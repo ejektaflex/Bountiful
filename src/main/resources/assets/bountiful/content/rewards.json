@@ -1,0 +1,10 @@
+[
+  {
+    "itemString":"minecraft:gold_nugget",
+    "unitWorth":100
+  },
+  {
+    "itemString":"minecraft:gold_ingot",
+    "unitWorth":900
+  }
+]

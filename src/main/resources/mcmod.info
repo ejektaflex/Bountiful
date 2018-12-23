@@ -1,0 +1,16 @@
+[
+{
+  "modid": "bountiful",
+  "name": "Bountiful",
+  "description": "Bountiful adds a bounty board to Minecraft.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Ejektaflex"],
+  "credits": "The Forge and FML guys, for making Forge and FML.",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
