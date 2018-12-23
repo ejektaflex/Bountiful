@@ -1,7 +1,10 @@
 package bountiful.command
 
 import bountiful.Bountiful
+import bountiful.config.BountifulIO
 import bountiful.gui.GuiHandler
+import bountiful.registry.BountyRegistry
+import bountiful.registry.RewardRegistry
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommand
 import net.minecraft.command.ICommandSender
@@ -36,7 +39,10 @@ class BountyCommand : ICommand {
 
         if (args.isNotEmpty()) {
             when (val curr: String = args[0]) {
-
+                "reload" -> {
+                    BountifulIO.hotReloadJson(BountyRegistry, "bounties.json")
+                    BountifulIO.hotReloadJson(RewardRegistry, "rewards.json")
+                }
             }
         } else {
             println("Bounty command was empty.")

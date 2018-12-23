@@ -12,4 +12,8 @@ open class ValueRegistry {
         }
     }
 
+    fun empty() {
+        items.clear()
+    }
+
 }

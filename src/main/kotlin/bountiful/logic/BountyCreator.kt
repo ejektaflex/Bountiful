@@ -11,12 +11,12 @@ import java.util.*
 
 object BountyCreator {
 
-    private var numBountyItems = (2..2)
+    private var numBountyItems = Bountiful.config.bountyAmountRange
 
     val rand = Random()
 
     fun createStack(): ItemStack {
-        return ItemStack(ContentRegistry.bounty).apply { ContentRegistry.bounty.ensureBounty(this) }
+        return ContentRegistry.bounty.let { ItemStack(it).apply { it.ensureBounty(this) } }
     }
 
     enum class BountyRarity(val level: Int, val itemRarity: EnumRarity, val bountyMult: Float) {

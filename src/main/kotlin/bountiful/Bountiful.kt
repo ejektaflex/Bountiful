@@ -1,6 +1,7 @@
 package bountiful
 
 import bountiful.command.BountyCommand
+import bountiful.config.BountifulIO
 import bountiful.config.ConfigFile
 import bountiful.proxy.IProxy
 import net.minecraftforge.common.MinecraftForge
@@ -32,9 +33,9 @@ object Bountiful : IProxy {
     @Mod.EventHandler
     override fun preInit(e: FMLPreInitializationEvent) {
         logger = e.modLog
-        config = ConfigFile(e.modConfigurationDirectory)
+        configDir = BountifulIO.ensureDirectory(e.modConfigurationDirectory, BountifulInfo.MODID)
+        config = ConfigFile(configDir)
         config.load()
-        configDir = e.modConfigurationDirectory
         MinecraftForge.EVENT_BUS.register(ContentRegistry)
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, GuiHandler())
         MinecraftForge.EVENT_BUS.register(proxy)
