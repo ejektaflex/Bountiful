@@ -8,7 +8,6 @@ import bountiful.registry.RewardRegistry
 import net.minecraft.item.EnumRarity
 import net.minecraft.item.ItemStack
 import java.util.*
-import kotlin.math.min
 
 object BountyCreator {
 
@@ -33,7 +32,7 @@ object BountyCreator {
 
     private fun calcRarity(): BountyRarity {
         var level = 0
-        val chance = 0.27f
+        val chance = Bountiful.config.rarityChance
         for (i in 0 until 3) {
             if (rand.nextFloat() < chance) {
                 level += 1
@@ -61,15 +60,15 @@ object BountyCreator {
             worth = (worth * getRarityFromInt(rarity).bountyMult).toInt()
 
             // Generate rewards based on worth
-            newFind(worth).forEach {
+            findRewards(worth).forEach {
                 rewards.add(it)
             }
 
-            time = worth * Bountiful.config.timeMultiplier
+            time = (worth * Bountiful.config.timeMultiplier).toLong()
         }
     }
 
-    fun newFind(n: Int): List<Pair<ItemStack, Int>> {
+    fun findRewards(n: Int): List<Pair<ItemStack, Int>> {
         var worthLeft = n
         val toRet = mutableListOf<Pair<ItemStack, Int>>()
         val picked = mutableListOf<String>()
