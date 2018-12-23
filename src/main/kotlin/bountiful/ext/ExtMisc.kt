@@ -1,6 +1,5 @@
 package bountiful.ext
 
-import bountiful.logic.PickableEntry
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import net.minecraft.client.Minecraft

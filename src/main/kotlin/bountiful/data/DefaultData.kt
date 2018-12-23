@@ -1,6 +1,6 @@
 package bountiful.data
 
-import bountiful.logic.PickableEntry
+import bountiful.logic.pickable.PickableEntry
 
 object DefaultData {
     val bounties = listOf(

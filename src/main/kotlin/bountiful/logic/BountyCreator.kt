@@ -2,6 +2,7 @@ package bountiful.logic
 
 import bountiful.Bountiful
 import bountiful.ContentRegistry
+import bountiful.logic.pickable.PickableEntry
 import bountiful.registry.BountyRegistry
 import bountiful.registry.RewardRegistry
 import net.minecraft.item.EnumRarity
@@ -12,7 +13,6 @@ import kotlin.math.min
 object BountyCreator {
 
     private var numBountyItems = (2..2)
-    private var numRewardItems = (2..10)
 
     val rand = Random()
 

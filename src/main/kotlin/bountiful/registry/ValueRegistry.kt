@@ -1,6 +1,6 @@
 package bountiful.registry
 
-import bountiful.logic.PickableEntry
+import bountiful.logic.pickable.PickableEntry
 
 open class ValueRegistry {
 

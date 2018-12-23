@@ -70,7 +70,6 @@ dependencies {
     compile("net.shadowfacts:Forgelin:$v_forgelin")
     deobfProvided("mezz.jei:jei_$v_minecraft:$v_jei:api")
     runtime("mezz.jei:jei_$v_minecraft:$v_jei")
-    compile(kotlin("stdlib-jdk8"))
 }
 
 tasks.withType<KotlinCompile> {
@@ -87,7 +86,7 @@ tasks.withType<ProcessResources> {
     }
 }
 
-
+// This part may be messy
 tasks.withType<Jar> {
     //from(sourceSets["main"].output)
     from(sourceSets["api"].output.classesDirs)

@@ -4,19 +4,14 @@ import bountiful.Bountiful
 import bountiful.BountifulInfo
 import bountiful.data.DefaultData
 import bountiful.data.EntryPack
-import bountiful.ext.rl
-import bountiful.ext.toStringContents
+import bountiful.logic.pickable.PickableEntry
 import bountiful.registry.BountyRegistry
-import bountiful.logic.PickableEntry
 import bountiful.registry.RewardRegistry
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import net.minecraft.util.ResourceLocation
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import java.io.File
-import java.lang.Exception
 
 open class CommonProxy : IProxy {
 
@@ -30,11 +25,8 @@ open class CommonProxy : IProxy {
     }
 
     fun getPickables(fileName: String, str: String): List<PickableEntry> {
-        val picked = Gson().fromJson(str, EntryPack::class.java)
-        if (picked == null) {
-            throw Exception("File $fileName has invalid structure!")
-        }
-        return picked!!.entries.toList()
+        val picked = Gson().fromJson(str, EntryPack::class.java) ?: throw Exception("File $fileName has invalid structure!")
+        return picked.entries.toList()
     }
 
 
@@ -81,22 +73,6 @@ open class CommonProxy : IProxy {
     }
 
     override fun postInit(e: FMLPostInitializationEvent) {
-        /*
-        BountyRegistry.add(
-                "minecraft:dirt".toItemStack!! to 20,
-                "minecraft:iron_ore".toItemStack!! to 3000,
-                "minecraft:gold_ore".toItemStack!! to 9000,
-                "minecraft:iron_ingot".toItemStack!! to 9000,
-                "minecraft:ender_pearl".toItemStack!! to 32_000,
-                "minecraft:diamond".toItemStack!! to 64_000,
-                "minecraft:cauldron".toItemStack!! to 72_000,
-                "minecraft:minecart".toItemStack!! to 54_000
-        )
 
-        RewardRegistry.add(
-                "minecraft:iron_nugget".toItemStack!! to 1000,
-                "minecraft:iron_ingot".toItemStack!! to 9000
-        )
-        */
     }
 }

@@ -18,7 +18,7 @@ class BountyCommand : ICommand {
     }
 
     override fun getName(): String {
-        return "bounty"
+        return "bountiful"
     }
 
     override fun getUsage(sender: ICommandSender): String {
@@ -33,12 +33,6 @@ class BountyCommand : ICommand {
 
     @Throws(CommandException::class)
     override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<String>) {
-
-        /*
-        // TODO Commands:
-        /bounty claim : generates a new random bounty itemString and puts it into your inventory
-        /bounty refresh : refresh all bounties at the bounty board
-         */
 
         if (args.isNotEmpty()) {
             when (val curr: String = args[0]) {

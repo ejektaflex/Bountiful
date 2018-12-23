@@ -1,13 +1,8 @@
-package bountiful.logic
+package bountiful.logic.pickable
 
 import bountiful.ext.toItemStack
-import com.google.gson.Gson
-import com.google.gson.JsonObject
-import com.google.gson.internal.LinkedTreeMap
+import bountiful.logic.ItemRange
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.JsonToNBT
-import net.minecraft.nbt.NBTTagCompound
-import java.util.*
 
 class PickableEntry(var itemString: String, var amount: ItemRange, var unitWorth: Int) {
 

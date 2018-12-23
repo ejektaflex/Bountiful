@@ -10,8 +10,7 @@ class GuiHandler : IGuiHandler {
 
     override fun getClientGuiElement(id: Int, player: EntityPlayer?, world: World?, x: Int, y: Int, z: Int): Any? {
         if (id == BOARD_GUI) {
-            val b = GuiBoard(ContainerBoard(player!!.inventory, world!!.getTileEntity(BlockPos(x, y, z)) as TileEntityBountyBoard ), player!!.inventory)
-            return b
+            return GuiBoard(ContainerBoard(player!!.inventory, world!!.getTileEntity(BlockPos(x, y, z)) as TileEntityBountyBoard ), player.inventory)
         }
         println("Did NOT get Client Gui.")
         return null
@@ -19,8 +18,7 @@ class GuiHandler : IGuiHandler {
 
     override fun getServerGuiElement(id: Int, player: EntityPlayer?, world: World?, x: Int, y: Int, z: Int): Any? {
         if (id == BOARD_GUI) {
-            val a = ContainerBoard(player!!.inventory, world!!.getTileEntity(BlockPos(x, y, z)) as TileEntityBountyBoard )
-            return a
+            return ContainerBoard(player!!.inventory, world!!.getTileEntity(BlockPos(x, y, z)) as TileEntityBountyBoard )
         }
         println("Did NOT get Server Gui")
         return null
