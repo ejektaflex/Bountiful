@@ -12,4 +12,17 @@ open class ValueRegistry {
         }
     }
 
+    fun backup(): List<PickableEntry> {
+        return mutableListOf<PickableEntry>().apply { addAll(items) }
+    }
+
+    fun restore(backupList: List<PickableEntry>) {
+        empty()
+        items.addAll(backupList)
+    }
+
+    fun empty() {
+        items.clear()
+    }
+
 }

@@ -25,7 +25,7 @@ val bouVersion: String
         } else {
             "UNDEFINED"
         }
-        println("gradle.txt.kts got Bountiful version: $gotVersion")
+        println("build.gradle.kts got Bountiful version: $gotVersion")
         return gotVersion
     }
 
@@ -70,6 +70,7 @@ dependencies {
     compile("net.shadowfacts:Forgelin:$v_forgelin")
     deobfProvided("mezz.jei:jei_$v_minecraft:$v_jei:api")
     runtime("mezz.jei:jei_$v_minecraft:$v_jei")
+    compile(kotlin("stdlib", "1.3.10"))
 }
 
 tasks.withType<KotlinCompile> {

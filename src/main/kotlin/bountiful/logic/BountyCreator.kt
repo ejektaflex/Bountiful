@@ -2,22 +2,23 @@ package bountiful.logic
 
 import bountiful.Bountiful
 import bountiful.ContentRegistry
+import bountiful.logic.error.BountyCreationException
 import bountiful.logic.pickable.PickableEntry
 import bountiful.registry.BountyRegistry
 import bountiful.registry.RewardRegistry
 import net.minecraft.item.EnumRarity
 import net.minecraft.item.ItemStack
 import java.util.*
-import kotlin.math.min
+import kotlin.math.max
 
 object BountyCreator {
 
-    private var numBountyItems = (2..2)
+    private var numBountyItems = Bountiful.config.bountyAmountRange
 
     val rand = Random()
 
     fun createStack(): ItemStack {
-        return ItemStack(ContentRegistry.bounty).apply { ContentRegistry.bounty.ensureBounty(this) }
+        return ContentRegistry.bounty.let { ItemStack(it).apply { it.ensureBounty(this) } }
     }
 
     enum class BountyRarity(val level: Int, val itemRarity: EnumRarity, val bountyMult: Float) {
@@ -33,7 +34,7 @@ object BountyCreator {
 
     private fun calcRarity(): BountyRarity {
         var level = 0
-        val chance = 0.27f
+        val chance = Bountiful.config.rarityChance
         for (i in 0 until 3) {
             if (rand.nextFloat() < chance) {
                 level += 1
@@ -53,23 +54,29 @@ object BountyCreator {
             // Generate bounty data
             itemsToPick.forEach {
                 val amountOfItem = it.randCount
-                toGet.add(it.itemStack!! to amountOfItem)
-                worth += (amountOfItem * it.unitWorth)
+                val itemItself = it.itemStack
+                if (itemItself != null) {
+                    toGet.add(it.itemStack!! to amountOfItem)
+                    worth += (amountOfItem * it.unitWorth)
+                } else {
+                    throw BountyCreationException("You tried to create a bounty but the item was invalid!")
+                }
             }
+
+            time = max((worth * Bountiful.config.timeMultiplier).toLong(), Bountiful.config.bountyTimeMin.toLong())
 
             // Make worth affected by rarity
             worth = (worth * getRarityFromInt(rarity).bountyMult).toInt()
 
             // Generate rewards based on worth
-            newFind(worth).forEach {
+            findRewards(worth).forEach {
                 rewards.add(it)
             }
 
-            time = worth * Bountiful.config.timeMultiplier
         }
     }
 
-    fun newFind(n: Int): List<Pair<ItemStack, Int>> {
+    private fun findRewards(n: Int): List<Pair<ItemStack, Int>> {
         var worthLeft = n
         val toRet = mutableListOf<Pair<ItemStack, Int>>()
         val picked = mutableListOf<String>()
@@ -82,6 +89,12 @@ object BountyCreator {
             worthLeft -= worthSated
             toRet.add(reward.itemStack!! to maxNumOfReward)
             validRewards = RewardRegistry.items.filter { it.unitWorth <= worthLeft && it.itemString !in picked }.sortedBy { it.unitWorth }
+        }
+
+        // If there were no valid rewards, find the cheapest item
+        if (toRet.isEmpty()) {
+            val lowestWorthItem = RewardRegistry.items.minBy { it.unitWorth * it.amount.min }!!
+            toRet.add(lowestWorthItem.itemStack!! to lowestWorthItem.amount.min)
         }
 
         return toRet
