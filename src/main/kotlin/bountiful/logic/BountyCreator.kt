@@ -91,6 +91,12 @@ object BountyCreator {
             validRewards = RewardRegistry.items.filter { it.unitWorth <= worthLeft && it.itemString !in picked }.sortedBy { it.unitWorth }
         }
 
+        // If there were no valid rewards, find the cheapest item
+        if (toRet.isEmpty()) {
+            val lowestWorthItem = RewardRegistry.items.minBy { it.unitWorth * it.amount.min }!!
+            toRet.add(lowestWorthItem.itemStack!! to lowestWorthItem.amount.min)
+        }
+
         return toRet
     }
 

@@ -9,7 +9,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg") {
     var maxBountiesPerBoard: Int = 12
     var boardAddFrequency: Long = 40L
     var boardLifespan: Int = 72000
-    var timeMultiplier: Double = 14.0
+    var timeMultiplier: Double = 28.0
     var cashInAtBountyBoard: Boolean = true
     var rarityChance: Double = 0.27
     var bountyAmountMax = 2
@@ -48,8 +48,8 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg") {
         timeMultiplier = config.get(
                 CATEGORY_BOUNTY,
                 "Bounty Expiry Time Multiplier",
-                14.0,
-                "A general multiplier for how long you get to complete a bounty, based on bounty worth. (Default: 14)"
+                28.0,
+                "A general multiplier for how long you get to complete a bounty, based on bounty worth. (Default: 28.0)"
         ).double
 
         cashInAtBountyBoard = config.get(
