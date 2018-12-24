@@ -8,6 +8,7 @@ import bountiful.registry.RewardRegistry
 import net.minecraft.item.EnumRarity
 import net.minecraft.item.ItemStack
 import java.util.*
+import kotlin.math.max
 
 object BountyCreator {
 
@@ -64,11 +65,11 @@ object BountyCreator {
                 rewards.add(it)
             }
 
-            time = (worth * Bountiful.config.timeMultiplier).toLong()
+            time = max((worth * Bountiful.config.timeMultiplier).toLong(), Bountiful.config.bountyTimeMin.toLong())
         }
     }
 
-    fun findRewards(n: Int): List<Pair<ItemStack, Int>> {
+    private fun findRewards(n: Int): List<Pair<ItemStack, Int>> {
         var worthLeft = n
         val toRet = mutableListOf<Pair<ItemStack, Int>>()
         val picked = mutableListOf<String>()

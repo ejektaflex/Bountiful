@@ -14,6 +14,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg") {
     var rarityChance: Double = 0.27
     var bountyAmountMax = 2
     var bountyAmountMin = 1
+    var bountyTimeMin = 6000
 
     val bountyAmountRange: IntRange
         get() = bountyAmountMin..bountyAmountMax
@@ -77,6 +78,13 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg") {
                 "Bounty Items Min",
                 1,
                 "The minimum number of items that a bounty could ask for (Default: 1)"
+        ).int
+
+        bountyTimeMin = config.get(
+                CATEGORY_BOUNTY,
+                "Minimum Bounty Time",
+                6000,
+                "The minimum time, in ticks, that a bounty can take to complete (Default: 4800)"
         ).int
 
 
