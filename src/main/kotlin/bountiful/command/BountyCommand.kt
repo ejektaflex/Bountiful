@@ -2,7 +2,9 @@ package bountiful.command
 
 import bountiful.Bountiful
 import bountiful.config.BountifulIO
+import bountiful.ext.sendMessage
 import bountiful.gui.GuiHandler
+import bountiful.logic.error.BountyCreationException
 import bountiful.registry.BountyRegistry
 import bountiful.registry.RewardRegistry
 import net.minecraft.command.CommandException
@@ -25,12 +27,13 @@ class BountyCommand : ICommand {
     }
 
     override fun getUsage(sender: ICommandSender): String {
-        return "/bo"
+        return "/bountiful"
     }
 
     override fun getAliases(): List<String> {
         val aliases = ArrayList<String>()
         aliases.add("bo")
+        aliases.add("bounty")
         return aliases
     }
 
@@ -40,12 +43,18 @@ class BountyCommand : ICommand {
         if (args.isNotEmpty()) {
             when (val curr: String = args[0]) {
                 "reload" -> {
-                    BountifulIO.hotReloadJson(BountyRegistry, "bounties.json")
-                    BountifulIO.hotReloadJson(RewardRegistry, "rewards.json")
+                    try {
+                        BountifulIO.hotReloadJson(BountyRegistry, "bounties.json")
+                        BountifulIO.hotReloadJson(RewardRegistry, "rewards.json")
+                        sender.sendMessage("Json config files reloaded.")
+                    } catch (bce: BountyCreationException) {
+                        sender.sendMessage("§4" + bce.message!!)
+                        sender.sendMessage("§4Defaulting to previous data. Correct it and try again.")
+                    }
                 }
             }
         } else {
-            println("Bounty command was empty.")
+            sender.sendMessage("Valid commands: '/bo reload'")
         }
 
     }

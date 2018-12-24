@@ -2,6 +2,7 @@ package bountiful.logic
 
 import bountiful.Bountiful
 import bountiful.ContentRegistry
+import bountiful.logic.error.BountyCreationException
 import bountiful.logic.pickable.PickableEntry
 import bountiful.registry.BountyRegistry
 import bountiful.registry.RewardRegistry
@@ -53,9 +54,16 @@ object BountyCreator {
             // Generate bounty data
             itemsToPick.forEach {
                 val amountOfItem = it.randCount
-                toGet.add(it.itemStack!! to amountOfItem)
-                worth += (amountOfItem * it.unitWorth)
+                val itemItself = it.itemStack
+                if (itemItself != null) {
+                    toGet.add(it.itemStack!! to amountOfItem)
+                    worth += (amountOfItem * it.unitWorth)
+                } else {
+                    throw BountyCreationException("You tried to create a bounty but the item was invalid!")
+                }
             }
+
+            time = max((worth * Bountiful.config.timeMultiplier).toLong(), Bountiful.config.bountyTimeMin.toLong())
 
             // Make worth affected by rarity
             worth = (worth * getRarityFromInt(rarity).bountyMult).toInt()
@@ -65,7 +73,6 @@ object BountyCreator {
                 rewards.add(it)
             }
 
-            time = max((worth * Bountiful.config.timeMultiplier).toLong(), Bountiful.config.bountyTimeMin.toLong())
         }
     }
 

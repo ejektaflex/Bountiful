@@ -2,6 +2,7 @@ package bountiful.config
 
 import bountiful.Bountiful
 import bountiful.data.EntryPack
+import bountiful.logic.error.BountyCreationException
 import bountiful.logic.pickable.PickableEntry
 import bountiful.registry.ValueRegistry
 import com.google.gson.Gson
@@ -39,9 +40,15 @@ object BountifulIO {
     }
 
     fun hotReloadJson(registry: ValueRegistry, fileName: String) {
+        val backup = registry.backup()
         registry.empty()
         getPickables(fileName, File(Bountiful.configDir, fileName).readText()).forEach {
-            registry.add(it)
+            if (it.itemStack == null) {
+                registry.restore(backup)
+                throw BountyCreationException("Could not create a bounty from: '${it.itemString}', it might be misspelled?")
+            } else {
+                registry.add(it)
+            }
         }
     }
 
