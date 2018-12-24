@@ -24,16 +24,19 @@ open class CommonProxy : IProxy {
 
 
     override fun init(e: FMLInitializationEvent) {
-        // Create folder
-        val folder = BountifulIO.ensureDirectory(Bountiful.configDir, BountifulInfo.MODID)
 
         // Populate bounties, fill if none exist
-        BountifulIO.populateConfigFolder(folder, DefaultData.bounties, "bounties.json")
-        BountifulIO.hotReloadJson(BountyRegistry, "bounties.json")
+        "bounties.json".let {
+            BountifulIO.populateConfigFolder(Bountiful.configDir, DefaultData.bounties, it)
+            BountifulIO.hotReloadJson(BountyRegistry, it)
+        }
 
         // Same for rewards
-        BountifulIO.populateConfigFolder(folder, DefaultData.rewards, "rewards.json")
-        BountifulIO.hotReloadJson(RewardRegistry, "rewards.json")
+        "rewards.json".let {
+            BountifulIO.populateConfigFolder(Bountiful.configDir, DefaultData.rewards, it)
+            BountifulIO.hotReloadJson(RewardRegistry, it)
+        }
+
 
         println("Bounties:")
         BountyRegistry.items.forEach { println(it) }
