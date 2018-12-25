@@ -1,20 +1,20 @@
 package ejektaflex.bountiful.logic
 
 import ejektaflex.bountiful.Bountiful
-import ejektaflex.bountiful.ext.toPretty
-import ejektaflex.bountiful.ext.toItemStack
+import ejektaflex.bountiful.api.logic.IBountyData
+import ejektaflex.bountiful.api.ext.toPretty
+import ejektaflex.bountiful.api.ext.toItemStack
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraftforge.common.util.INBTSerializable
 
-class BountyData : INBTSerializable<NBTTagCompound> {
+class BountyData : IBountyData {
 
     // 72000 = 1 hour IRL
-    private var boardTime = Bountiful.config.boardLifespan
-    var time = 0L
-    var rarity = 0
-    val toGet = mutableListOf<Pair<ItemStack, Int>>()
-    val rewards = mutableListOf<Pair<ItemStack, Int>>()
+    override var boardTime = Bountiful.config.boardLifespan
+    override var time = 0L
+    override var rarity = 0
+    override val toGet = mutableListOf<Pair<ItemStack, Int>>()
+    override val rewards = mutableListOf<Pair<ItemStack, Int>>()
     var worth = 0
 
     override fun toString(): String {

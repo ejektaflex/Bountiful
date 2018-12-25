@@ -3,7 +3,7 @@ package ejektaflex.bountiful.config
 import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.data.EntryPack
 import ejektaflex.bountiful.logic.error.BountyCreationException
-import ejektaflex.bountiful.logic.pickable.PickableEntry
+import ejektaflex.bountiful.api.logic.pickable.PickableEntry
 import ejektaflex.bountiful.registry.ValueRegistry
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -39,7 +39,7 @@ object BountifulIO {
         return fileToPopulate
     }
 
-    fun hotReloadJson(registry: ValueRegistry, fileName: String) {
+    fun hotReloadJson(registry: ValueRegistry<PickableEntry>, fileName: String) {
         val backup = registry.backup()
         registry.empty()
         getPickables(fileName, File(Bountiful.configDir, fileName).readText()).forEach {

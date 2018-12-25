@@ -1,7 +1,7 @@
 package ejektaflex.bountiful.command
 
 import ejektaflex.bountiful.config.BountifulIO
-import ejektaflex.bountiful.ext.sendMessage
+import ejektaflex.bountiful.api.ext.sendMessage
 import ejektaflex.bountiful.logic.error.BountyCreationException
 import ejektaflex.bountiful.registry.BountyRegistry
 import ejektaflex.bountiful.registry.RewardRegistry

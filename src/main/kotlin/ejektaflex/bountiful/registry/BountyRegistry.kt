@@ -1,3 +1,5 @@
 package ejektaflex.bountiful.registry
 
-object BountyRegistry : ValueRegistry()
+import ejektaflex.bountiful.api.logic.pickable.PickableEntry
+
+object BountyRegistry : ValueRegistry<PickableEntry>()

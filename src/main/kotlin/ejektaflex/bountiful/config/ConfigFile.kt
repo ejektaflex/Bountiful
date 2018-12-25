@@ -1,9 +1,8 @@
 package ejektaflex.bountiful.config
 
-import ejektaflex.bountiful.ext.clampTo
+import ejektaflex.bountiful.api.ext.clampTo
 import java.io.File
 import kotlin.math.max
-import kotlin.math.min
 
 data class ConfigFile(val folder: File) : KConfig(folder, "ejektaflex.bountiful.cfg") {
 

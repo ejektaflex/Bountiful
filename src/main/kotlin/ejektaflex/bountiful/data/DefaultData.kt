@@ -1,6 +1,6 @@
 package ejektaflex.bountiful.data
 
-import ejektaflex.bountiful.logic.pickable.PickableEntry
+import ejektaflex.bountiful.api.logic.pickable.PickableEntry
 
 object DefaultData {
     val bounties = listOf(

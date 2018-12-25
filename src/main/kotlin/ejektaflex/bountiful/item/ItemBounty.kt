@@ -1,6 +1,8 @@
 package ejektaflex.bountiful.item
 
 import ejektaflex.bountiful.Bountiful
+import ejektaflex.bountiful.api.enum.EnumBountyRarity
+import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.logic.BountyData
 import net.minecraft.client.util.ITooltipFlag
@@ -16,7 +18,8 @@ import net.minecraft.world.World
 import net.minecraftforge.items.ItemHandlerHelper
 import kotlin.math.min
 
-class ItemBounty : Item() {
+
+class ItemBounty : Item(), IItemBounty {
 
     init {
         unlocalizedName = "ejektaflex.bountiful.bounty"
@@ -35,9 +38,17 @@ class ItemBounty : Item() {
         }
     }
 
+    override fun getBountyData(stack: ItemStack): BountyData {
+        if (stack.hasTagCompound() && stack.item is ItemBounty) {
+            return BountyData().apply { deserializeNBT(stack.tagCompound!!) }
+        } else {
+            throw Exception("${stack.displayName} is not an ItemBounty or has no NBT data!")
+        }
+    }
+
     override fun getRarity(stack: ItemStack): EnumRarity {
         return if (stack.hasTagCompound() && stack.tagCompound!!.hasKey("rarity")) {
-            BountyCreator.getRarityFromInt(stack.tagCompound!!.getInteger("rarity")).itemRarity
+            EnumBountyRarity.getRarityFromInt(stack.tagCompound!!.getInteger("rarity")).itemRarity
         } else {
             super.getRarity(stack)
         }
@@ -58,24 +69,24 @@ class ItemBounty : Item() {
         return true
     }
 
-    private fun tryExpireBoardTime(stack: ItemStack) {
+    override fun tryExpireBoardTime(stack: ItemStack) {
         if (stack.hasTagCompound() && stack.tagCompound!!.hasKey("boardTime")) {
             stack.tagCompound!!.setInteger("boardTime", 0)
         }
     }
 
     // Decrements the amount of time left on the bounty. Returns true if it's run out.
-    private fun tickBountyTime(stack: ItemStack, amt: Int): Boolean {
+    override fun tickBountyTime(stack: ItemStack, amt: Int): Boolean {
         return tickNumber(stack, amt, "time")
     }
 
-    fun tickBoardTime(stack: ItemStack, amt: Int): Boolean {
+    override fun tickBoardTime(stack: ItemStack, amt: Int): Boolean {
         return tickNumber(stack, amt, "boardTime")
     }
 
     override fun getItemStackDisplayName(stack: ItemStack): String {
         return super.getItemStackDisplayName(stack) + if (stack.hasTagCompound() && stack.tagCompound!!.hasKey("rarity")) {
-             " (${BountyCreator.getRarityFromInt(stack.tagCompound!!.getInteger("rarity"))})"
+             " (${EnumBountyRarity.getRarityFromInt(stack.tagCompound!!.getInteger("rarity"))})"
         } else {
             ""
         }
@@ -92,11 +103,14 @@ class ItemBounty : Item() {
         }
     }
 
-    fun ensureBounty(stack: ItemStack): ItemBounty {
-        if (!stack.hasTagCompound()) {
-            stack.tagCompound = BountyCreator.create().serializeNBT()
+    override fun ensureBounty(stack: ItemStack) {
+        if (stack.item is ItemBounty) {
+            if (!stack.hasTagCompound()) {
+                stack.tagCompound = BountyCreator.create().serializeNBT()
+            }
+        } else {
+            throw Exception("${stack.displayName} is not an ItemBounty, so you cannot generate bounty data for it!")
         }
-        return this
     }
 
     // Used to cash in the bounty for a reward

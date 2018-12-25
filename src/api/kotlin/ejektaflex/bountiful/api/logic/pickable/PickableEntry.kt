@@ -1,7 +1,7 @@
-package ejektaflex.bountiful.logic.pickable
+package ejektaflex.bountiful.api.logic.pickable
 
-import ejektaflex.bountiful.ext.toItemStack
-import ejektaflex.bountiful.logic.ItemRange
+import ejektaflex.bountiful.api.ext.toItemStack
+import ejektaflex.bountiful.api.logic.ItemRange
 import net.minecraft.item.ItemStack
 
 class PickableEntry(var itemString: String, var amount: ItemRange, var unitWorth: Int) {

@@ -1,18 +1,16 @@
 package ejektaflex.bountiful
 
+import ejektaflex.bountiful.api.BountifulAPIProvider
 import ejektaflex.bountiful.command.BountyCommand
 import ejektaflex.bountiful.config.BountifulIO
 import ejektaflex.bountiful.config.ConfigFile
 import ejektaflex.bountiful.proxy.IProxy
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.fml.common.event.FMLInitializationEvent
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import org.apache.logging.log4j.Logger
 import net.minecraftforge.fml.common.SidedProxy
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent
 import ejektaflex.bountiful.gui.GuiHandler
+import net.minecraftforge.fml.common.event.*
 import net.minecraftforge.fml.common.network.NetworkRegistry
 import java.io.File
 
@@ -22,6 +20,9 @@ object Bountiful : IProxy {
 
     @SidedProxy(clientSide = BountifulInfo.CLIENT, serverSide = BountifulInfo.SERVER)
     @JvmStatic lateinit var proxy: IProxy
+
+    @Mod.EventHandler
+    fun loadAPI(event: FMLConstructionEvent) = BountifulAPIProvider.changeAPI(InternalAPI)
 
     lateinit var logger: Logger
     lateinit var configDir: File

@@ -2,12 +2,12 @@ package ejektaflex.bountiful.block
 
 
 import ejektaflex.bountiful.Bountiful
-import ejektaflex.bountiful.ext.*
+import ejektaflex.bountiful.api.ext.*
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.logic.BountyCreator
-import ejektaflex.bountiful.ext.clear
-import ejektaflex.bountiful.ext.filledSlots
-import ejektaflex.bountiful.ext.slotRange
+import ejektaflex.bountiful.api.ext.clear
+import ejektaflex.bountiful.api.ext.filledSlots
+import ejektaflex.bountiful.api.ext.slotRange
 import ejektaflex.bountiful.logic.BountyData
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -21,7 +21,7 @@ import net.minecraftforge.items.ItemStackHandler
 
 class TileEntityBountyBoard : TileEntity(), ITickable {
 
-    private val inventory = ItemStackHandler(numSlots)
+    val inventory = ItemStackHandler(numSlots)
 
     override fun writeToNBT(tag: NBTTagCompound): NBTTagCompound {
         tag.clear()

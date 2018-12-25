@@ -2,37 +2,29 @@ package ejektaflex.bountiful.logic
 
 import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.ContentRegistry
+import ejektaflex.bountiful.api.enum.EnumBountyRarity
+import ejektaflex.bountiful.api.logic.IBountyCreator
 import ejektaflex.bountiful.logic.error.BountyCreationException
-import ejektaflex.bountiful.logic.pickable.PickableEntry
+import ejektaflex.bountiful.api.logic.pickable.PickableEntry
 import ejektaflex.bountiful.registry.BountyRegistry
 import ejektaflex.bountiful.registry.RewardRegistry
-import net.minecraft.item.EnumRarity
 import net.minecraft.item.ItemStack
 import java.util.*
 import kotlin.math.max
 
-object BountyCreator {
+
+
+object BountyCreator : IBountyCreator {
 
     private var numBountyItems = Bountiful.config.bountyAmountRange
 
     val rand = Random()
 
-    fun createStack(): ItemStack {
+    override fun createStack(): ItemStack {
         return ContentRegistry.bounty.let { ItemStack(it).apply { it.ensureBounty(this) } }
     }
 
-    enum class BountyRarity(val level: Int, val itemRarity: EnumRarity, val bountyMult: Float) {
-        Common(0, EnumRarity.COMMON, 1f),
-        Uncommon(1, EnumRarity.UNCOMMON, 1.1f),
-        Rare(2, EnumRarity.RARE, 1.2f),
-        Epic(3, EnumRarity.EPIC, 1.5f)
-    }
-
-    fun getRarityFromInt(n: Int): BountyRarity {
-        return BountyRarity.values()[n]
-    }
-
-    private fun calcRarity(): BountyRarity {
+    override fun calcRarity(): EnumBountyRarity {
         var level = 0
         val chance = Bountiful.config.rarityChance
         for (i in 0 until 3) {
@@ -42,10 +34,10 @@ object BountyCreator {
                 break
             }
         }
-        return getRarityFromInt(level)
+        return EnumBountyRarity.getRarityFromInt(level)
     }
 
-    fun create(): BountyData {
+    override fun create(): BountyData {
         // Shuffle bounty registry and take a random number of bounty items
         val itemsToPick = BountyRegistry.items.shuffled().take(numBountyItems.random())
         return BountyData().apply {
@@ -66,7 +58,7 @@ object BountyCreator {
             time = max((worth * Bountiful.config.timeMultiplier).toLong(), Bountiful.config.bountyTimeMin.toLong())
 
             // Make worth affected by rarity
-            worth = (worth * getRarityFromInt(rarity).bountyMult).toInt()
+            worth = (worth * EnumBountyRarity.getRarityFromInt(rarity).bountyMult).toInt()
 
             // Generate rewards based on worth
             findRewards(worth).forEach {
