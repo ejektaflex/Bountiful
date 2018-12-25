@@ -1,4 +1,4 @@
-package ejektaflex.bountiful.ext
+package ejektaflex.bountiful.api.ext
 
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
