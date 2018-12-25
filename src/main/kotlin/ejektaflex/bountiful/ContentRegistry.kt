@@ -16,17 +16,17 @@ object ContentRegistry {
 
     val bounty = ItemBounty().apply {
         registryName = ResourceLocation(BountifulInfo.MODID, "bounty")
-        unlocalizedName = "ejektaflex.bountiful.bounty"
+        unlocalizedName = "bountiful.bounty"
     }
 
     val bountyBlock = BlockBountyBoard().apply {
             registryName = ResourceLocation(BountifulInfo.MODID, "bountyboard")
-            unlocalizedName = "ejektaflex.bountiful.bountyboardblock"
+            unlocalizedName = "bountiful.bountyboardblock"
     }
 
     val bountyItemBlock = ItemBlock(bountyBlock).apply {
         registryName = ResourceLocation(BountifulInfo.MODID, "bountyboarditem")
-        unlocalizedName = "ejektaflex.bountiful.bountyboarditem"
+        unlocalizedName = "bountiful.bountyboarditem"
     }
 
     val blocks = listOf(

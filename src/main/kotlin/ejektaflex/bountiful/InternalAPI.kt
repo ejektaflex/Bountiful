@@ -1,12 +1,14 @@
 package ejektaflex.bountiful
 
 import ejektaflex.bountiful.api.IBountifulAPI
+import ejektaflex.bountiful.api.config.IBountifulConfig
 import ejektaflex.bountiful.api.ext.stacks
 import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.api.logic.IBountyData
 import ejektaflex.bountiful.api.logic.pickable.PickableEntry
 import ejektaflex.bountiful.api.registry.IValueRegistry
 import ejektaflex.bountiful.block.TileEntityBountyBoard
+import ejektaflex.bountiful.config.ConfigFile
 import ejektaflex.bountiful.registry.BountyRegistry
 import ejektaflex.bountiful.registry.RewardRegistry
 import net.minecraft.item.ItemStack
@@ -17,6 +19,8 @@ object InternalAPI : IBountifulAPI {
 
     override val bountyRegistry = BountyRegistry
     override val rewardRegistry = RewardRegistry
+
+    override var modConfig: IBountifulConfig = Bountiful.config
 
     override fun getBountiesAt(worldIn: World, pos: BlockPos): List<ItemStack>? {
         return (worldIn.getTileEntity(pos) as? TileEntityBountyBoard)?.inventory?.stacks

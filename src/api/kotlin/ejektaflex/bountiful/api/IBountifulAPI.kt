@@ -1,5 +1,6 @@
 package ejektaflex.bountiful.api
 
+import ejektaflex.bountiful.api.config.IBountifulConfig
 import ejektaflex.bountiful.api.logic.IBountyData
 import ejektaflex.bountiful.api.logic.pickable.PickableEntry
 import ejektaflex.bountiful.api.registry.IValueRegistry
@@ -32,5 +33,10 @@ interface IBountifulAPI {
      * Converts bounty data to a bounty itemstack
      */
     fun dataToStack(data: IBountyData): ItemStack
+
+    /**
+     * Gets the config variables for Bountiful
+     */
+    var modConfig: IBountifulConfig
 
 }

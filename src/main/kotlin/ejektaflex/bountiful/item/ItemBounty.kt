@@ -21,10 +21,6 @@ import kotlin.math.min
 
 class ItemBounty : Item(), IItemBounty {
 
-    init {
-        unlocalizedName = "ejektaflex.bountiful.bounty"
-    }
-
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<String>, flagIn: ITooltipFlag) {
         if (stack.hasTagCompound()) {
             val bounty = BountyData().apply { deserializeNBT(stack.tagCompound!!) }

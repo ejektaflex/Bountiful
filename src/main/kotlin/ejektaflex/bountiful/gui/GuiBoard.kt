@@ -18,7 +18,7 @@ class GuiBoard(container: Container, private val playerInv: InventoryPlayer) : G
     }
 
     override fun drawGuiContainerForegroundLayer(mouseX: Int, mouseY: Int) {
-        val name = I18n.format("ejektaflex.bountiful.bounty.board")
+        val name = I18n.format("bountiful.bounty.board")
         fontRenderer.drawString(name, xSize / 2 - fontRenderer.getStringWidth(name) / 2, 6, 0x505050)
         fontRenderer.drawString(playerInv.displayName.unformattedText, 8, ySize - 94, 0x505050)
         super.drawGuiContainerForegroundLayer(mouseX, mouseY)

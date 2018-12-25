@@ -1,22 +1,25 @@
 package ejektaflex.bountiful.config
 
+import ejektaflex.bountiful.api.config.IBountifulConfig
 import ejektaflex.bountiful.api.ext.clampTo
 import java.io.File
 import kotlin.math.max
 
-data class ConfigFile(val folder: File) : KConfig(folder, "ejektaflex.bountiful.cfg") {
 
-    var maxBountiesPerBoard: Int = 12
-    var boardAddFrequency: Long = 40L
-    var boardLifespan: Int = 72000
-    var timeMultiplier: Double = 28.0
-    var cashInAtBountyBoard: Boolean = true
-    var rarityChance: Double = 0.27
+
+data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBountifulConfig {
+
+    override var maxBountiesPerBoard: Int = 12
+    override var boardAddFrequency: Long = 40L
+    override var boardLifespan: Int = 72000
+    override var timeMultiplier: Double = 28.0
+    override var cashInAtBountyBoard: Boolean = true
+    override var rarityChance: Double = 0.27
     var bountyAmountMax = 2
     var bountyAmountMin = 1
-    var bountyTimeMin = 6000
+    override var bountyTimeMin = 6000
 
-    val bountyAmountRange: IntRange
+    override val bountyAmountRange: IntRange
         get() = bountyAmountMin..bountyAmountMax
 
     override fun load() {
