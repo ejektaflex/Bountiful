@@ -1,5 +1,6 @@
 package ejektaflex.bountiful.config
 
+import ejektaflex.bountiful.ext.clampTo
 import java.io.File
 import kotlin.math.max
 import kotlin.math.min
@@ -21,26 +22,26 @@ data class ConfigFile(val folder: File) : KConfig(folder, "ejektaflex.bountiful.
 
     override fun load() {
 
-        maxBountiesPerBoard = min(config.get(
+        maxBountiesPerBoard = config.get(
                 CATEGORY_BOARD,
                 "Max Bounties Per Board At A Time",
                 17,
                 "How many bounties should be on a bounty board at a given time. (Max: 27, Default: 17)"
-        ).int, 27)
+        ).int.clampTo(1..27)
 
         boardAddFrequency = max(config.get(
                 CATEGORY_BOARD,
                 "New Bounty Frequency",
                 2400,
                 "How often, in ticks, new bounty should show up on the bounty board. (Min: 20, Default: 2400)"
-        ).int, 20).toLong()
+        ).int, 20).toLong().clampTo(20L..Long.MAX_VALUE)
 
         boardLifespan = config.get(
                 CATEGORY_BOARD,
                 "Bounty on Board Lifespan",
                 72000,
                 "How long bounties stay on the board, at max (Bounties will be removed prematurely if board hits max bounties). (Default: 72000)"
-        ).int
+        ).int.clampTo(10..Int.MAX_VALUE)
 
 
         // Bounty
@@ -50,7 +51,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "ejektaflex.bountiful.
                 "Bounty Expiry Time Multiplier",
                 28.0,
                 "A general multiplier for how long you get to complete a bounty, based on bounty worth. (Default: 28.0)"
-        ).double
+        ).double.clampTo(0.0, Double.MAX_VALUE)
 
         cashInAtBountyBoard = config.get(
                 CATEGORY_BOUNTY,
@@ -64,28 +65,28 @@ data class ConfigFile(val folder: File) : KConfig(folder, "ejektaflex.bountiful.
                 "Rarity Increase Chance",
                 0.27,
                 "The chance, per level, for a bounty to increase in rarity (Default: 0.27)"
-        ).double
+        ).double.clampTo(0.0, 1.0)
 
         bountyAmountMax = config.get(
                 CATEGORY_BOUNTY,
                 "Bounty Items Max",
                 2,
                 "The maximum number of items that a bounty could ask for (Default: 2)"
-        ).int
+        ).int.clampTo(1..64)
 
         bountyAmountMin = config.get(
                 CATEGORY_BOUNTY,
                 "Bounty Items Min",
                 1,
                 "The minimum number of items that a bounty could ask for (Default: 1)"
-        ).int
+        ).int.clampTo(1..64)
 
         bountyTimeMin = config.get(
                 CATEGORY_BOUNTY,
                 "Minimum Bounty Time",
                 6000,
                 "The minimum time, in ticks, that a bounty can take to complete (Default: 4800)"
-        ).int
+        ).int.clampTo(10..Int.MAX_VALUE)
 
 
     }
