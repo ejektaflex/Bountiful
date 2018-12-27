@@ -88,7 +88,7 @@ class ItemBounty : Item(), IItemBounty {
         }
     }
 
-    override fun onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean) {
+    override fun onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity?, itemSlot: Int, isSelected: Boolean) {
         if (worldIn.totalWorldTime % BountyData.bountyTickFreq == 0L) {
             val expired = tickBountyTime(stack, BountyData.bountyTickFreq.toInt())
             tryExpireBoardTime(stack)

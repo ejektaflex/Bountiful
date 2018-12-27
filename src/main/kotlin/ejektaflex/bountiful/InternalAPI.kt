@@ -20,8 +20,6 @@ object InternalAPI : IBountifulAPI {
     override val bountyRegistry = BountyRegistry
     override val rewardRegistry = RewardRegistry
 
-    override var modConfig: IBountifulConfig = Bountiful.config
-
     override fun getBountiesAt(worldIn: World, pos: BlockPos): List<ItemStack>? {
         return (worldIn.getTileEntity(pos) as? TileEntityBountyBoard)?.inventory?.stacks
     }

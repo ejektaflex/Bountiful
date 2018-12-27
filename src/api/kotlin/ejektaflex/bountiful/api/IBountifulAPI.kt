@@ -34,9 +34,4 @@ interface IBountifulAPI {
      */
     fun dataToStack(data: IBountyData): ItemStack
 
-    /**
-     * Gets the config variables for Bountiful
-     */
-    var modConfig: IBountifulConfig
-
 }
