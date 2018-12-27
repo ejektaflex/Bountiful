@@ -19,7 +19,7 @@ buildscript {
 
 val bouVersion: String
     get() {
-        val versionFile = File("src/main/kotlin/bountiful/BountifulInfo.kt")
+        val versionFile = File("src/main/kotlin/ejektaflex.bountiful/BountifulInfo.kt")
         val gotVersion = if (versionFile.exists()) {
             versionFile.readLines().find { "VERSION" in it }?.dropWhile { it != '"' }?.drop(1)?.dropLast(1) ?: "UNDEFINED"
         } else {
