@@ -4,7 +4,9 @@ import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.api.logic.IBountyData
 import ejektaflex.bountiful.api.ext.toPretty
 import ejektaflex.bountiful.api.ext.toItemStack
+import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.api.logic.BountyNBT
+import ejektaflex.bountiful.item.ItemBounty
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
@@ -105,6 +107,15 @@ class BountyData : IBountyData {
     companion object {
         const val bountyTickFreq = 20L
         const val boardTickFreq = 20L
+
+        fun from(stack: ItemStack): IBountyData {
+            if (stack.item is ItemBounty) {
+                return (stack.item as IItemBounty).getBountyData(stack)
+            } else {
+                throw Exception("${stack.displayName} is not an IItemBounty and cannot be converted to bounty data!")
+            }
+        }
+
     }
 
 }

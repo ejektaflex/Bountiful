@@ -73,13 +73,17 @@ class TileEntityBountyBoard : TileEntity(), ITickable {
         for (slot in inventory.slotRange) {
             val bounty = inventory.getStackInSlot(slot)
             if (bounty.item is ItemBounty) {
-                val expired = (bounty.item as ItemBounty).tickBoardTime(bounty)
+                val data = BountyData.from(bounty)
+                val bountyItem = bounty.item as ItemBounty
+
+                // Remove timestamp so that the timer is reset
+                //bountyItem.removeTimestamp(bounty)
 
                 if (Bountiful.config.shouldCountdownOnBoard) {
-                    (bounty.item as ItemBounty).ensureTimerStarted(bounty, world)
+                    bountyItem.ensureTimerStarted(bounty, world)
                 }
 
-                if (expired) {
+                if (data.timeLeft(world) <= 0) {
                     toRemove.add(slot)
                 }
             }

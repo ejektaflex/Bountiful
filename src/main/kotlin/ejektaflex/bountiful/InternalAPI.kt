@@ -9,6 +9,7 @@ import ejektaflex.bountiful.api.logic.pickable.PickableEntry
 import ejektaflex.bountiful.api.registry.IValueRegistry
 import ejektaflex.bountiful.block.TileEntityBountyBoard
 import ejektaflex.bountiful.config.ConfigFile
+import ejektaflex.bountiful.logic.BountyData
 import ejektaflex.bountiful.registry.BountyRegistry
 import ejektaflex.bountiful.registry.RewardRegistry
 import net.minecraft.item.ItemStack
@@ -25,11 +26,7 @@ object InternalAPI : IBountifulAPI {
     }
 
     override fun toBountyData(stack: ItemStack): IBountyData {
-        if (stack.item is IItemBounty) {
-            return (stack.item as IItemBounty).getBountyData(stack)
-        } else {
-            throw Exception("${stack.displayName} is not an IItemBounty and cannot be converted to bounty data!")
-        }
+        return BountyData.from(stack)
     }
 
     override fun dataToStack(data: IBountyData): ItemStack {

@@ -14,19 +14,14 @@ interface IItemBounty : IForgeRegistryEntry<Item> {
     fun getBountyData(stack: ItemStack): IBountyData
 
     /**
-     * When given a bounty ItemStack, this method attempts to expire the amount of board time it has left on the board.
-     */
-    fun tryExpireBoardTime(stack: ItemStack)
-
-    /**
      * When given a bounty ItemStack, this method attempts to expire the amount of time the bounty has left to complete.
      */
     fun tryExpireBountyTime(stack: ItemStack)
 
     /**
-     * Decrements the amount of bountyTime left on the bounty. Returns true if it's run out.
+     * Removes the timestamp from the given bounty.
      */
-    //fun tickBountyTime(stack: ItemStack, world: World): Boolean
+    fun removeTimestamp(stack: ItemStack)
 
     /**
      * Decrements the amount of bountyTime left on the board. Returns true if it's run out.

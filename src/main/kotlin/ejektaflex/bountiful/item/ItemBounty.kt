@@ -49,6 +49,15 @@ class ItemBounty : Item(), IItemBounty {
         }
     }
 
+    override fun removeTimestamp(stack: ItemStack) {
+        if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(BountyNBT.TimeStamp.key) && stack.tagCompound!!.hasKey(BountyNBT.BountyTime.key) ) {
+            stack.tagCompound!!.apply {
+                //setLong(BountyNBT.BountyTime.key, timeLeft(stack))
+                //removeTag(BountyNBT.TimeStamp.key)
+            }
+        }
+    }
+
     private fun tickNumber(stack: ItemStack, amount: Int, key: String): Boolean {
         if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(key)) {
             var time = stack.tagCompound!!.getInteger(key)
@@ -62,12 +71,6 @@ class ItemBounty : Item(), IItemBounty {
             return (time <= 0)
         }
         return true
-    }
-
-    override fun tryExpireBoardTime(stack: ItemStack) {
-        if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(BountyNBT.BoardTime.key)) {
-            stack.tagCompound!!.setInteger(BountyNBT.BoardTime.key, 0)
-        }
     }
 
     override fun tryExpireBountyTime(stack: ItemStack) {
@@ -87,12 +90,6 @@ class ItemBounty : Item(), IItemBounty {
         return 0L
     }
 
-    fun ensureTimerStarted(stack: ItemStack, worldIn: World) {
-        if (stack.item is ItemBounty && stack.hasTagCompound() && !stack.tagCompound!!.hasKey(BountyNBT.TimeStamp.key)) {
-            stack.tagCompound!!.setLong(BountyNBT.TimeStamp.key, worldIn.totalWorldTime)
-        }
-    }
-
     override fun tickBoardTime(stack: ItemStack): Boolean {
         return tickNumber(stack, BountyData.boardTickFreq.toInt(), BountyNBT.BoardTime.key)
     }
@@ -102,6 +99,12 @@ class ItemBounty : Item(), IItemBounty {
              " (${EnumBountyRarity.getRarityFromInt(stack.tagCompound!!.getInteger(BountyNBT.Rarity.key))})"
         } else {
             ""
+        }
+    }
+
+    fun ensureTimerStarted(stack: ItemStack, worldIn: World) {
+        if (stack.item is ItemBounty && stack.hasTagCompound() && !stack.tagCompound!!.hasKey(BountyNBT.TimeStamp.key)) {
+            stack.tagCompound!!.setLong(BountyNBT.TimeStamp.key, worldIn.totalWorldTime)
         }
     }
 
