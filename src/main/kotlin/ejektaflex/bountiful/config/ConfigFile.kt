@@ -10,14 +10,27 @@ import kotlin.math.max
 data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBountifulConfig {
 
     override var maxBountiesPerBoard: Int = 12
-    override var boardAddFrequency: Long = 40L
+        private set
+    override var boardAddFrequency: Long = 2400L
+        private set
     override var boardLifespan: Int = 72000
+        private set
     override var timeMultiplier: Double = 28.0
+        private set
     override var cashInAtBountyBoard: Boolean = true
+        private set
     override var rarityChance: Double = 0.27
-    var bountyAmountMax = 2
-    var bountyAmountMin = 1
+        private set
     override var bountyTimeMin = 6000
+        private set
+    override var shouldCountdownOnBoard = false
+        private set
+    override var bountiesCreatedOnPlace = 0
+        private set
+
+
+    private var bountyAmountMax = 2
+    private var bountyAmountMin = 1
 
     override val bountyAmountRange: IntRange
         get() = bountyAmountMin..bountyAmountMax
@@ -28,7 +41,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 CATEGORY_BOARD,
                 "Max Bounties Per Board At A Time",
                 17,
-                "How many bounties should be on a bounty board at a given time. (Max: 27, Default: 17)"
+                "How many bounties should be on a bounty board at a given bountyTime. (Max: 27, Default: 17)"
         ).int.clampTo(1..27)
 
         boardAddFrequency = max(config.get(
@@ -87,9 +100,22 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 CATEGORY_BOUNTY,
                 "Minimum Bounty Time",
                 6000,
-                "The minimum time, in ticks, that a bounty can take to complete (Default: 4800)"
+                "The minimum bountyTime, in ticks, that a bounty can take to complete (Default: 4800)"
         ).int.clampTo(10..Int.MAX_VALUE)
 
+        shouldCountdownOnBoard = config.get(
+                CATEGORY_BOUNTY,
+                "Should Bounties Count Down on Board?",
+                false,
+                "By default (false), bounties do not start counting down until the player takes them."
+        ).boolean
+
+        bountiesCreatedOnPlace = config.get(
+                CATEGORY_BOARD,
+                "Bounties Created On Place",
+                0,
+                "The number of bounties that a Bounty Board starts with when placed (Default: 0)"
+        ).int.clampTo(1..27)
 
     }
 

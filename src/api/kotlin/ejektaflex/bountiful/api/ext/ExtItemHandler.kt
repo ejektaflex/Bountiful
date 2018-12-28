@@ -13,12 +13,12 @@ operator fun IItemHandlerModifiable.set(slotNum: Int, stack: ItemStack) {
     return setStackInSlot(slotNum, stack)
 }
 
-val IItemHandlerModifiable.stacks: List<ItemStack>
+val IItemHandler.stacks: List<ItemStack>
     get() = slotRange.map { index ->
         this[index]
     }
 
-val IItemHandlerModifiable.slotRange: IntRange
+val IItemHandler.slotRange: IntRange
     get() = 0 until slots
 
 val IItemHandlerModifiable.filledSlots: List<Int>

@@ -22,6 +22,7 @@ import net.minecraftforge.items.ItemStackHandler
 class TileEntityBountyBoard : TileEntity(), ITickable {
 
     val inventory = ItemStackHandler(numSlots)
+    var newBoard = true
 
     override fun writeToNBT(tag: NBTTagCompound): NBTTagCompound {
         tag.clear()
@@ -36,12 +37,19 @@ class TileEntityBountyBoard : TileEntity(), ITickable {
 
     override fun update() {
         if (!world.isRemote) {
+            // Skip placement update tick
+            if (newBoard) {
+                newBoard = false
+                return
+            }
+
             if (world.totalWorldTime % 20 == 3L) {
                 tickBounties()
             }
             if (world.totalWorldTime % Bountiful.config.boardAddFrequency == 3L) {
                 addBounties()
             }
+
         }
     }
 
@@ -57,7 +65,7 @@ class TileEntityBountyBoard : TileEntity(), ITickable {
     }
 
     fun addSingleBounty() {
-        inventory[inventory.slotRange.random()] = BountyCreator.createStack()
+        inventory[inventory.slotRange.random()] = BountyCreator.createStack(world)
     }
 
     private fun tickBounties() {
@@ -65,8 +73,17 @@ class TileEntityBountyBoard : TileEntity(), ITickable {
         for (slot in inventory.slotRange) {
             val bounty = inventory.getStackInSlot(slot)
             if (bounty.item is ItemBounty) {
-                val expired = (bounty.item as ItemBounty).tickBoardTime(bounty, BountyData.boardTickFreq.toInt())
-                if (expired) {
+                val data = BountyData.from(bounty)
+                val bountyItem = bounty.item as ItemBounty
+
+                // Remove bountyStamp so that the timer is reset
+                //bountyItem.removeTimestamp(bounty)
+
+                if (Bountiful.config.shouldCountdownOnBoard) {
+                    bountyItem.ensureTimerStarted(bounty, world)
+                }
+
+                if (data.timeLeft(world) <= 0 || data.boardTimeLeft(world) <= 0) {
                     toRemove.add(slot)
                 }
             }
@@ -79,6 +96,7 @@ class TileEntityBountyBoard : TileEntity(), ITickable {
         return capability === CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing)
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         return if (capability === CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) inventory as T else super.getCapability<T>(capability, facing)
     }

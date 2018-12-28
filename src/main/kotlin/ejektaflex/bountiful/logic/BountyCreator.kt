@@ -9,6 +9,7 @@ import ejektaflex.bountiful.api.logic.pickable.PickableEntry
 import ejektaflex.bountiful.registry.BountyRegistry
 import ejektaflex.bountiful.registry.RewardRegistry
 import net.minecraft.item.ItemStack
+import net.minecraft.world.World
 import java.util.*
 import kotlin.math.max
 
@@ -20,8 +21,8 @@ object BountyCreator : IBountyCreator {
 
     val rand = Random()
 
-    override fun createStack(): ItemStack {
-        return ContentRegistry.bounty.let { ItemStack(it).apply { it.ensureBounty(this) } }
+    override fun createStack(world: World): ItemStack {
+        return ContentRegistry.bounty.let { ItemStack(it).apply { it.ensureBounty(this, world) } }
     }
 
     override fun calcRarity(): EnumBountyRarity {
@@ -55,7 +56,7 @@ object BountyCreator : IBountyCreator {
                 }
             }
 
-            time = max((worth * Bountiful.config.timeMultiplier).toLong(), Bountiful.config.bountyTimeMin.toLong())
+            bountyTime = max((worth * Bountiful.config.timeMultiplier).toLong(), Bountiful.config.bountyTimeMin.toLong())
 
             // Make worth affected by rarity
             worth = (worth * EnumBountyRarity.getRarityFromInt(rarity).bountyMult).toInt()

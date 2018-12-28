@@ -1,13 +1,15 @@
 package ejektaflex.bountiful.api.config
 
 interface IBountifulConfig {
-    var maxBountiesPerBoard: Int
-    var boardAddFrequency: Long
-    var boardLifespan: Int
-    var timeMultiplier: Double
-    var cashInAtBountyBoard: Boolean
-    var rarityChance: Double
-    var bountyTimeMin: Int
+    val maxBountiesPerBoard: Int
+    val boardAddFrequency: Long
+    val boardLifespan: Int
+    val timeMultiplier: Double
+    val cashInAtBountyBoard: Boolean
+    val rarityChance: Double
+    val bountyTimeMin: Int
     val bountyAmountRange: IntRange
+    val shouldCountdownOnBoard: Boolean
+    val bountiesCreatedOnPlace: Int
     fun load()
 }

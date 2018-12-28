@@ -2,7 +2,9 @@ package ejektaflex.bountiful.item
 
 import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
+import ejektaflex.bountiful.api.ext.sendMessage
 import ejektaflex.bountiful.api.item.IItemBounty
+import ejektaflex.bountiful.api.logic.BountyNBT
 import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.logic.BountyData
 import net.minecraft.client.util.ITooltipFlag
@@ -16,6 +18,7 @@ import net.minecraft.util.EnumHand
 import net.minecraft.util.text.TextComponentString
 import net.minecraft.world.World
 import net.minecraftforge.items.ItemHandlerHelper
+import kotlin.math.max
 import kotlin.math.min
 
 
@@ -24,12 +27,8 @@ class ItemBounty : Item(), IItemBounty {
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<String>, flagIn: ITooltipFlag) {
         if (stack.hasTagCompound()) {
             val bounty = BountyData().apply { deserializeNBT(stack.tagCompound!!) }
-            if (bounty.time <= 0) {
-                tooltip.add("Expired.")
-            } else {
-                for (line in bounty.toString().split("\n")) {
-                    tooltip.add(line)
-                }
+            for (line in bounty.tooltipInfo(worldIn!!)) {
+                tooltip.add(line)
             }
         }
     }
@@ -43,10 +42,19 @@ class ItemBounty : Item(), IItemBounty {
     }
 
     override fun getRarity(stack: ItemStack): EnumRarity {
-        return if (stack.hasTagCompound() && stack.tagCompound!!.hasKey("rarity")) {
-            EnumBountyRarity.getRarityFromInt(stack.tagCompound!!.getInteger("rarity")).itemRarity
+        return if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(BountyNBT.Rarity.key)) {
+            EnumBountyRarity.getRarityFromInt(stack.tagCompound!!.getInteger(BountyNBT.Rarity.key)).itemRarity
         } else {
             super.getRarity(stack)
+        }
+    }
+
+    override fun removeTimestamp(stack: ItemStack) {
+        if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(BountyNBT.BountyStamp.key) && stack.tagCompound!!.hasKey(BountyNBT.BountyTime.key) ) {
+            stack.tagCompound!!.apply {
+                //setLong(BountyNBT.BountyTime.key, timeLeft(stack))
+                //removeTag(BountyNBT.BountyStamp.key)
+            }
         }
     }
 
@@ -65,44 +73,54 @@ class ItemBounty : Item(), IItemBounty {
         return true
     }
 
-    override fun tryExpireBoardTime(stack: ItemStack) {
-        if (stack.hasTagCompound() && stack.tagCompound!!.hasKey("boardTime")) {
-            stack.tagCompound!!.setInteger("boardTime", 0)
+    override fun tryExpireBountyTime(stack: ItemStack) {
+        if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(BountyNBT.BountyTime.key)) {
+            stack.tagCompound!!.setInteger(BountyNBT.BountyTime.key, 0)
         }
     }
 
-    // Decrements the amount of time left on the bounty. Returns true if it's run out.
-    override fun tickBountyTime(stack: ItemStack, amt: Int): Boolean {
-        return tickNumber(stack, amt, "time")
+    override fun timeLeft(stack: ItemStack): Long {
+        if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(BountyNBT.BountyTime.key)) {
+            if (stack.tagCompound!!.hasKey(BountyNBT.BountyStamp.key)) {
+                val tag = stack.tagCompound
+                return max(tag!!.getLong(BountyNBT.BountyStamp.key) - tag.getLong(BountyNBT.BountyTime.key), 0)
+            }
+
+        }
+        return 0L
     }
 
-    override fun tickBoardTime(stack: ItemStack, amt: Int): Boolean {
-        return tickNumber(stack, amt, "boardTime")
+    override fun tickBoardTime(stack: ItemStack): Boolean {
+        return tickNumber(stack, BountyData.boardTickFreq.toInt(), BountyNBT.BoardStamp.key)
     }
 
     override fun getItemStackDisplayName(stack: ItemStack): String {
-        return super.getItemStackDisplayName(stack) + if (stack.hasTagCompound() && stack.tagCompound!!.hasKey("rarity")) {
-             " (${EnumBountyRarity.getRarityFromInt(stack.tagCompound!!.getInteger("rarity"))})"
+        return super.getItemStackDisplayName(stack) + if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(BountyNBT.Rarity.key)) {
+             " (${EnumBountyRarity.getRarityFromInt(stack.tagCompound!!.getInteger(BountyNBT.Rarity.key))})"
         } else {
             ""
         }
     }
 
-    override fun onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean) {
-        if (worldIn.totalWorldTime % BountyData.bountyTickFreq == 0L) {
-            val expired = tickBountyTime(stack, BountyData.bountyTickFreq.toInt())
-            tryExpireBoardTime(stack)
-            // Remove itemstack when expired
-            if (expired) {
-                stack.count = 0
-            }
+    fun ensureTimerStarted(stack: ItemStack, worldIn: World) {
+        if (stack.item is ItemBounty && stack.hasTagCompound() && !stack.tagCompound!!.hasKey(BountyNBT.BountyStamp.key)) {
+            stack.tagCompound!!.setLong(BountyNBT.BountyStamp.key, worldIn.totalWorldTime)
         }
     }
 
-    override fun ensureBounty(stack: ItemStack) {
+    override fun onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity?, itemSlot: Int, isSelected: Boolean) {
+        if (worldIn.totalWorldTime % BountyData.bountyTickFreq == 1L) {
+            ensureTimerStarted(stack, worldIn)
+        }
+    }
+
+    override fun ensureBounty(stack: ItemStack, worldIn: World) {
         if (stack.item is ItemBounty) {
             if (!stack.hasTagCompound()) {
-                stack.tagCompound = BountyCreator.create().serializeNBT()
+                stack.tagCompound = BountyCreator.create().serializeNBT().apply {
+                    this.removeTag(BountyNBT.BountyStamp.key)
+                    this.setLong(BountyNBT.BoardStamp.key, worldIn.totalWorldTime)
+                }
             }
         } else {
             throw Exception("${stack.displayName} is not an ItemBounty, so you cannot generate bounty data for it!")
@@ -113,7 +131,7 @@ class ItemBounty : Item(), IItemBounty {
     fun cashIn(player: EntityPlayer, hand: EnumHand, atBoard: Boolean = false): Boolean {
         val bountyItem = player.getHeldItem(hand)
         if (!bountyItem.hasTagCompound()) {
-            ensureBounty(player.getHeldItem(hand))
+            ensureBounty(player.getHeldItem(hand), player.world)
             return false
         }
 
@@ -126,6 +144,11 @@ class ItemBounty : Item(), IItemBounty {
             }
         }
 
+        if (bounty.timeLeft(player.world) <= 0) {
+            player.sendMessage("§4This bounty is expired.")
+            return false
+        }
+
         println("Prereq items: $prereqItems")
 
         // Check to see if bounty meets all prerequisites
@@ -135,7 +158,7 @@ class ItemBounty : Item(), IItemBounty {
             val amountNeeded = gettable.second
             val hasEnough = stackSum >= amountNeeded
             if (!hasEnough) {
-                player.sendMessage(TextComponentString("§cCannot fullfill bounty, you don't have everything needed!"))
+                player.sendMessage(TextComponentString("§cCannot fulfill bounty, you don't have everything needed!"))
             }
 
             hasEnough
@@ -190,7 +213,7 @@ class ItemBounty : Item(), IItemBounty {
             return super.onItemRightClick(worldIn, playerIn, handIn)
         }
 
-        cashIn(playerIn, handIn, false)
+        cashIn(playerIn, handIn, atBoard = false)
 
         return super.onItemRightClick(worldIn, playerIn, handIn)
     }

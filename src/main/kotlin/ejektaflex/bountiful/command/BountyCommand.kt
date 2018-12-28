@@ -2,6 +2,8 @@ package ejektaflex.bountiful.command
 
 import ejektaflex.bountiful.config.BountifulIO
 import ejektaflex.bountiful.api.ext.sendMessage
+import ejektaflex.bountiful.item.ItemBounty
+import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.logic.error.BountyCreationException
 import ejektaflex.bountiful.registry.BountyRegistry
 import ejektaflex.bountiful.registry.RewardRegistry
@@ -11,6 +13,8 @@ import net.minecraft.command.ICommandSender
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.math.BlockPos
+import net.minecraftforge.fml.common.FMLCommonHandler
+import net.minecraftforge.items.ItemHandlerHelper
 
 
 class BountyCommand : ICommand {
@@ -48,6 +52,22 @@ class BountyCommand : ICommand {
                         sender.sendMessage("§4" + bce.message!!)
                         sender.sendMessage("§4Defaulting to previous data. Correct it and try again.")
                     }
+                }
+                "gen" -> {
+                    val playerProfile = sender.server?.playerList?.onlinePlayerProfiles?.find { sender.name == it.name }
+                    if (playerProfile != null && sender.server?.playerList?.canSendCommands(playerProfile) == true) {
+                        ItemHandlerHelper.giveItemToPlayer(sender.commandSenderEntity as EntityPlayer, BountyCreator.createStack(sender.entityWorld))
+                    }
+                }
+                "expire" -> {
+                    val player = sender.commandSenderEntity as EntityPlayer
+                    val holding = player.heldItemMainhand
+                    if (holding.item is ItemBounty) {
+                        (holding.item as ItemBounty).tryExpireBountyTime(holding)
+                    }
+                }
+                "wt" -> {
+                    sender.sendMessage("Time: ${sender.entityWorld.totalWorldTime}")
                 }
             }
         } else {
