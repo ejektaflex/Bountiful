@@ -18,18 +18,16 @@ import net.minecraft.util.EnumHand
 import net.minecraft.util.text.TextComponentString
 import net.minecraft.world.World
 import net.minecraftforge.items.ItemHandlerHelper
+import kotlin.math.max
 import kotlin.math.min
 
 
 class ItemBounty : Item(), IItemBounty {
 
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<String>, flagIn: ITooltipFlag) {
-        // Update to match current time while hovering
-        worldIn?.let { (stack.item as ItemBounty).tickBountyTime(stack, it) }
-
         if (stack.hasTagCompound()) {
             val bounty = BountyData().apply { deserializeNBT(stack.tagCompound!!) }
-            for (line in bounty.toString().split("\n")) {
+            for (line in bounty.tooltipInfo(worldIn!!)) {
                 tooltip.add(line)
             }
         }
@@ -78,17 +76,21 @@ class ItemBounty : Item(), IItemBounty {
         }
     }
 
-    // Decrements the amount of bountyTime left on the bounty. Returns true if it's run out.
-    override fun tickBountyTime(stack: ItemStack, world: World): Boolean {
-        if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(BountyNBT.TickDown.key)) {
-            val tickdown = stack.tagCompound!!.getLong(BountyNBT.TickDown.key)
-            val timeSinceTickdown = world.totalWorldTime - tickdown
-            if (timeSinceTickdown >= BountyData.bountyTickFreq) {
-                stack.tagCompound!!.setLong(BountyNBT.TickDown.key, world.totalWorldTime)
-                return tickNumber(stack, timeSinceTickdown.toInt(), BountyNBT.BountyTime.key)
+    override fun timeLeft(stack: ItemStack): Long {
+        if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(BountyNBT.BountyTime.key)) {
+            if (stack.tagCompound!!.hasKey(BountyNBT.TimeStamp.key)) {
+                val tag = stack.tagCompound
+                return max(tag!!.getLong(BountyNBT.TimeStamp.key) - tag.getLong(BountyNBT.BountyTime.key), 0)
             }
+
         }
-        return false
+        return 0L
+    }
+
+    fun ensureTimerStarted(stack: ItemStack, worldIn: World) {
+        if (stack.item is ItemBounty && stack.hasTagCompound() && !stack.tagCompound!!.hasKey(BountyNBT.TimeStamp.key)) {
+            stack.tagCompound!!.setLong(BountyNBT.TimeStamp.key, worldIn.totalWorldTime)
+        }
     }
 
     override fun tickBoardTime(stack: ItemStack): Boolean {
@@ -105,14 +107,14 @@ class ItemBounty : Item(), IItemBounty {
 
     override fun onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity?, itemSlot: Int, isSelected: Boolean) {
         if (worldIn.totalWorldTime % BountyData.bountyTickFreq == 1L) {
-            val expired = tickBountyTime(stack, worldIn)
+            ensureTimerStarted(stack, worldIn)
         }
     }
 
     override fun ensureBounty(stack: ItemStack, worldIn: World) {
         if (stack.item is ItemBounty) {
             if (!stack.hasTagCompound()) {
-                stack.tagCompound = BountyCreator.create(worldIn).serializeNBT()
+                stack.tagCompound = BountyCreator.create().serializeNBT().apply { this.removeTag(BountyNBT.TimeStamp.key) }
             }
         } else {
             throw Exception("${stack.displayName} is not an ItemBounty, so you cannot generate bounty data for it!")
@@ -136,7 +138,7 @@ class ItemBounty : Item(), IItemBounty {
             }
         }
 
-        if (bounty.bountyTime <= 0) {
+        if (bounty.timeLeft(player.world) <= 0) {
             player.sendMessage("§4This bounty is expired.")
             return false
         }

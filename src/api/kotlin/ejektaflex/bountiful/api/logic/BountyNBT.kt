@@ -8,7 +8,7 @@ enum class BountyNBT(var key: String) {
     BountyTime("bountyTime"),
     Rarity("rarity"),
     Worth("worth"),
-    TickDown("tickdown"),
+    TimeStamp("timestamp"),
     ToGet("gets"),
     Rewards("rewards");
 }

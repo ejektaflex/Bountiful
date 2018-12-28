@@ -18,6 +18,6 @@ interface IBountyCreator {
     /**
      * Generates new, randomized bounty data
      */
-    fun create(world: World): IBountyData
+    fun create(): IBountyData
 
 }

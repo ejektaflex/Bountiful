@@ -2,6 +2,7 @@ package ejektaflex.bountiful.api.logic
 
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.world.World
 import net.minecraftforge.common.util.INBTSerializable
 
 interface IBountyData : INBTSerializable<NBTTagCompound> {
@@ -32,9 +33,14 @@ interface IBountyData : INBTSerializable<NBTTagCompound> {
     val rewards: MutableList<Pair<ItemStack, Int>>
 
     /**
-     * A long representing the last bountyTime (in world tick bountyTime) that the item's bountyTime was ticked down
+     * A long representing the last world time when the bounty was given.
      */
-    var tickdown: Long
+    var timestamp: Long?
+
+    /**
+     * A long representing how long the bounty has left before it expires.
+     */
+    fun timeLeft(world: World): Long
 
 
 }

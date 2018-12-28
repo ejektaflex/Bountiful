@@ -7,6 +7,8 @@ import ejektaflex.bountiful.api.ext.toItemStack
 import ejektaflex.bountiful.api.logic.BountyNBT
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.world.World
+import kotlin.math.max
 
 class BountyData : IBountyData {
 
@@ -16,14 +18,23 @@ class BountyData : IBountyData {
     override var rarity = 0
     override val toGet = mutableListOf<Pair<ItemStack, Int>>()
     override val rewards = mutableListOf<Pair<ItemStack, Int>>()
-    override var tickdown = 0L
+    override var timestamp: Long? = null
     var worth = 0
 
-    override fun toString(): String {
-        return "" +
-                //"Board Time: ${formatTickTime(boardTime / BountyData.boardTickFreq)}\n" +
-                "Time To Complete: ${formatTimeExpirable(bountyTime / bountyTickFreq)}\n" +
-                "§fRequired: $getPretty\n§fRewards: §6$rewardPretty§r"
+    override fun timeLeft(world: World): Long {
+        return if (timestamp == null) {
+            bountyTime
+        } else {
+            max(timestamp!! + bountyTime - world.totalWorldTime, 0)
+        }
+    }
+
+    fun tooltipInfo(world: World): List<String> {
+        return listOf(
+                "Time To Complete: ${formatTimeExpirable(timeLeft(world) / bountyTickFreq)}",
+                "§fRequired: $getPretty",
+                "§fRewards: §6$rewardPretty§r"
+        )
     }
 
     private fun formatTickTime(n: Long): String {
@@ -53,7 +64,9 @@ class BountyData : IBountyData {
         bountyTime = tag.getLong(BountyNBT.BountyTime.key)
         rarity = tag.getInteger(BountyNBT.Rarity.key)
         worth = tag.getInteger(BountyNBT.Worth.key)
-        tickdown = tag.getLong(BountyNBT.TickDown.key)
+        if (tag.hasKey(BountyNBT.TimeStamp.key)) {
+            timestamp = tag.getLong(BountyNBT.TimeStamp.key)
+        }
         toGet.clear()
         for (gettable in tag.getCompoundTag(BountyNBT.ToGet.key).keySet) {
             toGet.add(gettable.toItemStack!! to tag.getCompoundTag(BountyNBT.ToGet.key).getInteger(gettable))
@@ -83,7 +96,7 @@ class BountyData : IBountyData {
             setLong(BountyNBT.BountyTime.key, bountyTime)
             setInteger(BountyNBT.Rarity.key, rarity)
             setInteger(BountyNBT.Worth.key, worth)
-            setLong(BountyNBT.TickDown.key, tickdown)
+            timestamp?.let { setLong(BountyNBT.TimeStamp.key, it) }
             setTag(BountyNBT.ToGet.key, nGets)
             setTag(BountyNBT.Rewards.key, nRewards)
         }

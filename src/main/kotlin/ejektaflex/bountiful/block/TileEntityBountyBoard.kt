@@ -76,7 +76,7 @@ class TileEntityBountyBoard : TileEntity(), ITickable {
                 val expired = (bounty.item as ItemBounty).tickBoardTime(bounty)
 
                 if (Bountiful.config.shouldCountdownOnBoard) {
-                    (bounty.item as ItemBounty).tickBountyTime(bounty, world)
+                    (bounty.item as ItemBounty).ensureTimerStarted(bounty, world)
                 }
 
                 if (expired) {

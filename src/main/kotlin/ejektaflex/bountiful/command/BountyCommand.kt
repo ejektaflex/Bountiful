@@ -66,6 +66,9 @@ class BountyCommand : ICommand {
                         (holding.item as ItemBounty).tryExpireBountyTime(holding)
                     }
                 }
+                "wt" -> {
+                    sender.sendMessage("Time: ${sender.entityWorld.totalWorldTime}")
+                }
             }
         } else {
             sender.sendMessage("Valid commands: '/bo reload'")

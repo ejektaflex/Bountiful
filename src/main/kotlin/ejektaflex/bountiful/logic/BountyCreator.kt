@@ -38,7 +38,7 @@ object BountyCreator : IBountyCreator {
         return EnumBountyRarity.getRarityFromInt(level)
     }
 
-    override fun create(world: World): BountyData {
+    override fun create(): BountyData {
         // Shuffle bounty registry and take a random number of bounty items
         val itemsToPick = BountyRegistry.items.shuffled().take(numBountyItems.random())
         return BountyData().apply {
@@ -65,8 +65,6 @@ object BountyCreator : IBountyCreator {
             findRewards(worth).forEach {
                 rewards.add(it)
             }
-
-            tickdown = 0L
 
         }
     }
