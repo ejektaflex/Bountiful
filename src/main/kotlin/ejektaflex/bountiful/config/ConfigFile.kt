@@ -10,15 +10,27 @@ import kotlin.math.max
 data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBountifulConfig {
 
     override var maxBountiesPerBoard: Int = 12
+        private set
     override var boardAddFrequency: Long = 40L
+        private set
     override var boardLifespan: Int = 72000
+        private set
     override var timeMultiplier: Double = 28.0
+        private set
     override var cashInAtBountyBoard: Boolean = true
+        private set
     override var rarityChance: Double = 0.27
+        private set
+    override var bountyTimeMin = 6000
+        private set
+    override var shouldCountdownOnBoard = false
+        private set
+    override var bountiesCreatedOnPlace = 0
+        private set
+
+
     private var bountyAmountMax = 2
     private var bountyAmountMin = 1
-    override var bountyTimeMin = 6000
-    override var shouldCountdownOnBoard = false
 
     override val bountyAmountRange: IntRange
         get() = bountyAmountMin..bountyAmountMax
@@ -97,6 +109,13 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 false,
                 "By default (false), bounties do not start counting down until the player takes them."
         ).boolean
+
+        bountiesCreatedOnPlace = config.get(
+                CATEGORY_BOARD,
+                "Bounties Created On Place",
+                0,
+                "The number of bounties that a Bounty Board starts with when placed (Default: 0)"
+        ).int.clampTo(1..27)
 
     }
 

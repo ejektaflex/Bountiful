@@ -36,4 +36,8 @@ object InternalAPI : IBountifulAPI {
         return ItemStack(ContentRegistry.bounty).apply { this.tagCompound = data.serializeNBT() }
     }
 
+    override fun getConfig(): IBountifulConfig {
+        return Bountiful.config
+    }
+
 }

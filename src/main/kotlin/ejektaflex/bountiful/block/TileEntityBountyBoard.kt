@@ -23,6 +23,10 @@ class TileEntityBountyBoard : TileEntity(), ITickable {
 
     val inventory = ItemStackHandler(numSlots)
 
+    init {
+
+    }
+
     override fun writeToNBT(tag: NBTTagCompound): NBTTagCompound {
         tag.clear()
         tag.setTag("inv", inventory.serializeNBT())
