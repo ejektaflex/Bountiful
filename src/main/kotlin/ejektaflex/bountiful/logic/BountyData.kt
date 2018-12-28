@@ -4,6 +4,7 @@ import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.api.logic.IBountyData
 import ejektaflex.bountiful.api.ext.toPretty
 import ejektaflex.bountiful.api.ext.toItemStack
+import ejektaflex.bountiful.api.logic.BountyNBT
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
@@ -11,16 +12,17 @@ class BountyData : IBountyData {
 
     // 72000 = 1 hour IRL
     override var boardTime = Bountiful.config.boardLifespan
-    override var time = 0L
+    override var bountyTime = 0L
     override var rarity = 0
     override val toGet = mutableListOf<Pair<ItemStack, Int>>()
     override val rewards = mutableListOf<Pair<ItemStack, Int>>()
+    override var tickdown = 0L
     var worth = 0
 
     override fun toString(): String {
         return "" +
                 //"Board Time: ${formatTickTime(boardTime / BountyData.boardTickFreq)}\n" +
-                "Time To Complete: ${formatTimeExpirable(time / bountyTickFreq)}\n" +
+                "Time To Complete: ${formatTimeExpirable(bountyTime / bountyTickFreq)}\n" +
                 "§fRequired: $getPretty\n§fRewards: §6$rewardPretty§r"
     }
 
@@ -47,17 +49,18 @@ class BountyData : IBountyData {
         get() = rewards.joinToString("§r, ") { "§f${it.second}x §6${it.first.displayName}" }
 
     override fun deserializeNBT(tag: NBTTagCompound) {
-        boardTime = tag.getInteger("boardTime")
-        time = tag.getLong("time")
-        rarity = tag.getInteger("rarity")
-        worth = tag.getInteger("worth")
+        boardTime = tag.getInteger(BountyNBT.BoardTime.key)
+        bountyTime = tag.getLong(BountyNBT.BountyTime.key)
+        rarity = tag.getInteger(BountyNBT.Rarity.key)
+        worth = tag.getInteger(BountyNBT.Worth.key)
+        tickdown = tag.getLong(BountyNBT.TickDown.key)
         toGet.clear()
-        for (gettable in tag.getCompoundTag("gets").keySet) {
-            toGet.add(gettable.toItemStack!! to tag.getCompoundTag("gets").getInteger(gettable))
+        for (gettable in tag.getCompoundTag(BountyNBT.ToGet.key).keySet) {
+            toGet.add(gettable.toItemStack!! to tag.getCompoundTag(BountyNBT.ToGet.key).getInteger(gettable))
         }
         rewards.clear()
-        for (gettable in tag.getCompoundTag("rewards").keySet) {
-            rewards.add(gettable.toItemStack!! to tag.getCompoundTag("rewards").getInteger(gettable))
+        for (gettable in tag.getCompoundTag(BountyNBT.Rewards.key).keySet) {
+            rewards.add(gettable.toItemStack!! to tag.getCompoundTag(BountyNBT.Rewards.key).getInteger(gettable))
         }
     }
 
@@ -76,12 +79,13 @@ class BountyData : IBountyData {
         }
 
         return NBTTagCompound().apply {
-            setInteger("boardTime", boardTime)
-            setLong("time", time)
-            setInteger("rarity", rarity)
-            setInteger("worth", worth)
-            setTag("gets", nGets)
-            setTag("rewards", nRewards)
+            setInteger(BountyNBT.BoardTime.key, boardTime)
+            setLong(BountyNBT.BountyTime.key, bountyTime)
+            setInteger(BountyNBT.Rarity.key, rarity)
+            setInteger(BountyNBT.Worth.key, worth)
+            setLong(BountyNBT.TickDown.key, tickdown)
+            setTag(BountyNBT.ToGet.key, nGets)
+            setTag(BountyNBT.Rewards.key, nRewards)
         }
     }
 

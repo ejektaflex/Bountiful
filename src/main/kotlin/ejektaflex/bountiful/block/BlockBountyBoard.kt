@@ -1,6 +1,7 @@
 package ejektaflex.bountiful.block
 
 import ejektaflex.bountiful.Bountiful
+import ejektaflex.bountiful.api.ext.filledSlots
 import ejektaflex.bountiful.api.ext.sendMessage
 import ejektaflex.bountiful.api.ext.stacks
 import ejektaflex.bountiful.gui.GuiHandler
@@ -26,7 +27,7 @@ class BlockBountyBoard : BlockTileEntity<TileEntityBountyBoard>(Material.WOOD, "
                 // Cash in, or else try get bounty
                 if (Bountiful.config.cashInAtBountyBoard && holding?.item is ItemBounty) {
                     (holding.item as ItemBounty).cashIn(player, hand!!, atBoard = true)
-                } else if (tile.inventory.stacks.isEmpty()) {
+                } else if (tile.inventory.filledSlots.isEmpty()) {
                     player.sendMessage("§6No bounties available, come back later!")
                 } else {
                     player.openGui(Bountiful.instance!!, GuiHandler.BOARD_GUI, world, pos.x, pos.y, pos.z)

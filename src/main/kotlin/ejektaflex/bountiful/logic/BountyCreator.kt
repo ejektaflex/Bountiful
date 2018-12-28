@@ -55,7 +55,7 @@ object BountyCreator : IBountyCreator {
                 }
             }
 
-            time = max((worth * Bountiful.config.timeMultiplier).toLong(), Bountiful.config.bountyTimeMin.toLong())
+            bountyTime = max((worth * Bountiful.config.timeMultiplier).toLong(), Bountiful.config.bountyTimeMin.toLong())
 
             // Make worth affected by rarity
             worth = (worth * EnumBountyRarity.getRarityFromInt(rarity).bountyMult).toInt()
@@ -64,6 +64,8 @@ object BountyCreator : IBountyCreator {
             findRewards(worth).forEach {
                 rewards.add(it)
             }
+
+            tickdown = 0L
 
         }
     }

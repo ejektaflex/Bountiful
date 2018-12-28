@@ -11,7 +11,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
 
     override var maxBountiesPerBoard: Int = 12
         private set
-    override var boardAddFrequency: Long = 40L
+    override var boardAddFrequency: Long = 2400L
         private set
     override var boardLifespan: Int = 72000
         private set
@@ -41,7 +41,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 CATEGORY_BOARD,
                 "Max Bounties Per Board At A Time",
                 17,
-                "How many bounties should be on a bounty board at a given time. (Max: 27, Default: 17)"
+                "How many bounties should be on a bounty board at a given bountyTime. (Max: 27, Default: 17)"
         ).int.clampTo(1..27)
 
         boardAddFrequency = max(config.get(
@@ -100,7 +100,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 CATEGORY_BOUNTY,
                 "Minimum Bounty Time",
                 6000,
-                "The minimum time, in ticks, that a bounty can take to complete (Default: 4800)"
+                "The minimum bountyTime, in ticks, that a bounty can take to complete (Default: 4800)"
         ).int.clampTo(10..Int.MAX_VALUE)
 
         shouldCountdownOnBoard = config.get(

@@ -22,10 +22,7 @@ import net.minecraftforge.items.ItemStackHandler
 class TileEntityBountyBoard : TileEntity(), ITickable {
 
     val inventory = ItemStackHandler(numSlots)
-
-    init {
-
-    }
+    var newBoard = true
 
     override fun writeToNBT(tag: NBTTagCompound): NBTTagCompound {
         tag.clear()
@@ -40,12 +37,19 @@ class TileEntityBountyBoard : TileEntity(), ITickable {
 
     override fun update() {
         if (!world.isRemote) {
+            // Skip placement update tick
+            if (newBoard) {
+                newBoard = false
+                return
+            }
+
             if (world.totalWorldTime % 20 == 3L) {
                 tickBounties()
             }
             if (world.totalWorldTime % Bountiful.config.boardAddFrequency == 3L) {
                 addBounties()
             }
+
         }
     }
 
@@ -72,7 +76,7 @@ class TileEntityBountyBoard : TileEntity(), ITickable {
                 val expired = (bounty.item as ItemBounty).tickBoardTime(bounty)
 
                 if (Bountiful.config.shouldCountdownOnBoard) {
-                    (bounty.item as ItemBounty).tickBountyTime(bounty)
+                    (bounty.item as ItemBounty).tickBountyTime(bounty, world)
                 }
 
                 if (expired) {
@@ -88,6 +92,7 @@ class TileEntityBountyBoard : TileEntity(), ITickable {
         return capability === CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing)
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
         return if (capability === CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) inventory as T else super.getCapability<T>(capability, facing)
     }
