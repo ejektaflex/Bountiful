@@ -14,9 +14,14 @@ interface IItemBounty : IForgeRegistryEntry<Item> {
     fun getBountyData(stack: ItemStack): IBountyData
 
     /**
-     * When given a bounty ItemStack, this method attempts to expire the amount of bountyTime it has left on the board.
+     * When given a bounty ItemStack, this method attempts to expire the amount of board time it has left on the board.
      */
     fun tryExpireBoardTime(stack: ItemStack)
+
+    /**
+     * When given a bounty ItemStack, this method attempts to expire the amount of time the bounty has left to complete.
+     */
+    fun tryExpireBountyTime(stack: ItemStack)
 
     /**
      * Decrements the amount of bountyTime left on the bounty. Returns true if it's run out.
@@ -31,6 +36,6 @@ interface IItemBounty : IForgeRegistryEntry<Item> {
     /**
      * When given an ItemStack of ItemBounty, this method ensures that the stack has bounty NBT data.
      */
-    fun ensureBounty(stack: ItemStack)
+    fun ensureBounty(stack: ItemStack, worldIn: World)
 
 }

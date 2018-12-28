@@ -65,7 +65,7 @@ class TileEntityBountyBoard : TileEntity(), ITickable {
     }
 
     fun addSingleBounty() {
-        inventory[inventory.slotRange.random()] = BountyCreator.createStack()
+        inventory[inventory.slotRange.random()] = BountyCreator.createStack(world)
     }
 
     private fun tickBounties() {

@@ -2,6 +2,7 @@ package ejektaflex.bountiful.item
 
 import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
+import ejektaflex.bountiful.api.ext.sendMessage
 import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.api.logic.BountyNBT
 import ejektaflex.bountiful.logic.BountyCreator
@@ -23,14 +24,13 @@ import kotlin.math.min
 class ItemBounty : Item(), IItemBounty {
 
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<String>, flagIn: ITooltipFlag) {
+        // Update to match current time while hovering
+        worldIn?.let { (stack.item as ItemBounty).tickBountyTime(stack, it) }
+
         if (stack.hasTagCompound()) {
             val bounty = BountyData().apply { deserializeNBT(stack.tagCompound!!) }
-            if (bounty.bountyTime <= 0) {
-                tooltip.add("Expired.")
-            } else {
-                for (line in bounty.toString().split("\n")) {
-                    tooltip.add(line)
-                }
+            for (line in bounty.toString().split("\n")) {
+                tooltip.add(line)
             }
         }
     }
@@ -72,6 +72,12 @@ class ItemBounty : Item(), IItemBounty {
         }
     }
 
+    override fun tryExpireBountyTime(stack: ItemStack) {
+        if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(BountyNBT.BountyTime.key)) {
+            stack.tagCompound!!.setInteger(BountyNBT.BountyTime.key, 0)
+        }
+    }
+
     // Decrements the amount of bountyTime left on the bounty. Returns true if it's run out.
     override fun tickBountyTime(stack: ItemStack, world: World): Boolean {
         if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(BountyNBT.TickDown.key)) {
@@ -79,7 +85,7 @@ class ItemBounty : Item(), IItemBounty {
             val timeSinceTickdown = world.totalWorldTime - tickdown
             if (timeSinceTickdown >= BountyData.bountyTickFreq) {
                 stack.tagCompound!!.setLong(BountyNBT.TickDown.key, world.totalWorldTime)
-                return tickNumber(stack, BountyData.bountyTickFreq.toInt(), BountyNBT.BountyTime.key)
+                return tickNumber(stack, timeSinceTickdown.toInt(), BountyNBT.BountyTime.key)
             }
         }
         return false
@@ -103,10 +109,10 @@ class ItemBounty : Item(), IItemBounty {
         }
     }
 
-    override fun ensureBounty(stack: ItemStack) {
+    override fun ensureBounty(stack: ItemStack, worldIn: World) {
         if (stack.item is ItemBounty) {
             if (!stack.hasTagCompound()) {
-                stack.tagCompound = BountyCreator.create().serializeNBT()
+                stack.tagCompound = BountyCreator.create(worldIn).serializeNBT()
             }
         } else {
             throw Exception("${stack.displayName} is not an ItemBounty, so you cannot generate bounty data for it!")
@@ -117,7 +123,7 @@ class ItemBounty : Item(), IItemBounty {
     fun cashIn(player: EntityPlayer, hand: EnumHand, atBoard: Boolean = false): Boolean {
         val bountyItem = player.getHeldItem(hand)
         if (!bountyItem.hasTagCompound()) {
-            ensureBounty(player.getHeldItem(hand))
+            ensureBounty(player.getHeldItem(hand), player.world)
             return false
         }
 
@@ -128,6 +134,11 @@ class ItemBounty : Item(), IItemBounty {
             bounty.toGet.any { gettable ->
                 gettable.first.isItemEqualIgnoreDurability(invItem)
             }
+        }
+
+        if (bounty.bountyTime <= 0) {
+            player.sendMessage("§4This bounty is expired.")
+            return false
         }
 
         println("Prereq items: $prereqItems")
