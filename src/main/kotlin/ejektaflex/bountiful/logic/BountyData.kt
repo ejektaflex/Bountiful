@@ -20,7 +20,7 @@ class BountyData : IBountyData {
     override fun toString(): String {
         return "" +
                 //"Board Time: ${formatTickTime(boardTime / BountyData.boardTickFreq)}\n" +
-                "Time To Complete: ${formatTickTime(time / bountyTickFreq)}\n" +
+                "Time To Complete: ${formatTimeExpirable(time / bountyTickFreq)}\n" +
                 "§fRequired: $getPretty\n§fRewards: §6$rewardPretty§r"
     }
 
@@ -29,6 +29,14 @@ class BountyData : IBountyData {
             "${n}s"
         } else {
             "${n / 60}m ${n % 60}s"
+        }
+    }
+
+    private fun formatTimeExpirable(n: Long): String {
+        return if (n <= 0) {
+            "§4Expired"
+        } else {
+            formatTickTime(n)
         }
     }
 

@@ -15,9 +15,10 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
     override var timeMultiplier: Double = 28.0
     override var cashInAtBountyBoard: Boolean = true
     override var rarityChance: Double = 0.27
-    var bountyAmountMax = 2
-    var bountyAmountMin = 1
+    private var bountyAmountMax = 2
+    private var bountyAmountMin = 1
     override var bountyTimeMin = 6000
+    override var shouldCountdownOnBoard = false
 
     override val bountyAmountRange: IntRange
         get() = bountyAmountMin..bountyAmountMax
@@ -90,6 +91,12 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 "The minimum time, in ticks, that a bounty can take to complete (Default: 4800)"
         ).int.clampTo(10..Int.MAX_VALUE)
 
+        shouldCountdownOnBoard = config.get(
+                CATEGORY_BOUNTY,
+                "Should Bounties Count Down on Board?",
+                false,
+                "By default (false), bounties do not start counting down until the player takes them."
+        ).boolean
 
     }
 

@@ -20,12 +20,12 @@ interface IItemBounty : IForgeRegistryEntry<Item> {
     /**
      * Decrements the amount of time left on the bounty. Returns true if it's run out.
      */
-    fun tickBountyTime(stack: ItemStack, amt: Int): Boolean
+    fun tickBountyTime(stack: ItemStack): Boolean
 
     /**
      * Decrements the amount of time left on the board. Returns true if it's run out.
      */
-    fun tickBoardTime(stack: ItemStack, amt: Int): Boolean
+    fun tickBoardTime(stack: ItemStack): Boolean
 
     /**
      * When given an ItemStack of ItemBounty, this method ensures that the stack has bounty NBT data.

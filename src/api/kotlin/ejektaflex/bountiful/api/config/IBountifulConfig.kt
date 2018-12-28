@@ -9,5 +9,6 @@ interface IBountifulConfig {
     var rarityChance: Double
     var bountyTimeMin: Int
     val bountyAmountRange: IntRange
+    var shouldCountdownOnBoard: Boolean
     fun load()
 }

@@ -72,12 +72,12 @@ class ItemBounty : Item(), IItemBounty {
     }
 
     // Decrements the amount of time left on the bounty. Returns true if it's run out.
-    override fun tickBountyTime(stack: ItemStack, amt: Int): Boolean {
-        return tickNumber(stack, amt, "time")
+    override fun tickBountyTime(stack: ItemStack): Boolean {
+        return tickNumber(stack, BountyData.bountyTickFreq.toInt(), "time")
     }
 
-    override fun tickBoardTime(stack: ItemStack, amt: Int): Boolean {
-        return tickNumber(stack, amt, "boardTime")
+    override fun tickBoardTime(stack: ItemStack): Boolean {
+        return tickNumber(stack, BountyData.boardTickFreq.toInt(), "boardTime")
     }
 
     override fun getItemStackDisplayName(stack: ItemStack): String {
@@ -90,7 +90,7 @@ class ItemBounty : Item(), IItemBounty {
 
     override fun onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity?, itemSlot: Int, isSelected: Boolean) {
         if (worldIn.totalWorldTime % BountyData.bountyTickFreq == 0L) {
-            val expired = tickBountyTime(stack, BountyData.bountyTickFreq.toInt())
+            val expired = tickBountyTime(stack)
             tryExpireBoardTime(stack)
             // Remove itemstack when expired
             if (expired) {
