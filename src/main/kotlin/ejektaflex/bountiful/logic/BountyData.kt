@@ -15,24 +15,29 @@ import kotlin.math.max
 class BountyData : IBountyData {
 
     // 72000 = 1 hour IRL
-    override var boardTime = Bountiful.config.boardLifespan
+    override var boardStamp = Bountiful.config.boardLifespan
     override var bountyTime = 0L
     override var rarity = 0
     override val toGet = mutableListOf<Pair<ItemStack, Int>>()
     override val rewards = mutableListOf<Pair<ItemStack, Int>>()
-    override var timestamp: Long? = null
+    override var bountyStamp: Long? = null
     var worth = 0
 
     override fun timeLeft(world: World): Long {
-        return if (timestamp == null) {
+        return if (bountyStamp == null) {
             bountyTime
         } else {
-            max(timestamp!! + bountyTime - world.totalWorldTime, 0)
+            max(bountyStamp!! + bountyTime - world.totalWorldTime, 0)
         }
+    }
+
+    override fun boardTimeLeft(world: World): Long {
+        return max(boardStamp + Bountiful.config.boardLifespan - world.totalWorldTime , 0)
     }
 
     fun tooltipInfo(world: World): List<String> {
         return listOf(
+                //"Board Time: ${formatTickTime(boardTimeLeft(world) / boardTickFreq)}",
                 "Time To Complete: ${formatTimeExpirable(timeLeft(world) / bountyTickFreq)}",
                 "§fRequired: $getPretty",
                 "§fRewards: §6$rewardPretty§r"
@@ -62,12 +67,12 @@ class BountyData : IBountyData {
         get() = rewards.joinToString("§r, ") { "§f${it.second}x §6${it.first.displayName}" }
 
     override fun deserializeNBT(tag: NBTTagCompound) {
-        boardTime = tag.getInteger(BountyNBT.BoardTime.key)
+        boardStamp = tag.getInteger(BountyNBT.BoardStamp.key)
         bountyTime = tag.getLong(BountyNBT.BountyTime.key)
         rarity = tag.getInteger(BountyNBT.Rarity.key)
         worth = tag.getInteger(BountyNBT.Worth.key)
-        if (tag.hasKey(BountyNBT.TimeStamp.key)) {
-            timestamp = tag.getLong(BountyNBT.TimeStamp.key)
+        if (tag.hasKey(BountyNBT.BountyStamp.key)) {
+            bountyStamp = tag.getLong(BountyNBT.BountyStamp.key)
         }
         toGet.clear()
         for (gettable in tag.getCompoundTag(BountyNBT.ToGet.key).keySet) {
@@ -94,11 +99,11 @@ class BountyData : IBountyData {
         }
 
         return NBTTagCompound().apply {
-            setInteger(BountyNBT.BoardTime.key, boardTime)
+            setInteger(BountyNBT.BoardStamp.key, boardStamp)
             setLong(BountyNBT.BountyTime.key, bountyTime)
             setInteger(BountyNBT.Rarity.key, rarity)
             setInteger(BountyNBT.Worth.key, worth)
-            timestamp?.let { setLong(BountyNBT.TimeStamp.key, it) }
+            bountyStamp?.let { setLong(BountyNBT.BountyStamp.key, it) }
             setTag(BountyNBT.ToGet.key, nGets)
             setTag(BountyNBT.Rewards.key, nRewards)
         }

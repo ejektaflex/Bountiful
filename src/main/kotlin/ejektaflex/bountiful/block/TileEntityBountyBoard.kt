@@ -76,14 +76,14 @@ class TileEntityBountyBoard : TileEntity(), ITickable {
                 val data = BountyData.from(bounty)
                 val bountyItem = bounty.item as ItemBounty
 
-                // Remove timestamp so that the timer is reset
+                // Remove bountyStamp so that the timer is reset
                 //bountyItem.removeTimestamp(bounty)
 
                 if (Bountiful.config.shouldCountdownOnBoard) {
                     bountyItem.ensureTimerStarted(bounty, world)
                 }
 
-                if (data.timeLeft(world) <= 0) {
+                if (data.timeLeft(world) <= 0 || data.boardTimeLeft(world) <= 0) {
                     toRemove.add(slot)
                 }
             }

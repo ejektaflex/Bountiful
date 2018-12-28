@@ -10,7 +10,7 @@ interface IBountyData : INBTSerializable<NBTTagCompound> {
     /**
      * How long a bounty has left on the Bounty Board
      */
-    var boardTime: Int
+    var boardStamp: Int
 
     /**
      * How long the bounty has before it expires.
@@ -35,12 +35,17 @@ interface IBountyData : INBTSerializable<NBTTagCompound> {
     /**
      * A long representing the last world time when the bounty was given.
      */
-    var timestamp: Long?
+    var bountyStamp: Long?
 
     /**
      * A long representing how long the bounty has left before it expires.
      */
     fun timeLeft(world: World): Long
+
+    /**
+     * A long representing how long the bounty has left on the board.
+     */
+    fun boardTimeLeft(world: World): Long
 
 
 }

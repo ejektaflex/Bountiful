@@ -50,10 +50,10 @@ class ItemBounty : Item(), IItemBounty {
     }
 
     override fun removeTimestamp(stack: ItemStack) {
-        if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(BountyNBT.TimeStamp.key) && stack.tagCompound!!.hasKey(BountyNBT.BountyTime.key) ) {
+        if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(BountyNBT.BountyStamp.key) && stack.tagCompound!!.hasKey(BountyNBT.BountyTime.key) ) {
             stack.tagCompound!!.apply {
                 //setLong(BountyNBT.BountyTime.key, timeLeft(stack))
-                //removeTag(BountyNBT.TimeStamp.key)
+                //removeTag(BountyNBT.BountyStamp.key)
             }
         }
     }
@@ -81,9 +81,9 @@ class ItemBounty : Item(), IItemBounty {
 
     override fun timeLeft(stack: ItemStack): Long {
         if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(BountyNBT.BountyTime.key)) {
-            if (stack.tagCompound!!.hasKey(BountyNBT.TimeStamp.key)) {
+            if (stack.tagCompound!!.hasKey(BountyNBT.BountyStamp.key)) {
                 val tag = stack.tagCompound
-                return max(tag!!.getLong(BountyNBT.TimeStamp.key) - tag.getLong(BountyNBT.BountyTime.key), 0)
+                return max(tag!!.getLong(BountyNBT.BountyStamp.key) - tag.getLong(BountyNBT.BountyTime.key), 0)
             }
 
         }
@@ -91,7 +91,7 @@ class ItemBounty : Item(), IItemBounty {
     }
 
     override fun tickBoardTime(stack: ItemStack): Boolean {
-        return tickNumber(stack, BountyData.boardTickFreq.toInt(), BountyNBT.BoardTime.key)
+        return tickNumber(stack, BountyData.boardTickFreq.toInt(), BountyNBT.BoardStamp.key)
     }
 
     override fun getItemStackDisplayName(stack: ItemStack): String {
@@ -103,8 +103,8 @@ class ItemBounty : Item(), IItemBounty {
     }
 
     fun ensureTimerStarted(stack: ItemStack, worldIn: World) {
-        if (stack.item is ItemBounty && stack.hasTagCompound() && !stack.tagCompound!!.hasKey(BountyNBT.TimeStamp.key)) {
-            stack.tagCompound!!.setLong(BountyNBT.TimeStamp.key, worldIn.totalWorldTime)
+        if (stack.item is ItemBounty && stack.hasTagCompound() && !stack.tagCompound!!.hasKey(BountyNBT.BountyStamp.key)) {
+            stack.tagCompound!!.setLong(BountyNBT.BountyStamp.key, worldIn.totalWorldTime)
         }
     }
 
@@ -117,7 +117,10 @@ class ItemBounty : Item(), IItemBounty {
     override fun ensureBounty(stack: ItemStack, worldIn: World) {
         if (stack.item is ItemBounty) {
             if (!stack.hasTagCompound()) {
-                stack.tagCompound = BountyCreator.create().serializeNBT().apply { this.removeTag(BountyNBT.TimeStamp.key) }
+                stack.tagCompound = BountyCreator.create().serializeNBT().apply {
+                    this.removeTag(BountyNBT.BountyStamp.key)
+                    this.setLong(BountyNBT.BoardStamp.key, worldIn.totalWorldTime)
+                }
             }
         } else {
             throw Exception("${stack.displayName} is not an ItemBounty, so you cannot generate bounty data for it!")
