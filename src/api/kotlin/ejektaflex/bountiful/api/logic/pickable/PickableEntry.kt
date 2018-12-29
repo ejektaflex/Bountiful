@@ -19,4 +19,9 @@ open class PickableEntry(var content: String, var amount: ItemRange, var unitWor
         return PickedEntry(content, randCount).typed()
     }
 
+    val isValid: Boolean
+        get() {
+            return pick().content != null
+        }
+
 }

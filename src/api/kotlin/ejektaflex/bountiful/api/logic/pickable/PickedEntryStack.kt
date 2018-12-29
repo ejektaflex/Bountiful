@@ -10,11 +10,11 @@ class PickedEntryStack(
 ) : IPickedEntry by genericPick {
 
 
-
     val itemStack: ItemStack?
         get() = contentID.toItemStack
 
-    override val content: Any? = itemStack
+    override val content: Any?
+        get() = itemStack
 
     override fun toString(): String {
         return "§r" + amount.toString() + "x §a" + (itemStack?.displayName ?: "Unknown Item (Content ID: $contentID)") + "§r"

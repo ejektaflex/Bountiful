@@ -84,7 +84,7 @@ object BountyCreator : IBountyCreator {
             val maxNumOfReward = worthLeft / reward.amount
             val worthSated = reward.amount * maxNumOfReward
             worthLeft -= worthSated
-            toRet.add(reward)
+            toRet.add(PickedEntryStack(PickedEntry(reward.contentID, maxNumOfReward)))
             validRewards = RewardRegistry.items.filter { it.amount <= worthLeft && it.content !in picked }.sortedBy { it.amount }
         }
 

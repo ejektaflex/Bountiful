@@ -1,11 +1,9 @@
 package ejektaflex.bountiful.logic
 
 import ejektaflex.bountiful.Bountiful
-import ejektaflex.bountiful.api.ext.getSet
-import ejektaflex.bountiful.api.ext.setSet
+import ejektaflex.bountiful.api.ext.getUnsortedList
+import ejektaflex.bountiful.api.ext.setUnsortedList
 import ejektaflex.bountiful.api.logic.IBountyData
-import ejektaflex.bountiful.api.ext.toPretty
-import ejektaflex.bountiful.api.ext.toItemStack
 import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.api.logic.BountyNBT
 import ejektaflex.bountiful.api.logic.pickable.IPickedEntry
@@ -81,12 +79,12 @@ class BountyData : IBountyData {
             bountyStamp = tag.getLong(BountyNBT.BountyStamp.key)
         }
         toGet.restore(
-                tag.getSet(BountyNBT.ToGet.key) { PickedEntry() }.map {
+                tag.getUnsortedList(BountyNBT.ToGet.key) { PickedEntry() }.map {
                     it.typed()
                 }
         )
 
-        rewards.restore(tag.getSet(BountyNBT.Rewards.key) { PickedEntryStack(PickedEntry()) }.toList() )
+        rewards.restore(tag.getUnsortedList(BountyNBT.Rewards.key) { PickedEntryStack(PickedEntry()) }.toList() )
     }
 
     override fun serializeNBT(): NBTTagCompound {
@@ -97,8 +95,8 @@ class BountyData : IBountyData {
             setInteger(BountyNBT.Rarity.key, rarity)
             setInteger(BountyNBT.Worth.key, worth)
             bountyStamp?.let { setLong(BountyNBT.BountyStamp.key, it) }
-            setSet(BountyNBT.ToGet.key, toGet.items.toSet())
-            setSet(BountyNBT.Rewards.key, rewards.items.toSet())
+            setUnsortedList(BountyNBT.ToGet.key, toGet.items.toSet())
+            setUnsortedList(BountyNBT.Rewards.key, rewards.items.toSet())
         }
     }
 

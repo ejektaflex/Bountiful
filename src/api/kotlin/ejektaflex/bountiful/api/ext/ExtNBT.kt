@@ -9,7 +9,7 @@ fun NBTTagCompound.clear() {
     }
 }
 
-fun NBTTagCompound.setSet(key: String, items: Set<INBTSerializable<NBTTagCompound>>) {
+fun NBTTagCompound.setUnsortedList(key: String, items: Set<INBTSerializable<NBTTagCompound>>) {
     val listTag = NBTTagCompound().apply {
         items.forEachIndexed { index, item ->
             setTag(index.toString(), item.serializeNBT())
@@ -18,7 +18,7 @@ fun NBTTagCompound.setSet(key: String, items: Set<INBTSerializable<NBTTagCompoun
     setTag(key, listTag)
 }
 
-fun <T : INBTSerializable<NBTTagCompound>> NBTTagCompound.getSet(key: String, itemGen: () -> T): Set<T> {
+fun <T : INBTSerializable<NBTTagCompound>> NBTTagCompound.getUnsortedList(key: String, itemGen: () -> T): Set<T> {
     val listTag = getCompoundTag(key)
     return listTag.keySet.map { index ->
         val itag = listTag.getCompoundTag(index)
