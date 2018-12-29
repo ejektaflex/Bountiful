@@ -23,6 +23,7 @@ open class CommonProxy : IProxy {
         "bounties.json".let {
             BountifulIO.populateConfigFolder(Bountiful.configDir, DefaultData.entries.items, it)
             //BountifulIO.hotReloadJson(BountyRegistry, it)
+            BountyRegistry.restore(DefaultData.entries.items)
         }
 
         // Same for rewards
@@ -30,15 +31,16 @@ open class CommonProxy : IProxy {
             BountifulIO.populateConfigFolder(Bountiful.configDir, DefaultData.rewards.items.map { item ->
                 item.genericPick
             }, it)
+            RewardRegistry.restore(DefaultData.rewards.items)
             //BountifulIO.hotReloadJson(RewardRegistry, it)
         }
 
 
         println("Bounties:")
-        BountyRegistry.items.forEach { println(it) }
+        //BountyRegistry.items.forEach { println(it) }
 
         println("Rewards:")
-        RewardRegistry.items.forEach { println(it) }
+        //RewardRegistry.items.forEach { println(it) }
 
 
     }

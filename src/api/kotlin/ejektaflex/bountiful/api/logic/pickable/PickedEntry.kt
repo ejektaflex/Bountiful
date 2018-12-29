@@ -1,8 +1,14 @@
 package ejektaflex.bountiful.api.logic.pickable
 
+import com.google.gson.annotations.SerializedName
 import net.minecraft.nbt.NBTTagCompound
 
-open class PickedEntry(override var contentID: String = "UNDEFINED", override var amount: Int = Integer.MIN_VALUE) : IPickedEntry {
+open class PickedEntry(
+        override var contentID: String = "UNDEFINED",
+        @SerializedName("unitWorth")
+        override var amount: Int = Integer.MIN_VALUE
+) : IPickedEntry {
+
     override fun serializeNBT(): NBTTagCompound {
         return NBTTagCompound().apply {
             setString("contentID", contentID)

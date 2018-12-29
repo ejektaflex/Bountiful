@@ -3,6 +3,7 @@ package ejektaflex.bountiful.api
 import ejektaflex.bountiful.api.config.IBountifulConfig
 import ejektaflex.bountiful.api.logic.IBountyData
 import ejektaflex.bountiful.api.logic.pickable.PickableEntry
+import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
 import ejektaflex.bountiful.api.registry.IValueRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
@@ -17,7 +18,7 @@ interface IBountifulAPI {
     /**
      * The registry containing all possible bounty reward items
      */
-    val rewardRegistry: IValueRegistry<PickableEntry>
+    val rewardRegistry: IValueRegistry<PickedEntryStack>
 
     /**
      * Returns a list of bounties at a given bounty board

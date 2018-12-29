@@ -1,13 +1,14 @@
 package ejektaflex.bountiful.config
 
 import ejektaflex.bountiful.Bountiful
-import ejektaflex.bountiful.data.EntryPack
-import ejektaflex.bountiful.logic.error.BountyCreationException
+import ejektaflex.bountiful.data.SaveWrapper
 import ejektaflex.bountiful.api.logic.pickable.PickableEntry
 import ejektaflex.bountiful.registry.ValueRegistry
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import java.io.File
+import java.lang.reflect.Type
 
 object BountifulIO {
 
@@ -21,11 +22,11 @@ object BountifulIO {
 
     @Suppress("UNCHECKED_CAST")
     fun <T : PickableEntry> getPickables(fileName: String, str: String): List<PickableEntry> {
-        val picked = Gson().fromJson(str, EntryPack::class.java) ?: throw Exception("File $fileName has invalid structure!")
+        val picked = Gson().fromJson(str, SaveWrapper::class.java) ?: throw Exception("File $fileName has invalid structure!")
         return picked.entries.toList().mapNotNull { it as? T }
     }
 
-    fun populateConfigFolder(folder: File, defaultData: List<*>, fileName: String): File {
+    fun populateConfigFolder(folder: File, defaultData: List<Any>, fileName: String): File {
         val gson = GsonBuilder().setPrettyPrinting().create()
         // Populate entries, fill if none exist
         val fileToPopulate = File(folder, fileName)
@@ -33,7 +34,7 @@ object BountifulIO {
             fileToPopulate.apply {
                 createNewFile()
                 println("Going to serialize content..")
-                val content = gson.toJson(defaultData)
+                val content = gson.toJson(SaveWrapper(ArrayList(defaultData)))
                 println("Content: $content")
                 writeText(content)
             }
@@ -43,17 +44,23 @@ object BountifulIO {
 
     /*
     fun <T : Any> hotReloadJson(registry: ValueRegistry<T>, fileName: String) {
-        val backup = registry.backup()
+        //val backup = registry.backup()
+
         registry.empty()
-        getPickables<T>(fileName, File(Bountiful.configDir, fileName).readText()).forEach {
-            if (it.genericPick().typed().content == null) {
-                registry.restore(backup)
-                throw BountyCreationException("Could not create a bounty from: '${it.content}', it might be misspelled?")
-            } else {
-                registry.add(it)
-            }
+        val picked = Gson().fromJson(
+                File(Bountiful.configDir, fileName).readText(),
+                SaveWrapper(ArrayList())::class.java
+        ) ?: throw Exception("File $fileName has invalid structure!")
+
+        picked.entries.forEach {
+            registry.add(it)
         }
     }
     */
+
+    fun <T : Any> typeOf(): Type {
+        return object : TypeToken<T>() {}.type
+    }
+
 
 }
