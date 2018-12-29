@@ -46,7 +46,7 @@ class BountyData : IBountyData {
                 //"Board Time: ${formatTickTime(boardTimeLeft(world) / boardTickFreq)}",
                 "Time To Complete: ${formatTimeExpirable(timeLeft(world) / bountyTickFreq)}",
                 "§fRequired: $getPretty",
-                "§fRewards: §6$rewardPretty§r"
+                "§fRewards: $rewardPretty"
         )
     }
 
@@ -67,10 +67,10 @@ class BountyData : IBountyData {
     }
 
     private val getPretty: String
-        get() = toGet.items.joinToString("§r, ") { "$it" }
+        get() = toGet.items.joinToString(", ") { "§a$it§r" }
 
     private val rewardPretty: String
-        get() = rewards.items.joinToString("§r, ") { "$it" }
+        get() = rewards.items.joinToString("§r, ") { "§6$it§r" }
 
     override fun deserializeNBT(tag: NBTTagCompound) {
         boardStamp = tag.getInteger(BountyNBT.BoardStamp.key)
@@ -80,21 +80,16 @@ class BountyData : IBountyData {
         if (tag.hasKey(BountyNBT.BountyStamp.key)) {
             bountyStamp = tag.getLong(BountyNBT.BountyStamp.key)
         }
-        toGet.restore(tag.getSet(BountyNBT.ToGet.key) { PickedEntry() }.toList() )
+        toGet.restore(
+                tag.getSet(BountyNBT.ToGet.key) { PickedEntry() }.map {
+                    it.typed()
+                }
+        )
 
         rewards.restore(tag.getSet(BountyNBT.Rewards.key) { PickedEntryStack(PickedEntry()) }.toList() )
     }
 
     override fun serializeNBT(): NBTTagCompound {
-
-        val nGets = NBTTagCompound().apply {
-            setSet(BountyNBT.ToGet.key, toGet.items.toSet())
-        }
-
-
-        val nRewards = NBTTagCompound().apply {
-            setSet(BountyNBT.Rewards.key, rewards.items.toSet())
-        }
 
         return NBTTagCompound().apply {
             setInteger(BountyNBT.BoardStamp.key, boardStamp)
@@ -102,8 +97,8 @@ class BountyData : IBountyData {
             setInteger(BountyNBT.Rarity.key, rarity)
             setInteger(BountyNBT.Worth.key, worth)
             bountyStamp?.let { setLong(BountyNBT.BountyStamp.key, it) }
-            setTag(BountyNBT.ToGet.key, nGets)
-            setTag(BountyNBT.Rewards.key, nRewards)
+            setSet(BountyNBT.ToGet.key, toGet.items.toSet())
+            setSet(BountyNBT.Rewards.key, rewards.items.toSet())
         }
     }
 

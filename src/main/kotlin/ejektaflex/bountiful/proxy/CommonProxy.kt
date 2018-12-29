@@ -37,10 +37,10 @@ open class CommonProxy : IProxy {
 
 
         println("Bounties:")
-        //BountyRegistry.items.forEach { println(it) }
+        BountyRegistry.items.forEach { println(it) }
 
         println("Rewards:")
-        //RewardRegistry.items.forEach { println(it) }
+        RewardRegistry.items.forEach { println(it) }
 
 
     }

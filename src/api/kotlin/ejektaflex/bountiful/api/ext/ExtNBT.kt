@@ -19,7 +19,9 @@ fun NBTTagCompound.setSet(key: String, items: Set<INBTSerializable<NBTTagCompoun
 }
 
 fun <T : INBTSerializable<NBTTagCompound>> NBTTagCompound.getSet(key: String, itemGen: () -> T): Set<T> {
-    return (getTag(key) as NBTTagCompound).keySet.map { index ->
-        itemGen().apply { deserializeNBT(getTag(index) as NBTTagCompound) }
+    val listTag = getCompoundTag(key)
+    return listTag.keySet.map { index ->
+        val itag = listTag.getCompoundTag(index)
+        itemGen().apply { deserializeNBT(itag) }
     }.toSet()
 }

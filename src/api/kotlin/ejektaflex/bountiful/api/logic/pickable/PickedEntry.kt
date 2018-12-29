@@ -21,8 +21,8 @@ open class PickedEntry(
         amount = tag.getInteger("amount")
     }
 
-    override val pretty: String
-        get() = "§f${amount}x §6$contentID"
+
+    override fun toString() = "Picked(§f${amount}x §6$contentID)"
 
     override fun typed(): IPickedEntry {
         if (":" in contentID) {
