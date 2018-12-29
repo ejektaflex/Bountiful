@@ -19,19 +19,21 @@ object BountifulIO {
         return newDir
     }
 
-    fun getPickables(fileName: String, str: String): List<PickableEntry> {
+    @Suppress("UNCHECKED_CAST")
+    fun <T : PickableEntry> getPickables(fileName: String, str: String): List<PickableEntry> {
         val picked = Gson().fromJson(str, EntryPack::class.java) ?: throw Exception("File $fileName has invalid structure!")
-        return picked.entries.toList()
+        return picked.entries.toList().mapNotNull { it as? T }
     }
 
-    fun populateConfigFolder(folder: File, defaultData: List<PickableEntry>, fileName: String): File {
+    fun populateConfigFolder(folder: File, defaultData: List<*>, fileName: String): File {
         val gson = GsonBuilder().setPrettyPrinting().create()
-        // Populate bounties, fill if none exist
+        // Populate entries, fill if none exist
         val fileToPopulate = File(folder, fileName)
         if (!fileToPopulate.exists()) {
             fileToPopulate.apply {
                 createNewFile()
-                val content = gson.toJson(EntryPack(defaultData.toTypedArray()))
+                println("Going to serialize content..")
+                val content = gson.toJson(defaultData)
                 println("Content: $content")
                 writeText(content)
             }
@@ -39,17 +41,19 @@ object BountifulIO {
         return fileToPopulate
     }
 
-    fun hotReloadJson(registry: ValueRegistry<PickableEntry>, fileName: String) {
+    /*
+    fun <T : Any> hotReloadJson(registry: ValueRegistry<T>, fileName: String) {
         val backup = registry.backup()
         registry.empty()
-        getPickables(fileName, File(Bountiful.configDir, fileName).readText()).forEach {
-            if (it.itemStack == null) {
+        getPickables<T>(fileName, File(Bountiful.configDir, fileName).readText()).forEach {
+            if (it.genericPick().typed().content == null) {
                 registry.restore(backup)
-                throw BountyCreationException("Could not create a bounty from: '${it.itemString}', it might be misspelled?")
+                throw BountyCreationException("Could not create a bounty from: '${it.content}', it might be misspelled?")
             } else {
                 registry.add(it)
             }
         }
     }
+    */
 
 }

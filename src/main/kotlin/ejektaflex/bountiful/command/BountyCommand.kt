@@ -45,8 +45,8 @@ class BountyCommand : ICommand {
             when (val curr: String = args[0]) {
                 "reload" -> {
                     try {
-                        BountifulIO.hotReloadJson(BountyRegistry, "bounties.json")
-                        BountifulIO.hotReloadJson(RewardRegistry, "rewards.json")
+                        //BountifulIO.hotReloadJson(BountyRegistry, "entries.json")
+                        //BountifulIO.hotReloadJson(RewardRegistry, "rewards.json")
                         sender.sendMessage("Json config files reloaded.")
                     } catch (bce: BountyCreationException) {
                         sender.sendMessage("§4" + bce.message!!)

@@ -1,9 +1,14 @@
 package ejektaflex.bountiful.data
 
 import ejektaflex.bountiful.api.logic.pickable.PickableEntry
+import ejektaflex.bountiful.api.logic.pickable.PickedEntry
+import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
+import ejektaflex.bountiful.registry.ValueRegistry
 
 object DefaultData {
-    val bounties = listOf(
+
+    val entries = ValueRegistry<PickableEntry>().apply {
+        add(
             PickableEntry("minecraft:dirt", 16..128, 5),
             PickableEntry("minecraft:stone", 16..128, 10),
             PickableEntry("minecraft:cobblestone", 16..128, 7),
@@ -23,11 +28,14 @@ object DefaultData {
             PickableEntry("minecraft:sugar", 1..64, 55),
             PickableEntry("minecraft:tripwire_hook", 1..8, 70),
             PickableEntry("minecraft:wheat", 1..48, 20)
-    )
+        )
+    }
 
-    val rewards = listOf(
-            PickableEntry("minecraft:gold_nugget", 1..128, 100),
-            PickableEntry("minecraft:gold_ingot", 1..128, 900)
-    )
+    val rewards = ValueRegistry<PickedEntryStack>().apply {
+        add(
+                PickedEntryStack(PickedEntry("minecraft:gold_nugget", 100)),
+                PickedEntryStack(PickedEntry("minecraft:gold_ingot", 900))
+        )
+    }
 
 }

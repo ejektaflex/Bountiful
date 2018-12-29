@@ -28,7 +28,7 @@ class BlockBountyBoard : BlockTileEntity<TileEntityBountyBoard>(Material.WOOD, "
                 if (Bountiful.config.cashInAtBountyBoard && holding?.item is ItemBounty) {
                     (holding.item as ItemBounty).cashIn(player, hand!!, atBoard = true)
                 } else if (tile.inventory.filledSlots.isEmpty()) {
-                    player.sendMessage("§6No bounties available, come back later!")
+                    player.sendMessage("§6No entries available, come back later!")
                 } else {
                     player.openGui(Bountiful.instance!!, GuiHandler.BOARD_GUI, world, pos.x, pos.y, pos.z)
                 }

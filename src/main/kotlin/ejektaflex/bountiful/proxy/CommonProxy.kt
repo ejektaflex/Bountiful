@@ -19,16 +19,18 @@ open class CommonProxy : IProxy {
 
     override fun init(e: FMLInitializationEvent) {
 
-        // Populate bounties, fill if none exist
+        // Populate entries, fill if none exist
         "bounties.json".let {
-            BountifulIO.populateConfigFolder(Bountiful.configDir, DefaultData.bounties, it)
-            BountifulIO.hotReloadJson(BountyRegistry, it)
+            BountifulIO.populateConfigFolder(Bountiful.configDir, DefaultData.entries.items, it)
+            //BountifulIO.hotReloadJson(BountyRegistry, it)
         }
 
         // Same for rewards
         "rewards.json".let {
-            BountifulIO.populateConfigFolder(Bountiful.configDir, DefaultData.rewards, it)
-            BountifulIO.hotReloadJson(RewardRegistry, it)
+            BountifulIO.populateConfigFolder(Bountiful.configDir, DefaultData.rewards.items.map { item ->
+                item.genericPick
+            }, it)
+            //BountifulIO.hotReloadJson(RewardRegistry, it)
         }
 
 
