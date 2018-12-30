@@ -3,6 +3,7 @@ package ejektaflex.bountiful.logic
 import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.ContentRegistry
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
+import ejektaflex.bountiful.api.ext.weightedRandom
 import ejektaflex.bountiful.api.logic.IBountyCreator
 import ejektaflex.bountiful.api.logic.pickable.IPickedEntry
 import ejektaflex.bountiful.logic.error.BountyCreationException
@@ -42,13 +43,27 @@ object BountyCreator : IBountyCreator {
     }
 
     override fun create(): BountyData {
+
+        if (BountyRegistry.items.size < numBountyItems.last) {
+            throw Exception("Bounty registry has fewer items than the max number of bounty items that the config dictates you could give!")
+        }
+
         // Shuffle bounty registry and take a random number of bounty items
-        val itemsToPick = BountyRegistry.items.shuffled().take(numBountyItems.random())
+        val pickedAlready = mutableListOf<PickableEntry>()
+        //val itemsToPick = BountyRegistry.items.shuffled().take(numBountyItems.random())
+
+        val toPick = numBountyItems.random()
+        while (pickedAlready.size < toPick) {
+            val toAdd = BountyRegistry.items.filter { it !in pickedAlready }.weightedRandom
+            pickedAlready.add(toAdd)
+        }
+
+
         return BountyData().apply {
             rarity = calcRarity().level
             worth = 0
             // Generate bounty data
-            itemsToPick.forEach {
+            pickedAlready.forEach {
                 val picked = it.pick()
                 val amountOfItem = it.randCount
                 if (picked.content != null) {

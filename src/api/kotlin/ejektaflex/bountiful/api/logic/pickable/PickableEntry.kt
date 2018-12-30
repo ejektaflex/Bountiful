@@ -1,9 +1,10 @@
 package ejektaflex.bountiful.api.logic.pickable
 
+import ejektaflex.bountiful.api.logic.IWeighted
 import ejektaflex.bountiful.api.logic.ItemRange
 
 
-open class PickableEntry(var content: String, var amount: ItemRange, var unitWorth: Int) {
+open class PickableEntry(var content: String, var amount: ItemRange, var unitWorth: Int, override var weight: Int = 100) : IWeighted {
 
     // Get around ugly JSON serialization of IntRange for our purposes
     constructor(inString: String, amount: IntRange, worth: Int) : this(inString, ItemRange(amount), worth)

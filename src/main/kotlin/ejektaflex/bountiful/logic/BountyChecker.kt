@@ -56,16 +56,19 @@ object BountyChecker {
     }
 
     fun tryTakeEntities(player: EntityPlayer, data: BountyData, bounty: ItemStack, entity: EntityLivingBase) {
+        val toRemove = mutableListOf<PickedEntryEntity>()
         data.toGet.items.mapNotNull { it as? PickedEntryEntity }.forEach { picked ->
-            println("Item: $picked")
-            println("${picked.entityEntry?.name?.toLowerCase()}, ${entity.name.toLowerCase()}")
+            //println("${picked.entityEntry?.name?.toLowerCase()}, ${entity.name.toLowerCase()}")
             if (picked.entityEntry?.name?.toLowerCase() == entity.name.toLowerCase()) {
-                player.sendMessage("This mob was on the bounty!")
                 if (picked.amount > 0) {
                     picked.amount--
                 }
+                if (picked.amount == 0) {
+                    toRemove.add(picked)
+                }
             }
         }
+        data.toGet.items.removeAll(toRemove)
         bounty.tagCompound = data.serializeNBT()
     }
 
