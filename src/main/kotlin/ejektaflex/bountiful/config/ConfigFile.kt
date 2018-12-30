@@ -119,20 +119,11 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 "The number of entries that a Bounty Board starts with when placed (Default: 0)"
         ).int.clampTo(1..27)
 
-        /*
-        messageOnBountyMobDeath = config.get(
-                CATEGORY_BOUNTY,
-                "Should Bounty Kills Notify Player?",
-                false,
-                "By default (false), killing a mob and having a bounty for the mob in your inventory will not notify you."
-        ).boolean
-        */
-
         globalBounties = config.get(
                 CATEGORY_BOARD,
                 "Global Bounty Inventory",
                 false,
-                "By default (true), all boards share a single, global inventory. If false, all boards have their own inventory."
+                "By default (true), all boards share a single, global inventory per dimension. If false, all boards have their own inventory."
         ).boolean
 
     }

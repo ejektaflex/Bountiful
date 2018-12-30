@@ -1,11 +1,9 @@
 package ejektaflex.bountiful.cap
 
-import ejektaflex.bountiful.logic.BountyHolder
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.capabilities.ICapabilitySerializable
-import net.minecraftforge.items.ItemStackHandler
 import javax.annotation.Nullable
 
 
