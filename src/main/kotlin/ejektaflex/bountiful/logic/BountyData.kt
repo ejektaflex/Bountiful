@@ -1,6 +1,7 @@
 package ejektaflex.bountiful.logic
 
 import ejektaflex.bountiful.Bountiful
+import ejektaflex.bountiful.api.ext.getPickedEntryList
 import ejektaflex.bountiful.api.ext.getUnsortedList
 import ejektaflex.bountiful.api.ext.setUnsortedList
 import ejektaflex.bountiful.api.logic.IBountyData
@@ -96,9 +97,7 @@ class BountyData : IBountyData {
             bountyStamp = tag.getLong(BountyNBT.BountyStamp.key)
         }
         toGet.restore(
-                tag.getUnsortedList(BountyNBT.ToGet.key) { PickedEntry() }.map {
-                    it.typed()
-                }
+                tag.getPickedEntryList(BountyNBT.ToGet.key).toList()
         )
 
         rewards.restore(tag.getUnsortedList(BountyNBT.Rewards.key) { PickedEntryStack(PickedEntry()) }.toList() )

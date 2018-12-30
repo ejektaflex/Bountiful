@@ -63,27 +63,26 @@ object BountyChecker {
         if (data.hasExpired(player.world)) {
             return
         }
-        val toRemove = mutableListOf<PickedEntryEntity>()
         val bountyEntities = data.toGet.items.mapNotNull { it as? PickedEntryEntity }
 
         bountyEntities.forEach { picked ->
             //println("${picked.entityEntry?.name?.toLowerCase()}, ${entity.name.toLowerCase()}")
             if (picked.entityEntry?.name?.toLowerCase() == entity.name.toLowerCase()) {
-                if (picked.amount > 0) {
-                    picked.amount--
-                }
-                if (picked.amount == 0) {
-                    toRemove.add(picked)
+                if (picked.killedAmount < picked.amount) {
+                    picked.killedAmount ++
                 }
             }
         }
-        data.toGet.items.removeAll(toRemove)
         bounty.tagCompound = data.serializeNBT()
     }
 
     fun hasEntitiesFulfilled(data: BountyData): Boolean {
         val bountyEntities = data.toGet.items.mapNotNull { it as? PickedEntryEntity }
-        return bountyEntities.isEmpty()
+        return if (bountyEntities.isEmpty()) {
+            true
+        } else {
+            bountyEntities.all { it.killedAmount == it.amount }
+        }
     }
 
     fun rewardItems(player: EntityPlayer, inv: NonNullList<ItemStack>, data: BountyData, bountyItem: ItemStack) {
