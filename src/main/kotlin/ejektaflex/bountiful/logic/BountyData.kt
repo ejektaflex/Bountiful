@@ -1,12 +1,16 @@
 package ejektaflex.bountiful.logic
 
 import ejektaflex.bountiful.Bountiful
+import ejektaflex.bountiful.api.ext.getUnsortedList
+import ejektaflex.bountiful.api.ext.setUnsortedList
 import ejektaflex.bountiful.api.logic.IBountyData
-import ejektaflex.bountiful.api.ext.toPretty
-import ejektaflex.bountiful.api.ext.toItemStack
 import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.api.logic.BountyNBT
+import ejektaflex.bountiful.api.logic.pickable.IPickedEntry
+import ejektaflex.bountiful.api.logic.pickable.PickedEntry
+import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
 import ejektaflex.bountiful.item.ItemBounty
+import ejektaflex.bountiful.registry.ValueRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
@@ -18,8 +22,8 @@ class BountyData : IBountyData {
     override var boardStamp = Bountiful.config.boardLifespan
     override var bountyTime = 0L
     override var rarity = 0
-    override val toGet = mutableListOf<Pair<ItemStack, Int>>()
-    override val rewards = mutableListOf<Pair<ItemStack, Int>>()
+    override val toGet = ValueRegistry<IPickedEntry>()
+    override val rewards = ValueRegistry<PickedEntryStack>()
     override var bountyStamp: Long? = null
     var worth = 0
 
@@ -40,7 +44,7 @@ class BountyData : IBountyData {
                 //"Board Time: ${formatTickTime(boardTimeLeft(world) / boardTickFreq)}",
                 "Time To Complete: ${formatTimeExpirable(timeLeft(world) / bountyTickFreq)}",
                 "§fRequired: $getPretty",
-                "§fRewards: §6$rewardPretty§r"
+                "§fRewards: $rewardPretty"
         )
     }
 
@@ -61,10 +65,18 @@ class BountyData : IBountyData {
     }
 
     private val getPretty: String
-        get() = toGet.joinToString("§r, ") { "§f${it.second}x §a${it.first.displayName}" }
+        get() {
+            return toGet.items.joinToString(", ") {
+                "§f${it.amount}x §a${it.prettyContent}§f"
+            } + "§r"
+        }
 
     private val rewardPretty: String
-        get() = rewards.joinToString("§r, ") { "§f${it.second}x §6${it.first.displayName}" }
+        get() {
+            return rewards.items.joinToString(", ") {
+                "§f${it.amount}x §a${it.prettyContent}§f"
+            } + "§r"
+        }
 
     override fun deserializeNBT(tag: NBTTagCompound) {
         boardStamp = tag.getInteger(BountyNBT.BoardStamp.key)
@@ -74,29 +86,16 @@ class BountyData : IBountyData {
         if (tag.hasKey(BountyNBT.BountyStamp.key)) {
             bountyStamp = tag.getLong(BountyNBT.BountyStamp.key)
         }
-        toGet.clear()
-        for (gettable in tag.getCompoundTag(BountyNBT.ToGet.key).keySet) {
-            toGet.add(gettable.toItemStack!! to tag.getCompoundTag(BountyNBT.ToGet.key).getInteger(gettable))
-        }
-        rewards.clear()
-        for (gettable in tag.getCompoundTag(BountyNBT.Rewards.key).keySet) {
-            rewards.add(gettable.toItemStack!! to tag.getCompoundTag(BountyNBT.Rewards.key).getInteger(gettable))
-        }
+        toGet.restore(
+                tag.getUnsortedList(BountyNBT.ToGet.key) { PickedEntry() }.map {
+                    it.typed()
+                }
+        )
+
+        rewards.restore(tag.getUnsortedList(BountyNBT.Rewards.key) { PickedEntryStack(PickedEntry()) }.toList() )
     }
 
     override fun serializeNBT(): NBTTagCompound {
-
-        val nGets = NBTTagCompound().apply {
-            for (pair in toGet) {
-                setInteger(pair.first.toPretty, pair.second)
-            }
-        }
-
-        val nRewards = NBTTagCompound().apply {
-            for (pair in rewards) {
-                setInteger(pair.first.toPretty, pair.second)
-            }
-        }
 
         return NBTTagCompound().apply {
             setInteger(BountyNBT.BoardStamp.key, boardStamp)
@@ -104,8 +103,8 @@ class BountyData : IBountyData {
             setInteger(BountyNBT.Rarity.key, rarity)
             setInteger(BountyNBT.Worth.key, worth)
             bountyStamp?.let { setLong(BountyNBT.BountyStamp.key, it) }
-            setTag(BountyNBT.ToGet.key, nGets)
-            setTag(BountyNBT.Rewards.key, nRewards)
+            setUnsortedList(BountyNBT.ToGet.key, toGet.items.toSet())
+            setUnsortedList(BountyNBT.Rewards.key, rewards.items.toSet())
         }
     }
 

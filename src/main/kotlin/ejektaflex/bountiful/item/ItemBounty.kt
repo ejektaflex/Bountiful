@@ -5,6 +5,8 @@ import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.api.ext.sendMessage
 import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.api.logic.BountyNBT
+import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
+import ejektaflex.bountiful.logic.BountyChecker
 import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.logic.BountyData
 import net.minecraft.client.util.ITooltipFlag
@@ -79,17 +81,6 @@ class ItemBounty : Item(), IItemBounty {
         }
     }
 
-    override fun timeLeft(stack: ItemStack): Long {
-        if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(BountyNBT.BountyTime.key)) {
-            if (stack.tagCompound!!.hasKey(BountyNBT.BountyStamp.key)) {
-                val tag = stack.tagCompound
-                return max(tag!!.getLong(BountyNBT.BountyStamp.key) - tag.getLong(BountyNBT.BountyTime.key), 0)
-            }
-
-        }
-        return 0L
-    }
-
     override fun tickBoardTime(stack: ItemStack): Boolean {
         return tickNumber(stack, BountyData.boardTickFreq.toInt(), BountyNBT.BoardStamp.key)
     }
@@ -138,34 +129,15 @@ class ItemBounty : Item(), IItemBounty {
         val inv = player.inventory.mainInventory
         val bounty = BountyData().apply { deserializeNBT(bountyItem.tagCompound!!) }
 
-        val prereqItems = inv.filter { invItem ->
-            bounty.toGet.any { gettable ->
-                gettable.first.isItemEqualIgnoreDurability(invItem)
-            }
-        }
-
         if (bounty.timeLeft(player.world) <= 0) {
-            player.sendMessage("§4This bounty is expired.")
+            player.sendMessage("§4This bounty has expired.")
             return false
         }
 
-        println("Prereq items: $prereqItems")
+        // Returns prerequisite stacks needed to reduce for reward, or null if they don't have the prereqs
+        val prereq = BountyChecker.hasItems(player, inv, bounty)
 
-        // Check to see if bounty meets all prerequisites
-        val hasAllGets = bounty.toGet.all { gettable ->
-            val stacksToChange = prereqItems.filter { it.isItemEqualIgnoreDurability(gettable.first) }
-            val stackSum = stacksToChange.sumBy { it.count }
-            val amountNeeded = gettable.second
-            val hasEnough = stackSum >= amountNeeded
-            if (!hasEnough) {
-                player.sendMessage(TextComponentString("§cCannot fulfill bounty, you don't have everything needed!"))
-            }
-
-            hasEnough
-        }
-
-
-        if (hasAllGets) {
+        if (prereq != null) {
             if (!atBoard && Bountiful.config.cashInAtBountyBoard) {
                 player.sendMessage(TextComponentString("§aBounty requirements met. Fullfill your bounty by right clicking on a bounty board."))
                 return false
@@ -173,34 +145,15 @@ class ItemBounty : Item(), IItemBounty {
                 player.sendMessage(TextComponentString("§aBounty Fulfilled!"))
             }
 
-            // If it does, reduce count of all relevant stacks
-            bounty.toGet.forEach { gettable ->
-                var amountNeeded = gettable.second
-                val stacksToChange = prereqItems.filter { it.isItemEqualIgnoreDurability(gettable.first) }
-                for (stack in stacksToChange) {
-                    val amountToRemove = min(stack.count, amountNeeded)
-                    stack.count -= amountToRemove
-                    amountNeeded -= amountToRemove
-                }
-            }
+            // Reduce count of relevant prerequisite stacks
+            BountyChecker.takeItems(player, inv, bounty, prereq)
 
             // Remove bounty note
             player.setHeldItem(hand, ItemStack.EMPTY)
 
             // Reward player with rewards
-            bounty.rewards.forEach { reward ->
-                var amountNeededToGive = reward.second
-                val stacksToGive = mutableListOf<ItemStack>()
-                while (amountNeededToGive > 0) {
-                    val stackSize = min(amountNeededToGive, maxStackSize)
-                    val newStack = reward.first.copy().apply { count = stackSize }
-                    stacksToGive.add(newStack)
-                    amountNeededToGive -= stackSize
-                }
-                stacksToGive.forEach { stack ->
-                    ItemHandlerHelper.giveItemToPlayer(player, stack)
-                }
-            }
+            BountyChecker.rewardItems(player, inv, bounty, bountyItem)
+
             return true
         } else {
             return false

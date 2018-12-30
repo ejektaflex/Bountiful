@@ -33,9 +33,4 @@ interface IItemBounty : IForgeRegistryEntry<Item> {
      */
     fun ensureBounty(stack: ItemStack, worldIn: World)
 
-    /**
-     * The amount of time left on the bounty.
-     */
-    fun timeLeft(stack: ItemStack): Long
-
 }

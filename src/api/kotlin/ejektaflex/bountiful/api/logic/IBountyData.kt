@@ -1,5 +1,9 @@
 package ejektaflex.bountiful.api.logic
 
+import ejektaflex.bountiful.api.logic.pickable.IPickedEntry
+import ejektaflex.bountiful.api.logic.pickable.PickedEntry
+import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
+import ejektaflex.bountiful.api.registry.IValueRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
@@ -25,12 +29,12 @@ interface IBountyData : INBTSerializable<NBTTagCompound> {
     /**
      * A list of pairs of itemstacks needed to fulfill a bounty, and the amount needed.
      */
-    val toGet: MutableList<Pair<ItemStack, Int>>
+    val toGet: IValueRegistry<IPickedEntry>
 
     /**
      * A list of pairs of itemstacks used as rewards for the bounty, and the amount needed.
      */
-    val rewards: MutableList<Pair<ItemStack, Int>>
+    val rewards: IValueRegistry<PickedEntryStack>
 
     /**
      * A long representing the last world time when the bounty was given.

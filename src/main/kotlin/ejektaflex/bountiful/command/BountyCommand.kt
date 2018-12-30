@@ -10,10 +10,12 @@ import ejektaflex.bountiful.registry.RewardRegistry
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommand
 import net.minecraft.command.ICommandSender
+import net.minecraft.entity.EntityLiving
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.fml.common.FMLCommonHandler
+import net.minecraftforge.fml.common.registry.ForgeRegistries
 import net.minecraftforge.items.ItemHandlerHelper
 
 
@@ -45,12 +47,21 @@ class BountyCommand : ICommand {
             when (val curr: String = args[0]) {
                 "reload" -> {
                     try {
-                        BountifulIO.hotReloadJson(BountyRegistry, "bounties.json")
-                        BountifulIO.hotReloadJson(RewardRegistry, "rewards.json")
+                        sender.sendMessage("Reloading data..")
+                        BountifulIO.hotReloadBounties("bounties.json").also {
+                            if (it.isNotEmpty()) {
+                                sender.sendMessage("Invalid bounties: ${it.joinToString(", ")}. Skipped.")
+                            }
+                        }
+                        BountifulIO.hotReloadRewards("rewards.json").also {
+                            if (it.isNotEmpty()) {
+                                sender.sendMessage("Invalid rewards: ${it.joinToString(", ")}. Skipped.")
+                            }
+                        }
                         sender.sendMessage("Json config files reloaded.")
                     } catch (bce: BountyCreationException) {
                         sender.sendMessage("§4" + bce.message!!)
-                        sender.sendMessage("§4Defaulting to previous data. Correct it and try again.")
+                        //sender.sendMessage("§4Defaulting to previous data. Correct it and try again.")
                     }
                 }
                 "gen" -> {
@@ -68,6 +79,11 @@ class BountyCommand : ICommand {
                 }
                 "wt" -> {
                     sender.sendMessage("Time: ${sender.entityWorld.totalWorldTime}")
+                }
+                "e" -> {
+                    for (ee in ForgeRegistries.ENTITIES) {
+                        println(ee.name)
+                    }
                 }
             }
         } else {

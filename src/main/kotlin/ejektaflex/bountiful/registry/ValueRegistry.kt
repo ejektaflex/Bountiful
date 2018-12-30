@@ -27,4 +27,9 @@ open class ValueRegistry<T : Any> : IValueRegistry<T> {
         items.clear()
     }
 
+    @Suppress("UNCHECKED_CAST")
+    override fun <U : T> typedItems(): List<U> {
+        return items.mapNotNull { it as? U }
+    }
+
 }

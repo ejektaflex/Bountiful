@@ -41,7 +41,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 CATEGORY_BOARD,
                 "Max Bounties Per Board At A Time",
                 17,
-                "How many bounties should be on a bounty board at a given bountyTime. (Max: 27, Default: 17)"
+                "How many entries should be on a bounty board at a given bountyTime. (Max: 27, Default: 17)"
         ).int.clampTo(1..27)
 
         boardAddFrequency = max(config.get(
@@ -55,7 +55,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 CATEGORY_BOARD,
                 "Bounty on Board Lifespan",
                 72000,
-                "How long bounties stay on the board, at max (Bounties will be removed prematurely if board hits max bounties). (Default: 72000)"
+                "How long entries stay on the board, at max (Bounties will be removed prematurely if board hits max entries). (Default: 72000)"
         ).int.clampTo(10..Int.MAX_VALUE)
 
 
@@ -107,14 +107,14 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 CATEGORY_BOUNTY,
                 "Should Bounties Count Down on Board?",
                 false,
-                "By default (false), bounties do not start counting down until the player takes them."
+                "By default (false), entries do not start counting down until the player takes them."
         ).boolean
 
         bountiesCreatedOnPlace = config.get(
                 CATEGORY_BOARD,
                 "Bounties Created On Place",
                 0,
-                "The number of bounties that a Bounty Board starts with when placed (Default: 0)"
+                "The number of entries that a Bounty Board starts with when placed (Default: 0)"
         ).int.clampTo(1..27)
 
     }

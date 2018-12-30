@@ -7,4 +7,5 @@ interface IValueRegistry<T : Any> {
     fun backup(): List<T>
     fun restore(backupList: List<T>)
     fun empty()
+    fun <U : T> typedItems(): List<T>
 }
