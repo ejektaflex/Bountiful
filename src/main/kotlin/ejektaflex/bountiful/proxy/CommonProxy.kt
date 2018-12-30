@@ -1,6 +1,7 @@
 package ejektaflex.bountiful.proxy
 
 import ejektaflex.bountiful.Bountiful
+import ejektaflex.bountiful.api.events.PopulateBountyBoardEvent
 import ejektaflex.bountiful.config.BountifulIO
 import ejektaflex.bountiful.data.DefaultData
 import ejektaflex.bountiful.item.ItemBounty
@@ -26,6 +27,15 @@ open class CommonProxy : IProxy {
                     BountyChecker.tryTakeEntities(player, data, stack, e.entityLiving)
                 }
             }
+        }
+    }
+
+    // Cancel first posting to board on board creation
+    @SubscribeEvent
+    fun onBoardPost(e: PopulateBountyBoardEvent) {
+        if (e.board.newBoard) {
+            e.board.newBoard = false
+            e.isCanceled = true
         }
     }
 

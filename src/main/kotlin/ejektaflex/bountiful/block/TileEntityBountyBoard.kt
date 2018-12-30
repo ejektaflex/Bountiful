@@ -2,6 +2,8 @@ package ejektaflex.bountiful.block
 
 
 import ejektaflex.bountiful.Bountiful
+import ejektaflex.bountiful.api.block.ITileEntityBountyBoard
+import ejektaflex.bountiful.api.events.PopulateBountyBoardEvent
 import ejektaflex.bountiful.api.ext.*
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.logic.BountyCreator
@@ -19,19 +21,22 @@ import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.items.ItemStackHandler
 
 
-class TileEntityBountyBoard : TileEntity(), ITickable {
 
-    val inventory = ItemStackHandler(numSlots)
-    var newBoard = true
+class TileEntityBountyBoard : TileEntity(), ITileEntityBountyBoard {
+
+    override val inventory = ItemStackHandler(numSlots)
+    override var newBoard = true
 
     override fun writeToNBT(tag: NBTTagCompound): NBTTagCompound {
         tag.clear()
         tag.setTag("inv", inventory.serializeNBT())
+        tag.setBoolean("newBoard", newBoard)
         return super.writeToNBT(tag)
     }
 
     override fun readFromNBT(tag: NBTTagCompound) {
         inventory.deserializeNBT(tag.getCompoundTag("inv"))
+        newBoard = tag.getBoolean("newBoard")
         super.readFromNBT(tag)
     }
 
@@ -64,8 +69,12 @@ class TileEntityBountyBoard : TileEntity(), ITickable {
         markDirty()
     }
 
-    fun addSingleBounty() {
-        inventory[inventory.slotRange.random()] = BountyCreator.createStack(world)
+    override fun addSingleBounty() {
+        val newStack = BountyCreator.createStack(world)
+        val fired = PopulateBountyBoardEvent.fireEvent(newStack, this)
+        if (!fired.isCanceled) {
+            inventory[inventory.slotRange.random()] = newStack
+        }
     }
 
     private fun tickBounties() {
