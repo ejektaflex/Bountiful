@@ -9,7 +9,6 @@ class PickedEntryStack(
         val genericPick: PickedEntry
 ) : IPickedEntry by genericPick {
 
-
     val itemStack: ItemStack?
         get() = contentID.toItemStack
 

@@ -11,5 +11,6 @@ interface IBountifulConfig {
     val bountyAmountRange: IntRange
     val shouldCountdownOnBoard: Boolean
     val bountiesCreatedOnPlace: Int
+    val messageOnBountyMobDeath: Boolean
     fun load()
 }

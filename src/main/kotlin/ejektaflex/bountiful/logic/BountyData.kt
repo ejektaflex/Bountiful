@@ -74,7 +74,7 @@ class BountyData : IBountyData {
     private val rewardPretty: String
         get() {
             return rewards.items.joinToString(", ") {
-                "§f${it.amount}x §a${it.prettyContent}§f"
+                "§f${it.amount}x §6${it.prettyContent}§f"
             } + "§r"
         }
 

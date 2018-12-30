@@ -30,8 +30,7 @@ open class PickedEntry(
     override fun typed(): IPickedEntry {
         if (":" in contentID) {
             return when (val type = contentID.substringBefore(':')) {
-                "doot" -> PickedEntryStack(this)
-                //"entity" ->
+                "entity" -> PickedEntryEntity(this)
                 else -> PickedEntryStack(this)
             }
         } else {

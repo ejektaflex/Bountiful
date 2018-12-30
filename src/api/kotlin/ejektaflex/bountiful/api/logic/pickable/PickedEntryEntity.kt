@@ -1,29 +1,27 @@
 package ejektaflex.bountiful.api.logic.pickable
 
 import com.google.gson.annotations.Expose
-import net.minecraft.entity.EntityLiving
-import net.minecraftforge.fml.common.registry.EntityRegistry
-import net.minecraftforge.fml.common.registry.ForgeRegistries
+import ejektaflex.bountiful.api.ext.toEntityEntry
+import net.minecraftforge.fml.common.registry.EntityEntry
 
 class PickedEntryEntity(
         @Expose(serialize = false, deserialize = false)
         val genericPick: PickedEntry
 ) : IPickedEntry by genericPick {
 
-
-    val entityLiving: EntityLiving?
+    val entityEntry: EntityEntry?
         get() {
-            return null
+            return contentID.toEntityEntry
         }
 
     override val content: Any?
-        get() = entityLiving
+        get() = entityEntry
 
     override val prettyContent: String
-        get() = entityLiving?.name ?: "Null Living Entity, No Name"
+        get() = ("Kill " + entityEntry?.name)
 
     override fun toString(): String {
-        return "§r" + amount.toString() + "x §a" + (entityLiving?.displayName ?: "Unknown Item (Content ID: $contentID)") + "§r"
+        return "$amount x ${entityEntry?.name}"
     }
 
 }

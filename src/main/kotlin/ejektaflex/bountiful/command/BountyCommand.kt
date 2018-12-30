@@ -11,6 +11,7 @@ import net.minecraft.command.CommandException
 import net.minecraft.command.ICommand
 import net.minecraft.command.ICommandSender
 import net.minecraft.entity.EntityLiving
+import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.math.BlockPos
@@ -80,14 +81,15 @@ class BountyCommand : ICommand {
                 "wt" -> {
                     sender.sendMessage("Time: ${sender.entityWorld.totalWorldTime}")
                 }
-                "e" -> {
-                    for (ee in ForgeRegistries.ENTITIES) {
-                        println(ee.name)
-                    }
+                "entities" -> {
+                    val names = ForgeRegistries.ENTITIES.filter {
+                        EntityLiving::class.java.isAssignableFrom(it.entityClass)
+                    }.map { it.name.toLowerCase() }.sorted()
+                    sender.sendMessage(names.joinToString(", "))
                 }
             }
         } else {
-            sender.sendMessage("Valid commands: '/bo reload'")
+            sender.sendMessage("Valid commands: '/bo reload', '/bo entities', '/bo gen' (op), '/bo expire' (op)")
         }
 
     }

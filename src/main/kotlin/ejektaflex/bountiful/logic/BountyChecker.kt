@@ -1,7 +1,10 @@
 package ejektaflex.bountiful.logic
 
 import ejektaflex.bountiful.ContentRegistry
+import ejektaflex.bountiful.api.ext.sendMessage
+import ejektaflex.bountiful.api.logic.pickable.PickedEntryEntity
 import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
+import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.NonNullList
@@ -43,13 +46,27 @@ object BountyChecker {
 
     fun takeItems(player: EntityPlayer, inv: NonNullList<ItemStack>, data: BountyData, matched: List<ItemStack>) {
         // If it does, reduce count of all relevant stacks
-        data.toGet.typedItems<PickedEntryStack>().forEach { picked ->
+        data.toGet.items.mapNotNull { it as? PickedEntryStack }.forEach { picked ->
             val stacksToChange = matched.filter { it.isItemEqualIgnoreDurability(picked.itemStack!!) }
             for (stack in stacksToChange) {
                 val amountToRemove = min(stack.count, picked.amount)
                 stack.count -= amountToRemove
             }
         }
+    }
+
+    fun tryTakeEntities(player: EntityPlayer, data: BountyData, bounty: ItemStack, entity: EntityLivingBase) {
+        data.toGet.items.mapNotNull { it as? PickedEntryEntity }.forEach { picked ->
+            println("Item: $picked")
+            println("${picked.entityEntry?.name?.toLowerCase()}, ${entity.name.toLowerCase()}")
+            if (picked.entityEntry?.name?.toLowerCase() == entity.name.toLowerCase()) {
+                player.sendMessage("This mob was on the bounty!")
+                if (picked.amount > 0) {
+                    picked.amount--
+                }
+            }
+        }
+        bounty.tagCompound = data.serializeNBT()
     }
 
     fun rewardItems(player: EntityPlayer, inv: NonNullList<ItemStack>, data: BountyData, bountyItem: ItemStack) {
