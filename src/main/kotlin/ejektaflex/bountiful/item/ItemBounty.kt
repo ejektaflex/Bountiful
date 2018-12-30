@@ -5,7 +5,6 @@ import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.api.ext.sendMessage
 import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.api.logic.BountyNBT
-import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
 import ejektaflex.bountiful.logic.BountyChecker
 import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.logic.BountyData
@@ -19,9 +18,6 @@ import net.minecraft.util.ActionResult
 import net.minecraft.util.EnumHand
 import net.minecraft.util.text.TextComponentString
 import net.minecraft.world.World
-import net.minecraftforge.items.ItemHandlerHelper
-import kotlin.math.max
-import kotlin.math.min
 
 
 class ItemBounty : Item(), IItemBounty {
@@ -135,18 +131,24 @@ class ItemBounty : Item(), IItemBounty {
         }
 
         // Returns prerequisite stacks needed to reduce for reward, or null if they don't have the prereqs
-        val prereq = BountyChecker.hasItems(player, inv, bounty)
+        val invItemsAffected = BountyChecker.hasItems(player, inv, bounty) ?: return false
 
-        if (prereq != null) {
-            if (!atBoard && Bountiful.config.cashInAtBountyBoard) {
-                player.sendMessage(TextComponentString("§aBounty requirements met. Fullfill your bounty by right clicking on a bounty board."))
-                return false
-            } else {
-                player.sendMessage(TextComponentString("§aBounty Fulfilled!"))
-            }
+        //val errMsg = "§4You haven't completed all of the requirements for this bounty."
 
+        val entitiesFulfilled = BountyChecker.hasEntitiesFulfilled(bounty)
+        if (!entitiesFulfilled) {
+            player.sendMessage("§cYou need to kill more mobs to fulfill this bounty.")
+            return false
+        }
+
+
+        return if (!atBoard && Bountiful.config.cashInAtBountyBoard) {
+            player.sendMessage(TextComponentString("§aBounty requirements met. Fullfill your bounty by right clicking on a bounty board."))
+            false
+        } else {
+            player.sendMessage(TextComponentString("§aBounty Fulfilled!"))
             // Reduce count of relevant prerequisite stacks
-            BountyChecker.takeItems(player, inv, bounty, prereq)
+            BountyChecker.takeItems(player, inv, bounty, invItemsAffected)
 
             // Remove bounty note
             player.setHeldItem(hand, ItemStack.EMPTY)
@@ -154,10 +156,10 @@ class ItemBounty : Item(), IItemBounty {
             // Reward player with rewards
             BountyChecker.rewardItems(player, inv, bounty, bountyItem)
 
-            return true
-        } else {
-            return false
+            true
         }
+
+
     }
 
     override fun onItemRightClick(worldIn: World, playerIn: EntityPlayer, handIn: EnumHand): ActionResult<ItemStack> {

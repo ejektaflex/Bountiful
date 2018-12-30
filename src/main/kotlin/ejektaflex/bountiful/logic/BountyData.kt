@@ -66,9 +66,14 @@ class BountyData : IBountyData {
 
     private val getPretty: String
         get() {
-            return toGet.items.joinToString(", ") {
-                "§f${it.amount}x §a${it.prettyContent}§f"
-            } + "§r"
+            return if (toGet.items.isEmpty()) {
+                "§6Completed. §aTurn it in!"
+            } else {
+                toGet.items.joinToString(", ") {
+                    "§f${it.amount}x §a${it.prettyContent}§f"
+                } + "§r"
+            }
+
         }
 
     private val rewardPretty: String

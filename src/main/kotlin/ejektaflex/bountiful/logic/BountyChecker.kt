@@ -15,7 +15,7 @@ import kotlin.math.min
 object BountyChecker {
 
     fun hasItems(player: EntityPlayer, inv: NonNullList<ItemStack>, data: BountyData): List<ItemStack>? {
-        val stackPicked = data.toGet.typedItems<PickedEntryStack>()
+        val stackPicked = data.toGet.items.mapNotNull { it as? PickedEntryStack }
 
         println(stackPicked)
 
@@ -55,9 +55,14 @@ object BountyChecker {
         }
     }
 
+    /**
+     * Tries to tick all relevant entities on Bounty. Returns true if there are none left
+     */
     fun tryTakeEntities(player: EntityPlayer, data: BountyData, bounty: ItemStack, entity: EntityLivingBase) {
         val toRemove = mutableListOf<PickedEntryEntity>()
-        data.toGet.items.mapNotNull { it as? PickedEntryEntity }.forEach { picked ->
+        val bountyEntities = data.toGet.items.mapNotNull { it as? PickedEntryEntity }
+
+        bountyEntities.forEach { picked ->
             //println("${picked.entityEntry?.name?.toLowerCase()}, ${entity.name.toLowerCase()}")
             if (picked.entityEntry?.name?.toLowerCase() == entity.name.toLowerCase()) {
                 if (picked.amount > 0) {
@@ -70,6 +75,11 @@ object BountyChecker {
         }
         data.toGet.items.removeAll(toRemove)
         bounty.tagCompound = data.serializeNBT()
+    }
+
+    fun hasEntitiesFulfilled(data: BountyData): Boolean {
+        val bountyEntities = data.toGet.items.mapNotNull { it as? PickedEntryEntity }
+        return bountyEntities.isEmpty()
     }
 
     fun rewardItems(player: EntityPlayer, inv: NonNullList<ItemStack>, data: BountyData, bountyItem: ItemStack) {
