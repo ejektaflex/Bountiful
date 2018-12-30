@@ -49,7 +49,7 @@ class BountyData : IBountyData {
                 //"Board Time: ${formatTickTime(boardTimeLeft(world) / boardTickFreq)}",
                 "Time To Complete: ${formatTimeExpirable(timeLeft(world) / bountyTickFreq)}",
                 getPretty,
-                "§fRewards: $rewardPretty"
+                rewardPretty
         )
     }
 
@@ -75,7 +75,7 @@ class BountyData : IBountyData {
                 "§6Completed. §aTurn it in!"
             } else {
                 "§fRequired: " + toGet.items.joinToString(", ") {
-                    "§f${it.amount}x §a${it.prettyContent}§f"
+                    it.prettyContent
                 } + "§r"
             }
 
@@ -83,8 +83,8 @@ class BountyData : IBountyData {
 
     private val rewardPretty: String
         get() {
-            return rewards.items.joinToString(", ") {
-                "§f${it.amount}x §6${it.prettyContent}§f"
+            return "§fRewards: " + rewards.items.joinToString(", ") {
+                "§f${it.amount}x §6${it.itemStack?.displayName}§f"
             } + "§r"
         }
 

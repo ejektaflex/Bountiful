@@ -32,7 +32,7 @@ class PickedEntryEntity(
         get() = entityEntry
 
     override val prettyContent: String
-        get() = ("($killedAmount/$amount) " + entityEntry?.name + " Kills")
+        get() = ("($killedAmount/$amount) §a" + entityEntry?.name + " Kills§r")
 
     override fun toString(): String {
         return "$amount x ${entityEntry?.name}"

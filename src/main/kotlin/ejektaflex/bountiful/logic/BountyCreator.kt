@@ -53,7 +53,11 @@ object BountyCreator : IBountyCreator {
 
         val toPick = numBountyItems.random()
         while (pickedAlready.size < toPick) {
-            val toAdd = BountyRegistry.items.filter { it !in pickedAlready }.weightedRandom
+            println("###")
+            val pool = BountyRegistry.items.filter { it !in pickedAlready }
+            println("Pool: ${pool.map { it.content }}")
+            val toAdd = pool.weightedRandom
+            println("Adding: ${toAdd.content}")
             pickedAlready.add(toAdd)
         }
 
