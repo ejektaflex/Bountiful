@@ -27,8 +27,6 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private set
     override var bountiesCreatedOnPlace = 0
         private set
-    override var messageOnBountyMobDeath: Boolean = false
-        private set
 
 
     private var bountyAmountMax = 2
@@ -119,12 +117,14 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 "The number of entries that a Bounty Board starts with when placed (Default: 0)"
         ).int.clampTo(1..27)
 
+        /*
         messageOnBountyMobDeath = config.get(
                 CATEGORY_BOUNTY,
                 "Should Bounty Kills Notify Player?",
                 false,
                 "By default (false), killing a mob and having a bounty for the mob in your inventory will not notify you."
         ).boolean
+        */
 
     }
 
