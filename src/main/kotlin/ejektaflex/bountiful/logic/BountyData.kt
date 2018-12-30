@@ -65,10 +65,18 @@ class BountyData : IBountyData {
     }
 
     private val getPretty: String
-        get() = toGet.items.joinToString(", ") { "§a$it§r" }
+        get() {
+            return toGet.items.joinToString(", ") {
+                "§f${it.amount}x §a${it.prettyContent}§f"
+            } + "§r"
+        }
 
     private val rewardPretty: String
-        get() = rewards.items.joinToString("§r, ") { "§6$it§r" }
+        get() {
+            return rewards.items.joinToString(", ") {
+                "§f${it.amount}x §a${it.prettyContent}§f"
+            } + "§r"
+        }
 
     override fun deserializeNBT(tag: NBTTagCompound) {
         boardStamp = tag.getInteger(BountyNBT.BoardStamp.key)

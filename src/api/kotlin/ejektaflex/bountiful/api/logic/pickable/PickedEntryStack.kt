@@ -17,7 +17,10 @@ class PickedEntryStack(
         get() = itemStack
 
     override fun toString(): String {
-        return "§r" + amount.toString() + "x §a" + (itemStack?.displayName ?: "Unknown Item (Content ID: $contentID)") + "§r"
+        return amount.toString() + "x " + (itemStack?.displayName ?: "Unknown Item (Content ID: $contentID)")
     }
+
+    override val prettyContent: String
+        get() = itemStack?.displayName ?: "Unknown ItemStack, No Name"
 
 }

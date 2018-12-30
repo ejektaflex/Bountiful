@@ -24,10 +24,14 @@ open class PickedEntry(
 
     override fun toString() = "Picked(§f${amount}x §6$contentID)"
 
+    override val prettyContent: String
+        get() = toString()
+
     override fun typed(): IPickedEntry {
         if (":" in contentID) {
             return when (val type = contentID.substringBefore(':')) {
                 "doot" -> PickedEntryStack(this)
+                //"entity" ->
                 else -> PickedEntryStack(this)
             }
         } else {

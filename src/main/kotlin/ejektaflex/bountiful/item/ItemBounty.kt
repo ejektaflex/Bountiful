@@ -81,17 +81,6 @@ class ItemBounty : Item(), IItemBounty {
         }
     }
 
-    override fun timeLeft(stack: ItemStack): Long {
-        if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(BountyNBT.BountyTime.key)) {
-            if (stack.tagCompound!!.hasKey(BountyNBT.BountyStamp.key)) {
-                val tag = stack.tagCompound
-                return max(tag!!.getLong(BountyNBT.BountyStamp.key) - tag.getLong(BountyNBT.BountyTime.key), 0)
-            }
-
-        }
-        return 0L
-    }
-
     override fun tickBoardTime(stack: ItemStack): Boolean {
         return tickNumber(stack, BountyData.boardTickFreq.toInt(), BountyNBT.BoardStamp.key)
     }
@@ -139,6 +128,11 @@ class ItemBounty : Item(), IItemBounty {
 
         val inv = player.inventory.mainInventory
         val bounty = BountyData().apply { deserializeNBT(bountyItem.tagCompound!!) }
+
+        if (bounty.timeLeft(player.world) <= 0) {
+            player.sendMessage("§4This bounty has expired.")
+            return false
+        }
 
         // Returns prerequisite stacks needed to reduce for reward, or null if they don't have the prereqs
         val prereq = BountyChecker.hasItems(player, inv, bounty)

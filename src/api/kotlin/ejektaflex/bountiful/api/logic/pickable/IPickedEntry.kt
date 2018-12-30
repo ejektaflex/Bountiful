@@ -8,4 +8,5 @@ interface IPickedEntry : INBTSerializable<NBTTagCompound> {
     var amount: Int
     fun typed(): IPickedEntry
     val content: Any?
+    val prettyContent: String
 }
