@@ -34,13 +34,16 @@ class TileEntityBountyBoard : TileEntity(), ITileEntityBountyBoard {
     val isLocal: Boolean
         get() = !Bountiful.config.globalBounties
 
+    val cap: IGlobalBoard?
+        get() = world.getCapability(CapManager.CAP_BOARD!!, null)
+
     override val inventory: BountyHolder
         get() {
             return if (!isLocal) {
                 //BountyWorldData[world].inventory
                 if (world.hasCapability(CapManager.CAP_BOARD!!, null)) {
                     println("TACO THIS WORLD HAS THE CAP!")
-                    world.getCapability(CapManager.CAP_BOARD, null)!!.holder
+                    cap!!.holder
                 } else {
                     println("TACO THIS WORLD DOES ***NOT*** HAVE THE CAP!")
                     internalInv

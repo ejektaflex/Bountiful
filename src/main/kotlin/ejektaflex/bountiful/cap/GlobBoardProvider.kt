@@ -11,14 +11,14 @@ import javax.annotation.Nullable
 
 class GlobBoardProvider : ICapabilitySerializable<NBTTagCompound> {
 
-    //private
+    private val inst = GlobalBoard()
 
     override fun serializeNBT(): NBTTagCompound {
-        return CapManager.CAP_BOARD?.writeNBT(inst, null) as NBTTagCompound
+        return CapManager.CAP_BOARD?.storage!!.writeNBT(CapManager.CAP_BOARD, inst, EnumFacing.UP) as NBTTagCompound
     }
 
     override fun deserializeNBT(tag: NBTTagCompound) {
-        CapManager.CAP_BOARD?.readNBT(inst, null, tag)
+        CapManager.CAP_BOARD?.storage!!.readNBT(CapManager.CAP_BOARD, inst, EnumFacing.UP, tag)
     }
 
     // Return capability instance
@@ -30,8 +30,5 @@ class GlobBoardProvider : ICapabilitySerializable<NBTTagCompound> {
         return capability === CapManager.CAP_BOARD
     }
 
-    companion object {
-        val inst = GlobalBoard(BountyHolder(ItemStackHandler(27)))
-    }
 
 }

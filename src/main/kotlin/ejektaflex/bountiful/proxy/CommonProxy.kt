@@ -32,7 +32,7 @@ open class CommonProxy : IProxy {
 
     override fun preInit(e: FMLPreInitializationEvent) {
         //CapabilityManager.INSTANCE.re
-        CapabilityManager.INSTANCE.register(IGlobalBoard::class.java, Storage()) { GlobalBoard(BountyHolder(ItemStackHandler(27))) }
+        CapabilityManager.INSTANCE.register(IGlobalBoard::class.java, Storage()) { GlobalBoard() }
     }
 
     // Update mob bounties
