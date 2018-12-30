@@ -3,8 +3,8 @@ package ejektaflex.bountiful.logic
 import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.ContentRegistry
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
+import ejektaflex.bountiful.api.ext.weightedRandom
 import ejektaflex.bountiful.api.logic.IBountyCreator
-import ejektaflex.bountiful.api.logic.pickable.IPickedEntry
 import ejektaflex.bountiful.logic.error.BountyCreationException
 import ejektaflex.bountiful.api.logic.pickable.PickableEntry
 import ejektaflex.bountiful.api.logic.pickable.PickedEntry
@@ -42,16 +42,34 @@ object BountyCreator : IBountyCreator {
     }
 
     override fun create(): BountyData {
+
+        if (BountyRegistry.items.size < numBountyItems.last) {
+            throw Exception("Bounty registry has fewer items than the max number of bounty items that the config dictates you could give!")
+        }
+
         // Shuffle bounty registry and take a random number of bounty items
-        val itemsToPick = BountyRegistry.items.shuffled().take(numBountyItems.random())
+        val pickedAlready = mutableListOf<PickableEntry>()
+        //val itemsToPick = BountyRegistry.items.shuffled().take(numBountyItems.random())
+
+        val toPick = numBountyItems.random()
+        while (pickedAlready.size < toPick) {
+            println("###")
+            val pool = BountyRegistry.items.filter { it !in pickedAlready }
+            println("Pool: ${pool.map { it.content }}")
+            val toAdd = pool.weightedRandom
+            println("Adding: ${toAdd.content}")
+            pickedAlready.add(toAdd)
+        }
+
+
         return BountyData().apply {
             rarity = calcRarity().level
             worth = 0
             // Generate bounty data
-            itemsToPick.forEach {
+            pickedAlready.forEach {
                 val picked = it.pick()
                 val amountOfItem = it.randCount
-                if (picked.content != null) {
+                if (picked.contentObj != null) {
                     toGet.add(picked)
                     worth += (picked.amount * it.unitWorth)
                 } else {
@@ -76,22 +94,22 @@ object BountyCreator : IBountyCreator {
         var worthLeft = n
         val toRet = mutableListOf<PickedEntryStack>()
         val picked = mutableListOf<String>()
-        var validRewards: List<PickedEntryStack> = RewardRegistry.items.filter { it.amount <= worthLeft && it.contentID !in picked }.sortedBy { it.amount }
+        var validRewards: List<PickedEntryStack> = RewardRegistry.items.filter { it.amount <= worthLeft && it.content !in picked }.sortedBy { it.amount }
 
         while (validRewards.isNotEmpty()) {
-            val reward = validRewards.last()
+            val reward = validRewards.random()
 
             val maxNumOfReward = worthLeft / reward.amount
             val worthSated = reward.amount * maxNumOfReward
             worthLeft -= worthSated
-            toRet.add(PickedEntryStack(PickedEntry(reward.contentID, maxNumOfReward)))
-            validRewards = RewardRegistry.items.filter { it.amount <= worthLeft && it.content !in picked }.sortedBy { it.amount }
+            toRet.add(PickedEntryStack(PickedEntry(reward.content, maxNumOfReward)))
+            validRewards = RewardRegistry.items.filter { it.amount <= worthLeft && it.contentObj !in picked }.sortedBy { it.amount }
         }
 
         // If there were no valid rewards, find the cheapest item
         if (toRet.isEmpty()) {
             val lowestWorthItem = RewardRegistry.items.minBy { it.amount }!!
-            toRet.add(PickedEntryStack(PickedEntry(lowestWorthItem.contentID, 1)))
+            toRet.add(PickedEntryStack(PickedEntry(lowestWorthItem.content, 1)))
         }
 
         return toRet

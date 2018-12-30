@@ -1,5 +1,6 @@
 package ejektaflex.bountiful.api.ext
 
+import ejektaflex.bountiful.api.logic.IWeighted
 import net.minecraft.client.Minecraft
 import net.minecraft.command.ICommandSender
 import net.minecraft.util.ResourceLocation
@@ -30,3 +31,16 @@ fun Double.clampTo(low: Double, high: Double): Double {
 fun Long.clampTo(range: LongRange): Long {
     return max(range.first, min(this, range.last))
 }
+
+val <T : IWeighted> List<T>.weightedRandom: T
+    get() {
+        val sum = this.sumBy { it.weight }
+        var point = (0..sum).random()
+        for (item in this) {
+            if (point <= item.weight) {
+                return item
+            }
+            point -= item.weight
+        }
+        return last()
+    }

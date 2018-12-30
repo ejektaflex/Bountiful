@@ -4,9 +4,9 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.INBTSerializable
 
 interface IPickedEntry : INBTSerializable<NBTTagCompound> {
-    var contentID: String
+    var content: String
     var amount: Int
     fun typed(): IPickedEntry
-    val content: Any?
+    val contentObj: Any?
     val prettyContent: String
 }

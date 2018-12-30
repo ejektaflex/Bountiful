@@ -83,7 +83,7 @@ class TileEntityBountyBoard : TileEntity(), ITickable {
                     bountyItem.ensureTimerStarted(bounty, world)
                 }
 
-                if (data.timeLeft(world) <= 0 || data.boardTimeLeft(world) <= 0) {
+                if (data.hasExpired(world) || data.boardTimeLeft(world) <= 0) {
                     toRemove.add(slot)
                 }
             }

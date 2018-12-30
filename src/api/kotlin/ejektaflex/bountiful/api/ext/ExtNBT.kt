@@ -1,5 +1,7 @@
 package ejektaflex.bountiful.api.ext
 
+import ejektaflex.bountiful.api.logic.pickable.IPickedEntry
+import ejektaflex.bountiful.api.logic.pickable.PickedEntry
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.INBTSerializable
 
@@ -23,5 +25,13 @@ fun <T : INBTSerializable<NBTTagCompound>> NBTTagCompound.getUnsortedList(key: S
     return listTag.keySet.map { index ->
         val itag = listTag.getCompoundTag(index)
         itemGen().apply { deserializeNBT(itag) }
+    }.toSet()
+}
+
+fun NBTTagCompound.getPickedEntryList(key: String): Set<IPickedEntry> {
+    val listTag = getCompoundTag(key)
+    return listTag.keySet.map { index ->
+        val itag = listTag.getCompoundTag(index)
+        PickedEntry().apply { deserializeNBT(itag) }.typed().apply { deserializeNBT(itag) }
     }.toSet()
 }

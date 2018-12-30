@@ -8,6 +8,7 @@ import ejektaflex.bountiful.registry.ValueRegistry
 object DefaultData {
 
     val entries = ValueRegistry<PickableEntry>().apply {
+        /*
         add(
             PickableEntry("minecraft:dirt", 16..128, 5),
             PickableEntry("minecraft:stone", 16..128, 10),
@@ -28,6 +29,12 @@ object DefaultData {
             PickableEntry("minecraft:sugar", 1..64, 55),
             PickableEntry("minecraft:tripwire_hook", 1..8, 70),
             PickableEntry("minecraft:wheat", 1..48, 20)
+        )
+        */
+        add(
+                PickableEntry("entity:zombie", 1..8, 90),
+                PickableEntry("entity:skeleton", 1..6, 110),
+                PickableEntry("minecraft:bread", 1..12, 60)
         )
     }
 

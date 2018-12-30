@@ -1,9 +1,29 @@
 package ejektaflex.bountiful.api.ext
 
 import net.minecraft.block.state.IBlockState
+import net.minecraft.entity.Entity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraftforge.fml.common.registry.EntityEntry
+import net.minecraftforge.fml.common.registry.ForgeRegistries
 import net.minecraftforge.oredict.OreDictionary
+
+;
+
+
+val String.toEntityEntry: EntityEntry?
+    get() {
+        val sect = split(":").toMutableList()
+        if (sect.size != 2) {
+            return null
+        }
+        if (sect[0] != "entity") {
+            return null
+        }
+        return ForgeRegistries.ENTITIES.find {
+            it.name.toLowerCase() == sect[1]
+        }
+    }
 
 val String.toMeta: Int
     get() {

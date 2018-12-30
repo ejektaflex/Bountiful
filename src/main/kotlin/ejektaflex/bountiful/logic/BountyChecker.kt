@@ -1,7 +1,10 @@
 package ejektaflex.bountiful.logic
 
 import ejektaflex.bountiful.ContentRegistry
+import ejektaflex.bountiful.api.ext.sendMessage
+import ejektaflex.bountiful.api.logic.pickable.PickedEntryEntity
 import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
+import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.NonNullList
@@ -12,7 +15,7 @@ import kotlin.math.min
 object BountyChecker {
 
     fun hasItems(player: EntityPlayer, inv: NonNullList<ItemStack>, data: BountyData): List<ItemStack>? {
-        val stackPicked = data.toGet.typedItems<PickedEntryStack>()
+        val stackPicked = data.toGet.items.mapNotNull { it as? PickedEntryStack }
 
         println(stackPicked)
 
@@ -43,12 +46,42 @@ object BountyChecker {
 
     fun takeItems(player: EntityPlayer, inv: NonNullList<ItemStack>, data: BountyData, matched: List<ItemStack>) {
         // If it does, reduce count of all relevant stacks
-        data.toGet.typedItems<PickedEntryStack>().forEach { picked ->
+        data.toGet.items.mapNotNull { it as? PickedEntryStack }.forEach { picked ->
             val stacksToChange = matched.filter { it.isItemEqualIgnoreDurability(picked.itemStack!!) }
             for (stack in stacksToChange) {
                 val amountToRemove = min(stack.count, picked.amount)
                 stack.count -= amountToRemove
             }
+        }
+    }
+
+    /**
+     * Tries to tick all relevant entities on Bounty. Returns true if there are none left
+     */
+    fun tryTakeEntities(player: EntityPlayer, data: BountyData, bounty: ItemStack, entity: EntityLivingBase) {
+        // Don't try take entities from an expired bounty.
+        if (data.hasExpired(player.world)) {
+            return
+        }
+        val bountyEntities = data.toGet.items.mapNotNull { it as? PickedEntryEntity }
+
+        bountyEntities.forEach { picked ->
+            //println("${picked.entityEntry?.name?.toLowerCase()}, ${entity.name.toLowerCase()}")
+            if (picked.entityEntry?.name?.toLowerCase() == entity.name.toLowerCase()) {
+                if (picked.killedAmount < picked.amount) {
+                    picked.killedAmount ++
+                }
+            }
+        }
+        bounty.tagCompound = data.serializeNBT()
+    }
+
+    fun hasEntitiesFulfilled(data: BountyData): Boolean {
+        val bountyEntities = data.toGet.items.mapNotNull { it as? PickedEntryEntity }
+        return if (bountyEntities.isEmpty()) {
+            true
+        } else {
+            bountyEntities.all { it.killedAmount == it.amount }
         }
     }
 

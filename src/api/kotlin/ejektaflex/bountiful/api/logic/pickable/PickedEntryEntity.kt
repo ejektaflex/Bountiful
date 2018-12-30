@@ -1,29 +1,41 @@
 package ejektaflex.bountiful.api.logic.pickable
 
 import com.google.gson.annotations.Expose
-import net.minecraft.entity.EntityLiving
-import net.minecraftforge.fml.common.registry.EntityRegistry
-import net.minecraftforge.fml.common.registry.ForgeRegistries
+import ejektaflex.bountiful.api.ext.toEntityEntry
+import net.minecraft.nbt.NBTTagCompound
+import net.minecraftforge.fml.common.registry.EntityEntry
 
 class PickedEntryEntity(
         @Expose(serialize = false, deserialize = false)
         val genericPick: PickedEntry
 ) : IPickedEntry by genericPick {
 
+    var killedAmount = 0
 
-    val entityLiving: EntityLiving?
+    override fun deserializeNBT(tag: NBTTagCompound) {
+        genericPick.deserializeNBT(tag)
+        killedAmount = tag.getInteger("killedAmount")
+    }
+
+    override fun serializeNBT(): NBTTagCompound {
+        return genericPick.serializeNBT().apply {
+            setInteger("killedAmount", killedAmount)
+        }
+    }
+
+    val entityEntry: EntityEntry?
         get() {
-            return null
+            return content.toEntityEntry
         }
 
-    override val content: Any?
-        get() = entityLiving
+    override val contentObj: Any?
+        get() = entityEntry
 
     override val prettyContent: String
-        get() = entityLiving?.name ?: "Null Living Entity, No Name"
+        get() = ("($killedAmount/$amount) §a" + entityEntry?.name + " Kills§r")
 
     override fun toString(): String {
-        return "§r" + amount.toString() + "x §a" + (entityLiving?.displayName ?: "Unknown Item (Content ID: $contentID)") + "§r"
+        return "$amount x ${entityEntry?.name}"
     }
 
 }

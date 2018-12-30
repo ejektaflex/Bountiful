@@ -1,6 +1,7 @@
 package ejektaflex.bountiful.logic
 
 import ejektaflex.bountiful.Bountiful
+import ejektaflex.bountiful.api.ext.getPickedEntryList
 import ejektaflex.bountiful.api.ext.getUnsortedList
 import ejektaflex.bountiful.api.ext.setUnsortedList
 import ejektaflex.bountiful.api.logic.IBountyData
@@ -35,6 +36,10 @@ class BountyData : IBountyData {
         }
     }
 
+    override fun hasExpired(world: World): Boolean {
+        return timeLeft(world) <= 0
+    }
+
     override fun boardTimeLeft(world: World): Long {
         return max(boardStamp + Bountiful.config.boardLifespan - world.totalWorldTime , 0)
     }
@@ -43,8 +48,8 @@ class BountyData : IBountyData {
         return listOf(
                 //"Board Time: ${formatTickTime(boardTimeLeft(world) / boardTickFreq)}",
                 "Time To Complete: ${formatTimeExpirable(timeLeft(world) / bountyTickFreq)}",
-                "§fRequired: $getPretty",
-                "§fRewards: $rewardPretty"
+                getPretty,
+                rewardPretty
         )
     }
 
@@ -66,15 +71,20 @@ class BountyData : IBountyData {
 
     private val getPretty: String
         get() {
-            return toGet.items.joinToString(", ") {
-                "§f${it.amount}x §a${it.prettyContent}§f"
-            } + "§r"
+            return if (toGet.items.isEmpty()) {
+                "§6Completed. §aTurn it in!"
+            } else {
+                "§fRequired: " + toGet.items.joinToString(", ") {
+                    it.prettyContent
+                } + "§r"
+            }
+
         }
 
     private val rewardPretty: String
         get() {
-            return rewards.items.joinToString(", ") {
-                "§f${it.amount}x §a${it.prettyContent}§f"
+            return "§fRewards: " + rewards.items.joinToString(", ") {
+                "§f${it.amount}x §6${it.itemStack?.displayName}§f"
             } + "§r"
         }
 
@@ -87,9 +97,7 @@ class BountyData : IBountyData {
             bountyStamp = tag.getLong(BountyNBT.BountyStamp.key)
         }
         toGet.restore(
-                tag.getUnsortedList(BountyNBT.ToGet.key) { PickedEntry() }.map {
-                    it.typed()
-                }
+                tag.getPickedEntryList(BountyNBT.ToGet.key).toList()
         )
 
         rewards.restore(tag.getUnsortedList(BountyNBT.Rewards.key) { PickedEntryStack(PickedEntry()) }.toList() )

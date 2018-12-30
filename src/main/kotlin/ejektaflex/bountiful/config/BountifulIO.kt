@@ -1,19 +1,14 @@
 package ejektaflex.bountiful.config
 
 import ejektaflex.bountiful.Bountiful
-import ejektaflex.bountiful.data.SaveWrapper
 import ejektaflex.bountiful.api.logic.pickable.PickableEntry
-import ejektaflex.bountiful.registry.ValueRegistry
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
 import ejektaflex.bountiful.api.logic.pickable.PickedEntry
 import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
-import ejektaflex.bountiful.api.registry.IValueRegistry
 import ejektaflex.bountiful.registry.BountyRegistry
 import ejektaflex.bountiful.registry.RewardRegistry
 import java.io.File
-import java.lang.reflect.Type
 
 object BountifulIO {
 
@@ -32,9 +27,9 @@ object BountifulIO {
         if (!fileToPopulate.exists()) {
             fileToPopulate.apply {
                 createNewFile()
-                println("Going to serialize content..")
+                println("Going to serialize contentObj..")
                 val content = gson.toJson(defaultData.toTypedArray())
-                //println("Content: $content")
+                //println("Content: $contentObj")
                 writeText(content)
             }
         }
@@ -67,7 +62,7 @@ object BountifulIO {
         ).map { PickedEntryStack(it) }
         RewardRegistry.empty()
         for (item in picked) {
-            if (item.content != null) {
+            if (item.contentObj != null) {
                 RewardRegistry.add(item)
             } else {
                 invalids.add(item)

@@ -4,42 +4,41 @@ import com.google.gson.annotations.SerializedName
 import net.minecraft.nbt.NBTTagCompound
 
 open class PickedEntry(
-        override var contentID: String = "UNDEFINED",
+        override var content: String = "UNDEFINED",
         @SerializedName("unitWorth")
         override var amount: Int = Integer.MIN_VALUE
 ) : IPickedEntry {
 
     override fun serializeNBT(): NBTTagCompound {
         return NBTTagCompound().apply {
-            setString("contentID", contentID)
+            setString("content", content)
             setInteger("amount", amount)
         }
     }
 
     override fun deserializeNBT(tag: NBTTagCompound) {
-        contentID = tag.getString("contentID")
+        content = tag.getString("content")
         amount = tag.getInteger("amount")
     }
 
 
-    override fun toString() = "Picked(§f${amount}x §6$contentID)"
+    override fun toString() = "Picked(§f${amount}x §6$content)"
 
     override val prettyContent: String
         get() = toString()
 
     override fun typed(): IPickedEntry {
-        if (":" in contentID) {
-            return when (val type = contentID.substringBefore(':')) {
-                "doot" -> PickedEntryStack(this)
-                //"entity" ->
+        if (":" in content) {
+            return when (val type = content.substringBefore(':')) {
+                "entity" -> PickedEntryEntity(this)
                 else -> PickedEntryStack(this)
             }
         } else {
-            throw Exception("Entry: '$contentID' is has no comma prefix!")
+            throw Exception("Entry: '$content' is has no comma prefix!")
         }
     }
 
-    override val content: Any? = null
+    override val contentObj: Any? = null
 
 
 }
