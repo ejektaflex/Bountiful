@@ -7,13 +7,20 @@ import net.minecraftforge.fml.common.eventhandler.Cancelable
 import net.minecraftforge.fml.common.eventhandler.Event
 
 @Cancelable
-class PopulateBountyBoardEvent(var stack: ItemStack, var board: ITileEntityBountyBoard) : Event() {
+class PopulateBountyBoardEvent(var stack: ItemStack, var board: ITileEntityBountyBoard?, val isGlobal: Boolean) : Event() {
 
     companion object {
         fun fireEvent(stack: ItemStack, board: ITileEntityBountyBoard): PopulateBountyBoardEvent {
-            val event = PopulateBountyBoardEvent(stack, board)
+            val event = PopulateBountyBoardEvent(stack, board, false)
             MinecraftForge.EVENT_BUS.post(event)
             return event
         }
+
+        fun fireEvent(stack: ItemStack): PopulateBountyBoardEvent {
+            val event = PopulateBountyBoardEvent(stack, null, true)
+            MinecraftForge.EVENT_BUS.post(event)
+            return event
+        }
+
     }
 }

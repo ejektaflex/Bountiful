@@ -27,6 +27,8 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private set
     override var bountiesCreatedOnPlace = 0
         private set
+    override var globalBounties = false
+        private set
 
 
     private var bountyAmountMax = 2
@@ -125,6 +127,13 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 "By default (false), killing a mob and having a bounty for the mob in your inventory will not notify you."
         ).boolean
         */
+
+        globalBounties = config.get(
+                CATEGORY_BOARD,
+                "Global Bounty Inventory",
+                false,
+                "By default (true), all boards share a single, global inventory. If false, all boards have their own inventory."
+        ).boolean
 
     }
 

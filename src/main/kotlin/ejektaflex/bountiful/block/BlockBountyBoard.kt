@@ -27,7 +27,7 @@ class BlockBountyBoard : BlockTileEntity<TileEntityBountyBoard>(Material.WOOD, "
                 // Cash in, or else try get bounty
                 if (Bountiful.config.cashInAtBountyBoard && holding?.item is ItemBounty) {
                     (holding.item as ItemBounty).cashIn(player, hand!!, atBoard = true)
-                } else if (tile.inventory.filledSlots.isEmpty()) {
+                } else if (tile.inventory.handler.filledSlots.isEmpty()) {
                     player.sendMessage("§6No bounties available, come back later!")
                 } else {
                     player.openGui(Bountiful.instance!!, GuiHandler.BOARD_GUI, world, pos.x, pos.y, pos.z)
@@ -41,7 +41,7 @@ class BlockBountyBoard : BlockTileEntity<TileEntityBountyBoard>(Material.WOOD, "
     override fun onBlockAdded(worldIn: World, pos: BlockPos, state: IBlockState) {
         val tile = (getTileEntity(worldIn, pos) as TileEntityBountyBoard)
         for (i in 0 until Bountiful.config.bountiesCreatedOnPlace) {
-            tile.addSingleBounty()
+            tile.inventory.addSingleBounty(worldIn, null)
             tile.markDirty()
         }
     }

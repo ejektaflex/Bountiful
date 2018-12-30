@@ -22,7 +22,7 @@ object InternalAPI : IBountifulAPI {
     override val rewardRegistry = RewardRegistry
 
     override fun getBountiesAt(worldIn: World, pos: BlockPos): List<ItemStack>? {
-        return (worldIn.getTileEntity(pos) as? TileEntityBountyBoard)?.inventory?.stacks
+        return (worldIn.getTileEntity(pos) as? TileEntityBountyBoard)?.inventory?.handler?.stacks
     }
 
     override fun toBountyData(stack: ItemStack): IBountyData {
