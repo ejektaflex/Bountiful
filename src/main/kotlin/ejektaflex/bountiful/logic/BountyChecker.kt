@@ -59,6 +59,10 @@ object BountyChecker {
      * Tries to tick all relevant entities on Bounty. Returns true if there are none left
      */
     fun tryTakeEntities(player: EntityPlayer, data: BountyData, bounty: ItemStack, entity: EntityLivingBase) {
+        // Don't try take entities from an expired bounty.
+        if (data.hasExpired(player.world)) {
+            return
+        }
         val toRemove = mutableListOf<PickedEntryEntity>()
         val bountyEntities = data.toGet.items.mapNotNull { it as? PickedEntryEntity }
 

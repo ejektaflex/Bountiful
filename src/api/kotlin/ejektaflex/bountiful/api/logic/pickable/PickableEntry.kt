@@ -22,7 +22,7 @@ open class PickableEntry(var content: String, var amount: ItemRange, var unitWor
 
     val isValid: Boolean
         get() {
-            return pick().content != null
+            return pick().contentObj != null
         }
 
 }

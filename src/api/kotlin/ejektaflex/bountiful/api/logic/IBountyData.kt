@@ -46,6 +46,8 @@ interface IBountyData : INBTSerializable<NBTTagCompound> {
      */
     fun timeLeft(world: World): Long
 
+    fun hasExpired(world: World): Boolean
+
     /**
      * A long representing how long the bounty has left on the board.
      */

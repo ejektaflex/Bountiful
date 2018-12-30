@@ -35,6 +35,10 @@ class BountyData : IBountyData {
         }
     }
 
+    override fun hasExpired(world: World): Boolean {
+        return timeLeft(world) <= 0
+    }
+
     override fun boardTimeLeft(world: World): Long {
         return max(boardStamp + Bountiful.config.boardLifespan - world.totalWorldTime , 0)
     }
@@ -43,7 +47,7 @@ class BountyData : IBountyData {
         return listOf(
                 //"Board Time: ${formatTickTime(boardTimeLeft(world) / boardTickFreq)}",
                 "Time To Complete: ${formatTimeExpirable(timeLeft(world) / bountyTickFreq)}",
-                "§fRequired: $getPretty",
+                getPretty,
                 "§fRewards: $rewardPretty"
         )
     }
@@ -69,7 +73,7 @@ class BountyData : IBountyData {
             return if (toGet.items.isEmpty()) {
                 "§6Completed. §aTurn it in!"
             } else {
-                toGet.items.joinToString(", ") {
+                "§fRequired: " + toGet.items.joinToString(", ") {
                     "§f${it.amount}x §a${it.prettyContent}§f"
                 } + "§r"
             }

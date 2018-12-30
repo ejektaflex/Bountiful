@@ -11,10 +11,10 @@ class PickedEntryEntity(
 
     val entityEntry: EntityEntry?
         get() {
-            return contentID.toEntityEntry
+            return content.toEntityEntry
         }
 
-    override val content: Any?
+    override val contentObj: Any?
         get() = entityEntry
 
     override val prettyContent: String

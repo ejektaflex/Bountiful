@@ -125,7 +125,7 @@ class ItemBounty : Item(), IItemBounty {
         val inv = player.inventory.mainInventory
         val bounty = BountyData().apply { deserializeNBT(bountyItem.tagCompound!!) }
 
-        if (bounty.timeLeft(player.world) <= 0) {
+        if (bounty.hasExpired(player.world)) {
             player.sendMessage("§4This bounty has expired.")
             return false
         }
