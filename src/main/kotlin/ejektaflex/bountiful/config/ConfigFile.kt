@@ -35,6 +35,8 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private set
     override var boardRecipeEnabled: Boolean = true
         private set
+    override var bountyBoardBreakable: Boolean = true
+        private set
 
 
 
@@ -146,6 +148,14 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 true,
                 "Whether or not a recipe for the bounty board is created (Default: true)."
         ).boolean
+
+        bountyBoardBreakable = config.get(
+                CATEGORY_BOARD,
+                "Board Breakable?",
+                true,
+                "Whether or not the bounty board can be broken (Default: true)."
+        ).boolean
+
 
 
 

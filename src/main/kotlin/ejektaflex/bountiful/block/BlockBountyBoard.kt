@@ -18,7 +18,12 @@ import net.minecraft.world.World
 class BlockBountyBoard : BlockTileEntity<TileEntityBountyBoard>(Material.WOOD, "bountyboard") {
 
     init {
-        setHardness(2.0f)
+        val hardToSet = if (Bountiful.config.bountyBoardBreakable) {
+            2f
+        } else {
+            -1f
+        }
+        setHardness(hardToSet)
     }
 
     override val tileEntityClass: Class<TileEntityBountyBoard>
