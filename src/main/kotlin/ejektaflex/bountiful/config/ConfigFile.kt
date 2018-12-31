@@ -33,6 +33,8 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private set
     override var rarityMultipliers = mutableListOf(1.0, 1.1, 1.2, 1.5)
         private set
+    override var boardRecipeEnabled: Boolean = true
+        private set
 
 
 
@@ -138,7 +140,12 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 "A multiplier for how much longer entity (mob) bounties will give you to complete than item bounties."
         ).double.clampTo(0.01, 100.0)
 
-
+        boardRecipeEnabled = config.get(
+                CATEGORY_BOARD,
+                "Board Recipe Enabled?",
+                true,
+                "Whether or not a recipe for the bounty board is created (Default: true)."
+        ).boolean
 
 
 
