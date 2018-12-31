@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumHand
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 
 class BlockBountyBoard : BlockTileEntity<TileEntityBountyBoard>(Material.WOOD, "bountyboard") {
@@ -35,6 +36,34 @@ class BlockBountyBoard : BlockTileEntity<TileEntityBountyBoard>(Material.WOOD, "
             }
         }
         return true
+    }
+
+    override fun getWeakPower(blockState: IBlockState, blockAccess: IBlockAccess, pos: BlockPos, side: EnumFacing): Int {
+        return if (blockAccess is World) {
+            println("Getting weak power!")
+            val tile = (getTileEntity(blockAccess, pos) as TileEntityBountyBoard)
+            if (tile.pulseLeft > 0) 15 else 0
+        } else {
+            println("Not getting weak power!")
+            0
+        }
+    }
+
+    override fun shouldCheckWeakPower(state: IBlockState, world: IBlockAccess, pos: BlockPos, side: EnumFacing): Boolean {
+        return false
+    }
+
+    override fun canProvidePower(state: IBlockState): Boolean {
+        return true
+    }
+
+    override fun hasComparatorInputOverride(state: IBlockState): Boolean {
+        return true
+    }
+
+    override fun getComparatorInputOverride(blockState: IBlockState, worldIn: World, pos: BlockPos): Int {
+        val tile = (getTileEntity(worldIn, pos) as TileEntityBountyBoard)
+        return (tile.inventory.handler.filledSlots.size / 2)
     }
 
     // Initial population of board when placed

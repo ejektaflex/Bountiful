@@ -7,4 +7,5 @@ import net.minecraftforge.items.ItemStackHandler
 interface ITileEntityBountyBoard : ITickable {
     val inventory: IBountyHolder
     var newBoard: Boolean
+    fun sendRedstonePulse()
 }

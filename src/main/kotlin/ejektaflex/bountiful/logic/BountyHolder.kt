@@ -24,9 +24,6 @@ open class BountyHolder(override val handler: ItemStackHandler) : IBountyHolder,
                 val data = BountyData.from(bounty)
                 val bountyItem = bounty.item as ItemBounty
 
-                // Remove bountyStamp so that the timer is reset
-                //bountyItem.removeTimestamp(bounty)
-
                 if (Bountiful.config.shouldCountdownOnBoard) {
                     bountyItem.ensureTimerStarted(bounty, world)
                 }
@@ -44,7 +41,11 @@ open class BountyHolder(override val handler: ItemStackHandler) : IBountyHolder,
         val newStack = BountyCreator.createStack(world)
         val fired = PopulateBountyBoardEvent.fireEvent(newStack, te)
         if (!fired.isCanceled) {
-            handler[handler.slotRange.random()] = newStack
+            val freeSlots = handler.slotRange.toList() - handler.filledSlots
+            if (freeSlots.isNotEmpty()) {
+                handler[freeSlots.random()] = newStack
+                te?.sendRedstonePulse()
+            }
         }
     }
 
