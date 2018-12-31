@@ -1,6 +1,5 @@
 package ejektaflex.bountiful.api.logic.pickable
 
-import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import net.minecraft.nbt.NBTTagCompound
 
@@ -10,8 +9,7 @@ open class PickedEntry(
         override var amount: Int = Integer.MIN_VALUE
 ) : IPickedEntry {
 
-    @Expose(serialize = false, deserialize = false)
-    override val timeMult = 1.0
+    override fun timeMult() = 1.0
 
     override fun serializeNBT(): NBTTagCompound {
         return NBTTagCompound().apply {
