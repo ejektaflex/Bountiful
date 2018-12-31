@@ -3,11 +3,21 @@ package ejektaflex.bountiful.api.ext
 import ejektaflex.bountiful.api.logic.IWeighted
 import net.minecraft.client.Minecraft
 import net.minecraft.command.ICommandSender
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.TextComponentString
+import net.minecraft.world.World
+import net.minecraftforge.common.capabilities.Capability
+import net.minecraftforge.common.util.INBTSerializable
 import java.io.InputStream
 import kotlin.math.max
 import kotlin.math.min
+
+fun <T : INBTSerializable<NBTTagCompound>> World.ifHasCapability(capability: Capability<T>, func: T.() -> Unit) {
+    if (hasCapability(capability, null)) {
+        func(getCapability(capability, null)!!)
+    }
+}
 
 val String.rl: ResourceLocation
     get() = ResourceLocation(substringBefore(":"), substringAfter(":"))

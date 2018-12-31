@@ -7,7 +7,7 @@ import ejektaflex.bountiful.api.logic.ItemRange
 open class PickableEntry(var content: String, var amount: ItemRange, var unitWorth: Int, override var weight: Int = 100) : IWeighted {
 
     // Get around ugly JSON serialization of IntRange for our purposes
-    constructor(inString: String, amount: IntRange, worth: Int) : this(inString, ItemRange(amount), worth)
+    constructor(inString: String, amount: IntRange, worth: Int, weight: Int = 100) : this(inString, ItemRange(amount), worth, weight)
 
     val randCount: Int
         get() = (amount.min..amount.max).random()

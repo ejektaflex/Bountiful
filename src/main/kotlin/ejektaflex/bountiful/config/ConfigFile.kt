@@ -9,7 +9,7 @@ import kotlin.math.max
 
 data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBountifulConfig {
 
-    override var maxBountiesPerBoard: Int = 12
+    override var maxBountiesPerBoard: Int = 17
         private set
     override var boardAddFrequency: Long = 2400L
         private set
@@ -27,6 +27,13 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private set
     override var bountiesCreatedOnPlace = 0
         private set
+    override var globalBounties = false
+        private set
+    override var entityTimeMult = 2.0
+        private set
+    override var rarityMultipliers = mutableListOf(1.0, 1.1, 1.2, 1.5)
+        private set
+
 
 
     private var bountyAmountMax = 2
@@ -114,23 +121,61 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 CATEGORY_BOARD,
                 "Bounties Created On Place",
                 0,
-                "The number of entries that a Bounty Board starts with when placed (Default: 0)"
+                "The number of entries that a Bounty Board starts with when placed, if not using global bounties (Default: 0)"
         ).int.clampTo(1..27)
 
-        /*
-        messageOnBountyMobDeath = config.get(
-                CATEGORY_BOUNTY,
-                "Should Bounty Kills Notify Player?",
+        globalBounties = config.get(
+                CATEGORY_BOARD,
+                "Global Bounty Inventory",
                 false,
-                "By default (false), killing a mob and having a bounty for the mob in your inventory will not notify you."
+                "By default (true), all boards share a single, global inventory per dimension. If false, all boards have their own inventory."
         ).boolean
-        */
+
+        entityTimeMult = config.get(
+                CATEGORY_BOUNTY,
+                "Entity Bounty Time Multiplier",
+                2.0,
+                "A multiplier for how much longer entity (mob) bounties will give you to complete than item bounties."
+        ).double.clampTo(0.01, 100.0)
+
+
+
+
+
+        rarityMultipliers[0] = config.get(
+                CATEGORY_RARITY,
+                "a) Common Worth Multiplier",
+                1.0,
+                "A multiplier for how much a common bounty is worth. (Default: 1.0)"
+        ).double.clampTo(0.01, Double.MAX_VALUE)
+
+        rarityMultipliers[1] = config.get(
+                CATEGORY_RARITY,
+                "b) Uncommon Worth Multiplier",
+                1.1,
+                "A multiplier for how much an uncommon bounty is worth (Default: 1.1)"
+        ).double.clampTo(0.01, Double.MAX_VALUE)
+
+        rarityMultipliers[2] = config.get(
+                CATEGORY_RARITY,
+                "c) Rare Worth Multiplier",
+                1.2,
+                "A multiplier for how much a rare bounty is worth (Default: 1.2)"
+        ).double.clampTo(0.01, Double.MAX_VALUE)
+
+        rarityMultipliers[3] = config.get(
+                CATEGORY_RARITY,
+                "d) Epic Worth Multiplier",
+                1.5,
+                "A multiplier for how much an epic bounty is worth (Default: 1.5)"
+        ).double.clampTo(0.01, Double.MAX_VALUE)
 
     }
 
     companion object {
         private const val CATEGORY_BOARD = "board"
         private const val CATEGORY_BOUNTY = "bounty"
+        private const val CATEGORY_RARITY = "rarity"
     }
 
 }

@@ -1,5 +1,6 @@
 package ejektaflex.bountiful.api
 
+import ejektaflex.bountiful.api.block.ITileEntityBountyBoard
 import ejektaflex.bountiful.api.config.IBountifulConfig
 import ejektaflex.bountiful.api.logic.IBountyData
 import ejektaflex.bountiful.api.logic.pickable.PickableEntry
@@ -21,6 +22,11 @@ interface IBountifulAPI {
     val rewardRegistry: IValueRegistry<PickedEntryStack>
 
     /**
+     * Retrieves the tile entity of a bounty board
+     */
+    fun getBountyBoard(worldIn: World, pos: BlockPos): ITileEntityBountyBoard?
+
+    /**
      * Returns a list of bounties at a given bounty board
      */
     fun getBountiesAt(worldIn: World, pos: BlockPos): List<ItemStack>?
@@ -38,6 +44,6 @@ interface IBountifulAPI {
     /**
      * Retrieves config information about Bountiful
      */
-    fun getConfig(): IBountifulConfig
+    val config: IBountifulConfig
 
 }

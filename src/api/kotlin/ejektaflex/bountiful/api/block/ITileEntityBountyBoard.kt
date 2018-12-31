@@ -1,10 +1,20 @@
 package ejektaflex.bountiful.api.block
 
+import ejektaflex.bountiful.api.logic.IBountyHolder
 import net.minecraft.util.ITickable
-import net.minecraftforge.items.ItemStackHandler
 
 interface ITileEntityBountyBoard : ITickable {
-    val inventory: ItemStackHandler
+    /**
+     * The inventory holder for this bounty board. Contains an ItemStackHandler
+     */
+    val inventory: IBountyHolder
+    /**
+     * Whether or not this board has just been placed
+     */
     var newBoard: Boolean
-    fun addSingleBounty()
+
+    /**
+     * Sends a redstone pulse through the bounty board block
+     */
+    fun sendRedstonePulse()
 }

@@ -3,102 +3,97 @@ package ejektaflex.bountiful.block
 
 import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.api.block.ITileEntityBountyBoard
-import ejektaflex.bountiful.api.events.PopulateBountyBoardEvent
-import ejektaflex.bountiful.api.ext.*
-import ejektaflex.bountiful.item.ItemBounty
-import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.api.ext.clear
-import ejektaflex.bountiful.api.ext.filledSlots
-import ejektaflex.bountiful.api.ext.slotRange
-import ejektaflex.bountiful.logic.BountyData
-import net.minecraft.item.ItemStack
+import ejektaflex.bountiful.cap.CapManager
+import ejektaflex.bountiful.cap.IGlobalBoard
+import ejektaflex.bountiful.logic.BountyHolder
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.items.CapabilityItemHandler
 import net.minecraft.util.EnumFacing
-import net.minecraft.util.ITickable
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.items.ItemStackHandler
-
+import kotlin.math.max
 
 
 class TileEntityBountyBoard : TileEntity(), ITileEntityBountyBoard {
 
-    override val inventory = ItemStackHandler(numSlots)
+    private val internalInv = BountyHolder(ItemStackHandler(numSlots))
+
+    private val isLocalBounties: Boolean
+        get() = !Bountiful.config.globalBounties
+
+    private val cap: IGlobalBoard?
+        get() = world.getCapability(CapManager.CAP_BOARD!!, null)
+
+    override val inventory: BountyHolder
+        get() {
+            return if (!isLocalBounties) {
+                if (world.hasCapability(CapManager.CAP_BOARD!!, null)) {
+                    cap!!.holder
+                } else {
+                    internalInv
+                }
+            } else {
+                internalInv
+            }
+        }
+
     override var newBoard = true
 
+    var pulseLeft = 0
+
     override fun writeToNBT(tag: NBTTagCompound): NBTTagCompound {
-        tag.clear()
-        tag.setTag("inv", inventory.serializeNBT())
-        tag.setBoolean("newBoard", newBoard)
+        if (isLocalBounties) {
+            tag.clear()
+            tag.setTag("inv", inventory.handler.serializeNBT())
+            tag.setBoolean("newBoard", newBoard)
+            tag.setInteger("pulseLeft", pulseLeft)
+        }
         return super.writeToNBT(tag)
     }
 
     override fun readFromNBT(tag: NBTTagCompound) {
-        inventory.deserializeNBT(tag.getCompoundTag("inv"))
-        newBoard = tag.getBoolean("newBoard")
+        if (isLocalBounties) {
+            inventory.handler.deserializeNBT(tag.getCompoundTag("inv"))
+            newBoard = tag.getBoolean("newBoard")
+            pulseLeft = tag.getInteger("pulseLeft")
+        }
         super.readFromNBT(tag)
     }
 
+    private fun updatePulse() {
+        val oldPulse = pulseLeft
+        pulseLeft = max(pulseLeft - 1, 0)
+        if (pulseLeft != oldPulse) {
+            val blockstate = world.getBlockState(pos)
+            world.notifyNeighborsOfStateChange(pos, blockstate.block, true)
+            //world.notifyBlockUpdate(pos, blockstate, blockstate, 0b111)
+        }
+    }
+
+    override fun sendRedstonePulse() {
+        pulseLeft += 2
+        updatePulse()
+    }
+
     override fun update() {
-        if (!world.isRemote) {
+        if (!world.isRemote && isLocalBounties) {
             // Skip placement update tick
             if (newBoard) {
                 newBoard = false
                 return
             }
+            // Pulse length update
+            updatePulse()
 
-            if (world.totalWorldTime % 20 == 3L) {
-                tickBounties()
+            // Only do tile updates if it's a local inventory
+            val dirty = inventory.update(world, this)
+            if (dirty) {
+                markDirty()
             }
-            if (world.totalWorldTime % Bountiful.config.boardAddFrequency == 3L) {
-                addBounties()
-            }
 
         }
-    }
-
-    private fun addBounties() {
-        // Prune items to max amount - new amount
-        while (inventory.filledSlots.size >= Bountiful.config.maxBountiesPerBoard && inventory.filledSlots.isNotEmpty()) {
-            val slotPicked = inventory.filledSlots.random()
-            inventory[slotPicked] = ItemStack.EMPTY
-        }
-
-        addSingleBounty()
-        markDirty()
-    }
-
-    override fun addSingleBounty() {
-        val newStack = BountyCreator.createStack(world)
-        val fired = PopulateBountyBoardEvent.fireEvent(newStack, this)
-        if (!fired.isCanceled) {
-            inventory[inventory.slotRange.random()] = newStack
-        }
-    }
-
-    private fun tickBounties() {
-        val toRemove = mutableListOf<Int>()
-        for (slot in inventory.slotRange) {
-            val bounty = inventory.getStackInSlot(slot)
-            if (bounty.item is ItemBounty) {
-                val data = BountyData.from(bounty)
-                val bountyItem = bounty.item as ItemBounty
-
-                // Remove bountyStamp so that the timer is reset
-                //bountyItem.removeTimestamp(bounty)
-
-                if (Bountiful.config.shouldCountdownOnBoard) {
-                    bountyItem.ensureTimerStarted(bounty, world)
-                }
-
-                if (data.hasExpired(world) || data.boardTimeLeft(world) <= 0) {
-                    toRemove.add(slot)
-                }
-            }
-        }
-        toRemove.forEach { inventory.setStackInSlot(it, ItemStack.EMPTY) }
-        markDirty()
     }
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {
@@ -107,7 +102,9 @@ class TileEntityBountyBoard : TileEntity(), ITileEntityBountyBoard {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? {
-        return if (capability === CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) inventory as T else super.getCapability<T>(capability, facing)
+        return if (capability === CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) inventory.handler as T else {
+            super.getCapability<T>(capability, facing)
+        }
     }
 
     companion object {

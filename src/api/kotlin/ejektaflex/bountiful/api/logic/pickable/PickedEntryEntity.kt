@@ -1,6 +1,7 @@
 package ejektaflex.bountiful.api.logic.pickable
 
 import com.google.gson.annotations.Expose
+import ejektaflex.bountiful.api.BountifulAPI
 import ejektaflex.bountiful.api.ext.toEntityEntry
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fml.common.registry.EntityEntry
@@ -9,6 +10,8 @@ class PickedEntryEntity(
         @Expose(serialize = false, deserialize = false)
         val genericPick: PickedEntry
 ) : IPickedEntry by genericPick {
+
+    override val timeMult = BountifulAPI.config.entityTimeMult
 
     var killedAmount = 0
 

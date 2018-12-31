@@ -53,11 +53,8 @@ object BountyCreator : IBountyCreator {
 
         val toPick = numBountyItems.random()
         while (pickedAlready.size < toPick) {
-            println("###")
             val pool = BountyRegistry.items.filter { it !in pickedAlready }
-            println("Pool: ${pool.map { it.content }}")
             val toAdd = pool.weightedRandom
-            println("Adding: ${toAdd.content}")
             pickedAlready.add(toAdd)
         }
 
@@ -65,19 +62,20 @@ object BountyCreator : IBountyCreator {
         return BountyData().apply {
             rarity = calcRarity().level
             worth = 0
+            var preBountyTime = 0.0
             // Generate bounty data
             pickedAlready.forEach {
                 val picked = it.pick()
-                val amountOfItem = it.randCount
                 if (picked.contentObj != null) {
                     toGet.add(picked)
                     worth += (picked.amount * it.unitWorth)
+                    preBountyTime += (picked.amount * it.unitWorth * picked.timeMult)
                 } else {
-                    throw BountyCreationException("You tried to create a bounty but the item was invalid!")
+                    throw BountyCreationException("You tried to create a bounty but the item was invalid! Item was: ${picked.content}")
                 }
             }
 
-            bountyTime = max((worth * Bountiful.config.timeMultiplier).toLong(), Bountiful.config.bountyTimeMin.toLong())
+            bountyTime = max((preBountyTime * Bountiful.config.timeMultiplier).toLong(), Bountiful.config.bountyTimeMin.toLong())
 
             // Make worth affected by rarity
             worth = (worth * EnumBountyRarity.getRarityFromInt(rarity).bountyMult).toInt()

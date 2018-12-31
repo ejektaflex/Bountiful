@@ -11,5 +11,8 @@ interface IBountifulConfig {
     val bountyAmountRange: IntRange
     val shouldCountdownOnBoard: Boolean
     val bountiesCreatedOnPlace: Int
+    val globalBounties: Boolean
+    val entityTimeMult: Double
+    val rarityMultipliers: List<Double>
     fun load()
 }
