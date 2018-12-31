@@ -53,11 +53,8 @@ object BountyCreator : IBountyCreator {
 
         val toPick = numBountyItems.random()
         while (pickedAlready.size < toPick) {
-            //println("###")
             val pool = BountyRegistry.items.filter { it !in pickedAlready }
-            //println("Pool: ${pool.map { it.content }}")
             val toAdd = pool.weightedRandom
-            //println("Adding: ${toAdd.content}")
             pickedAlready.add(toAdd)
         }
 
@@ -73,7 +70,7 @@ object BountyCreator : IBountyCreator {
                     toGet.add(picked)
                     worth += (picked.amount * it.unitWorth)
                 } else {
-                    throw BountyCreationException("You tried to create a bounty but the item was invalid!")
+                    throw BountyCreationException("You tried to create a bounty but the item was invalid! Item was: ${picked.content}")
                 }
             }
 

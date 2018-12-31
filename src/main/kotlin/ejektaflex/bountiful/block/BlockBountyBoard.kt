@@ -40,8 +40,8 @@ class BlockBountyBoard : BlockTileEntity<TileEntityBountyBoard>(Material.WOOD, "
     // Initial population of board when placed
     override fun onBlockAdded(worldIn: World, pos: BlockPos, state: IBlockState) {
         val tile = (getTileEntity(worldIn, pos) as TileEntityBountyBoard)
-        for (i in 0 until Bountiful.config.bountiesCreatedOnPlace) {
-            tile.inventory.addSingleBounty(worldIn, null)
+        for (i in 0 until Bountiful.config.bountiesCreatedOnPlace + 1) {
+            tile.inventory.addSingleBounty(worldIn, tile)
             tile.markDirty()
         }
     }

@@ -42,14 +42,14 @@ open class BountyHolder(override val handler: ItemStackHandler) : IBountyHolder,
 
     override fun addSingleBounty(world: World, te: ITileEntityBountyBoard?) {
         val newStack = BountyCreator.createStack(world)
-        val fired = PopulateBountyBoardEvent.fireEvent(newStack)
+        val fired = PopulateBountyBoardEvent.fireEvent(newStack, te)
         if (!fired.isCanceled) {
             handler[handler.slotRange.random()] = newStack
         }
     }
 
 
-    override fun update(world: World): Boolean {
+    override fun update(world: World, te: ITileEntityBountyBoard?): Boolean {
         if (world.totalWorldTime % 20 == 3L) {
             tickBounties(world)
         }
@@ -60,7 +60,7 @@ open class BountyHolder(override val handler: ItemStackHandler) : IBountyHolder,
                 handler[slotPicked] = ItemStack.EMPTY
             }
 
-            addSingleBounty(world, null)
+            addSingleBounty(world, te)
             return true
         }
         return false

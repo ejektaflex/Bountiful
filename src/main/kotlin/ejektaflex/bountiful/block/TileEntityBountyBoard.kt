@@ -40,12 +40,9 @@ class TileEntityBountyBoard : TileEntity(), ITileEntityBountyBoard {
     override val inventory: BountyHolder
         get() {
             return if (!isLocal) {
-                //BountyWorldData[world].inventory
                 if (world.hasCapability(CapManager.CAP_BOARD!!, null)) {
-                    println("TACO THIS WORLD HAS THE CAP!")
                     cap!!.holder
                 } else {
-                    println("TACO THIS WORLD DOES ***NOT*** HAVE THE CAP!")
                     internalInv
                 }
             } else {
@@ -82,7 +79,7 @@ class TileEntityBountyBoard : TileEntity(), ITileEntityBountyBoard {
 
             // Only do tile updates if it's a local inventory
             if (isLocal) {
-                val dirty = inventory.update(world)
+                val dirty = inventory.update(world, this)
                 if (dirty) {
                     markDirty()
                 }

@@ -8,6 +8,6 @@ interface IBountyHolder {
     val handler: ItemStackHandler
     fun tickBounties(world: World)
     // Updates the bounty holder. Returns true if data has been marked dirty.
-    fun update(world: World): Boolean
+    fun update(world: World, te: ITileEntityBountyBoard?): Boolean
     fun addSingleBounty(world: World, te: ITileEntityBountyBoard?)
 }
