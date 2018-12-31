@@ -1,4 +1,9 @@
 {
+  "conditions": [
+    {
+      "type": "bountiful:bounty_conditional"
+    }
+  ],
   "type": "forge:ore_shaped",
   "pattern":
   [

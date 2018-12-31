@@ -14,5 +14,6 @@ interface IBountifulConfig {
     val globalBounties: Boolean
     val entityTimeMult: Double
     val rarityMultipliers: List<Double>
+    val boardRecipeEnabled: Boolean
     fun load()
 }
