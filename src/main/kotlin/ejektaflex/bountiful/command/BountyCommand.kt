@@ -49,16 +49,29 @@ class BountyCommand : ICommand {
                 "reload" -> {
                     try {
                         sender.sendMessage("Reloading data..")
-                        BountifulIO.hotReloadBounties("bounties.json").also {
-                            if (it.isNotEmpty()) {
-                                sender.sendMessage("Invalid bounties: ${it.joinToString(", ")}. Skipped.")
+                        try {
+                            BountifulIO.hotReloadBounties("bounties.json").also {
+                                if (it.isNotEmpty()) {
+                                    sender.sendMessage("Invalid bounties: ${it.joinToString(", ")}. Skipped.")
+                                }
                             }
+                        } catch (e: Exception) {
+                            println("JSON Structure of 'bounties.json' is incorrect! Details:")
+                            e.printStackTrace()
                         }
-                        BountifulIO.hotReloadRewards("rewards.json").also {
-                            if (it.isNotEmpty()) {
-                                sender.sendMessage("Invalid rewards: ${it.joinToString(", ")}. Skipped.")
+
+                        try {
+                            BountifulIO.hotReloadRewards("rewards.json").also {
+                                if (it.isNotEmpty()) {
+                                    sender.sendMessage("Invalid rewards: ${it.joinToString(", ")}. Skipped.")
+                                }
                             }
+                        } catch (e: Exception) {
+                            println("JSON Structure of 'rewards.json' is incorrect! Details:")
+                            e.printStackTrace()
                         }
+
+
                         sender.sendMessage("Json config files reloaded.")
                     } catch (bce: BountyCreationException) {
                         sender.sendMessage("§4" + bce.message!!)

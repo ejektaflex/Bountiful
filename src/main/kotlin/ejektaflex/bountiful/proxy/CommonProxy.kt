@@ -74,8 +74,13 @@ open class CommonProxy : IProxy {
         // Populate entries, fill if none exist
         "bounties.json".let {
             BountifulIO.populateConfigFolder(Bountiful.configDir, DefaultData.entries.items, it)
-            val invalids = BountifulIO.hotReloadBounties(it)
-            println("Invalid bounties: $invalids")
+            try {
+                val invalids = BountifulIO.hotReloadBounties(it)
+                println("Invalid bounties: $invalids")
+            } catch (e: Exception) {
+                println("JSON Structure of '$it' is incorrect! Details:")
+                e.printStackTrace()
+            }
         }
 
         // Same for rewards
@@ -83,8 +88,14 @@ open class CommonProxy : IProxy {
             BountifulIO.populateConfigFolder(Bountiful.configDir, DefaultData.rewards.items.map { item ->
                 item.genericPick
             }, it)
-            val invalid = BountifulIO.hotReloadRewards(it)
-            println("Invalid rewards: $invalid")
+            try {
+                val invalid = BountifulIO.hotReloadRewards(it)
+                println("Invalid rewards: $invalid")
+            } catch (e: Exception) {
+                println("JSON Structure of '$it' is incorrect! Details:")
+                e.printStackTrace()
+            }
+
         }
 
         println("Bounties: ${BountyRegistry.items.size}")
