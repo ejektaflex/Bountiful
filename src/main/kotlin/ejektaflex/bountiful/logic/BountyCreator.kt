@@ -69,7 +69,7 @@ object BountyCreator : IBountyCreator {
                 if (picked.contentObj != null) {
                     toGet.add(picked)
                     worth += (picked.amount * it.unitWorth)
-                    preBountyTime += (picked.amount * it.unitWorth * picked.timeMult)
+                    preBountyTime += (picked.amount * it.unitWorth * picked.timeMult())
                 } else {
                     throw BountyCreationException("You tried to create a bounty but the item was invalid! Item was: ${picked.content}")
                 }

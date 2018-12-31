@@ -11,7 +11,7 @@ class PickedEntryEntity(
         val genericPick: PickedEntry
 ) : IPickedEntry by genericPick {
 
-    override val timeMult = BountifulAPI.config.entityTimeMult
+    override fun timeMult() = BountifulAPI.config.entityTimeMult
 
     var killedAmount = 0
 

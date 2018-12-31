@@ -32,5 +32,5 @@ interface IPickedEntry : INBTSerializable<NBTTagCompound> {
     /**
      * A multiplier for how long this item gets to complete.
      */
-    val timeMult: Double
+    fun timeMult(): Double
 }
