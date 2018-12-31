@@ -9,6 +9,8 @@ open class PickedEntry(
         override var amount: Int = Integer.MIN_VALUE
 ) : IPickedEntry {
 
+    override val timeMult = 1.0
+
     override fun serializeNBT(): NBTTagCompound {
         return NBTTagCompound().apply {
             setString("content", content)

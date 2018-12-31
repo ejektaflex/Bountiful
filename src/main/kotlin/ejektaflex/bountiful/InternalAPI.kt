@@ -1,6 +1,7 @@
 package ejektaflex.bountiful
 
 import ejektaflex.bountiful.api.IBountifulAPI
+import ejektaflex.bountiful.api.block.ITileEntityBountyBoard
 import ejektaflex.bountiful.api.config.IBountifulConfig
 import ejektaflex.bountiful.api.ext.stacks
 import ejektaflex.bountiful.api.item.IItemBounty
@@ -22,7 +23,11 @@ object InternalAPI : IBountifulAPI {
     override val rewardRegistry = RewardRegistry
 
     override fun getBountiesAt(worldIn: World, pos: BlockPos): List<ItemStack>? {
-        return (worldIn.getTileEntity(pos) as? TileEntityBountyBoard)?.inventory?.handler?.stacks
+        return getBountyBoard(worldIn, pos)?.inventory?.handler?.stacks
+    }
+
+    override fun getBountyBoard(worldIn: World, pos: BlockPos): ITileEntityBountyBoard? {
+        return worldIn.getTileEntity(pos) as? TileEntityBountyBoard
     }
 
     override fun toBountyData(stack: ItemStack): IBountyData {
@@ -33,8 +38,7 @@ object InternalAPI : IBountifulAPI {
         return ItemStack(ContentRegistry.bounty).apply { this.tagCompound = data.serializeNBT() }
     }
 
-    override fun getConfig(): IBountifulConfig {
-        return Bountiful.config
-    }
+    override val config: IBountifulConfig
+        get() = Bountiful.config
 
 }

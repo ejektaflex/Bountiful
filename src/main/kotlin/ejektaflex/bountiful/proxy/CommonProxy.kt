@@ -53,6 +53,7 @@ open class CommonProxy : IProxy {
         }
     }
 
+    // Attach global bounty inventory to world
     @SubscribeEvent
     fun attachCaps(e: AttachCapabilitiesEvent<World>) {
         e.addCapability(ResourceLocation(BountifulInfo.MODID, "GlobalData"), GlobBoardProvider())
@@ -68,7 +69,6 @@ open class CommonProxy : IProxy {
             }
         }
     }
-
 
     override fun postInit(e: FMLPostInitializationEvent) {
         // Populate entries, fill if none exist

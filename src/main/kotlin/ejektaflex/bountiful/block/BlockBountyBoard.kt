@@ -17,6 +17,10 @@ import net.minecraft.world.World
 
 class BlockBountyBoard : BlockTileEntity<TileEntityBountyBoard>(Material.WOOD, "bountyboard") {
 
+    init {
+        setHardness(2.0f)
+    }
+
     override val tileEntityClass: Class<TileEntityBountyBoard>
         get() = TileEntityBountyBoard::class.java
 
@@ -40,11 +44,9 @@ class BlockBountyBoard : BlockTileEntity<TileEntityBountyBoard>(Material.WOOD, "
 
     override fun getWeakPower(blockState: IBlockState, blockAccess: IBlockAccess, pos: BlockPos, side: EnumFacing): Int {
         return if (blockAccess is World) {
-            println("Getting weak power!")
             val tile = (getTileEntity(blockAccess, pos) as TileEntityBountyBoard)
             if (tile.pulseLeft > 0) 15 else 0
         } else {
-            println("Not getting weak power!")
             0
         }
     }

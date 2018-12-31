@@ -9,6 +9,8 @@ class PickedEntryStack(
         val genericPick: PickedEntry
 ) : IPickedEntry by genericPick {
 
+    override val timeMult = 1.0
+
     val itemStack: ItemStack?
         get() = content.toItemStack
 
