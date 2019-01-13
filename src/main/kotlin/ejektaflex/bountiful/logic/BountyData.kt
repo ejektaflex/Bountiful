@@ -12,6 +12,7 @@ import ejektaflex.bountiful.api.logic.pickable.PickedEntry
 import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.registry.ValueRegistry
+import net.minecraft.client.resources.I18n
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
@@ -47,7 +48,7 @@ class BountyData : IBountyData {
     fun tooltipInfo(world: World): List<String> {
         return listOf(
                 //"Board Time: ${formatTickTime(boardTimeLeft(world) / boardTickFreq)}",
-                "Time To Complete: ${formatTimeExpirable(timeLeft(world) / bountyTickFreq)}",
+                "${I18n.format("bountiful.tooltip.time")}: ${formatTimeExpirable(timeLeft(world) / bountyTickFreq)}",
                 getPretty,
                 rewardPretty
         )
@@ -63,7 +64,7 @@ class BountyData : IBountyData {
 
     private fun formatTimeExpirable(n: Long): String {
         return if (n <= 0) {
-            "§4Expired"
+            "§4${I18n.format("bountiful.tooltip.expired")}"
         } else {
             formatTickTime(n)
         }
@@ -74,7 +75,7 @@ class BountyData : IBountyData {
             return if (toGet.items.isEmpty()) {
                 "§6Completed. §aTurn it in!"
             } else {
-                "§fRequired: " + toGet.items.joinToString(", ") {
+                "§f${I18n.format("bountiful.tooltip.required")}: " + toGet.items.joinToString(", ") {
                     it.prettyContent
                 } + "§r"
             }
@@ -83,7 +84,7 @@ class BountyData : IBountyData {
 
     private val rewardPretty: String
         get() {
-            return "§fRewards: " + rewards.items.joinToString(", ") {
+            return "§f${I18n.format("bountiful.tooltip.rewards")}: " + rewards.items.joinToString(", ") {
                 "§f${it.amount}x §6${it.itemStack?.displayName}§f"
             } + "§r"
         }

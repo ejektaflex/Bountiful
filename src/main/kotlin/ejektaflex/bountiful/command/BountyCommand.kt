@@ -5,17 +5,14 @@ import ejektaflex.bountiful.api.ext.sendMessage
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.logic.error.BountyCreationException
-import ejektaflex.bountiful.registry.BountyRegistry
-import ejektaflex.bountiful.registry.RewardRegistry
+import net.minecraft.client.resources.I18n
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommand
 import net.minecraft.command.ICommandSender
 import net.minecraft.entity.EntityLiving
-import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.math.BlockPos
-import net.minecraftforge.fml.common.FMLCommonHandler
 import net.minecraftforge.fml.common.registry.ForgeRegistries
 import net.minecraftforge.items.ItemHandlerHelper
 
@@ -48,7 +45,7 @@ class BountyCommand : ICommand {
             when (val curr: String = args[0]) {
                 "reload" -> {
                     try {
-                        sender.sendMessage("Reloading data..")
+                        sender.sendMessage(I18n.format("bountiful.reloading.data"))
                         try {
                             BountifulIO.hotReloadBounties("bounties.json").also {
                                 if (it.isNotEmpty()) {
@@ -72,7 +69,7 @@ class BountyCommand : ICommand {
                         }
 
 
-                        sender.sendMessage("Json config files reloaded.")
+                        sender.sendMessage(I18n.format("bountiful.reloaded.data"))
                     } catch (bce: BountyCreationException) {
                         sender.sendMessage("§4" + bce.message!!)
                         //sender.sendMessage("§4Defaulting to previous data. Correct it and try again.")

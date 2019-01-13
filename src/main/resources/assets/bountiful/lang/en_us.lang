@@ -2,3 +2,23 @@
 item.bountiful.bounty.name=Bounty
 bountiful.bounty.board=Bounty Board
 tile.bountiful.bountyboardblock.name=Bounty Board
+
+# Interface
+bountiful.bounty.expired=This bounty has expired.
+bountiful.bounty.fulfilled=Bounty Fulfilled!
+bountiful.cannot.fulfill=Cannot fulfill bounty, you don't have everything needed!
+
+bountiful.reloaded.data=Json config files reloaded.
+bountiful.reloading.data=Reloading data..
+bountiful.requirements.met=Bounty requirements met. Fullfill your bounty by right clicking on a bounty board.
+bountiful.requirements.mobs.needed=You need to kill more mobs to fulfill this bounty.
+
+bountiful.rarity.Common=Common
+bountiful.rarity.Uncommon=Uncommon
+bountiful.rarity.Rare=Rare
+bountiful.rarity.Epic=Epic
+
+bountiful.tooltip.time=Time To Complete
+bountiful.tooltip.required=Required
+bountiful.tooltip.rewards=Rewards
+bountiful.tooltip.expired=Expired
