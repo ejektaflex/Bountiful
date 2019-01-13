@@ -3,6 +3,7 @@ package ejektaflex.bountiful.api.logic.pickable
 import com.google.gson.annotations.Expose
 import ejektaflex.bountiful.api.BountifulAPI
 import ejektaflex.bountiful.api.ext.toEntityEntry
+import net.minecraft.client.resources.I18n
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fml.common.registry.EntityEntry
 
@@ -35,7 +36,7 @@ class PickedEntryEntity(
         get() = entityEntry
 
     override val prettyContent: String
-        get() = ("($killedAmount/$amount) §a" + entityEntry?.name + " Kills§r")
+        get() = ("($killedAmount/$amount) §a" + I18n.format("entity." + entityEntry?.name + ".name") + " Kills§r")
 
     override fun toString(): String {
         return "$amount x ${entityEntry?.name}"
