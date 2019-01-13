@@ -154,7 +154,7 @@ class ItemBounty : Item(), IItemBounty {
             player.setHeldItem(hand, ItemStack.EMPTY)
 
             // Reward player with rewards
-            BountyChecker.rewardItems(player, inv, bounty, bountyItem)
+            BountyChecker.rewardItems(player, bounty, bountyItem)
 
             true
         }

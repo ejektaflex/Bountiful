@@ -95,10 +95,11 @@ class BountyCommand : ICommand {
                     sender.sendMessage("Time: ${sender.entityWorld.totalWorldTime}")
                 }
                 "entities" -> {
-                    val names = ForgeRegistries.ENTITIES.filter {
-                        EntityLiving::class.java.isAssignableFrom(it.entityClass)
-                    }.map { it.name.toLowerCase() }.sorted()
+                    val names = ForgeRegistries.ENTITIES.entries.filter {
+                        EntityLiving::class.java.isAssignableFrom(it.value.entityClass)
+                    }.map { it.value.registryName.toString() }.sorted()
                     sender.sendMessage(names.joinToString(", "))
+                    println(names)
                 }
             }
         } else {

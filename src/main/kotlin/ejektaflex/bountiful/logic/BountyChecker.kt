@@ -1,6 +1,7 @@
 package ejektaflex.bountiful.logic
 
 import ejektaflex.bountiful.ContentRegistry
+import ejektaflex.bountiful.api.ext.registryName
 import ejektaflex.bountiful.api.ext.sendMessage
 import ejektaflex.bountiful.api.logic.pickable.PickedEntryEntity
 import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
@@ -63,13 +64,13 @@ object BountyChecker {
         if (data.hasExpired(player.world)) {
             return
         }
+
         val bountyEntities = data.toGet.items.mapNotNull { it as? PickedEntryEntity }
 
         bountyEntities.forEach { picked ->
-            //println("${picked.entityEntry?.name?.toLowerCase()}, ${entity.name.toLowerCase()}")
-            if (picked.entityEntry?.name?.toLowerCase() == entity.name.toLowerCase()) {
+            if (picked.entityEntry?.registryName?.toString() == entity.registryName?.toString()) {
                 if (picked.killedAmount < picked.amount) {
-                    picked.killedAmount ++
+                    picked.killedAmount++
                 }
             }
         }
@@ -85,7 +86,7 @@ object BountyChecker {
         }
     }
 
-    fun rewardItems(player: EntityPlayer, inv: NonNullList<ItemStack>, data: BountyData, bountyItem: ItemStack) {
+    fun rewardItems(player: EntityPlayer, data: BountyData, bountyItem: ItemStack) {
 
         // Reward player with rewards
         data.rewards.items.forEach { reward ->

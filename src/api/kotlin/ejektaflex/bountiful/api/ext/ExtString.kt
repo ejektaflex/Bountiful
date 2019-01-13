@@ -13,16 +13,22 @@ import net.minecraftforge.oredict.OreDictionary
 
 val String.toEntityEntry: EntityEntry?
     get() {
-        val sect = split(":").toMutableList()
-        if (sect.size != 2) {
+        if (":" !in this) {
             return null
         }
-        if (sect[0] != "entity") {
-            return null
+        if (substringBefore(":") == "entity") {
+            var id = substringAfter(":")
+            // Prepend minecraft domain if none exists
+            if (":" !in id) {
+                id = "minecraft:$id"
+            }
+            // Find resource key in registry
+            return ForgeRegistries.ENTITIES.entries.find {
+                it.key.toString() == id
+            }?.value
         }
-        return ForgeRegistries.ENTITIES.find {
-            it.name.toLowerCase() == sect[1]
-        }
+
+        return null
     }
 
 val String.toMeta: Int
