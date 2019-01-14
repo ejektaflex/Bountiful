@@ -41,7 +41,7 @@ object BountyCreator : IBountyCreator {
         return EnumBountyRarity.getRarityFromInt(level)
     }
 
-    override fun create(): BountyData {
+    override fun create(inRarity: EnumBountyRarity?): BountyData {
 
         if (BountyRegistry.items.size < numBountyItems.last) {
             throw Exception("Bounty registry has fewer items than the max number of bounty items that the config dictates you could give!")
@@ -60,7 +60,7 @@ object BountyCreator : IBountyCreator {
 
 
         return BountyData().apply {
-            rarity = calcRarity().level
+            rarity = inRarity?.level ?: calcRarity().level
             worth = 0
             var preBountyTime = 0.0
             // Generate bounty data

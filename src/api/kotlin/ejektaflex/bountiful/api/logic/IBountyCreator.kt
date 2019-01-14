@@ -18,6 +18,6 @@ interface IBountyCreator {
     /**
      * Generates new, randomized bounty data
      */
-    fun create(): IBountyData
+    fun create(inRarity: EnumBountyRarity? = null): IBountyData
 
 }
