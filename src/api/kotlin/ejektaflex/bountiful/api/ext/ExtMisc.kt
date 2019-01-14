@@ -4,7 +4,10 @@ import ejektaflex.bountiful.api.logic.IWeighted
 import net.minecraft.client.Minecraft
 import net.minecraft.command.ICommandSender
 import net.minecraft.entity.Entity
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.stats.StatBase
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.TextComponentString
 import net.minecraft.world.World
@@ -54,6 +57,14 @@ fun Double.clampTo(low: Double, high: Double): Double {
 
 fun Long.clampTo(range: LongRange): Long {
     return max(range.first, min(this, range.last))
+}
+
+fun EntityPlayer.increaseStat(stat: StatBase, amt: Int) {
+    (this as? EntityPlayerMP)?.statFile?.let {
+        it.increaseStat(this, stat, amt)
+        it.markAllDirty()
+        it.saveStatFile()
+    }
 }
 
 val <T : IWeighted> List<T>.weightedRandom: T
