@@ -7,6 +7,7 @@ tile.bountiful.bountyboardblock.name=Bounty Board
 bountiful.bounty.expired=This bounty has expired.
 bountiful.bounty.fulfilled=Bounty Fulfilled!
 bountiful.cannot.fulfill=Cannot fulfill bounty, you don't have everything needed!
+bountiful.board.empty=No bounties available, come back later!
 
 bountiful.reloaded.data=Json config files reloaded.
 bountiful.reloading.data=Reloading data..
@@ -17,6 +18,13 @@ bountiful.rarity.Common=Common
 bountiful.rarity.Uncommon=Uncommon
 bountiful.rarity.Rare=Rare
 bountiful.rarity.Epic=Epic
+
+bountiful.stat.bountiesTaken=Bounties Taken
+bountiful.stat.bountiesCompleted=Bounties Completed (Total)
+bountiful.stat.bountiesCommon=Bounties Completed (Common)
+bountiful.stat.bountiesUncommon=Bounties Completed (Uncommon)
+bountiful.stat.bountiesRare=Bounties Completed (Rare)
+bountiful.stat.bountiesEpic=Bounties Completed (Epic)
 
 bountiful.tooltip.time=Time To Complete
 bountiful.tooltip.required=Required

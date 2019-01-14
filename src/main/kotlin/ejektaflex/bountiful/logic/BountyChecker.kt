@@ -49,8 +49,12 @@ object BountyChecker {
         data.toGet.items.mapNotNull { it as? PickedEntryStack }.forEach { picked ->
             val stacksToChange = matched.filter { it.isItemEqualIgnoreDurability(picked.itemStack!!) }
             for (stack in stacksToChange) {
+                if (picked.amount == 0) {
+                    break
+                }
                 val amountToRemove = min(stack.count, picked.amount)
                 stack.count -= amountToRemove
+                picked.amount -= amountToRemove
             }
         }
     }

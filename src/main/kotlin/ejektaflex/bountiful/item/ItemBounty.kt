@@ -2,12 +2,15 @@ package ejektaflex.bountiful.item
 
 import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
+import ejektaflex.bountiful.api.ext.increaseStat
 import ejektaflex.bountiful.api.ext.sendMessage
 import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.api.logic.BountyNBT
 import ejektaflex.bountiful.logic.BountyChecker
 import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.logic.BountyData
+import ejektaflex.bountiful.api.stats.BountifulStats
+import net.minecraft.advancements.CriteriaTriggers
 import net.minecraft.client.resources.I18n
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity
@@ -158,6 +161,11 @@ class ItemBounty : Item(), IItemBounty {
 
             // Reward player with rewards
             BountyChecker.rewardItems(player, bounty, bountyItem)
+
+            // Increment stats
+            player.addStat(BountifulStats.bountiesCompleted)
+            player.addStat(EnumBountyRarity.getRarityFromInt(bounty.rarity).stat)
+
 
             true
         }

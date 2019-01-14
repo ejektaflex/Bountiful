@@ -11,6 +11,7 @@ import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.logic.BountyChecker
 import ejektaflex.bountiful.registry.BountyRegistry
 import ejektaflex.bountiful.registry.RewardRegistry
+import ejektaflex.bountiful.api.stats.BountifulStats
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ResourceLocation
 import net.minecraft.world.World
@@ -59,7 +60,7 @@ open class CommonProxy : IProxy {
         e.addCapability(ResourceLocation(BountifulInfo.MODID, "GlobalData"), GlobBoardProvider())
     }
 
-    // Cancel first posting to board on board creation
+    // Cancel first posting to board on board creation (as first update is immediate after placement)
     @SubscribeEvent
     fun onBoardPost(e: PopulateBountyBoardEvent) {
         e.board?.let {
@@ -97,6 +98,8 @@ open class CommonProxy : IProxy {
             }
 
         }
+
+        BountifulStats.register()
 
         println("Bounties: ${BountyRegistry.items.size}")
         BountyRegistry.items.forEach { println(it) }
