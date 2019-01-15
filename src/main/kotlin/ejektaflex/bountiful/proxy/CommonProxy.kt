@@ -12,9 +12,12 @@ import ejektaflex.bountiful.logic.BountyChecker
 import ejektaflex.bountiful.registry.BountyRegistry
 import ejektaflex.bountiful.registry.RewardRegistry
 import ejektaflex.bountiful.api.stats.BountifulStats
+import ejektaflex.bountiful.worldgen.VillageBoardComponent
+import ejektaflex.bountiful.worldgen.VillageBoardCreationHandler
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ResourceLocation
 import net.minecraft.world.World
+import net.minecraft.world.gen.structure.MapGenStructureIO
 import net.minecraftforge.common.capabilities.CapabilityManager
 import net.minecraftforge.event.AttachCapabilitiesEvent
 import net.minecraftforge.event.entity.living.LivingDeathEvent
@@ -22,11 +25,14 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
+import net.minecraftforge.fml.common.registry.VillagerRegistry
 
 open class CommonProxy : IProxy {
 
     override fun preInit(e: FMLPreInitializationEvent) {
         CapabilityManager.INSTANCE.register(IGlobalBoard::class.java, Storage()) { GlobalBoard() }
+        VillagerRegistry.instance().registerVillageCreationHandler(VillageBoardCreationHandler())
+        MapGenStructureIO.registerStructureComponent(VillageBoardComponent::class.java, VillageBoardComponent.VILLAGE_BOARD_ID.toString())
     }
 
     // Update mob bounties

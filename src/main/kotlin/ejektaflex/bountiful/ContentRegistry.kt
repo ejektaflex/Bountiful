@@ -17,6 +17,7 @@ object ContentRegistry {
     val bounty = ItemBounty().apply {
         registryName = ResourceLocation(BountifulInfo.MODID, "bounty")
         unlocalizedName = "bountiful.bounty"
+        setMaxStackSize(1)
     }
 
     val bountyBlock = BlockBountyBoard().apply {
