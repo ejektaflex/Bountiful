@@ -37,6 +37,8 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private set
     override var bountyBoardBreakable: Boolean = true
         private set
+    override var greedyRewards: Boolean = false
+        private set
 
 
 
@@ -156,6 +158,13 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 "Whether or not the bounty board can be broken (Default: true)."
         ).boolean
 
+        greedyRewards = config.get(
+                CATEGORY_REWARDS,
+                "Greedy Rewards?",
+                false,
+                "If using a currency for rewards, set this to true. By default (false), rewards will be picked at random until they match the bounty value (adjusted by rarity). If true, rewards will be greedily chosen (The most expensive coming first) until they match the bounty value. Currency rewards benefit from setting this to true because the highest possible coin values will be given first."
+        ).boolean
+
 
 
 
@@ -193,6 +202,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private const val CATEGORY_BOARD = "board"
         private const val CATEGORY_BOUNTY = "bounty"
         private const val CATEGORY_RARITY = "rarity"
+        private const val CATEGORY_REWARDS = "rewards"
     }
 
 }
