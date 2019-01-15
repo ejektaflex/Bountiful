@@ -95,7 +95,10 @@ object BountyCreator : IBountyCreator {
         var validRewards: List<PickedEntryStack> = RewardRegistry.items.filter { it.amount <= worthLeft && it.content !in picked }.sortedBy { it.amount }
 
         while (validRewards.isNotEmpty()) {
-            val reward = validRewards.random()
+            val reward = when (Bountiful.config.greedyRewards) {
+                true -> validRewards.last()
+                false -> validRewards.random()
+            }
 
             val maxNumOfReward = worthLeft / reward.amount
             val worthSated = reward.amount * maxNumOfReward
