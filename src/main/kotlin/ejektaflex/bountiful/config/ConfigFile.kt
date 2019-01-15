@@ -39,6 +39,9 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private set
     override var greedyRewards: Boolean = false
         private set
+    override var villageGeneration: Boolean = true
+        private set
+
 
 
 
@@ -165,6 +168,12 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 "If using a currency for rewards, set this to true. By default (false), rewards will be picked at random until they match the bounty value (adjusted by rarity). If true, rewards will be greedily chosen (The most expensive coming first) until they match the bounty value. Currency rewards benefit from setting this to true because the highest possible coin values will be given first."
         ).boolean
 
+        villageGeneration = config.get(
+                CATEGORY_BOARD,
+                "Village Generation",
+                true,
+                "Whether or not bounty boards naturally generate in villages (Default: true)."
+        ).boolean
 
 
 

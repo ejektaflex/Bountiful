@@ -17,5 +17,6 @@ interface IBountifulConfig {
     val boardRecipeEnabled: Boolean
     val bountyBoardBreakable: Boolean
     val greedyRewards: Boolean
+    val villageGeneration: Boolean
     fun load()
 }

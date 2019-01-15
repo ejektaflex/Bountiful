@@ -1,5 +1,6 @@
 package ejektaflex.bountiful.worldgen
 
+import ejektaflex.bountiful.Bountiful
 import net.minecraft.util.EnumFacing
 import net.minecraft.world.gen.structure.StructureComponent
 import net.minecraft.world.gen.structure.StructureVillagePieces
@@ -16,7 +17,7 @@ class VillageBoardCreationHandler : VillagerRegistry.IVillageCreationHandler {
     override fun getComponentClass() = VillageBoardComponent::class.java
 
     override fun getVillagePieceWeight(random: Random, size: Int): StructureVillagePieces.PieceWeight {
-        return if (random.nextFloat() <= 0.63f) {
+        return if (random.nextFloat() <= 0.73f && Bountiful.config.villageGeneration) {
             StructureVillagePieces.PieceWeight(VillageBoardComponent::class.java, 3, 1)
         } else {
             StructureVillagePieces.PieceWeight(VillageBoardComponent::class.java, 0, 0)
