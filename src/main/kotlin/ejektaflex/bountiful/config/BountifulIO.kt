@@ -40,22 +40,26 @@ object BountifulIO {
     }
 
 
-
     fun safeHotReloadAll(): List<String> {
         val retMsg = mutableListOf<String>()
 
         try {
             val oldBounties = BountyRegistry.backup()
-            hotReloadBounties().forEach {
-                retMsg += "§4Invalid bounty: ${it.content}"
+            hotReloadBounties().also { invalids ->
+                if (invalids.isNotEmpty()) {
+
+                    invalids.forEach {
+                        retMsg += "§4Invalid bounty: ${it.content}. Reverting to original data."
+                    }
+
+                }
+                val numValidBounties = oldBounties.size - invalids.size
+                if (numValidBounties < Bountiful.config.bountyAmountRange.last) {
+                    retMsg += "§4Your config file ('bounties.json') does not contain enough valid bounties."
+                    BountyRegistry.restore(oldBounties)
+                }
             }
-            if (BountyRegistry.items.size < Bountiful.config.bountyAmountRange.last) {
-                retMsg += "§4Your config file does not contain enough valid bounties. The config file dictates that you need at least: ${Bountiful.config.bountyAmountRange.last}"
-                retMsg += "§4Reverting to previous bounty data."
-                BountyRegistry.restore(oldBounties)
-            } else {
-                retMsg += "Bounties Reloaded."
-            }
+            retMsg += "Bounties Reloaded."
         } catch (e: Exception) {
             retMsg += "§4Invalid bounty json data. Details: "
             retMsg.addAll(e.message!!.split("\n").map { "§4$it" })
@@ -63,7 +67,7 @@ object BountifulIO {
 
         try {
             hotReloadRewards().forEach {
-                retMsg += "§4Invalid reward: ${it.content}"
+                retMsg += "§4Invalid reward: ${it.content}. Skipping."
             }
             retMsg += "Rewards Reloaded."
         } catch (e: Exception) {
@@ -95,10 +99,10 @@ object BountifulIO {
     }
 
     fun hotReloadBounties(): List<PickableEntry> {
-        return hotReload("bounties.json", BountyRegistry, Array<PickableEntry>::class.java, { it -> it }) {
-            println("DOOT?:D")
+        val replaced = hotReload("bounties.json", BountyRegistry, Array<PickableEntry>::class.java, { it -> it }) {
             it.isValid()
         }
+        return replaced
     }
 
     fun hotReloadRewards(): List<PickedEntryStack> {
