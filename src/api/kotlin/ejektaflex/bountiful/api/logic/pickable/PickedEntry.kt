@@ -42,5 +42,9 @@ open class PickedEntry(
 
     override val contentObj: Any? = null
 
+    override fun isValid(): Boolean {
+        return contentObj != null
+    }
+
 
 }

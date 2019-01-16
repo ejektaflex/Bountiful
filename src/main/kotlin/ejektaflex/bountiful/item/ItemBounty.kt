@@ -8,8 +8,8 @@ import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.api.logic.BountyNBT
 import ejektaflex.bountiful.logic.BountyChecker
 import ejektaflex.bountiful.logic.BountyCreator
-import ejektaflex.bountiful.logic.BountyData
 import ejektaflex.bountiful.api.stats.BountifulStats
+import ejektaflex.bountiful.data.BountyData
 import net.minecraft.advancements.CriteriaTriggers
 import net.minecraft.client.resources.I18n
 import net.minecraft.client.util.ITooltipFlag

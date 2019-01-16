@@ -1,10 +1,11 @@
 package ejektaflex.bountiful.api.logic.pickable
 
+import ejektaflex.bountiful.api.data.IValidatable
 import ejektaflex.bountiful.api.logic.IWeighted
 import ejektaflex.bountiful.api.logic.ItemRange
 
 
-open class PickableEntry(var content: String, var amount: ItemRange, var unitWorth: Int, override var weight: Int = 100) : IWeighted {
+open class PickableEntry(var content: String, var amount: ItemRange, var unitWorth: Int, override var weight: Int = 100) : IWeighted, IValidatable {
 
     // Get around ugly JSON serialization of IntRange for our purposes
     constructor(inString: String, amount: IntRange, worth: Int, weight: Int = 100) : this(inString, ItemRange(amount), worth, weight)
@@ -20,9 +21,9 @@ open class PickableEntry(var content: String, var amount: ItemRange, var unitWor
         return PickedEntry(content, randCount).typed()
     }
 
-    val isValid: Boolean
-        get() {
-            return pick().contentObj != null
-        }
+    override fun isValid(): Boolean {
+        return pick().contentObj != null
+    }
+
 
 }

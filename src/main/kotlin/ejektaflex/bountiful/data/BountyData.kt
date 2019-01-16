@@ -1,10 +1,10 @@
-package ejektaflex.bountiful.logic
+package ejektaflex.bountiful.data
 
 import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.api.ext.getPickedEntryList
 import ejektaflex.bountiful.api.ext.getUnsortedList
 import ejektaflex.bountiful.api.ext.setUnsortedList
-import ejektaflex.bountiful.api.logic.IBountyData
+import ejektaflex.bountiful.api.data.IBountyData
 import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.api.logic.BountyNBT
 import ejektaflex.bountiful.api.logic.pickable.IPickedEntry

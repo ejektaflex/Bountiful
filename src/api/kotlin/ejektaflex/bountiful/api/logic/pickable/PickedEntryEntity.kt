@@ -42,4 +42,8 @@ class PickedEntryEntity(
         return "$amount x ${entityEntry?.name}"
     }
 
+    override fun isValid(): Boolean {
+        return contentObj != null
+    }
+
 }
