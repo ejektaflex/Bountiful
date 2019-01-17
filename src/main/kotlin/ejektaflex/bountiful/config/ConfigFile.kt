@@ -33,7 +33,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private set
     override var rarityMultipliers = mutableListOf(1.0, 1.1, 1.2, 1.5)
         private set
-    override var boardRecipeEnabled: Boolean = true
+    override var boardRecipeEnabled: Boolean = false
         private set
     override var bountyBoardBreakable: Boolean = true
         private set
@@ -150,8 +150,8 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         boardRecipeEnabled = config.get(
                 CATEGORY_BOARD,
                 "Board Recipe Enabled?",
-                true,
-                "Whether or not a recipe for the bounty board is created (Default: true)."
+                false,
+                "Whether or not a recipe for the bounty board is created (Default: false)."
         ).boolean
 
         bountyBoardBreakable = config.get(
