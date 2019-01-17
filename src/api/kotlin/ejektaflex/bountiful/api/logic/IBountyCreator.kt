@@ -1,5 +1,6 @@
 package ejektaflex.bountiful.api.logic
 
+import ejektaflex.bountiful.api.data.IBountyData
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
@@ -18,6 +19,6 @@ interface IBountyCreator {
     /**
      * Generates new, randomized bounty data
      */
-    fun create(): IBountyData
+    fun create(inRarity: EnumBountyRarity? = null): IBountyData
 
 }

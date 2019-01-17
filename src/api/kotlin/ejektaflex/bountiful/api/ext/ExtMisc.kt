@@ -3,12 +3,15 @@ package ejektaflex.bountiful.api.ext
 import ejektaflex.bountiful.api.logic.IWeighted
 import net.minecraft.client.Minecraft
 import net.minecraft.command.ICommandSender
+import net.minecraft.entity.Entity
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.TextComponentString
+import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.INBTSerializable
+import net.minecraftforge.fml.common.registry.ForgeRegistries
 import java.io.InputStream
 import kotlin.math.max
 import kotlin.math.min
@@ -28,7 +31,20 @@ val ResourceLocation.inputStream: InputStream?
 val ResourceLocation.toStringContents: String?
     get() = inputStream?.bufferedReader()?.readText()
 
+
+val Entity.registryName: ResourceLocation?
+    get() {
+        val valid = ForgeRegistries.ENTITIES.entries.filter {
+            this::class.java.isAssignableFrom(it.value.entityClass) &&
+                    it.value.entityClass.isAssignableFrom(this::class.java)
+        }
+        return valid.firstOrNull()?.key
+    }
+
+
 fun ICommandSender.sendMessage(str: String) = sendMessage(TextComponentString(str))
+
+fun ICommandSender.sendTranslation(key: String) = sendMessage(TextComponentTranslation(key))
 
 fun Int.clampTo(range: IntRange): Int {
     return max(range.first, min(this, range.last))

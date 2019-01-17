@@ -9,6 +9,7 @@ import ejektaflex.bountiful.logic.error.BountyCreationException
 import ejektaflex.bountiful.api.logic.pickable.PickableEntry
 import ejektaflex.bountiful.api.logic.pickable.PickedEntry
 import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
+import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.registry.BountyRegistry
 import ejektaflex.bountiful.registry.RewardRegistry
 import net.minecraft.item.ItemStack
@@ -19,8 +20,6 @@ import kotlin.math.max
 
 
 object BountyCreator : IBountyCreator {
-
-    private var numBountyItems = Bountiful.config.bountyAmountRange
 
     val rand = Random()
 
@@ -41,26 +40,21 @@ object BountyCreator : IBountyCreator {
         return EnumBountyRarity.getRarityFromInt(level)
     }
 
-    override fun create(): BountyData {
+    private fun createRandomBounty(inRarity: EnumBountyRarity?): BountyData {
 
-        if (BountyRegistry.items.size < numBountyItems.last) {
-            throw Exception("Bounty registry has fewer items than the max number of bounty items that the config dictates you could give!")
-        }
 
         // Shuffle bounty registry and take a random number of bounty items
         val pickedAlready = mutableListOf<PickableEntry>()
-        //val itemsToPick = BountyRegistry.items.shuffled().take(numBountyItems.random())
 
-        val toPick = numBountyItems.random()
+        val toPick = Bountiful.config.bountyAmountRange.random()
         while (pickedAlready.size < toPick) {
             val pool = BountyRegistry.items.filter { it !in pickedAlready }
             val toAdd = pool.weightedRandom
             pickedAlready.add(toAdd)
         }
 
-
         return BountyData().apply {
-            rarity = calcRarity().level
+            rarity = inRarity?.level ?: calcRarity().level
             worth = 0
             var preBountyTime = 0.0
             // Generate bounty data
@@ -88,6 +82,19 @@ object BountyCreator : IBountyCreator {
         }
     }
 
+    private fun createPremadeBounty(inRarity: EnumBountyRarity?): BountyData {
+        // TODO this
+        return BountyData()
+    }
+
+    override fun create(inRarity: EnumBountyRarity?): BountyData {
+        return if (Bountiful.config.randomBounties) {
+            createRandomBounty(inRarity)
+        } else {
+            createPremadeBounty(inRarity)
+        }
+    }
+
     private fun findRewards(n: Int): List<PickedEntryStack> {
         var worthLeft = n
         val toRet = mutableListOf<PickedEntryStack>()
@@ -95,7 +102,10 @@ object BountyCreator : IBountyCreator {
         var validRewards: List<PickedEntryStack> = RewardRegistry.items.filter { it.amount <= worthLeft && it.content !in picked }.sortedBy { it.amount }
 
         while (validRewards.isNotEmpty()) {
-            val reward = validRewards.random()
+            val reward = when (Bountiful.config.greedyRewards) {
+                true -> validRewards.last()
+                false -> validRewards.random()
+            }
 
             val maxNumOfReward = worthLeft / reward.amount
             val worthSated = reward.amount * maxNumOfReward

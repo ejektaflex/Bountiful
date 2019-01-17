@@ -27,9 +27,25 @@ open class ValueRegistry<T : Any> : IValueRegistry<T> {
         items.clear()
     }
 
-    @Suppress("UNCHECKED_CAST")
-    override fun <U : T> typedItems(): List<U> {
-        return items.mapNotNull { it as? U }
+
+    override fun replace(newItems: List<T>, condition: T.() -> Boolean): List<T> {
+        val invalids = mutableListOf<T>()
+        val dataBackup = backup()
+        this.empty()
+        for (item in newItems) {
+            if (condition(item)) {
+                this.add(item)
+            } else {
+                invalids.add(item)
+            }
+        }
+        // If there was any invalid data, toss it and restore the old, valid data
+        if (invalids.isNotEmpty()) {
+            restore(dataBackup)
+        }
+        return invalids
     }
 
 }
+
+

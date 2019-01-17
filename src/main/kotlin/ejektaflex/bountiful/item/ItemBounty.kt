@@ -3,11 +3,14 @@ package ejektaflex.bountiful.item
 import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.api.ext.sendMessage
+import ejektaflex.bountiful.api.ext.sendTranslation
 import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.api.logic.BountyNBT
 import ejektaflex.bountiful.logic.BountyChecker
 import ejektaflex.bountiful.logic.BountyCreator
-import ejektaflex.bountiful.logic.BountyData
+import ejektaflex.bountiful.api.stats.BountifulStats
+import ejektaflex.bountiful.data.BountyData
+import net.minecraft.client.resources.I18n
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
@@ -16,7 +19,6 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ActionResult
 import net.minecraft.util.EnumHand
-import net.minecraft.util.text.TextComponentString
 import net.minecraft.world.World
 
 
@@ -83,7 +85,9 @@ class ItemBounty : Item(), IItemBounty {
 
     override fun getItemStackDisplayName(stack: ItemStack): String {
         return super.getItemStackDisplayName(stack) + if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(BountyNBT.Rarity.key)) {
-             " (${EnumBountyRarity.getRarityFromInt(stack.tagCompound!!.getInteger(BountyNBT.Rarity.key))})"
+            val rarity = EnumBountyRarity.getRarityFromInt(stack.tagCompound!!.getInteger(BountyNBT.Rarity.key))
+            val localizedRarity = I18n.format("bountiful.rarity.${rarity.name}")
+             " ($localizedRarity)"
         } else {
             ""
         }
@@ -126,7 +130,7 @@ class ItemBounty : Item(), IItemBounty {
         val bounty = BountyData().apply { deserializeNBT(bountyItem.tagCompound!!) }
 
         if (bounty.hasExpired(player.world)) {
-            player.sendMessage("§4This bounty has expired.")
+            player.sendTranslation("bountiful.bounty.expired")
             return false
         }
 
@@ -137,16 +141,16 @@ class ItemBounty : Item(), IItemBounty {
 
         val entitiesFulfilled = BountyChecker.hasEntitiesFulfilled(bounty)
         if (!entitiesFulfilled) {
-            player.sendMessage("§cYou need to kill more mobs to fulfill this bounty.")
+            player.sendTranslation("bountiful.requirements.mobs.needed")
             return false
         }
 
 
         return if (!atBoard && Bountiful.config.cashInAtBountyBoard) {
-            player.sendMessage(TextComponentString("§aBounty requirements met. Fullfill your bounty by right clicking on a bounty board."))
+            player.sendTranslation("bountiful.requirements.met")
             false
         } else {
-            player.sendMessage(TextComponentString("§aBounty Fulfilled!"))
+            player.sendTranslation("bountiful.bounty.fulfilled")
             // Reduce count of relevant prerequisite stacks
             BountyChecker.takeItems(player, inv, bounty, invItemsAffected)
 
@@ -154,7 +158,12 @@ class ItemBounty : Item(), IItemBounty {
             player.setHeldItem(hand, ItemStack.EMPTY)
 
             // Reward player with rewards
-            BountyChecker.rewardItems(player, inv, bounty, bountyItem)
+            BountyChecker.rewardItems(player, bounty, bountyItem)
+
+            // Increment stats
+            player.addStat(BountifulStats.bountiesCompleted)
+            player.addStat(EnumBountyRarity.getRarityFromInt(bounty.rarity).stat)
+
 
             true
         }

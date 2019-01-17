@@ -36,11 +36,15 @@ open class PickedEntry(
                 else -> PickedEntryStack(this)
             }
         } else {
-            throw Exception("Entry: '$content' is has no comma prefix!")
+            throw Exception("Entry: '$content' is has no colon prefix!")
         }
     }
 
     override val contentObj: Any? = null
+
+    override fun isValid(): Boolean {
+        return contentObj != null
+    }
 
 
 }

@@ -1,21 +1,21 @@
 package ejektaflex.bountiful.command
 
+import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.config.BountifulIO
 import ejektaflex.bountiful.api.ext.sendMessage
+import ejektaflex.bountiful.api.ext.sendTranslation
+import ejektaflex.bountiful.config.ConfigFile
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.logic.error.BountyCreationException
 import ejektaflex.bountiful.registry.BountyRegistry
-import ejektaflex.bountiful.registry.RewardRegistry
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommand
 import net.minecraft.command.ICommandSender
 import net.minecraft.entity.EntityLiving
-import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.math.BlockPos
-import net.minecraftforge.fml.common.FMLCommonHandler
 import net.minecraftforge.fml.common.registry.ForgeRegistries
 import net.minecraftforge.items.ItemHandlerHelper
 
@@ -48,31 +48,22 @@ class BountyCommand : ICommand {
             when (val curr: String = args[0]) {
                 "reload" -> {
                     try {
-                        sender.sendMessage("Reloading data..")
-                        try {
-                            BountifulIO.hotReloadBounties("bounties.json").also {
-                                if (it.isNotEmpty()) {
-                                    sender.sendMessage("Invalid bounties: ${it.joinToString(", ")}. Skipped.")
-                                }
+                        sender.sendTranslation("bountiful.reloading.data")
+
+                        val bountyBackup = BountyRegistry.backup()
+
+                        BountifulIO.safeHotReloadAll().also {
+                            for (msg in it) {
+                                sender.sendMessage(msg)
                             }
-                        } catch (e: Exception) {
-                            println("JSON Structure of 'bounties.json' is incorrect! Details:")
-                            e.printStackTrace()
                         }
 
-                        try {
-                            BountifulIO.hotReloadRewards("rewards.json").also {
-                                if (it.isNotEmpty()) {
-                                    sender.sendMessage("Invalid rewards: ${it.joinToString(", ")}. Skipped.")
-                                }
-                            }
-                        } catch (e: Exception) {
-                            println("JSON Structure of 'rewards.json' is incorrect! Details:")
-                            e.printStackTrace()
+                        if (BountyRegistry.items.size < Bountiful.config.bountyAmountRange.last) {
+                            sender.sendMessage("bountiful.toofew.bounties")
+                            BountyRegistry.restore(bountyBackup)
                         }
 
-
-                        sender.sendMessage("Json config files reloaded.")
+                        sender.sendTranslation("bountiful.reloaded.data")
                     } catch (bce: BountyCreationException) {
                         sender.sendMessage("§4" + bce.message!!)
                         //sender.sendMessage("§4Defaulting to previous data. Correct it and try again.")
@@ -95,10 +86,11 @@ class BountyCommand : ICommand {
                     sender.sendMessage("Time: ${sender.entityWorld.totalWorldTime}")
                 }
                 "entities" -> {
-                    val names = ForgeRegistries.ENTITIES.filter {
-                        EntityLiving::class.java.isAssignableFrom(it.entityClass)
-                    }.map { it.name.toLowerCase() }.sorted()
+                    val names = ForgeRegistries.ENTITIES.entries.filter {
+                        EntityLiving::class.java.isAssignableFrom(it.value.entityClass)
+                    }.map { it.value.registryName.toString() }.sorted()
                     sender.sendMessage(names.joinToString(", "))
+                    println(names)
                 }
             }
         } else {

@@ -1,6 +1,6 @@
 package ejektaflex.bountiful.api.item
 
-import ejektaflex.bountiful.api.logic.IBountyData
+import ejektaflex.bountiful.api.data.IBountyData
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World

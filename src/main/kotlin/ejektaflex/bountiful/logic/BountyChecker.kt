@@ -1,14 +1,14 @@
 package ejektaflex.bountiful.logic
 
-import ejektaflex.bountiful.ContentRegistry
-import ejektaflex.bountiful.api.ext.sendMessage
+import ejektaflex.bountiful.api.ext.registryName
+import ejektaflex.bountiful.api.ext.sendTranslation
 import ejektaflex.bountiful.api.logic.pickable.PickedEntryEntity
 import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
+import ejektaflex.bountiful.data.BountyData
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.NonNullList
-import net.minecraft.util.text.TextComponentString
 import net.minecraftforge.items.ItemHandlerHelper
 import kotlin.math.min
 
@@ -32,7 +32,7 @@ object BountyChecker {
             val stacksMatching = prereqItems.filter { it.isItemEqualIgnoreDurability(picked.itemStack!!) }
             val hasEnough = stacksMatching.sumBy { it.count } >= picked.amount
             if (!hasEnough) {
-                player.sendMessage(TextComponentString("§cCannot fulfill bounty, you don't have everything needed!"))
+                player.sendTranslation("bountiful.cannot.fulfill")
             }
             hasEnough
         }
@@ -49,8 +49,12 @@ object BountyChecker {
         data.toGet.items.mapNotNull { it as? PickedEntryStack }.forEach { picked ->
             val stacksToChange = matched.filter { it.isItemEqualIgnoreDurability(picked.itemStack!!) }
             for (stack in stacksToChange) {
+                if (picked.amount == 0) {
+                    break
+                }
                 val amountToRemove = min(stack.count, picked.amount)
                 stack.count -= amountToRemove
+                picked.amount -= amountToRemove
             }
         }
     }
@@ -63,13 +67,13 @@ object BountyChecker {
         if (data.hasExpired(player.world)) {
             return
         }
+
         val bountyEntities = data.toGet.items.mapNotNull { it as? PickedEntryEntity }
 
         bountyEntities.forEach { picked ->
-            //println("${picked.entityEntry?.name?.toLowerCase()}, ${entity.name.toLowerCase()}")
-            if (picked.entityEntry?.name?.toLowerCase() == entity.name.toLowerCase()) {
+            if (picked.entityEntry?.registryName?.toString() == entity.registryName?.toString()) {
                 if (picked.killedAmount < picked.amount) {
-                    picked.killedAmount ++
+                    picked.killedAmount++
                 }
             }
         }
@@ -85,7 +89,7 @@ object BountyChecker {
         }
     }
 
-    fun rewardItems(player: EntityPlayer, inv: NonNullList<ItemStack>, data: BountyData, bountyItem: ItemStack) {
+    fun rewardItems(player: EntityPlayer, data: BountyData, bountyItem: ItemStack) {
 
         // Reward player with rewards
         data.rewards.items.forEach { reward ->

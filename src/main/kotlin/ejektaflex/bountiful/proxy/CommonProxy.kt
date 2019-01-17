@@ -11,9 +11,14 @@ import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.logic.BountyChecker
 import ejektaflex.bountiful.registry.BountyRegistry
 import ejektaflex.bountiful.registry.RewardRegistry
+import ejektaflex.bountiful.api.stats.BountifulStats
+import ejektaflex.bountiful.logic.BountyCreator
+import ejektaflex.bountiful.worldgen.VillageBoardComponent
+import ejektaflex.bountiful.worldgen.VillageBoardCreationHandler
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ResourceLocation
 import net.minecraft.world.World
+import net.minecraft.world.gen.structure.MapGenStructureIO
 import net.minecraftforge.common.capabilities.CapabilityManager
 import net.minecraftforge.event.AttachCapabilitiesEvent
 import net.minecraftforge.event.entity.living.LivingDeathEvent
@@ -21,11 +26,14 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
+import net.minecraftforge.fml.common.registry.VillagerRegistry
 
 open class CommonProxy : IProxy {
 
     override fun preInit(e: FMLPreInitializationEvent) {
         CapabilityManager.INSTANCE.register(IGlobalBoard::class.java, Storage()) { GlobalBoard() }
+        VillagerRegistry.instance().registerVillageCreationHandler(VillageBoardCreationHandler())
+        MapGenStructureIO.registerStructureComponent(VillageBoardComponent::class.java, VillageBoardComponent.VILLAGE_BOARD_ID.toString())
     }
 
     // Update mob bounties
@@ -59,7 +67,7 @@ open class CommonProxy : IProxy {
         e.addCapability(ResourceLocation(BountifulInfo.MODID, "GlobalData"), GlobBoardProvider())
     }
 
-    // Cancel first posting to board on board creation
+    // Cancel first posting to board on board creation (as first update is immediate after placement)
     @SubscribeEvent
     fun onBoardPost(e: PopulateBountyBoardEvent) {
         e.board?.let {
@@ -74,12 +82,13 @@ open class CommonProxy : IProxy {
         // Populate entries, fill if none exist
         "bounties.json".let {
             BountifulIO.populateConfigFolder(Bountiful.configDir, DefaultData.entries.items, it)
-            try {
-                val invalids = BountifulIO.hotReloadBounties(it)
-                println("Invalid bounties: $invalids")
-            } catch (e: Exception) {
-                println("JSON Structure of '$it' is incorrect! Details:")
-                e.printStackTrace()
+            val invalids = BountifulIO.hotReloadBounties()
+            if (invalids.isNotEmpty()) {
+                throw Exception("'bountiful/bounties.json' contains one or more invalid bounties. Invalid bounty objectives: $invalids")
+            }
+            val minObjectives = Bountiful.config.bountyAmountRange.last
+            if (BountyRegistry.items.size < minObjectives) {
+                throw Exception("Config file needs more bounties! Must have at least $minObjectives bounty objectives to choose from, according to the current config.")
             }
         }
 
@@ -88,15 +97,11 @@ open class CommonProxy : IProxy {
             BountifulIO.populateConfigFolder(Bountiful.configDir, DefaultData.rewards.items.map { item ->
                 item.genericPick
             }, it)
-            try {
-                val invalid = BountifulIO.hotReloadRewards(it)
-                println("Invalid rewards: $invalid")
-            } catch (e: Exception) {
-                println("JSON Structure of '$it' is incorrect! Details:")
-                e.printStackTrace()
-            }
-
+            val invalid = BountifulIO.hotReloadRewards()
+            println("Invalid rewards: $invalid")
         }
+
+        BountifulStats.register()
 
         println("Bounties: ${BountyRegistry.items.size}")
         BountyRegistry.items.forEach { println(it) }

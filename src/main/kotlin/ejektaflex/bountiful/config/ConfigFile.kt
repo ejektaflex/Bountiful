@@ -33,11 +33,16 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private set
     override var rarityMultipliers = mutableListOf(1.0, 1.1, 1.2, 1.5)
         private set
-    override var boardRecipeEnabled: Boolean = true
+    override var boardRecipeEnabled: Boolean = false
         private set
     override var bountyBoardBreakable: Boolean = true
         private set
-
+    override var greedyRewards: Boolean = false
+        private set
+    override var villageGeneration: Boolean = true
+        private set
+    override var randomBounties: Boolean = true
+        private set
 
 
     private var bountyAmountMax = 2
@@ -97,21 +102,21 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 CATEGORY_BOUNTY,
                 "Bounty Items Max",
                 2,
-                "The maximum number of items that a bounty could ask for (Default: 2)"
+                "The maximum number of objectives that a bounty could ask for (Default: 2)"
         ).int.clampTo(1..64)
 
         bountyAmountMin = config.get(
                 CATEGORY_BOUNTY,
                 "Bounty Items Min",
                 1,
-                "The minimum number of items that a bounty could ask for (Default: 1)"
+                "The minimum number of objectives that a bounty could ask for (Default: 1)"
         ).int.clampTo(1..64)
 
         bountyTimeMin = config.get(
                 CATEGORY_BOUNTY,
                 "Minimum Bounty Time",
                 6000,
-                "The minimum bountyTime, in ticks, that a bounty can take to complete (Default: 4800)"
+                "The minimum time, in ticks, required to complete a bounty. (Default: 4800)"
         ).int.clampTo(10..Int.MAX_VALUE)
 
         shouldCountdownOnBoard = config.get(
@@ -126,13 +131,13 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 "Bounties Created On Place",
                 0,
                 "The number of entries that a Bounty Board starts with when placed, if not using global bounties (Default: 0)"
-        ).int.clampTo(1..27)
+        ).int.clampTo(0..27)
 
         globalBounties = config.get(
                 CATEGORY_BOARD,
                 "Global Bounty Inventory",
                 false,
-                "By default (true), all boards share a single, global inventory per dimension. If false, all boards have their own inventory."
+                "By default (false), all boards share a single, global inventory per dimension. If false, all boards have their own inventory."
         ).boolean
 
         entityTimeMult = config.get(
@@ -145,8 +150,8 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         boardRecipeEnabled = config.get(
                 CATEGORY_BOARD,
                 "Board Recipe Enabled?",
-                true,
-                "Whether or not a recipe for the bounty board is created (Default: true)."
+                false,
+                "Whether or not a recipe for the bounty board is created (Default: false)."
         ).boolean
 
         bountyBoardBreakable = config.get(
@@ -156,6 +161,28 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 "Whether or not the bounty board can be broken (Default: true)."
         ).boolean
 
+        greedyRewards = config.get(
+                CATEGORY_REWARDS,
+                "Greedy Rewards?",
+                false,
+                "If using a currency for rewards, set this to true. By default (false), rewards will be picked at random until they match the bounty value (adjusted by rarity). If true, rewards will be greedily chosen (The most expensive coming first) until they match the bounty value. Currency rewards benefit from setting this to true because the highest possible coin values will be given first."
+        ).boolean
+
+        villageGeneration = config.get(
+                CATEGORY_BOARD,
+                "Village Generation",
+                true,
+                "Whether or not bounty boards naturally generate in villages (Default: true)."
+        ).boolean
+
+        /*
+        randomBounties = config.get(
+                CATEGORY_BOUNTY,
+                "Random Bounties",
+                true,
+                "By default (true), bounties are randomly created based on 'bounties.json'. If set to false, premade bounties will instead be picked from 'premade.json'."
+        ).boolean
+        */
 
 
 
@@ -193,6 +220,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private const val CATEGORY_BOARD = "board"
         private const val CATEGORY_BOUNTY = "bounty"
         private const val CATEGORY_RARITY = "rarity"
+        private const val CATEGORY_REWARDS = "rewards"
     }
 
 }

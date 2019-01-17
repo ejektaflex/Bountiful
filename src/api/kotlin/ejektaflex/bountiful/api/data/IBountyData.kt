@@ -1,4 +1,4 @@
-package ejektaflex.bountiful.api.logic
+package ejektaflex.bountiful.api.data
 
 import ejektaflex.bountiful.api.logic.pickable.IPickedEntry
 import ejektaflex.bountiful.api.logic.pickable.PickedEntry

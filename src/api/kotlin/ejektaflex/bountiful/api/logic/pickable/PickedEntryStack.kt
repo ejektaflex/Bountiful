@@ -20,4 +20,8 @@ class PickedEntryStack(
     override val prettyContent: String
         get() = "§f${amount}x §a${itemStack?.displayName}§r"
 
+    override fun isValid(): Boolean {
+        return contentObj != null
+    }
+
 }

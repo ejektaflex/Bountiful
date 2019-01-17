@@ -16,5 +16,8 @@ interface IBountifulConfig {
     val rarityMultipliers: List<Double>
     val boardRecipeEnabled: Boolean
     val bountyBoardBreakable: Boolean
+    val greedyRewards: Boolean
+    val villageGeneration: Boolean
+    val randomBounties: Boolean
     fun load()
 }
