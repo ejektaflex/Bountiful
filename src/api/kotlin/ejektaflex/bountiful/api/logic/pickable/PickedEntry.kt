@@ -36,7 +36,7 @@ open class PickedEntry(
                 else -> PickedEntryStack(this)
             }
         } else {
-            throw Exception("Entry: '$content' is has no comma prefix!")
+            throw Exception("Entry: '$content' is has no colon prefix!")
         }
     }
 

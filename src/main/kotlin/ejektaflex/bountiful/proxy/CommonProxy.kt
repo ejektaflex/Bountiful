@@ -83,9 +83,12 @@ open class CommonProxy : IProxy {
         "bounties.json".let {
             BountifulIO.populateConfigFolder(Bountiful.configDir, DefaultData.entries.items, it)
             val invalids = BountifulIO.hotReloadBounties()
-            println("Invalid bounties: $invalids")
-            if (BountyRegistry.items.size < Bountiful.config.bountyAmountRange.last) {
-                throw Exception("Bounty registry has fewer items than the max number of bounty items that the config dictates you could give!")
+            if (invalids.isNotEmpty()) {
+                throw Exception("'bountiful/bounties.json' contains one or more invalid bounties. Invalid bounty objectives: $invalids")
+            }
+            val minObjectives = Bountiful.config.bountyAmountRange.last
+            if (BountyRegistry.items.size < minObjectives) {
+                throw Exception("Config file needs more bounties! Must have at least $minObjectives bounty objectives to choose from, according to the current config.")
             }
         }
 

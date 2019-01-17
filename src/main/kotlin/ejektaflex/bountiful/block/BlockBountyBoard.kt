@@ -2,13 +2,11 @@ package ejektaflex.bountiful.block
 
 import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.api.ext.filledSlots
-import ejektaflex.bountiful.api.ext.sendMessage
-import ejektaflex.bountiful.api.ext.stacks
+import ejektaflex.bountiful.api.ext.sendTranslation
 import ejektaflex.bountiful.gui.GuiHandler
 import ejektaflex.bountiful.item.ItemBounty
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
-import net.minecraft.client.resources.I18n
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumHand
@@ -39,7 +37,7 @@ class BlockBountyBoard : BlockTileEntity<TileEntityBountyBoard>(Material.WOOD, "
                 if (Bountiful.config.cashInAtBountyBoard && holding?.item is ItemBounty) {
                     (holding.item as ItemBounty).cashIn(player, hand!!, atBoard = true)
                 } else if (tile.inventory.handler.filledSlots.isEmpty()) {
-                    player.sendMessage("§6${I18n.format("bountiful.board.empty")}")
+                    player.sendTranslation("bountiful.board.empty")
                 } else {
                     player.openGui(Bountiful.instance!!, GuiHandler.BOARD_GUI, world, pos.x, pos.y, pos.z)
                 }

@@ -3,13 +3,12 @@ package ejektaflex.bountiful.command
 import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.config.BountifulIO
 import ejektaflex.bountiful.api.ext.sendMessage
+import ejektaflex.bountiful.api.ext.sendTranslation
 import ejektaflex.bountiful.config.ConfigFile
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.logic.error.BountyCreationException
 import ejektaflex.bountiful.registry.BountyRegistry
-import ejektaflex.bountiful.registry.RewardRegistry
-import net.minecraft.client.resources.I18n
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommand
 import net.minecraft.command.ICommandSender
@@ -49,7 +48,7 @@ class BountyCommand : ICommand {
             when (val curr: String = args[0]) {
                 "reload" -> {
                     try {
-                        sender.sendMessage(I18n.format("bountiful.reloading.data"))
+                        sender.sendTranslation("bountiful.reloading.data")
 
                         val bountyBackup = BountyRegistry.backup()
 
@@ -60,11 +59,11 @@ class BountyCommand : ICommand {
                         }
 
                         if (BountyRegistry.items.size < Bountiful.config.bountyAmountRange.last) {
-                            sender.sendMessage("§4Your config file does not contain enough valid bounties. Reverting to previous bounty data.")
+                            sender.sendMessage("bountiful.toofew.bounties")
                             BountyRegistry.restore(bountyBackup)
                         }
 
-                        sender.sendMessage(I18n.format("bountiful.reloaded.data"))
+                        sender.sendTranslation("bountiful.reloaded.data")
                     } catch (bce: BountyCreationException) {
                         sender.sendMessage("§4" + bce.message!!)
                         //sender.sendMessage("§4Defaulting to previous data. Correct it and try again.")

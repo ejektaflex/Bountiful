@@ -175,12 +175,14 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 "Whether or not bounty boards naturally generate in villages (Default: true)."
         ).boolean
 
+        /*
         randomBounties = config.get(
                 CATEGORY_BOUNTY,
                 "Random Bounties",
                 true,
                 "By default (true), bounties are randomly created based on 'bounties.json'. If set to false, premade bounties will instead be picked from 'premade.json'."
         ).boolean
+        */
 
 
 

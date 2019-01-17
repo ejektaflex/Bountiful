@@ -16,6 +16,8 @@ import java.util.Random
 
 class VillageBoardComponent : StructureVillagePieces.Village {
 
+    // Blank default to make Forge happy
+    constructor()
 
     constructor(start: StructureVillagePieces.Start, type: Int, boundingBox: StructureBoundingBox, facing: EnumFacing) : super(start, type) {
         this.boundingBox = boundingBox
