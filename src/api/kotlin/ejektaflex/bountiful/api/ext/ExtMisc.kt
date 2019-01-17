@@ -4,16 +4,13 @@ import ejektaflex.bountiful.api.logic.IWeighted
 import net.minecraft.client.Minecraft
 import net.minecraft.command.ICommandSender
 import net.minecraft.entity.Entity
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.stats.StatBase
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.TextComponentString
+import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.INBTSerializable
-import net.minecraftforge.fml.common.registry.EntityEntry
 import net.minecraftforge.fml.common.registry.ForgeRegistries
 import java.io.InputStream
 import kotlin.math.max
@@ -47,6 +44,8 @@ val Entity.registryName: ResourceLocation?
 
 fun ICommandSender.sendMessage(str: String) = sendMessage(TextComponentString(str))
 
+fun ICommandSender.sendTranslation(key: String) = sendMessage(TextComponentTranslation(key))
+
 fun Int.clampTo(range: IntRange): Int {
     return max(range.first, min(this, range.last))
 }
@@ -57,14 +56,6 @@ fun Double.clampTo(low: Double, high: Double): Double {
 
 fun Long.clampTo(range: LongRange): Long {
     return max(range.first, min(this, range.last))
-}
-
-fun EntityPlayer.increaseStat(stat: StatBase, amt: Int) {
-    (this as? EntityPlayerMP)?.statFile?.let {
-        it.increaseStat(this, stat, amt)
-        it.markAllDirty()
-        it.saveStatFile()
-    }
 }
 
 val <T : IWeighted> List<T>.weightedRandom: T

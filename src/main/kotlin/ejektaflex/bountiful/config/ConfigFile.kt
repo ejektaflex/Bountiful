@@ -33,13 +33,16 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private set
     override var rarityMultipliers = mutableListOf(1.0, 1.1, 1.2, 1.5)
         private set
-    override var boardRecipeEnabled: Boolean = true
+    override var boardRecipeEnabled: Boolean = false
         private set
     override var bountyBoardBreakable: Boolean = true
         private set
     override var greedyRewards: Boolean = false
         private set
-
+    override var villageGeneration: Boolean = true
+        private set
+    override var randomBounties: Boolean = true
+        private set
 
 
     private var bountyAmountMax = 2
@@ -147,8 +150,8 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         boardRecipeEnabled = config.get(
                 CATEGORY_BOARD,
                 "Board Recipe Enabled?",
-                true,
-                "Whether or not a recipe for the bounty board is created (Default: true)."
+                false,
+                "Whether or not a recipe for the bounty board is created (Default: false)."
         ).boolean
 
         bountyBoardBreakable = config.get(
@@ -165,6 +168,21 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 "If using a currency for rewards, set this to true. By default (false), rewards will be picked at random until they match the bounty value (adjusted by rarity). If true, rewards will be greedily chosen (The most expensive coming first) until they match the bounty value. Currency rewards benefit from setting this to true because the highest possible coin values will be given first."
         ).boolean
 
+        villageGeneration = config.get(
+                CATEGORY_BOARD,
+                "Village Generation",
+                true,
+                "Whether or not bounty boards naturally generate in villages (Default: true)."
+        ).boolean
+
+        /*
+        randomBounties = config.get(
+                CATEGORY_BOUNTY,
+                "Random Bounties",
+                true,
+                "By default (true), bounties are randomly created based on 'bounties.json'. If set to false, premade bounties will instead be picked from 'premade.json'."
+        ).boolean
+        */
 
 
 

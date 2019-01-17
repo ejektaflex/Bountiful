@@ -2,7 +2,7 @@ package ejektaflex.bountiful.api
 
 import ejektaflex.bountiful.api.block.ITileEntityBountyBoard
 import ejektaflex.bountiful.api.config.IBountifulConfig
-import ejektaflex.bountiful.api.logic.IBountyData
+import ejektaflex.bountiful.api.data.IBountyData
 import ejektaflex.bountiful.api.logic.pickable.PickableEntry
 import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
 import ejektaflex.bountiful.api.registry.IValueRegistry

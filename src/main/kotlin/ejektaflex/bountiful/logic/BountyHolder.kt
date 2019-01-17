@@ -7,6 +7,7 @@ import ejektaflex.bountiful.api.ext.filledSlots
 import ejektaflex.bountiful.api.ext.set
 import ejektaflex.bountiful.api.ext.slotRange
 import ejektaflex.bountiful.api.logic.IBountyHolder
+import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.item.ItemBounty
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound

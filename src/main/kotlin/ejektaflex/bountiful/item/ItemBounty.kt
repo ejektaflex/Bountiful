@@ -2,15 +2,14 @@ package ejektaflex.bountiful.item
 
 import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
-import ejektaflex.bountiful.api.ext.increaseStat
 import ejektaflex.bountiful.api.ext.sendMessage
+import ejektaflex.bountiful.api.ext.sendTranslation
 import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.api.logic.BountyNBT
 import ejektaflex.bountiful.logic.BountyChecker
 import ejektaflex.bountiful.logic.BountyCreator
-import ejektaflex.bountiful.logic.BountyData
 import ejektaflex.bountiful.api.stats.BountifulStats
-import net.minecraft.advancements.CriteriaTriggers
+import ejektaflex.bountiful.data.BountyData
 import net.minecraft.client.resources.I18n
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity
@@ -20,7 +19,6 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ActionResult
 import net.minecraft.util.EnumHand
-import net.minecraft.util.text.TextComponentString
 import net.minecraft.world.World
 
 
@@ -132,7 +130,7 @@ class ItemBounty : Item(), IItemBounty {
         val bounty = BountyData().apply { deserializeNBT(bountyItem.tagCompound!!) }
 
         if (bounty.hasExpired(player.world)) {
-            player.sendMessage("§4${I18n.format("bountiful.bounty.expired")}")
+            player.sendTranslation("bountiful.bounty.expired")
             return false
         }
 
@@ -143,16 +141,16 @@ class ItemBounty : Item(), IItemBounty {
 
         val entitiesFulfilled = BountyChecker.hasEntitiesFulfilled(bounty)
         if (!entitiesFulfilled) {
-            player.sendMessage("§c${I18n.format("bountiful.requirements.mobs.needed")}")
+            player.sendTranslation("bountiful.requirements.mobs.needed")
             return false
         }
 
 
         return if (!atBoard && Bountiful.config.cashInAtBountyBoard) {
-            player.sendMessage(TextComponentString("§a${I18n.format("bountiful.requirements.met")}"))
+            player.sendTranslation("bountiful.requirements.met")
             false
         } else {
-            player.sendMessage(TextComponentString("§a${I18n.format("bountiful.bounty.fulfilled")}"))
+            player.sendTranslation("bountiful.bounty.fulfilled")
             // Reduce count of relevant prerequisite stacks
             BountyChecker.takeItems(player, inv, bounty, invItemsAffected)
 

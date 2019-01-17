@@ -1,9 +1,10 @@
 package ejektaflex.bountiful.api.logic.pickable
 
+import ejektaflex.bountiful.api.data.IValidatable
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.INBTSerializable
 
-interface IPickedEntry : INBTSerializable<NBTTagCompound> {
+interface IPickedEntry : INBTSerializable<NBTTagCompound>, IValidatable {
     /**
      * A string representing the content of this picked entry
      */

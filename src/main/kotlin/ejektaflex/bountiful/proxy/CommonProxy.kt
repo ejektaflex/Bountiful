@@ -12,6 +12,7 @@ import ejektaflex.bountiful.logic.BountyChecker
 import ejektaflex.bountiful.registry.BountyRegistry
 import ejektaflex.bountiful.registry.RewardRegistry
 import ejektaflex.bountiful.api.stats.BountifulStats
+import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.worldgen.VillageBoardComponent
 import ejektaflex.bountiful.worldgen.VillageBoardCreationHandler
 import net.minecraft.entity.player.EntityPlayer
@@ -81,12 +82,13 @@ open class CommonProxy : IProxy {
         // Populate entries, fill if none exist
         "bounties.json".let {
             BountifulIO.populateConfigFolder(Bountiful.configDir, DefaultData.entries.items, it)
-            try {
-                val invalids = BountifulIO.hotReloadBounties(it)
-                println("Invalid bounties: $invalids")
-            } catch (e: Exception) {
-                println("JSON Structure of '$it' is incorrect! Details:")
-                e.printStackTrace()
+            val invalids = BountifulIO.hotReloadBounties()
+            if (invalids.isNotEmpty()) {
+                throw Exception("'bountiful/bounties.json' contains one or more invalid bounties. Invalid bounty objectives: $invalids")
+            }
+            val minObjectives = Bountiful.config.bountyAmountRange.last
+            if (BountyRegistry.items.size < minObjectives) {
+                throw Exception("Config file needs more bounties! Must have at least $minObjectives bounty objectives to choose from, according to the current config.")
             }
         }
 
@@ -95,14 +97,8 @@ open class CommonProxy : IProxy {
             BountifulIO.populateConfigFolder(Bountiful.configDir, DefaultData.rewards.items.map { item ->
                 item.genericPick
             }, it)
-            try {
-                val invalid = BountifulIO.hotReloadRewards(it)
-                println("Invalid rewards: $invalid")
-            } catch (e: Exception) {
-                println("JSON Structure of '$it' is incorrect! Details:")
-                e.printStackTrace()
-            }
-
+            val invalid = BountifulIO.hotReloadRewards()
+            println("Invalid rewards: $invalid")
         }
 
         BountifulStats.register()

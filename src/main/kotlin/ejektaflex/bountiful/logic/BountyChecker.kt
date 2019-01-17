@@ -1,14 +1,14 @@
 package ejektaflex.bountiful.logic
 
 import ejektaflex.bountiful.api.ext.registryName
+import ejektaflex.bountiful.api.ext.sendTranslation
 import ejektaflex.bountiful.api.logic.pickable.PickedEntryEntity
 import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
-import net.minecraft.client.resources.I18n
+import ejektaflex.bountiful.data.BountyData
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.NonNullList
-import net.minecraft.util.text.TextComponentString
 import net.minecraftforge.items.ItemHandlerHelper
 import kotlin.math.min
 
@@ -32,7 +32,7 @@ object BountyChecker {
             val stacksMatching = prereqItems.filter { it.isItemEqualIgnoreDurability(picked.itemStack!!) }
             val hasEnough = stacksMatching.sumBy { it.count } >= picked.amount
             if (!hasEnough) {
-                player.sendMessage(TextComponentString("§c${I18n.format("bountiful.cannot.fulfill")}"))
+                player.sendTranslation("bountiful.cannot.fulfill")
             }
             hasEnough
         }
