@@ -4,13 +4,11 @@ import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.api.logic.pickable.PickableEntry
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import ejektaflex.bountiful.api.logic.pickable.IPickedEntry
 import ejektaflex.bountiful.api.logic.pickable.PickedEntry
 import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
 import ejektaflex.bountiful.registry.BountyRegistry
 import ejektaflex.bountiful.registry.RewardRegistry
 import ejektaflex.bountiful.registry.ValueRegistry
-import net.minecraft.util.text.TextComponentString
 import java.io.File
 
 object BountifulIO {
@@ -99,10 +97,9 @@ object BountifulIO {
     }
 
     fun hotReloadBounties(): List<PickableEntry> {
-        val replaced = hotReload("bounties.json", BountyRegistry, Array<PickableEntry>::class.java, { it -> it }) {
+        return hotReload("bounties.json", BountyRegistry, Array<PickableEntry>::class.java, { it -> it }) {
             it.isValid()
         }
-        return replaced
     }
 
     fun hotReloadRewards(): List<PickedEntryStack> {

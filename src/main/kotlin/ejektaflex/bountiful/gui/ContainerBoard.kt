@@ -1,6 +1,5 @@
 package ejektaflex.bountiful.gui
 
-import ejektaflex.bountiful.api.stats.BountifulStats
 import ejektaflex.bountiful.block.TileEntityBountyBoard
 import ejektaflex.bountiful.item.ItemBounty
 import net.minecraft.entity.player.EntityPlayer

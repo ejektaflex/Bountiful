@@ -25,12 +25,12 @@ interface IPresetBounty : IWeighted {
     fun isValid(): Boolean
 
     /**
-     * Returns the bounty objectives, as a [List<PickedEntry>]
+     * Returns the bounty objectives, as a [List<IPickedEntry>]
      */
     fun objectiveContent(): List<IPickedEntry>
 
     /**
-     * Returns the rewards, as a [List<PickedEntry>]
+     * Returns the rewards, as a [List<IPickedEntry>]
      */
     fun rewardContent(): List<IPickedEntry>
 }

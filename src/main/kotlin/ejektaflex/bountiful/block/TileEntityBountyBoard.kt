@@ -73,7 +73,7 @@ class TileEntityBountyBoard : TileEntity(), ITileEntityBountyBoard {
     }
 
     override fun sendRedstonePulse() {
-        pulseLeft += 2
+        pulseLeft += 2 // 2 ticks, a standard minimum pulse length
         updatePulse()
     }
 
@@ -92,7 +92,6 @@ class TileEntityBountyBoard : TileEntity(), ITileEntityBountyBoard {
             if (dirty) {
                 markDirty()
             }
-
         }
     }
 

@@ -21,7 +21,7 @@ import kotlin.math.max
 
 object BountyCreator : IBountyCreator {
 
-    val rand = Random()
+    private val rand = Random()
 
     override fun createStack(world: World): ItemStack {
         return ContentRegistry.bounty.let { ItemStack(it).apply { it.ensureBounty(this, world) } }
