@@ -1,5 +1,8 @@
 package ejektaflex.bountiful.api.config
 
+/**
+ * Explanations of each config option are generated in the config implementation, so are they withheld here.
+ */
 interface IBountifulConfig {
     val maxBountiesPerBoard: Int
     val boardAddFrequency: Long

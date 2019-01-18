@@ -2,8 +2,8 @@ package ejektaflex.bountiful.api
 
 
 /**
- * [BountifulAPIProvider] is a wrapper around an empty instance of the Pewter API.
- * At the bountyTime of mod construction, it gets replaced by Pewter's internal API
+ * [BountifulAPIProvider] is a wrapper around an empty instance of the Bountiful API.
+ * At the bountyTime of mod construction, it gets replaced by Bountiful's internal API
  * implementation.
  */
 open class BountifulAPIProvider : IBountifulAPI by api {
