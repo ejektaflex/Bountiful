@@ -14,7 +14,6 @@ class PickedEntryStack(
     val itemStack: ItemStack?
         get() {
             val stack = content.toItemStack
-            println("NBT JSON: ${genericPick.nbtJson}")
             tag?.let { stack?.tagCompound = it }
             return stack
         }

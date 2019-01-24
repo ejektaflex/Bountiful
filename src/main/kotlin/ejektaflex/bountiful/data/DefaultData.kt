@@ -29,7 +29,8 @@ object DefaultData {
             PickableEntry("minecraft:tripwire_hook", 1..8, 70),
             PickableEntry("minecraft:wheat", 1..48, 20),
             PickableEntry("entity:minecraft:zombie", 1..8, 120, weight = 300),
-            PickableEntry("entity:minecraft:skeleton", 1..6, 140, weight = 250)
+            PickableEntry("entity:minecraft:skeleton", 1..6, 140, weight = 250),
+            PickableEntry("minecraft:potion", 1..3, 300, nbtJson = "{Potion: \"minecraft:healing\"}")
         )
     }
 

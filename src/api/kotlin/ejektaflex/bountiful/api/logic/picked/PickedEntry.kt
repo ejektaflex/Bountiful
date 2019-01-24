@@ -9,7 +9,7 @@ open class PickedEntry(
         @SerializedName("unitWorth")
         override var amount: Int = Integer.MIN_VALUE,
         @SerializedName("nbt_data")
-        override var nbtJson: Any? = null
+        override var nbtJson: String? = null
 ) : IPickedEntry, IHasTag {
 
     // Must override because overriding [nbtJson]

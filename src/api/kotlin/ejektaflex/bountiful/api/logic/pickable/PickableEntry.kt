@@ -15,11 +15,11 @@ open class PickableEntry(
         var unitWorth: Int,
         override var weight: Int = 100,
         @SerializedName("nbt_data")
-        override var nbtJson: Any? = null
+        override var nbtJson: String? = null
 ) : IWeighted, IValidatable, IHasTag {
 
     // Get around ugly JSON serialization of IntRange for our purposes
-    constructor(inString: String, amount: IntRange, worth: Int, weight: Int = 100, nbtJson: Any? = null) : this(inString, ItemRange(amount), worth, weight, nbtJson)
+    constructor(inString: String, amount: IntRange, worth: Int, weight: Int = 100, nbtJson: String? = null) : this(inString, ItemRange(amount), worth, weight, nbtJson)
 
     val randCount: Int
         get() = (amount.min..amount.max).random()
