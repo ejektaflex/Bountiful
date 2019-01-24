@@ -12,7 +12,12 @@ class PickedEntryStack(
     override fun timeMult() = 1.0
 
     val itemStack: ItemStack?
-        get() = content.toItemStack
+        get() {
+            val stack = content.toItemStack
+            println("NBT JSON: ${genericPick.nbtJson}")
+            nbt?.let { stack?.tagCompound = it }
+            return stack
+        }
 
     override val contentObj: Any?
         get() = itemStack
@@ -23,5 +28,10 @@ class PickedEntryStack(
     override fun isValid(): Boolean {
         return contentObj != null
     }
+
+    override fun toString(): String {
+        return "PickedEntry (Stack) [Item: $content, Amount: $amount, NBT: $nbt]"
+    }
+
 
 }

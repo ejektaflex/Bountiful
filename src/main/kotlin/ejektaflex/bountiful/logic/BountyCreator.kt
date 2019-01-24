@@ -110,14 +110,17 @@ object BountyCreator : IBountyCreator {
             val maxNumOfReward = worthLeft / reward.amount
             val worthSated = reward.amount * maxNumOfReward
             worthLeft -= worthSated
-            toRet.add(PickedEntryStack(PickedEntry(reward.content, maxNumOfReward)))
+            println("For bounty, picked: $reward")
+            val rewardClone = PickedEntryStack(PickedEntry(reward.content, maxNumOfReward, reward.nbt))
+            println("For bounty, clone is: $rewardClone")
+            toRet.add(rewardClone)
             validRewards = RewardRegistry.items.filter { it.amount <= worthLeft && it.contentObj !in picked }.sortedBy { it.amount }
         }
 
         // If there were no valid rewards, find the cheapest item
         if (toRet.isEmpty()) {
             val lowestWorthItem = RewardRegistry.items.minBy { it.amount }!!
-            toRet.add(PickedEntryStack(PickedEntry(lowestWorthItem.content, 1)))
+            toRet.add(PickedEntryStack(PickedEntry(lowestWorthItem.content, 1, lowestWorthItem.nbt)))
         }
 
         return toRet

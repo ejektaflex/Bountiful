@@ -98,6 +98,7 @@ object BountyChecker {
             while (amountNeededToGive > 0) {
                 val stackSize = min(amountNeededToGive, bountyItem.maxStackSize)
                 val newStack = reward.itemStack!!.copy().apply { count = stackSize }
+
                 stacksToGive.add(newStack)
                 amountNeededToGive -= stackSize
             }
