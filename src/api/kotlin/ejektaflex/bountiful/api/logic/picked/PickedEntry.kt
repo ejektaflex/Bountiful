@@ -1,6 +1,7 @@
 package ejektaflex.bountiful.api.logic.picked
 
 import com.google.gson.annotations.SerializedName
+import ejektaflex.bountiful.api.data.IHasTag
 import net.minecraft.nbt.*
 
 open class PickedEntry(
@@ -8,18 +9,12 @@ open class PickedEntry(
         @SerializedName("unitWorth")
         override var amount: Int = Integer.MIN_VALUE,
         @SerializedName("nbt_data")
-        var nbtJson: Any? = null
-) : IPickedEntry {
+        override var nbtJson: Any? = null
+) : IPickedEntry, IHasTag {
 
-    override val nbt: NBTTagCompound?
-        get() {
-            return when (nbtJson) {
-                null -> null
-                is String -> JsonToNBT.getTagFromJson(nbtJson.toString())
-                is NBTTagCompound -> nbtJson as NBTTagCompound
-                else -> throw Exception("NBT $nbtJson must be a String! Instead was a: ${nbtJson!!::class}")
-            }
-        }
+    // Must override because overriding [nbtJson]
+    override val tag: NBTTagCompound?
+        get() = super.tag
 
     override fun timeMult() = 1.0
 
@@ -27,7 +22,7 @@ open class PickedEntry(
         return NBTTagCompound().apply {
             setString("content", content)
             setInteger("amount", amount)
-            nbt?.let {
+            tag?.let {
                 setTag("nbt", it)
             }
         }
@@ -61,7 +56,7 @@ open class PickedEntry(
     override val contentObj: Any? = null
 
     override fun isValid(): Boolean {
-        val isNBTValid = (nbtJson == null) || (nbt != null)
+        val isNBTValid = (nbtJson == null) || (tag != null)
         return contentObj != null && isNBTValid
     }
 

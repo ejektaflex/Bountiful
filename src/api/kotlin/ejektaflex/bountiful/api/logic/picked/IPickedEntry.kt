@@ -18,7 +18,7 @@ interface IPickedEntry : INBTSerializable<NBTTagCompound>, IValidatable, Cloneab
     /**
      * The accompanying NBT data of the picked item, if there is any
      */
-    val nbt: NBTTagCompound?
+    val tag: NBTTagCompound?
 
     /**
      * The subtype ([PickedEntryStack], [PickedEntryEntity], etc) of this entry

@@ -15,7 +15,7 @@ class PickedEntryStack(
         get() {
             val stack = content.toItemStack
             println("NBT JSON: ${genericPick.nbtJson}")
-            nbt?.let { stack?.tagCompound = it }
+            tag?.let { stack?.tagCompound = it }
             return stack
         }
 
@@ -30,7 +30,7 @@ class PickedEntryStack(
     }
 
     override fun toString(): String {
-        return "PickedEntry (Stack) [Item: $content, Amount: $amount, NBT: $nbt]"
+        return "PickedEntry (Stack) [Item: $content, Amount: $amount, NBT: $tag]"
     }
 
 

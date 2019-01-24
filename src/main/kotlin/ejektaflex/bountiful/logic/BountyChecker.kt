@@ -14,6 +14,13 @@ import kotlin.math.min
 
 object BountyChecker {
 
+    /**
+     * Simply checks whether the two stacks are the same item and have the same NBT data.
+     */
+    private fun validStackCheck(stack: ItemStack, other: ItemStack): Boolean {
+        return stack.isItemEqualIgnoreDurability(other) && ItemStack.areItemStackTagsEqual(stack, other)
+    }
+
     fun hasItems(player: EntityPlayer, inv: NonNullList<ItemStack>, data: BountyData): List<ItemStack>? {
         val stackPicked = data.toGet.items.mapNotNull { it as? PickedEntryStack }
 
@@ -29,7 +36,7 @@ object BountyChecker {
 
         // Check to see if bounty meets all prerequisites
         val hasAllItems = stackPicked.all { picked ->
-            val stacksMatching = prereqItems.filter { it.isItemEqualIgnoreDurability(picked.itemStack!!) }
+            val stacksMatching = prereqItems.filter { validStackCheck(it, picked.itemStack!!) }
             val hasEnough = stacksMatching.sumBy { it.count } >= picked.amount
             if (!hasEnough) {
                 player.sendTranslation("bountiful.cannot.fulfill")
@@ -47,7 +54,7 @@ object BountyChecker {
     fun takeItems(player: EntityPlayer, inv: NonNullList<ItemStack>, data: BountyData, matched: List<ItemStack>) {
         // If it does, reduce count of all relevant stacks
         data.toGet.items.mapNotNull { it as? PickedEntryStack }.forEach { picked ->
-            val stacksToChange = matched.filter { it.isItemEqualIgnoreDurability(picked.itemStack!!) }
+            val stacksToChange = matched.filter { validStackCheck(it, picked.itemStack!!) }
             for (stack in stacksToChange) {
                 if (picked.amount == 0) {
                     break
