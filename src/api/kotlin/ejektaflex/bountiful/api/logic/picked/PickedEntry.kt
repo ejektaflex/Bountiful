@@ -1,6 +1,5 @@
 package ejektaflex.bountiful.api.logic.picked
 
-import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import net.minecraft.nbt.*
 
@@ -18,7 +17,7 @@ open class PickedEntry(
                 null -> null
                 is String -> JsonToNBT.getTagFromJson(nbtJson.toString())
                 is NBTTagCompound -> nbtJson as NBTTagCompound
-                else -> throw Exception("NBT $nbtJson must be a String or a JsonElement! Instead was a: ${nbtJson!!::class}")
+                else -> throw Exception("NBT $nbtJson must be a String! Instead was a: ${nbtJson!!::class}")
             }
         }
 
