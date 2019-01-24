@@ -1,10 +1,8 @@
 package ejektaflex.bountiful.api.data
 
-import ejektaflex.bountiful.api.logic.pickable.IPickedEntry
-import ejektaflex.bountiful.api.logic.pickable.PickedEntry
-import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
+import ejektaflex.bountiful.api.logic.picked.IPickedEntry
+import ejektaflex.bountiful.api.logic.picked.PickedEntryStack
 import ejektaflex.bountiful.api.registry.IValueRegistry
-import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
 import net.minecraftforge.common.util.INBTSerializable

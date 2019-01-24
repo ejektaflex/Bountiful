@@ -1,6 +1,6 @@
 package ejektaflex.bountiful.api.ext
 
-import ejektaflex.bountiful.api.logic.IWeighted
+import ejektaflex.bountiful.api.data.IWeighted
 import net.minecraft.client.Minecraft
 import net.minecraft.command.ICommandSender
 import net.minecraft.entity.Entity

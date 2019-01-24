@@ -1,8 +1,8 @@
 package ejektaflex.bountiful.data
 
 import ejektaflex.bountiful.api.logic.pickable.PickableEntry
-import ejektaflex.bountiful.api.logic.pickable.PickedEntry
-import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
+import ejektaflex.bountiful.api.logic.picked.PickedEntry
+import ejektaflex.bountiful.api.logic.picked.PickedEntryStack
 import ejektaflex.bountiful.registry.ValueRegistry
 
 object DefaultData {
@@ -28,8 +28,8 @@ object DefaultData {
             PickableEntry("minecraft:sugar", 1..64, 55),
             PickableEntry("minecraft:tripwire_hook", 1..8, 70),
             PickableEntry("minecraft:wheat", 1..48, 20),
-            PickableEntry("entity:zombie", 1..8, 120, weight = 300),
-            PickableEntry("entity:skeleton", 1..6, 140, weight = 250)
+            PickableEntry("entity:minecraft:zombie", 1..8, 120, weight = 300),
+            PickableEntry("entity:minecraft:skeleton", 1..6, 140, weight = 250)
         )
     }
 

@@ -1,4 +1,4 @@
-package ejektaflex.bountiful.api.logic.pickable
+package ejektaflex.bountiful.api.logic.picked
 
 import ejektaflex.bountiful.api.data.IValidatable
 import net.minecraft.nbt.NBTTagCompound

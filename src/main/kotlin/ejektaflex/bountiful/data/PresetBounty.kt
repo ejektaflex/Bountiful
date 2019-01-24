@@ -1,8 +1,8 @@
 package ejektaflex.bountiful.data
 
 import ejektaflex.bountiful.api.data.IPresetBounty
-import ejektaflex.bountiful.api.logic.pickable.PickedEntry
-import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
+import ejektaflex.bountiful.api.logic.picked.PickedEntry
+import ejektaflex.bountiful.api.logic.picked.PickedEntryStack
 
 data class PresetBounty(
         override val objectives: MutableMap<String, Int> = mutableMapOf(),

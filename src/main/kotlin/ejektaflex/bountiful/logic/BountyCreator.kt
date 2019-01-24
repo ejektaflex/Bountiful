@@ -7,8 +7,8 @@ import ejektaflex.bountiful.api.ext.weightedRandom
 import ejektaflex.bountiful.api.logic.IBountyCreator
 import ejektaflex.bountiful.logic.error.BountyCreationException
 import ejektaflex.bountiful.api.logic.pickable.PickableEntry
-import ejektaflex.bountiful.api.logic.pickable.PickedEntry
-import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
+import ejektaflex.bountiful.api.logic.picked.PickedEntry
+import ejektaflex.bountiful.api.logic.picked.PickedEntryStack
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.registry.BountyRegistry
 import ejektaflex.bountiful.registry.RewardRegistry

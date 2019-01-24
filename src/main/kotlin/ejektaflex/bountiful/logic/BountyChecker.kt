@@ -2,8 +2,8 @@ package ejektaflex.bountiful.logic
 
 import ejektaflex.bountiful.api.ext.registryName
 import ejektaflex.bountiful.api.ext.sendTranslation
-import ejektaflex.bountiful.api.logic.pickable.PickedEntryEntity
-import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
+import ejektaflex.bountiful.api.logic.picked.PickedEntryEntity
+import ejektaflex.bountiful.api.logic.picked.PickedEntryStack
 import ejektaflex.bountiful.data.BountyData
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer

@@ -7,9 +7,9 @@ import ejektaflex.bountiful.api.ext.setUnsortedList
 import ejektaflex.bountiful.api.data.IBountyData
 import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.api.logic.BountyNBT
-import ejektaflex.bountiful.api.logic.pickable.IPickedEntry
-import ejektaflex.bountiful.api.logic.pickable.PickedEntry
-import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
+import ejektaflex.bountiful.api.logic.picked.IPickedEntry
+import ejektaflex.bountiful.api.logic.picked.PickedEntry
+import ejektaflex.bountiful.api.logic.picked.PickedEntryStack
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.registry.ValueRegistry
 import net.minecraft.client.resources.I18n

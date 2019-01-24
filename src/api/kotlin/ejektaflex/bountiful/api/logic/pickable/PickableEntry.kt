@@ -1,8 +1,10 @@
 package ejektaflex.bountiful.api.logic.pickable
 
 import ejektaflex.bountiful.api.data.IValidatable
-import ejektaflex.bountiful.api.logic.IWeighted
+import ejektaflex.bountiful.api.data.IWeighted
 import ejektaflex.bountiful.api.logic.ItemRange
+import ejektaflex.bountiful.api.logic.picked.IPickedEntry
+import ejektaflex.bountiful.api.logic.picked.PickedEntry
 
 
 open class PickableEntry(var content: String, var amount: ItemRange, var unitWorth: Int, override var weight: Int = 100) : IWeighted, IValidatable {
