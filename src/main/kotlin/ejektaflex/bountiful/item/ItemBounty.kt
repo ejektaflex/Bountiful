@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.ActionResult
 import net.minecraft.util.EnumHand
 import net.minecraft.world.World
+import org.lwjgl.input.Keyboard
 
 
 class ItemBounty : Item(), IItemBounty {
@@ -26,7 +27,8 @@ class ItemBounty : Item(), IItemBounty {
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<String>, flagIn: ITooltipFlag) {
         if (stack.hasTagCompound()) {
             val bounty = BountyData().apply { deserializeNBT(stack.tagCompound!!) }
-            for (line in bounty.tooltipInfo(worldIn!!)) {
+            val bountyTipInfo = bounty.tooltipInfo(worldIn!!, Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
+            for (line in bountyTipInfo) {
                 tooltip.add(line)
             }
         }
@@ -45,15 +47,6 @@ class ItemBounty : Item(), IItemBounty {
             EnumBountyRarity.getRarityFromInt(stack.tagCompound!!.getInteger(BountyNBT.Rarity.key)).itemRarity
         } else {
             super.getRarity(stack)
-        }
-    }
-
-    override fun removeTimestamp(stack: ItemStack) {
-        if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(BountyNBT.BountyStamp.key) && stack.tagCompound!!.hasKey(BountyNBT.BountyTime.key) ) {
-            stack.tagCompound!!.apply {
-                //setLong(BountyNBT.BountyTime.key, timeLeft(stack))
-                //removeTag(BountyNBT.BountyStamp.key)
-            }
         }
     }
 
