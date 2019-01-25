@@ -12,7 +12,11 @@ enum class EnumBountyRarity(val level: Int, val itemRarity: EnumRarity, val boun
 
     companion object {
         fun getRarityFromInt(n: Int): EnumBountyRarity {
-            return EnumBountyRarity.values()[n]
+            return if (n in 0 until values().size) {
+                EnumBountyRarity.values()[n]
+            } else {
+                Common
+            }
         }
     }
 }
