@@ -1,4 +1,4 @@
-package ejektaflex.bountiful.api.logic.pickable
+package ejektaflex.bountiful.api.logic.picked
 
 import com.google.gson.annotations.Expose
 import ejektaflex.bountiful.api.ext.toItemStack
@@ -12,7 +12,11 @@ class PickedEntryStack(
     override fun timeMult() = 1.0
 
     val itemStack: ItemStack?
-        get() = content.toItemStack
+        get() {
+            val stack = content.toItemStack
+            tag?.let { stack?.tagCompound = it }
+            return stack
+        }
 
     override val contentObj: Any?
         get() = itemStack
@@ -23,5 +27,10 @@ class PickedEntryStack(
     override fun isValid(): Boolean {
         return contentObj != null
     }
+
+    override fun toString(): String {
+        return "PickedEntry (Stack) [Item: $content, Amount: $amount, NBT: $tag]"
+    }
+
 
 }

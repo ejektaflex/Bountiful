@@ -7,9 +7,9 @@ import ejektaflex.bountiful.api.ext.setUnsortedList
 import ejektaflex.bountiful.api.data.IBountyData
 import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.api.logic.BountyNBT
-import ejektaflex.bountiful.api.logic.pickable.IPickedEntry
-import ejektaflex.bountiful.api.logic.pickable.PickedEntry
-import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
+import ejektaflex.bountiful.api.logic.picked.IPickedEntry
+import ejektaflex.bountiful.api.logic.picked.PickedEntry
+import ejektaflex.bountiful.api.logic.picked.PickedEntryStack
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.registry.ValueRegistry
 import net.minecraft.client.resources.I18n
@@ -45,13 +45,37 @@ class BountyData : IBountyData {
         return max(boardStamp + Bountiful.config.boardLifespan - world.totalWorldTime , 0)
     }
 
-    fun tooltipInfo(world: World): List<String> {
+    fun tooltipInfo(world: World, advanced: Boolean): List<String> {
+        return when (advanced) {
+            false -> tooltipInfoBasic(world)
+            true -> tooltipInfoAdvanced(world)
+        }
+    }
+
+    private fun tooltipInfoBasic(world: World): List<String> {
         return listOf(
                 //"Board Time: ${formatTickTime(boardTimeLeft(world) / boardTickFreq)}",
                 "${I18n.format("bountiful.tooltip.time")}: ${formatTimeExpirable(timeLeft(world) / bountyTickFreq)}",
                 getPretty,
-                rewardPretty
+                rewardPretty,
+                I18n.format("bountiful.tooltip.advanced")
         )
+    }
+
+    private fun tooltipInfoAdvanced(world: World): List<String> {
+        val cycleLength = 27 // ticks per cycle
+
+        val getItems: List<Pair<IPickedEntry, String>> =  toGet.items.filter { it is PickedEntryStack }.map { it to I18n.format("bountiful.tooltip.requiredDetails") }
+        val getRewards: List<Pair<IPickedEntry, String>> =  rewards.items.map { it to I18n.format("bountiful.tooltip.rewardsDetails") }
+        val allGets = getItems + getRewards
+
+        return if (allGets.isEmpty()) {
+            listOf()
+        } else {
+            val itemIndex = (world.totalWorldTime % (allGets.size * cycleLength)) / cycleLength
+            val itemToShow = allGets[itemIndex.toInt()]
+            listOf(itemToShow.second) + (itemToShow.first as PickedEntryStack).itemStack!!.getTooltip(null) { false }
+        }
     }
 
     private fun formatTickTime(n: Long): String {

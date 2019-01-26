@@ -1,6 +1,6 @@
 package ejektaflex.bountiful.registry
 
-import ejektaflex.bountiful.data.PresetBounty
+import ejektaflex.bountiful.api.data.PresetBounty
 
 /**
  * A registry containing all premade bounties

@@ -1,7 +1,7 @@
 package ejektaflex.bountiful.api.ext
 
-import ejektaflex.bountiful.api.logic.pickable.IPickedEntry
-import ejektaflex.bountiful.api.logic.pickable.PickedEntry
+import ejektaflex.bountiful.api.logic.picked.IPickedEntry
+import ejektaflex.bountiful.api.logic.picked.PickedEntry
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.INBTSerializable
 

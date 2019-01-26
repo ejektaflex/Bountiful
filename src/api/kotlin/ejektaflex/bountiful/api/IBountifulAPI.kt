@@ -4,7 +4,7 @@ import ejektaflex.bountiful.api.block.ITileEntityBountyBoard
 import ejektaflex.bountiful.api.config.IBountifulConfig
 import ejektaflex.bountiful.api.data.IBountyData
 import ejektaflex.bountiful.api.logic.pickable.PickableEntry
-import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
+import ejektaflex.bountiful.api.logic.picked.PickedEntryStack
 import ejektaflex.bountiful.api.registry.IValueRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos

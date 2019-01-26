@@ -1,18 +1,17 @@
 package ejektaflex.bountiful.api.data
 
-import ejektaflex.bountiful.api.logic.IWeighted
-import ejektaflex.bountiful.api.logic.pickable.IPickedEntry
+import ejektaflex.bountiful.api.logic.picked.IPickedEntry
 
 interface IPresetBounty : IWeighted {
     /**
      * A list of strings representing which objectives you must complete in order to complete the bounty, as well as the amount of each
      */
-    val objectives: MutableMap<String, Int>
+    val objectives: MutableList<PresetBounty.BountyObjective>
 
     /**
      * A list of strings representing stacks which are the rewards completing the bounty.
      */
-    val rewards: MutableMap<String, Int>
+    val rewards: MutableList<PresetBounty.BountyReward>
 
     /**
      * The weight for how often this bounty should be chosen out of the list of preset bounties.

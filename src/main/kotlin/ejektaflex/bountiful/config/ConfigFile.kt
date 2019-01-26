@@ -57,7 +57,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 CATEGORY_BOARD,
                 "Max Bounties Per Board At A Time",
                 17,
-                "How many entries should be on a bounty board at a given bountyTime. (Max: 27, Default: 17)"
+                "How many entries should be on a bounty board at a given time. (Max: 27, Default: 17)"
         ).int.clampTo(1..27)
 
         boardAddFrequency = max(config.get(

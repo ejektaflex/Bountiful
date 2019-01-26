@@ -7,8 +7,8 @@ import ejektaflex.bountiful.api.ext.weightedRandom
 import ejektaflex.bountiful.api.logic.IBountyCreator
 import ejektaflex.bountiful.logic.error.BountyCreationException
 import ejektaflex.bountiful.api.logic.pickable.PickableEntry
-import ejektaflex.bountiful.api.logic.pickable.PickedEntry
-import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
+import ejektaflex.bountiful.api.logic.picked.PickedEntry
+import ejektaflex.bountiful.api.logic.picked.PickedEntryStack
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.registry.BountyRegistry
 import ejektaflex.bountiful.registry.RewardRegistry
@@ -110,14 +110,15 @@ object BountyCreator : IBountyCreator {
             val maxNumOfReward = worthLeft / reward.amount
             val worthSated = reward.amount * maxNumOfReward
             worthLeft -= worthSated
-            toRet.add(PickedEntryStack(PickedEntry(reward.content, maxNumOfReward)))
+            val rewardClone = PickedEntryStack(PickedEntry(reward.content, maxNumOfReward, reward.tag?.toString()))
+            toRet.add(rewardClone)
             validRewards = RewardRegistry.items.filter { it.amount <= worthLeft && it.contentObj !in picked }.sortedBy { it.amount }
         }
 
         // If there were no valid rewards, find the cheapest item
         if (toRet.isEmpty()) {
             val lowestWorthItem = RewardRegistry.items.minBy { it.amount }!!
-            toRet.add(PickedEntryStack(PickedEntry(lowestWorthItem.content, 1)))
+            toRet.add(PickedEntryStack(PickedEntry(lowestWorthItem.content, 1, lowestWorthItem.tag?.toString())))
         }
 
         return toRet

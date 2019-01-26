@@ -18,10 +18,6 @@ interface IItemBounty : IForgeRegistryEntry<Item> {
      */
     fun tryExpireBountyTime(stack: ItemStack)
 
-    /**
-     * Removes the bountyStamp from the given bounty.
-     */
-    fun removeTimestamp(stack: ItemStack)
 
     /**
      * Decrements the amount of bountyTime left on the board. Returns true if it's run out.
