@@ -1,6 +1,7 @@
 package ejektaflex.bountiful.command
 
 import ejektaflex.bountiful.Bountiful
+import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.config.BountifulIO
 import ejektaflex.bountiful.api.ext.sendMessage
 import ejektaflex.bountiful.api.ext.sendTranslation
@@ -13,6 +14,7 @@ import net.minecraft.command.ICommand
 import net.minecraft.command.ICommandSender
 import net.minecraft.entity.EntityLiving
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.ItemStack
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.fml.common.registry.ForgeRegistries
@@ -40,6 +42,13 @@ class BountyCommand : ICommand {
         return aliases
     }
 
+    private fun safeGivePlayer(sender: ICommandSender, item: ItemStack) {
+        val playerProfile = sender.server?.playerList?.onlinePlayerProfiles?.find { sender.name == it.name }
+        if (playerProfile != null && sender.server?.playerList?.canSendCommands(playerProfile) == true) {
+            ItemHandlerHelper.giveItemToPlayer(sender.commandSenderEntity as EntityPlayer, item)
+        }
+    }
+
     @Throws(CommandException::class)
     override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<String>) {
 
@@ -58,7 +67,7 @@ class BountyCommand : ICommand {
                         }
 
                         if (BountyRegistry.items.size < Bountiful.config.bountyAmountRange.last) {
-                            sender.sendMessage("bountiful.toofew.bounties")
+                            sender.sendTranslation("bountiful.toofew.bounties")
                             BountyRegistry.restore(bountyBackup)
                         }
 
@@ -69,10 +78,19 @@ class BountyCommand : ICommand {
                     }
                 }
                 "gen" -> {
-                    val playerProfile = sender.server?.playerList?.onlinePlayerProfiles?.find { sender.name == it.name }
-                    if (playerProfile != null && sender.server?.playerList?.canSendCommands(playerProfile) == true) {
-                        ItemHandlerHelper.giveItemToPlayer(sender.commandSenderEntity as EntityPlayer, BountyCreator.createStack(sender.entityWorld))
+                    //BountyCreator.createStack(sender.entityWorld)
+                    when (args.drop(1).size) {
+                        0 -> safeGivePlayer(sender, BountyCreator.createStack(sender.entityWorld))
+                        else -> {
+                            val rarity = EnumBountyRarity.values().find { it.name.toLowerCase().startsWith(args.drop(1).first()) }
+                            if (rarity != null) {
+                                safeGivePlayer(sender, BountyCreator.createStack(sender.entityWorld, rarity))
+                            } else {
+                                sender.sendTranslation("bountiful.command.gen.invalid")
+                            }
+                        }
                     }
+
                 }
                 "expire" -> {
                     val player = sender.commandSenderEntity as EntityPlayer

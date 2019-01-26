@@ -23,8 +23,8 @@ object BountyCreator : IBountyCreator {
 
     private val rand = Random()
 
-    override fun createStack(world: World): ItemStack {
-        return ContentRegistry.bounty.let { ItemStack(it).apply { it.ensureBounty(this, world) } }
+    override fun createStack(world: World, rarity: EnumBountyRarity?): ItemStack {
+        return ContentRegistry.bounty.let { ItemStack(it).apply { it.ensureBounty(this, world, rarity) } }
     }
 
     override fun calcRarity(): EnumBountyRarity {

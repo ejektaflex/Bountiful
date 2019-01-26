@@ -97,10 +97,10 @@ class ItemBounty : Item(), IItemBounty {
         }
     }
 
-    override fun ensureBounty(stack: ItemStack, worldIn: World) {
+    override fun ensureBounty(stack: ItemStack, worldIn: World, rarity: EnumBountyRarity?) {
         if (stack.item is ItemBounty) {
             if (!stack.hasTagCompound()) {
-                stack.tagCompound = BountyCreator.create().serializeNBT().apply {
+                stack.tagCompound = BountyCreator.create(rarity).serializeNBT().apply {
                     this.removeTag(BountyNBT.BountyStamp.key)
                     this.setLong(BountyNBT.BoardStamp.key, worldIn.totalWorldTime)
                 }

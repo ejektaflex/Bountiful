@@ -9,7 +9,7 @@ interface IBountyCreator {
     /**
      * Creates a new, randomized bounty
      */
-    fun createStack(world: World): ItemStack
+    fun createStack(world: World, rarity: EnumBountyRarity? = null): ItemStack
 
     /**
      * Generates a random rarity according to the Bountiful config
