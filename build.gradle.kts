@@ -2,7 +2,7 @@
 import org.gradle.language.jvm.tasks.ProcessResources
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val v_forgelin = "1.7.3"
+val v_forgelin = "1.8.2"
 val v_jei = "4.11.0.206"
 val v_minecraft_root = "1.12"
 val v_minecraft = "$v_minecraft_root.2"

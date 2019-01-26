@@ -22,5 +22,6 @@ interface IBountifulConfig {
     val greedyRewards: Boolean
     val villageGeneration: Boolean
     val randomBounties: Boolean
+    val boardDrops: Boolean
     fun load()
 }

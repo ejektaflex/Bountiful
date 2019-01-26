@@ -43,6 +43,8 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private set
     override var randomBounties: Boolean = true
         private set
+    override var boardDrops: Boolean = true
+        private set
 
 
     private var bountyAmountMax = 2
@@ -173,6 +175,13 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 "Village Generation",
                 true,
                 "Whether or not bounty boards naturally generate in villages (Default: true)."
+        ).boolean
+
+        boardDrops = config.get(
+                CATEGORY_BOARD,
+                "Board Drops on Break",
+                true,
+                "Whether or not bounty boards will drop when broken (Default: true)."
         ).boolean
 
         /*
