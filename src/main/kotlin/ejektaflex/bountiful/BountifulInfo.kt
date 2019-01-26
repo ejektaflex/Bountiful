@@ -4,7 +4,7 @@ object BountifulInfo {
     const val ADAPTER = "net.shadowfacts.forgelin.KotlinAdapter"
     const val MODID = "bountiful"
     const val NAME = "Bountiful"
-    const val VERSION = "2.1.0"
+    const val VERSION = "2.2.0"
     const val DEPENDS = "required-after:forgelin@[1.8.0,1.9.0);"
     const val CLIENT = "ejektaflex.bountiful.proxy.ClientProxy"
     const val SERVER = "ejektaflex.bountiful.proxy.CommonProxy"

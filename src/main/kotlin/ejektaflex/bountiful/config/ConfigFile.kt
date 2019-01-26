@@ -45,6 +45,9 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private set
     override var boardDrops: Boolean = true
         private set
+    override var xpBonuses = listOf(5, 10, 15, 25)
+
+
 
 
     private var bountyAmountMax = 2
@@ -184,6 +187,14 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 "Whether or not bounty boards will drop when broken (Default: true)."
         ).boolean
 
+        xpBonuses = config.get(
+                CATEGORY_MISC,
+                "How much experience each rarity of bounty should give you.",
+                listOf(5, 10, 15, 25).toTypedArray().toIntArray(),
+                "A multiplier for how much a common bounty is worth. (Default: 5 (Common), 10 (Uncommon), 15 (Rare), 25 (Epic))"
+        ).intList.toList()
+
+
         /*
         randomBounties = config.get(
                 CATEGORY_BOUNTY,
@@ -230,6 +241,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private const val CATEGORY_BOUNTY = "bounty"
         private const val CATEGORY_RARITY = "rarity"
         private const val CATEGORY_REWARDS = "rewards"
+        private const val CATEGORY_MISC = "misc"
     }
 
 }

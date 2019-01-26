@@ -28,7 +28,7 @@ bountiful.stat.bountiesEpic=Bounties Completed (Epic)
 
 bountiful.toofew.bounties=§4Your config file does not contain enough valid bounties. Reverting to previous bounty data.
 
-bountiful.tooltip.advanced=Hold Shift for details
+bountiful.tooltip.advanced=Hold Shift for item details
 bountiful.tooltip.time=Time To Complete
 bountiful.tooltip.required=Required
 bountiful.tooltip.rewards=Rewards

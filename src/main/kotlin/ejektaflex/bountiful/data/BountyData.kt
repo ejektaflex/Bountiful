@@ -5,6 +5,7 @@ import ejektaflex.bountiful.api.ext.getPickedEntryList
 import ejektaflex.bountiful.api.ext.getUnsortedList
 import ejektaflex.bountiful.api.ext.setUnsortedList
 import ejektaflex.bountiful.api.data.IBountyData
+import ejektaflex.bountiful.api.ext.modOriginName
 import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.api.logic.BountyNBT
 import ejektaflex.bountiful.api.logic.picked.IPickedEntry
@@ -74,7 +75,8 @@ class BountyData : IBountyData {
         } else {
             val itemIndex = (world.totalWorldTime % (allGets.size * cycleLength)) / cycleLength
             val itemToShow = allGets[itemIndex.toInt()]
-            listOf(itemToShow.second) + (itemToShow.first as PickedEntryStack).itemStack!!.getTooltip(null) { false }
+            val istack = (itemToShow.first as PickedEntryStack).itemStack!!
+            listOf(itemToShow.second) + istack.getTooltip(null) { false } + (istack.modOriginName?.let { listOf("§9§o$it§r") } ?: listOf<String>())
         }
     }
 

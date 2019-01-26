@@ -23,5 +23,6 @@ interface IBountifulConfig {
     val villageGeneration: Boolean
     val randomBounties: Boolean
     val boardDrops: Boolean
+    val xpBonuses: List<Int>
     fun load()
 }

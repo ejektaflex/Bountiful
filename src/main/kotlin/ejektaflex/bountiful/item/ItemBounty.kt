@@ -152,10 +152,14 @@ class ItemBounty : Item(), IItemBounty {
             // Reward player with rewards
             BountyChecker.rewardItems(player, bounty, bountyItem)
 
+            val bountyRarity = EnumBountyRarity.getRarityFromInt(bounty.rarity)
+
             // Increment stats
             player.addStat(BountifulStats.bountiesCompleted)
-            player.addStat(EnumBountyRarity.getRarityFromInt(bounty.rarity).stat)
+            player.addStat(bountyRarity.stat)
 
+            // Give XP
+            player.addExperience(bountyRarity.xp)
 
             true
         }
