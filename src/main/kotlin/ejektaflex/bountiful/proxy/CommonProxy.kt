@@ -97,8 +97,10 @@ open class CommonProxy : IProxy {
             BountifulIO.populateConfigFolder(Bountiful.configDir, DefaultData.rewards.items.map { item ->
                 item.genericPick
             }, it)
-            val invalid = BountifulIO.hotReloadRewards()
-            println("Invalid rewards: $invalid")
+            val invalids = BountifulIO.hotReloadRewards()
+            if (invalids.isNotEmpty()) {
+                throw Exception("'bountiful/rewards.json' contains one or more invalid rewards. Invalid rewards: $invalids")
+            }
         }
 
         BountifulStats.register()

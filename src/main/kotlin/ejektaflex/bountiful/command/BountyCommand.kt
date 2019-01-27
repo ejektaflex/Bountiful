@@ -63,6 +63,7 @@ class BountyCommand : ICommand {
                 // "/bo bounties" & "/bo rewards" are only meant to be used in dev right now
                 "bounties" -> {
                     if (hasBasicPerms(sender)) {
+                        sender.sendMessage("§6Bounties:")
                         for (bo in BountyRegistry.items) {
                             sender.sendMessage(bo.toString())
                         }
@@ -71,6 +72,7 @@ class BountyCommand : ICommand {
                 }
                 "rewards" -> {
                     if (hasBasicPerms(sender)) {
+                        sender.sendMessage("§6Rewards:")
                         for (re in RewardRegistry.items) {
                             sender.sendMessage(re.toString())
                         }

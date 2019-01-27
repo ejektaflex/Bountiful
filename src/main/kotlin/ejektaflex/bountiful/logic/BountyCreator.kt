@@ -99,7 +99,7 @@ object BountyCreator : IBountyCreator {
         var worthLeft = n
         val toRet = mutableListOf<PickedEntryStack>()
         val picked = mutableListOf<String>()
-        var validRewards: List<PickedEntryStack> = RewardRegistry.items.filter { it.amount <= worthLeft && it.content !in picked }.sortedBy { it.amount }
+        var validRewards: List<PickedEntryStack> = RewardRegistry.validRewards(worthLeft, picked)
 
         while (validRewards.isNotEmpty()) {
             val reward = when (Bountiful.config.greedyRewards) {
@@ -112,12 +112,12 @@ object BountyCreator : IBountyCreator {
             worthLeft -= worthSated
             val rewardClone = PickedEntryStack(PickedEntry(reward.content, maxNumOfReward, nbtJson = reward.tag?.toString()))
             toRet.add(rewardClone)
-            validRewards = RewardRegistry.items.filter { it.amount <= worthLeft && it.contentObj !in picked }.sortedBy { it.amount }
+            validRewards = RewardRegistry.validRewards(worthLeft, picked)
         }
 
-        // If there were no valid rewards, find the cheapest item
+        // If there were no valid rewards, find the cheapest item and give them that.
         if (toRet.isEmpty()) {
-            val lowestWorthItem = RewardRegistry.items.minBy { it.amount }!!
+            val lowestWorthItem = RewardRegistry.validRewards().minBy { it.amount }!!
             toRet.add(PickedEntryStack(PickedEntry(lowestWorthItem.content, 1, nbtJson = lowestWorthItem.tag?.toString())))
         }
 
