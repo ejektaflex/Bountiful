@@ -25,11 +25,11 @@ open class PickableEntry(
         get() = (amount.min..amount.max).random()
 
     override fun toString(): String {
-        return "Pickable [Item: $content, Amount: ${amount.min..amount.max}, Unit Worth: $unitWorth]"
+        return "Pickable [Item: $content, Amount: ${amount.min..amount.max}, Unit Worth: $unitWorth, Weight: $weight]"
     }
 
     fun pick(): IPickedEntry {
-        return PickedEntry(content, randCount, nbtJson).typed()
+        return PickedEntry(content, randCount, nbtJson = nbtJson).typed()
     }
 
     override fun isValid(): Boolean {

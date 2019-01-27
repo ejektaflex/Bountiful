@@ -9,6 +9,7 @@ import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.logic.error.BountyCreationException
 import ejektaflex.bountiful.registry.BountyRegistry
+import ejektaflex.bountiful.registry.RewardRegistry
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommand
 import net.minecraft.command.ICommandSender
@@ -42,9 +43,13 @@ class BountyCommand : ICommand {
         return aliases
     }
 
-    private fun safeGivePlayer(sender: ICommandSender, item: ItemStack) {
+    private fun hasBasicPerms(sender: ICommandSender): Boolean {
         val playerProfile = sender.server?.playerList?.onlinePlayerProfiles?.find { sender.name == it.name }
-        if (playerProfile != null && sender.server?.playerList?.canSendCommands(playerProfile) == true) {
+        return playerProfile != null && sender.server?.playerList?.canSendCommands(playerProfile) == true
+    }
+
+    private fun safeGivePlayer(sender: ICommandSender, item: ItemStack) {
+        if (hasBasicPerms(sender)) {
             ItemHandlerHelper.giveItemToPlayer(sender.commandSenderEntity as EntityPlayer, item)
         }
     }
@@ -54,6 +59,24 @@ class BountyCommand : ICommand {
 
         if (args.isNotEmpty()) {
             when (val curr: String = args[0]) {
+
+                // "/bo bounties" & "/bo rewards" are only meant to be used in dev right now
+                "bounties" -> {
+                    if (hasBasicPerms(sender)) {
+                        for (bo in BountyRegistry.items) {
+                            sender.sendMessage(bo.toString())
+                        }
+                    }
+
+                }
+                "rewards" -> {
+                    if (hasBasicPerms(sender)) {
+                        for (re in RewardRegistry.items) {
+                            sender.sendMessage(re.toString())
+                        }
+                    }
+                }
+
                 "reload" -> {
                     try {
                         sender.sendTranslation("bountiful.reloading.data")

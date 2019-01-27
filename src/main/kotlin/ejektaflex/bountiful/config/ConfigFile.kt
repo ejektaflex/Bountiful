@@ -45,7 +45,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private set
     override var boardDrops: Boolean = true
         private set
-    override var xpBonuses = listOf(5, 10, 15, 25)
+    override var xpBonuses = listOf(4, 10, 15, 25)
 
 
 
@@ -121,7 +121,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 CATEGORY_BOUNTY,
                 "Minimum Bounty Time",
                 6000,
-                "The minimum time, in ticks, required to complete a bounty. (Default: 4800)"
+                "The minimum time, in ticks, required to complete a bounty. (Default: 6000)"
         ).int.clampTo(10..Int.MAX_VALUE)
 
         shouldCountdownOnBoard = config.get(
@@ -190,7 +190,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         xpBonuses = config.get(
                 CATEGORY_MISC,
                 "How much experience each rarity of bounty should give you.",
-                listOf(5, 10, 15, 25).toTypedArray().toIntArray(),
+                listOf(4, 10, 15, 25).toTypedArray().toIntArray(),
                 "A multiplier for how much a common bounty is worth. (Default: 5 (Common), 10 (Uncommon), 15 (Rare), 25 (Epic))"
         ).intList.toList()
 
