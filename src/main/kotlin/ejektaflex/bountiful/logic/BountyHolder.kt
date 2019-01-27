@@ -22,7 +22,13 @@ open class BountyHolder(override val handler: ItemStackHandler) : IBountyHolder,
         for (slot in handler.slotRange) {
             val bounty = handler.getStackInSlot(slot)
             if (bounty.item is ItemBounty) {
-                val data = BountyData.from(bounty)
+                // Try get bounty data. If it fails, just skip to the next bounty.
+                val data = if (BountyData.isValidBounty(bounty)) {
+                    BountyData.from(bounty)
+                } else {
+                    continue
+                }
+
                 val bountyItem = bounty.item as ItemBounty
 
                 if (Bountiful.config.shouldCountdownOnBoard) {

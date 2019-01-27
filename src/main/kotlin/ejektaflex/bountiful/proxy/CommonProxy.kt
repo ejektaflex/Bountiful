@@ -12,6 +12,7 @@ import ejektaflex.bountiful.logic.BountyChecker
 import ejektaflex.bountiful.registry.BountyRegistry
 import ejektaflex.bountiful.registry.RewardRegistry
 import ejektaflex.bountiful.api.stats.BountifulStats
+import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.worldgen.VillageBoardComponent
 import ejektaflex.bountiful.worldgen.VillageBoardCreationHandler
@@ -44,7 +45,7 @@ open class CommonProxy : IProxy {
             val bountyStacks = player.inventory.mainInventory.filter { it.item is ItemBounty }
             if (bountyStacks.isNotEmpty()) {
                 bountyStacks.forEach { stack ->
-                    val data = (stack.item as ItemBounty).getBountyData(stack)
+                    val data = BountyData.from(stack)
                     BountyChecker.tryTakeEntities(player, data, stack, e.entityLiving)
                 }
             }
@@ -67,9 +68,13 @@ open class CommonProxy : IProxy {
         e.addCapability(ResourceLocation(BountifulInfo.MODID, "GlobalData"), GlobBoardProvider())
     }
 
-    // Cancel first posting to board on board creation (as first update is immediate after placement)
     @SubscribeEvent
     fun onBoardPost(e: PopulateBountyBoardEvent) {
+        // Don't post bounties without data to the bounty board.
+        if (!e.stack.hasTagCompound()) {
+            e.isCanceled = true
+        }
+        // Cancel first posting to board on board creation (as first update is immediate after placement)
         e.board?.let {
             if (it.newBoard) {
                 it.newBoard = false

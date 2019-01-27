@@ -2,6 +2,7 @@ package ejektaflex.bountiful.logic
 
 import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.ContentRegistry
+import ejektaflex.bountiful.api.data.IBountyData
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.api.ext.weightedRandom
 import ejektaflex.bountiful.api.logic.IBountyCreator
@@ -41,7 +42,9 @@ object BountyCreator : IBountyCreator {
     }
 
     private fun createRandomBounty(inRarity: EnumBountyRarity?): BountyData {
-
+        if (RewardRegistry.validRewards().isEmpty()) {
+            throw BountyCreationException("There are no valid rewards in the reward registry!")
+        }
 
         // Shuffle bounty registry and take a random number of bounty items
         val pickedAlready = mutableListOf<PickableEntry>()
@@ -87,7 +90,7 @@ object BountyCreator : IBountyCreator {
         return BountyData()
     }
 
-    override fun create(inRarity: EnumBountyRarity?): BountyData {
+    override fun create(inRarity: EnumBountyRarity?): BountyData? {
         return if (Bountiful.config.randomBounties) {
             createRandomBounty(inRarity)
         } else {

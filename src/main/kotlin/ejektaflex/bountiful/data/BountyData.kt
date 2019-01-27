@@ -147,9 +147,18 @@ class BountyData : IBountyData {
         const val bountyTickFreq = 20L
         const val boardTickFreq = 20L
 
-        fun from(stack: ItemStack): IBountyData {
+        fun isValidBounty(stack: ItemStack): Boolean {
+            return try {
+                from(stack)
+                true
+            } catch (e: Exception) {
+                false
+            }
+        }
+
+        fun from(stack: ItemStack): BountyData {
             if (stack.item is ItemBounty) {
-                return (stack.item as IItemBounty).getBountyData(stack)
+                return (stack.item as IItemBounty).getBountyData(stack) as BountyData
             } else {
                 throw Exception("${stack.displayName} is not an IItemBounty and cannot be converted to bounty data!")
             }

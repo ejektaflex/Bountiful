@@ -1,6 +1,8 @@
 package ejektaflex.bountiful.api.item
 
+import ejektaflex.bountiful.api.BountifulAPI
 import ejektaflex.bountiful.api.data.IBountyData
+import ejektaflex.bountiful.api.data.IValidatable
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack

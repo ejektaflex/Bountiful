@@ -5,8 +5,10 @@ import ejektaflex.bountiful.api.block.ITileEntityBountyBoard
 import ejektaflex.bountiful.api.config.IBountifulConfig
 import ejektaflex.bountiful.api.ext.stacks
 import ejektaflex.bountiful.api.data.IBountyData
+import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.block.TileEntityBountyBoard
 import ejektaflex.bountiful.data.BountyData
+import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.registry.BountyRegistry
 import ejektaflex.bountiful.registry.RewardRegistry
 import net.minecraft.item.ItemStack
@@ -36,5 +38,9 @@ object InternalAPI : IBountifulAPI {
 
     override val config: IBountifulConfig
         get() = Bountiful.config
+
+    override fun createBountyData(rarity: EnumBountyRarity?): BountyData? {
+        return BountyCreator.create(rarity)
+    }
 
 }
