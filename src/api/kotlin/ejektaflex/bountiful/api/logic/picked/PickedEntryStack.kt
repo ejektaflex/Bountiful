@@ -29,7 +29,7 @@ class PickedEntryStack(
     }
 
     override fun toString(): String {
-        return "PickedEntry (Stack) [Item: $content, Amount: $amount, NBT: $tag]"
+        return "PickedEntry (Stack) [Item: $content, Amount: $amount, NBT: $tag, Weight: $weight]"
     }
 
 

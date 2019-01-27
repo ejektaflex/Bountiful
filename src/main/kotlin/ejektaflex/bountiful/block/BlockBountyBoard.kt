@@ -1,6 +1,7 @@
 package ejektaflex.bountiful.block
 
 import ejektaflex.bountiful.Bountiful
+import ejektaflex.bountiful.api.BountifulAPI
 import ejektaflex.bountiful.api.ext.filledSlots
 import ejektaflex.bountiful.api.ext.sendTranslation
 import ejektaflex.bountiful.gui.GuiHandler
@@ -11,8 +12,10 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumHand
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.Explosion
 import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
+import java.util.*
 
 class BlockBountyBoard : BlockTileEntity<TileEntityBountyBoard>(Material.WOOD, "bountyboard") {
 
@@ -65,6 +68,14 @@ class BlockBountyBoard : BlockTileEntity<TileEntityBountyBoard>(Material.WOOD, "
 
     override fun hasComparatorInputOverride(state: IBlockState): Boolean {
         return true
+    }
+
+    override fun quantityDropped(random: Random): Int {
+        return if (BountifulAPI.config.boardDrops) super.quantityDropped(random) else 0
+    }
+
+    override fun quantityDroppedWithBonus(fortune: Int, random: Random): Int {
+        return if (BountifulAPI.config.boardDrops) super.quantityDroppedWithBonus(fortune, random) else 0
     }
 
     override fun getComparatorInputOverride(blockState: IBlockState, worldIn: World, pos: BlockPos): Int {

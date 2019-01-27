@@ -1,5 +1,6 @@
-package ejektaflex.bountiful.api.data
+package ejektaflex.bountiful.api.adapter
 
+import ejektaflex.bountiful.api.data.IWeighted
 import ejektaflex.bountiful.api.logic.picked.IPickedEntry
 
 interface IPresetBounty : IWeighted {

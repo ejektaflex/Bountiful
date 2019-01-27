@@ -2,6 +2,7 @@ package ejektaflex.bountiful.api.ext
 
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraftforge.fml.common.Loader
 
 val ItemStack.toNBT: NBTTagCompound
     get() {
@@ -18,5 +19,15 @@ val NBTTagCompound.toItemStack: ItemStack?
         return istack?.apply {
             count = getInteger("e_amt")
             tagCompound = getCompoundTag("e_nbt")
+        }
+    }
+
+val ItemStack.modOriginName: String?
+    get() {
+        val modid = item.registryName?.resourceDomain
+        return if (modid != null) {
+            Loader.instance().modList.find { it.modId == modid }?.name
+        } else {
+            null
         }
     }

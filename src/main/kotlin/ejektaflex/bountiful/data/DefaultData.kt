@@ -28,6 +28,7 @@ object DefaultData {
             PickableEntry("minecraft:sugar", 1..64, 55),
             PickableEntry("minecraft:tripwire_hook", 1..8, 70),
             PickableEntry("minecraft:wheat", 1..48, 20),
+            PickableEntry("minecraft:leather", 1..12, 90),
             PickableEntry("entity:minecraft:zombie", 1..8, 120, weight = 300),
             PickableEntry("entity:minecraft:skeleton", 1..6, 140, weight = 250),
             PickableEntry("minecraft:potion", 1..3, 300, nbtJson = "{Potion: \"minecraft:healing\"}")
@@ -37,7 +38,14 @@ object DefaultData {
     val rewards = ValueRegistry<PickedEntryStack>().apply {
         add(
                 PickedEntryStack(PickedEntry("minecraft:gold_nugget", 100)),
-                PickedEntryStack(PickedEntry("minecraft:gold_ingot", 900))
+                PickedEntryStack(PickedEntry("minecraft:gold_ingot", 900)),
+                PickedEntryStack(PickedEntry("minecraft:diamond", 2400, 10)),
+                PickedEntryStack(PickedEntry("minecraft:potion", 800, 5)),
+                PickedEntryStack(PickedEntry("minecraft:iron_sword", 750, 5, nbtJson = "{display:{Lore:[\"Sharper than Usual.\"]},ench:[{id:16,lvl:1}]}")),
+                PickedEntryStack(PickedEntry("minecraft:leather_helmet", 500, 5)),
+                PickedEntryStack(PickedEntry("minecraft:leather_boots", 450, 5)),
+                PickedEntryStack(PickedEntry("minecraft:iron_chestplate", 1800, 5)),
+                PickedEntryStack(PickedEntry("minecraft:golden_chestplate", 1200, 5))
         )
     }
 

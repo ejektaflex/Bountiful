@@ -8,6 +8,7 @@ open class PickedEntry(
         override var content: String = "UNDEFINED",
         @SerializedName("unitWorth")
         override var amount: Int = Integer.MIN_VALUE,
+        override var weight: Int = 100,
         @SerializedName("nbt_data")
         override var nbtJson: String? = null
 ) : IPickedEntry, IHasTag {

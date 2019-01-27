@@ -5,6 +5,7 @@ import ejektaflex.bountiful.api.ext.getPickedEntryList
 import ejektaflex.bountiful.api.ext.getUnsortedList
 import ejektaflex.bountiful.api.ext.setUnsortedList
 import ejektaflex.bountiful.api.data.IBountyData
+import ejektaflex.bountiful.api.ext.modOriginName
 import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.api.logic.BountyNBT
 import ejektaflex.bountiful.api.logic.picked.IPickedEntry
@@ -74,7 +75,8 @@ class BountyData : IBountyData {
         } else {
             val itemIndex = (world.totalWorldTime % (allGets.size * cycleLength)) / cycleLength
             val itemToShow = allGets[itemIndex.toInt()]
-            listOf(itemToShow.second) + (itemToShow.first as PickedEntryStack).itemStack!!.getTooltip(null) { false }
+            val istack = (itemToShow.first as PickedEntryStack).itemStack!!
+            listOf(itemToShow.second) + istack.getTooltip(null) { false } + (istack.modOriginName?.let { listOf("§9§o$it§r") } ?: listOf<String>())
         }
     }
 
@@ -145,9 +147,18 @@ class BountyData : IBountyData {
         const val bountyTickFreq = 20L
         const val boardTickFreq = 20L
 
-        fun from(stack: ItemStack): IBountyData {
+        fun isValidBounty(stack: ItemStack): Boolean {
+            return try {
+                from(stack)
+                true
+            } catch (e: Exception) {
+                false
+            }
+        }
+
+        fun from(stack: ItemStack): BountyData {
             if (stack.item is ItemBounty) {
-                return (stack.item as IItemBounty).getBountyData(stack)
+                return (stack.item as IItemBounty).getBountyData(stack) as BountyData
             } else {
                 throw Exception("${stack.displayName} is not an IItemBounty and cannot be converted to bounty data!")
             }

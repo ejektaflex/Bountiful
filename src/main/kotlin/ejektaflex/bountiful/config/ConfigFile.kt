@@ -43,6 +43,11 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private set
     override var randomBounties: Boolean = true
         private set
+    override var boardDrops: Boolean = true
+        private set
+    override var xpBonuses = listOf(4, 10, 15, 25)
+
+
 
 
     private var bountyAmountMax = 2
@@ -116,7 +121,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 CATEGORY_BOUNTY,
                 "Minimum Bounty Time",
                 6000,
-                "The minimum time, in ticks, required to complete a bounty. (Default: 4800)"
+                "The minimum time, in ticks, required to complete a bounty. (Default: 6000)"
         ).int.clampTo(10..Int.MAX_VALUE)
 
         shouldCountdownOnBoard = config.get(
@@ -165,7 +170,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 CATEGORY_REWARDS,
                 "Greedy Rewards?",
                 false,
-                "If using a currency for rewards, set this to true. By default (false), rewards will be picked at random until they match the bounty value (adjusted by rarity). If true, rewards will be greedily chosen (The most expensive coming first) until they match the bounty value. Currency rewards benefit from setting this to true because the highest possible coin values will be given first."
+                "If using a currency for rewards, set this to true. By default (false), rewards will be picked at random until they match the bounty value (adjusted by rarity). If true, rewards will be greedily chosen (The most expensive coming first) until they match the bounty value. Currency rewards benefit from setting this to true because the highest possible coin values will be given first. With this turned on, reward weights are ignored."
         ).boolean
 
         villageGeneration = config.get(
@@ -174,6 +179,21 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 true,
                 "Whether or not bounty boards naturally generate in villages (Default: true)."
         ).boolean
+
+        boardDrops = config.get(
+                CATEGORY_BOARD,
+                "Board Drops on Break",
+                true,
+                "Whether or not bounty boards will drop when broken (Default: true)."
+        ).boolean
+
+        xpBonuses = config.get(
+                CATEGORY_MISC,
+                "How much experience each rarity of bounty should give you.",
+                listOf(4, 10, 15, 25).toTypedArray().toIntArray(),
+                "A multiplier for how much a common bounty is worth. (Default: 5 (Common), 10 (Uncommon), 15 (Rare), 25 (Epic))"
+        ).intList.toList()
+
 
         /*
         randomBounties = config.get(
@@ -221,6 +241,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private const val CATEGORY_BOUNTY = "bounty"
         private const val CATEGORY_RARITY = "rarity"
         private const val CATEGORY_REWARDS = "rewards"
+        private const val CATEGORY_MISC = "misc"
     }
 
 }

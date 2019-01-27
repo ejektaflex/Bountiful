@@ -39,7 +39,7 @@ class PickedEntryEntity(
         get() = ("($killedAmount/$amount) §a" + I18n.format("entity." + entityEntry?.name + ".name") + " Kills§r")
 
     override fun toString(): String {
-        return "$amount x ${entityEntry?.name}"
+        return "PickedEntry (Entity) [Entity: $content, Amount: $amount, Weight: $weight]"
     }
 
     override fun isValid(): Boolean {
