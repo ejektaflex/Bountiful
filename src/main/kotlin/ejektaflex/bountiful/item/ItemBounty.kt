@@ -23,11 +23,14 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.ActionResult
 import net.minecraft.util.EnumHand
 import net.minecraft.world.World
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 import org.lwjgl.input.Keyboard
 
 
 class ItemBounty : Item(), IItemBounty {
 
+    @SideOnly(Side.CLIENT)
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<String>, flagIn: ITooltipFlag) {
         if (stack.hasTagCompound()) {
             val bounty = BountyData().apply { deserializeNBT(stack.tagCompound!!) }
@@ -103,7 +106,7 @@ class ItemBounty : Item(), IItemBounty {
 
     override fun ensureBounty(stack: ItemStack, worldIn: World, rarity: EnumBountyRarity?) {
         val data = try {
-            BountifulAPI.createBountyData(rarity)
+            BountifulAPI.createBountyData(worldIn, rarity)
         } catch (e: BountyCreationException) {
             return
         }

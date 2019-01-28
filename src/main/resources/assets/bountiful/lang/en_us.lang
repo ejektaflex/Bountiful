@@ -36,6 +36,7 @@ bountiful.tooltip.time=Time To Complete
 bountiful.tooltip.required=Required
 bountiful.tooltip.rewards=Rewards
 bountiful.tooltip.expired=Expired
+bountiful.tooltip.requirements=Requirements not met.
 
 bountiful.tooltip.requiredDetails=§6Requires:§f
 bountiful.tooltip.rewardsDetails=§6Rewards:§f

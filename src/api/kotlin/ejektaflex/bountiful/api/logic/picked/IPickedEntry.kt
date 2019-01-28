@@ -45,4 +45,9 @@ interface IPickedEntry : INBTSerializable<NBTTagCompound>, IValidatable, Cloneab
      * A multiplier for how long this item gets to complete.
      */
     fun timeMult(): Double
+
+    /**
+     * Any GameStages stages that this entry might have
+     */
+    val stages: MutableList<String>
 }

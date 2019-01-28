@@ -18,6 +18,8 @@ open class PickableEntry(
         override var nbtJson: String? = null
 ) : IWeighted, IValidatable, IHasTag {
 
+    val stages = mutableListOf<String>()
+
     // Get around ugly JSON serialization of IntRange for our purposes
     constructor(inString: String, amount: IntRange, worth: Int, weight: Int = 100, nbtJson: String? = null) : this(inString, ItemRange(amount), worth, weight, nbtJson)
 

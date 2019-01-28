@@ -24,7 +24,7 @@ val NBTTagCompound.toItemStack: ItemStack?
 
 val ItemStack.modOriginName: String?
     get() {
-        val modid = item.registryName?.resourceDomain
+        val modid = item.registryName?.namespace
         return if (modid != null) {
             Loader.instance().modList.find { it.modId == modid }?.name
         } else {

@@ -2,6 +2,9 @@ package ejektaflex.bountiful.api.logic.picked
 
 import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.api.data.IHasTag
+import ejektaflex.bountiful.api.ext.getUnsortedStringSet
+import ejektaflex.bountiful.api.ext.setUnsortedList
+import ejektaflex.bountiful.api.ext.setUnsortedStringSet
 import net.minecraft.nbt.*
 
 open class PickedEntry(
@@ -10,8 +13,10 @@ open class PickedEntry(
         override var amount: Int = Integer.MIN_VALUE,
         override var weight: Int = 100,
         @SerializedName("nbt_data")
-        override var nbtJson: String? = null
+        override var nbtJson: String? = null,
+        override var stages: MutableList<String> = mutableListOf()
 ) : IPickedEntry, IHasTag {
+
 
     // Must override because overriding [nbtJson]
     override val tag: NBTTagCompound?
@@ -26,6 +31,7 @@ open class PickedEntry(
             tag?.let {
                 setTag("nbt", it)
             }
+            setUnsortedStringSet("stages", stages.toSet())
         }
     }
 
@@ -35,6 +41,7 @@ open class PickedEntry(
         if (tag.hasKey("nbt")) {
             nbtJson = tag.getCompoundTag("nbt").toString()
         }
+        stages = tag.getUnsortedStringSet("stages").toMutableList()
     }
 
 

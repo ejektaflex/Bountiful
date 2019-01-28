@@ -39,8 +39,8 @@ object InternalAPI : IBountifulAPI {
     override val config: IBountifulConfig
         get() = Bountiful.config
 
-    override fun createBountyData(rarity: EnumBountyRarity?): BountyData? {
-        return BountyCreator.create(rarity)
+    override fun createBountyData(worldIn: World, rarity: EnumBountyRarity?): BountyData? {
+        return BountyCreator.create(worldIn, rarity)
     }
 
 }

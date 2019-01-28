@@ -41,8 +41,8 @@ object BountyCreator : IBountyCreator {
         return EnumBountyRarity.getRarityFromInt(level)
     }
 
-    private fun createRandomBounty(inRarity: EnumBountyRarity?): BountyData {
-        if (RewardRegistry.validRewards().isEmpty()) {
+    private fun createRandomBounty(world: World, inRarity: EnumBountyRarity?): BountyData {
+        if (RewardRegistry.validRewards(world).isEmpty()) {
             throw BountyCreationException("There are no valid rewards in the reward registry!")
         }
 
@@ -78,7 +78,7 @@ object BountyCreator : IBountyCreator {
             worth = (worth * EnumBountyRarity.getRarityFromInt(rarity).bountyMult).toInt()
 
             // Generate rewards based on worth
-            findRewards(worth).forEach {
+            findRewards(world, worth).forEach {
                 rewards.add(it)
             }
 
@@ -90,19 +90,19 @@ object BountyCreator : IBountyCreator {
         return BountyData()
     }
 
-    override fun create(inRarity: EnumBountyRarity?): BountyData? {
+    override fun create(world: World, inRarity: EnumBountyRarity?): BountyData? {
         return if (Bountiful.config.randomBounties) {
-            createRandomBounty(inRarity)
+            createRandomBounty(world, inRarity)
         } else {
             createPremadeBounty(inRarity)
         }
     }
 
-    private fun findRewards(n: Int): List<PickedEntryStack> {
+    private fun findRewards(world: World, n: Int): List<PickedEntryStack> {
         var worthLeft = n
         val toRet = mutableListOf<PickedEntryStack>()
         val picked = mutableListOf<String>()
-        var validRewards: List<PickedEntryStack> = RewardRegistry.validRewards(worthLeft, picked)
+        var validRewards: List<PickedEntryStack> = RewardRegistry.validRewards(world, worthLeft, picked)
 
         while (validRewards.isNotEmpty()) {
             val reward = when (Bountiful.config.greedyRewards) {
@@ -113,14 +113,14 @@ object BountyCreator : IBountyCreator {
             val maxNumOfReward = worthLeft / reward.amount
             val worthSated = reward.amount * maxNumOfReward
             worthLeft -= worthSated
-            val rewardClone = PickedEntryStack(PickedEntry(reward.content, maxNumOfReward, nbtJson = reward.tag?.toString()))
+            val rewardClone = PickedEntryStack(PickedEntry(reward.content, maxNumOfReward, nbtJson = reward.tag?.toString(), stages = reward.stages))
             toRet.add(rewardClone)
-            validRewards = RewardRegistry.validRewards(worthLeft, picked)
+            validRewards = RewardRegistry.validRewards(world, worthLeft, picked)
         }
 
         // If there were no valid rewards, find the cheapest item and give them that.
         if (toRet.isEmpty()) {
-            val lowestWorthItem = RewardRegistry.validRewards().minBy { it.amount }!!
+            val lowestWorthItem = RewardRegistry.validRewards(world).minBy { it.amount }!!
             toRet.add(PickedEntryStack(PickedEntry(lowestWorthItem.content, 1, nbtJson = lowestWorthItem.tag?.toString())))
         }
 

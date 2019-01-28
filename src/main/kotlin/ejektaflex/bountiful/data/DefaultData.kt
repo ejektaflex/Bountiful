@@ -40,7 +40,7 @@ object DefaultData {
                 PickedEntryStack(PickedEntry("minecraft:gold_nugget", 100)),
                 PickedEntryStack(PickedEntry("minecraft:gold_ingot", 900)),
                 PickedEntryStack(PickedEntry("minecraft:diamond", 2400, 10)),
-                PickedEntryStack(PickedEntry("minecraft:potion", 800, 5)),
+                //PickedEntryStack(PickedEntry("minecraft:potion", 800, 5)),
                 PickedEntryStack(PickedEntry("minecraft:iron_sword", 750, 5, nbtJson = "{display:{Lore:[\"Sharper than Usual.\"]},ench:[{id:16,lvl:1}]}")),
                 PickedEntryStack(PickedEntry("minecraft:leather_helmet", 500, 5)),
                 PickedEntryStack(PickedEntry("minecraft:leather_boots", 450, 5)),
