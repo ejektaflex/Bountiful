@@ -1,17 +1,29 @@
 package ejektaflex.bountiful.registry
 
+import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.api.logic.picked.PickedEntryStack
+import ejektaflex.compat.FacadeGameStages
+import net.minecraft.world.World
 
 object RewardRegistry : ValueRegistry<PickedEntryStack>() {
-    fun validRewards(worth: Int, alreadyPicked: List<String>): List<PickedEntryStack> {
-        return validRewards().filter { it.amount <= worth && it.content !in alreadyPicked }.sortedBy { it.amount }
+    fun validRewards(world: World, worth: Int, alreadyPicked: List<String>): List<PickedEntryStack> {
+        return validRewards(world).filter { it.amount <= worth && it.content !in alreadyPicked }.sortedBy { it.amount }
     }
 
-    fun validRewards(worth: Int): List<PickedEntryStack> {
-        return validRewards().filter { it.amount <= worth }.sortedBy { it.amount }
+    fun validRewards(world: World, worth: Int): List<PickedEntryStack> {
+        return validRewards(world).filter { it.amount <= worth }.sortedBy { it.amount }
     }
 
-    fun validRewards(): List<PickedEntryStack> {
-        return items
+    fun validRewards(world: World): List<PickedEntryStack> {
+        // Was told client does not always know about all players
+        return if (world.isRemote) {
+            listOf()
+        } else {
+            return if (Bountiful.config.isRunningGameStages) {
+                items.filter { FacadeGameStages.anyPlayerHas(world, it.genericPick.requiredStages()) }
+            } else {
+                items
+            }
+        }
     }
 }

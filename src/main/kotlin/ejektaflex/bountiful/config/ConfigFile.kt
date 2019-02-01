@@ -2,6 +2,7 @@ package ejektaflex.bountiful.config
 
 import ejektaflex.bountiful.api.config.IBountifulConfig
 import ejektaflex.bountiful.api.ext.clampTo
+import net.minecraftforge.fml.common.Loader
 import java.io.File
 import kotlin.math.max
 
@@ -46,6 +47,9 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
     override var boardDrops: Boolean = true
         private set
     override var xpBonuses = listOf(4, 10, 15, 25)
+        private set
+    override var compatGameStages: Boolean = true
+        private set
 
 
 
@@ -55,6 +59,9 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
 
     override val bountyAmountRange: IntRange
         get() = bountyAmountMin..bountyAmountMax
+
+    val isRunningGameStages: Boolean
+        get() = compatGameStages && Loader.isModLoaded("gamestages")
 
     override fun load() {
 
@@ -194,6 +201,13 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 "A multiplier for how much a common bounty is worth. (Default: 5 (Common), 10 (Uncommon), 15 (Rare), 25 (Epic))"
         ).intList.toList()
 
+        compatGameStages = config.get(
+                CATEGORY_COMPAT,
+                "GameStages Compat",
+                true,
+                "Whether or not gamestages compat is enabled."
+        ).boolean
+
 
         /*
         randomBounties = config.get(
@@ -242,6 +256,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private const val CATEGORY_RARITY = "rarity"
         private const val CATEGORY_REWARDS = "rewards"
         private const val CATEGORY_MISC = "misc"
+        private const val CATEGORY_COMPAT = "compat"
     }
 
 }

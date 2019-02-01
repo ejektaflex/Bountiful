@@ -13,6 +13,7 @@ import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.api.stats.BountifulStats
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.logic.error.BountyCreationException
+import ejektaflex.compat.FacadeGameStages
 import net.minecraft.client.resources.I18n
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity
@@ -23,11 +24,14 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.ActionResult
 import net.minecraft.util.EnumHand
 import net.minecraft.world.World
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 import org.lwjgl.input.Keyboard
 
 
 class ItemBounty : Item(), IItemBounty {
 
+    @SideOnly(Side.CLIENT)
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<String>, flagIn: ITooltipFlag) {
         if (stack.hasTagCompound()) {
             val bounty = BountyData().apply { deserializeNBT(stack.tagCompound!!) }
@@ -103,7 +107,7 @@ class ItemBounty : Item(), IItemBounty {
 
     override fun ensureBounty(stack: ItemStack, worldIn: World, rarity: EnumBountyRarity?) {
         val data = try {
-            BountifulAPI.createBountyData(rarity)
+            BountifulAPI.createBountyData(worldIn, rarity)
         } catch (e: BountyCreationException) {
             return
         }
@@ -131,6 +135,12 @@ class ItemBounty : Item(), IItemBounty {
 
         val inv = player.inventory.mainInventory
         val bounty = BountyData().apply { deserializeNBT(bountyItem.tagCompound!!) }
+
+        // Gate behind gamestages
+        if (Bountiful.config.isRunningGameStages && FacadeGameStages.stagesStillNeededFor(player, bounty).isNotEmpty()) {
+            player.sendTranslation("bountiful.tooltip.requirements")
+            return false
+        }
 
         if (bounty.hasExpired(player.world)) {
             player.sendTranslation("bountiful.bounty.expired")

@@ -1,4 +1,5 @@
 //import org.jetbrains.dokka.gradle.DokkaTask
+import net.minecraftforge.gradle.user.patcherUser.forge.ForgeExtension
 import org.gradle.language.jvm.tasks.ProcessResources
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -6,6 +7,9 @@ val v_forgelin = "1.8.2"
 val v_jei = "4.11.0.206"
 val v_minecraft_root = "1.12"
 val v_minecraft = "$v_minecraft_root.2"
+
+val v_gamestages = "2.0.105"
+val v_bookshelf = "2.3.557"
 
 buildscript {
     repositories {
@@ -48,9 +52,10 @@ java {
 }
 
 minecraft {
+    setUseDepAts(true)
     version = "1.12.2-14.23.5.2796"
     runDir = "run"
-    mappings = "snapshot_20171003"
+    mappings = "stable_39"
 }
 
 repositories {
@@ -67,9 +72,14 @@ repositories {
 
 dependencies {
     subprojects.forEach { compile(it) }
-    compile("net.shadowfacts:Forgelin:$v_forgelin")
+    api("net.shadowfacts:Forgelin:$v_forgelin")
     deobfProvided("mezz.jei:jei_$v_minecraft:$v_jei:api")
     runtime("mezz.jei:jei_$v_minecraft:$v_jei")
+
+    compileOnly(files("libonly/GameStages-$v_minecraft-$v_gamestages-deobf.jar"))
+    compileOnly("net.darkhax.bookshelf:Bookshelf-$v_minecraft:$v_bookshelf:deobf")
+
+
     compile(kotlin("stdlib", "1.3.10"))
 }
 

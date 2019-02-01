@@ -13,6 +13,9 @@ import ejektaflex.bountiful.api.logic.picked.PickedEntry
 import ejektaflex.bountiful.api.logic.picked.PickedEntryStack
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.registry.ValueRegistry
+import ejektaflex.compat.FacadeGameStages
+import net.minecraft.client.Minecraft
+import net.minecraft.client.entity.AbstractClientPlayer
 import net.minecraft.client.resources.I18n
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -47,6 +50,13 @@ class BountyData : IBountyData {
     }
 
     fun tooltipInfo(world: World, advanced: Boolean): List<String> {
+        if (Bountiful.config.isRunningGameStages) {
+            val localPlayer = Minecraft.getMinecraft().player
+            if (FacadeGameStages.stagesStillNeededFor(localPlayer, this).isNotEmpty()) {
+                return listOf(I18n.format("bountiful.tooltip.requirements"))
+            }
+        }
+
         return when (advanced) {
             false -> tooltipInfoBasic(world)
             true -> tooltipInfoAdvanced(world)
@@ -115,6 +125,10 @@ class BountyData : IBountyData {
             } + "§r"
         }
 
+    override fun requiredStages(): List<String> {
+        return toGet.items.map { it.requiredStages() }.flatten() + rewards.items.map { it.requiredStages() }.flatten()
+    }
+
     override fun deserializeNBT(tag: NBTTagCompound) {
         boardStamp = tag.getInteger(BountyNBT.BoardStamp.key)
         bountyTime = tag.getLong(BountyNBT.BountyTime.key)
@@ -131,7 +145,6 @@ class BountyData : IBountyData {
     }
 
     override fun serializeNBT(): NBTTagCompound {
-
         return NBTTagCompound().apply {
             setInteger(BountyNBT.BoardStamp.key, boardStamp)
             setLong(BountyNBT.BountyTime.key, bountyTime)

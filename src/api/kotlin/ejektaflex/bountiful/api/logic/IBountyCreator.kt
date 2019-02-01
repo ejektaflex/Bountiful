@@ -19,6 +19,6 @@ interface IBountyCreator {
     /**
      * Generates new, randomized bounty data
      */
-    fun create(inRarity: EnumBountyRarity? = null): IBountyData?
+    fun create(world: World, inRarity: EnumBountyRarity? = null): IBountyData?
 
 }

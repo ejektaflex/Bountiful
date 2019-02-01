@@ -16,18 +16,18 @@ object ContentRegistry {
 
     val bounty = ItemBounty().apply {
         registryName = ResourceLocation(BountifulInfo.MODID, "bounty")
-        unlocalizedName = "bountiful.bounty"
+        translationKey = "bountiful.bounty"
         setMaxStackSize(1)
     }
 
     val bountyBlock = BlockBountyBoard().apply {
             registryName = ResourceLocation(BountifulInfo.MODID, "bountyboard")
-            unlocalizedName = "bountiful.bountyboardblock"
+            translationKey = "bountiful.bountyboardblock"
     }
 
     val bountyItemBlock = ItemBlock(bountyBlock).apply {
         registryName = ResourceLocation(BountifulInfo.MODID, "bountyboarditem")
-        unlocalizedName = "bountiful.bountyboarditem"
+        translationKey = "bountiful.bountyboarditem"
     }
 
     val blocks = listOf(

@@ -8,6 +8,7 @@ import ejektaflex.bountiful.item.ItemBounty
 import net.minecraft.client.renderer.ItemMeshDefinition
 import net.minecraft.client.renderer.block.model.ModelBakery
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
+import net.minecraft.client.resources.I18n
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
@@ -49,9 +50,9 @@ class ClientProxy : CommonProxy() {
     fun registerModels(event: ModelRegistryEvent) {
         ContentRegistry.items.forEach {
             if (it is ItemBounty) {
-                registerBountyRenderer(it, 0, it.registryName!!.resourcePath)
+                registerBountyRenderer(it, 0, it.registryName!!.path)
             } else {
-                registerItemRenderer(it, 0, it.registryName!!.resourcePath)
+                registerItemRenderer(it, 0, it.registryName!!.path)
             }
         }
     }

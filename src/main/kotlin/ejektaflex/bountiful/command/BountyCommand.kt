@@ -136,7 +136,7 @@ class BountyCommand : ICommand {
                 }
             }
         } else {
-            sender.sendMessage("Valid commands: '/bo reload', '/bo entities', '/bo gen' (op), '/bo expire' (op)")
+            sender.sendMessage("Valid commands: '/bo reload', '/bo entities', '/bo gen [c/u/r/e]' (op), '/bo expire' (op)")
         }
 
     }
