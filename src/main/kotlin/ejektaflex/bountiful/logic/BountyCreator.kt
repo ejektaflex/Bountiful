@@ -2,7 +2,6 @@ package ejektaflex.bountiful.logic
 
 import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.ContentRegistry
-import ejektaflex.bountiful.api.data.IBountyData
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.api.ext.weightedRandom
 import ejektaflex.bountiful.api.logic.IBountyCreator
@@ -41,19 +40,27 @@ object BountyCreator : IBountyCreator {
         return EnumBountyRarity.getRarityFromInt(level)
     }
 
-    private fun createRandomBounty(world: World, inRarity: EnumBountyRarity?): BountyData {
+    private fun precheckRegistries(world: World) {
         if (RewardRegistry.validRewards(world).isEmpty()) {
             throw BountyCreationException("There are no valid rewards in the reward registry!")
         }
+        if (BountyRegistry.validBounties(world).size < Bountiful.config.bountyAmountRange.last) {
+            throw BountyCreationException("There are not enough valid bounties in the bounty registry! (At least ${Bountiful.config.bountyAmountRange} must be valid at any one time).")
+        }
+    }
+
+    private fun createRandomBounty(world: World, inRarity: EnumBountyRarity?): BountyData {
+        // Throw exception if we can't complete the bounty
+        precheckRegistries(world)
 
         // Shuffle bounty registry and take a random number of bounty items
         val pickedAlready = mutableListOf<PickableEntry>()
 
         val toPick = Bountiful.config.bountyAmountRange.random()
         while (pickedAlready.size < toPick) {
-            val pool = BountyRegistry.items.filter { it !in pickedAlready }
+            val pool = BountyRegistry.validBounties(world).filter { it !in pickedAlready }
             val toAdd = pool.weightedRandom
-            pickedAlready.add(toAdd)
+            pickedAlready.add(toAdd.copy())
         }
 
         return BountyData().apply {

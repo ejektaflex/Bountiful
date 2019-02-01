@@ -1,5 +1,6 @@
 package ejektaflex.bountiful.api.logic.picked
 
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.api.data.IHasTag
 import ejektaflex.bountiful.api.ext.getUnsortedStringSet
@@ -14,7 +15,7 @@ open class PickedEntry(
         override var weight: Int = 100,
         @SerializedName("nbt_data")
         override var nbtJson: String? = null,
-        override var stages: MutableList<String> = mutableListOf()
+        override var stages: MutableList<String>? = null
 ) : IPickedEntry, IHasTag {
 
 
@@ -31,7 +32,7 @@ open class PickedEntry(
             tag?.let {
                 setTag("nbt", it)
             }
-            setUnsortedStringSet("stages", stages.toSet())
+            stages?.let { setUnsortedStringSet("stages", it.toSet()) }
         }
     }
 
@@ -67,6 +68,5 @@ open class PickedEntry(
         val isNBTValid = (nbtJson == null) || (tag != null)
         return contentObj != null && isNBTValid
     }
-
 
 }

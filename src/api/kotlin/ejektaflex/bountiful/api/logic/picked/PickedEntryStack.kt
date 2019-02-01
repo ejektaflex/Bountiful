@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose
 import ejektaflex.bountiful.api.ext.toItemStack
 import net.minecraft.item.ItemStack
 
-class PickedEntryStack(
+data class PickedEntryStack(
         @Expose(serialize = false, deserialize = false)
         val genericPick: PickedEntry
 ) : IPickedEntry by genericPick {

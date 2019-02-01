@@ -4,7 +4,6 @@ import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.api.logic.pickable.PickableEntry
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import ejektaflex.adapter.RewardAdapter
 import ejektaflex.bountiful.api.logic.picked.PickedEntry
 import ejektaflex.bountiful.api.logic.picked.PickedEntryStack
 import ejektaflex.bountiful.registry.BountyRegistry

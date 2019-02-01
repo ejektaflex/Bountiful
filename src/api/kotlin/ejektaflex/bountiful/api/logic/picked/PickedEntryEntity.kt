@@ -7,7 +7,7 @@ import net.minecraft.client.resources.I18n
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fml.common.registry.EntityEntry
 
-class PickedEntryEntity(
+data class PickedEntryEntity(
         @Expose(serialize = false, deserialize = false)
         val genericPick: PickedEntry
 ) : IPickedEntry by genericPick {

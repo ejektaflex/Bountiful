@@ -20,7 +20,7 @@ object RewardRegistry : ValueRegistry<PickedEntryStack>() {
             listOf()
         } else {
             return if (Bountiful.config.isRunningGameStages) {
-                items.filter { FacadeGameStages.anyPlayerHas(world, it.genericPick.stages) }
+                items.filter { FacadeGameStages.anyPlayerHas(world, it.genericPick.requiredStages()) }
             } else {
                 items
             }

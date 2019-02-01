@@ -125,6 +125,10 @@ class BountyData : IBountyData {
             } + "§r"
         }
 
+    override fun requiredStages(): List<String> {
+        return toGet.items.map { it.requiredStages() }.flatten() + rewards.items.map { it.requiredStages() }.flatten()
+    }
+
     override fun deserializeNBT(tag: NBTTagCompound) {
         boardStamp = tag.getInteger(BountyNBT.BoardStamp.key)
         bountyTime = tag.getLong(BountyNBT.BountyTime.key)
@@ -141,7 +145,6 @@ class BountyData : IBountyData {
     }
 
     override fun serializeNBT(): NBTTagCompound {
-
         return NBTTagCompound().apply {
             setInteger(BountyNBT.BoardStamp.key, boardStamp)
             setLong(BountyNBT.BountyTime.key, bountyTime)

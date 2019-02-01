@@ -12,14 +12,11 @@ object FacadeGameStages {
     }
 
     fun stagesStillNeededFor(player: EntityPlayer, bountyData: BountyData): List<String> {
-        val bountyStagesNeeded = bountyData.toGet.items.map { it.stages }.flatten().toSet()
-        val rewardStagesNeeded = bountyData.rewards.items.map { it.stages }.flatten().toSet()
-        val allStagesNeeded = bountyStagesNeeded + rewardStagesNeeded
-        println("Stages needed: $allStagesNeeded")
-        val playerStages = GameStageHelper.getPlayerData(player).stages.filterNotNull().toSet()
-        val stillNeeded = (allStagesNeeded - playerStages).toList()
-        println("Stages still needed: $stillNeeded")
-        return stillNeeded
+        return stagesStillNeededFor(player, bountyData.requiredStages())
+    }
+
+    fun stagesStillNeededFor(player: EntityPlayer, current: List<String>): List<String> {
+        return (current.toSet() - GameStageHelper.getPlayerData(player).stages.filterNotNull().toSet()).toList()
     }
 
 }

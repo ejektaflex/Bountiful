@@ -13,6 +13,7 @@ import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.api.stats.BountifulStats
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.logic.error.BountyCreationException
+import ejektaflex.compat.FacadeGameStages
 import net.minecraft.client.resources.I18n
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity
@@ -134,6 +135,12 @@ class ItemBounty : Item(), IItemBounty {
 
         val inv = player.inventory.mainInventory
         val bounty = BountyData().apply { deserializeNBT(bountyItem.tagCompound!!) }
+
+        // Gate behind gamestages
+        if (Bountiful.config.isRunningGameStages && FacadeGameStages.stagesStillNeededFor(player, bounty).isNotEmpty()) {
+            player.sendTranslation("bountiful.tooltip.requirements")
+            return false
+        }
 
         if (bounty.hasExpired(player.world)) {
             player.sendTranslation("bountiful.bounty.expired")
