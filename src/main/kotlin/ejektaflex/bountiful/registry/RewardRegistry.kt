@@ -7,11 +7,7 @@ import net.minecraft.world.World
 
 object RewardRegistry : ValueRegistry<PickedEntryStack>() {
     fun validRewards(world: World, worth: Int, alreadyPicked: List<String>): List<PickedEntryStack> {
-        return validRewards(world).filter { it.amount <= worth && it.content !in alreadyPicked }.sortedBy { it.amount }
-    }
-
-    fun validRewards(world: World, worth: Int): List<PickedEntryStack> {
-        return validRewards(world).filter { it.amount <= worth }.sortedBy { it.amount }
+        return validRewards(world).filter { it.genericPick.minValueOfPick <= worth && it.content !in alreadyPicked }.sortedBy { it.genericPick.minValueOfPick }
     }
 
     fun validRewards(world: World): List<PickedEntryStack> {

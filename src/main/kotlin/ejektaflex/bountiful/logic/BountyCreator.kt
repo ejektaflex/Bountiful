@@ -3,6 +3,7 @@ package ejektaflex.bountiful.logic
 import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.ContentRegistry
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
+import ejektaflex.bountiful.api.ext.clampTo
 import ejektaflex.bountiful.api.ext.weightedRandom
 import ejektaflex.bountiful.api.logic.IBountyCreator
 import ejektaflex.bountiful.logic.error.BountyCreationException
@@ -117,10 +118,20 @@ object BountyCreator : IBountyCreator {
                 false -> validRewards.weightedRandom
             }
 
-            val maxNumOfReward = worthLeft / reward.amount
-            val worthSated = reward.amount * maxNumOfReward
+            val maxNumCouldGive = (worthLeft / reward.amount)
+            val numCanGive = maxNumCouldGive.let {
+                val minMaxRange = reward.genericPick.range
+                if (minMaxRange != null) {
+                    it.clampTo(minMaxRange.toIntRange())
+                } else {
+                    it
+                }
+            }
+
+            val worthSated = reward.amount * numCanGive
             worthLeft -= worthSated
-            val rewardClone = PickedEntryStack(PickedEntry(reward.content, maxNumOfReward, nbtJson = reward.tag?.toString(), stages = reward.stages))
+            val rewardClone = PickedEntryStack(PickedEntry(reward.content, numCanGive, nbtJson = reward.tag?.toString(), stages = reward.stages))
+            picked.add(rewardClone.content) // Don't show up again!
             toRet.add(rewardClone)
             validRewards = RewardRegistry.validRewards(world, worthLeft, picked)
         }
@@ -128,7 +139,7 @@ object BountyCreator : IBountyCreator {
         // If there were no valid rewards, find the cheapest item and give them that.
         if (toRet.isEmpty()) {
             val lowestWorthItem = RewardRegistry.validRewards(world).minBy { it.amount }!!
-            toRet.add(PickedEntryStack(PickedEntry(lowestWorthItem.content, 1, nbtJson = lowestWorthItem.tag?.toString())))
+            toRet.add(PickedEntryStack(PickedEntry(lowestWorthItem.content, lowestWorthItem.genericPick.range?.min ?: 1, nbtJson = lowestWorthItem.tag?.toString())))
         }
 
         return toRet
