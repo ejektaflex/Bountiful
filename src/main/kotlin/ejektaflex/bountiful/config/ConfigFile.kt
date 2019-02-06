@@ -197,8 +197,8 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         xpBonuses = config.get(
                 CATEGORY_MISC,
                 "How much experience each rarity of bounty should give you.",
-                listOf(4, 10, 15, 25).toTypedArray().toIntArray(),
-                "A multiplier for how much a common bounty is worth. (Default: 5 (Common), 10 (Uncommon), 15 (Rare), 25 (Epic))"
+                listOf(4, 8, 12, 20).toTypedArray().toIntArray(),
+                "How much experience you get for completing a bounty at each rarity tier. (Default: 4 (Common), 8 (Uncommon), 12 (Rare), 20 (Epic))"
         ).intList.toList()
 
         compatGameStages = config.get(
