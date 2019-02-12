@@ -1,5 +1,6 @@
 package ejektaflex.bountiful.data
 
+import ejektaflex.bountiful.api.logic.ItemRange
 import ejektaflex.bountiful.api.logic.pickable.PickableEntry
 import ejektaflex.bountiful.api.logic.picked.PickedEntry
 import ejektaflex.bountiful.api.logic.picked.PickedEntryStack
@@ -41,11 +42,12 @@ object DefaultData {
                 PickedEntryStack(PickedEntry("minecraft:gold_ingot", 900)),
                 PickedEntryStack(PickedEntry("minecraft:diamond", 2400, 10)),
                 //PickedEntryStack(PickedEntry("minecraft:potion", 800, 5)),
-                PickedEntryStack(PickedEntry("minecraft:iron_sword", 750, 5, nbtJson = "{display:{Lore:[\"Sharper than Usual.\"]},ench:[{id:16,lvl:1}]}")),
-                PickedEntryStack(PickedEntry("minecraft:leather_helmet", 500, 5)),
-                PickedEntryStack(PickedEntry("minecraft:leather_boots", 450, 5)),
-                PickedEntryStack(PickedEntry("minecraft:iron_chestplate", 1800, 5)),
-                PickedEntryStack(PickedEntry("minecraft:golden_chestplate", 1200, 5))
+                PickedEntryStack(PickedEntry("minecraft:iron_sword", 750, 5, nbtJson = "{display:{Lore:[\"Sharper than Usual.\"]},ench:[{id:16,lvl:1}]}", range = ItemRange(1, 1))),
+                PickedEntryStack(PickedEntry("minecraft:leather_helmet", 500, 5, range = ItemRange(1, 1))),
+                PickedEntryStack(PickedEntry("minecraft:leather_boots", 450, 5, range = ItemRange(1, 1))),
+                PickedEntryStack(PickedEntry("minecraft:iron_chestplate", 1800, 5, range = ItemRange(1, 1))),
+                PickedEntryStack(PickedEntry("minecraft:golden_chestplate", 1200, 5, range = ItemRange(1, 1))),
+                PickedEntryStack(PickedEntry("minecraft:bow", 1300, 10, "{ench:[{id:48,lvl:2}]}", range = ItemRange(1, 1)))
         )
     }
 
