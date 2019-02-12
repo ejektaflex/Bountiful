@@ -1,4 +1,4 @@
-package ejektaflex.bountiful.api.logic.pickable
+package ejektaflex.bountiful.api.logic.picked
 
 import com.google.gson.annotations.Expose
 import ejektaflex.bountiful.api.BountifulAPI
@@ -7,7 +7,7 @@ import net.minecraft.client.resources.I18n
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fml.common.registry.EntityEntry
 
-class PickedEntryEntity(
+data class PickedEntryEntity(
         @Expose(serialize = false, deserialize = false)
         val genericPick: PickedEntry
 ) : IPickedEntry by genericPick {
@@ -39,7 +39,7 @@ class PickedEntryEntity(
         get() = ("($killedAmount/$amount) §a" + I18n.format("entity." + entityEntry?.name + ".name") + " Kills§r")
 
     override fun toString(): String {
-        return "$amount x ${entityEntry?.name}"
+        return "PickedEntry (Entity) [Entity: $content, Amount: $amount, Weight: $weight]"
     }
 
     override fun isValid(): Boolean {

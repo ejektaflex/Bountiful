@@ -1,5 +1,8 @@
 package ejektaflex.bountiful.api.config
 
+/**
+ * Explanations of each config option are generated in the config implementation, so are they withheld here.
+ */
 interface IBountifulConfig {
     val maxBountiesPerBoard: Int
     val boardAddFrequency: Long
@@ -19,5 +22,8 @@ interface IBountifulConfig {
     val greedyRewards: Boolean
     val villageGeneration: Boolean
     val randomBounties: Boolean
+    val boardDrops: Boolean
+    val xpBonuses: List<Int>
+    val compatGameStages: Boolean
     fun load()
 }

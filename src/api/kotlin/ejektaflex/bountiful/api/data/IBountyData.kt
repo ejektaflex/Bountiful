@@ -1,15 +1,14 @@
 package ejektaflex.bountiful.api.data
 
-import ejektaflex.bountiful.api.logic.pickable.IPickedEntry
-import ejektaflex.bountiful.api.logic.pickable.PickedEntry
-import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
+import ejektaflex.bountiful.api.logic.IStageRequirement
+import ejektaflex.bountiful.api.logic.picked.IPickedEntry
+import ejektaflex.bountiful.api.logic.picked.PickedEntryStack
 import ejektaflex.bountiful.api.registry.IValueRegistry
-import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
 import net.minecraftforge.common.util.INBTSerializable
 
-interface IBountyData : INBTSerializable<NBTTagCompound> {
+interface IBountyData : INBTSerializable<NBTTagCompound>, IStageRequirement {
 
     /**
      * How long a bounty has left on the Bounty Board
@@ -46,12 +45,14 @@ interface IBountyData : INBTSerializable<NBTTagCompound> {
      */
     fun timeLeft(world: World): Long
 
+    /**
+     * Whether or not the bounty has expired.
+     */
     fun hasExpired(world: World): Boolean
 
     /**
      * A long representing how long the bounty has left on the board.
      */
     fun boardTimeLeft(world: World): Long
-
 
 }

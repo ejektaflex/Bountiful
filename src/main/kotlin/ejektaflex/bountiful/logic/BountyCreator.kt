@@ -3,12 +3,13 @@ package ejektaflex.bountiful.logic
 import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.ContentRegistry
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
+import ejektaflex.bountiful.api.ext.clampTo
 import ejektaflex.bountiful.api.ext.weightedRandom
 import ejektaflex.bountiful.api.logic.IBountyCreator
 import ejektaflex.bountiful.logic.error.BountyCreationException
 import ejektaflex.bountiful.api.logic.pickable.PickableEntry
-import ejektaflex.bountiful.api.logic.pickable.PickedEntry
-import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
+import ejektaflex.bountiful.api.logic.picked.PickedEntry
+import ejektaflex.bountiful.api.logic.picked.PickedEntryStack
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.registry.BountyRegistry
 import ejektaflex.bountiful.registry.RewardRegistry
@@ -21,10 +22,10 @@ import kotlin.math.max
 
 object BountyCreator : IBountyCreator {
 
-    val rand = Random()
+    private val rand = Random()
 
-    override fun createStack(world: World): ItemStack {
-        return ContentRegistry.bounty.let { ItemStack(it).apply { it.ensureBounty(this, world) } }
+    override fun createStack(world: World, rarity: EnumBountyRarity?): ItemStack {
+        return ContentRegistry.bounty.let { ItemStack(it).apply { it.ensureBounty(this, world, rarity) } }
     }
 
     override fun calcRarity(): EnumBountyRarity {
@@ -40,17 +41,27 @@ object BountyCreator : IBountyCreator {
         return EnumBountyRarity.getRarityFromInt(level)
     }
 
-    private fun createRandomBounty(inRarity: EnumBountyRarity?): BountyData {
+    private fun precheckRegistries(world: World) {
+        if (RewardRegistry.validRewards(world).isEmpty()) {
+            throw BountyCreationException("There are no valid rewards in the reward registry!")
+        }
+        if (BountyRegistry.validBounties(world).size < Bountiful.config.bountyAmountRange.last) {
+            throw BountyCreationException("There are not enough valid bounties in the bounty registry! (At least ${Bountiful.config.bountyAmountRange} must be valid at any one time).")
+        }
+    }
 
+    private fun createRandomBounty(world: World, inRarity: EnumBountyRarity?): BountyData {
+        // Throw exception if we can't complete the bounty
+        precheckRegistries(world)
 
         // Shuffle bounty registry and take a random number of bounty items
         val pickedAlready = mutableListOf<PickableEntry>()
 
         val toPick = Bountiful.config.bountyAmountRange.random()
         while (pickedAlready.size < toPick) {
-            val pool = BountyRegistry.items.filter { it !in pickedAlready }
+            val pool = BountyRegistry.validBounties(world).filter { it !in pickedAlready }
             val toAdd = pool.weightedRandom
-            pickedAlready.add(toAdd)
+            pickedAlready.add(toAdd.copy())
         }
 
         return BountyData().apply {
@@ -75,7 +86,7 @@ object BountyCreator : IBountyCreator {
             worth = (worth * EnumBountyRarity.getRarityFromInt(rarity).bountyMult).toInt()
 
             // Generate rewards based on worth
-            findRewards(worth).forEach {
+            findRewards(world, worth).forEach {
                 rewards.add(it)
             }
 
@@ -87,37 +98,48 @@ object BountyCreator : IBountyCreator {
         return BountyData()
     }
 
-    override fun create(inRarity: EnumBountyRarity?): BountyData {
+    override fun create(world: World, inRarity: EnumBountyRarity?): BountyData? {
         return if (Bountiful.config.randomBounties) {
-            createRandomBounty(inRarity)
+            createRandomBounty(world, inRarity)
         } else {
             createPremadeBounty(inRarity)
         }
     }
 
-    private fun findRewards(n: Int): List<PickedEntryStack> {
+    private fun findRewards(world: World, n: Int): List<PickedEntryStack> {
         var worthLeft = n
         val toRet = mutableListOf<PickedEntryStack>()
         val picked = mutableListOf<String>()
-        var validRewards: List<PickedEntryStack> = RewardRegistry.items.filter { it.amount <= worthLeft && it.content !in picked }.sortedBy { it.amount }
+        var validRewards: List<PickedEntryStack> = RewardRegistry.validRewards(world, worthLeft, picked)
 
         while (validRewards.isNotEmpty()) {
             val reward = when (Bountiful.config.greedyRewards) {
                 true -> validRewards.last()
-                false -> validRewards.random()
+                false -> validRewards.weightedRandom
             }
 
-            val maxNumOfReward = worthLeft / reward.amount
-            val worthSated = reward.amount * maxNumOfReward
+            val maxNumCouldGive = (worthLeft / reward.amount)
+            val numCanGive = maxNumCouldGive.let {
+                val minMaxRange = reward.genericPick.range
+                if (minMaxRange != null) {
+                    it.clampTo(minMaxRange.toIntRange())
+                } else {
+                    it
+                }
+            }
+
+            val worthSated = reward.amount * numCanGive
             worthLeft -= worthSated
-            toRet.add(PickedEntryStack(PickedEntry(reward.content, maxNumOfReward)))
-            validRewards = RewardRegistry.items.filter { it.amount <= worthLeft && it.contentObj !in picked }.sortedBy { it.amount }
+            val rewardClone = PickedEntryStack(PickedEntry(reward.content, numCanGive, nbtJson = reward.tag?.toString(), stages = reward.stages))
+            picked.add(rewardClone.content) // Don't show up again!
+            toRet.add(rewardClone)
+            validRewards = RewardRegistry.validRewards(world, worthLeft, picked)
         }
 
-        // If there were no valid rewards, find the cheapest item
+        // If there were no valid rewards, find the cheapest item and give them that.
         if (toRet.isEmpty()) {
-            val lowestWorthItem = RewardRegistry.items.minBy { it.amount }!!
-            toRet.add(PickedEntryStack(PickedEntry(lowestWorthItem.content, 1)))
+            val lowestWorthItem = RewardRegistry.validRewards(world).minBy { it.amount }!!
+            toRet.add(PickedEntryStack(PickedEntry(lowestWorthItem.content, lowestWorthItem.genericPick.range?.min ?: 1, nbtJson = lowestWorthItem.tag?.toString())))
         }
 
         return toRet

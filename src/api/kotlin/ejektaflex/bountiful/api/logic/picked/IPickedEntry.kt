@@ -1,19 +1,22 @@
-package ejektaflex.bountiful.api.logic.pickable
+package ejektaflex.bountiful.api.logic.picked
 
 import ejektaflex.bountiful.api.data.IValidatable
+import ejektaflex.bountiful.api.data.IWeighted
+import ejektaflex.bountiful.api.logic.IPickCommon
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.INBTSerializable
 
-interface IPickedEntry : INBTSerializable<NBTTagCompound>, IValidatable {
-    /**
-     * A string representing the content of this picked entry
-     */
-    var content: String
+interface IPickedEntry : INBTSerializable<NBTTagCompound>, IPickCommon, IValidatable, Cloneable, IWeighted {
 
     /**
      * An integer representing the amount of this content you need to complete the bounty
      */
     var amount: Int
+
+    /**
+     * The accompanying NBT data of the picked item, if there is any
+     */
+    val tag: NBTTagCompound?
 
     /**
      * The subtype ([PickedEntryStack], [PickedEntryEntity], etc) of this entry
@@ -34,4 +37,5 @@ interface IPickedEntry : INBTSerializable<NBTTagCompound>, IValidatable {
      * A multiplier for how long this item gets to complete.
      */
     fun timeMult(): Double
+
 }

@@ -2,6 +2,7 @@ package ejektaflex.bountiful.config
 
 import ejektaflex.bountiful.api.config.IBountifulConfig
 import ejektaflex.bountiful.api.ext.clampTo
+import net.minecraftforge.fml.common.Loader
 import java.io.File
 import kotlin.math.max
 
@@ -43,6 +44,14 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private set
     override var randomBounties: Boolean = true
         private set
+    override var boardDrops: Boolean = true
+        private set
+    override var xpBonuses = listOf(4, 10, 15, 25)
+        private set
+    override var compatGameStages: Boolean = true
+        private set
+
+
 
 
     private var bountyAmountMax = 2
@@ -51,13 +60,16 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
     override val bountyAmountRange: IntRange
         get() = bountyAmountMin..bountyAmountMax
 
+    val isRunningGameStages: Boolean
+        get() = compatGameStages && Loader.isModLoaded("gamestages")
+
     override fun load() {
 
         maxBountiesPerBoard = config.get(
                 CATEGORY_BOARD,
                 "Max Bounties Per Board At A Time",
                 17,
-                "How many entries should be on a bounty board at a given bountyTime. (Max: 27, Default: 17)"
+                "How many entries should be on a bounty board at a given time. (Max: 27, Default: 17)"
         ).int.clampTo(1..27)
 
         boardAddFrequency = max(config.get(
@@ -116,7 +128,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 CATEGORY_BOUNTY,
                 "Minimum Bounty Time",
                 6000,
-                "The minimum time, in ticks, required to complete a bounty. (Default: 4800)"
+                "The minimum time, in ticks, required to complete a bounty. (Default: 6000)"
         ).int.clampTo(10..Int.MAX_VALUE)
 
         shouldCountdownOnBoard = config.get(
@@ -165,7 +177,7 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 CATEGORY_REWARDS,
                 "Greedy Rewards?",
                 false,
-                "If using a currency for rewards, set this to true. By default (false), rewards will be picked at random until they match the bounty value (adjusted by rarity). If true, rewards will be greedily chosen (The most expensive coming first) until they match the bounty value. Currency rewards benefit from setting this to true because the highest possible coin values will be given first."
+                "If using a currency for rewards, set this to true. By default (false), rewards will be picked at random until they match the bounty value (adjusted by rarity). If true, rewards will be greedily chosen (The most expensive coming first) until they match the bounty value. Currency rewards benefit from setting this to true because the highest possible coin values will be given first. With this turned on, reward weights are ignored."
         ).boolean
 
         villageGeneration = config.get(
@@ -174,6 +186,28 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 true,
                 "Whether or not bounty boards naturally generate in villages (Default: true)."
         ).boolean
+
+        boardDrops = config.get(
+                CATEGORY_BOARD,
+                "Board Drops on Break",
+                true,
+                "Whether or not bounty boards will drop when broken (Default: true)."
+        ).boolean
+
+        xpBonuses = config.get(
+                CATEGORY_MISC,
+                "How much experience each rarity of bounty should give you.",
+                listOf(4, 8, 12, 20).toTypedArray().toIntArray(),
+                "How much experience you get for completing a bounty at each rarity tier. (Default: 4 (Common), 8 (Uncommon), 12 (Rare), 20 (Epic))"
+        ).intList.toList()
+
+        compatGameStages = config.get(
+                CATEGORY_COMPAT,
+                "GameStages Compat",
+                true,
+                "Whether or not gamestages compat is enabled."
+        ).boolean
+
 
         /*
         randomBounties = config.get(
@@ -221,6 +255,8 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private const val CATEGORY_BOUNTY = "bounty"
         private const val CATEGORY_RARITY = "rarity"
         private const val CATEGORY_REWARDS = "rewards"
+        private const val CATEGORY_MISC = "misc"
+        private const val CATEGORY_COMPAT = "compat"
     }
 
 }

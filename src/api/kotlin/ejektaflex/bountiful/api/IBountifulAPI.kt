@@ -3,8 +3,9 @@ package ejektaflex.bountiful.api
 import ejektaflex.bountiful.api.block.ITileEntityBountyBoard
 import ejektaflex.bountiful.api.config.IBountifulConfig
 import ejektaflex.bountiful.api.data.IBountyData
+import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.api.logic.pickable.PickableEntry
-import ejektaflex.bountiful.api.logic.pickable.PickedEntryStack
+import ejektaflex.bountiful.api.logic.picked.PickedEntryStack
 import ejektaflex.bountiful.api.registry.IValueRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
@@ -45,5 +46,10 @@ interface IBountifulAPI {
      * Retrieves config information about Bountiful
      */
     val config: IBountifulConfig
+
+    /**
+     * Creates data for a new bounty.
+     */
+    fun createBountyData(worldIn: World, rarity: EnumBountyRarity?): IBountyData?
 
 }

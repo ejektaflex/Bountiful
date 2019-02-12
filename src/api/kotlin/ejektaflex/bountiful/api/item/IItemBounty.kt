@@ -1,6 +1,9 @@
 package ejektaflex.bountiful.api.item
 
+import ejektaflex.bountiful.api.BountifulAPI
 import ejektaflex.bountiful.api.data.IBountyData
+import ejektaflex.bountiful.api.data.IValidatable
+import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
@@ -18,10 +21,6 @@ interface IItemBounty : IForgeRegistryEntry<Item> {
      */
     fun tryExpireBountyTime(stack: ItemStack)
 
-    /**
-     * Removes the bountyStamp from the given bounty.
-     */
-    fun removeTimestamp(stack: ItemStack)
 
     /**
      * Decrements the amount of bountyTime left on the board. Returns true if it's run out.
@@ -31,6 +30,6 @@ interface IItemBounty : IForgeRegistryEntry<Item> {
     /**
      * When given an ItemStack of ItemBounty, this method ensures that the stack has bounty NBT data.
      */
-    fun ensureBounty(stack: ItemStack, worldIn: World)
+    fun ensureBounty(stack: ItemStack, worldIn: World, rarity: EnumBountyRarity? = null)
 
 }
