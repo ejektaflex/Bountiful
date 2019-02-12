@@ -58,7 +58,4 @@ object ContentRegistry {
         event.registry.registerAll(*items.toTypedArray())
     }
 
-
-
-
 }
