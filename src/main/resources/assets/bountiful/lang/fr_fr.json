@@ -1,0 +1,42 @@
+
+item.bountiful.bounty.name=Quête
+bountiful.bounty.board=Tableau des quêtes
+tile.bountiful.bountyboardblock.name=Tableau des quêtes
+
+# Interface
+bountiful.bounty.expired=§4Cette qûete a expiré.
+bountiful.bounty.fulfilled=§6Quête remplie!
+bountiful.cannot.fulfill=§aImpossible d'accomplir la quête, vous n'avez pas tout ce qu'il faut pour la terminer!
+bountiful.board.empty=§6Aucune quête disponible, revenez plus tard!
+
+# Commandes
+
+bountiful.reloaded.data=Fichiers de configuration Json rechargés.
+bountiful.reloading.data=Rechargement des données.
+bountiful.requirements.met=§aExigence de quête remplie. Remplissez votre quête en faisant un clic droit sur un tableau de primes.
+bountiful.requirements.mobs.needed=§cVous devez tuer plus de mobs pour terminer cette quête.
+bountiful.command.gen.invalid=§6Rareté non trouvée!
+
+bountiful.rarity.Common=Commun
+bountiful.rarity.Uncommon=Peu commun
+bountiful.rarity.Rare=Rare
+bountiful.rarity.Epic=Épique
+
+bountiful.stat.bountiesTaken=Quêtes Prises
+bountiful.stat.bountiesCompleted=Quêtes terminées (Total)
+bountiful.stat.bountiesCommon=Quêtes terminées (Common)
+bountiful.stat.bountiesUncommon=Quêtes terminées (Peu commun)
+bountiful.stat.bountiesRare=Quêtes terminées (Rare)
+bountiful.stat.bountiesEpic=Quêtes terminées (Épique)
+
+bountiful.toofew.bounties=§4Votre fichier de configuration ne contient pas assez de quêtes valables. Retour aux données précédentes sur les quêtes.
+
+bountiful.tooltip.advanced=Maintenez Shift pour plus de détails
+bountiful.tooltip.time=Temps pour terminer
+bountiful.tooltip.required=Requis
+bountiful.tooltip.rewards=Récompenses
+bountiful.tooltip.expired=Expiré
+bountiful.tooltip.requirements=Les exigences ne sont pas satisfaites.
+
+bountiful.tooltip.requiredDetails=§6Requis:§f
+bountiful.tooltip.rewardsDetails=§6Récompenses:§f
