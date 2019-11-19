@@ -1,4 +1,3 @@
-import net.minecraftforge.gradle.user.patcherUser.forge.ForgeExtension
 import org.gradle.language.jvm.tasks.ProcessResources
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 

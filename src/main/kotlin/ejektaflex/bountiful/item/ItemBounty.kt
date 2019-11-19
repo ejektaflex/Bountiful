@@ -4,12 +4,10 @@ import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.api.BountifulAPI
 import ejektaflex.bountiful.api.data.IBountyData
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
-import ejektaflex.bountiful.api.ext.sendMessage
 import ejektaflex.bountiful.api.ext.sendTranslation
 import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.api.logic.BountyNBT
 import ejektaflex.bountiful.logic.BountyChecker
-import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.api.stats.BountifulStats
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.logic.error.BountyCreationException
@@ -83,6 +81,7 @@ class ItemBounty : Item(), IItemBounty {
         return tickNumber(stack, BountyData.boardTickFreq.toInt(), BountyNBT.BoardStamp.key)
     }
 
+    @SideOnly(Side.CLIENT)
     override fun getItemStackDisplayName(stack: ItemStack): String {
         return super.getItemStackDisplayName(stack) + if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(BountyNBT.Rarity.key)) {
             val rarity = EnumBountyRarity.getRarityFromInt(stack.tagCompound!!.getInteger(BountyNBT.Rarity.key))
