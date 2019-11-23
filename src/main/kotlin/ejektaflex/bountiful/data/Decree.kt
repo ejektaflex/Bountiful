@@ -14,7 +14,6 @@ data class Decree(
         override val rewardPools: MutableList<String> = mutableListOf()
 ) : IDecree {
 
-
     override val objectives: List<BountyEntry>
         get() = getEntriesFromTagList(objectivePools)
 

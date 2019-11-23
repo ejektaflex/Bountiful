@@ -1,5 +1,6 @@
 package ejektaflex.bountiful
 
+import ejektaflex.bountiful.api.BountifulAPIProvider
 import net.alexwells.kottle.FMLKotlinModLoadingContext
 import net.minecraft.block.Blocks
 import net.minecraft.item.Item
@@ -31,15 +32,8 @@ object BountifulMod {
     }
 
     init {
-
-        FMLKotlinModLoadingContext.get().modEventBus.apply {
-
-            //addListener<RegistryEvent.Register<Item>> { SetupLifecycle.registerItems(it) }
-
-        }
-
+        BountifulAPIProvider.changeAPI(BountifulAPIImpl)
         FMLKotlinModLoadingContext.get().modEventBus.register(SetupLifecycle)
-
     }
 
     // Temporary dummy config until real config files are replaced
