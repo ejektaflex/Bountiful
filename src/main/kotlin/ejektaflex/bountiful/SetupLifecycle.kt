@@ -8,12 +8,15 @@ import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.registry.DecreeRegistry
 import ejektaflex.bountiful.registry.PoolRegistry
 import net.alexwells.kottle.KotlinEventBusSubscriber
+import net.minecraft.block.Block
 import net.minecraft.item.Item
 import net.minecraftforge.client.event.ModelRegistryEvent
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.client.event.ConfigChangedEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
+import net.minecraftforge.registries.IForgeRegistry
+import net.minecraftforge.registries.IForgeRegistryEntry
 import java.io.File
 
 @KotlinEventBusSubscriber
@@ -82,14 +85,38 @@ object SetupLifecycle {
     }
     */
 
+    /*
+    fun registerItems(event: RegistryEvent.Register<*>) {
+
+        var regType = event.getRegistry().getRegistrySuperType()
+
+         when (regType) {
+            is Item -> {
+                val bountyItem = ItemBounty(
+                        Item.Properties().maxStackSize(1)
+                ).apply {
+                    setRegistryName("bountiful", "bounty")
+                }
+                println("Registering to: ${event.getRegistry().getRegistryName()}, ${event.getRegistry().getRegistrySuperType()}")
+                (event.getRegistry() as IForgeRegistry<Item>).register(bountyItem)
+            }
+        }
+
+    }
+
+     */
+
+    @SubscribeEvent
     fun registerItems(event: RegistryEvent.Register<Item>) {
+
         val bountyItem = ItemBounty(
                 Item.Properties().maxStackSize(1)
         ).apply {
             setRegistryName("bountiful", "bounty")
         }
-        println("Registering to: ${event.registry.registryName}, ${event.registry.registrySuperType}")
+        println("Registering to: ${event.getRegistry().getRegistryName()}, ${event.getRegistry().getRegistrySuperType()}")
         event.registry.register(bountyItem)
+
     }
 
     @SubscribeEvent
@@ -116,3 +143,5 @@ object SetupLifecycle {
 
 
 }
+
+

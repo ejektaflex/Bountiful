@@ -34,9 +34,12 @@ object BountifulMod {
 
         FMLKotlinModLoadingContext.get().modEventBus.apply {
 
-            addListener<RegistryEvent.Register<Item>> { SetupLifecycle.registerItems(it) }
+            //addListener<RegistryEvent.Register<Item>> { SetupLifecycle.registerItems(it) }
 
         }
+
+        FMLKotlinModLoadingContext.get().modEventBus.register(SetupLifecycle)
+
     }
 
     // Temporary dummy config until real config files are replaced

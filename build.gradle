@@ -98,6 +98,11 @@ minecraft {
 
 repositories {
     maven { url 'https://minecraft.curseforge.com/api/maven/' }
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
 }
 
 dependencies {
@@ -106,6 +111,11 @@ dependencies {
 
     compile "kottle:Kottle:$kottleVersion"
     mod "kottle:Kottle:$kottleVersion"
+
+    // compile against the JEI API but do not include it at runtime
+    compileOnly fg.deobf("mezz.jei:jei-1.14.4:${jei_version}:api")
+    // at runtime, use the full JEI jar
+    runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:${jei_version}")
 
 }
 
@@ -124,19 +134,6 @@ jar {
     }
 }
 
-task installMods(type: Copy, dependsOn: "deinstallMods") {
-    from { configurations.mod }
-    include "**/*.jar"
-    into file("run/mods")
-}
-
-task deinstallMods(type: Delete) {
-    delete fileTree(dir: "run/mods", include: "*.jar")
-}
-
-project.afterEvaluate {
-    project.tasks['prepareRuns'].dependsOn(project.tasks['installMods'])
-}
 
 // Example configuration to allow publishing using the maven-publish task
 // we define a custom artifact that is sourced from the reobfJar output task
