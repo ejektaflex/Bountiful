@@ -18,7 +18,7 @@ displayName="Bountiful" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification <here>
 logoFile="examplemod.png" #optional
 # A text field displayed in the mod UI
-credits="Thanks for this example mod goes to Java" #optional
+credits="Forge team!" #optional
 # A text field displayed in the mod UI
 authors="Ejektaflex (code), AkiShirai (art)" #optional
 # The description text for the mod (multi line!) (#mandatory)
@@ -32,7 +32,7 @@ Bountiful adds bounty boards and bounties to the game.
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[28,)" #mandatory
+    versionRange="[31,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
@@ -41,6 +41,6 @@ Bountiful adds bounty boards and bounties to the game.
 [[dependencies.bountiful]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.14.4]"
+    versionRange="[1.15.2]"
     ordering="NONE"
     side="BOTH"

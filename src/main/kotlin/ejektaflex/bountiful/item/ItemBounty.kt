@@ -9,10 +9,14 @@ import ejektaflex.bountiful.logic.BountyChecker
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.data.BountyNBT
 import net.minecraft.client.util.ITooltipFlag
+import net.minecraft.entity.Entity
+import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.item.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Rarity
+import net.minecraft.nbt.CompoundNBT
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.text.ITextComponent
@@ -100,14 +104,11 @@ class ItemBounty(builder: Item.Properties) : Item(builder), IItemBounty {
         }
     }
 
-    // TODO Reimplement bounty item updates
-    /*
-    override fun onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity?, itemSlot: Int, isSelected: Boolean) {
+    override fun inventoryTick(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean) {
         if (worldIn.gameTime % BountyData.bountyTickFreq == 1L) {
             ensureTimerStarted(stack, worldIn)
         }
     }
-    */
 
     class BountyCreationException(err: String = "Bounty could not be created!") : Exception(err)
 
@@ -147,6 +148,7 @@ class ItemBounty(builder: Item.Properties) : Item(builder), IItemBounty {
         // Gate behind gamestages
         if (BountifulMod.config.isRunningGameStages && FacadeGameStages.stagesStillNeededFor(player, bounty).isNotEmpty()) {
             //player.sendTranslation("bountiful.tooltip.requirements")
+
             return false
         }
 

@@ -12,7 +12,6 @@ import net.minecraft.item.Item
 import net.minecraftforge.client.event.ModelRegistryEvent
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
-import net.minecraftforge.fml.client.event.ConfigChangedEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import java.io.File
 
@@ -107,6 +106,7 @@ object SetupLifecycle {
         */
     }
 
+    /*
     @SubscribeEvent
     fun onConfigChange(event: ConfigChangedEvent.OnConfigChangedEvent) {
         if (event.modID == "bountiful") {
@@ -114,6 +114,7 @@ object SetupLifecycle {
             BountifulConfig.Common.get()
         }
     }
+     */
 
 
 }
