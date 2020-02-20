@@ -2,22 +2,17 @@ package ejektaflex.bountiful.logic
 
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.api.data.IDecree
-import ejektaflex.bountiful.api.data.entry.BountyEntryStack
 import ejektaflex.bountiful.api.data.json.JsonAdapter
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
-import ejektaflex.bountiful.api.ext.clampTo
 import ejektaflex.bountiful.api.ext.hackyRandom
 import ejektaflex.bountiful.api.ext.randomSplit
 import ejektaflex.bountiful.api.ext.weightedRandom
 import ejektaflex.bountiful.data.BountyData
-import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.registry.DecreeRegistry
 import ejektaflex.bountiful.registry.PoolRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
 import java.util.*
-import kotlin.math.max
-
 
 
 object BountyCreator : IBountyCreator {
@@ -51,15 +46,15 @@ object BountyCreator : IBountyCreator {
 
         println("Decrees: $decrees")
 
-        createRewards(data, world, inRarity, decrees)
-        createObjectives(data, world, inRarity, decrees)
+        val toSatisfy = createRewards(data, world, inRarity, decrees)
+        createObjectives(data, world, inRarity, decrees, toSatisfy)
 
         println(JsonAdapter.toJson(data, BountyData::class))
 
         return data
     }
 
-    private fun createRewards(data: BountyData, world: World, inRarity: EnumBountyRarity, decrees: List<IDecree>) {
+    private fun createRewards(data: BountyData, world: World, inRarity: EnumBountyRarity, decrees: List<IDecree>): Int {
 
 
 
@@ -72,16 +67,33 @@ object BountyCreator : IBountyCreator {
         for (i in 0 until numRewards) {
             val randReward = rewards.weightedRandom.pick()
 
-            //accumWorth += randReward.
+            accumWorth += randReward.calculatedWorth
 
             data.rewards.add(randReward)
         }
 
+        return accumWorth
+
     }
 
-    private fun createObjectives(data: BountyData, world: World, inRarity: EnumBountyRarity, decrees: List<IDecree>) {
+    private fun createObjectives(data: BountyData, world: World, inRarity: EnumBountyRarity, decrees: List<IDecree>, worth: Int) {
 
         val objectives = DecreeRegistry.getObjectives(decrees)
+        val numObjectives = (1..2).hackyRandom()
+        val worthGroups = randomSplit(worth, numObjectives)
+
+        worthGroups.forEachIndexed { i, wrth ->
+
+            val objGroups = objectives.groupBy { it.worthDistanceFrom(wrth) }
+            println("Obj groups keys: " + objGroups.keys.toString())
+            val smallestDist = objGroups.keys.min()
+            val closest = objGroups[smallestDist]!!.hackyRandom().pick(wrth)
+
+            println("Closest for wrth [$wrth]: $closest")
+
+            data.objectives.add(closest)
+
+        }
 
 
 

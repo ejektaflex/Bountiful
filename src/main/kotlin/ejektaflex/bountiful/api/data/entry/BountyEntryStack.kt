@@ -6,6 +6,7 @@ import ejektaflex.bountiful.api.data.entry.feature.IKilledAmount
 import ejektaflex.bountiful.api.ext.toItemStack
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundNBT
+import kotlin.math.ceil
 
 class BountyEntryStack : BountyEntry<BountyEntryStack.StackBountyFeatures>() {
 
@@ -14,9 +15,13 @@ class BountyEntryStack : BountyEntry<BountyEntryStack.StackBountyFeatures>() {
     override val calculatedWorth: Int
         get() = unitWorth * feature.amount
 
-    override fun pick(): BountyEntry<StackBountyFeatures> {
+    override fun pick(worth: Int?): BountyEntry<StackBountyFeatures> {
         return cloned().apply {
-            feature!!.amount = randCount
+            feature!!.amount = if (worth != null) {
+                ceil(worth.toDouble() / unitWorth).toInt()
+            } else {
+                randCount
+            }
         }
     }
 

@@ -70,16 +70,15 @@ object DefaultData {
                                 unitWorth = 80
                                 amountRange = (2..32).ir
                             },
-                            BountyEntryStack().apply {
-                                content = "minecraft:apple"
-                                unitWorth = 70
+                            BountyEntryEntity().apply {
+                                content = "minecraft:zombie"
+                                unitWorth = 40
                                 amountRange = (2..32).ir
                             },
                             BountyEntryEntity().apply {
-                                content = "entity:minecraft:zombie"
-                                unitWorth = 40
-                                amountRange = (2..4).ir
-                                weight = 356
+                                content = "minecraft:spider"
+                                unitWorth = 120
+                                amountRange = (2..32).ir
                             }
                             //BountyEntry("minecraft:bread", 60, amountRange = (1..12).ir),
                             //BountyEntry("minecraft:sugar", 55, amountRange = (1..64).ir),
@@ -94,6 +93,26 @@ object DefaultData {
                                 content = "minecraft:baked_potato"
                                 unitWorth = 120
                                 amountRange = (4..24).ir
+                            },
+                            BountyEntryStack().apply {
+                                content = "minecraft:cooked_mutton"
+                                unitWorth = 150
+                                amountRange = (4..24).ir
+                            },
+                            BountyEntryStack().apply {
+                                content = "minecraft:cooked_beef"
+                                unitWorth = 175
+                                amountRange = (4..24).ir
+                            },
+                            BountyEntryStack().apply {
+                                content = "minecraft:cooked_beef"
+                                unitWorth = 175
+                                amountRange = (4..24).ir
+                            },
+                            BountyEntryStack().apply {
+                                content = "minecraft:cooked_porkchop"
+                                unitWorth = 60
+                                amountRange = (1..24).ir
                             }
                     )
                 },

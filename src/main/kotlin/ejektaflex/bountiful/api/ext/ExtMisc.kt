@@ -69,11 +69,17 @@ fun Long.clampTo(range: LongRange): Long {
 val IntRange.ir: ItemRange
     get() = ItemRange(this.first, this.last)
 
+// Some ASM transformers don't like Kotlin's random class :(
+
 private val hackyRandMaker = java.util.Random()
 
 fun IntRange.hackyRandom(): Int {
 
-    return start + hackyRandMaker.nextInt(endInclusive - start)
+    return start + hackyRandMaker.nextInt(endInclusive - start + 1)
+}
+
+fun <T : Any> List<T>.hackyRandom(): T {
+    return this[(0 until size).hackyRandom()]
 }
 
 val <T : IWeighted> List<T>.weightedRandom: T
@@ -105,7 +111,7 @@ fun <T : IWeighted> List<T>.weightedRandomNorm(exp: Double): T {
 }
 
 fun randomSplit(num: Int, ways: Int): List<Int> {
-    val bits = (0 until ways).map { Random.nextDouble() }
+    val bits = (0 until ways).map { hackyRandMaker.nextDouble() }
     val sum = bits.sum()
     return bits.map { (it / sum) * num }.map { it.toInt() }
 }

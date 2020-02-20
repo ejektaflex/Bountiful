@@ -7,18 +7,22 @@ import ejektaflex.bountiful.api.ext.toEntityEntry
 import net.minecraft.client.resources.I18n
 import net.minecraft.entity.EntityType
 import net.minecraft.nbt.CompoundNBT
+import kotlin.math.ceil
 
 class BountyEntryEntity : BountyEntry<BountyEntryEntity.EntityBountyFeatures>() {
 
     override var type: String = BountyType.Entity.id
 
-
     override val calculatedWorth: Int
         get() = unitWorth * feature.amount
 
-    override fun pick(): BountyEntry<EntityBountyFeatures> {
+    override fun pick(worth: Int?): BountyEntry<EntityBountyFeatures> {
         return cloned().apply {
-            feature!!.amount = randCount
+            feature!!.amount = if (worth != null) {
+                ceil(worth.toDouble() / unitWorth).toInt()
+            } else {
+                randCount
+            }
         }
     }
 
@@ -46,7 +50,7 @@ class BountyEntryEntity : BountyEntry<BountyEntryEntity.EntityBountyFeatures>() 
         }
 
     override val prettyContent: String
-        get() = ("(${feature.killedAmount}/${feature.amount}) §a" + I18n.format("entity." + entityEntry?.registryName + ".name") + " Kills§r")
+        get() = ("(${feature.killedAmount}/${feature.amount}) §a" + "entity." + content + ".name" + " Kills§r")
 
     override fun toString(): String {
         return "BountyEntry (Entity) [Entity: $content, Amount: ${feature.amount}, Weight: $weight]"

@@ -10,6 +10,8 @@ import ejektaflex.bountiful.api.generic.IWeighted
 import ejektaflex.bountiful.api.generic.ItemRange
 import net.minecraft.nbt.*
 import net.minecraftforge.common.util.INBTSerializable
+import kotlin.math.abs
+import kotlin.math.min
 
 abstract class BountyEntry<T : IEntryFeature> : ITagString, JsonBiSerializer<BountyEntry<T>>, INBTSerializable<CompoundNBT>, IWeighted, Cloneable {
 
@@ -29,11 +31,23 @@ abstract class BountyEntry<T : IEntryFeature> : ITagString, JsonBiSerializer<Bou
 
     abstract val calculatedWorth: Int
 
+    private val worthRange: IntRange
+        get() = (amountRange!!.min * unitWorth)..(amountRange!!.max * unitWorth)
+
+    fun worthDistanceFrom(value: Int): Int {
+        val rnge = worthRange
+        return if (value in rnge) {
+            0
+        } else {
+            min(abs(rnge.first - value), abs(rnge.last - value))
+        }
+    }
+
     fun cloned(): BountyEntry<T> {
         return clone() as BountyEntry<T>
     }
 
-    abstract fun pick(): BountyEntry<T>
+    abstract fun pick(worth: Int? = null): BountyEntry<T>
 
     val randCount: Int
         get() = ((amountRange?.min ?: 1)..(amountRange?.max ?: Int.MAX_VALUE)).hackyRandom()
