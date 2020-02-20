@@ -37,6 +37,6 @@ interface IBountifulAPI {
     /**
      * Creates data for a new bounty.
      */
-    fun createBountyData(worldIn: World, rarity: EnumBountyRarity?): IBountyData?
+    fun createBountyData(worldIn: World, rarity: EnumBountyRarity): IBountyData?
 
 }

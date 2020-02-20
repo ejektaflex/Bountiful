@@ -19,7 +19,7 @@ enum class EnumBountyRarity(
     companion object {
         fun getRarityFromInt(n: Int): EnumBountyRarity {
             return if (n in 0 until values().size) {
-                EnumBountyRarity.values()[n]
+                values()[n]
             } else {
                 Common
             }

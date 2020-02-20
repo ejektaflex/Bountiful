@@ -2,10 +2,22 @@ package ejektaflex.bountiful.api.data.entry
 
 import ejektaflex.bountiful.api.ext.toItemStack
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.CompoundNBT
 
 class BountyEntryStack : BountyEntry() {
 
-    override val type: String = BountyType.Stack.id
+    override var type: String = BountyType.Stack.id
+
+    override fun deserializeNBT(tag: CompoundNBT) {
+        super.deserializeNBT(tag)
+        amount = tag.getInt("amount")
+    }
+
+    override fun serializeNBT(): CompoundNBT {
+        return super.serializeNBT().apply {
+            putInt("amount", amount)
+        }
+    }
 
     val itemStack: ItemStack?
         get() {

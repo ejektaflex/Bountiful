@@ -14,6 +14,7 @@ import net.minecraftforge.registries.ForgeRegistries
 import java.io.InputStream
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.random.Random
 
 /*
 fun <T : INBTSerializable<CompoundNBT>> World.ifHasCapability(capability: Capability<T>, func: T.() -> Unit) {
@@ -50,6 +51,9 @@ val Entity.registryName: ResourceLocation?
 
 //fun ICommandSender.sendTranslation(key: String) = sendMessage(TextComponentTranslation(key))
 
+// TODO Make update this
+fun Entity.sendTranslation(key: String) = sendMessage(StringTextComponent("Key: $key"))
+
 fun Int.clampTo(range: IntRange): Int {
     return max(range.first, min(this, range.last))
 }
@@ -65,10 +69,18 @@ fun Long.clampTo(range: LongRange): Long {
 val IntRange.ir: ItemRange
     get() = ItemRange(this.first, this.last)
 
+private val hackyRandMaker = java.util.Random()
+
+fun IntRange.hackyRandom(): Int {
+
+    return start + hackyRandMaker.nextInt(endInclusive - start)
+}
+
 val <T : IWeighted> List<T>.weightedRandom: T
     get() {
+        //if (size == 1) return first()
         val sum = this.sumBy { it.weight }
-        var point = (0..sum).random()
+        var point = (0..sum).hackyRandom()
         for (item in this) {
             if (point <= item.weight) {
                 return item
@@ -77,3 +89,23 @@ val <T : IWeighted> List<T>.weightedRandom: T
         }
         return last()
     }
+
+
+fun <T : IWeighted> List<T>.weightedRandomNorm(exp: Double): T {
+    //if (size == 1) return first()
+    val sum = this.sumBy { it.normalizedWeight(exp) }
+    var point = (0..sum).hackyRandom()
+    for (item in this) {
+        if (point <= item.normalizedWeight(exp)) {
+            return item
+        }
+        point -= item.normalizedWeight(exp)
+    }
+    return last()
+}
+
+fun randomSplit(num: Int, ways: Int): List<Int> {
+    val bits = (0 until ways).map { Random.nextDouble() }
+    val sum = bits.sum()
+    return bits.map { (it / sum) * num }.map { it.toInt() }
+}

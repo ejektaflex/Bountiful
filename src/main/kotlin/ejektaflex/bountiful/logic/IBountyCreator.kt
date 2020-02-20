@@ -2,7 +2,9 @@ package ejektaflex.bountiful.logic
 
 
 import ejektaflex.bountiful.api.data.IBountyData
+import ejektaflex.bountiful.api.data.IDecree
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
+import ejektaflex.bountiful.registry.DecreeRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
 
@@ -20,6 +22,6 @@ interface IBountyCreator {
     /**
      * Generates new, randomized bounty data
      */
-    fun create(world: World, inRarity: EnumBountyRarity? = null): IBountyData?
+    fun create(world: World, inRarity: EnumBountyRarity, decrees: List<IDecree> = DecreeRegistry.content): IBountyData?
 
 }

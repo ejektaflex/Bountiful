@@ -2,12 +2,16 @@ package ejektaflex.bountiful.item
 
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.api.BountifulAPI
+import ejektaflex.bountiful.api.data.json.JsonAdapter
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
+import ejektaflex.bountiful.api.ext.sendTranslation
 import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.compat.FacadeGameStages
 import ejektaflex.bountiful.logic.BountyChecker
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.data.BountyNBT
+import ejektaflex.bountiful.registry.DecreeRegistry
+import ejektaflex.bountiful.registry.PoolRegistry
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
@@ -28,8 +32,23 @@ import net.minecraftforge.api.distmarker.OnlyIn
 
 class ItemBounty(builder: Item.Properties) : Item(builder), IItemBounty {
 
+    /**
+     * Thrown when bounty NBT data could not be created
+     */
+    class BountyCreationException(err: String = "Bounty could not be created!") : Exception(err)
+
     override fun getTranslationKey() = "bountiful.bounty"
 
+    override fun onItemRightClick(worldIn: World, playerIn: PlayerEntity, handIn: Hand): ActionResult<ItemStack> {
+
+        if (worldIn.isRemote) {
+            return super.onItemRightClick(worldIn, playerIn, handIn)
+        }
+
+        cashIn(playerIn, handIn, atBoard = false)
+
+        return super.onItemRightClick(worldIn, playerIn, handIn)
+    }
 
     @OnlyIn(Dist.CLIENT)
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<ITextComponent>, flagIn: ITooltipFlag) {
@@ -110,9 +129,8 @@ class ItemBounty(builder: Item.Properties) : Item(builder), IItemBounty {
         }
     }
 
-    class BountyCreationException(err: String = "Bounty could not be created!") : Exception(err)
 
-    override fun ensureBounty(stack: ItemStack, worldIn: World, rarity: EnumBountyRarity?) {
+    override fun ensureBounty(stack: ItemStack, worldIn: World, rarity: EnumBountyRarity) {
 
         val data = try {
             BountifulAPI.createBountyData(worldIn, rarity)
@@ -132,6 +150,8 @@ class ItemBounty(builder: Item.Properties) : Item(builder), IItemBounty {
             throw Exception("${stack.displayName} is not an ItemBounty, so you cannot generate bounty data for it!")
         }
 
+
+
     }
 
     // Used to cash in the bounty for a reward
@@ -147,13 +167,13 @@ class ItemBounty(builder: Item.Properties) : Item(builder), IItemBounty {
 
         // Gate behind gamestages
         if (BountifulMod.config.isRunningGameStages && FacadeGameStages.stagesStillNeededFor(player, bounty).isNotEmpty()) {
-            //player.sendTranslation("bountiful.tooltip.requirements")
+            player.sendTranslation("bountiful.tooltip.requirements")
 
             return false
         }
 
         if (bounty.hasExpired(player.world)) {
-            //player.sendTranslation("bountiful.bounty.expired")
+            player.sendTranslation("bountiful.bounty.expired")
             return false
         }
 
@@ -164,7 +184,7 @@ class ItemBounty(builder: Item.Properties) : Item(builder), IItemBounty {
 
         val entitiesFulfilled = BountyChecker.hasEntitiesFulfilled(bounty)
         if (!entitiesFulfilled) {
-            //player.sendTranslation("bountiful.requirements.mobs.needed")
+            player.sendTranslation("bountiful.requirements.mobs.needed")
             return false
         }
 
@@ -173,7 +193,7 @@ class ItemBounty(builder: Item.Properties) : Item(builder), IItemBounty {
             //player.sendTranslation("bountiful.requirements.met")
             false
         } else {
-            //player.sendTranslation("bountiful.bounty.fulfilled")
+            player.sendTranslation("bountiful.bounty.fulfilled")
             // Reduce count of relevant prerequisite stacks
             BountyChecker.takeItems(player, inv, bounty, invItemsAffected)
 
@@ -200,16 +220,7 @@ class ItemBounty(builder: Item.Properties) : Item(builder), IItemBounty {
 
     }
 
-    override fun onItemRightClick(worldIn: World, playerIn: PlayerEntity, handIn: Hand): ActionResult<ItemStack> {
 
-        if (worldIn.isRemote) {
-            return super.onItemRightClick(worldIn, playerIn, handIn)
-        }
-
-        cashIn(playerIn, handIn, atBoard = false)
-
-        return super.onItemRightClick(worldIn, playerIn, handIn)
-    }
 
     // Don't flail arms randomly on NBT update
     override fun shouldCauseReequipAnimation(oldStack: ItemStack, newStack: ItemStack, slotChanged: Boolean): Boolean {

@@ -10,6 +10,6 @@ interface IDecree : IIdentifiable {
     val spawnsInBoard: Boolean
     val objectivePools: MutableList<String>
     val rewardPools: MutableList<String>
-    val objectives: List<BountyEntry>
-    val rewards: List<BountyEntry>
+    //val objectives: List<BountyEntry>
+    //val rewards: List<BountyEntry>
 }

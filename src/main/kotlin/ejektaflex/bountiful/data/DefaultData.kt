@@ -76,7 +76,7 @@ object DefaultData {
                                 amountRange = (2..32).ir
                             },
                             BountyEntryEntity().apply {
-                                content = "entity:minecraft:apple"
+                                content = "entity:minecraft:zombie"
                                 unitWorth = 40
                                 amountRange = (2..4).ir
                                 weight = 356
@@ -102,6 +102,11 @@ object DefaultData {
                     add(
                             //BountyEntryStack("minecraft:gold_nugget", 100),
                             //BountyEntryStack("minecraft:gold_ingot", 900)
+                            BountyEntryStack().apply {
+                                content = "minecraft:gold_nugget"
+                                unitWorth = 150
+                                amountRange = (1..16).ir
+                            }
                     )
                 }
 

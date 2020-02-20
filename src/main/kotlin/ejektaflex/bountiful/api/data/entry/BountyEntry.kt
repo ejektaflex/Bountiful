@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.api.data.ITagString
 import ejektaflex.bountiful.api.data.JsonBiSerializer
 import ejektaflex.bountiful.api.ext.getUnsortedStringSet
+import ejektaflex.bountiful.api.ext.hackyRandom
 import ejektaflex.bountiful.api.ext.setUnsortedStringSet
 import ejektaflex.bountiful.api.generic.IStageRequirement
 import ejektaflex.bountiful.api.generic.IWeighted
@@ -19,7 +20,7 @@ import net.minecraftforge.common.util.INBTSerializable
 abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSerializable<CompoundNBT>,
         IStageRequirement, IWeighted {
 
-    abstract val type: String
+    abstract var type: String
 
     open var content: String = ""
 
@@ -32,15 +33,26 @@ abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSeri
 
     @Transient open var amount: Int = amountRange?.min ?: 1
 
+
+
     open var unitWorth: Int = Integer.MIN_VALUE
 
-    @Expose(serialize = false)
-    @Transient override var weight: Int = 100
+    //@Expose(serialize = false)
+    override var weight: Int = 100
 
     override fun requiredStages() = mutableListOf<String>()
 
     val randCount: Int
-        get() = ((amountRange?.min ?: 1)..(amountRange?.max ?: Int.MAX_VALUE)).random()
+        get() = ((amountRange?.min ?: 1)..(amountRange?.max ?: Int.MAX_VALUE)).hackyRandom()
+
+    val worthRange: ItemRange
+        get() = ItemRange(
+                unitWorth * (amountRange?.min ?: amount),
+                unitWorth * (amountRange?.max ?: amount)
+        )
+
+    val averageWorth: Int
+        get() = (worthRange.min + worthRange.max) / 2
 
 
     // Must override because overriding [nbtString]
@@ -50,21 +62,25 @@ abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSeri
 
     override fun serializeNBT(): CompoundNBT {
         return CompoundNBT().apply {
+            putString("type", type)
             putString("content", content)
             putInt("unitWorth", unitWorth)
             tag?.let {
                 this.put("nbt", it)
             }
+            //putInt("amount", amount)
             stages?.let { setUnsortedStringSet("stages", it.toSet()) }
         }
     }
 
     override fun deserializeNBT(tag: CompoundNBT) {
+        type = tag.getString("type")
         content = tag.getString("content")
         unitWorth = tag.getInt("unitWorth")
         if ("nbt" in tag) {
             nbtString = tag["nbt"]!!.toString()
         }
+        //amount = tag.getInt("amount")
         stages = tag.getUnsortedStringSet("stages").toMutableList()
     }
 

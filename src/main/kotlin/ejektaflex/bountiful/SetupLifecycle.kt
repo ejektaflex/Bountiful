@@ -12,10 +12,11 @@ import net.minecraft.item.Item
 import net.minecraftforge.client.event.ModelRegistryEvent
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
+import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import java.io.File
 
-@KotlinEventBusSubscriber
+@Mod.EventBusSubscriber
 object SetupLifecycle {
 
     init {
@@ -50,30 +51,28 @@ object SetupLifecycle {
 
             info(testFile.readText())
 
-            val decreeList = JsonAdapter.fromJson<Array<Decree>>(testFile.readText())
-            //DecreeRegistry.restore(decreeList)
+            val decreeList = JsonAdapter.fromJson<Array<Decree>>(testFile.readText()).toList()
+            DecreeRegistry.restore(decreeList)
             val first = decreeList.first()
 
             println(first)
-            println(first.objectives)
-            println(first.rewards)
+            //println(first.objectives)
+            //println(first.rewards)
 
             info("Testing done.")
         }
 
     }
 
-    fun setupConfig() = BountifulConfig.register()
+    private fun setupConfig() = BountifulConfig.register()
 
-    fun dumpDecrees() {
+    private fun dumpDecrees() {
         BountifulMod.logger.info("Bountiful decrees:")
         println(DecreeRegistry.content.first().decreeDescription)
         println("Doot")
-        for (decree in DecreeRegistry.content) {
-            BountifulMod.logger.info(decree.decreeTitle)
-        }
         println("Doot 2")
         for (decree in DecreeRegistry) {
+            BountifulMod.logger.info(decree.decreeTitle)
             BountifulMod.logger.info(decree.decreeDescription)
         }
     }

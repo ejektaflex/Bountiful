@@ -28,6 +28,6 @@ interface IItemBounty : IForgeRegistryEntry<Item> {
     /**
      * When given an ItemStack of ItemBounty, this method ensures that the stack has bounty NBT data.
      */
-    fun ensureBounty(stack: ItemStack, worldIn: World, rarity: EnumBountyRarity? = null)
+    fun ensureBounty(stack: ItemStack, worldIn: World, rarity: EnumBountyRarity = EnumBountyRarity.Common)
 
 }

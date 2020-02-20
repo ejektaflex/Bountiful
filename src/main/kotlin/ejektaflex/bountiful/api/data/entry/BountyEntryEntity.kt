@@ -8,7 +8,7 @@ import net.minecraft.nbt.CompoundNBT
 
 class BountyEntryEntity : BountyEntry() {
 
-    override val type: String = BountyType.Entity.id
+    override var type: String = BountyType.Entity.id
 
     @Expose(serialize = false, deserialize = false)
     var killedAmount = 0

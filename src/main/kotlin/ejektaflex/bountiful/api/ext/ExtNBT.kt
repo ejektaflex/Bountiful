@@ -61,8 +61,8 @@ fun <T : INBTSerializable<CompoundNBT>> CompoundNBT.getUnsortedList(key: String,
 val CompoundNBT.toBountyEntry: BountyEntry
     get() {
         val bTypeName = getString("type")
-        val bType = BountyType.values().find { it.id == bTypeName } ?: Exception("Deserialized bounty with type: $bTypeName")
-        val newBounty = (bType as BountyType).klazz.createInstance()
+        val bType = BountyType.values().find { it.id == bTypeName } ?: throw Exception("Deserialized bounty with type: $bTypeName")
+        val newBounty = bType.klazz.createInstance()
         return newBounty.apply { deserializeNBT(this@toBountyEntry) }
     }
 
