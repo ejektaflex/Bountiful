@@ -12,6 +12,8 @@
 
 	"_comment": "Commands",
 
+	"bountiful.bounty": "Bounty",
+
 	"bountiful.reloaded.data": "Json config files reloaded.",
 	"bountiful.reloading.data": "Reloading data..",
 	"bountiful.requirements.met": "§aBounty requirements met. Fullfill your bounty by right clicking on a bounty board.",

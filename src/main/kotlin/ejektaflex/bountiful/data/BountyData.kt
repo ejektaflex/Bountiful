@@ -83,7 +83,7 @@ class BountyData : IBountyData {
     private val rewardPretty: List<String>
         get() {
             return listOf(
-                    "§f${I18n.format("bountiful.tooltip.rewardPools")}: "
+                    "§f${I18n.format("bountiful.tooltip.rewards")}: "
             ) + rewards.content.map { it.prettyContent } + listOf("§r")
         }
 

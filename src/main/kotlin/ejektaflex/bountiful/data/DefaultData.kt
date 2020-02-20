@@ -66,7 +66,7 @@ object DefaultData {
                 EntryPool("vanilla_food_bounties").apply {
                     add(
                             BountyEntryStack().apply {
-                                content = "minecraft:fish"
+                                content = "minecraft:cod"
                                 unitWorth = 80
                                 amountRange = (2..32).ir
                             },
