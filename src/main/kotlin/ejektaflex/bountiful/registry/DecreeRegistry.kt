@@ -3,6 +3,8 @@ package ejektaflex.bountiful.registry
 import ejektaflex.bountiful.api.data.IDecree
 import ejektaflex.bountiful.api.data.entry.BountyEntry
 import ejektaflex.bountiful.data.ValueRegistry
+import ejektaflex.bountiful.logic.IBountyObjective
+import ejektaflex.bountiful.logic.IBountyReward
 
 object DecreeRegistry : ValueRegistry<IDecree>() {
 
@@ -25,12 +27,16 @@ object DecreeRegistry : ValueRegistry<IDecree>() {
     fun getObjectives(decrees: List<IDecree>): List<BountyEntry<*>> {
         return getEntryList(decrees) {
             objectivePools
+        }.filter {
+            it is IBountyObjective
         }
     }
 
     fun getRewards(decrees: List<IDecree>): List<BountyEntry<*>> {
         return getEntryList(decrees) {
             rewardPools
+        }.filter {
+            it is IBountyReward
         }
     }
 

@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "bountiful:items/bounty-epic"
+    "layer0": "bountiful:item/bounty-epic"
   }
 }

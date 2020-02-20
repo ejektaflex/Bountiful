@@ -1,12 +1,12 @@
 {
   "parent": "block/cube",
   "textures": {
-    "particle": "bountiful:blocks/bountyboard",
-    "down": "bountiful:blocks/bountyboard_top",
-    "up": "bountiful:blocks/bountyboard_top",
-    "north": "bountiful:blocks/bountyboard",
-    "east": "bountiful:blocks/bountyboard",
-    "south": "bountiful:blocks/bountyboard",
-    "west": "bountiful:blocks/bountyboard"
+    "particle": "bountiful:block/bountyboard",
+    "down": "bountiful:block/bountyboard_top",
+    "up": "bountiful:block/bountyboard_top",
+    "north": "bountiful:block/bountyboard",
+    "east": "bountiful:block/bountyboard",
+    "south": "bountiful:block/bountyboard",
+    "west": "bountiful:block/bountyboard"
   }
 }

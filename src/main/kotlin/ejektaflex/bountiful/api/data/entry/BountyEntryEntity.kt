@@ -4,12 +4,14 @@ import com.google.gson.annotations.Expose
 import ejektaflex.bountiful.api.data.entry.feature.IAmount
 import ejektaflex.bountiful.api.data.entry.feature.IKilledAmount
 import ejektaflex.bountiful.api.ext.toEntityEntry
+import ejektaflex.bountiful.logic.IBountyObjective
 import net.minecraft.client.resources.I18n
 import net.minecraft.entity.EntityType
 import net.minecraft.nbt.CompoundNBT
 import kotlin.math.ceil
+import kotlin.math.max
 
-class BountyEntryEntity : BountyEntry<BountyEntryEntity.EntityBountyFeatures>() {
+class BountyEntryEntity : BountyEntry<BountyEntryEntity.EntityBountyFeatures>(), IBountyObjective {
 
     override var type: String = BountyType.Entity.id
 
@@ -19,7 +21,7 @@ class BountyEntryEntity : BountyEntry<BountyEntryEntity.EntityBountyFeatures>() 
     override fun pick(worth: Int?): BountyEntry<EntityBountyFeatures> {
         return cloned().apply {
             feature!!.amount = if (worth != null) {
-                ceil(worth.toDouble() / unitWorth).toInt()
+                max(1, ceil(worth.toDouble() / unitWorth).toInt())
             } else {
                 randCount
             }

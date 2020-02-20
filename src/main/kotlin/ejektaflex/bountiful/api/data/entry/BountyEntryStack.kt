@@ -4,11 +4,14 @@ import ejektaflex.bountiful.api.data.entry.feature.IAmount
 import ejektaflex.bountiful.api.data.entry.feature.IEntryFeature
 import ejektaflex.bountiful.api.data.entry.feature.IKilledAmount
 import ejektaflex.bountiful.api.ext.toItemStack
+import ejektaflex.bountiful.logic.IBountyObjective
+import ejektaflex.bountiful.logic.IBountyReward
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundNBT
 import kotlin.math.ceil
+import kotlin.math.max
 
-class BountyEntryStack : BountyEntry<BountyEntryStack.StackBountyFeatures>() {
+class BountyEntryStack : BountyEntry<BountyEntryStack.StackBountyFeatures>(), IBountyObjective, IBountyReward {
 
     override var type: String = BountyType.Stack.id
 
@@ -18,7 +21,7 @@ class BountyEntryStack : BountyEntry<BountyEntryStack.StackBountyFeatures>() {
     override fun pick(worth: Int?): BountyEntry<StackBountyFeatures> {
         return cloned().apply {
             feature!!.amount = if (worth != null) {
-                ceil(worth.toDouble() / unitWorth).toInt()
+                max(1, ceil(worth.toDouble() / unitWorth).toInt())
             } else {
                 randCount
             }
@@ -39,10 +42,12 @@ class BountyEntryStack : BountyEntry<BountyEntryStack.StackBountyFeatures>() {
         }
 
     override val prettyContent: String
-        get() = "§f${feature.amount}x §a${itemStack?.displayName}§r"
+        get() = "§f${feature.amount}x §a${itemStack?.displayName!!.formattedText}§r"
 
     override fun toString(): String {
         return "BountyEntry (Stack) [Item: $content, Amount: ${feature.amount}, Worth: $unitWorth, NBT: $tag, Weight: $weight]"
     }
+
+
 
 }

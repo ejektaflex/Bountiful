@@ -36,6 +36,7 @@ class BountyData : IBountyData {
         return timeLeft(world) <= 0
     }
 
+
     override fun boardTimeLeft(world: World): Long {
         return max(boardStamp + BountifulMod.config.boardLifespan - world.gameTime , 0)
     }
@@ -47,11 +48,8 @@ class BountyData : IBountyData {
     private fun tooltipInfoBasic(world: World): List<String> {
         return listOf(
                 //"Board Time: ${formatTickTime(boardTimeLeft(world) / boardTickFreq)}",
-                "${I18n.format("bountiful.tooltip.time")}: ${formatTimeExpirable(timeLeft(world) / bountyTickFreq)}",
-                getPretty,
-                rewardPretty,
-                I18n.format("bountiful.tooltip.advanced")
-        )
+                "${I18n.format("bountiful.tooltip.time")}: ${formatTimeExpirable(timeLeft(world) / bountyTickFreq)}"
+        ) + getPretty + rewardPretty + listOf(I18n.format("bountiful.tooltip.advanced") )
     }
 
     private fun formatTickTime(n: Long): String {
@@ -70,23 +68,23 @@ class BountyData : IBountyData {
         }
     }
 
-    private val getPretty: String
+    private val getPretty: List<String>
         get() {
             return if (objectives.content.isEmpty()) {
-                "§6Completed. §aTurn it in!"
+                listOf("§6Completed. §aTurn it in!")
             } else {
-                "§f${I18n.format("bountiful.tooltip.required")}: " + objectives.content.joinToString(", ") {
-                    it.prettyContent
-                } + "§r"
+                listOf(
+                        "§f${I18n.format("bountiful.tooltip.required")}: "
+                ) + objectives.content.map { it.prettyContent } + listOf("§r")
             }
 
         }
 
-    private val rewardPretty: String
+    private val rewardPretty: List<String>
         get() {
-            return "§f${I18n.format("bountiful.tooltip.rewardPools")}: " + rewards.content.joinToString(", ") {
-                "§f${it.unitWorth}x §6${it.prettyContent}§f"
-            } + "§r"
+            return listOf(
+                    "§f${I18n.format("bountiful.tooltip.rewardPools")}: "
+            ) + rewards.content.map { it.prettyContent } + listOf("§r")
         }
 
 

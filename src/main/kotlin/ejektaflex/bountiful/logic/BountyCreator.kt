@@ -2,6 +2,7 @@ package ejektaflex.bountiful.logic
 
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.api.data.IDecree
+import ejektaflex.bountiful.api.data.entry.BountyEntry
 import ejektaflex.bountiful.api.data.json.JsonAdapter
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.api.ext.hackyRandom
@@ -13,6 +14,7 @@ import ejektaflex.bountiful.registry.PoolRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
 import java.util.*
+import kotlin.math.ceil
 
 
 object BountyCreator : IBountyCreator {
@@ -56,21 +58,29 @@ object BountyCreator : IBountyCreator {
 
     private fun createRewards(data: BountyData, world: World, inRarity: EnumBountyRarity, decrees: List<IDecree>): Int {
 
-
-
         val rewards = DecreeRegistry.getRewards(decrees)
-
-        var accumWorth = 0
 
         val numRewards = (1..2).hackyRandom()
 
+        val toAdd = mutableListOf<BountyEntry<*>>()
+
         for (i in 0 until numRewards) {
-            val randReward = rewards.weightedRandom.pick()
 
-            accumWorth += randReward.calculatedWorth
+            val totalRewards = rewards.filter {
+                it.content !in toAdd.map { alreadyAdded -> alreadyAdded.content }
+            }
 
-            data.rewards.add(randReward)
+            // Return if there's nothing to pick
+            if (totalRewards.isEmpty()) {
+                break
+            }
+
+            toAdd.add( totalRewards.weightedRandom.pick() )
         }
+
+        val accumWorth = toAdd.sumBy { it.calculatedWorth }
+
+        data.rewards.add(*toAdd.toTypedArray())
 
         return accumWorth
 
@@ -82,19 +92,51 @@ object BountyCreator : IBountyCreator {
         val numObjectives = (1..2).hackyRandom()
         val worthGroups = randomSplit(worth, numObjectives)
 
-        worthGroups.forEachIndexed { i, wrth ->
+        if (objectives.isEmpty()) {
+            return
+        }
 
-            val objGroups = objectives.groupBy { it.worthDistanceFrom(wrth) }
+        val variance = 0.1
+
+        val toAdd = mutableListOf<BountyEntry<*>>()
+
+        for (wrth in worthGroups) {
+            val wRange = ceil(wrth * variance)
+
+            // Filter out things already picked
+            val totalObjectives = objectives.filter {
+                it.content !in toAdd.map { alreadyAdded -> alreadyAdded.content }
+            }
+
+            // Return if there's nothing to pick
+            if (totalObjectives.isEmpty()) {
+                break
+            }
+
+            // Make sure to filter out non-objectives
+            val objGroups = totalObjectives.groupBy { it.worthDistanceFrom(wrth) }
+
             println("Obj groups keys: " + objGroups.keys.toString())
-            val smallestDist = objGroups.keys.min()
-            val closest = objGroups[smallestDist]!!.hackyRandom().pick(wrth)
+
+            val groupsInRange = objGroups.filter { it.key <= wRange }
+            val totalObjs = groupsInRange.values.flatten()
+
+            // If there are no objectives within variance from target worth, just get the one with the smallest distance
+            // Otherwise, if one/some exist, pick at random.
+            val closest = if (totalObjs.isEmpty()) {
+                val smallestDist = objGroups.keys.min()
+                objGroups[smallestDist]!!.hackyRandom().pick(wrth)
+            } else {
+                totalObjs.hackyRandom().pick(wrth)
+            }
 
             println("Closest for wrth [$wrth]: $closest")
 
-            data.objectives.add(closest)
-
+            toAdd.add(closest)
         }
 
+
+        data.objectives.add(*toAdd.toTypedArray())
 
 
     }
