@@ -17,6 +17,8 @@ abstract class BountyEntry<T : IEntryFeature> : ITagString, JsonBiSerializer<Bou
 
     abstract var type: String
 
+    open var name: String? = null
+
     open var content: String = ""
 
     @SerializedName("nbt_data")

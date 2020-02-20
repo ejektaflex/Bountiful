@@ -42,7 +42,13 @@ class BountyEntryStack : BountyEntry<BountyEntryStack.StackBountyFeatures>(), IB
         }
 
     override val prettyContent: String
-        get() = "§f${feature.amount}x §a${itemStack?.displayName!!.formattedText}§r"
+        get() {
+            return if (name != null) {
+                "§f${feature.amount}x §a$name§r"
+            } else {
+                "§f${feature.amount}x §a${itemStack?.displayName!!.formattedText}§r"
+            }
+        }
 
     override fun toString(): String {
         return "BountyEntry (Stack) [Item: $content, Amount: ${feature.amount}, Worth: $unitWorth, NBT: $tag, Weight: $weight]"

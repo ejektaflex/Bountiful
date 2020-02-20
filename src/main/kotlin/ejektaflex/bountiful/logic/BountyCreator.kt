@@ -51,7 +51,7 @@ object BountyCreator : IBountyCreator {
         val toSatisfy = createRewards(data, world, inRarity, decrees)
         createObjectives(data, world, inRarity, decrees, toSatisfy)
 
-        println(JsonAdapter.toJson(data, BountyData::class))
+        //println(JsonAdapter.toJson(data, BountyData::class))
 
         return data
     }

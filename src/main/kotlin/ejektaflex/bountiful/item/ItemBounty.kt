@@ -8,6 +8,7 @@ import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.logic.BountyChecker
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.data.BountyNBT
+import ejektaflex.bountiful.logic.BountyCheck
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
@@ -158,11 +159,19 @@ class ItemBounty(builder: Item.Properties) : Item(builder), IItemBounty {
         val inv = player.inventory.mainInventory
         val bounty = BountyData().apply { deserializeNBT(bountyItem.tag!!) }
 
+        val check = BountyCheck(player, bounty, inv)
+        check.checkStacks()
 
         if (bounty.hasExpired(player.world)) {
             player.sendTranslation("bountiful.bounty.expired")
             return false
         }
+
+
+
+        return false
+
+        /*
 
         // Returns prerequisite stacks needed to reduce for reward, or null if they don't have the prereqs
         val invItemsAffected = BountyChecker.hasItems(player, inv, bounty) ?: return false
@@ -203,6 +212,8 @@ class ItemBounty(builder: Item.Properties) : Item(builder), IItemBounty {
 
             true
         }
+
+         */
 
 
     }
