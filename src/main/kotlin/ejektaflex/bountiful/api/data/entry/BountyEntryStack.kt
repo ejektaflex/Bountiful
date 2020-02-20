@@ -1,22 +1,29 @@
 package ejektaflex.bountiful.api.data.entry
 
+import ejektaflex.bountiful.api.data.entry.feature.IAmount
+import ejektaflex.bountiful.api.data.entry.feature.IEntryFeature
+import ejektaflex.bountiful.api.data.entry.feature.IKilledAmount
 import ejektaflex.bountiful.api.ext.toItemStack
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundNBT
 
-class BountyEntryStack : BountyEntry() {
+class BountyEntryStack : BountyEntry<BountyEntryStack.StackBountyFeatures>() {
 
     override var type: String = BountyType.Stack.id
 
-    override fun deserializeNBT(tag: CompoundNBT) {
-        super.deserializeNBT(tag)
-        amount = tag.getInt("amount")
+    override val calculatedWorth: Int
+        get() = unitWorth * feature.amount
+
+    override fun pick(): BountyEntry<StackBountyFeatures> {
+        return cloned().apply {
+            feature!!.amount = randCount
+        }
     }
 
-    override fun serializeNBT(): CompoundNBT {
-        return super.serializeNBT().apply {
-            putInt("amount", amount)
-        }
+    override val feature = StackBountyFeatures()
+
+    inner class StackBountyFeatures : IAmount {
+        override var amount: Int = 0
     }
 
     val itemStack: ItemStack?
@@ -26,14 +33,11 @@ class BountyEntryStack : BountyEntry() {
             return stack
         }
 
-    override val contentObj: ItemStack?
-        get() = itemStack
-
     override val prettyContent: String
-        get() = "§f${amount}x §a${itemStack?.displayName}§r"
+        get() = "§f${feature.amount}x §a${itemStack?.displayName}§r"
 
     override fun toString(): String {
-        return "BountyEntry (Stack) [Item: $content, Amount: $amount, Worth: $unitWorth, NBT: $tag, Weight: $weight, Stages: $stages]"
+        return "BountyEntry (Stack) [Item: $content, Amount: ${feature.amount}, Worth: $unitWorth, NBT: $tag, Weight: $weight]"
     }
 
 }

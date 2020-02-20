@@ -22,7 +22,7 @@ data class Decree(
         get() = getEntriesFromTagList(rewardPools)
     **/
 
-    private fun getEntriesFromTagList(poolTags: MutableList<String>): List<BountyEntry> {
+    private fun getEntriesFromTagList(poolTags: MutableList<String>): List<BountyEntry<*>> {
         return PoolRegistry.content.filter { it.id in poolTags }.map { it.content }.flatten()
     }
 

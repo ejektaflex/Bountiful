@@ -20,8 +20,8 @@ class BountyData : IBountyData {
     override var boardStamp = BountifulMod.config.boardLifespan
     override var bountyTime = 0L
     override var rarity = 0
-    override val objectives = ValueRegistry<BountyEntry>()
-    override val rewards = ValueRegistry<BountyEntry>()
+    override val objectives = ValueRegistry<BountyEntry<*>>()
+    override val rewards = ValueRegistry<BountyEntry<*>>()
     override var bountyStamp: Long? = null
 
     override fun timeLeft(world: World): Long {
@@ -41,16 +41,6 @@ class BountyData : IBountyData {
     }
 
     fun tooltipInfo(world: World, advanced: Boolean): List<String> {
-        if (BountifulMod.config.isRunningGameStages) {
-            val localPlayer = Minecraft.getInstance().player
-            /*
-            if (FacadeGameStages.stagesStillNeededFor(localPlayer, this).isNotEmpty()) {
-
-            }
-            */
-            return listOf(I18n.format("bountiful.tooltip.requirements"))
-        }
-
         return tooltipInfoBasic(world)
     }
 
@@ -95,13 +85,10 @@ class BountyData : IBountyData {
     private val rewardPretty: String
         get() {
             return "§f${I18n.format("bountiful.tooltip.rewardPools")}: " + rewards.content.joinToString(", ") {
-                "§f${it.unitWorth}x §6${it.contentObj}§f"
+                "§f${it.unitWorth}x §6${it.prettyContent}§f"
             } + "§r"
         }
 
-    override fun requiredStages(): List<String> {
-        return objectives.content.map { it.requiredStages() }.flatten() + rewards.content.map { it.requiredStages() }.flatten()
-    }
 
     override fun deserializeNBT(tag: CompoundNBT) {
         boardStamp = tag.getInt(BountyNBT.BoardStamp.key)
@@ -116,7 +103,9 @@ class BountyData : IBountyData {
                 tag.getUnsortedList(BountyNBT.Objectives.key).map { it.toBountyEntry }
         )
 
-        rewards.restore(tag.getUnsortedList(BountyNBT.Rewards.key).map { it.toBountyEntry } )
+        rewards.restore(
+                tag.getUnsortedList(BountyNBT.Rewards.key).map { it.toBountyEntry }
+        )
     }
 
     override fun serializeNBT(): CompoundNBT {

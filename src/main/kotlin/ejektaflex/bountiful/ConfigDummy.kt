@@ -43,14 +43,10 @@ class ConfigDummy : IBountifulConfig {
         private set
     override var xpBonuses = listOf(4, 10, 15, 25)
         private set
-    override var compatGameStages: Boolean = true
-        private set
 
     override fun load() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    val isRunningGameStages: Boolean
-        get() = false
 
 }

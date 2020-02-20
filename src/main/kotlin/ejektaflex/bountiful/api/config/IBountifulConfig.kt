@@ -24,6 +24,5 @@ interface IBountifulConfig {
     val randomBounties: Boolean
     val boardDrops: Boolean
     val xpBonuses: List<Int>
-    val compatGameStages: Boolean
     fun load()
 }

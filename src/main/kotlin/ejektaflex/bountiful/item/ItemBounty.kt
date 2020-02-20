@@ -2,25 +2,18 @@ package ejektaflex.bountiful.item
 
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.api.BountifulAPI
-import ejektaflex.bountiful.api.data.json.JsonAdapter
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.api.ext.sendTranslation
 import ejektaflex.bountiful.api.item.IItemBounty
-import ejektaflex.bountiful.compat.FacadeGameStages
 import ejektaflex.bountiful.logic.BountyChecker
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.data.BountyNBT
-import ejektaflex.bountiful.registry.DecreeRegistry
-import ejektaflex.bountiful.registry.PoolRegistry
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.item.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Rarity
-import net.minecraft.nbt.CompoundNBT
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.text.ITextComponent
@@ -165,12 +158,6 @@ class ItemBounty(builder: Item.Properties) : Item(builder), IItemBounty {
         val inv = player.inventory.mainInventory
         val bounty = BountyData().apply { deserializeNBT(bountyItem.tag!!) }
 
-        // Gate behind gamestages
-        if (BountifulMod.config.isRunningGameStages && FacadeGameStages.stagesStillNeededFor(player, bounty).isNotEmpty()) {
-            player.sendTranslation("bountiful.tooltip.requirements")
-
-            return false
-        }
 
         if (bounty.hasExpired(player.world)) {
             player.sendTranslation("bountiful.bounty.expired")

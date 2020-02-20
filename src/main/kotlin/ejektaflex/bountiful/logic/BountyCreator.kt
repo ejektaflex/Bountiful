@@ -6,6 +6,8 @@ import ejektaflex.bountiful.api.data.entry.BountyEntryStack
 import ejektaflex.bountiful.api.data.json.JsonAdapter
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.api.ext.clampTo
+import ejektaflex.bountiful.api.ext.hackyRandom
+import ejektaflex.bountiful.api.ext.randomSplit
 import ejektaflex.bountiful.api.ext.weightedRandom
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.item.ItemBounty
@@ -42,35 +44,45 @@ object BountyCreator : IBountyCreator {
 
     override fun create(world: World, inRarity: EnumBountyRarity, decrees: List<IDecree>): BountyData {
         val data = BountyData()
-        val objectives = DecreeRegistry.getObjectives(decrees)
-
-        createRewards(data, world, inRarity, decrees)
-
-        return data
-    }
-
-    fun createRewards(data: BountyData, world: World, inRarity: EnumBountyRarity, decrees: List<IDecree>) {
 
         println("Yep, that's a bounty!")
         println(DecreeRegistry.content.size)
         println(PoolRegistry.content.size)
 
-        val rewards = DecreeRegistry.getRewards(decrees).sortedBy { it.averageWorth }
-
         println("Decrees: $decrees")
-        println("Rewards: $rewards")
-        println("Num rewards: ${rewards.size}")
 
-
-
-        val randReward = rewards.weightedRandom
-
-        data.rewards.add(randReward)
-
-        //data.rewards.add(randReward)
-
+        createRewards(data, world, inRarity, decrees)
+        createObjectives(data, world, inRarity, decrees)
 
         println(JsonAdapter.toJson(data, BountyData::class))
+
+        return data
+    }
+
+    private fun createRewards(data: BountyData, world: World, inRarity: EnumBountyRarity, decrees: List<IDecree>) {
+
+
+
+        val rewards = DecreeRegistry.getRewards(decrees)
+
+        var accumWorth = 0
+
+        val numRewards = (1..2).hackyRandom()
+
+        for (i in 0 until numRewards) {
+            val randReward = rewards.weightedRandom.pick()
+
+            //accumWorth += randReward.
+
+            data.rewards.add(randReward)
+        }
+
+    }
+
+    private fun createObjectives(data: BountyData, world: World, inRarity: EnumBountyRarity, decrees: List<IDecree>) {
+
+        val objectives = DecreeRegistry.getObjectives(decrees)
+
 
 
     }

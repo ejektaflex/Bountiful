@@ -1,12 +1,11 @@
 package ejektaflex.bountiful.api.data
 
 import ejektaflex.bountiful.api.data.entry.BountyEntry
-import ejektaflex.bountiful.api.generic.IStageRequirement
 import net.minecraft.nbt.CompoundNBT
 import net.minecraft.world.World
 import net.minecraftforge.common.util.INBTSerializable
 
-interface IBountyData : INBTSerializable<CompoundNBT>, IStageRequirement {
+interface IBountyData : INBTSerializable<CompoundNBT> {
 
     /**
      * How long a bounty has left on the Bounty Board
@@ -26,12 +25,12 @@ interface IBountyData : INBTSerializable<CompoundNBT>, IStageRequirement {
     /**
      * A list of pairs of itemstacks needed to fulfill a bounty, and the unitWorth needed.
      */
-    val objectives: IValueRegistry<BountyEntry>
+    val objectives: IValueRegistry<BountyEntry<*>>
 
     /**
      * A list of pairs of itemstacks used as rewardPools for the bounty, and the unitWorth needed.
      */
-    val rewards: IValueRegistry<BountyEntry>
+    val rewards: IValueRegistry<BountyEntry<*>>
 
     /**
      * A long representing the last world time when the bounty was given.

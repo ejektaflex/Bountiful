@@ -10,10 +10,10 @@ object DecreeRegistry : ValueRegistry<IDecree>() {
         return content.firstOrNull { it.id == id }
     }
 
-    val allObjectives: List<BountyEntry>
+    val allObjectives: List<BountyEntry<*>>
         get() = getObjectives(content)
 
-    private fun getEntryList(decrees: List<IDecree>, pools: IDecree.() -> List<String>): List<BountyEntry> {
+    private fun getEntryList(decrees: List<IDecree>, pools: IDecree.() -> List<String>): List<BountyEntry<*>> {
         return decrees.asSequence().map {
             pools(it)
         }.flatten().toSet().map {
@@ -22,13 +22,13 @@ object DecreeRegistry : ValueRegistry<IDecree>() {
     }
 
     // Get all objective pool string from decrees, then get said pools
-    fun getObjectives(decrees: List<IDecree>): List<BountyEntry> {
+    fun getObjectives(decrees: List<IDecree>): List<BountyEntry<*>> {
         return getEntryList(decrees) {
             objectivePools
         }
     }
 
-    fun getRewards(decrees: List<IDecree>): List<BountyEntry> {
+    fun getRewards(decrees: List<IDecree>): List<BountyEntry<*>> {
         return getEntryList(decrees) {
             rewardPools
         }

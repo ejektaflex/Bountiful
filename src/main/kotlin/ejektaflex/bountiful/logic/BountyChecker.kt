@@ -20,6 +20,7 @@ object BountyChecker {
     }
 
     fun hasItems(player: PlayerEntity, inv: NonNullList<ItemStack>, data: BountyData): List<ItemStack>? {
+        /*
         val stackPicked = data.objectives.content.mapNotNull { it as? BountyEntryStack }
 
         println(stackPicked)
@@ -47,9 +48,13 @@ object BountyChecker {
         } else {
             null
         }
+
+         */
+        return null
     }
 
     fun takeItems(player: PlayerEntity, inv: NonNullList<ItemStack>, data: BountyData, matched: List<ItemStack>) {
+        /*
         // If it does, reduce count of all relevant stacks
         data.objectives.content.mapNotNull { it as? BountyEntryStack }.forEach { picked ->
             val stacksToChange = matched.filter { validStackCheck(it, picked.itemStack!!) }
@@ -62,6 +67,8 @@ object BountyChecker {
                 picked.amount -= amountToRemove
             }
         }
+
+         */
     }
 
     /**
@@ -73,6 +80,8 @@ object BountyChecker {
             return
         }
 
+        /*
+
         val bountyEntities = data.objectives.content.mapNotNull { it as? BountyEntryEntity }
 
         bountyEntities.forEach { picked ->
@@ -83,18 +92,26 @@ object BountyChecker {
             //}
         }
         bounty.tag = data.serializeNBT()
+
+         */
     }
 
     fun hasEntitiesFulfilled(data: BountyData): Boolean {
+        /*
         val bountyEntities = data.objectives.content.mapNotNull { it as? BountyEntryEntity }
         return if (bountyEntities.isEmpty()) {
             true
         } else {
             bountyEntities.all { it.killedAmount == it.amount }
         }
+
+         */
+        return false
     }
 
     fun rewardItems(player: PlayerEntity, data: BountyData, bountyItem: ItemStack) {
+
+        /*
 
         // Reward player with rewards
         data.rewards.content.forEach { reward ->
@@ -111,6 +128,8 @@ object BountyChecker {
                 ItemHandlerHelper.giveItemToPlayer(player, stack)
             }
         }
+
+         */
     }
 
 
