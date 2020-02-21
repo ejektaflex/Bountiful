@@ -2,8 +2,6 @@ package ejektaflex.bountiful.api.data.json
 
 import com.google.gson.JsonDeserializer
 import ejektaflex.bountiful.api.data.entry.BountyEntry
-import ejektaflex.bountiful.api.data.entry.BountyEntryEntity
-import ejektaflex.bountiful.api.data.entry.BountyEntryStack
 import ejektaflex.bountiful.api.data.entry.BountyType
 
 /**
@@ -19,7 +17,7 @@ object JsonSerializers {
         val jsonType = json.asJsonObject.get("type").asString
         val jsonName = json.asJsonObject.get("content").asString
 
-        val bType = BountyType.values().find { it.id == jsonType }
+        val bType = BountyType.values().find { jsonType in it.ids }
                 ?: throw Exception("Incorrect type for bounty: $jsonType. Content was: $jsonName")
 
         JsonAdapter.fromJson(json, bType.klazz)

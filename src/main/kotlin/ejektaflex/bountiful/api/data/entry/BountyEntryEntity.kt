@@ -1,11 +1,8 @@
 package ejektaflex.bountiful.api.data.entry
 
 import com.google.gson.annotations.Expose
-import ejektaflex.bountiful.api.data.entry.feature.IAmount
-import ejektaflex.bountiful.api.data.entry.feature.IKilledAmount
 import ejektaflex.bountiful.api.ext.toEntityEntry
 import ejektaflex.bountiful.logic.IBountyObjective
-import net.minecraft.client.resources.I18n
 import net.minecraft.entity.EntityType
 import net.minecraft.nbt.CompoundNBT
 import kotlin.math.ceil
@@ -14,7 +11,7 @@ import kotlin.math.max
 class BountyEntryEntity : BountyEntry(), IBountyObjective {
 
     @Expose
-    override var type: String = BountyType.Entity.id
+    override var type: String = BountyType.Entity.ids.first()
 
     var killedAmount = 0
 

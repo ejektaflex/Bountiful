@@ -1,21 +1,19 @@
 package ejektaflex.bountiful.api.data.entry
 
 import com.google.gson.annotations.Expose
-import ejektaflex.bountiful.api.data.entry.feature.IAmount
-import ejektaflex.bountiful.api.data.entry.feature.IEntryFeature
-import ejektaflex.bountiful.api.data.entry.feature.IKilledAmount
 import ejektaflex.bountiful.api.ext.toItemStack
 import ejektaflex.bountiful.logic.IBountyObjective
 import ejektaflex.bountiful.logic.IBountyReward
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundNBT
+import net.minecraft.tags.ItemTags
+import net.minecraft.util.ResourceLocation
 import kotlin.math.ceil
 import kotlin.math.max
 
 class BountyEntryStack : BountyEntry(), IBountyObjective, IBountyReward {
 
     @Expose
-    override var type: String = BountyType.Stack.id
+    override var type: String = BountyType.Stack.ids.first()
 
     override val calculatedWorth: Int
         get() = unitWorth * amount
@@ -30,6 +28,28 @@ class BountyEntryStack : BountyEntry(), IBountyObjective, IBountyReward {
         }
     }
 
+    val validStacks: List<ItemStack>
+        get() {
+            return if (type == "stack") {
+
+                val stack = content.toItemStack
+                tag?.let { stack?.tag = it }
+
+                listOfNotNull(stack)
+
+            } else {
+
+                val tag = ItemTags.getCollection().getOrCreate(ResourceLocation(content))
+
+                tag.allElements.map { element ->
+                    element.defaultInstance.apply {
+                        count = amount
+                        this.tag?.let { t -> this.tag = t }
+                    }
+                }
+
+            }
+        }
 
     val itemStack: ItemStack?
         get() {
@@ -40,11 +60,13 @@ class BountyEntryStack : BountyEntry(), IBountyObjective, IBountyReward {
 
     override val prettyContent: String
         get() {
-            return if (name != null) {
-                "§f${amount}x §a$name§r"
-            } else {
-                "§f${amount}x §a${itemStack?.displayName!!.formattedText}§r"
+
+            return when (type) {
+                "tag" -> "§f${amount}x §a${name ?: content}§r"
+                "stack" -> "§f${amount}x §a${itemStack?.displayName!!.formattedText}§r"
+                else -> "??? Stack?"
             }
+
         }
 
     override fun toString(): String {

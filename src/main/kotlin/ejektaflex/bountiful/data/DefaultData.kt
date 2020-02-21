@@ -96,10 +96,13 @@ object DefaultData {
                                 amountRange = (4..24).ir
                             },
                             BountyEntryStack().apply {
-                                content = "minecraft:cooked_mutton"
+                                name = "Any Fish"
+                                type = "tag"
+                                content = "minecraft:fishes"
                                 unitWorth = 150
                                 amountRange = (4..24).ir
-                            },
+                            }
+                            /*,
                             BountyEntryStack().apply {
                                 content = "minecraft:cooked_beef"
                                 unitWorth = 175
@@ -110,6 +113,8 @@ object DefaultData {
                                 unitWorth = 60
                                 amountRange = (1..24).ir
                             }
+
+                             */
                     )
                 },
 

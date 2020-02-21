@@ -2,10 +2,8 @@ package ejektaflex.bountiful.api.ext
 
 import ejektaflex.bountiful.api.data.entry.BountyEntry
 import ejektaflex.bountiful.api.data.entry.BountyType
-import ejektaflex.bountiful.api.data.entry.IBountyEntry
 import net.minecraft.nbt.CompoundNBT
 import net.minecraftforge.common.util.INBTSerializable
-import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
 fun CompoundNBT.clear() {
@@ -61,7 +59,7 @@ fun <T : INBTSerializable<CompoundNBT>> CompoundNBT.getUnsortedList(key: String,
 val CompoundNBT.toBountyEntry: BountyEntry
     get() {
         val bTypeName = getString("type")
-        val bType = BountyType.values().find { it.id == bTypeName } ?: throw Exception("Deserialized bounty with type: $bTypeName")
+        val bType = BountyType.values().find { bTypeName in it.ids } ?: throw Exception("Deserialized bounty with type: $bTypeName")
         val newBounty = bType.klazz.createInstance()
         return newBounty.apply { deserializeNBT(this@toBountyEntry) }
     }
