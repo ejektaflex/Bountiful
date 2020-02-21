@@ -71,15 +71,25 @@ object DefaultData {
                                 unitWorth = 80
                                 amountRange = (2..32).ir
                             },
+                            BountyEntryStack().apply {
+                                content = "minecraft:coal"
+                                unitWorth = 80
+                                amountRange = (2..32).ir
+                            },
+                            /*
                             BountyEntryEntity().apply {
                                 content = "minecraft:zombie"
                                 unitWorth = 40
                                 amountRange = (2..32).ir
                             },
-                            BountyEntryEntity().apply {
-                                content = "minecraft:spider"
-                                unitWorth = 120
-                                amountRange = (2..32).ir
+
+                             */
+                            BountyEntryStack().apply {
+                                name = "Any Fish"
+                                type = "tag"
+                                content = "minecraft:fishes"
+                                unitWorth = 150
+                                amountRange = (4..24).ir
                             }
                             //BountyEntry("minecraft:bread", 60, amountRange = (1..12).ir),
                             //BountyEntry("minecraft:sugar", 55, amountRange = (1..64).ir),
@@ -96,9 +106,7 @@ object DefaultData {
                                 amountRange = (4..24).ir
                             },
                             BountyEntryStack().apply {
-                                name = "Any Fish"
-                                type = "tag"
-                                content = "minecraft:fishes"
+                                content = "minecraft:cooked_mutton"
                                 unitWorth = 150
                                 amountRange = (4..24).ir
                             }

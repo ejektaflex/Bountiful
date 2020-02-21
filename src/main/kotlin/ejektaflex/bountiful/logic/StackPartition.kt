@@ -22,4 +22,8 @@ class StackPartition(stack: ItemStack) {
         }
     }
 
+    override fun toString(): String {
+        return "PartitionMap[f=$free,r=$reserved,s=$size]"
+    }
+
 }
