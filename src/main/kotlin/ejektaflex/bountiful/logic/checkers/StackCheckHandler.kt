@@ -1,20 +1,25 @@
-package ejektaflex.bountiful.logic
+package ejektaflex.bountiful.logic.checkers
 
 import ejektaflex.bountiful.api.data.IBountyData
 import ejektaflex.bountiful.api.data.entry.BountyEntry
 import ejektaflex.bountiful.api.data.entry.BountyEntryStack
-import ejektaflex.bountiful.api.ext.modOriginName
+import ejektaflex.bountiful.logic.BountyProgress
+import ejektaflex.bountiful.logic.StackPartition
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.NonNullList
 
-class BountyCheck(val player: PlayerEntity, val data: IBountyData, val inv: NonNullList<ItemStack>) {
-
-
+class StackCheckHandler() : CheckHandler<BountyEntryStack>() {
 
     val partMap = mutableMapOf<ItemStack, StackPartition>()
 
-    fun checkStacks() {
+    override fun fulfill() {
+        for (part in partMap) {
+            part.value.shrink()
+        }
+    }
+
+    override fun objectiveStatus(): Map<BountyEntry, BountyProgress> {
         partMap.clear()
 
         val stackObjs = data.objectives.content.filterIsInstance<BountyEntryStack>()
@@ -22,19 +27,23 @@ class BountyCheck(val player: PlayerEntity, val data: IBountyData, val inv: NonN
         val stackTypeObj = stackObjs.filter { it.type == "stack" }
         val tagTypeObj = stackObjs.filter { it.type == "tag" }
 
-        println("Objectives: $stackObjs")
+        //println("Objectives: $stackObjs")
 
         // For each stack objective
-        println("Checking stacks")
+        //println("Checking stacks")
         val a = checkObjs(stackTypeObj)
-        println("Checking tags")
-        val b = checkObjs(tagTypeObj)
+        //println("Checking tags")
+        val b = checkObjs(tagTypeObj).toMutableMap()
 
-        println("Fully reserved partitions: ${partMap.count { it.value.free == 0 }}")
+        for (key in a.keys) {
+            b[key] = a.getValue(key)
+        }
 
-        println("A: $a")
-        println("B: $b")
+        //println("Fully reserved partitions: ${partMap.count { it.value.free == 0 }}")
 
+        //println("B: $b")
+
+        return b
 
     }
 
@@ -50,7 +59,7 @@ class BountyCheck(val player: PlayerEntity, val data: IBountyData, val inv: NonN
             // Get all matching inventory stacks
             val invStacks = inv.filter { validStackCheck(obj.validStacks, it) }
             for (iStack in invStacks) {
-                println("Analyzing stack: $iStack")
+                //println("Analyzing stack: $iStack")
                 // Initialize the stack in the partmap
                 if (iStack !in partMap) {
                     partMap[iStack] = StackPartition(iStack)
@@ -58,14 +67,14 @@ class BountyCheck(val player: PlayerEntity, val data: IBountyData, val inv: NonN
                 // Grab it
                 val part = partMap[iStack]!!
 
-                println("PartMapSize: ${partMap.keys}")
-                println("Partition reserving in: $part")
+                //println("PartMapSize: ${partMap.keys}")
+                //println("Partition reserving in: $part")
 
-                println("Trying to reserve: $neededForObj")
+                //println("Trying to reserve: $neededForObj")
 
                 val leftOver = part.reserve(neededForObj)
 
-                println("Leftover after reserving: $leftOver")
+                //println("Leftover after reserving: $leftOver")
 
                 // If we have nothing leftover (AKA allocated it all), we are done with this item stack
                 if (leftOver == 0) {

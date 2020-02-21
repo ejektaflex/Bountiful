@@ -8,7 +8,8 @@ import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.logic.BountyChecker
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.data.BountyNBT
-import ejektaflex.bountiful.logic.BountyCheck
+import ejektaflex.bountiful.logic.checkers.CheckerRegistry
+import ejektaflex.bountiful.logic.checkers.StackCheckHandler
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
@@ -159,8 +160,8 @@ class ItemBounty(builder: Item.Properties) : Item(builder), IItemBounty {
         val inv = player.inventory.mainInventory
         val bounty = BountyData().apply { deserializeNBT(bountyItem.tag!!) }
 
-        val check = BountyCheck(player, bounty, inv)
-        check.checkStacks()
+        CheckerRegistry.passAllChecks(player, bounty, inv)
+
 
         if (bounty.hasExpired(player.world)) {
             player.sendTranslation("bountiful.bounty.expired")

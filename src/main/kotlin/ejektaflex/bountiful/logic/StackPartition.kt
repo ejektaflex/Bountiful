@@ -2,7 +2,7 @@ package ejektaflex.bountiful.logic
 
 import net.minecraft.item.ItemStack
 
-class StackPartition(stack: ItemStack) {
+class StackPartition(val stack: ItemStack) {
 
     val size = stack.count
     var free = size
@@ -24,6 +24,10 @@ class StackPartition(stack: ItemStack) {
 
     override fun toString(): String {
         return "PartitionMap[f=$free,r=$reserved,s=$size]"
+    }
+
+    fun shrink() {
+        stack.shrink(reserved)
     }
 
 }
