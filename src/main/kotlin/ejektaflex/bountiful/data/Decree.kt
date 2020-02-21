@@ -1,17 +1,18 @@
 package ejektaflex.bountiful.data
 
+import com.google.gson.annotations.Expose
 import ejektaflex.bountiful.api.data.IDecree
 import ejektaflex.bountiful.api.data.entry.BountyEntry
 import ejektaflex.bountiful.registry.PoolRegistry
 
 data class Decree(
-        override val decreeTitle: String = "UNKNOWN",
-        override val decreeDescription: String = "UNKNOWN_DESC",
-        override val id: String = "unknown_id",
-        override val spawnsInBoard: Boolean = false,
-        override val isGreedy: Boolean = false,
-        override val objectivePools: MutableList<String> = mutableListOf(),
-        override val rewardPools: MutableList<String> = mutableListOf()
+        @Expose override val decreeTitle: String = "UNKNOWN",
+        @Expose override val decreeDescription: String = "UNKNOWN_DESC",
+        @Expose override val id: String = "unknown_id",
+        @Expose override val spawnsInBoard: Boolean = false,
+        @Expose override val isGreedy: Boolean = false,
+        @Expose override val objectivePools: MutableList<String> = mutableListOf(),
+        @Expose override val rewardPools: MutableList<String> = mutableListOf()
 ) : IDecree {
 
     /**
@@ -22,7 +23,7 @@ data class Decree(
         get() = getEntriesFromTagList(rewardPools)
     **/
 
-    private fun getEntriesFromTagList(poolTags: MutableList<String>): List<BountyEntry<*>> {
+    private fun getEntriesFromTagList(poolTags: MutableList<String>): List<BountyEntry> {
         return PoolRegistry.content.filter { it.id in poolTags }.map { it.content }.flatten()
     }
 

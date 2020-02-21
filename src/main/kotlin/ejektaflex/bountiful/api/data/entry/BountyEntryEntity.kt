@@ -11,16 +11,19 @@ import net.minecraft.nbt.CompoundNBT
 import kotlin.math.ceil
 import kotlin.math.max
 
-class BountyEntryEntity : BountyEntry<BountyEntryEntity.EntityBountyFeatures>(), IBountyObjective {
+class BountyEntryEntity : BountyEntry(), IBountyObjective {
 
+    @Expose
     override var type: String = BountyType.Entity.id
 
-    override val calculatedWorth: Int
-        get() = unitWorth * feature.amount
+    var killedAmount = 0
 
-    override fun pick(worth: Int?): BountyEntry<EntityBountyFeatures> {
+    override val calculatedWorth: Int
+        get() = unitWorth * amount
+
+    override fun pick(worth: Int?): BountyEntry {
         return cloned().apply {
-            feature!!.amount = if (worth != null) {
+            amount = if (worth != null) {
                 max(1, ceil(worth.toDouble() / unitWorth).toInt())
             } else {
                 randCount
@@ -28,23 +31,16 @@ class BountyEntryEntity : BountyEntry<BountyEntryEntity.EntityBountyFeatures>(),
         }
     }
 
-    override val feature = EntityBountyFeatures()
-
-    inner class EntityBountyFeatures : IAmount, IKilledAmount {
-        override var amount: Int = 0
-        override var killedAmount: Int = 0
-
-        override fun deserializeNBT(tag: CompoundNBT) {
-            super<IAmount>.deserializeNBT(tag)
-            super<IKilledAmount>.deserializeNBT(tag)
-        }
-
-        override fun serializeNBT(tag: CompoundNBT) {
-            super<IAmount>.serializeNBT(tag)
-            super<IKilledAmount>.serializeNBT(tag)
-        }
+    override fun deserializeNBT(tag: CompoundNBT) {
+        super.deserializeNBT(tag)
+        killedAmount = tag.getInt("killedAmount")
     }
 
+    override fun serializeNBT(): CompoundNBT {
+        return super.serializeNBT().apply {
+            putInt("killedAmount", killedAmount)
+        }
+    }
 
     val entityEntry: EntityType<*>?
         get() {
@@ -52,10 +48,10 @@ class BountyEntryEntity : BountyEntry<BountyEntryEntity.EntityBountyFeatures>(),
         }
 
     override val prettyContent: String
-        get() = ("(${feature.killedAmount}/${feature.amount}) §a" + "entity." + content + ".name" + " Kills§r")
+        get() = ("(${killedAmount}/${amount}) §a" + "entity." + content + ".name" + " Kills§r")
 
     override fun toString(): String {
-        return "BountyEntry (Entity) [Entity: $content, Amount: ${feature.amount}, Weight: $weight]"
+        return "BountyEntry (Entity) [Entity: $content, Amount: ${amount}, Weight: $weight]"
     }
 
 

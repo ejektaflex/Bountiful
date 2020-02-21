@@ -25,12 +25,12 @@ interface IBountyData : INBTSerializable<CompoundNBT> {
     /**
      * A list of pairs of itemstacks needed to fulfill a bounty, and the unitWorth needed.
      */
-    val objectives: IValueRegistry<BountyEntry<*>>
+    val objectives: IValueRegistry<BountyEntry>
 
     /**
      * A list of pairs of itemstacks used as rewardPools for the bounty, and the unitWorth needed.
      */
-    val rewards: IValueRegistry<BountyEntry<*>>
+    val rewards: IValueRegistry<BountyEntry>
 
     /**
      * A long representing the last world time when the bounty was given.

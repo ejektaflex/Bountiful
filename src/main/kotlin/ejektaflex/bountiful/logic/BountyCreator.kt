@@ -62,7 +62,7 @@ object BountyCreator : IBountyCreator {
 
         val numRewards = (1..2).hackyRandom()
 
-        val toAdd = mutableListOf<BountyEntry<*>>()
+        val toAdd = mutableListOf<BountyEntry>()
 
         for (i in 0 until numRewards) {
 
@@ -98,7 +98,7 @@ object BountyCreator : IBountyCreator {
 
         val variance = 0.1
 
-        val toAdd = mutableListOf<BountyEntry<*>>()
+        val toAdd = mutableListOf<BountyEntry>()
 
         for (wrth in worthGroups) {
             val wRange = ceil(wrth * variance)

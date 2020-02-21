@@ -1,6 +1,7 @@
 package ejektaflex.bountiful.api.data.entry
 
 
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.api.data.ITagString
 import ejektaflex.bountiful.api.data.JsonBiSerializer
@@ -13,25 +14,31 @@ import net.minecraftforge.common.util.INBTSerializable
 import kotlin.math.abs
 import kotlin.math.min
 
-abstract class BountyEntry<T : IEntryFeature> : ITagString, JsonBiSerializer<BountyEntry<T>>, INBTSerializable<CompoundNBT>, IWeighted, Cloneable {
+abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSerializable<CompoundNBT>, IWeighted, Cloneable {
 
     abstract var type: String
 
+    @Expose
     open var name: String? = null
 
+    @Expose
     open var content: String = ""
 
     @SerializedName("nbt_data")
     override var nbtString: String? = null
 
+    @Expose
     open var amountRange: ItemRange? = null
 
+    @Expose
     open var unitWorth: Int = Integer.MIN_VALUE
 
-    //@Expose(serialize = false)
+    @Expose
     override var weight: Int = 100
 
     abstract val calculatedWorth: Int
+
+    var amount = 0
 
     private val worthRange: IntRange
         get() = (amountRange!!.min * unitWorth)..(amountRange!!.max * unitWorth)
@@ -45,16 +52,15 @@ abstract class BountyEntry<T : IEntryFeature> : ITagString, JsonBiSerializer<Bou
         }
     }
 
-    fun cloned(): BountyEntry<T> {
-        return clone() as BountyEntry<T>
+    fun cloned(): BountyEntry {
+        return clone() as BountyEntry
     }
 
-    abstract fun pick(worth: Int? = null): BountyEntry<T>
+    abstract fun pick(worth: Int? = null): BountyEntry
 
     val randCount: Int
         get() = ((amountRange?.min ?: 1)..(amountRange?.max ?: Int.MAX_VALUE)).hackyRandom()
 
-    @Transient open val feature: T? = null
 
 
     // Must override because overriding [nbtString]
@@ -70,7 +76,7 @@ abstract class BountyEntry<T : IEntryFeature> : ITagString, JsonBiSerializer<Bou
             tag?.let {
                 this.put("nbt", it)
             }
-            feature?.serializeNBT(this)
+            putInt("amount", amount)
         }
     }
 
@@ -81,7 +87,7 @@ abstract class BountyEntry<T : IEntryFeature> : ITagString, JsonBiSerializer<Bou
         if ("nbt" in tag) {
             nbtString = tag["nbt"]!!.toString()
         }
-        feature?.deserializeNBT(tag)
+        amount = tag.getInt("amount")
     }
 
     open val prettyContent: String

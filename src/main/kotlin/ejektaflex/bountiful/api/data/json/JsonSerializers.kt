@@ -15,7 +15,7 @@ object JsonSerializers {
         JsonAdapter.register(bountyDeserializer)
     }
 
-    val bountyDeserializer: JsonDeserializer<BountyEntry<*>> = JsonDeserializer { json, typeOfT, context ->
+    val bountyDeserializer: JsonDeserializer<BountyEntry> = JsonDeserializer { json, typeOfT, context ->
         val jsonType = json.asJsonObject.get("type").asString
         val jsonName = json.asJsonObject.get("content").asString
 

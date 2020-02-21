@@ -1,5 +1,6 @@
 package ejektaflex.bountiful.api.data.entry
 
+import com.google.gson.annotations.Expose
 import ejektaflex.bountiful.api.data.entry.feature.IAmount
 import ejektaflex.bountiful.api.data.entry.feature.IEntryFeature
 import ejektaflex.bountiful.api.data.entry.feature.IKilledAmount
@@ -11,16 +12,17 @@ import net.minecraft.nbt.CompoundNBT
 import kotlin.math.ceil
 import kotlin.math.max
 
-class BountyEntryStack : BountyEntry<BountyEntryStack.StackBountyFeatures>(), IBountyObjective, IBountyReward {
+class BountyEntryStack : BountyEntry(), IBountyObjective, IBountyReward {
 
+    @Expose
     override var type: String = BountyType.Stack.id
 
     override val calculatedWorth: Int
-        get() = unitWorth * feature.amount
+        get() = unitWorth * amount
 
-    override fun pick(worth: Int?): BountyEntry<StackBountyFeatures> {
+    override fun pick(worth: Int?): BountyEntry {
         return cloned().apply {
-            feature!!.amount = if (worth != null) {
+            amount = if (worth != null) {
                 max(1, ceil(worth.toDouble() / unitWorth).toInt())
             } else {
                 randCount
@@ -28,11 +30,6 @@ class BountyEntryStack : BountyEntry<BountyEntryStack.StackBountyFeatures>(), IB
         }
     }
 
-    override val feature = StackBountyFeatures()
-
-    inner class StackBountyFeatures : IAmount {
-        override var amount: Int = 0
-    }
 
     val itemStack: ItemStack?
         get() {
@@ -44,14 +41,14 @@ class BountyEntryStack : BountyEntry<BountyEntryStack.StackBountyFeatures>(), IB
     override val prettyContent: String
         get() {
             return if (name != null) {
-                "§f${feature.amount}x §a$name§r"
+                "§f${amount}x §a$name§r"
             } else {
-                "§f${feature.amount}x §a${itemStack?.displayName!!.formattedText}§r"
+                "§f${amount}x §a${itemStack?.displayName!!.formattedText}§r"
             }
         }
 
     override fun toString(): String {
-        return "BountyEntry (Stack) [Item: $content, Amount: ${feature.amount}, Worth: $unitWorth, NBT: $tag, Weight: $weight]"
+        return "BountyEntry (Stack) [Item: $content, Amount: ${amount}, Worth: $unitWorth, NBT: $tag, Weight: $weight]"
     }
 
 

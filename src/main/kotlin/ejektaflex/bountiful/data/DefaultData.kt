@@ -19,6 +19,7 @@ object DefaultData {
         for (item in reg) {
             File(location, "${item.id}.json").apply {
                 createNewFile()
+
                 val itemText = JsonAdapter.toJson(item, item::class)
                 println("Serializing $item")
                 println(itemText)
@@ -97,11 +98,6 @@ object DefaultData {
                             BountyEntryStack().apply {
                                 content = "minecraft:cooked_mutton"
                                 unitWorth = 150
-                                amountRange = (4..24).ir
-                            },
-                            BountyEntryStack().apply {
-                                content = "minecraft:cooked_beef"
-                                unitWorth = 175
                                 amountRange = (4..24).ir
                             },
                             BountyEntryStack().apply {

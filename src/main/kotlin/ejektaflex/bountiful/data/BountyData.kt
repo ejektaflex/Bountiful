@@ -20,8 +20,8 @@ class BountyData : IBountyData {
     override var boardStamp = BountifulMod.config.boardLifespan
     override var bountyTime = 0L
     override var rarity = 0
-    override val objectives = ValueRegistry<BountyEntry<*>>()
-    override val rewards = ValueRegistry<BountyEntry<*>>()
+    override val objectives = ValueRegistry<BountyEntry>()
+    override val rewards = ValueRegistry<BountyEntry>()
     override var bountyStamp: Long? = null
 
     override fun timeLeft(world: World): Long {

@@ -21,7 +21,7 @@ class BountyCheck(val player: PlayerEntity, val data: IBountyData, val inv: NonN
         // For each stack objective
         for (obj in stackObjs) {
 
-            var neededForObj = obj.feature.amount
+            var neededForObj = obj.amount
 
             // Get all matching inventory stacks
             val invStacks = inv.filter { validStackCheck(obj.itemStack ?: ItemStack.EMPTY, it) }

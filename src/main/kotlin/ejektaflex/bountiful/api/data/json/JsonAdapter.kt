@@ -19,7 +19,7 @@ object JsonAdapter {
 
     fun buildGson(): Gson {
         //excludeFieldsWithoutExposeAnnotation?
-        var gsonProto = GsonBuilder().setPrettyPrinting()
+        var gsonProto = GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation()
         for (deser in deserializers) {
             gsonProto = gsonProto.registerTypeAdapter(deser.key, deser.value)
         }
