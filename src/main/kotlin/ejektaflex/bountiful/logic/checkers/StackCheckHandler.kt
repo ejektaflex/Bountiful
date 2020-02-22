@@ -90,9 +90,6 @@ class StackCheckHandler() : CheckHandler<BountyEntryStack>() {
                     println("Got it all! / AKA SUCC 1 OBJ")
                     succ[obj] = BountyProgress.DONE
                 }
-                obj.amount -> {
-                    succ[obj] = BountyProgress.NEW
-                }
                 else -> {
                     println("Needed this many more: $neededForObj / AKA FAILED 1 OBJ")
                     succ[obj] = BountyProgress.UNFINISHED

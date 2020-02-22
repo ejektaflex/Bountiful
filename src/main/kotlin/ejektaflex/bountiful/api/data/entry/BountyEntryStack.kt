@@ -63,8 +63,8 @@ class BountyEntryStack : BountyEntry(), IBountyObjective, IBountyReward {
         get() {
 
             return when (type) {
-                "tag" -> "§f${amount}x §6${name ?: content}§r"
-                "stack" -> "§f${amount}x §6${itemStack?.displayName!!.formattedText}§r"
+                "tag" -> "§f${amount}x §b${name ?: content}§r"
+                "stack" -> "§f${amount}x §b${itemStack?.displayName!!.formattedText}§r"
                 else -> "??? Stack?"
             }
 

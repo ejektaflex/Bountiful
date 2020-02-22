@@ -24,7 +24,6 @@ class EntityCheckHandler() : CheckHandler<BountyEntryEntity>() {
 
         for (obj in entityObjs) {
             succ[obj] = when (obj.killedAmount) {
-                0 -> BountyProgress.NEW
                 obj.amount -> BountyProgress.DONE
                 else -> BountyProgress.UNFINISHED
             }
