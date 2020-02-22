@@ -8,6 +8,8 @@ import ejektaflex.bountiful.api.ext.getUnsortedList
 import ejektaflex.bountiful.api.ext.toBountyEntry
 import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.item.ItemBounty
+import ejektaflex.bountiful.logic.BountyTypeRegistry
+import ejektaflex.bountiful.logic.checkers.CheckerRegistry
 import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.I18n
 import net.minecraft.item.ItemStack
@@ -42,14 +44,33 @@ class BountyData : IBountyData {
     }
 
     fun tooltipInfo(world: World, advanced: Boolean): List<String> {
-        return tooltipInfoBasic(world)
+        //return tooltipInfoBasic(world)
+        return tooltipInfoAdvanced(world)
     }
 
     private fun tooltipInfoBasic(world: World): List<String> {
+
+
         return listOf(
                 //"Board Time: ${formatTickTime(boardTimeLeft(world) / boardTickFreq)}",
                 "${I18n.format("bountiful.tooltip.time")}: ${formatTimeExpirable(timeLeft(world) / bountyTickFreq)}"
-        ) + getPretty + rewardPretty + listOf(I18n.format("bountiful.tooltip.advanced") )
+        ) + objectivesPretty + rewardsPretty + listOf(I18n.format("bountiful.tooltip.advanced") )
+    }
+
+    private fun tooltipInfoAdvanced(world: World): List<String> {
+        val passed = CheckerRegistry.passedChecks(Minecraft.getInstance().player!!, this)
+
+        val objs = passed.toList().sortedBy {
+            BountyTypeRegistry.content.indexOf(it.first.type)
+        }.map {
+            it.first.tooltipView(it.second)
+        }
+
+        return listOf(
+                //"Board Time: ${formatTickTime(boardTimeLeft(world) / boardTickFreq)}",
+                "${I18n.format("bountiful.tooltip.time")}: ${formatTimeExpirable(timeLeft(world) / bountyTickFreq)}"
+        ) + objs + rewardsPretty + listOf(I18n.format("bountiful.tooltip.advanced") )
+
     }
 
     private fun formatTickTime(n: Long): String {
@@ -68,7 +89,9 @@ class BountyData : IBountyData {
         }
     }
 
-    private val getPretty: List<String>
+
+
+    private val objectivesPretty: List<String>
         get() {
             return if (objectives.content.isEmpty()) {
                 listOf("§6Completed. §aTurn it in!")
@@ -80,7 +103,7 @@ class BountyData : IBountyData {
 
         }
 
-    private val rewardPretty: List<String>
+    private val rewardsPretty: List<String>
         get() {
             return listOf(
                     "§f${I18n.format("bountiful.tooltip.rewards")}: "

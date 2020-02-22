@@ -2,6 +2,7 @@ package ejektaflex.bountiful.api.data.entry
 
 import com.google.gson.annotations.Expose
 import ejektaflex.bountiful.api.ext.toItemStack
+import ejektaflex.bountiful.logic.BountyProgress
 import ejektaflex.bountiful.logic.IBountyObjective
 import ejektaflex.bountiful.logic.IBountyReward
 import net.minecraft.item.ItemStack
@@ -62,12 +63,25 @@ class BountyEntryStack : BountyEntry(), IBountyObjective, IBountyReward {
         get() {
 
             return when (type) {
-                "tag" -> "§f${amount}x §a${name ?: content}§r"
-                "stack" -> "§f${amount}x §a${itemStack?.displayName!!.formattedText}§r"
+                "tag" -> "§f${amount}x §6${name ?: content}§r"
+                "stack" -> "§f${amount}x §6${itemStack?.displayName!!.formattedText}§r"
                 else -> "??? Stack?"
             }
 
         }
+
+    val formattedName: String
+        get() {
+            return when (type) {
+                "tag" -> name ?: content
+                "stack" -> itemStack?.displayName!!.formattedText
+                else -> "???"
+            }
+        }
+
+    override fun tooltipView(progress: BountyProgress): String {
+        return "§f${amount}x ${progress.colorCode}${formattedName}§r"
+    }
 
     override fun toString(): String {
         return "BountyEntry (Stack) [Item: $content, Amount: ${amount}, Worth: $unitWorth, NBT: $tag, Weight: $weight]"

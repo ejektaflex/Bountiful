@@ -9,6 +9,7 @@ import ejektaflex.bountiful.api.data.entry.feature.IEntryFeature
 import ejektaflex.bountiful.api.ext.hackyRandom
 import ejektaflex.bountiful.api.generic.IWeighted
 import ejektaflex.bountiful.api.generic.ItemRange
+import ejektaflex.bountiful.logic.BountyProgress
 import net.minecraft.nbt.*
 import net.minecraftforge.common.util.INBTSerializable
 import kotlin.math.abs
@@ -77,6 +78,9 @@ abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSeri
                 this.put("nbt", it)
             }
             putInt("amount", amount)
+            name?.let {
+                this.putString("name", it)
+            }
         }
     }
 
@@ -88,13 +92,15 @@ abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSeri
             nbtString = tag["nbt"]!!.toString()
         }
         amount = tag.getInt("amount")
+        if ("name" in tag) {
+            name = tag.getString("name")
+        }
     }
+
+    abstract fun tooltipView(progress: BountyProgress): String
 
     open val prettyContent: String
         get() = toString()
 
-
-    val minValueOfPick: Int
-        get() = unitWorth * (amountRange?.min ?: 1)
 
 }

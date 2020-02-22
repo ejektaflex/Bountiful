@@ -2,6 +2,7 @@ package ejektaflex.bountiful.api.data.entry
 
 import com.google.gson.annotations.Expose
 import ejektaflex.bountiful.api.ext.toEntityEntry
+import ejektaflex.bountiful.logic.BountyProgress
 import ejektaflex.bountiful.logic.IBountyObjective
 import net.minecraft.entity.EntityType
 import net.minecraft.nbt.CompoundNBT
@@ -43,6 +44,10 @@ class BountyEntryEntity : BountyEntry(), IBountyObjective {
         get() {
             return content.toEntityEntry
         }
+
+    override fun tooltipView(progress: BountyProgress): String {
+        return prettyContent
+    }
 
     override val prettyContent: String
         get() = ("(${killedAmount}/${amount}) §a" + "entity." + content + ".name" + " Kills§r")

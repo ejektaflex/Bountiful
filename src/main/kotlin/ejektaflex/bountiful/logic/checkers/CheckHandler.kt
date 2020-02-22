@@ -15,10 +15,10 @@ abstract class CheckHandler<T : BountyEntry>() {
 
     constructor(inPlayer: PlayerEntity, inData: IBountyData, inInv: NonNullList<ItemStack>) : this() {}
 
-    fun initialize(inPlayer: PlayerEntity, inData: IBountyData, inInv: NonNullList<ItemStack>) {
+    fun initialize(inPlayer: PlayerEntity, inData: IBountyData) {
         player = inPlayer
         data = inData
-        inv = inInv
+        inv = player.inventory.mainInventory
     }
 
     abstract fun fulfill()

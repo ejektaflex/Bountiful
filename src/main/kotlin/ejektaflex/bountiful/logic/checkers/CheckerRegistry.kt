@@ -1,7 +1,9 @@
 package ejektaflex.bountiful.logic.checkers
 
 import ejektaflex.bountiful.api.data.IBountyData
+import ejektaflex.bountiful.api.data.entry.BountyEntry
 import ejektaflex.bountiful.data.ValueRegistry
+import ejektaflex.bountiful.logic.BountyProgress
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.NonNullList
@@ -15,10 +17,10 @@ object CheckerRegistry : ValueRegistry<KClass<out CheckHandler<*>>>() {
         add(EntityCheckHandler::class)
     }
 
-    fun passAllChecks(player: PlayerEntity, data: IBountyData, inv: NonNullList<ItemStack>) {
+    fun passAllChecks(player: PlayerEntity, data: IBountyData) {
         val checkers = content.map {
             val inst = it.createInstance()
-            inst.initialize(player, data, inv)
+            inst.initialize(player, data)
             inst
         }
 
@@ -29,6 +31,22 @@ object CheckerRegistry : ValueRegistry<KClass<out CheckHandler<*>>>() {
         if (passesAll) {
             checkers.forEach {
                 it.fulfill()
+            }
+        }
+    }
+
+    fun passedChecks(player: PlayerEntity, data: IBountyData): Map<BountyEntry, BountyProgress> {
+        val checkers = content.map {
+            val inst = it.createInstance()
+            inst.initialize(player, data)
+            inst
+        }
+
+        return checkers.map {
+            it.objectiveStatus().toMutableMap()
+        }.reduce { mapA, mapB ->
+            mapA.apply {
+                putAll(mapB)
             }
         }
     }

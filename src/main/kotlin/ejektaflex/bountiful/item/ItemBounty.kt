@@ -160,7 +160,7 @@ class ItemBounty(builder: Item.Properties) : Item(builder), IItemBounty {
         val inv = player.inventory.mainInventory
         val bounty = BountyData().apply { deserializeNBT(bountyItem.tag!!) }
 
-        CheckerRegistry.passAllChecks(player, bounty, inv)
+        CheckerRegistry.passAllChecks(player, bounty)
 
 
         if (bounty.hasExpired(player.world)) {
