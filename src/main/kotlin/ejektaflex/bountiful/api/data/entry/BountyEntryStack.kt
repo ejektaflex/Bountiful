@@ -80,7 +80,7 @@ class BountyEntryStack : BountyEntry(), IBountyObjective, IBountyReward {
         }
 
     override fun tooltipView(progress: BountyProgress): String {
-        return "§f${amount}x ${progress.colorCode}${formattedName}§r"
+        return "§f${progress.stringNums} ${progress.color}${formattedName}§r"
     }
 
     override fun toString(): String {

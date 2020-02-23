@@ -26,6 +26,6 @@ abstract class CheckHandler<T : BountyEntry>() {
     abstract fun objectiveStatus(): Map<BountyEntry, BountyProgress>
 
     val isComplete: Boolean
-        get() = objectiveStatus().isEmpty() || objectiveStatus().all { it.value == BountyProgress.DONE }
+        get() = objectiveStatus().isEmpty() || objectiveStatus().all { it.value.isFinished }
 
 }

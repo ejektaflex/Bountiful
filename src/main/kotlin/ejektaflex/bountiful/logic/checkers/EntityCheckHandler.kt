@@ -23,10 +23,7 @@ class EntityCheckHandler() : CheckHandler<BountyEntryEntity>() {
         val entityObjs = data.objectives.content.filterIsInstance<BountyEntryEntity>()
 
         for (obj in entityObjs) {
-            succ[obj] = when (obj.killedAmount) {
-                obj.amount -> BountyProgress.DONE
-                else -> BountyProgress.UNFINISHED
-            }
+            succ[obj] = BountyProgress(obj.killedAmount to obj.amount)
         }
 
         return succ
