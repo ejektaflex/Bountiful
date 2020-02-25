@@ -7,6 +7,7 @@ import net.minecraft.world.World
 
 interface IBountyObjective {
 
+    fun tooltipObjective(progress: BountyProgress): String
 
     /*
     fun checkComplete(world: World, player: PlayerEntity, data: IBountyData): Boolean {

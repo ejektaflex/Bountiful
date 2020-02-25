@@ -59,18 +59,7 @@ class BountyEntryStack : BountyEntry(), IBountyObjective, IBountyReward {
             return stack
         }
 
-    override val prettyContent: String
-        get() {
-
-            return when (type) {
-                "tag" -> "§f${amount}x §b${name ?: content}§r"
-                "stack" -> "§f${amount}x §b${itemStack?.displayName!!.formattedText}§r"
-                else -> "??? Stack?"
-            }
-
-        }
-
-    val formattedName: String
+    override val formattedName: String
         get() {
             return when (type) {
                 "tag" -> name ?: content
@@ -79,8 +68,12 @@ class BountyEntryStack : BountyEntry(), IBountyObjective, IBountyReward {
             }
         }
 
-    override fun tooltipView(progress: BountyProgress): String {
-        return "§f${progress.stringNums} ${progress.color}${formattedName}§r"
+    override fun tooltipObjective(progress: BountyProgress): String {
+        return "§f${progress.color}${formattedName}§r §f${progress.stringNums}"
+    }
+
+    override fun tooltipReward(): String {
+        return "§f${amount}§fx §b$formattedName"
     }
 
     override fun toString(): String {

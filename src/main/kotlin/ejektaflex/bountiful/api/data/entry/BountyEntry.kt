@@ -97,10 +97,6 @@ abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSeri
         }
     }
 
-    abstract fun tooltipView(progress: BountyProgress): String
-
-    open val prettyContent: String
-        get() = toString()
-
+    abstract val formattedName: String
 
 }

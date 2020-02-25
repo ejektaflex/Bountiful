@@ -49,7 +49,7 @@ class StackCheckHandler() : CheckHandler<BountyEntryStack>() {
 
     private fun checkObjs(list: List<BountyEntryStack>): Map<BountyEntry, BountyProgress> {
 
-        var succ = mutableMapOf<BountyEntry, BountyProgress>()
+        val succ = mutableMapOf<BountyEntry, BountyProgress>()
 
         // For each stack objective
         loop@ for (obj in list) {
@@ -86,20 +86,6 @@ class StackCheckHandler() : CheckHandler<BountyEntryStack>() {
             }
 
             val amountGotten = obj.amount - neededForObj
-
-
-            // TODO: Remove this
-            when (neededForObj) {
-                0 -> {
-                    println("Got it all! / AKA SUCC 1 OBJ")
-                    //succ[obj] = BountyProgress(obj.amount to obj.amount)
-                }
-                else -> {
-                    println("Needed this many more: $neededForObj / AKA FAILED 1 OBJ")
-                    //succ[obj] = BountyProgress.UNFINISHED
-                    //break@loop
-                }
-            }
 
             succ[obj] = BountyProgress(amountGotten to obj.amount)
 
