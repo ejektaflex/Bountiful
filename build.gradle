@@ -108,7 +108,7 @@ repositories {
 
 dependencies {
 
-    minecraft 'net.minecraftforge:forge:1.15.2-31.1.14'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.2.1'
 
     compile "kottle:Kottle:$kottleVersion"
     mod "kottle:Kottle:$kottleVersion"

@@ -1,15 +1,30 @@
 package ejektaflex.bountiful
 
+import ejektaflex.bountiful.api.BountifulAPI
 import ejektaflex.bountiful.api.data.json.JsonAdapter
 import ejektaflex.bountiful.api.data.json.JsonSerializers
+import ejektaflex.bountiful.api.enum.EnumBountyRarity
+import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.data.Decree
 import ejektaflex.bountiful.data.DefaultData
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.registry.DecreeRegistry
 import ejektaflex.bountiful.registry.PoolRegistry
 import net.alexwells.kottle.KotlinEventBusSubscriber
+import net.minecraft.client.renderer.ItemModelMesher
+import net.minecraft.client.renderer.model.ModelBakery
+import net.minecraft.client.renderer.model.ModelManager
+import net.minecraft.client.renderer.model.ModelResourceLocation
 import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
+import net.minecraft.util.ResourceLocation
+import net.minecraftforge.api.distmarker.Dist
+import net.minecraftforge.api.distmarker.OnlyIn
+import net.minecraftforge.client.ItemModelMesherForge
+import net.minecraftforge.client.event.ModelBakeEvent
 import net.minecraftforge.client.event.ModelRegistryEvent
+import net.minecraftforge.client.model.ModelLoader
+import net.minecraftforge.client.model.ModelLoaderRegistry
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
@@ -91,9 +106,37 @@ object SetupLifecycle {
 
     }
 
+    @OnlyIn(Dist.CLIENT)
+    private class BountyMesher(val id: String, manager: ModelManager) : ItemModelMesherForge(manager) {
+        override fun getLocation(stack: ItemStack): ModelResourceLocation {
+
+            val locid = "bountiful:" + id
+            return try {
+                val data = BountifulAPI.toBountyData(stack) as BountyData
+                val rarity = data.rarityEnum
+                ModelResourceLocation("$locid-${rarity.name.toLowerCase()}", "inventory")
+            } catch (e: Exception) {
+                ModelResourceLocation("$locid-${EnumBountyRarity.Common.name.toLowerCase()}", "inventory")
+            }
+
+        }
+    }
+
+    @SubscribeEvent
+    fun bakeModels(event: ModelBakeEvent) {
+
+        val mesher = BountyMesher("bounty", event.modelManager)
+    }
+
     @SubscribeEvent
     fun registerModels(event: ModelRegistryEvent) {
         BountifulMod.logger.info("Registering Bountiful models..")
+
+        //ModelLoaderRegistry.registerLoader(ResourceLocation("bountiful", "bounty-model-loader"))
+
+
+        //val doot = ItemModelMesherForge
+
         /*
         ContentRegistry.items.forEach {
             if (it is ItemBounty) {

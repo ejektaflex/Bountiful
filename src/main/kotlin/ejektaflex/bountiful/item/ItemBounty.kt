@@ -89,7 +89,7 @@ class ItemBounty(builder: Item.Properties) : Item(builder), IItemBounty {
         if (stack.hasTag() && stack.item is ItemBounty) {
             return BountyData().apply { deserializeNBT(stack.tag!!) }
         } else {
-            throw Exception("${stack.displayName} is not an ItemBounty or has no NBT data!")
+            throw Exception("${stack.item.registryName} is not an ItemBounty or has no NBT data!")
         }
     }
 
