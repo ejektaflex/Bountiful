@@ -4,6 +4,7 @@ import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.api.ext.setUnsortedList
 import ejektaflex.bountiful.api.data.IBountyData
 import ejektaflex.bountiful.api.data.entry.BountyEntry
+import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.api.ext.getUnsortedList
 import ejektaflex.bountiful.api.ext.toBountyEntry
 import ejektaflex.bountiful.api.item.IItemBounty
@@ -40,6 +41,8 @@ class BountyData : IBountyData {
         return timeLeft(world) <= 0
     }
 
+    val rarityEnum: EnumBountyRarity
+        get() = EnumBountyRarity.getRarityFromInt(rarity)
 
     override fun boardTimeLeft(world: World): Long {
         return max(boardStamp + BountifulMod.config.boardLifespan - world.gameTime , 0)
@@ -60,15 +63,18 @@ class BountyData : IBountyData {
 
         return listOf(
                 //"Board Time: ${formatTickTime(boardTimeLeft(world) / boardTickFreq)}",
-                "${I18n.format("bountiful.tooltip.time")}: ${formatTimeExpirable(timeLeft(world) / bountyTickFreq)}") +
                 listOf("§6${I18n.format("bountiful.tooltip.required")}:§f ") +
                 objs +
                 listOf("§6${I18n.format("bountiful.tooltip.rewards")}:§f ") +
                 rews +
                 listOf(I18n.format("bountiful.tooltip.advanced") )
+        ).flatten()
 
     }
 
+    fun remainingTime(world: World): String {
+        return formatTimeExpirable(timeLeft(world) / bountyTickFreq)
+    }
 
     private fun formatTickTime(n: Long): String {
         return if (n / 60 <= 0) {

@@ -10,6 +10,7 @@ import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.data.BountyNBT
 import ejektaflex.bountiful.logic.checkers.CheckerRegistry
 import ejektaflex.bountiful.logic.checkers.StackCheckHandler
+import net.minecraft.client.Minecraft
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
@@ -23,6 +24,7 @@ import net.minecraft.util.text.StringTextComponent
 import net.minecraft.world.World
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.api.distmarker.OnlyIn
+import net.minecraft.util.text.TranslationTextComponent
 
 
 class ItemBounty(builder: Item.Properties) : Item(builder), IItemBounty {
@@ -33,6 +35,31 @@ class ItemBounty(builder: Item.Properties) : Item(builder), IItemBounty {
     class BountyCreationException(err: String = "Bounty could not be created!") : Exception(err)
 
     override fun getTranslationKey() = "bountiful.bounty"
+
+    override fun getDisplayName(stack: ItemStack): ITextComponent {
+
+        return if (BountyData.isValidBounty(stack)) {
+            val bd = getBountyData(stack)
+            TranslationTextComponent("bountiful.rarity.${bd.rarityEnum.name}").apply {
+
+                appendSibling(StringTextComponent(" "))
+
+                appendSibling(super.getDisplayName(stack))
+
+                Minecraft.getInstance().world?.let { wrld ->
+                    appendSibling(
+                            StringTextComponent(
+                                    " (${bd.remainingTime(wrld)}§f)"
+                            )
+                    )
+                }
+
+            }
+        } else {
+            super.getDisplayName(stack)
+        }
+
+    }
 
     override fun onItemRightClick(worldIn: World, playerIn: PlayerEntity, handIn: Hand): ActionResult<ItemStack> {
 
