@@ -1,0 +1,24 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "bountiful:item/bounty-common"
+  },
+  "overrides": [
+    {
+      "predicate": { "bountiful:rarity": 0.0 },
+      "model": "bountiful:item/bounty-common"
+    },
+    {
+      "predicate": { "bountiful:rarity": 0.1 },
+      "model": "bountiful:item/bounty-uncommon"
+    },
+    {
+      "predicate": { "bountiful:rarity": 0.2 },
+      "model": "bountiful:item/bounty-rare"
+    },
+    {
+      "predicate": { "bountiful:rarity": 0.3 },
+      "model": "bountiful:item/bounty-epic"
+    }
+  ]
+}

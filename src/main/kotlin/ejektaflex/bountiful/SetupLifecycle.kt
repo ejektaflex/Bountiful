@@ -23,10 +23,12 @@ import net.minecraftforge.api.distmarker.OnlyIn
 import net.minecraftforge.client.ItemModelMesherForge
 import net.minecraftforge.client.event.ModelBakeEvent
 import net.minecraftforge.client.event.ModelRegistryEvent
+import net.minecraftforge.client.model.ICustomModelLoader
 import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.client.model.ModelLoaderRegistry
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
+import net.minecraftforge.fml.client.event.ConfigChangedEvent
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import java.io.File
@@ -106,49 +108,6 @@ object SetupLifecycle {
 
     }
 
-    @OnlyIn(Dist.CLIENT)
-    private class BountyMesher(val id: String, manager: ModelManager) : ItemModelMesherForge(manager) {
-        override fun getLocation(stack: ItemStack): ModelResourceLocation {
-
-            val locid = "bountiful:" + id
-            return try {
-                val data = BountifulAPI.toBountyData(stack) as BountyData
-                val rarity = data.rarityEnum
-                ModelResourceLocation("$locid-${rarity.name.toLowerCase()}", "inventory")
-            } catch (e: Exception) {
-                ModelResourceLocation("$locid-${EnumBountyRarity.Common.name.toLowerCase()}", "inventory")
-            }
-
-        }
-    }
-
-    @SubscribeEvent
-    fun bakeModels(event: ModelBakeEvent) {
-
-        val mesher = BountyMesher("bounty", event.modelManager)
-    }
-
-    @SubscribeEvent
-    fun registerModels(event: ModelRegistryEvent) {
-        BountifulMod.logger.info("Registering Bountiful models..")
-
-        //ModelLoaderRegistry.registerLoader(ResourceLocation("bountiful", "bounty-model-loader"))
-
-
-        //val doot = ItemModelMesherForge
-
-        /*
-        ContentRegistry.items.forEach {
-            if (it is ItemBounty) {
-                registerBountyRenderer(it, 0, it.registryName!!.path)
-            } else {
-                registerItemRenderer(it, 0, it.registryName!!.path)
-            }
-        }
-        */
-    }
-
-    /*
     @SubscribeEvent
     fun onConfigChange(event: ConfigChangedEvent.OnConfigChangedEvent) {
         if (event.modID == "bountiful") {
@@ -156,7 +115,6 @@ object SetupLifecycle {
             BountifulConfig.Common.get()
         }
     }
-     */
 
 
 }

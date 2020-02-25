@@ -144,6 +144,14 @@ class BountyData : IBountyData {
             }
         }
 
+        fun safeData(stack: ItemStack): BountyData? {
+            return try {
+                from(stack)
+            } catch (e: Exception) {
+                null
+            }
+        }
+
     }
 
 }

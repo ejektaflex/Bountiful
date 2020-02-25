@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.Rarity
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
+import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
 import net.minecraft.world.World
@@ -33,6 +34,17 @@ class ItemBounty(builder: Item.Properties) : Item(builder), IItemBounty {
      * Thrown when bounty NBT data could not be created
      */
     class BountyCreationException(err: String = "Bounty could not be created!") : Exception(err)
+
+    init {
+        addPropertyOverride(ResourceLocation("bountiful", "rarity")) { stack, world, entity ->
+            val bd = BountyData.safeData(stack)
+            if (bd != null) {
+                bd.rarity * 0.1f
+            } else {
+                0.0f
+            }
+        }
+    }
 
     override fun getTranslationKey() = "bountiful.bounty"
 

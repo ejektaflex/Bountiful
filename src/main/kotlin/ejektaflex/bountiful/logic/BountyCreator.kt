@@ -62,6 +62,8 @@ object BountyCreator : IBountyCreator {
 
         val numRewards = (1..2).hackyRandom()
 
+        val rarity = (0..3).hackyRandom()
+
         val toAdd = mutableListOf<BountyEntry>()
 
         for (i in 0 until numRewards) {
@@ -80,6 +82,7 @@ object BountyCreator : IBountyCreator {
 
         val accumWorth = toAdd.sumBy { it.calculatedWorth }
 
+        data.rarity = rarity
         data.rewards.add(*toAdd.toTypedArray())
 
         return accumWorth
