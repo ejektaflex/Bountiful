@@ -1,37 +1,24 @@
 package ejektaflex.bountiful
 
-import ejektaflex.bountiful.api.BountifulAPI
 import ejektaflex.bountiful.api.data.json.JsonAdapter
 import ejektaflex.bountiful.api.data.json.JsonSerializers
-import ejektaflex.bountiful.api.enum.EnumBountyRarity
-import ejektaflex.bountiful.data.BountyData
+import ejektaflex.bountiful.block.BountyTE
+import ejektaflex.bountiful.content.ModContent
 import ejektaflex.bountiful.data.Decree
 import ejektaflex.bountiful.data.DefaultData
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.registry.DecreeRegistry
 import ejektaflex.bountiful.registry.PoolRegistry
-import net.alexwells.kottle.KotlinEventBusSubscriber
-import net.minecraft.client.renderer.ItemModelMesher
-import net.minecraft.client.renderer.model.ModelBakery
-import net.minecraft.client.renderer.model.ModelManager
-import net.minecraft.client.renderer.model.ModelResourceLocation
+import net.minecraft.block.Block
 import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.util.ResourceLocation
-import net.minecraftforge.api.distmarker.Dist
-import net.minecraftforge.api.distmarker.OnlyIn
-import net.minecraftforge.client.ItemModelMesherForge
-import net.minecraftforge.client.event.ModelBakeEvent
-import net.minecraftforge.client.event.ModelRegistryEvent
-import net.minecraftforge.client.model.ICustomModelLoader
-import net.minecraftforge.client.model.ModelLoader
-import net.minecraftforge.client.model.ModelLoaderRegistry
+import net.minecraft.tileentity.TileEntityType
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.client.event.ConfigChangedEvent
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import java.io.File
+import java.util.function.Supplier
 
 @Mod.EventBusSubscriber
 object SetupLifecycle {
@@ -94,20 +81,6 @@ object SetupLifecycle {
         }
     }
 
-
-    @SubscribeEvent
-    fun registerItems(event: RegistryEvent.Register<Item>) {
-
-        val bountyItem = ItemBounty(
-                Item.Properties().maxStackSize(1)
-        ).apply {
-            setRegistryName("bountiful", "bounty")
-        }
-        println("Registering to: ${event.registry.registryName}, ${event.registry.registrySuperType}")
-        event.registry.register(bountyItem)
-
-    }
-
     @SubscribeEvent
     fun onConfigChange(event: ConfigChangedEvent.OnConfigChangedEvent) {
         if (event.modID == "bountiful") {
@@ -116,6 +89,37 @@ object SetupLifecycle {
         }
     }
 
+
+    @SubscribeEvent
+    fun registerItems(event: RegistryEvent.Register<Item>) {
+        println("Registering to: ${event.registry.registryName}, ${event.registry.registrySuperType}")
+        event.registry.registerAll(
+                ModContent.Items.BOUNTY,
+                ModContent.Items.BOUNTYBOARD
+        )
+    }
+
+    @SubscribeEvent
+    fun registerBlocks(event: RegistryEvent.Register<Block>) {
+        println("Registering to: ${event.registry.registryName}, ${event.registry.registrySuperType}")
+        event.registry.registerAll(
+                ModContent.Blocks.BOUNTYBOARD
+        )
+    }
+
+    @SubscribeEvent
+    fun onTileEntityRegistry(event: RegistryEvent.Register<TileEntityType<*>>) {
+        println("BOUQ registering tile entities")
+
+        event.registry.register(
+                TileEntityType.Builder.create<BountyTE>(Supplier {
+                    BountyTE()
+                }, ModContent.Blocks.BOUNTYBOARD)
+                        .build(null)
+                        .setRegistryName("${BountifulMod.MODID}:bounty-te")
+        )
+
+    }
 
 }
 

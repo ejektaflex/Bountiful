@@ -17,6 +17,8 @@ import java.nio.file.Paths
 @Mod("bountiful")
 object BountifulMod {
 
+    const val MODID = "bountiful"
+
     val logger: Logger = LogManager.getLogger()
 
     val configFolder = Paths.get("config", "bountiful").toFile().apply {

@@ -28,7 +28,9 @@ import net.minecraftforge.api.distmarker.OnlyIn
 import net.minecraft.util.text.TranslationTextComponent
 
 
-class ItemBounty(builder: Item.Properties) : Item(builder), IItemBounty {
+class ItemBounty() : Item(
+        Item.Properties().maxStackSize(1)
+), IItemBounty {
 
     /**
      * Thrown when bounty NBT data could not be created
