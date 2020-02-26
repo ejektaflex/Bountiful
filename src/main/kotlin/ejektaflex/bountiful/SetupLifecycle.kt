@@ -7,9 +7,11 @@ import ejektaflex.bountiful.content.ModContent
 import ejektaflex.bountiful.data.Decree
 import ejektaflex.bountiful.data.DefaultData
 import ejektaflex.bountiful.gui.BoardContainer
+import ejektaflex.bountiful.gui.BoardScreen
 import ejektaflex.bountiful.registry.DecreeRegistry
 import ejektaflex.bountiful.registry.PoolRegistry
 import net.minecraft.block.Block
+import net.minecraft.client.gui.ScreenManager
 import net.minecraft.inventory.container.ContainerType
 import net.minecraft.item.Item
 import net.minecraft.tileentity.TileEntityType
@@ -18,6 +20,7 @@ import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.client.event.ConfigChangedEvent
 import net.minecraftforge.fml.common.Mod
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import java.io.File
 import java.util.function.Supplier
@@ -129,6 +132,13 @@ object SetupLifecycle {
             val pos = data.readBlockPos()
             BoardContainer(windowId, inv.player.world, pos, inv)
         }.setRegistryName("bountyboard"))
+    }
+
+    @SubscribeEvent
+    fun onClientInit(event: FMLClientSetupEvent) {
+        ScreenManager.registerFactory(ModContent.Guis.BOARDCONTAINER) {
+            container, inv, textComponent ->  BoardScreen(container, inv, textComponent)
+        }
     }
 
 }

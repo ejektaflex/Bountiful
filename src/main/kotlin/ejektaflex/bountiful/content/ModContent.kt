@@ -3,6 +3,7 @@ package ejektaflex.bountiful.content
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.block.BlockBountyBoard
 import ejektaflex.bountiful.block.BoardTE
+import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.item.ItemBounty
 import net.minecraft.inventory.container.ContainerType
 import net.minecraft.item.BlockItem
@@ -28,7 +29,7 @@ object ModContent {
 
     object Guis {
         @ObjectHolder(BountifulMod.MODID + ":bountyboard")
-        @JvmStatic lateinit var BOARDCONTAINER: ContainerType<*>
+        @JvmStatic lateinit var BOARDCONTAINER: ContainerType<BoardContainer>
     }
 
 }

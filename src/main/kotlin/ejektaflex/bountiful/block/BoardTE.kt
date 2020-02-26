@@ -22,7 +22,7 @@ import net.minecraftforge.items.ItemStackHandler
 class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEntity, INamedContainerProvider {
 
     private fun genHandler(): ItemStackHandler {
-        return ItemStackHandler(1)
+        return ItemStackHandler(24)
     }
 
     // Lazy load lazy optional ( ... :| )
@@ -30,7 +30,7 @@ class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEnt
         LazyOptional.of { handler }
     }
 
-    private var handler: ItemStackHandler = genHandler()
+    val handler: ItemStackHandler = genHandler()
 
     override fun tick() {
         if (!world!!.isRemote) {
