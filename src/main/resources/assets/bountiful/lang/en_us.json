@@ -2,6 +2,9 @@
 
 	"block.bountiful.bountyboard": "Bounty Board",
 
+	"bountiful.decree": "Decree",
+	"bountiful.decrees": "Decrees",
+
 	"_comment": "Interface",
 	"bountiful.bounty.expired": "§4This bounty has expired.",
 	"bountiful.bounty.fulfilled": "§6Bounty Fulfilled!",

@@ -39,35 +39,15 @@ class BoardContainer(id: Int, val world: World, val pos: BlockPos, val inv: Play
             }
         }
 
-        layoutPlayerInventorySlots(10, 70)
-    }
-
-    private fun addSlotRange(handler: IItemHandler, index: Int, x: Int, y: Int, amount: Int, dx: Int): Int {
-        var aindex = index
-        var x = x
-        for (i in 0 until amount) {
-            addSlot(SlotItemHandler(handler, aindex, x, y))
-            x += dx
-            aindex++
+        for (j in 0..2) {
+            for (k in 0..8) {
+                this.addSlot(SlotItemHandler(playerInvHandler, k + j * 9 + 9, 8 + k * 18, 103 + j * 18 - 19))
+            }
         }
-        return index
-    }
 
-    private fun addSlotBox(handler: IItemHandler, index: Int, x: Int, y: Int, horAmount: Int, dx: Int, verAmount: Int, dy: Int): Int {
-        var aindex = index
-        var ay = y
-        for (j in 0 until verAmount) {
-            aindex = addSlotRange(handler, aindex, x, ay, horAmount, dx)
-            ay += dy
+        for (i1 in 0..8) {
+            this.addSlot(SlotItemHandler(playerInvHandler, i1, 8 + i1 * 18, 142))
         }
-        return index
-    }
-
-    private fun layoutPlayerInventorySlots(leftCol: Int, topRow: Int) { // Player inventory
-        var atopRow = topRow
-        addSlotBox(playerInvHandler, 9, leftCol, atopRow, 9, 18, 3, 18)
-        atopRow += 58
-        addSlotRange(playerInvHandler, 0, leftCol, atopRow, 9, 18)
     }
 
     // TODO Maybe use isWithinUsableDistance later on

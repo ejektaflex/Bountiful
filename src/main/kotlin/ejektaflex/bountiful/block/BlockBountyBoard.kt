@@ -26,13 +26,6 @@ class BlockBountyBoard() : Block(
                 )
 ) {
 
-
-    override fun onBlockPlacedBy(world: World, pos: BlockPos, state: BlockState, entity: LivingEntity?, stack: ItemStack) {
-
-        super.onBlockPlacedBy(world, pos, state, entity, stack)
-
-    }
-
     override fun onBlockActivated(state: BlockState, worldIn: World, pos: BlockPos, player: PlayerEntity, handIn: Hand, hit: BlockRayTraceResult): Boolean {
         if (!worldIn.isRemote) {
             val te = worldIn.getTileEntity(pos)
@@ -40,7 +33,7 @@ class BlockBountyBoard() : Block(
                 NetworkHooks.openGui(player as ServerPlayerEntity, te as INamedContainerProvider, te.pos)
             }
         }
-        return super.onBlockActivated(state, worldIn, pos, player, handIn, hit)
+        return true
     }
 
     // Will always have a tile entity
