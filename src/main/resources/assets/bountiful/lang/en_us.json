@@ -1,8 +1,7 @@
 {
 
-	"item.bountiful.bountiful.bounty": "Bounty",
 	"bountiful.bounty.board": "Bounty Board",
-	"block.bountiful.bountiful.bountyboardblock": "Bounty Board",
+	"block.bountiful.bountyboard": "Bounty Board",
 
 	"_comment": "Interface",
 	"bountiful.bounty.expired": "§4This bounty has expired.",
