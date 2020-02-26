@@ -3,16 +3,23 @@ package ejektaflex.bountiful.block
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.api.ext.clear
 import ejektaflex.bountiful.content.ModContent
+import ejektaflex.bountiful.gui.BoardContainer
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.inventory.container.Container
+import net.minecraft.inventory.container.INamedContainerProvider
 import net.minecraft.nbt.CompoundNBT
 import net.minecraft.tileentity.ITickableTileEntity
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.Direction
+import net.minecraft.util.text.ITextComponent
+import net.minecraft.util.text.TranslationTextComponent
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.items.CapabilityItemHandler
 import net.minecraftforge.items.ItemStackHandler
 
-class BountyTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEntity {
+class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEntity, INamedContainerProvider {
 
     private fun genHandler(): ItemStackHandler {
         return ItemStackHandler(1)
@@ -60,6 +67,14 @@ class BountyTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEn
         }
 
         return super.getCapability(cap)
+    }
+
+    override fun createMenu(i: Int, inv: PlayerInventory, player: PlayerEntity): Container? {
+        return BoardContainer(i, world!!, pos, inv)
+    }
+
+    override fun getDisplayName(): ITextComponent {
+        return TranslationTextComponent("block.bountiful.bountyboard")
     }
 
 }

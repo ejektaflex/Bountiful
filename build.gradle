@@ -24,11 +24,20 @@ version = '1.0'
 group = 'ejektaflex.bountiful' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'modid'
 
+
+
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 configurations {
     mod
 }
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
 
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.
@@ -117,6 +126,8 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-${mcVersion}:${jei_version}:api")
     // at runtime, use the full JEI jar
     runtimeOnly fg.deobf("mezz.jei:jei-${mcVersion}:${jei_version}")
+
+
 
 }
 

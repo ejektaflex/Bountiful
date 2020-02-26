@@ -2,16 +2,18 @@ package ejektaflex.bountiful
 
 import ejektaflex.bountiful.api.data.json.JsonAdapter
 import ejektaflex.bountiful.api.data.json.JsonSerializers
-import ejektaflex.bountiful.block.BountyTE
+import ejektaflex.bountiful.block.BoardTE
 import ejektaflex.bountiful.content.ModContent
 import ejektaflex.bountiful.data.Decree
 import ejektaflex.bountiful.data.DefaultData
-import ejektaflex.bountiful.item.ItemBounty
+import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.registry.DecreeRegistry
 import ejektaflex.bountiful.registry.PoolRegistry
 import net.minecraft.block.Block
+import net.minecraft.inventory.container.ContainerType
 import net.minecraft.item.Item
 import net.minecraft.tileentity.TileEntityType
+import net.minecraftforge.common.extensions.IForgeContainerType
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.client.event.ConfigChangedEvent
@@ -112,13 +114,21 @@ object SetupLifecycle {
         println("BOUQ registering tile entities")
 
         event.registry.register(
-                TileEntityType.Builder.create<BountyTE>(Supplier {
-                    BountyTE()
+                TileEntityType.Builder.create<BoardTE>(Supplier {
+                    BoardTE()
                 }, ModContent.Blocks.BOUNTYBOARD)
                         .build(null)
                         .setRegistryName("${BountifulMod.MODID}:bounty-te")
         )
 
+    }
+
+    @SubscribeEvent
+    fun onContainerRegistry(event: RegistryEvent.Register<ContainerType<*>>) {
+        event.registry.register(IForgeContainerType.create { windowId, inv, data ->
+            val pos = data.readBlockPos()
+            BoardContainer(windowId, inv.player.world, pos, inv)
+        }.setRegistryName("bountyboard"))
     }
 
 }
