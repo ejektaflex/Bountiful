@@ -6,25 +6,11 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.registries.ForgeRegistries
 
-val String.toEntityEntry: EntityType<*>?
+val String.toEntityType: EntityType<*>?
     get() {
-        if (":" !in this) {
-            return null
-        }
-        if (substringBefore(":") == "entity") {
-            var id = substringAfter(":")
-            // Prepend minecraft domain if none exists
-            if (":" !in id) {
-                id = "minecraft:$id"
-            }
-            // Find resource key in registry
-            return ForgeRegistries.ENTITIES.entries.find {
-                it.key.toString() == id
-            }?.value
-        }
-
-
-        return null
+        return ForgeRegistries.ENTITIES.entries.find {
+            it.key.toString() == this
+        }?.value
     }
 
 

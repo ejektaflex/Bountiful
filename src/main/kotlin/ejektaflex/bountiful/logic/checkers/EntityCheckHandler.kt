@@ -13,7 +13,7 @@ import net.minecraft.util.NonNullList
 class EntityCheckHandler() : CheckHandler<BountyEntryEntity>() {
 
     override fun fulfill() {
-        println("EntityHandler nothing to fulfill!")
+        // Nothing needs to happen in order to fulfill this bounty objective type :)
     }
 
     override fun objectiveStatus(): Map<BountyEntry, BountyProgress> {

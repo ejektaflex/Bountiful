@@ -12,23 +12,6 @@ fun CompoundNBT.clear() {
     }
 }
 
-
-fun CompoundNBT.setUnsortedStringSet(key: String, items: Set<String>) {
-    val listTag = CompoundNBT().apply {
-        items.forEachIndexed { index, item ->
-            putString(index.toString(), item)
-        }
-    }
-    put(key, listTag)
-}
-
-fun CompoundNBT.getUnsortedStringSet(key: String): Set<String> {
-    val listTag = get(key) as CompoundNBT
-    return listTag.keySet().map { index ->
-        listTag.getString(index)
-    }.toSet()
-}
-
 fun CompoundNBT.setUnsortedList(key: String, items: Set<INBTSerializable<CompoundNBT>>) {
     val listTag = CompoundNBT().apply {
         items.forEachIndexed { index, item ->

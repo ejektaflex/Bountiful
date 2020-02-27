@@ -92,7 +92,7 @@ class ItemBounty() : Item(
             //val bountyTipInfo = bounty.tooltipInfo(worldIn!!, Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
             val bountyTipInfo = bounty.tooltipInfo(worldIn!!, false)
             for (line in bountyTipInfo) {
-                tooltip.add(StringTextComponent(line))
+                tooltip.add(line)
             }
         }
     }

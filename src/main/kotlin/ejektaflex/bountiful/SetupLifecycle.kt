@@ -2,6 +2,7 @@ package ejektaflex.bountiful
 
 import ejektaflex.bountiful.api.data.IEntryPool
 import ejektaflex.bountiful.api.data.entry.BountyEntry
+import ejektaflex.bountiful.api.data.entry.BountyEntryEntity
 import ejektaflex.bountiful.api.data.json.JsonAdapter
 import ejektaflex.bountiful.api.data.json.JsonSerializers
 import ejektaflex.bountiful.api.ext.sendErrorMsg
@@ -9,21 +10,25 @@ import ejektaflex.bountiful.api.ext.sendMessage
 import ejektaflex.bountiful.block.BoardTE
 import ejektaflex.bountiful.command.BountifulCommand
 import ejektaflex.bountiful.content.ModContent
+import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.data.Decree
 import ejektaflex.bountiful.data.DefaultData
 import ejektaflex.bountiful.data.EntryPool
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.gui.BoardScreen
+import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.registry.DecreeRegistry
 import ejektaflex.bountiful.registry.PoolRegistry
 import net.minecraft.block.Block
 import net.minecraft.client.gui.ScreenManager
 import net.minecraft.command.CommandSource
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.container.ContainerType
 import net.minecraft.item.Item
 import net.minecraft.tileentity.TileEntityType
 import net.minecraftforge.common.extensions.IForgeContainerType
 import net.minecraftforge.event.RegistryEvent
+import net.minecraftforge.event.entity.living.LivingDeathEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.client.event.ConfigChangedEvent
 import net.minecraftforge.fml.common.Mod
@@ -32,6 +37,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent
 import java.util.function.Supplier
 import kotlin.Exception
+import kotlin.math.max
+import kotlin.math.min
 
 @Mod.EventBusSubscriber
 object SetupLifecycle {
@@ -147,6 +154,33 @@ object SetupLifecycle {
     private fun dumpDecrees() {
         for (decree in DecreeRegistry) {
             BountifulMod.logger.info(decree.decreeTitle)
+        }
+    }
+
+    // Update mob bounties
+    @SubscribeEvent
+    fun entityLivingDeath(e: LivingDeathEvent) {
+        val deadEntity = e.entityLiving
+        if (e.source.trueSource is PlayerEntity) {
+            val player = e.source.trueSource as PlayerEntity
+            val bountyStacks = player.inventory.mainInventory.filter { it.item is ItemBounty && it.hasTag() }
+            if (bountyStacks.isNotEmpty()) {
+                bountyStacks.forEach { stack ->
+                    val data = BountyData.from(stack)
+                    val eObjs = data.objectives.content.filterIsInstance<BountyEntryEntity>()
+                    for (obj in eObjs) {
+
+                        if (obj.isSameEntity(deadEntity)) {
+                            println("It was the same! :D")
+                            obj.killedAmount = min(obj.killedAmount + 1, obj.amount)
+                            stack.tag = data.serializeNBT()
+                        } else {
+                            println("It was different!")
+                        }
+
+                    }
+                }
+            }
         }
     }
 

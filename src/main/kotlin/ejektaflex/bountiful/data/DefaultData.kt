@@ -71,19 +71,13 @@ object DefaultData {
                                 unitWorth = 80
                                 amountRange = (2..32).ir
                             },
-                            BountyEntryStack().apply {
-                                content = "minecraft:coal"
-                                unitWorth = 80
-                                amountRange = (2..32).ir
-                            },
-                            /*
+
                             BountyEntryEntity().apply {
                                 content = "minecraft:zombie"
                                 unitWorth = 40
                                 amountRange = (2..32).ir
                             },
 
-                             */
                             BountyEntryItemTag().apply {
                                 name = "Any Fish"
                                 type = "tag"

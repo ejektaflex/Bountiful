@@ -11,6 +11,7 @@ import ejektaflex.bountiful.api.generic.IWeighted
 import ejektaflex.bountiful.api.generic.ItemRange
 import ejektaflex.bountiful.logic.BountyProgress
 import net.minecraft.nbt.*
+import net.minecraft.util.text.ITextComponent
 import net.minecraftforge.common.util.INBTSerializable
 import kotlin.math.abs
 import kotlin.math.min
@@ -58,6 +59,8 @@ abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSeri
     fun cloned(): BountyEntry {
         return clone() as BountyEntry
     }
+
+
 
     open fun validate() {
         if (amountRange.min < 1) {
@@ -107,6 +110,6 @@ abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSeri
         }
     }
 
-    abstract val formattedName: String
+    abstract val formattedName: ITextComponent
 
 }

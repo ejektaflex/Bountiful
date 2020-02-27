@@ -10,6 +10,8 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.tags.ItemTags
 import net.minecraft.util.ResourceLocation
+import net.minecraft.util.text.ITextComponent
+import net.minecraft.util.text.StringTextComponent
 import kotlin.math.ceil
 import kotlin.math.max
 
@@ -44,7 +46,7 @@ class BountyEntryItemTag : AbstractBountyEntryStackLike(), IBountyObjective {
         }
 
 
-    override val formattedName: String
-        get() = name ?: content
+    override val formattedName: ITextComponent
+        get() = StringTextComponent(name ?: content)
 
 }

@@ -10,6 +10,8 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.tags.ItemTags
 import net.minecraft.util.ResourceLocation
+import net.minecraft.util.text.ITextComponent
+import net.minecraft.util.text.StringTextComponent
 import kotlin.math.ceil
 import kotlin.math.max
 
@@ -41,12 +43,14 @@ class BountyEntryStack : AbstractBountyEntryStackLike(), IBountyObjective, IBoun
             return listOfNotNull(stack)
         }
 
-    override val formattedName: String
-        get() = itemStack?.displayName!!.formattedText
+    override val formattedName: ITextComponent
+        get() = StringTextComponent(itemStack?.displayName!!.formattedText)
 
 
-    override fun tooltipReward(): String {
-        return "§f${amount}§fx §b$formattedName"
+    override fun tooltipReward(): ITextComponent {
+        return StringTextComponent("§f${amount}§fx §b").appendSibling(
+                formattedName
+        )
     }
 
 }

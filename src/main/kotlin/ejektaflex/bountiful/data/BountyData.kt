@@ -17,6 +17,9 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.I18n
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundNBT
+import net.minecraft.util.text.ITextComponent
+import net.minecraft.util.text.StringTextComponent
+import net.minecraft.util.text.TranslationTextComponent
 import net.minecraft.world.World
 import kotlin.math.max
 
@@ -48,7 +51,7 @@ class BountyData : IBountyData {
         return max(boardStamp + BountifulMod.config.boardLifespan - world.gameTime , 0)
     }
 
-    fun tooltipInfo(world: World, advanced: Boolean): List<String> {
+    fun tooltipInfo(world: World, advanced: Boolean): List<ITextComponent> {
         val passed = CheckerRegistry.passedChecks(Minecraft.getInstance().player!!, this)
 
         val objs = passed.toList().sortedBy {
@@ -63,11 +66,25 @@ class BountyData : IBountyData {
 
         return listOf(
                 //"Board Time: ${formatTickTime(boardTimeLeft(world) / boardTickFreq)}",
-                listOf("§6${I18n.format("bountiful.tooltip.required")}:§f ") +
+                listOf(
+                        StringTextComponent("§6").appendSibling(
+                            TranslationTextComponent("bountiful.tooltip.required")
+                        ).appendSibling(
+                                StringTextComponent(":§f ")
+                        )
+                ) +
                 objs +
-                listOf("§6${I18n.format("bountiful.tooltip.rewards")}:§f ") +
+                listOf(
+                        StringTextComponent("§6").appendSibling(
+                                TranslationTextComponent("bountiful.tooltip.rewards")
+                        ).appendSibling(
+                                StringTextComponent(":§f ")
+                        )
+                ) +
                 rews +
-                listOf(I18n.format("bountiful.tooltip.advanced") )
+                listOf(
+                        TranslationTextComponent("bountiful.tooltip.advanced")
+                )
         ).flatten()
 
     }

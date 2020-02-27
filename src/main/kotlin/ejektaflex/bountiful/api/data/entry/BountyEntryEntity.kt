@@ -1,11 +1,13 @@
 package ejektaflex.bountiful.api.data.entry
 
 import com.google.gson.annotations.Expose
-import ejektaflex.bountiful.api.ext.toEntityEntry
+import ejektaflex.bountiful.api.ext.toEntityType
 import ejektaflex.bountiful.logic.BountyProgress
 import ejektaflex.bountiful.logic.IBountyObjective
-import net.minecraft.entity.EntityType
+import net.minecraft.entity.LivingEntity
 import net.minecraft.nbt.CompoundNBT
+import net.minecraft.util.text.ITextComponent
+import net.minecraft.util.text.StringTextComponent
 import kotlin.math.ceil
 import kotlin.math.max
 
@@ -45,16 +47,25 @@ class BountyEntryEntity : BountyEntry(), IBountyObjective {
         }
     }
 
-    val entityEntry: EntityType<*>?
-        get() {
-            return content.toEntityEntry
+    fun isSameEntity(e: LivingEntity): Boolean {
+        val ereg = e.type.registryName
+        if (ereg.toString() == content) {
+            return true
         }
+        return false
+    }
 
-    override val formattedName: String
-        get() = ("(${killedAmount}/${amount}) §a" + "entity." + content + ".name" + " Kills§r")
+    override val formattedName: ITextComponent
+        get() = (content.toEntityType?.name ?: StringTextComponent(content))
 
-    override fun tooltipObjective(progress: BountyProgress): String {
-        return "§f${progress.stringNums} ${progress.color}${formattedName}§r"
+    override fun tooltipObjective(progress: BountyProgress): ITextComponent {
+        return StringTextComponent(progress.color).appendSibling(
+                formattedName
+        ).appendSibling(
+                StringTextComponent(" Kills§r ")
+        ).appendSibling(
+                StringTextComponent("§f${progress.stringNums}")
+        )
     }
 
     override fun toString(): String {
