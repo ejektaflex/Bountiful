@@ -50,17 +50,8 @@ object BountifulCommand {
         it.source.sendMessage("Dumping Pools to console...")
         for (pool in PoolRegistry.content) {
 
-            BountifulMod.logger.info("Pool: ${pool.id}")
-            for (entry in pool.content) {
-                BountifulMod.logger.info("* $entry")
-                if (test) {
-                    try {
-                        entry.validate()
-                    } catch (e: Exception) {
-                        it.source.sendErrorMsg(e.message!!)
-                    }
-                }
-            }
+            SetupLifecycle.validatePool(pool, it.source, test)
+
         }
         it.source.sendMessage("Pools dumped.")
 

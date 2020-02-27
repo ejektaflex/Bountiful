@@ -1,5 +1,7 @@
 package ejektaflex.bountiful
 
+import ejektaflex.bountiful.api.data.IEntryPool
+import ejektaflex.bountiful.api.data.entry.BountyEntry
 import ejektaflex.bountiful.api.data.json.JsonAdapter
 import ejektaflex.bountiful.api.data.json.JsonSerializers
 import ejektaflex.bountiful.api.ext.sendErrorMsg
@@ -46,7 +48,6 @@ object SetupLifecycle {
         JsonSerializers.register()
         setupConfig()
         exportContent() // TODO NOT overwrite content
-        clearContent()
         loadContentFromFiles()
         dumpDecrees()
     }
@@ -56,18 +57,42 @@ object SetupLifecycle {
         DefaultData.export()
     }
 
-    private fun clearContent() {
-        DecreeRegistry.empty()
-        PoolRegistry.empty()
+    fun validatePool(pool: IEntryPool, sender: CommandSource? = null, log: Boolean = false): MutableList<BountyEntry> {
+
+        val validEntries = mutableListOf<BountyEntry>()
+
+        if (log) {
+            BountifulMod.logger.info("Pool: ${pool.id}")
+        }
+        for (entry in pool.content) {
+            if (log) {
+                BountifulMod.logger.info("* $entry")
+            }
+            try {
+                entry.validate()
+                validEntries.add(entry)
+            } catch (e: Exception) {
+                sender?.sendErrorMsg(e.message!!)
+            }
+        }
+
+        return validEntries
     }
 
-
     fun loadContentFromFiles(sender: CommandSource? = null) {
+        if (sender?.world?.isRemote == true) {
+            return
+        }
 
         BountifulMod.logger.apply {
+            info("Reloading content from files..")
+
 
             val decreeBackup = DecreeRegistry.backup()
             val poolBackup = PoolRegistry.backup()
+
+            DecreeRegistry.empty()
+            PoolRegistry.empty()
 
             var succ = true
 
@@ -90,7 +115,14 @@ object SetupLifecycle {
                 try {
                     val fileText = file.readText()
                     val pool = JsonAdapter.fromJson<EntryPool>(fileText)
+
+                    // Run entries through validation
+                    val entries = validatePool(pool, sender, false)
+                    pool.restore(entries)
+
+                    // Add pool with only valid entries
                     PoolRegistry.add(pool)
+
                 } catch (e: Exception) {
                     sender?.sendErrorMsg("Could not load pool in file '${file.name}'. Details: ${e.message}")
                     succ = false
@@ -100,7 +132,7 @@ object SetupLifecycle {
             }
 
             if (succ) {
-                sender?.sendMessage("Bounty data reloaded successfully!")
+                sender?.sendMessage("Bounty data reloaded.")
             } else {
                 sender?.sendErrorMsg("Reverting to previous safe data.")
             }

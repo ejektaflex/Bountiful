@@ -29,9 +29,8 @@ class BountyEntryEntity : BountyEntry(), IBountyObjective {
         }
     }
 
-    override fun validate(): Boolean {
-        return true
-        // TODO not implemented
+    override fun validate() {
+        // TODO Implement entity validation
     }
 
     override fun deserializeNBT(tag: CompoundNBT) {

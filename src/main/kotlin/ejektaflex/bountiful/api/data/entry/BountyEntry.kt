@@ -17,7 +17,7 @@ import kotlin.math.min
 
 abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSerializable<CompoundNBT>, IWeighted, Cloneable {
 
-    class EntryValidationException(reason: String) : Exception("Entry failed validation. Reason: $reason")
+    class EntryValidationException(reason: String) : Exception("An entry has failed validation and will not be loaded. Reason: $reason. Skipping entry..")
 
     open var type: String = "UNKNOWN_TYPE"
 
@@ -31,7 +31,7 @@ abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSeri
     override var nbtString: String? = null
 
     @Expose
-    open var amountRange: ItemRange? = null
+    open var amountRange: ItemRange = ItemRange(1, 1)
 
     @Expose
     open var unitWorth: Int = Integer.MIN_VALUE
@@ -59,13 +59,12 @@ abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSeri
         return clone() as BountyEntry
     }
 
-    abstract fun validate(): Boolean
+    abstract fun validate()
 
     abstract fun pick(worth: Int? = null): BountyEntry
 
     val randCount: Int
         get() = ((amountRange?.min ?: 1)..(amountRange?.max ?: Int.MAX_VALUE)).hackyRandom()
-
 
 
     // Must override because overriding [nbtString]

@@ -7,6 +7,7 @@ import ejektaflex.bountiful.logic.IBountyObjective
 import ejektaflex.bountiful.logic.IBountyReward
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
 import net.minecraft.tags.ItemTags
 import net.minecraft.util.ResourceLocation
 import kotlin.math.ceil
@@ -30,13 +31,22 @@ class BountyEntryStack : BountyEntry(), IBountyObjective, IBountyReward {
         }
     }
 
-    override fun validate(): Boolean {
+    override fun validate() {
         if (type == "tag") {
             if (tagElements.isEmpty()) {
                 throw EntryValidationException("Tag '$content' does not exist!")
             }
         } else if (type == "stack") {
-            val stackie = itemStack ?: throw EntryValidationException("Stack $content cannot be created!")
+            val stackie = itemStack
+            if (stackie?.item == Items.AIR) {
+                throw EntryValidationException("Stack '$content' does not exist!")
+            }
+        }
+        if (amountRange.min < 1) {
+            throw EntryValidationException("'$content' cannot have an amount possibly less than 1!")
+        }
+        if (amountRange.min > amountRange.max) {
+            throw EntryValidationException("'$content' cannot have a min amount greater than it's max!")
         }
         return true
     }
