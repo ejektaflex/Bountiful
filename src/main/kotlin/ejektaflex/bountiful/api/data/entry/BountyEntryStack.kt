@@ -5,6 +5,7 @@ import ejektaflex.bountiful.api.ext.toItemStack
 import ejektaflex.bountiful.logic.BountyProgress
 import ejektaflex.bountiful.logic.IBountyObjective
 import ejektaflex.bountiful.logic.IBountyReward
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.tags.ItemTags
 import net.minecraft.util.ResourceLocation
@@ -28,6 +29,20 @@ class BountyEntryStack : BountyEntry(), IBountyObjective, IBountyReward {
             }
         }
     }
+
+    override fun validate(): Boolean {
+        if (type == "tag") {
+            if (tagElements.isEmpty()) {
+                throw EntryValidationException("Tag '$content' does not exist!")
+            }
+        } else if (type == "stack") {
+            val stackie = itemStack ?: throw EntryValidationException("Stack $content cannot be created!")
+        }
+        return true
+    }
+
+    val tagElements: List<Item>
+        get() = ItemTags.getCollection().getOrCreate(ResourceLocation(content)).allElements.toList()
 
     val validStacks: List<ItemStack>
         get() {

@@ -2,16 +2,21 @@ package ejektaflex.bountiful
 
 import ejektaflex.bountiful.api.data.json.JsonAdapter
 import ejektaflex.bountiful.api.data.json.JsonSerializers
+import ejektaflex.bountiful.api.ext.sendErrorMsg
+import ejektaflex.bountiful.api.ext.sendMessage
 import ejektaflex.bountiful.block.BoardTE
+import ejektaflex.bountiful.command.BountifulCommand
 import ejektaflex.bountiful.content.ModContent
 import ejektaflex.bountiful.data.Decree
 import ejektaflex.bountiful.data.DefaultData
+import ejektaflex.bountiful.data.EntryPool
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.gui.BoardScreen
 import ejektaflex.bountiful.registry.DecreeRegistry
 import ejektaflex.bountiful.registry.PoolRegistry
 import net.minecraft.block.Block
 import net.minecraft.client.gui.ScreenManager
+import net.minecraft.command.CommandSource
 import net.minecraft.inventory.container.ContainerType
 import net.minecraft.item.Item
 import net.minecraft.tileentity.TileEntityType
@@ -22,8 +27,9 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
-import java.io.File
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent
 import java.util.function.Supplier
+import kotlin.Exception
 
 @Mod.EventBusSubscriber
 object SetupLifecycle {
@@ -32,41 +38,72 @@ object SetupLifecycle {
         BountifulMod.logger.info("Loading Bountiful listeners..")
     }
 
+    class BountifulLoadingException(reason: String) : Exception("Bountiful failed to load JSON data. Reason: $reason")
+
     @SubscribeEvent
     fun gameSetup(event: FMLCommonSetupEvent) {
+        println("Registering data type adapters for JSON/Data conversion...")
+        JsonSerializers.register()
         setupConfig()
-        loadContent()
+        exportContent() // TODO NOT overwrite content
+        clearContent()
+        loadContentFromFiles()
         dumpDecrees()
     }
 
-    fun loadContent() {
+    private fun exportContent() {
+        println("Dumping default data into registries..")
+        DefaultData.export()
+    }
+
+    private fun clearContent() {
+        DecreeRegistry.empty()
+        PoolRegistry.empty()
+    }
+
+
+    fun loadContentFromFiles(sender: CommandSource? = null) {
 
         BountifulMod.logger.apply {
-            info("Dumping default data into registries..")
 
-            DefaultData.export()
+            val decreeBackup = DecreeRegistry.backup()
+            val poolBackup = PoolRegistry.backup()
 
-            info("Registering data type adapters for JSON/Data conversion...")
-            JsonSerializers.register()
+            var succ = true
 
-            info("Creating file to dump data...")
-            val testFile = File("test.json")
-            testFile.writeText(JsonAdapter.toJson(
-                    DefaultData.decrees.content
-            ))
+            for (file in BountifulMod.configDecrees.listFiles()!!.filter { it.extension == "json" }) {
+                info("Found DECREEFILE ${file.name}")
+                try {
+                    val fileText = file.readText()
+                    val decree = JsonAdapter.fromJson<Decree>(fileText)
+                    DecreeRegistry.add(decree)
+                } catch (e: Exception) {
+                    sender?.sendErrorMsg("Could not load decree in file ${file.name}. Details: ${e.message}")
+                    succ = false
+                    DecreeRegistry.restore(decreeBackup)
+                    PoolRegistry.restore(poolBackup)
+                }
+            }
 
-            DecreeRegistry.restore(DefaultData.decrees.content)
-            PoolRegistry.restore(DefaultData.pools.content)
+            for (file in BountifulMod.configPools.listFiles()!!.filter { it.extension == "json" }) {
+                info("Found POOLFILE ${file.name}")
+                try {
+                    val fileText = file.readText()
+                    val pool = JsonAdapter.fromJson<EntryPool>(fileText)
+                    PoolRegistry.add(pool)
+                } catch (e: Exception) {
+                    sender?.sendErrorMsg("Could not load pool in file '${file.name}'. Details: ${e.message}")
+                    succ = false
+                    DecreeRegistry.restore(decreeBackup)
+                    PoolRegistry.restore(poolBackup)
+                }
+            }
 
-            info(testFile.readText())
-
-            val decreeList = JsonAdapter.fromJson<Array<Decree>>(testFile.readText()).toList()
-            DecreeRegistry.restore(decreeList)
-            val first = decreeList.first()
-
-            println(first)
-            //println(first.objectives)
-            //println(first.rewards)
+            if (succ) {
+                sender?.sendMessage("Bounty data reloaded successfully!")
+            } else {
+                sender?.sendErrorMsg("Reverting to previous safe data.")
+            }
 
             info("Testing done.")
         }
@@ -94,6 +131,10 @@ object SetupLifecycle {
         }
     }
 
+    @SubscribeEvent
+    fun onServerStarting(event: FMLServerStartingEvent) {
+        BountifulCommand.generateCommand(event.commandDispatcher)
+    }
 
     @SubscribeEvent
     fun registerItems(event: RegistryEvent.Register<Item>) {

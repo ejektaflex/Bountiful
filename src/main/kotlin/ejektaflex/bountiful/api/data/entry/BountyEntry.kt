@@ -17,7 +17,9 @@ import kotlin.math.min
 
 abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSerializable<CompoundNBT>, IWeighted, Cloneable {
 
-    abstract var type: String
+    class EntryValidationException(reason: String) : Exception("Entry failed validation. Reason: $reason")
+
+    open var type: String = "UNKNOWN_TYPE"
 
     @Expose
     open var name: String? = null
@@ -56,6 +58,8 @@ abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSeri
     fun cloned(): BountyEntry {
         return clone() as BountyEntry
     }
+
+    abstract fun validate(): Boolean
 
     abstract fun pick(worth: Int? = null): BountyEntry
 

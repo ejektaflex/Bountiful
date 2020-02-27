@@ -42,16 +42,8 @@ object BountyCreator : IBountyCreator {
     override fun create(world: World, inRarity: EnumBountyRarity, decrees: List<IDecree>): BountyData {
         val data = BountyData()
 
-        println("Yep, that's a bounty!")
-        println(DecreeRegistry.content.size)
-        println(PoolRegistry.content.size)
-
-        println("Decrees: $decrees")
-
         val toSatisfy = createRewards(data, world, inRarity, decrees)
         createObjectives(data, world, inRarity, decrees, toSatisfy)
-
-        //println(JsonAdapter.toJson(data, BountyData::class))
 
         return data
     }
@@ -138,9 +130,7 @@ object BountyCreator : IBountyCreator {
             toAdd.add(closest)
         }
 
-
         data.objectives.add(*toAdd.toTypedArray())
-
 
     }
 

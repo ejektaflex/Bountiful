@@ -3,10 +3,12 @@ package ejektaflex.bountiful.api.ext
 import ejektaflex.bountiful.api.generic.IWeighted
 import ejektaflex.bountiful.api.generic.ItemRange
 import net.minecraft.client.Minecraft
+import net.minecraft.command.CommandSource
 import net.minecraft.entity.Entity
 import net.minecraft.nbt.CompoundNBT
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.StringTextComponent
+import net.minecraft.util.text.TranslationTextComponent
 import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.INBTSerializable
@@ -50,6 +52,18 @@ val Entity.registryName: ResourceLocation?
 //fun ICommandSender.sendMessage(str: String) = sendMessage(StringTextComponent(str))
 
 //fun ICommandSender.sendTranslation(key: String) = sendMessage(TextComponentTranslation(key))
+
+fun CommandSource.sendMessage(str: String) {
+    sendFeedback(StringTextComponent(str), true)
+}
+
+fun CommandSource.sendTranslation(str: String) {
+    sendFeedback(TranslationTextComponent(str), true)
+}
+
+fun CommandSource.sendErrorMsg(str: String) {
+    sendErrorMessage(StringTextComponent(str))
+}
 
 // TODO Make update this
 fun Entity.sendTranslation(key: String) = sendMessage(StringTextComponent("Key: $key"))

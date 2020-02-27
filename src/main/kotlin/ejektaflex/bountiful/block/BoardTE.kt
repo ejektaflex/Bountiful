@@ -35,8 +35,8 @@ class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEnt
     override fun tick() {
         if (!world!!.isRemote) {
             if (world!!.gameTime % 20 == 0L) {
-                println("BountyTE::tick")
-                markDirty()
+                //println("BountyTE::tick")
+                //markDirty()
             }
         }
     }

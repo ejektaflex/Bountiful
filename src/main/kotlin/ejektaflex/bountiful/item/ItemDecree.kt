@@ -7,6 +7,7 @@ import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.api.ext.hackyRandom
 import ejektaflex.bountiful.api.ext.sendTranslation
 import ejektaflex.bountiful.api.item.IItemBounty
+import ejektaflex.bountiful.content.ModContent
 import ejektaflex.bountiful.logic.BountyChecker
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.data.BountyNBT
@@ -33,7 +34,7 @@ import net.minecraft.util.text.TranslationTextComponent
 
 
 class ItemDecree() : Item(
-        Item.Properties().maxStackSize(1)
+        Item.Properties().maxStackSize(1).group(ModContent.BountifulGroup)
 ) {
 
 

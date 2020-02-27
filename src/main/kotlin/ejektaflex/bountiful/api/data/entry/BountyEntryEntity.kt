@@ -29,6 +29,11 @@ class BountyEntryEntity : BountyEntry(), IBountyObjective {
         }
     }
 
+    override fun validate(): Boolean {
+        return true
+        // TODO not implemented
+    }
+
     override fun deserializeNBT(tag: CompoundNBT) {
         super.deserializeNBT(tag)
         killedAmount = tag.getInt("killedAmount")

@@ -1,17 +1,19 @@
 package ejektaflex.bountiful.api.data.json
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
+import com.google.gson.*
 import kotlin.reflect.KClass
 
 object JsonAdapter {
 
     var deserializers = mutableMapOf<Class<*>, JsonDeserializer<*>>()
+    var serializers = mutableMapOf<Class<*>, JsonSerializer<*>>()
 
     inline fun <reified T : Any> register(deserializer: JsonDeserializer<T>) {
         deserializers[T::class.java] = deserializer
+    }
+
+    inline fun <reified T : Any> register(serializer: JsonSerializer<T>) {
+        serializers[T::class.java] = serializer
     }
 
     val gson: Gson
@@ -22,6 +24,9 @@ object JsonAdapter {
         var gsonProto = GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation()
         for (deser in deserializers) {
             gsonProto = gsonProto.registerTypeAdapter(deser.key, deser.value)
+        }
+        for (ser in serializers) {
+            gsonProto = gsonProto.registerTypeAdapter(ser.key, ser.value)
         }
         return gsonProto.create()
     }
@@ -45,6 +50,10 @@ object JsonAdapter {
 
     fun toJson(obj: Any, klazz: KClass<*>): String {
         return gson.toJson(obj, klazz.java)
+    }
+
+    fun toJsonTree(obj: Any, klazz: KClass<*>): JsonElement {
+        return gson.toJsonTree(obj, klazz.java)
     }
 
 }
