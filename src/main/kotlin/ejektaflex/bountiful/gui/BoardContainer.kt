@@ -3,6 +3,7 @@ package ejektaflex.bountiful.gui
 import ejektaflex.bountiful.block.BoardTE
 import ejektaflex.bountiful.content.ModContent
 import ejektaflex.bountiful.gui.slot.BountySlot
+import ejektaflex.bountiful.gui.slot.DecreeSlot
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.container.Container
@@ -37,6 +38,8 @@ class BoardContainer(id: Int, val world: World, val pos: BlockPos, val inv: Play
                 println("Made slot with index $j $k: ${k + j * bCols}")
                 addSlot(BountySlot(boardTE, k + j * bCols, 8 + k * 18, 18 + j * 18))
             }
+
+            addSlot(DecreeSlot(boardTE, 7 + j * bCols, 19 + 7 * 18, 18 + j * 18))
         }
 
         for (j in 0..2) {
