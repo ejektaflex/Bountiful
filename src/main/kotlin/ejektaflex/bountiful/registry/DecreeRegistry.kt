@@ -2,13 +2,14 @@ package ejektaflex.bountiful.registry
 
 import ejektaflex.bountiful.api.data.IDecree
 import ejektaflex.bountiful.api.data.entry.BountyEntry
+import ejektaflex.bountiful.data.Decree
 import ejektaflex.bountiful.data.ValueRegistry
 import ejektaflex.bountiful.logic.IBountyObjective
 import ejektaflex.bountiful.logic.IBountyReward
 
-object DecreeRegistry : ValueRegistry<IDecree>() {
+object DecreeRegistry : ValueRegistry<Decree>() {
 
-    fun getDecree(id: String): IDecree? {
+    fun getDecree(id: String): Decree? {
         return content.firstOrNull { it.id == id }
     }
 

@@ -5,6 +5,7 @@ import ejektaflex.bountiful.block.BlockBountyBoard
 import ejektaflex.bountiful.block.BoardTE
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.item.ItemBounty
+import ejektaflex.bountiful.item.ItemDecree
 import net.minecraft.inventory.container.ContainerType
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
@@ -25,6 +26,7 @@ object ModContent {
     object Items {
         val BOUNTY = ItemBounty().setRegistryName("bounty")
         val BOUNTYBOARD = BlockItem(Blocks.BOUNTYBOARD, Item.Properties()).setRegistryName("bountyboard")
+        val DECREE = ItemDecree().setRegistryName("decree")
     }
 
     object Guis {

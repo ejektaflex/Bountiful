@@ -100,7 +100,8 @@ object SetupLifecycle {
         println("Registering to: ${event.registry.registryName}, ${event.registry.registrySuperType}")
         event.registry.registerAll(
                 ModContent.Items.BOUNTY,
-                ModContent.Items.BOUNTYBOARD
+                ModContent.Items.BOUNTYBOARD,
+                ModContent.Items.DECREE
         )
     }
 

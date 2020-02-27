@@ -140,19 +140,6 @@ class ItemBounty() : Item(
         return tickNumber(stack, BountyData.boardTickFreq.toInt(), BountyNBT.BoardStamp.key)
     }
 
-    // TODO Reimplement Bounty ItemStack display name
-    /*
-    override fun getItemStackDisplayName(stack: ItemStack): String {
-        return super.getItemStackDisplayName(stack) + if (stack.hasTagCompound() && stack.tagCompound!!.hasKey(BountyNBT.Rarity.key)) {
-            val rarity = EnumBountyRarity.getRarityFromInt(stack.tagCompound!!.getInteger(BountyNBT.Rarity.key))
-            val localizedRarity = I18n.format("bountiful.rarity.${rarity.name}")
-             " ($localizedRarity)"
-        } else {
-            ""
-        }
-    }
-    */
-
     fun ensureTimerStarted(stack: ItemStack, worldIn: World) {
         if (stack.item is ItemBounty && stack.hasTag() && BountyNBT.BountyStamp.key !in stack.tag!!) {
             stack.tag!!.putLong(BountyNBT.BountyStamp.key, worldIn.gameTime)
