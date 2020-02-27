@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.api.data.entry.BountyEntry
 import ejektaflex.bountiful.api.data.entry.BountyEntryEntity
+import ejektaflex.bountiful.api.data.entry.BountyEntryItemTag
 import ejektaflex.bountiful.api.data.entry.BountyEntryStack
 import ejektaflex.bountiful.api.data.json.JsonAdapter
 import ejektaflex.bountiful.api.ext.ir
@@ -46,7 +47,6 @@ object DefaultData {
         add(
                 Decree(
                         "Village Rations: Food",
-                        "The people are in need of food!",
                         "vanilla_food_rations",
                         spawnsInBoard = true,
                         objectivePools = mutableListOf(
@@ -84,7 +84,7 @@ object DefaultData {
                             },
 
                              */
-                            BountyEntryStack().apply {
+                            BountyEntryItemTag().apply {
                                 name = "Any Fish"
                                 type = "tag"
                                 content = "minecraft:fishes"

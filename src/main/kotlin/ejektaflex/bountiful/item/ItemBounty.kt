@@ -1,16 +1,13 @@
 package ejektaflex.bountiful.item
 
-import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.api.BountifulAPI
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.api.ext.sendTranslation
 import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.content.ModContent
-import ejektaflex.bountiful.logic.BountyChecker
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.data.BountyNBT
 import ejektaflex.bountiful.logic.checkers.CheckerRegistry
-import ejektaflex.bountiful.logic.checkers.StackCheckHandler
 import net.minecraft.client.Minecraft
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity

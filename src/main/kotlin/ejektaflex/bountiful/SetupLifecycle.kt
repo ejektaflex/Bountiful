@@ -145,13 +145,8 @@ object SetupLifecycle {
     private fun setupConfig() = BountifulConfig.register()
 
     private fun dumpDecrees() {
-        BountifulMod.logger.info("Bountiful decrees:")
-        println(DecreeRegistry.content.first().decreeDescription)
-        println("Doot")
-        println("Doot 2")
         for (decree in DecreeRegistry) {
             BountifulMod.logger.info(decree.decreeTitle)
-            BountifulMod.logger.info(decree.decreeDescription)
         }
     }
 

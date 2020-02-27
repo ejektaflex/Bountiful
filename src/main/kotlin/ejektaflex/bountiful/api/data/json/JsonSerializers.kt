@@ -19,7 +19,7 @@ object JsonSerializers {
         val jsonType = json.asJsonObject.get("type").asString
         val jsonName = json.asJsonObject.get("content").asString
 
-        val bType = BountyType.values().find { jsonType in it.ids }
+        val bType = BountyType.values().find { jsonType == it.id }
                 ?: throw Exception("Incorrect type for bounty: $jsonType. Content was: $jsonName")
 
         JsonAdapter.fromJson(json, bType.klazz)

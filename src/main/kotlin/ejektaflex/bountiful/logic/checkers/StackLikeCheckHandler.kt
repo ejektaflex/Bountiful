@@ -1,7 +1,9 @@
 package ejektaflex.bountiful.logic.checkers
 
 import ejektaflex.bountiful.api.data.IBountyData
+import ejektaflex.bountiful.api.data.entry.AbstractBountyEntryStackLike
 import ejektaflex.bountiful.api.data.entry.BountyEntry
+import ejektaflex.bountiful.api.data.entry.BountyEntryItemTag
 import ejektaflex.bountiful.api.data.entry.BountyEntryStack
 import ejektaflex.bountiful.logic.BountyProgress
 import ejektaflex.bountiful.logic.StackPartition
@@ -9,7 +11,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.NonNullList
 
-class StackCheckHandler() : CheckHandler<BountyEntryStack>() {
+class StackLikeCheckHandler() : CheckHandler<BountyEntryStack>() {
 
     val partMap = mutableMapOf<ItemStack, StackPartition>()
 
@@ -22,10 +24,9 @@ class StackCheckHandler() : CheckHandler<BountyEntryStack>() {
     override fun objectiveStatus(): Map<BountyEntry, BountyProgress> {
         partMap.clear()
 
-        val stackObjs = data.objectives.content.filterIsInstance<BountyEntryStack>()
+        val stackTypeObj = data.objectives.content.filterIsInstance<BountyEntryStack>()
+        val tagTypeObj = data.objectives.content.filterIsInstance<BountyEntryItemTag>()
 
-        val stackTypeObj = stackObjs.filter { it.type == "stack" }
-        val tagTypeObj = stackObjs.filter { it.type == "tag" }
 
         //println("Objectives: $stackObjs")
 
@@ -47,7 +48,7 @@ class StackCheckHandler() : CheckHandler<BountyEntryStack>() {
 
     }
 
-    private fun checkObjs(list: List<BountyEntryStack>): Map<BountyEntry, BountyProgress> {
+    private fun checkObjs(list: List<AbstractBountyEntryStackLike>): Map<BountyEntry, BountyProgress> {
 
         val succ = mutableMapOf<BountyEntry, BountyProgress>()
 

@@ -5,15 +5,13 @@ import ejektaflex.bountiful.api.data.entry.BountyEntry
 import ejektaflex.bountiful.data.ValueRegistry
 import ejektaflex.bountiful.logic.BountyProgress
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.ItemStack
-import net.minecraft.util.NonNullList
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
 object CheckerRegistry : ValueRegistry<KClass<out CheckHandler<*>>>() {
 
     init {
-        add(StackCheckHandler::class)
+        add(StackLikeCheckHandler::class)
         add(EntityCheckHandler::class)
     }
 

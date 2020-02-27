@@ -13,7 +13,7 @@ abstract class CheckHandler<T : BountyEntry>() {
     lateinit var data: IBountyData
     lateinit var inv: NonNullList<ItemStack>
 
-    constructor(inPlayer: PlayerEntity, inData: IBountyData, inInv: NonNullList<ItemStack>) : this() {}
+    constructor(inPlayer: PlayerEntity, inData: IBountyData) : this() {}
 
     fun initialize(inPlayer: PlayerEntity, inData: IBountyData) {
         player = inPlayer

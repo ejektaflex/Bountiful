@@ -9,7 +9,6 @@ import net.minecraftforge.common.util.INBTSerializable
 
 data class Decree(
         @Expose override val decreeTitle: String = "UNKNOWN",
-        @Expose override val decreeDescription: String = "UNKNOWN_DESC",
         @Expose override var id: String = "unknown_id",
         @Expose override val spawnsInBoard: Boolean = false,
         @Expose override val isGreedy: Boolean = false,

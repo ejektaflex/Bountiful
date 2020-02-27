@@ -6,6 +6,7 @@
 
 	"bountiful.decree": "Decree",
 	"bountiful.decrees": "Decrees",
+	"bountiful.decree.invalid": "Invalid Decree",
 
 	"_comment": "Interface",
 	"bountiful.bounty.expired": "§4This bounty has expired.",

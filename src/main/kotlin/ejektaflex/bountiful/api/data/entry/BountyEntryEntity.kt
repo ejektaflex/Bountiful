@@ -12,7 +12,7 @@ import kotlin.math.max
 class BountyEntryEntity : BountyEntry(), IBountyObjective {
 
     @Expose
-    override var type: String = BountyType.Entity.ids.first()
+    override var type: String = BountyType.Entity.id
 
     var killedAmount = 0
 

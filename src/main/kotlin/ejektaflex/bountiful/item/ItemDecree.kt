@@ -1,30 +1,15 @@
 package ejektaflex.bountiful.item
 
-import ejektaflex.bountiful.BountifulMod
-import ejektaflex.bountiful.api.BountifulAPI
-import ejektaflex.bountiful.api.data.IDecree
-import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.api.ext.hackyRandom
-import ejektaflex.bountiful.api.ext.sendTranslation
-import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.content.ModContent
-import ejektaflex.bountiful.logic.BountyChecker
-import ejektaflex.bountiful.data.BountyData
-import ejektaflex.bountiful.data.BountyNBT
 import ejektaflex.bountiful.data.Decree
-import ejektaflex.bountiful.logic.checkers.CheckerRegistry
-import ejektaflex.bountiful.logic.checkers.StackCheckHandler
 import ejektaflex.bountiful.registry.DecreeRegistry
-import net.minecraft.client.Minecraft
 import net.minecraft.client.util.ITooltipFlag
-import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.item.Rarity
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
-import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
 import net.minecraft.world.World
@@ -43,24 +28,39 @@ class ItemDecree() : Item(
      */
     class DecreeCreationException(err: String = "Decree could not be created!") : Exception(err)
 
-    var decreeId: String? = null
-
-    val decree: Decree?
-        get() = decreeId?.let { DecreeRegistry.getDecree(it) }
-
     override fun getTranslationKey() = "bountiful.decree"
 
     override fun getDisplayName(stack: ItemStack): ITextComponent {
-        return if (decree != null) {
-            StringTextComponent(decree!!.decreeTitle)
-        } else {
-            TranslationTextComponent(getTranslationKey(stack))
-        }
+        return StringTextComponent("§5").appendSibling(
+            TranslationTextComponent(getTranslationKey())
+        )
     }
 
     @OnlyIn(Dist.CLIENT)
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<ITextComponent>, flagIn: ITooltipFlag) {
-        tooltip.add(StringTextComponent("Replace Me!"))
+
+        val id = stack.tag?.getString("id")
+
+        if (id != null) {
+            val decree = DecreeRegistry.getDecree(id)
+            val tip = if (decree != null) {
+                StringTextComponent("§5").appendSibling(
+                        StringTextComponent("§6")
+                ).appendSibling(
+                        StringTextComponent(decree.decreeTitle)
+                )
+            } else {
+                TranslationTextComponent("bountiful.decree.invalid").appendSibling(
+                        StringTextComponent(" ($id)")
+                )
+            }
+            tooltip.add(tip)
+        } else {
+            tooltip.add(TranslationTextComponent(getTranslationKey()))
+        }
+
+        // TODO Add debug tool when holding sneak, showing which pools are being used
+        //tooltip.add(StringTextComponent("Replace Me!"))
     }
 
     override fun onItemRightClick(worldIn: World, playerIn: PlayerEntity, handIn: Hand): ActionResult<ItemStack> {

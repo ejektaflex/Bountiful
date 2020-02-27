@@ -59,7 +59,14 @@ abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSeri
         return clone() as BountyEntry
     }
 
-    abstract fun validate()
+    open fun validate() {
+        if (amountRange.min < 1) {
+            throw EntryValidationException("'$content' cannot have an amount possibly less than 1!")
+        }
+        if (amountRange.min > amountRange.max) {
+            throw EntryValidationException("'$content' cannot have a min amount greater than it's max!")
+        }
+    }
 
     abstract fun pick(worth: Int? = null): BountyEntry
 
