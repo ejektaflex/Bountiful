@@ -6,7 +6,7 @@ import ejektaflex.bountiful.item.ItemBounty
 import net.minecraft.item.ItemStack
 import net.minecraftforge.items.SlotItemHandler
 
-class BountySlot(val board: BoardTE, index: Int, x: Int, y: Int) : SlotItemHandler(board.handler, index, x, y) {
+class BountySlot(val board: BoardTE, index: Int, x: Int, y: Int) : SlotItemHandler(board.getTheHandler()!!, index, x, y) {
     override fun onSlotChanged() {
         board.markDirty()
     }

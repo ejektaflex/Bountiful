@@ -7,9 +7,7 @@ import ejektaflex.bountiful.gui.slot.DecreeSlot
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.container.Container
-import net.minecraft.inventory.container.Slot
 import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.items.IItemHandler
@@ -19,11 +17,11 @@ import net.minecraftforge.items.wrapper.InvWrapper
 
 class BoardContainer(id: Int, val world: World, val pos: BlockPos, val inv: PlayerInventory) : Container(ModContent.Guis.BOARDCONTAINER, id) {
 
-    val boardTE: BoardTE by lazy {
+    private val boardTE: BoardTE by lazy {
         world.getTileEntity(pos) as BoardTE
     }
 
-    val playerInvHandler: IItemHandler by lazy {
+    private val playerInvHandler: IItemHandler by lazy {
         InvWrapper(inv)
     }
 
@@ -32,14 +30,15 @@ class BoardContainer(id: Int, val world: World, val pos: BlockPos, val inv: Play
         val bRows = 3
         val bCols = 7
 
-        for (j in 0 until 3) {
+        for (j in 0 until bRows) {
             // EIGHT! 7! NOT NINE! We need to make the DecreeSlots on the right side.
-            for (k in 0 until 7) {
+            for (k in 0 until bCols) {
                 println("Made slot with index $j $k: ${k + j * bCols}")
                 addSlot(BountySlot(boardTE, k + j * bCols, 8 + k * 18, 18 + j * 18))
             }
 
-            addSlot(DecreeSlot(boardTE, 7 + j * bCols, 19 + 7 * 18, 18 + j * 18))
+            println("Making new slot with index ${BoardTE.SIZE - 2 + j}")
+            addSlot(DecreeSlot(boardTE, BoardTE.SIZE - 3 + j, 19 + 7 * 18, 18 + j * 18))
         }
 
         for (j in 0..2) {

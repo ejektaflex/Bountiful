@@ -1,6 +1,5 @@
 package ejektaflex.bountiful.block
 
-import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.api.ext.clear
 import ejektaflex.bountiful.content.ModContent
 import ejektaflex.bountiful.gui.BoardContainer
@@ -17,12 +16,13 @@ import net.minecraft.util.text.TranslationTextComponent
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.items.CapabilityItemHandler
+import net.minecraftforge.items.IItemHandler
 import net.minecraftforge.items.ItemStackHandler
 
 class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEntity, INamedContainerProvider {
 
     private fun genHandler(): ItemStackHandler {
-        return ItemStackHandler(24)
+        return ItemStackHandler(SIZE)
     }
 
     // Lazy load lazy optional ( ... :| )
@@ -30,7 +30,17 @@ class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEnt
         LazyOptional.of { handler }
     }
 
-    val handler: ItemStackHandler = genHandler()
+    val handler: ItemStackHandler  by lazy {
+        genHandler()
+    }
+
+    fun getTheHandler(): ItemStackHandler? {
+        var doot: ItemStackHandler? = null
+        val cap = getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent { hndlr ->
+            doot = hndlr as ItemStackHandler
+        }
+        return doot
+    }
 
     override fun tick() {
         if (!world!!.isRemote) {
@@ -44,17 +54,28 @@ class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEnt
     var pulseLeft = 0
 
     override fun serializeNBT(): CompoundNBT {
+        println("Serializing BoardTE")
         return super.serializeNBT().apply {
             clear()
-            put("inv", handler.serializeNBT())
+            put("inv", getTheHandler()!!.serializeNBT())
             putBoolean("newBoard", newBoard)
             putInt("pulseLeft", pulseLeft)
         }
     }
 
+    override fun markDirty() {
+        if (world!!.isRemote) {
+            println("is dirty on client")
+        } else {
+            println("is dirty on server")
+        }
+        super.markDirty()
+    }
+
     override fun deserializeNBT(nbt: CompoundNBT) {
+        println("Deserializing BoardTE")
         super.deserializeNBT(nbt)
-        handler.deserializeNBT(nbt.getCompound("inv"))
+        getTheHandler()!!.deserializeNBT(nbt.getCompound("inv"))
         newBoard = nbt.getBoolean("newBoard")
         pulseLeft = nbt.getInt("pulseLeft")
     }
@@ -75,6 +96,10 @@ class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEnt
 
     override fun getDisplayName(): ITextComponent {
         return TranslationTextComponent("block.bountiful.bountyboard")
+    }
+
+    companion object {
+        const val SIZE = 24
     }
 
 }
