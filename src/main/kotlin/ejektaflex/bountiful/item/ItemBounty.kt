@@ -63,7 +63,7 @@ class ItemBounty() : Item(
                 Minecraft.getInstance().world?.let { wrld ->
                     appendSibling(
                             StringTextComponent(
-                                    " (${bd.remainingTime(wrld)}§f)"
+                                    " §f(${bd.remainingTime(wrld)}§f)"
                             )
                     )
                 }

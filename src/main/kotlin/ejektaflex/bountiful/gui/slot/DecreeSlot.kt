@@ -7,7 +7,7 @@ import ejektaflex.bountiful.item.ItemDecree
 import net.minecraft.item.ItemStack
 import net.minecraftforge.items.SlotItemHandler
 
-class DecreeSlot(val board: BoardTE, index: Int, x: Int, y: Int) : SlotItemHandler(board.getTheHandler()!!, index, x, y) {
+class DecreeSlot(val board: BoardTE, index: Int, x: Int, y: Int) : SlotItemHandler(board.handler, index, x, y) {
     override fun onSlotChanged() {
         board.markDirty()
     }

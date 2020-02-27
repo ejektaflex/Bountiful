@@ -21,9 +21,6 @@ import net.minecraftforge.items.ItemStackHandler
 
 class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEntity, INamedContainerProvider {
 
-    private fun genHandler(): ItemStackHandler {
-        return ItemStackHandler(SIZE)
-    }
 
     // Lazy load lazy optional ( ... :| )
     private val lazyOptional: LazyOptional<*> by lazy {
@@ -31,21 +28,15 @@ class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEnt
     }
 
     val handler: ItemStackHandler  by lazy {
-        genHandler()
+        ItemStackHandler(SIZE)
     }
 
-    fun getTheHandler(): ItemStackHandler? {
-        var doot: ItemStackHandler? = null
-        val cap = getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent { hndlr ->
-            doot = hndlr as ItemStackHandler
-        }
-        return doot
-    }
 
     override fun tick() {
         if (!world!!.isRemote) {
             if (world!!.gameTime % 20 == 0L) {
                 println("BountyTE::tick")
+                markDirty()
             }
         }
     }
@@ -53,29 +44,18 @@ class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEnt
     var newBoard = true
     var pulseLeft = 0
 
-    override fun serializeNBT(): CompoundNBT {
-        println("Serializing BoardTE")
-        return super.serializeNBT().apply {
-            clear()
-            put("inv", getTheHandler()!!.serializeNBT())
+
+    override fun write(compound: CompoundNBT): CompoundNBT {
+        return super.write(compound).apply {
+            put("inv", handler.serializeNBT())
             putBoolean("newBoard", newBoard)
             putInt("pulseLeft", pulseLeft)
         }
     }
 
-    override fun markDirty() {
-        if (world!!.isRemote) {
-            println("is dirty on client")
-        } else {
-            println("is dirty on server")
-        }
-        super.markDirty()
-    }
-
-    override fun deserializeNBT(nbt: CompoundNBT) {
-        println("Deserializing BoardTE")
-        super.deserializeNBT(nbt)
-        getTheHandler()!!.deserializeNBT(nbt.getCompound("inv"))
+    override fun read(nbt: CompoundNBT) {
+        super.read(nbt)
+        handler.deserializeNBT(nbt.getCompound("inv"))
         newBoard = nbt.getBoolean("newBoard")
         pulseLeft = nbt.getInt("pulseLeft")
     }

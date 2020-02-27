@@ -11,4 +11,7 @@ import net.minecraft.world.World
 
 open class EntryPool(@Expose override val id: String) : ValueRegistry<BountyEntry>(), IEntryPool {
 
+    @Expose
+    override val modsRequired: MutableList<String>? = null
+
 }

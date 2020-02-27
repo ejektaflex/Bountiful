@@ -1,5 +1,5 @@
 {
   "variants": {
-    "normal": { "model": "bountiful:block/bountyboard" }
+    "": { "model": "bountiful:block/bountyboard" }
   }
 }
