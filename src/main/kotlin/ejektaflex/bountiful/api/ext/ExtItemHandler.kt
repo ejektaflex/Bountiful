@@ -21,7 +21,7 @@ val IItemHandler.stacks: List<ItemStack>
 val IItemHandler.slotRange: IntRange
     get() = 0 until slots
 
-val IItemHandlerModifiable.filledSlots: List<Int>
+val IItemHandlerModifiable.filledBountySlots: List<Int>
     get() = slotRange.mapNotNull {
         val itis = this[it]
         if (itis == ItemStack.EMPTY || itis.item == Items.AIR) {
@@ -30,6 +30,17 @@ val IItemHandlerModifiable.filledSlots: List<Int>
             it
         }
     }
+
+fun IItemHandlerModifiable.filledSlots(inRange: IntRange): List<Int> {
+    return inRange.mapNotNull {
+        val itis = this[it]
+        if (itis == ItemStack.EMPTY || itis.item == Items.AIR) {
+            null
+        } else {
+            it
+        }
+    }
+}
 
 
 

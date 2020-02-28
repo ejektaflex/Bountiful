@@ -8,7 +8,9 @@ import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.api.ext.hackyRandom
 import ejektaflex.bountiful.api.ext.randomSplit
 import ejektaflex.bountiful.api.ext.weightedRandom
+import ejektaflex.bountiful.content.ModContent
 import ejektaflex.bountiful.data.BountyData
+import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.registry.DecreeRegistry
 import ejektaflex.bountiful.registry.PoolRegistry
 import net.minecraft.item.ItemStack
@@ -22,8 +24,12 @@ object BountyCreator {
     private val rand = Random()
 
 
-    fun createStack(world: World, rarity: EnumBountyRarity?): ItemStack {
-        return ItemStack.EMPTY
+    fun createStack(world: World, decrees: List<IDecree>): ItemStack {
+        val data = create(world, calcRarity(), decrees)
+
+        return ItemStack(ModContent.Items.BOUNTY).apply {
+            (ModContent.Items.BOUNTY as ItemBounty).ensureBounty(this, world, calcRarity())
+        }
         //return ContentRegistry.bounty.let { ItemStack(it).apply { it.ensureBounty(this, world, rarity) } }
     }
 
@@ -129,6 +135,13 @@ object BountyCreator {
             println("Closest for wrth [$wrth]: $closest")
 
             toAdd.add(closest)
+
+            data.bountyTime += if (closest.worthMult != null) {
+                (worth * BountifulMod.config.timeMultiplier * closest.worthMult!!).toLong()
+            } else {
+                (worth * BountifulMod.config.timeMultiplier).toLong()
+            }
+
         }
 
         data.objectives.add(*toAdd.toTypedArray())

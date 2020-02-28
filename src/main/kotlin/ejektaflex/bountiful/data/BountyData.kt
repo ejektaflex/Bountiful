@@ -51,6 +51,7 @@ class BountyData : IBountyData {
         return max(boardStamp + BountifulMod.config.boardLifespan - world.gameTime , 0)
     }
 
+
     fun tooltipInfo(world: World, advanced: Boolean): List<ITextComponent> {
         val passed = CheckerRegistry.passedChecks(Minecraft.getInstance().player!!, this)
 

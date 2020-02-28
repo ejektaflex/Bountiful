@@ -1,22 +1,26 @@
 package ejektaflex.bountiful.block
 
-import ejektaflex.bountiful.api.ext.clear
+import ejektaflex.bountiful.BountifulMod
+import ejektaflex.bountiful.api.ext.*
 import ejektaflex.bountiful.content.ModContent
+import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.gui.BoardContainer
+import ejektaflex.bountiful.item.ItemBounty
+import ejektaflex.bountiful.logic.BountyCreator
+import ejektaflex.bountiful.registry.DecreeRegistry
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.container.Container
 import net.minecraft.inventory.container.INamedContainerProvider
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundNBT
 import net.minecraft.tileentity.ITickableTileEntity
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.Direction
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.TranslationTextComponent
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.items.CapabilityItemHandler
-import net.minecraftforge.items.IItemHandler
 import net.minecraftforge.items.ItemStackHandler
 
 class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEntity, INamedContainerProvider {
@@ -31,12 +35,76 @@ class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEnt
         ItemStackHandler(SIZE)
     }
 
+    val bountyRange = 0 until 21
+    val decreeRange = 21 until 24
+
+    val bountySlots = bountyRange.toList()
+    val decreeSlots = decreeRange.toList()
+
+    val filledBountySlots: List<Int>
+        get() = handler.filledSlots(bountyRange)
+
+    private fun tickBounties() {
+
+        val toRemove = mutableListOf<Int>()
+
+        for (slot in handler.slotRange) {
+            val bounty = handler.getStackInSlot(slot)
+            if (bounty.item is ItemBounty) {
+                // Try get bounty data. If it fails, just skip to the next bounty.
+                val data = if (BountyData.isValidBounty(bounty)) {
+                    BountyData.from(bounty)
+                } else {
+                    continue
+                }
+
+                val bountyItem = bounty.item as ItemBounty
+
+                if (BountifulMod.config.shouldCountdownOnBoard) {
+                    bountyItem.ensureTimerStarted(bounty, world!!)
+                }
+
+                if (data.hasExpired(world!!) || data.boardTimeLeft(world!!) <= 0) {
+                    toRemove.add(slot)
+                }
+
+            }
+        }
+
+        toRemove.forEach { handler.setStackInSlot(it, ItemStack.EMPTY) }
+
+        if (toRemove.isNotEmpty()) {
+            markDirty()
+        }
+
+    }
+
+    private fun addSingleBounty() {
+        println("Adding a single bounty")
+        val newStack = BountyCreator.createStack(world!!, DecreeRegistry.content)
+        val freeSlots = bountySlots - filledBountySlots
+        if (freeSlots.isNotEmpty()) {
+            handler[freeSlots.hackyRandom()] = newStack
+        }
+    }
 
     override fun tick() {
         if (!world!!.isRemote) {
             if (world!!.gameTime % 20 == 0L) {
-                //println("BountyTE::tick")
-                //markDirty()
+                tickBounties()
+            }
+            if (world!!.gameTime % BountifulMod.config.boardAddFrequency == 3L) {
+
+                // Prune items to max amount - new amount
+                while (filledBountySlots.size >= BountifulMod.config.maxBountiesPerBoard && filledBountySlots.isNotEmpty()) {
+                    val slotPicked = filledBountySlots.hackyRandom()
+                    handler[slotPicked] = ItemStack.EMPTY
+                }
+
+                addSingleBounty()
+
+                markDirty()
+
             }
         }
     }

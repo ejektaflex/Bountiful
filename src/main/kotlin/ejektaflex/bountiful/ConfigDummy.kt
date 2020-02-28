@@ -5,13 +5,13 @@ import ejektaflex.bountiful.api.config.IBountifulConfig
 class ConfigDummy : IBountifulConfig {
     override val bountyAmountRange: IntRange
         get() = 1..2
-    override var maxBountiesPerBoard: Int = 17
+    override var maxBountiesPerBoard: Int = 15
         private set
-    override var boardAddFrequency: Long = 2400L
+    override var boardAddFrequency: Long = 40L
         private set
     override var boardLifespan: Int = 72000
         private set
-    override var timeMultiplier: Double = 28.0
+    override var timeMultiplier: Double = 40.0
         private set
     override var cashInAtBountyBoard: Boolean = true
         private set

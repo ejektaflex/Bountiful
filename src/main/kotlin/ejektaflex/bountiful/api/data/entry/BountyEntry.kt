@@ -38,6 +38,9 @@ abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSeri
     open var unitWorth: Int = Integer.MIN_VALUE
 
     @Expose
+    open var worthMult: Double? = null
+
+    @Expose
     override var weight: Int = 100
 
     abstract val calculatedWorth: Int

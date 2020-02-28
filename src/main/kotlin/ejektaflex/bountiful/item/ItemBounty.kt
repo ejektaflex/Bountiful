@@ -7,6 +7,7 @@ import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.content.ModContent
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.data.BountyNBT
+import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.logic.checkers.CheckerRegistry
 import net.minecraft.client.Minecraft
 import net.minecraft.client.util.ITooltipFlag
@@ -145,8 +146,12 @@ class ItemBounty() : Item(
     }
 
     override fun inventoryTick(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean) {
-        if (worldIn.gameTime % BountyData.bountyTickFreq == 1L) {
-            ensureTimerStarted(stack, worldIn)
+        if (!worldIn.isRemote) {
+            if (worldIn.gameTime % BountyData.bountyTickFreq == 3L) {
+
+                ensureTimerStarted(stack, worldIn)
+
+            }
         }
     }
 
@@ -183,18 +188,14 @@ class ItemBounty() : Item(
             return false
         }
 
-        val inv = player.inventory.mainInventory
         val bounty = BountyData().apply { deserializeNBT(bountyItem.tag!!) }
-
-        CheckerRegistry.tryCashIn(player, bounty)
-
 
         if (bounty.hasExpired(player.world)) {
             player.sendTranslation("bountiful.bounty.expired")
             return false
         }
 
-
+        CheckerRegistry.tryCashIn(player, bounty)
 
         return false
 
