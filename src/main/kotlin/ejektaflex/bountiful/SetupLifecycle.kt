@@ -171,11 +171,8 @@ object SetupLifecycle {
                     for (obj in eObjs) {
 
                         if (obj.isSameEntity(deadEntity)) {
-                            println("It was the same! :D")
                             obj.killedAmount = min(obj.killedAmount + 1, obj.amount)
                             stack.tag = data.serializeNBT()
-                        } else {
-                            println("It was different!")
                         }
 
                     }

@@ -1,12 +1,9 @@
 package ejektaflex.bountiful.data
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import ejektaflex.bountiful.BountifulMod
-import ejektaflex.bountiful.api.data.entry.BountyEntry
 import ejektaflex.bountiful.api.data.entry.BountyEntryEntity
 import ejektaflex.bountiful.api.data.entry.BountyEntryItemTag
-import ejektaflex.bountiful.api.data.entry.BountyEntryStack
+import ejektaflex.bountiful.api.data.entry.BountyEntryItem
 import ejektaflex.bountiful.api.data.json.JsonAdapter
 import ejektaflex.bountiful.api.ext.ir
 import ejektaflex.bountiful.api.generic.IIdentifiable
@@ -66,7 +63,7 @@ object DefaultData {
         add(
                 EntryPool("vanilla_food_bounties").apply {
                     add(
-                            BountyEntryStack().apply {
+                            BountyEntryItem().apply {
                                 content = "minecraft:cod"
                                 unitWorth = 80
                                 amountRange = (2..32).ir
@@ -80,7 +77,6 @@ object DefaultData {
 
                             BountyEntryItemTag().apply {
                                 name = "Any Fish"
-                                type = "tag"
                                 content = "minecraft:fishes"
                                 unitWorth = 150
                                 amountRange = (4..24).ir
@@ -94,12 +90,12 @@ object DefaultData {
                 EntryPool("vanilla_food_rewards").apply {
                     add(
                             //BountyEntryStack("minecraft:cake", 200, 1..3),
-                            BountyEntryStack().apply {
+                            BountyEntryItem().apply {
                                 content = "minecraft:baked_potato"
                                 unitWorth = 120
                                 amountRange = (4..24).ir
                             },
-                            BountyEntryStack().apply {
+                            BountyEntryItem().apply {
                                 content = "minecraft:cooked_mutton"
                                 unitWorth = 150
                                 amountRange = (4..24).ir
@@ -124,7 +120,7 @@ object DefaultData {
                     add(
                             //BountyEntryStack("minecraft:gold_nugget", 100),
                             //BountyEntryStack("minecraft:gold_ingot", 900)
-                            BountyEntryStack().apply {
+                            BountyEntryItem().apply {
                                 content = "minecraft:gold_nugget"
                                 unitWorth = 150
                                 amountRange = (1..16).ir

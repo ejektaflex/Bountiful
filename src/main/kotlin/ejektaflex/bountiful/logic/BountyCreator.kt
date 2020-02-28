@@ -17,17 +17,17 @@ import java.util.*
 import kotlin.math.ceil
 
 
-object BountyCreator : IBountyCreator {
+object BountyCreator {
 
     private val rand = Random()
 
 
-    override fun createStack(world: World, rarity: EnumBountyRarity?): ItemStack {
+    fun createStack(world: World, rarity: EnumBountyRarity?): ItemStack {
         return ItemStack.EMPTY
         //return ContentRegistry.bounty.let { ItemStack(it).apply { it.ensureBounty(this, world, rarity) } }
     }
 
-    override fun calcRarity(): EnumBountyRarity {
+    fun calcRarity(): EnumBountyRarity {
         var level = 0
         val chance = BountifulMod.config.rarityChance
         for (i in 0 until 3) {
@@ -40,7 +40,7 @@ object BountyCreator : IBountyCreator {
         return EnumBountyRarity.getRarityFromInt(level)
     }
 
-    override fun create(world: World, inRarity: EnumBountyRarity, decrees: List<IDecree>): BountyData {
+    fun create(world: World, inRarity: EnumBountyRarity, decrees: List<IDecree>): BountyData {
         val data = BountyData()
 
         val toSatisfy = createRewards(data, world, inRarity, decrees)

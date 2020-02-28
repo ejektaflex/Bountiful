@@ -1,17 +1,14 @@
 package ejektaflex.bountiful.logic.checkers
 
-import ejektaflex.bountiful.api.data.IBountyData
 import ejektaflex.bountiful.api.data.entry.AbstractBountyEntryStackLike
 import ejektaflex.bountiful.api.data.entry.BountyEntry
 import ejektaflex.bountiful.api.data.entry.BountyEntryItemTag
-import ejektaflex.bountiful.api.data.entry.BountyEntryStack
+import ejektaflex.bountiful.api.data.entry.BountyEntryItem
 import ejektaflex.bountiful.logic.BountyProgress
 import ejektaflex.bountiful.logic.StackPartition
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
-import net.minecraft.util.NonNullList
 
-class StackLikeCheckHandler() : CheckHandler<BountyEntryStack>() {
+class StackLikeCheckHandler() : CheckHandler<BountyEntryItem>() {
 
     val partMap = mutableMapOf<ItemStack, StackPartition>()
 
@@ -24,7 +21,7 @@ class StackLikeCheckHandler() : CheckHandler<BountyEntryStack>() {
     override fun objectiveStatus(): Map<BountyEntry, BountyProgress> {
         partMap.clear()
 
-        val stackTypeObj = data.objectives.content.filterIsInstance<BountyEntryStack>()
+        val stackTypeObj = data.objectives.content.filterIsInstance<BountyEntryItem>()
         val tagTypeObj = data.objectives.content.filterIsInstance<BountyEntryItemTag>()
 
 

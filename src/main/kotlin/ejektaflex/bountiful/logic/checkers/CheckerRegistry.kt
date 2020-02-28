@@ -4,6 +4,7 @@ import ejektaflex.bountiful.api.data.IBountyData
 import ejektaflex.bountiful.api.data.entry.BountyEntry
 import ejektaflex.bountiful.data.ValueRegistry
 import ejektaflex.bountiful.logic.BountyProgress
+import ejektaflex.bountiful.logic.IBountyReward
 import net.minecraft.entity.player.PlayerEntity
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
@@ -15,7 +16,7 @@ object CheckerRegistry : ValueRegistry<KClass<out CheckHandler<*>>>() {
         add(EntityCheckHandler::class)
     }
 
-    fun passAllChecks(player: PlayerEntity, data: IBountyData) {
+    fun tryCashIn(player: PlayerEntity, data: IBountyData) {
         val checkers = content.map {
             val inst = it.createInstance()
             inst.initialize(player, data)
@@ -29,6 +30,9 @@ object CheckerRegistry : ValueRegistry<KClass<out CheckHandler<*>>>() {
         if (passesAll) {
             checkers.forEach {
                 it.fulfill()
+            }
+            for (reward in data.rewards.content) {
+                (reward as IBountyReward).reward(player)
             }
         }
     }

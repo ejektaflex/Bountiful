@@ -62,7 +62,7 @@ class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEnt
 
     // Remove side when you want to remove hopper access
     @Suppress("UNCHECKED_CAST")
-    override fun <T : Any?> getCapability(cap: Capability<T>, side: Direction?): LazyOptional<T> {
+    override fun <T : Any?> getCapability(cap: Capability<T>): LazyOptional<T> {
         if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return lazyOptional as LazyOptional<T>
         }

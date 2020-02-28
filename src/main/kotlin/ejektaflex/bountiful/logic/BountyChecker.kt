@@ -1,14 +1,10 @@
 package ejektaflex.bountiful.logic
 
-import ejektaflex.bountiful.api.data.entry.BountyEntryEntity
-import ejektaflex.bountiful.api.data.entry.BountyEntryStack
 import ejektaflex.bountiful.data.BountyData
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.NonNullList
-import net.minecraftforge.items.ItemHandlerHelper
-import kotlin.math.min
 
 object BountyChecker {
 

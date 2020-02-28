@@ -22,7 +22,7 @@ class BountyEntryItemTag : AbstractBountyEntryStackLike(), IBountyObjective {
 
 
     override fun validate() {
-        if (type == "tag") {
+        if (type == BountyType.ItemTag.id) {
             if (tagElements.isEmpty()) {
                 throw EntryValidationException("Tag '$content' does not exist or was empty!")
             }

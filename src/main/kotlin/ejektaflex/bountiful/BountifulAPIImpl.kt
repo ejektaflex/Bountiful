@@ -7,6 +7,7 @@ import ejektaflex.bountiful.api.data.IBountyData
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.logic.BountyCreator
+import ejektaflex.bountiful.registry.DecreeRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -36,7 +37,7 @@ object BountifulAPIImpl : IBountifulAPI {
 
 
     override fun createBountyData(worldIn: World, rarity: EnumBountyRarity): BountyData? {
-        return BountyCreator.create(worldIn, rarity)
+        return BountyCreator.create(worldIn, rarity, DecreeRegistry.content)
     }
 
 
