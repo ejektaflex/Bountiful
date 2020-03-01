@@ -10,10 +10,7 @@ import ejektaflex.bountiful.api.ext.sendMessage
 import ejektaflex.bountiful.block.BoardTE
 import ejektaflex.bountiful.command.BountifulCommand
 import ejektaflex.bountiful.content.ModContent
-import ejektaflex.bountiful.data.BountyData
-import ejektaflex.bountiful.data.Decree
-import ejektaflex.bountiful.data.DefaultData
-import ejektaflex.bountiful.data.EntryPool
+import ejektaflex.bountiful.data.*
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.gui.BoardScreen
 import ejektaflex.bountiful.item.ItemBounty
@@ -25,7 +22,9 @@ import net.minecraft.command.CommandSource
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.container.ContainerType
 import net.minecraft.item.Item
+import net.minecraft.resources.IResourceManager
 import net.minecraft.tileentity.TileEntityType
+import net.minecraft.util.ResourceLocation
 import net.minecraftforge.common.extensions.IForgeContainerType
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.event.entity.living.LivingDeathEvent
@@ -34,10 +33,14 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
+import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent
+import net.minecraftforge.resource.IResourceType
+import net.minecraftforge.resource.ISelectiveResourceReloadListener
+import java.io.InputStreamReader
+import java.util.function.Predicate
 import java.util.function.Supplier
 import kotlin.Exception
-import kotlin.math.max
 import kotlin.math.min
 
 @Mod.EventBusSubscriber
@@ -54,15 +57,9 @@ object SetupLifecycle {
         println("Registering data type adapters for JSON/Data conversion...")
         JsonSerializers.register()
         setupConfig()
-        exportContent() // TODO NOT overwrite content
-        loadContentFromFiles()
-        dumpDecrees()
+
     }
 
-    private fun exportContent() {
-        println("Dumping default data into registries..")
-        DefaultData.export()
-    }
 
     fun validatePool(pool: IEntryPool, sender: CommandSource? = null, log: Boolean = false): MutableList<BountyEntry> {
 
@@ -87,9 +84,8 @@ object SetupLifecycle {
     }
 
     fun loadContentFromFiles(sender: CommandSource? = null) {
-        if (sender?.world?.isRemote == true) {
-            return
-        }
+        BountifulMod.logger.warn("Loading content from files (client? ${sender})")
+
 
         BountifulMod.logger.apply {
             info("Reloading content from files..")
@@ -151,12 +147,6 @@ object SetupLifecycle {
 
     private fun setupConfig() = BountifulConfig.register()
 
-    private fun dumpDecrees() {
-        for (decree in DecreeRegistry) {
-            BountifulMod.logger.info(decree.decreeTitle)
-        }
-    }
-
     // Update mob bounties
     @SubscribeEvent
     fun entityLivingDeath(e: LivingDeathEvent) {
@@ -183,15 +173,43 @@ object SetupLifecycle {
 
     @SubscribeEvent
     fun onConfigChange(event: ConfigChangedEvent.OnConfigChangedEvent) {
-        if (event.modID == "bountiful") {
+        if (event.modID == BountifulMod.MODID) {
             BountifulConfig.Client.get()
             BountifulConfig.Common.get()
         }
     }
 
+
+    @SubscribeEvent
+    fun onServerAboutToStart(event: FMLServerAboutToStartEvent) {
+        BountifulMod.logger.info("Bountiful listening for resource reloads..")
+        event.server.resourceManager.addReloadListener(object : ISelectiveResourceReloadListener {
+            override fun onResourceManagerReload(resourceManager: IResourceManager, resourcePredicate: Predicate<IResourceType>) {
+                BountifulMod.logger.info("Bountiful reloading resources! :D")
+                BountifulResourceType.values().forEach { type ->
+                    if (resourcePredicate.test(type)) {
+                        // doot
+                    }
+                    // always running it for now
+                    BountifulMod.tryFillDefaultData(event.server, resourceManager, type)
+                }
+            }
+        })
+    }
+
     @SubscribeEvent
     fun onServerStarting(event: FMLServerStartingEvent) {
         BountifulCommand.generateCommand(event.commandDispatcher)
+
+        //BountifulMod.logger.info("Bountiful reloading resources on server!")
+
+        //BountifulResourceType.values().forEach { type ->
+        //    BountifulMod.tryFillDefaultData(event.server.resourceManager, type)
+        //}
+
+        //loadContentFromFiles()
+
+
     }
 
     @SubscribeEvent
@@ -214,8 +232,6 @@ object SetupLifecycle {
 
     @SubscribeEvent
     fun onTileEntityRegistry(event: RegistryEvent.Register<TileEntityType<*>>) {
-        println("BOUQ registering tile entities")
-
         event.registry.register(
                 TileEntityType.Builder.create<BoardTE>(Supplier {
                     BoardTE()
@@ -223,7 +239,6 @@ object SetupLifecycle {
                         .build(null)
                         .setRegistryName("${BountifulMod.MODID}:bounty-te")
         )
-
     }
 
     @SubscribeEvent
@@ -239,6 +254,11 @@ object SetupLifecycle {
         ScreenManager.registerFactory(ModContent.Guis.BOARDCONTAINER) {
             container, inv, textComponent ->  BoardScreen(container, inv, textComponent)
         }
+
+
+
+        //loadContentFromFiles()
+
     }
 
 }

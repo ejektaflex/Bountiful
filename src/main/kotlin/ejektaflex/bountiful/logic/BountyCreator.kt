@@ -118,7 +118,7 @@ object BountyCreator {
             // Make sure to filter out non-objectives
             val objGroups = totalObjectives.groupBy { it.worthDistanceFrom(wrth) }
 
-            println("Obj groups keys: " + objGroups.keys.toString())
+            //println("Obj groups keys: " + objGroups.keys.toString())
 
             val groupsInRange = objGroups.filter { it.key <= wRange }
             val totalObjs = groupsInRange.values.flatten()
@@ -132,7 +132,7 @@ object BountyCreator {
                 totalObjs.hackyRandom().pick(wrth)
             }
 
-            println("Closest for wrth [$wrth]: $closest")
+            //println("Closest for wrth [$wrth]: $closest")
 
             toAdd.add(closest)
 

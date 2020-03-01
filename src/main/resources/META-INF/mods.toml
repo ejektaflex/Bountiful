@@ -20,7 +20,7 @@ logoFile="examplemod.png" #optional
 # A text field displayed in the mod UI
 credits="Forge team!" #optional
 # A text field displayed in the mod UI
-authors="Ejektaflex (code), AkiShirai (art)" #optional
+authors="Ejektaflex (code, item art), AkiShirai (block art)" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
 Bountiful adds bounty boards and bounties to the game.

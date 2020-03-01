@@ -43,6 +43,7 @@ class ConfigDummy : IBountifulConfig {
         private set
     override var xpBonuses = listOf(4, 10, 15, 25)
         private set
+    var debugMode = true
 
     override fun load() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

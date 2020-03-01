@@ -29,13 +29,6 @@ fun <T : INBTSerializable<CompoundNBT>> World.ifHasCapability(capability: Capabi
 val String.rl: ResourceLocation
     get() = ResourceLocation(substringBefore(":"), substringAfter(":"))
 
-val ResourceLocation.inputStream: InputStream?
-    get() = Minecraft.getInstance().resourceManager.getResource(this).inputStream
-
-val ResourceLocation.toStringContents: String?
-    get() = inputStream?.bufferedReader()?.readText()
-
-
 /*
 val Entity.registryName: ResourceLocation?
     get() {

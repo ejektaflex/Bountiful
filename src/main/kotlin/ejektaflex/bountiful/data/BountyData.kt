@@ -65,6 +65,7 @@ class BountyData : IBountyData {
             (it as IBountyReward).tooltipReward()
         }
 
+
         return listOf(
                 //"Board Time: ${formatTickTime(boardTimeLeft(world) / boardTickFreq)}",
                 listOf(

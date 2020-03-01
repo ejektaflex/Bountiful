@@ -13,6 +13,7 @@ import java.io.File
 
 object DefaultData {
 
+    /*
     private fun exportReg(reg: ValueRegistry<out IIdentifiable>, location: File) {
         for (item in reg) {
             File(location, "${item.id}.json").apply {
@@ -26,19 +27,6 @@ object DefaultData {
         }
     }
 
-    fun export() {
-        BountifulMod.logger.info("Dumping default data into Bountiful data registries.")
-        DecreeRegistry.restore(decrees.content)
-        PoolRegistry.restore(pools.content)
-
-        exportReg(decrees, BountifulMod.configDecrees)
-        exportReg(pools, BountifulMod.configPools)
-
-        println("Serial for this thingy: ${JsonAdapter.toJson(decrees.content.first())}")
-
-        BountifulMod.logger.info("Data dumped, added default data")
-
-    }
 
     val decrees = ValueRegistry<Decree>().apply {
         add(
@@ -130,4 +118,6 @@ object DefaultData {
 
         )
     }
+
+     */
 }

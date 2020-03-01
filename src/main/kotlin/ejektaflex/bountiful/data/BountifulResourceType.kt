@@ -1,12 +1,15 @@
 package ejektaflex.bountiful.data
 
+import ejektaflex.bountiful.BountifulMod
 import net.minecraftforge.resource.IResourceType
+import java.io.File
 
-enum class BountifulResourceType : IResourceType {
+enum class BountifulResourceType(val folderLoc: File) : IResourceType {
 
-    // Currently, only ALL is being used. There's not really a reason to only reload one type, because it's so fast.
-    ALL,
-    DECREES,
-    POOLS
+    DECREES(BountifulMod.configDecrees),
+    POOLS(BountifulMod.configPools);
+
+    val folderName: String
+        get() = folderLoc.nameWithoutExtension
 
 }
