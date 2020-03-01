@@ -1,0 +1,36 @@
+{
+  "id": "vanilla_food_bounties",
+  "content": [
+    {
+      "type": "item",
+      "content": "minecraft:cod",
+      "amountRange": {
+        "min": 2,
+        "max": 32
+      },
+      "unitWorth": 80,
+      "weight": 100
+    },
+    {
+      "type": "entity",
+      "content": "minecraft:zombie",
+      "amountRange": {
+        "min": 2,
+        "max": 32
+      },
+      "unitWorth": 40,
+      "weight": 100
+    },
+    {
+      "type": "item-tag",
+      "name": "Any Fish",
+      "content": "minecraft:fishes",
+      "amountRange": {
+        "min": 4,
+        "max": 24
+      },
+      "unitWorth": 150,
+      "weight": 100
+    }
+  ]
+}

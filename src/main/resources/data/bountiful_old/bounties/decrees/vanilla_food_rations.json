@@ -1,0 +1,13 @@
+{
+  "decreeTitle": "Village Rations: Food",
+  "id": "vanilla_food_rations",
+  "spawnsInBoard": true,
+  "isGreedy": false,
+  "objectivePools": [
+    "vanilla_food_bounties"
+  ],
+  "rewardPools": [
+    "vanilla_food_rewards",
+    "vanilla_money_rewards"
+  ]
+}
