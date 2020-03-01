@@ -1,6 +1,7 @@
 package ejektaflex.bountiful.data
 
 import com.google.gson.annotations.Expose
+import ejektaflex.bountiful.api.IMerge
 import ejektaflex.bountiful.api.data.IDecree
 import ejektaflex.bountiful.api.data.entry.BountyEntry
 import ejektaflex.bountiful.registry.PoolRegistry
@@ -8,13 +9,13 @@ import net.minecraft.nbt.CompoundNBT
 import net.minecraftforge.common.util.INBTSerializable
 
 data class Decree(
-        @Expose override val decreeTitle: String = "UNKNOWN",
+        @Expose override var decreeTitle: String = "UNKNOWN",
         @Expose override var id: String = "unknown_id",
-        @Expose override val spawnsInBoard: Boolean = false,
-        @Expose override val isGreedy: Boolean = false,
-        @Expose override val objectivePools: MutableList<String> = mutableListOf(),
-        @Expose override val rewardPools: MutableList<String> = mutableListOf()
-) : IDecree, INBTSerializable<CompoundNBT> {
+        @Expose override var spawnsInBoard: Boolean = false,
+        @Expose override var isGreedy: Boolean = false,
+        @Expose override var objectivePools: MutableList<String> = mutableListOf(),
+        @Expose override var rewardPools: MutableList<String> = mutableListOf()
+) : IDecree, INBTSerializable<CompoundNBT>, IMerge<Decree> {
 
     override fun serializeNBT(): CompoundNBT {
         return CompoundNBT().apply {
@@ -22,8 +23,14 @@ data class Decree(
         }
     }
 
+
     override fun deserializeNBT(nbt: CompoundNBT?) {
         id = nbt!!.getString("id")
+    }
+
+    override fun merge(other: Decree) {
+        objectivePools = mutableSetOf(*(objectivePools + other.objectivePools).toTypedArray()).toMutableList()
+        rewardPools = mutableSetOf(*(rewardPools + other.rewardPools).toTypedArray()).toMutableList()
     }
 
     /**

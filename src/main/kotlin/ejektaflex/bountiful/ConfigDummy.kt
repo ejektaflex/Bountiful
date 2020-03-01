@@ -45,6 +45,8 @@ class ConfigDummy : IBountifulConfig {
         private set
     var debugMode = true
 
+    var namespaceBlacklist: MutableList<String> = mutableListOf()
+
     override fun load() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

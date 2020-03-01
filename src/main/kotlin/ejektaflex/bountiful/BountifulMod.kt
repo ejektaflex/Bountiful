@@ -1,18 +1,17 @@
 package ejektaflex.bountiful
 
 import ejektaflex.bountiful.api.BountifulAPIProvider
+import ejektaflex.bountiful.api.IMerge
+import ejektaflex.bountiful.api.data.json.JsonAdapter
 import ejektaflex.bountiful.data.BountifulResourceType
+import ejektaflex.bountiful.data.ValueRegistry
 import ejektaflex.bountiful.registry.DecreeRegistry
 import ejektaflex.bountiful.registry.PoolRegistry
 import net.alexwells.kottle.FMLKotlinModLoadingContext
-import net.minecraft.command.impl.DataPackCommand
 import net.minecraft.resources.IResourceManager
-import net.minecraft.resources.ResourcePackType
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.ResourceLocation
-import net.minecraft.world.dimension.DimensionType
 import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.fml.packs.ResourcePackLoader
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import java.io.File
@@ -85,45 +84,78 @@ object BountifulMod {
 
      */
 
-    fun tryFillDefaultData(server: MinecraftServer, manager: IResourceManager, fillType: BountifulResourceType, force: Boolean = false) {
+    fun reloadBountyData(server: MinecraftServer, manager: IResourceManager = server.resourceManager, fillType: BountifulResourceType, force: Boolean = false) {
         logger.info("Copying default data for bounty resource ${fillType.name} (force=$force)")
 
         val folderName = "bounties/" + fillType.folderName
         val extension = ".json"
 
-        for (packInfo in server.resourcePacks.enabledPacks) {
-            val pack = packInfo.resourcePack
-            logger.info("Pack: ${packInfo.name}")
-
-            for (loccie in pack.getAllResourceLocations(ResourcePackType.SERVER_DATA, folderName, 4) {
-                it.endsWith(".json")
-            }) {
-
-                logger.error("PACKRESOURCEFOUND: $loccie")
-
-            }
-
-
-        }
-
-        DecreeRegistry.empty()
-        PoolRegistry.empty()
-
+        fillType.reg.empty()
 
         logger.warn("Namespaces: ${manager.resourceNamespaces}")
 
-        for (namespace in manager.resourceNamespaces)
+        fun rlFileName(rl: ResourceLocation) = rl.path.substringAfter("$folderName/")
 
-
-        for (fullLocation in manager.getAllResourceLocations(folderName) {
+        // Get all resource locations, grouped by namespace
+        val spaceMap = manager.getAllResourceLocations(folderName) {
             it.endsWith(extension)
-        }) {
+        }.groupBy { rl -> rlFileName(rl) }
 
-            logger.info("Full location: $fullLocation")
+        // For each group of files with the same name
+        for ((filename, locations) in spaceMap) {
 
-            val res = manager.getResource(fullLocation)
-            //logger.info("TEXT: ${manager.getResource(fullLocation).inputStream.reader().readText()}")
+            var obj: IMerge<Any>? = null
+
+            logger.error("########## FILENAME: $filename ##########")
+
+            // Go through each namespace in order
+            for (namespace in manager.resourceNamespaces - BountifulMod.config.namespaceBlacklist) {
+
+                logger.warn("Inspecting namespace: $namespace")
+
+                // Try get the RL of the namespace for this file
+                val location = locations.find { it.namespace == namespace }
+
+                logger.info("- Location found? $location (${location?.path})")
+
+                location?.let {
+
+                    logger.info("- - Yes!")
+
+                    val res = manager.getResource(it)
+                    val content = res.inputStream.reader().readText()
+
+                    val newObj = JsonAdapter.fromJsonExp(content, fillType.klazz)
+
+                    logger.info("New obj is: $newObj")
+
+                    if (obj != null) {
+                        logger.warn("MERGING $obj with $newObj")
+                        obj!!.merge(newObj)
+                        logger.warn("RESULT IS: $obj")
+                    } else {
+                        obj = newObj as IMerge<Any>
+                    }
+
+
+                }
+
+
+            }
+
+            // Adding item to pool
+            if (obj != null) {
+                (fillType.reg as ValueRegistry<Any>).add(obj as Any)
+                logger.error("Reg Size Is Now: ${fillType.reg.content.size}")
+            }
+
         }
+
+        //logger.info("Full location: $fullLocation")
+
+        //val res = manager.getResource(fullLocation)
+        //logger.info("TEXT: ${manager.getResource(fullLocation).inputStream.reader().readText()}")
+
 
 
     }

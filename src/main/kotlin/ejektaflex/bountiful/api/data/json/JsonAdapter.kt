@@ -40,6 +40,10 @@ object JsonAdapter {
         return gson.fromJson(json, klazz.java)
     }
 
+    fun <T : Any> fromJsonExp(json: String, klazz: KClass<T>): T {
+        return gson.fromJson(json, klazz.java) as T
+    }
+
     inline fun <reified T : Any> fromJson(json: String): T {
         return gson.fromJson<T>(json, T::class.java)
     }

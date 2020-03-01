@@ -24,7 +24,6 @@ import net.minecraft.inventory.container.ContainerType
 import net.minecraft.item.Item
 import net.minecraft.resources.IResourceManager
 import net.minecraft.tileentity.TileEntityType
-import net.minecraft.util.ResourceLocation
 import net.minecraftforge.common.extensions.IForgeContainerType
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.event.entity.living.LivingDeathEvent
@@ -37,7 +36,6 @@ import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent
 import net.minecraftforge.resource.IResourceType
 import net.minecraftforge.resource.ISelectiveResourceReloadListener
-import java.io.InputStreamReader
 import java.util.function.Predicate
 import java.util.function.Supplier
 import kotlin.Exception
@@ -191,7 +189,7 @@ object SetupLifecycle {
                         // doot
                     }
                     // always running it for now
-                    BountifulMod.tryFillDefaultData(event.server, resourceManager, type)
+                    BountifulMod.reloadBountyData(event.server, resourceManager, type)
                 }
             }
         })
