@@ -7,12 +7,9 @@ import net.minecraftforge.resource.IResourceType
 import java.io.File
 import kotlin.reflect.KClass
 
-enum class BountifulResourceType(val folderLoc: File, val reg: ValueRegistry<out Any>, val klazz: KClass<out Any>) : IResourceType {
+enum class BountifulResourceType(val folderName: String, val reg: ValueRegistry<out Any>, val klazz: KClass<out Any>) : IResourceType {
 
-    DECREES(BountifulMod.configDecrees, DecreeRegistry, Decree::class),
-    POOLS(BountifulMod.configPools, PoolRegistry, EntryPool::class);
-
-    val folderName: String
-        get() = folderLoc.nameWithoutExtension
+    DECREES("decrees", DecreeRegistry, Decree::class),
+    POOLS("pools", PoolRegistry, EntryPool::class);
 
 }

@@ -37,55 +37,7 @@ object BountifulMod {
         mkdirs()
     }
 
-    /*
-    fun loadServerPackData(server: MinecraftServer) {
-        val packs = server.resourcePacks
-
-        // Using all packs for now, will later want to just do all packs if there's an empty config
-        for (packInfo in packs.allPacks) {
-
-            //this.loadDataPacks(this.getWorld(DimensionType.OVERWORLD).getWorldInfo())
-            val pack = server.
-
-            logger.info("Troo to grab server data?")
-            logger.info("Loca: ${pack.getResourceNamespaces(ResourcePackType.SERVER_DATA)}")
-            pack.getAllResourceLocations(ResourcePackType.SERVER_DATA, "decrees", 4) {
-                it.endsWith(".json")
-            }.forEach { rl ->
-                println("RL: $rl")
-            }
-            logger.info("Grabbed server data.")
-        }
-
-
-    }
-     */
-
-    /*
-        val pack = ResourcePackLoader.getResourcePackFor(MODID).get()
-
-        logger.info("Tryina to grab server data?")
-        logger.info("Loca: ${pack.getResourceNamespaces(ResourcePackType.SERVER_DATA)}")
-        pack.getAllResourceLocations(ResourcePackType.SERVER_DATA, "decrees", 4) {
-            it.endsWith(".json")
-        }.forEach { rl ->
-            println("RL: $rl")
-        }
-        logger.info("Grabbed server data.")
-    */
-
-    /*
-    if (force) {
-        fillType.folderLoc.listFiles()!!.forEach { file ->
-            file.delete()
-            logger.info("Files deleted")
-        }
-    }
-
-     */
-
-    fun reloadBountyData(server: MinecraftServer, manager: IResourceManager = server.resourceManager, fillType: BountifulResourceType, force: Boolean = false) {
-        logger.info("Copying default data for bounty resource ${fillType.name} (force=$force)")
+    fun reloadBountyData(server: MinecraftServer, manager: IResourceManager = server.resourceManager, fillType: BountifulResourceType) {
 
         val folderName = "bounties/" + fillType.folderName
         val extension = ".json"

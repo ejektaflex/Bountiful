@@ -81,68 +81,6 @@ object SetupLifecycle {
         return validEntries
     }
 
-    fun loadContentFromFiles(sender: CommandSource? = null) {
-        BountifulMod.logger.warn("Loading content from files (client? ${sender})")
-
-
-        BountifulMod.logger.apply {
-            info("Reloading content from files..")
-
-
-            val decreeBackup = DecreeRegistry.backup()
-            val poolBackup = PoolRegistry.backup()
-
-            DecreeRegistry.empty()
-            PoolRegistry.empty()
-
-            var succ = true
-
-            for (file in BountifulMod.configDecrees.listFiles()!!.filter { it.extension == "json" }) {
-                info("Found DECREEFILE ${file.name}")
-                try {
-                    val fileText = file.readText()
-                    val decree = JsonAdapter.fromJson<Decree>(fileText)
-                    DecreeRegistry.add(decree)
-                } catch (e: Exception) {
-                    sender?.sendErrorMsg("Could not load decree in file ${file.name}. Details: ${e.message}")
-                    succ = false
-                    DecreeRegistry.restore(decreeBackup)
-                    PoolRegistry.restore(poolBackup)
-                }
-            }
-
-            for (file in BountifulMod.configPools.listFiles()!!.filter { it.extension == "json" }) {
-                info("Found POOLFILE ${file.name}")
-                try {
-                    val fileText = file.readText()
-                    val pool = JsonAdapter.fromJson<EntryPool>(fileText)
-
-                    // Run entries through validation
-                    val entries = validatePool(pool, sender, false)
-                    pool.restore(entries)
-
-                    // Add pool with only valid entries
-                    PoolRegistry.add(pool)
-
-                } catch (e: Exception) {
-                    sender?.sendErrorMsg("Could not load pool in file '${file.name}'. Details: ${e.message}")
-                    succ = false
-                    DecreeRegistry.restore(decreeBackup)
-                    PoolRegistry.restore(poolBackup)
-                }
-            }
-
-            if (succ) {
-                sender?.sendMessage("Bounty data reloaded.")
-            } else {
-                sender?.sendErrorMsg("Reverting to previous safe data.")
-            }
-
-            info("Testing done.")
-        }
-
-    }
-
     private fun setupConfig() = BountifulConfig.register()
 
     // Update mob bounties

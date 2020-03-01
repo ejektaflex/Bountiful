@@ -69,7 +69,7 @@ class BountyEntryEntity : BountyEntry(), IBountyObjective {
     }
 
     override fun toString(): String {
-        return "BountyEntry (Entity) [Entity: $content, Amount: ${amount}, Weight: $weight]"
+        return "BountyEntry ($type) [Entity: $content, Amount: ${amount}, Weight: $weight]"
     }
 
 
