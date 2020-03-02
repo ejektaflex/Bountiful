@@ -11,11 +11,11 @@ class ConfigDummy : IBountifulConfig {
         private set
     override var boardLifespan: Int = 72000
         private set
-    override var timeMultiplier: Double = 40.0
+    override var timeMultiplier: Double = 7.5
         private set
     override var cashInAtBountyBoard: Boolean = true
         private set
-    override var rarityChance: Double = 0.27
+    override var rarityChance: Double = 0.35
         private set
     override var bountyTimeMin = 6000
         private set

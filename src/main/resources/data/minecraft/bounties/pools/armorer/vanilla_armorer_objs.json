@@ -1,0 +1,55 @@
+{
+    "id": "vanilla_armorer_objs",
+    "content": [
+      {
+        "type": "item",
+        "content": "minecraft:lava_bucket",
+        "amountRange": {
+          "min": 1,
+          "max": 4
+        },
+        "unitWorth": 1500,
+        "weight": 1000
+      },
+      {
+        "type": "item",
+        "content": "minecraft:leather_leggings",
+        "amountRange": {
+          "min": 1,
+          "max": 1
+        },
+        "unitWorth": 700,
+        "weight": 1000
+      },
+      {
+        "type": "item",
+        "content": "minecraft:leather_boots",
+        "amountRange": {
+          "min": 1,
+          "max": 1
+        },
+        "unitWorth": 400,
+        "weight": 1000
+      },
+      {
+        "type": "item",
+        "content": "minecraft:leather_chestplate",
+        "amountRange": {
+          "min": 1,
+          "max": 1
+        },
+        "unitWorth": 800,
+        "weight": 1000
+      },
+      {
+        "type": "item",
+        "content": "minecraft:leather_helmet",
+        "amountRange": {
+          "min": 1,
+          "max": 1
+        },
+        "unitWorth": 500,
+        "weight": 1000
+      }
+    ]
+  }

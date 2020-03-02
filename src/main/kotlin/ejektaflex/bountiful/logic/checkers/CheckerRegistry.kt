@@ -16,7 +16,7 @@ object CheckerRegistry : ValueRegistry<KClass<out CheckHandler<*>>>() {
         add(EntityCheckHandler::class)
     }
 
-    fun tryCashIn(player: PlayerEntity, data: IBountyData) {
+    fun tryCashIn(player: PlayerEntity, data: IBountyData): Boolean {
         val checkers = content.map {
             val inst = it.createInstance()
             inst.initialize(player, data)
@@ -34,7 +34,9 @@ object CheckerRegistry : ValueRegistry<KClass<out CheckHandler<*>>>() {
             for (reward in data.rewards.content) {
                 (reward as IBountyReward).reward(player)
             }
+            return true
         }
+        return false
     }
 
     fun passedChecks(player: PlayerEntity, data: IBountyData): Map<BountyEntry, BountyProgress> {

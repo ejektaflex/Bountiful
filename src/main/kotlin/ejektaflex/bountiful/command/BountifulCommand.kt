@@ -50,8 +50,10 @@ object BountifulCommand {
 
         //SetupLifecycle.loadContentFromFiles(it.source)
 
+        println("Reloading on side! :O isRemote?: ${it.source.world.isRemote}")
+
         BountifulResourceType.values().forEach { type ->
-            BountifulMod.reloadBountyData(it.source.server, it.source.server.resourceManager, type)
+            BountifulMod.reloadBountyData(it.source.server, it.source.server.resourceManager, type, it.source)
         }
 
         1
@@ -60,7 +62,7 @@ object BountifulCommand {
     // TODO If test is true, warn on invalid pool entries
     private fun dump(test: Boolean = false) = Command<CommandSource> {
 
-        it.source.sendMessage("Dumping Decrees to console...")
+        it.source.sendMessage("Dumping Decrees to console")
         for (decree in DecreeRegistry.content) {
             BountifulMod.logger.info("* $decree")
         }

@@ -23,6 +23,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.container.ContainerType
 import net.minecraft.item.Item
 import net.minecraft.resources.IResourceManager
+import net.minecraft.resources.IResourceManagerReloadListener
 import net.minecraft.tileentity.TileEntityType
 import net.minecraftforge.common.extensions.IForgeContainerType
 import net.minecraftforge.event.RegistryEvent
@@ -60,6 +61,10 @@ object SetupLifecycle {
 
 
     fun validatePool(pool: IEntryPool, sender: CommandSource? = null, log: Boolean = false): MutableList<BountyEntry> {
+
+        BountifulMod.logger.info("Validating pool on side? isRemote?: ${sender?.world?.isRemote}")
+
+        sender?.sendMessage("Validating pool '${pool.id}'")
 
         val validEntries = mutableListOf<BountyEntry>()
 
@@ -119,14 +124,10 @@ object SetupLifecycle {
     @SubscribeEvent
     fun onServerAboutToStart(event: FMLServerAboutToStartEvent) {
         BountifulMod.logger.info("Bountiful listening for resource reloads..")
-        event.server.resourceManager.addReloadListener(object : ISelectiveResourceReloadListener {
-            override fun onResourceManagerReload(resourceManager: IResourceManager, resourcePredicate: Predicate<IResourceType>) {
+        event.server.resourceManager.addReloadListener(object : IResourceManagerReloadListener {
+            override fun onResourceManagerReload(resourceManager: IResourceManager) {
                 BountifulMod.logger.info("Bountiful reloading resources! :D")
                 BountifulResourceType.values().forEach { type ->
-                    if (resourcePredicate.test(type)) {
-                        // doot
-                    }
-                    // always running it for now
                     BountifulMod.reloadBountyData(event.server, resourceManager, type)
                 }
             }
@@ -136,15 +137,6 @@ object SetupLifecycle {
     @SubscribeEvent
     fun onServerStarting(event: FMLServerStartingEvent) {
         BountifulCommand.generateCommand(event.commandDispatcher)
-
-        //BountifulMod.logger.info("Bountiful reloading resources on server!")
-
-        //BountifulResourceType.values().forEach { type ->
-        //    BountifulMod.tryFillDefaultData(event.server.resourceManager, type)
-        //}
-
-        //loadContentFromFiles()
-
 
     }
 

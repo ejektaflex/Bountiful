@@ -1,0 +1,38 @@
+{
+    "id": "all_villager_objs",
+    "content": [
+      {
+        "type": "entity",
+        "content": "minecraft:zombie",
+        "amountRange": {
+          "min": 1,
+          "max": 20
+        },
+        "unitWorth": 200,
+        "weight": 1000,
+        "timeMult": 2.5
+      },
+      {
+        "type": "entity",
+        "content": "minecraft:spider",
+        "amountRange": {
+          "min": 1,
+          "max": 20
+        },
+        "unitWorth": 200,
+        "weight": 1000,
+        "timeMult": 2.5
+      },
+      {
+        "type": "entity",
+        "content": "minecraft:skeleton",
+        "amountRange": {
+          "min": 1,
+          "max": 20
+        },
+        "unitWorth": 200,
+        "weight": 1000,
+        "timeMult": 2.5
+      }
+    ]
+  }

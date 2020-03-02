@@ -1,0 +1,14 @@
+{
+    "decreeTitle": "Farming",
+    "id": "vanilla_farmer",
+    "spawnsInBoard": true,
+    "isGreedy": false,
+    "objectivePools": [
+      "all_villager_objs",
+      "vanilla_farmer_objs"
+    ],
+    "rewardPools": [
+      "all_villager_rews",
+      "vanilla_farmer_rews"
+    ]
+  }

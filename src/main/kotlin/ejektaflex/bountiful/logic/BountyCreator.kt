@@ -3,20 +3,20 @@ package ejektaflex.bountiful.logic
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.api.data.IDecree
 import ejektaflex.bountiful.api.data.entry.BountyEntry
-import ejektaflex.bountiful.api.data.json.JsonAdapter
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.api.ext.hackyRandom
 import ejektaflex.bountiful.api.ext.randomSplit
 import ejektaflex.bountiful.api.ext.weightedRandom
+import ejektaflex.bountiful.api.ext.weightedRandomNorm
 import ejektaflex.bountiful.content.ModContent
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.registry.DecreeRegistry
-import ejektaflex.bountiful.registry.PoolRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
 import java.util.*
 import kotlin.math.ceil
+import kotlin.math.max
 
 
 object BountyCreator {
@@ -25,7 +25,6 @@ object BountyCreator {
 
 
     fun createStack(world: World, decrees: List<IDecree>): ItemStack {
-        val data = create(world, calcRarity(), decrees)
 
         return ItemStack(ModContent.Items.BOUNTY).apply {
             (ModContent.Items.BOUNTY as ItemBounty).ensureBounty(this, world, calcRarity())
@@ -61,7 +60,7 @@ object BountyCreator {
 
         val numRewards = (1..2).hackyRandom()
 
-        val rarity = (0..3).hackyRandom()
+        val rarity = EnumBountyRarity.values().indexOf(inRarity)
 
         val toAdd = mutableListOf<BountyEntry>()
 
@@ -76,7 +75,7 @@ object BountyCreator {
                 break
             }
 
-            toAdd.add( totalRewards.weightedRandom.pick() )
+            toAdd.add( totalRewards.weightedRandomNorm(inRarity.exponent).pick() )
         }
 
         val accumWorth = toAdd.sumBy { it.calculatedWorth }
@@ -90,7 +89,14 @@ object BountyCreator {
 
     private fun createObjectives(data: BountyData, world: World, inRarity: EnumBountyRarity, decrees: List<IDecree>, worth: Int) {
 
-        val objectives = DecreeRegistry.getObjectives(decrees)
+        val rewardContentIds = data.rewards.content.map { it.content }
+
+        val objectives = DecreeRegistry.getObjectives(decrees).filter {
+            it.content !in rewardContentIds
+        }
+
+        // TODO RIGHT NOW FILTER OUT REWARD CONTENT FROM OBJECTIVES
+
         val numObjectives = (1..2).hackyRandom()
         val worthGroups = randomSplit(worth, numObjectives)
 
@@ -98,7 +104,7 @@ object BountyCreator {
             return
         }
 
-        val variance = 0.1
+        val variance = 0.2
 
         val toAdd = mutableListOf<BountyEntry>()
 
@@ -136,13 +142,15 @@ object BountyCreator {
 
             toAdd.add(closest)
 
-            data.bountyTime += if (closest.worthMult != null) {
-                (worth * BountifulMod.config.timeMultiplier * closest.worthMult!!).toLong()
+            data.bountyTime += if (closest.timeMult != null) {
+                (worth * BountifulMod.config.timeMultiplier * closest.timeMult!!).toLong()
             } else {
                 (worth * BountifulMod.config.timeMultiplier).toLong()
             }
 
         }
+
+        data.bountyTime = max(data.bountyTime, BountifulMod.config.bountyTimeMin.toLong())
 
         data.objectives.add(*toAdd.toTypedArray())
 

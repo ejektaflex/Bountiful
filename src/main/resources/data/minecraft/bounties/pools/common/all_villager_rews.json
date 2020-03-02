@@ -1,0 +1,15 @@
+{
+    "id": "all_villager_rews",
+    "content": [
+      {
+        "type": "item",
+        "content": "minecraft:emerald",
+        "amountRange": {
+          "min": 1,
+          "max": 12
+        },
+        "unitWorth": 1000,
+        "weight": 2500
+      }
+    ]
+  }

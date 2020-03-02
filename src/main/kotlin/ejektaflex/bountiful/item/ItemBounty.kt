@@ -195,7 +195,11 @@ class ItemBounty() : Item(
             return false
         }
 
-        CheckerRegistry.tryCashIn(player, bounty)
+        val succ = CheckerRegistry.tryCashIn(player, bounty)
+
+        if (succ) {
+            bountyItem.shrink(bountyItem.maxStackSize)
+        }
 
         return false
 
