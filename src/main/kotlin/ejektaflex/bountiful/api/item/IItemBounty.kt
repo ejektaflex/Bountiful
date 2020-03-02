@@ -1,6 +1,7 @@
 package ejektaflex.bountiful.api.item
 
 import ejektaflex.bountiful.api.data.IBountyData
+import ejektaflex.bountiful.api.data.IDecree
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -28,6 +29,6 @@ interface IItemBounty : IForgeRegistryEntry<Item> {
     /**
      * When given an ItemStack of ItemBounty, this method ensures that the stack has bounty NBT data.
      */
-    fun ensureBounty(stack: ItemStack, worldIn: World, rarity: EnumBountyRarity = EnumBountyRarity.Common)
+    fun ensureBounty(stack: ItemStack, worldIn: World, decrees: List<IDecree>, rarity: EnumBountyRarity = EnumBountyRarity.Common)
 
 }

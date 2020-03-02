@@ -4,6 +4,7 @@ import ejektaflex.bountiful.api.IBountifulAPI
 import ejektaflex.bountiful.api.config.IBountifulConfig
 import ejektaflex.bountiful.api.ext.stacks
 import ejektaflex.bountiful.api.data.IBountyData
+import ejektaflex.bountiful.api.data.IDecree
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.logic.BountyCreator
@@ -34,11 +35,8 @@ object BountifulAPIImpl : IBountifulAPI {
         return ItemStack.EMPTY
     }
 
-
-
-    override fun createBountyData(worldIn: World, rarity: EnumBountyRarity): BountyData? {
-        return BountyCreator.create(worldIn, rarity, DecreeRegistry.content)
+    override fun createBountyData(worldIn: World, rarity: EnumBountyRarity, decrees: List<IDecree>): BountyData? {
+        return BountyCreator.create(worldIn, rarity, decrees)
     }
-
 
 }

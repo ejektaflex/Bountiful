@@ -4,6 +4,7 @@ import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.api.ext.*
 import ejektaflex.bountiful.content.ModContent
 import ejektaflex.bountiful.data.BountyData
+import ejektaflex.bountiful.data.Decree
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.item.ItemDecree
@@ -48,6 +49,20 @@ class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEnt
     val hasDecree: Boolean
         get() = decreeSlots.map { handler.getStackInSlot(it) }.any { it.item is ItemDecree }
 
+    val decrees: List<Decree>
+        get() {
+            val ids = decreeSlots.map {
+                handler.getStackInSlot(it)
+            }.filter {
+                it.item is ItemDecree
+            }.map {
+                (it.item as ItemDecree).ensureDecree(it)
+                it.tag!!.getString("id")
+            }
+
+            return ids.mapNotNull { DecreeRegistry.getDecree(it) }
+        }
+
     private fun tickBounties() {
 
         val toRemove = mutableListOf<Int>()
@@ -85,7 +100,7 @@ class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEnt
 
     private fun addSingleBounty() {
         println("Adding a single bounty")
-        val newStack = BountyCreator.createStack(world!!, DecreeRegistry.content)
+        val newStack = BountyCreator.createStack(world!!, decrees)
         val freeSlots = bountySlots - filledBountySlots
         if (freeSlots.isNotEmpty()) {
             handler[freeSlots.hackyRandom()] = newStack

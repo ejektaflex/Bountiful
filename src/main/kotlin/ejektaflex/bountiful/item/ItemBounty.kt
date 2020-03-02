@@ -1,14 +1,17 @@
 package ejektaflex.bountiful.item
 
 import ejektaflex.bountiful.api.BountifulAPI
+import ejektaflex.bountiful.api.data.IDecree
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.api.ext.sendTranslation
 import ejektaflex.bountiful.api.item.IItemBounty
 import ejektaflex.bountiful.content.ModContent
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.data.BountyNBT
+import ejektaflex.bountiful.data.Decree
 import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.logic.checkers.CheckerRegistry
+import ejektaflex.bountiful.registry.DecreeRegistry
 import net.minecraft.client.Minecraft
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity
@@ -156,10 +159,10 @@ class ItemBounty() : Item(
     }
 
 
-    override fun ensureBounty(stack: ItemStack, worldIn: World, rarity: EnumBountyRarity) {
+    override fun ensureBounty(stack: ItemStack, worldIn: World, decrees: List<IDecree>, rarity: EnumBountyRarity) {
 
         val data = try {
-            BountifulAPI.createBountyData(worldIn, rarity)
+            BountifulAPI.createBountyData(worldIn, rarity, decrees)
         } catch (e: BountyCreationException) {
             return
         }
@@ -184,7 +187,7 @@ class ItemBounty() : Item(
     fun cashIn(player: PlayerEntity, hand: Hand, atBoard: Boolean = false): Boolean {
         val bountyItem = player.getHeldItem(hand)
         if (!bountyItem.hasTag()) {
-            ensureBounty(player.getHeldItem(hand), player.world)
+            ensureBounty(player.getHeldItem(hand), player.world, DecreeRegistry.content)
             return false
         }
 

@@ -2,6 +2,7 @@ package ejektaflex.bountiful.api
 
 import ejektaflex.bountiful.api.config.IBountifulConfig
 import ejektaflex.bountiful.api.data.IBountyData
+import ejektaflex.bountiful.api.data.IDecree
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
@@ -37,6 +38,6 @@ interface IBountifulAPI {
     /**
      * Creates data for a new bounty.
      */
-    fun createBountyData(worldIn: World, rarity: EnumBountyRarity): IBountyData?
+    fun createBountyData(worldIn: World, rarity: EnumBountyRarity, decrees: List<IDecree>): IBountyData?
 
 }

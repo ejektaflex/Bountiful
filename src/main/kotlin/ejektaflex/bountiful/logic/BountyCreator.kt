@@ -27,7 +27,7 @@ object BountyCreator {
     fun createStack(world: World, decrees: List<IDecree>): ItemStack {
 
         return ItemStack(ModContent.Items.BOUNTY).apply {
-            (ModContent.Items.BOUNTY as ItemBounty).ensureBounty(this, world, calcRarity())
+            (ModContent.Items.BOUNTY as ItemBounty).ensureBounty(this, world, decrees, calcRarity())
         }
         //return ContentRegistry.bounty.let { ItemStack(it).apply { it.ensureBounty(this, world, rarity) } }
     }
@@ -58,9 +58,10 @@ object BountyCreator {
 
         val rewards = DecreeRegistry.getRewards(decrees)
 
-        val numRewards = (1..2).hackyRandom()
+        var numRewards = (1..2).hackyRandom()
 
         val rarity = EnumBountyRarity.values().indexOf(inRarity)
+
 
         val toAdd = mutableListOf<BountyEntry>()
 
@@ -87,6 +88,8 @@ object BountyCreator {
 
     }
 
+    val rando = Random()
+
     private fun createObjectives(data: BountyData, world: World, inRarity: EnumBountyRarity, decrees: List<IDecree>, worth: Int) {
 
         val rewardContentIds = data.rewards.content.map { it.content }
@@ -95,9 +98,13 @@ object BountyCreator {
             it.content !in rewardContentIds
         }
 
-        // TODO RIGHT NOW FILTER OUT REWARD CONTENT FROM OBJECTIVES
+        var numObjectives = (1..2).hackyRandom()
+        var chanceToAddThirdObj = (1.0 - inRarity.exponent) / 2
 
-        val numObjectives = (1..2).hackyRandom()
+        if (rando.nextFloat() < chanceToAddThirdObj) {
+            numObjectives++
+        }
+
         val worthGroups = randomSplit(worth, numObjectives)
 
         if (objectives.isEmpty()) {

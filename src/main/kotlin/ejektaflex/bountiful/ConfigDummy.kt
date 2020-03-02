@@ -15,7 +15,7 @@ class ConfigDummy : IBountifulConfig {
         private set
     override var cashInAtBountyBoard: Boolean = true
         private set
-    override var rarityChance: Double = 0.35
+    override var rarityChance: Double = 0.4
         private set
     override var bountyTimeMin = 6000
         private set
