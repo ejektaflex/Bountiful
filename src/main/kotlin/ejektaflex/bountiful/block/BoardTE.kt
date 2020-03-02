@@ -6,6 +6,7 @@ import ejektaflex.bountiful.content.ModContent
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.item.ItemBounty
+import ejektaflex.bountiful.item.ItemDecree
 import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.registry.DecreeRegistry
 import net.minecraft.entity.player.PlayerEntity
@@ -43,6 +44,9 @@ class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEnt
 
     val filledBountySlots: List<Int>
         get() = handler.filledSlots(bountyRange)
+
+    val hasDecree: Boolean
+        get() = decreeSlots.map { handler.getStackInSlot(it) }.any { it.item is ItemDecree }
 
     private fun tickBounties() {
 
@@ -88,10 +92,22 @@ class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEnt
         }
     }
 
+
+    private fun ensureDecreeExists() {
+        if (!hasDecree) {
+            val newDecree = ItemStack(ModContent.Items.DECREE)
+            (newDecree.item as ItemDecree).ensureDecree(newDecree)
+            handler.setStackInSlot(decreeSlots.hackyRandom(), newDecree)
+        }
+    }
+
     override fun tick() {
         if (!world!!.isRemote) {
             if (world!!.gameTime % 20 == 0L) {
-                tickBounties()
+                ensureDecreeExists()
+                if (hasDecree) {
+                    tickBounties()
+                }
             }
             if (world!!.gameTime % BountifulMod.config.boardAddFrequency == 3L) {
 
@@ -101,7 +117,9 @@ class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEnt
                     handler[slotPicked] = ItemStack.EMPTY
                 }
 
-                addSingleBounty()
+                if (hasDecree) {
+                    addSingleBounty()
+                }
 
                 markDirty()
 

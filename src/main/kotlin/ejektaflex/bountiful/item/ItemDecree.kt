@@ -40,14 +40,14 @@ class ItemDecree() : Item(
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<ITextComponent>, flagIn: ITooltipFlag) {
 
         val id = stack.tag?.getString("id")
+        val title = stack.tag?.getString("title")
 
-        if (id != null) {
-            val decree = DecreeRegistry.getDecree(id)
-            val tip = if (decree != null) {
+        if (id != null && title != null) {
+            val tip = if (stack.tag != null) {
                 StringTextComponent("§5").appendSibling(
                         StringTextComponent("§6")
                 ).appendSibling(
-                        StringTextComponent(decree.decreeTitle)
+                        StringTextComponent(title)
                 )
             } else {
                 TranslationTextComponent("bountiful.decree.invalid").appendSibling(
@@ -66,20 +66,32 @@ class ItemDecree() : Item(
     override fun onItemRightClick(worldIn: World, playerIn: PlayerEntity, handIn: Hand): ActionResult<ItemStack> {
 
         val held = playerIn.getHeldItem(handIn)
-        ensureDecree(held)
+        //ensureDecree(held)
 
         return super.onItemRightClick(worldIn, playerIn, handIn)
     }
 
-    private fun ensureDecree(stack: ItemStack) {
-        val data = try {
-            DecreeRegistry.content.hackyRandom()
-        } catch (e: DecreeCreationException) {
-            return
-        }
+    fun ensureDecree(stack: ItemStack) {
+
         if (stack.item is ItemDecree) {
             if (!stack.hasTag()) {
+
+                val data = try {
+                    DecreeRegistry.content.hackyRandom()
+                } catch (e: DecreeCreationException) {
+                    return
+                }
+
                 stack.tag = data.serializeNBT()
+            } else {
+
+                // If the ID on the Decree is invalid, turn it into a new random decree
+                val tid = stack.tag!!.getString("id")
+
+                if (DecreeRegistry.content.find { it.id == tid } == null) {
+                    ensureDecree(stack)
+                }
+
             }
         } else {
             throw Exception("${stack.displayName} is not an ItemDecree, so you cannot generate decree data for it!")

@@ -20,12 +20,14 @@ data class Decree(
     override fun serializeNBT(): CompoundNBT {
         return CompoundNBT().apply {
             putString("id", this@Decree.id)
+            putString("title", this@Decree.decreeTitle)
         }
     }
 
 
     override fun deserializeNBT(nbt: CompoundNBT?) {
         id = nbt!!.getString("id")
+        decreeTitle = nbt.getString("title")
     }
 
     override fun merge(other: Decree) {

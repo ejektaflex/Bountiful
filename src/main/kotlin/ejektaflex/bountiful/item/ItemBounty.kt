@@ -205,34 +205,6 @@ class ItemBounty() : Item(
 
         /*
 
-        // Returns prerequisite stacks needed to reduce for reward, or null if they don't have the prereqs
-        val invItemsAffected = BountyChecker.hasItems(player, inv, bounty) ?: return false
-
-        //val errMsg = "§4You haven't completed all of the requirements for this bounty."
-
-        val entitiesFulfilled = BountyChecker.hasEntitiesFulfilled(bounty)
-        if (!entitiesFulfilled) {
-            player.sendTranslation("bountiful.requirements.mobs.needed")
-            return false
-        }
-
-
-        return if (!atBoard && BountifulMod.config.cashInAtBountyBoard) {
-            //player.sendTranslation("bountiful.requirements.met")
-            false
-        } else {
-            player.sendTranslation("bountiful.bounty.fulfilled")
-            // Reduce count of relevant prerequisite stacks
-            BountyChecker.takeItems(player, inv, bounty, invItemsAffected)
-
-            // Remove bounty note
-            player.setHeldItem(hand, ItemStack.EMPTY)
-
-            // Reward player with rewards
-            BountyChecker.rewardItems(player, bounty, bountyItem)
-
-            val bountyRarity = EnumBountyRarity.getRarityFromInt(bounty.rarity)
-
             // Increment stats
 
             // TODO Reimplement Scoreboard Stats
