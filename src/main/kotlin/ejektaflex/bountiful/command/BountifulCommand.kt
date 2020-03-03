@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType.getInteger
 import com.mojang.brigadier.arguments.IntegerArgumentType.integer
 import com.mojang.brigadier.arguments.StringArgumentType.getString
 import com.mojang.brigadier.arguments.StringArgumentType.string
+import ejektaflex.bountiful.BountifulConfig
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.SetupLifecycle
 import ejektaflex.bountiful.api.ext.sendMessage
@@ -38,7 +39,7 @@ object BountifulCommand {
                         .then(
                                 literal("test").executes(dump(true))
                         )
-                        /*
+
                         .then(
                                 literal("time").then(
                                         argument("num", integer()).executes { c ->
@@ -47,8 +48,7 @@ object BountifulCommand {
                                         }
                                 )
                         )
-                        
-                         */
+
                         .then(
                                 literal("dec").then(
                                         argument("decType", string())
@@ -97,7 +97,7 @@ object BountifulCommand {
 
     private fun bSpeed(num: Int) = Command<CommandSource> {
 
-        BountifulMod.config.boardAddFrequency = num.toLong()
+        BountifulConfig.SERVER.boardAddFrequency.set(num)
 
         1
     }

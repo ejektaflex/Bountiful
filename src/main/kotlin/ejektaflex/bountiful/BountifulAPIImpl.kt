@@ -1,22 +1,17 @@
 package ejektaflex.bountiful
 
 import ejektaflex.bountiful.api.IBountifulAPI
-import ejektaflex.bountiful.api.config.IBountifulConfig
-import ejektaflex.bountiful.api.ext.stacks
 import ejektaflex.bountiful.api.data.IBountyData
 import ejektaflex.bountiful.api.data.IDecree
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.logic.BountyCreator
-import ejektaflex.bountiful.registry.DecreeRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 object BountifulAPIImpl : IBountifulAPI {
 
-    override val config: IBountifulConfig
-        get() = BountifulMod.config
 
     override fun getBountiesAt(worldIn: World, pos: BlockPos): List<ItemStack>? {
         // Todo BountifulAPIImpl::getBountiesAt

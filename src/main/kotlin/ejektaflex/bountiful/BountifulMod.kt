@@ -4,18 +4,17 @@ import ejektaflex.bountiful.api.BountifulAPIProvider
 import ejektaflex.bountiful.api.IMerge
 import ejektaflex.bountiful.api.data.json.JsonAdapter
 import ejektaflex.bountiful.api.ext.sendErrorMsg
-import ejektaflex.bountiful.api.ext.sendMessage
 import ejektaflex.bountiful.data.BountifulResourceType
 import ejektaflex.bountiful.data.EntryPool
 import ejektaflex.bountiful.data.ValueRegistry
-import ejektaflex.bountiful.registry.DecreeRegistry
-import ejektaflex.bountiful.registry.PoolRegistry
 import net.alexwells.kottle.FMLKotlinModLoadingContext
 import net.minecraft.command.CommandSource
 import net.minecraft.resources.IResourceManager
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.ResourceLocation
+import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
+import net.minecraftforge.fml.config.ModConfig
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import java.io.File
@@ -29,6 +28,10 @@ object BountifulMod {
     const val MODID = "bountiful"
 
     val logger: Logger = LogManager.getLogger()
+
+    init {
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, BountifulConfig.serverSpec)
+    }
 
     val configFolder = Paths.get("config", "bountiful").toFile().apply {
         mkdirs()
@@ -136,6 +139,6 @@ object BountifulMod {
     }
 
     // Temporary dummy config until real config files are replaced
-    val config = ConfigDummy()
+    val config = BountifulConfig()
 
 }

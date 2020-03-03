@@ -61,8 +61,6 @@ object SetupLifecycle {
     fun gameSetup(event: FMLCommonSetupEvent) {
         println("Registering data type adapters for JSON/Data conversion...")
         JsonSerializers.register()
-        setupConfig()
-
     }
 
 
@@ -92,7 +90,6 @@ object SetupLifecycle {
         return validEntries
     }
 
-    private fun setupConfig() = BountifulConfig.register()
 
     // Update mob bounties
     @SubscribeEvent
@@ -115,14 +112,6 @@ object SetupLifecycle {
                     }
                 }
             }
-        }
-    }
-
-    @SubscribeEvent
-    fun onConfigChange(event: ConfigChangedEvent.OnConfigChangedEvent) {
-        if (event.modID == BountifulMod.MODID) {
-            BountifulConfig.Client.get()
-            BountifulConfig.Common.get()
         }
     }
 

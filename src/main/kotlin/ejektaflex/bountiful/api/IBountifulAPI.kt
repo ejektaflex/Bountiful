@@ -1,6 +1,5 @@
 package ejektaflex.bountiful.api
 
-import ejektaflex.bountiful.api.config.IBountifulConfig
 import ejektaflex.bountiful.api.data.IBountyData
 import ejektaflex.bountiful.api.data.IDecree
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
@@ -29,11 +28,6 @@ interface IBountifulAPI {
      * Converts bounty data to a bounty itemstack
      */
     fun dataToStack(data: IBountyData): ItemStack
-
-    /**
-     * Retrieves config information about Bountiful
-     */
-    val config: IBountifulConfig
 
     /**
      * Creates data for a new bounty.

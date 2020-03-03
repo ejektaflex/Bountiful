@@ -1,5 +1,6 @@
 package ejektaflex.bountiful.block
 
+import ejektaflex.bountiful.BountifulConfig
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.api.ext.*
 import ejektaflex.bountiful.content.ModContent
@@ -125,10 +126,10 @@ class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEnt
                     tickBounties()
                 }
             }
-            if (world!!.gameTime % BountifulMod.config.boardAddFrequency == 3L) {
+            if (world!!.gameTime % (BountifulConfig.SERVER.boardAddFrequency.get() * 20L) == 3L) {
 
                 // Prune items to max amount - new amount
-                while (filledBountySlots.size >= BountifulMod.config.maxBountiesPerBoard && filledBountySlots.isNotEmpty()) {
+                while (filledBountySlots.size >= BountifulConfig.SERVER.maxBountiesPerBoard.get() && filledBountySlots.isNotEmpty()) {
                     val slotPicked = filledBountySlots.hackyRandom()
                     handler[slotPicked] = ItemStack.EMPTY
                 }

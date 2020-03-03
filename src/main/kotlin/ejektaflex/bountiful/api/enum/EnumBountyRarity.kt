@@ -1,5 +1,6 @@
 package ejektaflex.bountiful.api.enum
 
+import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.api.BountifulAPI
 import net.minecraft.item.Rarity
 
@@ -8,8 +9,8 @@ enum class EnumBountyRarity(
         val itemRarity: Rarity,
         val exponent: Double,
         //val stat: BountifulStats.BountifulStat,
-        val bountyMult: Double = BountifulAPI.config.rarityMultipliers[level],
-        val xp: Int = BountifulAPI.config.xpBonuses[level]
+        val bountyMult: Double = BountifulMod.config.rarityMultipliers[level],
+        val xp: Int = BountifulMod.config.xpBonuses[level]
 ) {
 
     Common(0, Rarity.COMMON, 1.0),
