@@ -9,8 +9,10 @@ import com.mojang.brigadier.arguments.StringArgumentType.string
 import ejektaflex.bountiful.BountifulConfig
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.SetupLifecycle
+import ejektaflex.bountiful.api.ext.sendErrorMsg
 import ejektaflex.bountiful.api.ext.sendMessage
 import ejektaflex.bountiful.data.BountifulResourceType
+import ejektaflex.bountiful.data.Decree
 import ejektaflex.bountiful.item.ItemDecree
 import ejektaflex.bountiful.registry.DecreeRegistry
 import ejektaflex.bountiful.registry.PoolRegistry
@@ -80,6 +82,27 @@ object BountifulCommand {
                                         }
                                 )
                         )
+
+                        .then(
+                                literal("sample").then(
+                                        argument("decType", string())
+                                                .suggests { c, b ->
+                                                    for (dec in DecreeRegistry.content) {
+                                                        b.suggest(dec.id)
+                                                    }
+                                                    b.buildFuture()
+                                                }
+                                                .executes { c ->
+
+                                                    val decId = getString(c, "decType")
+
+                                                    sample(decId)
+
+                                                    1
+                                                }
+                                )
+                        )
+
                         .then(
                                 literal("reload").executes(reload())
                         ).apply {
@@ -111,6 +134,27 @@ object BountifulCommand {
         BountifulResourceType.values().forEach { type ->
             BountifulMod.reloadBountyData(it.source.server, it.source.server.resourceManager, type, it.source)
         }
+
+        1
+    }
+
+    private fun sample(decreeName: String) = Command<CommandSource> {
+
+        val decree = DecreeRegistry.getDecree(decreeName)
+        val log = BountifulMod.logger
+
+        if (decree == null) {
+            it.source.sendErrorMsg("Decree '$decreeName' does not exist!")
+            return@Command 0
+        }
+
+        val rewards = DecreeRegistry.getRewards(listOf(decree))
+
+        for (reward in rewards) {
+
+        }
+
+
 
         1
     }

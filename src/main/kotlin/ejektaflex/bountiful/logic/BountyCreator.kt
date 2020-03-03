@@ -17,6 +17,7 @@ import net.minecraft.world.World
 import java.util.*
 import kotlin.math.ceil
 import kotlin.math.max
+import kotlin.math.min
 
 
 object BountyCreator {
@@ -48,20 +49,16 @@ object BountyCreator {
     fun create(world: World, inRarity: EnumBountyRarity, decrees: List<IDecree>): BountyData {
         val data = BountyData()
 
-        val toSatisfy = createRewards(data, world, inRarity, decrees)
-        createObjectives(data, world, inRarity, decrees, toSatisfy)
+        val toSatisfy = createRewards(data, inRarity, decrees)
+        createObjectives(data, inRarity, decrees, toSatisfy)
 
         return data
     }
 
-    private fun createRewards(data: BountyData, world: World, inRarity: EnumBountyRarity, decrees: List<IDecree>): Int {
-
+    fun createRewards(inRarity: EnumBountyRarity, decrees: List<IDecree>): List<BountyEntry> {
         val rewards = DecreeRegistry.getRewards(decrees)
 
         var numRewards = (1..2).hackyRandom()
-
-        val rarity = EnumBountyRarity.values().indexOf(inRarity)
-
 
         val toAdd = mutableListOf<BountyEntry>()
 
@@ -79,37 +76,62 @@ object BountyCreator {
             toAdd.add( totalRewards.weightedRandomNorm(inRarity.exponent).pick() )
         }
 
-        val accumWorth = toAdd.sumBy { it.calculatedWorth }
+        return toAdd
+    }
 
+
+    private fun createRewards(data: BountyData, inRarity: EnumBountyRarity, decrees: List<IDecree>): Int {
+        val toAdd = createRewards(inRarity, decrees)
+        val rarity = EnumBountyRarity.values().indexOf(inRarity)
         data.rarity = rarity
         data.rewards.add(*toAdd.toTypedArray())
-
-        return accumWorth
-
+        return toAdd.sumBy { it.calculatedWorth }
     }
+
 
     val rando = Random()
 
-    private fun createObjectives(data: BountyData, world: World, inRarity: EnumBountyRarity, decrees: List<IDecree>, worth: Int) {
+    /*
 
-        val rewardContentIds = data.rewards.content.map { it.content }
+        val highestObjWorth = objectives.maxBy { it.maxWorth }
+
+        // Add more objectives if this bounty still couldn't ever possibly hit max worth
+        // Later on we should sample for this
+
+        if (highestObjWorth != null) {
+            val neededOfThese = ceil(worth.toDouble() / highestObjWorth.maxWorth).toInt()
+            if (numObjectives < neededOfThese) {
+                numObjectives = neededOfThese
+            }
+        }
+     */
+
+    fun createObjectives(rewards: List<BountyEntry>, inRarity: EnumBountyRarity, decrees: List<IDecree>, worth: Int): List<BountyEntry> {
+        val rewardContentIds = rewards.map { it.content }
 
         val objectives = DecreeRegistry.getObjectives(decrees).filter {
             it.content !in rewardContentIds
         }
 
+
+
         var numObjectives = (1..2).hackyRandom()
+
+
         var chanceToAddThirdObj = (1.0 - inRarity.exponent) / 2
 
         if (rando.nextFloat() < chanceToAddThirdObj) {
             numObjectives++
         }
 
+
+
         val worthGroups = randomSplit(worth, numObjectives)
 
         if (objectives.isEmpty()) {
-            return
+            return listOf()
         }
+
 
         val variance = 0.2
 
@@ -149,18 +171,25 @@ object BountyCreator {
 
             toAdd.add(closest)
 
-            data.bountyTime += if (closest.timeMult != null) {
-                (worth * BountifulMod.config.timeMultiplier * closest.timeMult!!).toLong()
+        }
+
+        return toAdd
+    }
+
+    private fun createObjectives(data: BountyData, inRarity: EnumBountyRarity, decrees: List<IDecree>, worth: Int) {
+        val objs = createObjectives(data.rewards.content, inRarity, decrees, worth)
+
+        for (obj in objs) {
+            data.bountyTime += if (obj.timeMult != null) {
+                (worth * BountifulMod.config.timeMultiplier * obj.timeMult!!).toLong()
             } else {
                 (worth * BountifulMod.config.timeMultiplier).toLong()
             }
-
         }
 
         data.bountyTime = max(data.bountyTime, BountifulMod.config.bountyTimeMin.toLong())
 
-        data.objectives.add(*toAdd.toTypedArray())
-
+        data.objectives.add(*objs.toTypedArray())
     }
 
 

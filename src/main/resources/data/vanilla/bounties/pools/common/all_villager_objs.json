@@ -6,9 +6,9 @@
         "content": "minecraft:zombie",
         "amountRange": {
           "min": 1,
-          "max": 20
+          "max": 18
         },
-        "unitWorth": 200,
+        "unitWorth": 250,
         "weight": 1000,
         "timeMult": 2.5
       },
@@ -17,9 +17,9 @@
         "content": "minecraft:spider",
         "amountRange": {
           "min": 1,
-          "max": 20
+          "max": 18
         },
-        "unitWorth": 200,
+        "unitWorth": 250,
         "weight": 1000,
         "timeMult": 2.5
       },
@@ -28,9 +28,9 @@
         "content": "minecraft:skeleton",
         "amountRange": {
           "min": 1,
-          "max": 20
+          "max": 18
         },
-        "unitWorth": 200,
+        "unitWorth": 250,
         "weight": 1000,
         "timeMult": 2.5
       }

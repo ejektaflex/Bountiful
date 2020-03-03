@@ -34,6 +34,12 @@ abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSeri
     @Expose
     open var amountRange: ItemRange = ItemRange(1, 1)
 
+    val maxWorth: Int
+        get() = unitWorth * amountRange.max
+
+    val minWorth: Int
+        get() = unitWorth * amountRange.min
+
     @Expose
     open var unitWorth: Int = Integer.MIN_VALUE
 

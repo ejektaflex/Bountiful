@@ -1,0 +1,55 @@
+{
+    "id": "vanilla_fisherman_rews",
+    "content": [
+      {
+        "type": "item",
+        "content": "minecraft:cod_bucket",
+        "amountRange": {
+          "min": 1,
+          "max": 4
+        },
+        "unitWorth": 3000,
+        "weight": 100
+      },
+      {
+        "type": "item",
+        "content": "minecraft:cooked_cod",
+        "amountRange": {
+          "min": 2,
+          "max": 12
+        },
+        "unitWorth": 200,
+        "weight": 1000
+      },
+      {
+        "type": "item",
+        "content": "minecraft:campfire",
+        "amountRange": {
+          "min": 1,
+          "max": 2
+        },
+        "unitWorth": 500,
+        "weight": 1000
+      },
+      {
+        "type": "item",
+        "content": "minecraft:cooked_salmon",
+        "amountRange": {
+          "min": 2,
+          "max": 12
+        },
+        "unitWorth": 200,
+        "weight": 1000
+      },
+      {
+        "type": "item",
+        "content": "minecraft:fishing_rod",
+        "amountRange": {
+          "min": 1,
+          "max": 2
+        },
+        "unitWorth": 400,
+        "weight": 1000
+      }
+    ]
+  }

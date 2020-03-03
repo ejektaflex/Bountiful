@@ -9,4 +9,9 @@ data class ItemRange(@Expose var min: Int = 0, @Expose var max: Int = Int.MAX_VA
     fun toIntRange(): IntRange {
         return min..max
     }
+
+    override fun toString(): String {
+        return "[$min..$max]"
+    }
+
 }
