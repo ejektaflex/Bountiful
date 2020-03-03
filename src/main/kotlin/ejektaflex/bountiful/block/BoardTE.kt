@@ -47,7 +47,10 @@ class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEnt
         get() = handler.filledSlots(bountyRange)
 
     val hasDecree: Boolean
-        get() = decreeSlots.map { handler.getStackInSlot(it) }.any { it.item is ItemDecree }
+        get() = numDecrees > 0
+
+    val numDecrees: Int
+        get() = decreeSlots.map { handler.getStackInSlot(it) }.count { it.item is ItemDecree }
 
     val decrees: List<Decree>
         get() {
@@ -110,9 +113,7 @@ class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEnt
 
     private fun ensureDecreeExists() {
         if (!hasDecree) {
-            val newDecree = ItemStack(ModContent.Items.DECREE)
-            (newDecree.item as ItemDecree).ensureDecree(newDecree)
-            handler.setStackInSlot(decreeSlots.hackyRandom(), newDecree)
+            handler.setStackInSlot(decreeSlots.hackyRandom(), ItemDecree.makeStack())
         }
     }
 

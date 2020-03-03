@@ -3,6 +3,7 @@ package ejektaflex.bountiful.gui.slot
 import ejektaflex.bountiful.block.BoardTE
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.item.ItemBounty
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraftforge.items.SlotItemHandler
 

@@ -76,6 +76,16 @@
         "unitWorth": 300,
         "weight": 1000,
         "timeMult": 2.5
+      },
+      {
+        "type": "item",
+        "content": "minecraft:golden_apple",
+        "amountRange": {
+          "min": 1,
+          "max": 6
+        },
+        "unitWorth": 12000,
+        "weight": 1000
       }
     ]
   }

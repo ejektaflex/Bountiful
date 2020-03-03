@@ -1,5 +1,6 @@
 package ejektaflex.bountiful.item
 
+import ejektaflex.bountiful.api.data.IDecree
 import ejektaflex.bountiful.api.ext.hackyRandom
 import ejektaflex.bountiful.content.ModContent
 import ejektaflex.bountiful.data.Decree
@@ -71,13 +72,13 @@ class ItemDecree() : Item(
         return super.onItemRightClick(worldIn, playerIn, handIn)
     }
 
-    fun ensureDecree(stack: ItemStack) {
+    fun ensureDecree(stack: ItemStack, defaultData: Decree? = null) {
 
         if (stack.item is ItemDecree) {
             if (!stack.hasTag()) {
 
                 val data = try {
-                    DecreeRegistry.content.hackyRandom()
+                    defaultData ?: DecreeRegistry.content.hackyRandom()
                 } catch (e: DecreeCreationException) {
                     return
                 }
@@ -96,6 +97,28 @@ class ItemDecree() : Item(
         } else {
             throw Exception("${stack.displayName} is not an ItemDecree, so you cannot generate decree data for it!")
         }
+    }
+
+    companion object {
+
+        fun makeStack(): ItemStack {
+            val newDecree = ItemStack(ModContent.Items.DECREE)
+            (newDecree.item as ItemDecree).ensureDecree(newDecree)
+            return newDecree
+        }
+
+        fun makeStack(decree: Decree): ItemStack {
+            val newDecree = ItemStack(ModContent.Items.DECREE)
+            (newDecree.item as ItemDecree).ensureDecree(newDecree, decree)
+            return newDecree
+        }
+
+        fun makeStack(decId: String): ItemStack? {
+            val decree = DecreeRegistry.content.find { it.id == decId }
+            return if (decree != null) makeStack(decree) else null
+        }
+
+
     }
 
 }

@@ -14,20 +14,26 @@ import ejektaflex.bountiful.data.*
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.gui.BoardScreen
 import ejektaflex.bountiful.item.ItemBounty
+import ejektaflex.bountiful.item.ItemDecree
 import ejektaflex.bountiful.registry.DecreeRegistry
 import ejektaflex.bountiful.registry.PoolRegistry
 import net.minecraft.block.Block
 import net.minecraft.client.gui.ScreenManager
 import net.minecraft.command.CommandSource
+import net.minecraft.entity.merchant.villager.VillagerTrades
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.container.ContainerType
 import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
 import net.minecraft.resources.IResourceManager
 import net.minecraft.resources.IResourceManagerReloadListener
 import net.minecraft.tileentity.TileEntityType
+import net.minecraftforge.common.BasicTrade
 import net.minecraftforge.common.extensions.IForgeContainerType
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.event.entity.living.LivingDeathEvent
+import net.minecraftforge.event.village.WandererTradesEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.client.event.ConfigChangedEvent
 import net.minecraftforge.fml.common.Mod
@@ -137,7 +143,6 @@ object SetupLifecycle {
     @SubscribeEvent
     fun onServerStarting(event: FMLServerStartingEvent) {
         BountifulCommand.generateCommand(event.commandDispatcher)
-
     }
 
     @SubscribeEvent
@@ -182,10 +187,13 @@ object SetupLifecycle {
         ScreenManager.registerFactory(ModContent.Guis.BOARDCONTAINER) {
             container, inv, textComponent ->  BoardScreen(container, inv, textComponent)
         }
+    }
 
+    @SubscribeEvent
+    fun doWandererTrades(event: WandererTradesEvent) {
 
-
-        //loadContentFromFiles()
+        event.genericTrades.add(BasicTrade(1, ItemStack(ModContent.Items.DECREE), 5, 5, 0.05f))
+        event.rareTrades.add(BasicTrade(1, ItemStack(ModContent.Items.DECREE), 5, 5, 0.05f))
 
     }
 

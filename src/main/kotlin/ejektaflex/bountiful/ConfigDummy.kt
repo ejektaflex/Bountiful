@@ -7,8 +7,8 @@ class ConfigDummy : IBountifulConfig {
         get() = 1..2
     override var maxBountiesPerBoard: Int = 15
         private set
-    override var boardAddFrequency: Long = 40L
-        private set
+    override var boardAddFrequency: Long = 400L
+        //private set
     override var boardLifespan: Int = 72000
         private set
     override var timeMultiplier: Double = 7.5
