@@ -1,0 +1,14 @@
+{
+    "decreeTitle": "Leatherworking",
+    "id": "leatherer",
+    "spawnsInBoard": true,
+    "isGreedy": false,
+    "objectivePools": [
+      "all_villager_objs",
+      "leatherer_objs"
+    ],
+    "rewardPools": [
+      "all_villager_rews",
+      "leatherer_rews"
+    ]
+  }

@@ -1,0 +1,15 @@
+{
+  "decreeTitle": "Cartography",
+  "id": "mapper",
+  "spawnsInBoard": true,
+  "isGreedy": false,
+  "objectivePools": [
+    "common_crafts",
+    "all_villager_objs",
+    "mapper_objs"
+  ],
+  "rewardPools": [
+    "all_villager_rews",
+    "mapper_rews"
+  ]
+}

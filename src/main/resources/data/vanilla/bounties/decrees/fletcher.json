@@ -1,0 +1,14 @@
+{
+    "decreeTitle": "Fletching",
+    "id": "fletcher",
+    "spawnsInBoard": true,
+    "isGreedy": false,
+    "objectivePools": [
+      "all_villager_objs",
+      "fletcher_objs"
+    ],
+    "rewardPools": [
+      "all_villager_rews",
+      "fletcher_rews"
+    ]
+  }

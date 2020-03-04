@@ -1,0 +1,45 @@
+{
+  "id": "fletcher_rews",
+  "content": [
+    {
+      "type": "item",
+      "content": "minecraft:arrow",
+      "amountRange": {
+        "min": 8,
+        "max": 48
+      },
+      "unitWorth": 62,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:flint",
+      "amountRange": {
+        "min": 8,
+        "max": 24
+      },
+      "unitWorth": 80,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:bow",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 1000,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:crossbow",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 2000,
+      "weight": 1000
+    }
+  ]
+}

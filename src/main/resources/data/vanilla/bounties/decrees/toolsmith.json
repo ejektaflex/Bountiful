@@ -1,0 +1,15 @@
+{
+    "decreeTitle": "Toolsmithing",
+    "id": "toolsmith",
+    "spawnsInBoard": true,
+    "isGreedy": false,
+    "objectivePools": [
+      "common_crafts",
+      "all_villager_objs",
+      "toolsmith_objs"
+    ],
+    "rewardPools": [
+      "all_villager_rews",
+      "toolsmith_rews"
+    ]
+  }

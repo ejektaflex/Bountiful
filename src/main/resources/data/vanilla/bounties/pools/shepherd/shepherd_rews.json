@@ -1,0 +1,85 @@
+{
+  "id": "shepherd_rews",
+  "content": [
+    {
+      "type": "item",
+      "content": "minecraft:shears",
+      "amountRange": {
+        "min": 1,
+        "max": 2
+      },
+      "unitWorth": 1500,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:blue_wool",
+      "amountRange": {
+        "min": 2,
+        "max": 8
+      },
+      "unitWorth": 600,
+      "weight": 400
+    },
+    {
+      "type": "item",
+      "content": "minecraft:orange_wool",
+      "amountRange": {
+        "min": 2,
+        "max": 8
+      },
+      "unitWorth": 600,
+      "weight": 400
+    },
+    {
+      "type": "item",
+      "content": "minecraft:red_wool",
+      "amountRange": {
+        "min": 2,
+        "max": 8
+      },
+      "unitWorth": 600,
+      "weight": 400
+    },
+    {
+      "type": "item",
+      "content": "minecraft:yellow_wool",
+      "amountRange": {
+        "min": 2,
+        "max": 8
+      },
+      "unitWorth": 600,
+      "weight": 400
+    },
+    {
+      "type": "item",
+      "content": "minecraft:yellow_carpet",
+      "amountRange": {
+        "min": 2,
+        "max": 8
+      },
+      "unitWorth": 600,
+      "weight": 400
+    },
+    {
+      "type": "item",
+      "content": "minecraft:orange_carpet",
+      "amountRange": {
+        "min": 2,
+        "max": 8
+      },
+      "unitWorth": 600,
+      "weight": 400
+    },
+    {
+      "type": "item",
+      "content": "minecraft:painting",
+      "amountRange": {
+        "min": 2,
+        "max": 6
+      },
+      "unitWorth": 800,
+      "weight": 300
+    }
+  ]
+}

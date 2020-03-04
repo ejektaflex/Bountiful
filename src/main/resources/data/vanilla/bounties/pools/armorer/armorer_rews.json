@@ -1,0 +1,155 @@
+{
+  "id": "armorer_rews",
+  "content": [
+    {
+      "type": "item",
+      "content": "minecraft:iron_boots",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 4000,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:iron_leggings",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 7000,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:iron_helmet",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 5000,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:iron_chestplate",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 9000,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:bell",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 16000,
+      "weight": 750
+    },
+    {
+      "type": "item",
+      "content": "minecraft:chainmail_leggings",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 3000,
+      "weight": 750
+    },
+    {
+      "type": "item",
+      "content": "minecraft:chainmail_boots",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 1000,
+      "weight": 750
+    },
+    {
+      "type": "item",
+      "content": "minecraft:chainmail_chestplate",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 4000,
+      "weight": 750
+    },
+    {
+      "type": "item",
+      "content": "minecraft:chainmail_helmet",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 1000,
+      "weight": 750
+    },
+    {
+      "type": "item",
+      "content": "minecraft:shield",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 5000,
+      "weight": 750
+    },
+    {
+      "type": "item",
+      "content": "minecraft:shield",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 5000,
+      "weight": 750
+    },
+    {
+      "type": "item",
+      "content": "minecraft:diamond_leggings",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 12500,
+      "weight": 200
+    },
+    {
+      "type": "item",
+      "content": "minecraft:diamond_boots",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 10000,
+      "weight": 200
+    },
+    {
+      "type": "item",
+      "content": "minecraft:diamond_chestplate",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 22000,
+      "weight": 200
+    },
+    {
+      "type": "item",
+      "content": "minecraft:diamond_helmet",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 15000,
+      "weight": 200
+    }
+  ]
+}
