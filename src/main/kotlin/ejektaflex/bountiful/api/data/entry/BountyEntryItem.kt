@@ -20,7 +20,7 @@ class BountyEntryItem : AbstractBountyEntryStackLike(), IBountyObjective, IBount
     val itemStack: ItemStack?
         get() {
             val stack = content.toItemStack
-            tag?.let { stack?.tag = it }
+            nbtTag?.let { stack?.tag = it }
             return stack
         }
 
@@ -53,7 +53,7 @@ class BountyEntryItem : AbstractBountyEntryStackLike(), IBountyObjective, IBount
     override val validStacks: List<ItemStack>
         get() {
             val stack = content.toItemStack
-            tag?.let { stack?.tag = it }
+            nbtTag?.let { stack?.tag = it }
 
             return listOfNotNull(stack)
         }

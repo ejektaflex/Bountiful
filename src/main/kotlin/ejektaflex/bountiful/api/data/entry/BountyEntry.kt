@@ -1,15 +1,15 @@
 package ejektaflex.bountiful.api.data.entry
 
 
+import com.google.gson.JsonElement
+import com.google.gson.JsonParser
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import ejektaflex.bountiful.api.data.ITagString
 import ejektaflex.bountiful.api.data.JsonBiSerializer
-import ejektaflex.bountiful.api.data.entry.feature.IEntryFeature
+import ejektaflex.bountiful.api.data.json.JsonAdapter
 import ejektaflex.bountiful.api.ext.hackyRandom
 import ejektaflex.bountiful.api.generic.IWeighted
 import ejektaflex.bountiful.api.generic.ItemRange
-import ejektaflex.bountiful.logic.BountyProgress
 import net.minecraft.nbt.*
 import net.minecraft.util.text.ITextComponent
 import net.minecraftforge.common.util.INBTSerializable
@@ -18,7 +18,7 @@ import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min
 
-abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSerializable<CompoundNBT>, IWeighted, Cloneable {
+abstract class BountyEntry : JsonBiSerializer<BountyEntry>, INBTSerializable<CompoundNBT>, IWeighted, Cloneable {
 
     class EntryValidationException(reason: String) : Exception("An entry has failed validation and will not be loaded. Reason: $reason. Skipping entry..")
 
@@ -30,8 +30,20 @@ abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSeri
     @Expose
     open var content: String = ""
 
-    @SerializedName("nbt_data")
-    override var nbtString: String? = null
+    @Expose
+    @SerializedName("nbt")
+    var jsonNBT: JsonElement? = null
+
+    val nbtTag: CompoundNBT?
+        get() {
+            return when (jsonNBT) {
+                null -> null
+                is JsonElement -> JsonToNBT.getTagFromJson(jsonNBT.toString())
+                else -> throw Exception("NBT $jsonNBT must be a String! Instead was a: ${jsonNBT!!::class}")
+            }
+        }
+
+
 
     @Expose
     open var amountRange: ItemRange = ItemRange(1, 1)
@@ -99,9 +111,6 @@ abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSeri
         get() = ((amountRange?.min ?: 1)..(amountRange?.max ?: Int.MAX_VALUE)).hackyRandom()
 
 
-    // Must override because overriding [nbtString]
-    override val tag: CompoundNBT?
-        get() = super.tag
 
 
     override fun serializeNBT(): CompoundNBT {
@@ -109,7 +118,7 @@ abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSeri
             putString("type", type)
             putString("content", content)
             putInt("unitWorth", unitWorth)
-            tag?.let {
+            nbtTag?.let {
                 this.put("nbt", it)
             }
             putInt("amount", amount)
@@ -119,12 +128,17 @@ abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSeri
         }
     }
 
+    private val jsonParser = JsonParser()
+
     override fun deserializeNBT(tag: CompoundNBT) {
         type = tag.getString("type")
         content = tag.getString("content")
         unitWorth = tag.getInt("unitWorth")
         if ("nbt" in tag) {
-            nbtString = tag["nbt"]!!.toString()
+            val comp = tag.get("nbt")
+            val str = comp.toString()
+            jsonNBT = jsonParser.parse(str)
+            //jsonNBT = tag["nbt"]!!.toString()
         }
         amount = tag.getInt("amount")
         if ("name" in tag) {

@@ -5,9 +5,6 @@ import ejektaflex.bountiful.logic.IBountyObjective
 import net.minecraft.item.ItemStack
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
-import kotlin.math.ceil
-import kotlin.math.max
-import kotlin.math.min
 
 abstract class AbstractBountyEntryStackLike : BountyEntry(), IBountyObjective {
 
@@ -23,7 +20,7 @@ abstract class AbstractBountyEntryStackLike : BountyEntry(), IBountyObjective {
     }
 
     override fun toString(): String {
-        return "BountyEntry ($type) [Item: $content, Amount: ${amount} [${amountRange}], Worth: $unitWorth, NBT: $tag, Weight: $weight]"
+        return "BountyEntry ($type) [Item: $content, Amount: ${amount} [${amountRange}], Worth: $unitWorth, NBT: $nbtTag, Weight: $weight]"
     }
 
 
