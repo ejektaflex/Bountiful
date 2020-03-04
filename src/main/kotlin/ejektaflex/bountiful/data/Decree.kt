@@ -24,6 +24,8 @@ data class Decree(
         }
     }
 
+    override val canLoad: Boolean
+        get() = true
 
     override fun deserializeNBT(nbt: CompoundNBT?) {
         id = nbt!!.getString("id")

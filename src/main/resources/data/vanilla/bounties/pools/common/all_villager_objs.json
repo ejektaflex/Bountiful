@@ -33,6 +33,17 @@
         "unitWorth": 250,
         "weight": 1000,
         "timeMult": 2.5
+      },
+      {
+        "type": "entity",
+        "content": "minecraft:creeper",
+        "amountRange": {
+          "min": 1,
+          "max": 14
+        },
+        "unitWorth": 400,
+        "weight": 1000,
+        "timeMult": 2.5
       }
     ]
   }

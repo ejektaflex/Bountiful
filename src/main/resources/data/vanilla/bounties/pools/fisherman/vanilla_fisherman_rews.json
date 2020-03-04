@@ -6,7 +6,7 @@
         "content": "minecraft:cod_bucket",
         "amountRange": {
           "min": 1,
-          "max": 4
+          "max": 2
         },
         "unitWorth": 3000,
         "weight": 100

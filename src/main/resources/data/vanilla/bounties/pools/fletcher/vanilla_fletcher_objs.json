@@ -50,6 +50,15 @@
         },
         "unitWorth": 185,
         "weight": 1000
+      },
+      {
+        "type": "item",
+        "content": "minecraft:crossbow",
+        "amountRange": {
+          "min": 1,
+          "max": 6
+        },
+        "weight": 1000
       }
     ]
   }

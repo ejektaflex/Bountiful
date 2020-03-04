@@ -31,7 +31,7 @@ object BountifulAPIImpl : IBountifulAPI {
     }
 
     override fun createBountyData(worldIn: World, rarity: EnumBountyRarity, decrees: List<IDecree>): BountyData? {
-        return BountyCreator.create(worldIn, rarity, decrees)
+        return BountyCreator.create(rarity, decrees)
     }
 
 }

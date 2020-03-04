@@ -1,11 +1,13 @@
 package ejektaflex.bountiful.api.ext
 
+import ejektaflex.bountiful.api.data.entry.BountyEntry
 import ejektaflex.bountiful.api.generic.IWeighted
 import ejektaflex.bountiful.api.generic.ItemRange
 import net.minecraft.client.Minecraft
 import net.minecraft.command.CommandSource
 import net.minecraft.entity.Entity
 import net.minecraft.nbt.CompoundNBT
+import net.minecraft.util.NonNullList
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.StringTextComponent
 import net.minecraft.util.text.TranslationTextComponent
@@ -83,6 +85,10 @@ private val hackyRandMaker = java.util.Random()
 fun IntRange.hackyRandom(): Int {
 
     return start + hackyRandMaker.nextInt(endInclusive - start + 1)
+}
+
+inline fun <reified T : Any> supposedlyNotNull(list: List<T>): NonNullList<T> {
+    return NonNullList.from<T>(list.first(), *list.toTypedArray())
 }
 
 fun <T : Any> List<T>.hackyRandom(): T {

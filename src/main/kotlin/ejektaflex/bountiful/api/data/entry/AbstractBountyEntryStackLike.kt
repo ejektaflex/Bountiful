@@ -7,21 +7,12 @@ import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
 import kotlin.math.ceil
 import kotlin.math.max
+import kotlin.math.min
 
 abstract class AbstractBountyEntryStackLike : BountyEntry(), IBountyObjective {
 
     override val calculatedWorth: Int
         get() = unitWorth * amount
-
-    override fun pick(worth: Int?): BountyEntry {
-        return cloned().apply {
-            amount = if (worth != null) {
-                max(1, ceil(worth.toDouble() / unitWorth).toInt())
-            } else {
-                randCount
-            }
-        }
-    }
 
     abstract val validStacks: List<ItemStack>
 

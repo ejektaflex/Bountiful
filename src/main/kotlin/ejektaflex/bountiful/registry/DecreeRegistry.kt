@@ -22,13 +22,13 @@ object DecreeRegistry : ValueRegistry<Decree>() {
         get() = getObjectives(content)
 
     private fun getEntryList(decrees: List<IDecree>, pools: IDecree.() -> List<String>): List<BountyEntry> {
-        // Pool string list -> Pool list -> Only pools with all required mods aquired -> pool entries -> flattened
+        // Pool string list -> Pool list -> Only pools with all required mods acquired -> pool entries -> flattened
         return decrees.asSequence().map {
             pools(it)
         }.flatten().toSet().map {
             PoolRegistry.poolFor(it)!!
         }.filter {
-            it.modsRequired?.all { ModList.get().isLoaded(it) } ?: true
+            it.modsRequired?.all { mName -> ModList.get().isLoaded(mName) } ?: true
         }.map {
             it.content
         }.flatten()

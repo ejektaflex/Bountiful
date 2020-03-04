@@ -60,6 +60,16 @@
         },
         "unitWorth": 70,
         "weight": 1000
+      },
+      {
+        "type": "item",
+        "content": "minecraft:cauldron",
+        "amountRange": {
+          "min": 1,
+          "max": 2
+        },
+        "unitWorth": 6000,
+        "weight": 200
       }
     ]
   }

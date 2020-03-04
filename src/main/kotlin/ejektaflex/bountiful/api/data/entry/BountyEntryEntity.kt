@@ -21,16 +21,6 @@ class BountyEntryEntity : BountyEntry(), IBountyObjective {
     override val calculatedWorth: Int
         get() = unitWorth * amount
 
-    override fun pick(worth: Int?): BountyEntry {
-        return cloned().apply {
-            amount = if (worth != null) {
-                max(1, ceil(worth.toDouble() / unitWorth).toInt())
-            } else {
-                randCount
-            }
-        }
-    }
-
     override fun validate() {
         // TODO Implement entity validation
     }

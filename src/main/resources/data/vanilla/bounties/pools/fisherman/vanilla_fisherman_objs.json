@@ -60,6 +60,17 @@
         },
         "unitWorth": 300,
         "weight": 200
+      },
+      {
+        "type": "entity",
+        "content": "minecraft:guardian",
+        "amountRange": {
+          "min": 1,
+          "max": 12
+        },
+        "unitWorth": 1300,
+        "weight": 1000,
+        "timeMult": 2.5
       }
     ]
   }

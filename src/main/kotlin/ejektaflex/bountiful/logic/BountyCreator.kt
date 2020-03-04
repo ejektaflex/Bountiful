@@ -6,18 +6,18 @@ import ejektaflex.bountiful.api.data.entry.BountyEntry
 import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.api.ext.hackyRandom
 import ejektaflex.bountiful.api.ext.randomSplit
-import ejektaflex.bountiful.api.ext.weightedRandom
+import ejektaflex.bountiful.api.ext.supposedlyNotNull
 import ejektaflex.bountiful.api.ext.weightedRandomNorm
 import ejektaflex.bountiful.content.ModContent
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.registry.DecreeRegistry
 import net.minecraft.item.ItemStack
+import net.minecraft.util.NonNullList
 import net.minecraft.world.World
 import java.util.*
 import kotlin.math.ceil
 import kotlin.math.max
-import kotlin.math.min
 
 
 object BountyCreator {
@@ -46,7 +46,7 @@ object BountyCreator {
         return EnumBountyRarity.getRarityFromInt(level)
     }
 
-    fun create(world: World, inRarity: EnumBountyRarity, decrees: List<IDecree>): BountyData {
+    fun create(inRarity: EnumBountyRarity, decrees: List<IDecree>): BountyData {
         val data = BountyData()
 
         val toSatisfy = createRewards(data, inRarity, decrees)
@@ -106,6 +106,36 @@ object BountyCreator {
         }
      */
 
+    fun getObjectivesWithinVariance(objs: List<BountyEntry>, worth: Int, variance: Double): List<BountyEntry> {
+        val wRange = ceil(worth * variance)
+
+        // Make sure to filter out non-objectives
+        val objGroups = objs.groupBy { it.worthDistanceFrom(worth) }
+
+        //println("Obj groups keys: " + objGroups.keys.toString())
+
+        val groupsInRange = objGroups.filter { it.key <= wRange }
+        val totalObjs = groupsInRange.values.flatten()
+
+        return totalObjs
+    }
+
+
+    fun pickObjective(objectives: NonNullList<BountyEntry>, worth: Int): BountyEntry {
+
+        val variance = 0.2
+
+        val inVariance = getObjectivesWithinVariance(objectives, worth, variance)
+
+        // If there are no objectives within variance from target worth, just get the one with the smallest distance
+        // Otherwise, if one/some exist, pick at random.
+        return if (inVariance.isEmpty()) {
+            objectives.minBy { it.worthDistanceFrom(worth) }!!.pick(worth)
+        } else {
+            inVariance.hackyRandom().pick(worth)
+        }
+    }
+
     fun createObjectives(rewards: List<BountyEntry>, inRarity: EnumBountyRarity, decrees: List<IDecree>, worth: Int): List<BountyEntry> {
         val rewardContentIds = rewards.map { it.content }
 
@@ -113,64 +143,40 @@ object BountyCreator {
             it.content !in rewardContentIds
         }
 
-
-
         var numObjectives = (1..2).hackyRandom()
 
-
+        /*
+        // Possible chance for higher tier bounties to get an additional objective
         var chanceToAddThirdObj = (1.0 - inRarity.exponent) / 2
-
         if (rando.nextFloat() < chanceToAddThirdObj) {
             numObjectives++
         }
 
-
-
-        val worthGroups = randomSplit(worth, numObjectives)
+         */
 
         if (objectives.isEmpty()) {
             return listOf()
         }
 
-
-        val variance = 0.2
+        val worthGroups = randomSplit(worth, numObjectives)
 
         val toAdd = mutableListOf<BountyEntry>()
 
         for (wrth in worthGroups) {
-            val wRange = ceil(wrth * variance)
 
             // Filter out things already picked
-            val totalObjectives = objectives.filter {
+            val pickableObjs = objectives.filter {
                 it.content !in toAdd.map { alreadyAdded -> alreadyAdded.content }
             }
 
             // Return if there's nothing to pick
-            if (totalObjectives.isEmpty()) {
+            if (pickableObjs.isEmpty()) {
                 break
             }
 
-            // Make sure to filter out non-objectives
-            val objGroups = totalObjectives.groupBy { it.worthDistanceFrom(wrth) }
-
-            //println("Obj groups keys: " + objGroups.keys.toString())
-
-            val groupsInRange = objGroups.filter { it.key <= wRange }
-            val totalObjs = groupsInRange.values.flatten()
-
-            // If there are no objectives within variance from target worth, just get the one with the smallest distance
-            // Otherwise, if one/some exist, pick at random.
-            val closest = if (totalObjs.isEmpty()) {
-                val smallestDist = objGroups.keys.min()
-                objGroups[smallestDist]!!.hackyRandom().pick(wrth)
-            } else {
-                totalObjs.hackyRandom().pick(wrth)
-            }
-
-            //println("Closest for wrth [$wrth]: $closest")
+            val closest = pickObjective(supposedlyNotNull(pickableObjs), wrth)
 
             toAdd.add(closest)
-
         }
 
         return toAdd

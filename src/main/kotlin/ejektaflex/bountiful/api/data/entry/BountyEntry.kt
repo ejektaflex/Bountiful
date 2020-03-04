@@ -14,6 +14,8 @@ import net.minecraft.nbt.*
 import net.minecraft.util.text.ITextComponent
 import net.minecraftforge.common.util.INBTSerializable
 import kotlin.math.abs
+import kotlin.math.ceil
+import kotlin.math.max
 import kotlin.math.min
 
 abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSerializable<CompoundNBT>, IWeighted, Cloneable {
@@ -80,7 +82,18 @@ abstract class BountyEntry : ITagString, JsonBiSerializer<BountyEntry>, INBTSeri
         }
     }
 
-    abstract fun pick(worth: Int? = null): BountyEntry
+    open fun pick(worth: Int? = null): BountyEntry {
+        return cloned().apply {
+            amount = if (worth != null) {
+                max(1, ceil(worth.toDouble() / unitWorth).toInt())
+            } else {
+                randCount
+            }
+            // Clamp amount into amount range
+            amount = min(amount, amountRange.max)
+            amount = max(amount, amountRange.min)
+        }
+    }
 
     val randCount: Int
         get() = ((amountRange?.min ?: 1)..(amountRange?.max ?: Int.MAX_VALUE)).hackyRandom()

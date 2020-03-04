@@ -6,7 +6,7 @@
         "content": "minecraft:emerald",
         "amountRange": {
           "min": 1,
-          "max": 5
+          "max": 3
         },
         "unitWorth": 1250,
         "weight": 800

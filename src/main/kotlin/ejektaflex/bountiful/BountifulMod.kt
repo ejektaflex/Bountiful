@@ -94,16 +94,18 @@ object BountifulMod {
                     } catch (e: Exception) {
                         msgSender?.sendErrorMsg("Skipping resource $location. Reason: ${e.message}")
                         continue@nameLoop
-                    }
+                    } as IMerge<Any>
 
                     //logger.info("New obj is: $newObj")
 
                     if (obj != null) {
                         //logger.warn("MERGING $obj with $newObj")
-                        obj!!.merge(newObj)
+                        if (newObj.canLoad) {
+                            obj.merge(newObj)
+                        }
                         //logger.warn("RESULT IS: $obj")
                     } else {
-                        obj = newObj as IMerge<Any>
+                        obj = newObj
                     }
                 }
 
