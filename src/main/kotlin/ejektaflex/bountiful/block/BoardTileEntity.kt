@@ -3,9 +3,9 @@ package ejektaflex.bountiful.block
 import ejektaflex.bountiful.BountifulConfig
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.ext.*
-import ejektaflex.bountiful.content.ModContent
-import ejektaflex.bountiful.data.BountyData
-import ejektaflex.bountiful.data.Decree
+import ejektaflex.bountiful.ModContent
+import ejektaflex.bountiful.data.bounty.BountyData
+import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.item.ItemDecree
@@ -26,7 +26,7 @@ import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.items.CapabilityItemHandler
 import net.minecraftforge.items.ItemStackHandler
 
-class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEntity, INamedContainerProvider {
+class BoardTileEntity : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEntity, INamedContainerProvider {
 
 
     // Lazy load lazy optional ( ... :| )

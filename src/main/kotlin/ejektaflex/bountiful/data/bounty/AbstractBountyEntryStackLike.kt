@@ -1,4 +1,4 @@
-package ejektaflex.bountiful.data.entry
+package ejektaflex.bountiful.data.bounty
 
 import ejektaflex.bountiful.logic.BountyProgress
 import ejektaflex.bountiful.logic.IBountyObjective

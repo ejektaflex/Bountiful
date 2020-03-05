@@ -1,15 +1,12 @@
 package ejektaflex.bountiful.block
 
-import ejektaflex.bountiful.BountifulMod
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.SoundType
 import net.minecraft.block.material.Material
-import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.ServerPlayerEntity
 import net.minecraft.inventory.container.INamedContainerProvider
-import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.Hand
 import net.minecraft.util.math.BlockPos
@@ -45,7 +42,7 @@ class BlockBountyBoard() : Block(
     }
 
     override fun createTileEntity(state: BlockState?, world: IBlockReader?): TileEntity? {
-        return BoardTE()
+        return BoardTileEntity()
     }
 
 

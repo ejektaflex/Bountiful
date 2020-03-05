@@ -1,6 +1,7 @@
-package ejektaflex.bountiful.data.entry
+package ejektaflex.bountiful.data.bounty
 
 import com.google.gson.annotations.Expose
+import ejektaflex.bountiful.data.bounty.enums.BountyType
 import ejektaflex.bountiful.ext.toEntityType
 import ejektaflex.bountiful.logic.BountyProgress
 import ejektaflex.bountiful.logic.IBountyObjective

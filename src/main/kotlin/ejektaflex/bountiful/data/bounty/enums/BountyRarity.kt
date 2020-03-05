@@ -1,9 +1,9 @@
-package ejektaflex.bountiful.enum
+package ejektaflex.bountiful.data.bounty.enums
 
 import ejektaflex.bountiful.BountifulMod
 import net.minecraft.item.Rarity
 
-enum class EnumBountyRarity(
+enum class BountyRarity(
         val level: Int,
         val itemRarity: Rarity,
         val exponent: Double,
@@ -18,7 +18,7 @@ enum class EnumBountyRarity(
     Epic(3, Rarity.EPIC, 0.25);
 
     companion object {
-        fun getRarityFromInt(n: Int): EnumBountyRarity {
+        fun getRarityFromInt(n: Int): BountyRarity {
             return if (n in values().indices) {
                 values()[n]
             } else {

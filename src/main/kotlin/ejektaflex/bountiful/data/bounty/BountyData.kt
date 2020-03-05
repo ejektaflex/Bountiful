@@ -1,17 +1,17 @@
-package ejektaflex.bountiful.data
+package ejektaflex.bountiful.data.bounty
 
 import ejektaflex.bountiful.BountifulMod
+import ejektaflex.bountiful.data.bounty.enums.BountyNBT
+import ejektaflex.bountiful.data.bounty.enums.BountyRarity
 import ejektaflex.bountiful.ext.setUnsortedList
-import ejektaflex.bountiful.data.entry.BountyEntry
-import ejektaflex.bountiful.enum.EnumBountyRarity
 import ejektaflex.bountiful.ext.getUnsortedList
 import ejektaflex.bountiful.ext.toBountyEntry
-import ejektaflex.bountiful.item.IItemBounty
+import ejektaflex.bountiful.generic.ValueRegistry
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.logic.BountyTypeRegistry
 import ejektaflex.bountiful.logic.IBountyObjective
 import ejektaflex.bountiful.logic.IBountyReward
-import ejektaflex.bountiful.logic.checkers.CheckerRegistry
+import ejektaflex.bountiful.data.bounty.checkers.CheckerRegistry
 import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.I18n
 import net.minecraft.item.ItemStack
@@ -20,18 +20,19 @@ import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
 import net.minecraft.util.text.TranslationTextComponent
 import net.minecraft.world.World
+import net.minecraftforge.common.util.INBTSerializable
 import kotlin.math.max
 
-class BountyData : IBountyData {
+class BountyData : INBTSerializable<CompoundNBT> {
 
-    override var boardStamp = BountifulMod.config.boardLifespan
-    override var bountyTime = 0L
-    override var rarity = 0
-    override val objectives = ValueRegistry<BountyEntry>()
-    override val rewards = ValueRegistry<BountyEntry>()
-    override var bountyStamp: Long? = null
+    var boardStamp = BountifulMod.config.boardLifespan
+    var bountyTime = 0L
+    var rarity = 0
+    val objectives = ValueRegistry<BountyEntry>()
+    val rewards = ValueRegistry<BountyEntry>()
+    var bountyStamp: Long? = null
 
-    override fun timeLeft(world: World): Long {
+    fun timeLeft(world: World): Long {
         return if (bountyStamp == null) {
             bountyTime
         } else {
@@ -39,14 +40,14 @@ class BountyData : IBountyData {
         }
     }
 
-    override fun hasExpired(world: World): Boolean {
+    fun hasExpired(world: World): Boolean {
         return timeLeft(world) <= 0
     }
 
-    val rarityEnum: EnumBountyRarity
-        get() = EnumBountyRarity.getRarityFromInt(rarity)
+    val rarityEnum: BountyRarity
+        get() = BountyRarity.getRarityFromInt(rarity)
 
-    override fun boardTimeLeft(world: World): Long {
+    fun boardTimeLeft(world: World): Long {
         return max(boardStamp + BountifulMod.config.boardLifespan - world.gameTime , 0)
     }
 
@@ -156,7 +157,7 @@ class BountyData : IBountyData {
 
         fun from(stack: ItemStack): BountyData {
             if (stack.item is ItemBounty) {
-                return (stack.item as IItemBounty).getBountyData(stack) as BountyData
+                return (stack.item as ItemBounty).getBountyData(stack) as BountyData
             } else {
                 throw Exception("${stack.displayName} is not an IItemBounty and cannot be converted to bounty data!")
             }

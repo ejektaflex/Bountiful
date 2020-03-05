@@ -1,7 +1,7 @@
-package ejektaflex.bountiful.logic.checkers
+package ejektaflex.bountiful.data.bounty.checkers
 
-import ejektaflex.bountiful.data.entry.BountyEntry
-import ejektaflex.bountiful.data.entry.BountyEntryEntity
+import ejektaflex.bountiful.data.bounty.BountyEntry
+import ejektaflex.bountiful.data.bounty.BountyEntryEntity
 import ejektaflex.bountiful.logic.BountyProgress
 
 class EntityCheckHandler() : CheckHandler<BountyEntryEntity>() {

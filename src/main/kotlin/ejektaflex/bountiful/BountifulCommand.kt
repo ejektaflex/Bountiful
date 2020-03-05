@@ -1,4 +1,4 @@
-package ejektaflex.bountiful.command
+package ejektaflex.bountiful
 
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
@@ -6,13 +6,10 @@ import com.mojang.brigadier.arguments.IntegerArgumentType.getInteger
 import com.mojang.brigadier.arguments.IntegerArgumentType.integer
 import com.mojang.brigadier.arguments.StringArgumentType.getString
 import com.mojang.brigadier.arguments.StringArgumentType.string
-import ejektaflex.bountiful.BountifulConfig
-import ejektaflex.bountiful.BountifulMod
-import ejektaflex.bountiful.SetupLifecycle
 import ejektaflex.bountiful.ext.sendErrorMsg
 import ejektaflex.bountiful.ext.sendMessage
 import ejektaflex.bountiful.ext.supposedlyNotNull
-import ejektaflex.bountiful.data.BountifulResourceType
+import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
 import ejektaflex.bountiful.item.ItemDecree
 import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.registry.DecreeRegistry

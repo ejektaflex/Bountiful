@@ -1,7 +1,7 @@
 package ejektaflex.bountiful.gui
 
-import ejektaflex.bountiful.block.BoardTE
-import ejektaflex.bountiful.content.ModContent
+import ejektaflex.bountiful.block.BoardTileEntity
+import ejektaflex.bountiful.ModContent
 import ejektaflex.bountiful.gui.slot.BountySlot
 import ejektaflex.bountiful.gui.slot.DecreeSlot
 import net.minecraft.entity.player.PlayerEntity
@@ -17,8 +17,8 @@ import net.minecraftforge.items.wrapper.InvWrapper
 
 class BoardContainer(id: Int, val world: World, val pos: BlockPos, val inv: PlayerInventory) : Container(ModContent.Guis.BOARDCONTAINER, id) {
 
-    private val boardTE: BoardTE by lazy {
-        world.getTileEntity(pos) as BoardTE
+    private val boardTE: BoardTileEntity by lazy {
+        world.getTileEntity(pos) as BoardTileEntity
     }
 
     private val playerInvHandler: IItemHandler by lazy {
@@ -37,8 +37,8 @@ class BoardContainer(id: Int, val world: World, val pos: BlockPos, val inv: Play
                 addSlot(BountySlot(boardTE, k + j * bCols, 8 + k * 18, 18 + j * 18))
             }
 
-            println("Making new slot with index ${BoardTE.SIZE - 2 + j}")
-            addSlot(DecreeSlot(boardTE, BoardTE.SIZE - 3 + j, 19 + 7 * 18, 18 + j * 18))
+            println("Making new slot with index ${BoardTileEntity.SIZE - 2 + j}")
+            addSlot(DecreeSlot(boardTE, BoardTileEntity.SIZE - 3 + j, 19 + 7 * 18, 18 + j * 18))
         }
 
         for (j in 0..2) {

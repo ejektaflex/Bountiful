@@ -1,10 +1,9 @@
 package ejektaflex.bountiful.registry
 
 import ejektaflex.bountiful.BountifulMod
-import ejektaflex.bountiful.data.IDecree
-import ejektaflex.bountiful.data.entry.BountyEntry
-import ejektaflex.bountiful.data.Decree
-import ejektaflex.bountiful.data.ValueRegistry
+import ejektaflex.bountiful.data.bounty.BountyEntry
+import ejektaflex.bountiful.data.structure.Decree
+import ejektaflex.bountiful.generic.ValueRegistry
 import ejektaflex.bountiful.logic.IBountyObjective
 import ejektaflex.bountiful.logic.IBountyReward
 import net.minecraftforge.fml.ModList
@@ -15,7 +14,7 @@ object DecreeRegistry : ValueRegistry<Decree>() {
         return content.firstOrNull { it.id == id }
     }
 
-    private fun getEntryList(decrees: List<IDecree>, pools: IDecree.() -> List<String>): List<BountyEntry> {
+    private fun getEntryList(decrees: List<Decree>, pools: Decree.() -> List<String>): List<BountyEntry> {
         // Pool string list -> Pool list -> Only pools with all required mods acquired -> pool entries -> flattened
         return decrees.asSequence().map {
             pools(it)
@@ -33,7 +32,7 @@ object DecreeRegistry : ValueRegistry<Decree>() {
     }
 
     // Get all objective pool string from decrees, then get said pools
-    fun getObjectives(decrees: List<IDecree>): List<BountyEntry> {
+    fun getObjectives(decrees: List<Decree>): List<BountyEntry> {
         return getEntryList(decrees) {
             objectivePools
         }.filter {
@@ -41,7 +40,7 @@ object DecreeRegistry : ValueRegistry<Decree>() {
         }
     }
 
-    fun getRewards(decrees: List<IDecree>): List<BountyEntry> {
+    fun getRewards(decrees: List<Decree>): List<BountyEntry> {
         return getEntryList(decrees) {
             rewardPools
         }.filter {

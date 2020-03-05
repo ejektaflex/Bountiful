@@ -2,8 +2,8 @@ package ejektaflex.bountiful.data.json
 
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonSerializer
-import ejektaflex.bountiful.data.entry.BountyEntry
-import ejektaflex.bountiful.data.entry.BountyType
+import ejektaflex.bountiful.data.bounty.BountyEntry
+import ejektaflex.bountiful.data.bounty.enums.BountyType
 
 /**
  * Contains all of our data serializers and deserializers

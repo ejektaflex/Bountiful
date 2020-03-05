@@ -1,13 +1,14 @@
 package ejektaflex.bountiful.item
 
 import ejektaflex.bountiful.api.BountifulAPI
-import ejektaflex.bountiful.data.IDecree
-import ejektaflex.bountiful.enum.EnumBountyRarity
+import ejektaflex.bountiful.data.bounty.enums.BountyRarity
 import ejektaflex.bountiful.ext.sendTranslation
-import ejektaflex.bountiful.content.ModContent
-import ejektaflex.bountiful.data.BountyData
-import ejektaflex.bountiful.data.BountyNBT
-import ejektaflex.bountiful.logic.checkers.CheckerRegistry
+import ejektaflex.bountiful.ModContent
+import ejektaflex.bountiful.data.bounty.BountyData
+import ejektaflex.bountiful.data.bounty.enums.BountyNBT
+import ejektaflex.bountiful.data.structure.Decree
+import ejektaflex.bountiful.logic.BountyCreator
+import ejektaflex.bountiful.data.bounty.checkers.CheckerRegistry
 import ejektaflex.bountiful.registry.DecreeRegistry
 import net.minecraft.client.Minecraft
 import net.minecraft.client.util.ITooltipFlag
@@ -25,11 +26,12 @@ import net.minecraft.world.World
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.api.distmarker.OnlyIn
 import net.minecraft.util.text.TranslationTextComponent
+import net.minecraftforge.registries.IForgeRegistryEntry
 
 
 class ItemBounty() : Item(
         Item.Properties().maxStackSize(1).group(ModContent.BountifulGroup)
-), IItemBounty {
+), IForgeRegistryEntry<Item> {
 
     /**
      * Thrown when bounty NBT data could not be created
@@ -98,7 +100,7 @@ class ItemBounty() : Item(
         }
     }
 
-    override fun getBountyData(stack: ItemStack): BountyData {
+    fun getBountyData(stack: ItemStack): BountyData {
         if (stack.hasTag() && stack.item is ItemBounty) {
             return BountyData().apply { deserializeNBT(stack.tag!!) }
         } else {
@@ -108,7 +110,7 @@ class ItemBounty() : Item(
 
     override fun getRarity(stack: ItemStack): Rarity {
         return if (stack.hasTag() && BountyNBT.Rarity.key in stack.tag!!) {
-            EnumBountyRarity.getRarityFromInt(stack.tag!!.getInt(BountyNBT.Rarity.key)).itemRarity
+            BountyRarity.getRarityFromInt(stack.tag!!.getInt(BountyNBT.Rarity.key)).itemRarity
         } else {
             super.getRarity(stack)
         }
@@ -129,13 +131,13 @@ class ItemBounty() : Item(
         return true
     }
 
-    override fun tryExpireBountyTime(stack: ItemStack) {
+    fun tryExpireBountyTime(stack: ItemStack) {
         if (stack.hasTag() && BountyNBT.BountyTime.key in stack.tag!!) {
             stack.tag!!.putInt(BountyNBT.BountyTime.key, 0)
         }
     }
 
-    override fun tickBoardTime(stack: ItemStack): Boolean {
+    fun tickBoardTime(stack: ItemStack): Boolean {
         return tickNumber(stack, BountyData.boardTickFreq.toInt(), BountyNBT.BoardStamp.key)
     }
 
@@ -156,7 +158,7 @@ class ItemBounty() : Item(
     }
 
 
-    override fun ensureBounty(stack: ItemStack, worldIn: World, decrees: List<IDecree>, rarity: EnumBountyRarity) {
+    fun ensureBounty(stack: ItemStack, worldIn: World, decrees: List<Decree>, rarity: BountyRarity) {
 
         val data = try {
             BountifulAPI.createBountyData(worldIn, rarity, decrees)
@@ -185,7 +187,7 @@ class ItemBounty() : Item(
     fun cashIn(player: PlayerEntity, hand: Hand, atBoard: Boolean = false): Boolean {
         val bountyItem = player.getHeldItem(hand)
         if (!bountyItem.hasTag()) {
-            ensureBounty(player.getHeldItem(hand), player.world, DecreeRegistry.content)
+            ensureBounty(player.getHeldItem(hand), player.world, DecreeRegistry.content, BountyCreator.calcRarity())
             return false
         }
 

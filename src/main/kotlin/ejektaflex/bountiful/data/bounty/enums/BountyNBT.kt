@@ -1,4 +1,4 @@
-package ejektaflex.bountiful.data
+package ejektaflex.bountiful.data.bounty.enums
 
 /**
  * An enum class representing all needed NBT variables on an item bounty

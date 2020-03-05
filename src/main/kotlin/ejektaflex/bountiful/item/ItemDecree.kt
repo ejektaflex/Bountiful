@@ -1,8 +1,8 @@
 package ejektaflex.bountiful.item
 
 import ejektaflex.bountiful.ext.hackyRandom
-import ejektaflex.bountiful.content.ModContent
-import ejektaflex.bountiful.data.Decree
+import ejektaflex.bountiful.ModContent
+import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.registry.DecreeRegistry
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.player.PlayerEntity

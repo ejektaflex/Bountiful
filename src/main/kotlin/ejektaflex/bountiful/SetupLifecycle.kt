@@ -1,15 +1,14 @@
 package ejektaflex.bountiful
 
-import ejektaflex.bountiful.data.IEntryPool
-import ejektaflex.bountiful.data.entry.BountyEntry
-import ejektaflex.bountiful.data.entry.BountyEntryEntity
+import ejektaflex.bountiful.data.bounty.BountyEntry
+import ejektaflex.bountiful.data.bounty.BountyEntryEntity
 import ejektaflex.bountiful.data.json.JsonSerializers
 import ejektaflex.bountiful.ext.sendErrorMsg
 import ejektaflex.bountiful.ext.sendMessage
-import ejektaflex.bountiful.block.BoardTE
-import ejektaflex.bountiful.command.BountifulCommand
-import ejektaflex.bountiful.content.ModContent
-import ejektaflex.bountiful.data.*
+import ejektaflex.bountiful.block.BoardTileEntity
+import ejektaflex.bountiful.data.bounty.BountyData
+import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
+import ejektaflex.bountiful.data.structure.EntryPool
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.gui.BoardScreen
 import ejektaflex.bountiful.item.ItemBounty
@@ -55,7 +54,7 @@ object SetupLifecycle {
     }
 
 
-    fun validatePool(pool: IEntryPool, sender: CommandSource? = null, log: Boolean = false): MutableList<BountyEntry> {
+    fun validatePool(pool: EntryPool, sender: CommandSource? = null, log: Boolean = false): MutableList<BountyEntry> {
 
         BountifulMod.logger.info("Validating pool on side? isRemote?: ${sender?.world?.isRemote}")
 
@@ -146,8 +145,8 @@ object SetupLifecycle {
     @SubscribeEvent
     fun onTileEntityRegistry(event: RegistryEvent.Register<TileEntityType<*>>) {
         event.registry.register(
-                TileEntityType.Builder.create<BoardTE>(Supplier {
-                    BoardTE()
+                TileEntityType.Builder.create<BoardTileEntity>(Supplier {
+                    BoardTileEntity()
                 }, ModContent.Blocks.BOUNTYBOARD)
                         .build(null)
                         .setRegistryName("${BountifulMod.MODID}:bounty-te")

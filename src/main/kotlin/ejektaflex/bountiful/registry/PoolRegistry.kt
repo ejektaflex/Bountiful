@@ -1,11 +1,11 @@
 package ejektaflex.bountiful.registry
 
-import ejektaflex.bountiful.data.IEntryPool
-import ejektaflex.bountiful.data.ValueRegistry
+import ejektaflex.bountiful.data.structure.EntryPool
+import ejektaflex.bountiful.generic.ValueRegistry
 
-object PoolRegistry : ValueRegistry<IEntryPool>() {
+object PoolRegistry : ValueRegistry<EntryPool>() {
 
-    fun poolFor(id: String): IEntryPool? {
+    fun poolFor(id: String): EntryPool? {
         return content.firstOrNull { it.id == id }
     }
 

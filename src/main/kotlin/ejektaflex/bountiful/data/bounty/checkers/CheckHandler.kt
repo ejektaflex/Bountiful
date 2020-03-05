@@ -1,7 +1,7 @@
-package ejektaflex.bountiful.logic.checkers
+package ejektaflex.bountiful.data.bounty.checkers
 
-import ejektaflex.bountiful.data.IBountyData
-import ejektaflex.bountiful.data.entry.BountyEntry
+import ejektaflex.bountiful.data.bounty.BountyData
+import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.logic.BountyProgress
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
@@ -10,12 +10,12 @@ import net.minecraft.util.NonNullList
 abstract class CheckHandler<T : BountyEntry>() {
 
     lateinit var player: PlayerEntity
-    lateinit var data: IBountyData
+    lateinit var data: BountyData
     lateinit var inv: NonNullList<ItemStack>
 
-    constructor(inPlayer: PlayerEntity, inData: IBountyData) : this() {}
+    constructor(inPlayer: PlayerEntity, inData: BountyData) : this() {}
 
-    fun initialize(inPlayer: PlayerEntity, inData: IBountyData) {
+    fun initialize(inPlayer: PlayerEntity, inData: BountyData) {
         player = inPlayer
         data = inData
         inv = player.inventory.mainInventory

@@ -1,15 +1,15 @@
 package ejektaflex.bountiful.logic
 
 import ejektaflex.bountiful.BountifulMod
-import ejektaflex.bountiful.data.IDecree
-import ejektaflex.bountiful.data.entry.BountyEntry
-import ejektaflex.bountiful.enum.EnumBountyRarity
+import ejektaflex.bountiful.data.bounty.BountyEntry
+import ejektaflex.bountiful.data.bounty.enums.BountyRarity
 import ejektaflex.bountiful.ext.hackyRandom
 import ejektaflex.bountiful.ext.randomSplit
 import ejektaflex.bountiful.ext.supposedlyNotNull
 import ejektaflex.bountiful.ext.weightedRandomNorm
-import ejektaflex.bountiful.content.ModContent
-import ejektaflex.bountiful.data.BountyData
+import ejektaflex.bountiful.ModContent
+import ejektaflex.bountiful.data.bounty.BountyData
+import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.registry.DecreeRegistry
 import net.minecraft.item.ItemStack
@@ -25,7 +25,7 @@ object BountyCreator {
     private val rand = Random()
 
 
-    fun createStack(world: World, decrees: List<IDecree>): ItemStack {
+    fun createStack(world: World, decrees: List<Decree>): ItemStack {
 
         return ItemStack(ModContent.Items.BOUNTY).apply {
             (ModContent.Items.BOUNTY as ItemBounty).ensureBounty(this, world, decrees, calcRarity())
@@ -33,7 +33,7 @@ object BountyCreator {
         //return ContentRegistry.bounty.let { ItemStack(it).apply { it.ensureBounty(this, world, rarity) } }
     }
 
-    fun calcRarity(): EnumBountyRarity {
+    fun calcRarity(): BountyRarity {
         var level = 0
         val chance = BountifulMod.config.rarityChance
         for (i in 0 until 3) {
@@ -43,10 +43,10 @@ object BountyCreator {
                 break
             }
         }
-        return EnumBountyRarity.getRarityFromInt(level)
+        return BountyRarity.getRarityFromInt(level)
     }
 
-    fun create(inRarity: EnumBountyRarity, decrees: List<IDecree>): BountyData {
+    fun create(inRarity: BountyRarity, decrees: List<Decree>): BountyData {
         val data = BountyData()
 
         val toSatisfy = createRewards(data, inRarity, decrees)
@@ -55,7 +55,7 @@ object BountyCreator {
         return data
     }
 
-    fun createRewards(inRarity: EnumBountyRarity, decrees: List<IDecree>): List<BountyEntry> {
+    fun createRewards(inRarity: BountyRarity, decrees: List<Decree>): List<BountyEntry> {
         val rewards = DecreeRegistry.getRewards(decrees)
 
         var numRewards = (1..2).hackyRandom()
@@ -80,9 +80,9 @@ object BountyCreator {
     }
 
 
-    private fun createRewards(data: BountyData, inRarity: EnumBountyRarity, decrees: List<IDecree>): Int {
+    private fun createRewards(data: BountyData, inRarity: BountyRarity, decrees: List<Decree>): Int {
         val toAdd = createRewards(inRarity, decrees)
-        val rarity = EnumBountyRarity.values().indexOf(inRarity)
+        val rarity = BountyRarity.values().indexOf(inRarity)
         data.rarity = rarity
         data.rewards.add(*toAdd.toTypedArray())
         return toAdd.sumBy { it.calculatedWorth }
@@ -136,7 +136,7 @@ object BountyCreator {
         }
     }
 
-    fun createObjectives(rewards: List<BountyEntry>, inRarity: EnumBountyRarity, decrees: List<IDecree>, worth: Int): List<BountyEntry> {
+    fun createObjectives(rewards: List<BountyEntry>, inRarity: BountyRarity, decrees: List<Decree>, worth: Int): List<BountyEntry> {
         val rewardContentIds = rewards.map { it.content }
 
         val objectives = DecreeRegistry.getObjectives(decrees).filter {
@@ -182,7 +182,7 @@ object BountyCreator {
         return toAdd
     }
 
-    private fun createObjectives(data: BountyData, inRarity: EnumBountyRarity, decrees: List<IDecree>, worth: Int) {
+    private fun createObjectives(data: BountyData, inRarity: BountyRarity, decrees: List<Decree>, worth: Int) {
         val objs = createObjectives(data.rewards.content, inRarity, decrees, worth)
 
         for (obj in objs) {

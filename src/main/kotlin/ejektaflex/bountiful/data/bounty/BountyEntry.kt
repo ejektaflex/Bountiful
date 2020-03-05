@@ -1,4 +1,4 @@
-package ejektaflex.bountiful.data.entry
+package ejektaflex.bountiful.data.bounty
 
 
 import com.google.gson.JsonElement

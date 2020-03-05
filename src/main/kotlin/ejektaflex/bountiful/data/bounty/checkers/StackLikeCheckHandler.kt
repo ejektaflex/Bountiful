@@ -1,9 +1,9 @@
-package ejektaflex.bountiful.logic.checkers
+package ejektaflex.bountiful.data.bounty.checkers
 
-import ejektaflex.bountiful.data.entry.AbstractBountyEntryStackLike
-import ejektaflex.bountiful.data.entry.BountyEntry
-import ejektaflex.bountiful.data.entry.BountyEntryItemTag
-import ejektaflex.bountiful.data.entry.BountyEntryItem
+import ejektaflex.bountiful.data.bounty.AbstractBountyEntryStackLike
+import ejektaflex.bountiful.data.bounty.BountyEntry
+import ejektaflex.bountiful.data.bounty.BountyEntryItemTag
+import ejektaflex.bountiful.data.bounty.BountyEntryItem
 import ejektaflex.bountiful.logic.BountyProgress
 import ejektaflex.bountiful.logic.StackPartition
 import net.minecraft.item.ItemStack

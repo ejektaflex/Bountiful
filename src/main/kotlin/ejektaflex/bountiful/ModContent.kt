@@ -1,8 +1,7 @@
-package ejektaflex.bountiful.content
+package ejektaflex.bountiful
 
-import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.block.BlockBountyBoard
-import ejektaflex.bountiful.block.BoardTE
+import ejektaflex.bountiful.block.BoardTileEntity
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.item.ItemDecree
@@ -21,7 +20,7 @@ object ModContent {
         val BOUNTYBOARD = BlockBountyBoard().setRegistryName("bountyboard")
 
         @ObjectHolder(BountifulMod.MODID + ":bounty-te")
-        @JvmStatic lateinit var BOUNTYTILEENTITY: TileEntityType<BoardTE>
+        @JvmStatic lateinit var BOUNTYTILEENTITY: TileEntityType<BoardTileEntity>
 
     }
 

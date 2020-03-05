@@ -1,8 +1,8 @@
 package ejektaflex.bountiful.api
 
-import ejektaflex.bountiful.data.IBountyData
-import ejektaflex.bountiful.data.IDecree
-import ejektaflex.bountiful.enum.EnumBountyRarity
+import ejektaflex.bountiful.data.bounty.BountyData
+import ejektaflex.bountiful.data.structure.Decree
+import ejektaflex.bountiful.data.bounty.enums.BountyRarity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -22,16 +22,16 @@ interface IBountifulAPI {
     /**
      * Converts an IItemBounty ItemStack to bounty data
      */
-    fun toBountyData(stack: ItemStack): IBountyData
+    fun toBountyData(stack: ItemStack): BountyData
 
     /**
      * Converts bounty data to a bounty itemstack
      */
-    fun dataToStack(data: IBountyData): ItemStack
+    fun dataToStack(data: BountyData): ItemStack
 
     /**
      * Creates data for a new bounty.
      */
-    fun createBountyData(worldIn: World, rarity: EnumBountyRarity, decrees: List<IDecree>): IBountyData?
+    fun createBountyData(worldIn: World, rarity: BountyRarity, decrees: List<Decree>): BountyData?
 
 }

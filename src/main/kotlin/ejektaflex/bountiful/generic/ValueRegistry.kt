@@ -1,36 +1,36 @@
-package ejektaflex.bountiful.data
+package ejektaflex.bountiful.generic
 
 import com.google.gson.annotations.Expose
 
-open class ValueRegistry<T : Any> : IValueRegistry<T> {
+open class ValueRegistry<T : Any> {
 
     @Expose
-    override val content = mutableListOf<T>()
+    val content = mutableListOf<T>()
 
-    override fun add(vararg items: T) {
+    fun add(vararg items: T) {
         for (item in items) {
             this.content.add(item)
         }
     }
 
-    override fun remove(item: T) = content.remove(item)
+    fun remove(item: T) = content.remove(item)
 
-    override fun backup(): List<T> {
+    fun backup(): List<T> {
         return mutableListOf<T>().apply { addAll(content) }
     }
 
-    override fun restore(backupList: List<T>) {
+    fun restore(backupList: List<T>) {
         empty()
         content.addAll(backupList)
     }
 
-    override fun empty() {
+    fun empty() {
         content.clear()
     }
 
     operator fun iterator() = content.iterator()
 
-    override fun replace(newItems: List<T>, condition: T.() -> Boolean): List<T> {
+    fun replace(newItems: List<T>, condition: T.() -> Boolean): List<T> {
         val invalids = mutableListOf<T>()
         val dataBackup = backup()
         this.empty()

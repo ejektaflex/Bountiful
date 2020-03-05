@@ -4,9 +4,9 @@ import ejektaflex.bountiful.api.BountifulAPIProvider
 import ejektaflex.bountiful.generic.IMerge
 import ejektaflex.bountiful.data.json.JsonAdapter
 import ejektaflex.bountiful.ext.sendErrorMsg
-import ejektaflex.bountiful.data.BountifulResourceType
-import ejektaflex.bountiful.data.EntryPool
-import ejektaflex.bountiful.data.ValueRegistry
+import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
+import ejektaflex.bountiful.data.structure.EntryPool
+import ejektaflex.bountiful.generic.ValueRegistry
 import net.alexwells.kottle.FMLKotlinModLoadingContext
 import net.minecraft.command.CommandSource
 import net.minecraft.resources.IResourceManager

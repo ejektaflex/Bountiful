@@ -1,8 +1,8 @@
-package ejektaflex.bountiful.logic.checkers
+package ejektaflex.bountiful.data.bounty.checkers
 
-import ejektaflex.bountiful.data.IBountyData
-import ejektaflex.bountiful.data.entry.BountyEntry
-import ejektaflex.bountiful.data.ValueRegistry
+import ejektaflex.bountiful.data.bounty.BountyData
+import ejektaflex.bountiful.data.bounty.BountyEntry
+import ejektaflex.bountiful.generic.ValueRegistry
 import ejektaflex.bountiful.logic.BountyProgress
 import ejektaflex.bountiful.logic.IBountyReward
 import net.minecraft.entity.player.PlayerEntity
@@ -16,7 +16,7 @@ object CheckerRegistry : ValueRegistry<KClass<out CheckHandler<*>>>() {
         add(EntityCheckHandler::class)
     }
 
-    fun tryCashIn(player: PlayerEntity, data: IBountyData): Boolean {
+    fun tryCashIn(player: PlayerEntity, data: BountyData): Boolean {
         val checkers = content.map {
             val inst = it.createInstance()
             inst.initialize(player, data)
@@ -39,7 +39,7 @@ object CheckerRegistry : ValueRegistry<KClass<out CheckHandler<*>>>() {
         return false
     }
 
-    fun passedChecks(player: PlayerEntity, data: IBountyData): Map<BountyEntry, BountyProgress> {
+    fun passedChecks(player: PlayerEntity, data: BountyData): Map<BountyEntry, BountyProgress> {
         val checkers = content.map {
             val inst = it.createInstance()
             inst.initialize(player, data)

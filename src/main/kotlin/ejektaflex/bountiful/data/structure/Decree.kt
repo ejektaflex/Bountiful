@@ -1,20 +1,21 @@
-package ejektaflex.bountiful.data
+package ejektaflex.bountiful.data.structure
 
 import com.google.gson.annotations.Expose
 import ejektaflex.bountiful.generic.IMerge
-import ejektaflex.bountiful.data.entry.BountyEntry
+import ejektaflex.bountiful.data.bounty.BountyEntry
+import ejektaflex.bountiful.generic.IIdentifiable
 import ejektaflex.bountiful.registry.PoolRegistry
 import net.minecraft.nbt.CompoundNBT
 import net.minecraftforge.common.util.INBTSerializable
 
 data class Decree(
-        @Expose override var decreeTitle: String = "UNKNOWN",
+        @Expose var decreeTitle: String = "UNKNOWN",
         @Expose override var id: String = "unknown_id",
-        @Expose override var spawnsInBoard: Boolean = false,
-        @Expose override var isGreedy: Boolean = false,
-        @Expose override var objectivePools: MutableList<String> = mutableListOf(),
-        @Expose override var rewardPools: MutableList<String> = mutableListOf()
-) : IDecree, INBTSerializable<CompoundNBT>, IMerge<Decree> {
+        @Expose var spawnsInBoard: Boolean = false,
+        @Expose var isGreedy: Boolean = false,
+        @Expose var objectivePools: MutableList<String> = mutableListOf(),
+        @Expose var rewardPools: MutableList<String> = mutableListOf()
+) : INBTSerializable<CompoundNBT>, IMerge<Decree>, IIdentifiable {
 
     override fun serializeNBT(): CompoundNBT {
         return CompoundNBT().apply {
