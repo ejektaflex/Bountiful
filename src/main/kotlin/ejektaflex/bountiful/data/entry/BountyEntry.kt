@@ -1,15 +1,14 @@
-package ejektaflex.bountiful.api.data.entry
+package ejektaflex.bountiful.data.entry
 
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import ejektaflex.bountiful.api.data.JsonBiSerializer
-import ejektaflex.bountiful.api.data.json.JsonAdapter
-import ejektaflex.bountiful.api.ext.hackyRandom
-import ejektaflex.bountiful.api.generic.IWeighted
-import ejektaflex.bountiful.api.generic.ItemRange
+import ejektaflex.bountiful.data.json.JsonBiSerializer
+import ejektaflex.bountiful.ext.hackyRandom
+import ejektaflex.bountiful.generic.IWeighted
+import ejektaflex.bountiful.generic.ItemRange
 import net.minecraft.nbt.*
 import net.minecraft.util.text.ITextComponent
 import net.minecraftforge.common.util.INBTSerializable

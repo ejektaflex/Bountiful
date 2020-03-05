@@ -1,4 +1,4 @@
-package ejektaflex.bountiful.api.data
+package ejektaflex.bountiful.data
 
 interface IValueRegistry<T : Any> {
     val content: MutableList<T>

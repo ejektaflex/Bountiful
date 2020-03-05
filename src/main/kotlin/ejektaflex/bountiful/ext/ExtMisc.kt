@@ -1,24 +1,15 @@
-package ejektaflex.bountiful.api.ext
+package ejektaflex.bountiful.ext
 
-import ejektaflex.bountiful.api.data.entry.BountyEntry
-import ejektaflex.bountiful.api.generic.IWeighted
-import ejektaflex.bountiful.api.generic.ItemRange
-import net.minecraft.client.Minecraft
+import ejektaflex.bountiful.generic.IWeighted
+import ejektaflex.bountiful.generic.ItemRange
 import net.minecraft.command.CommandSource
 import net.minecraft.entity.Entity
-import net.minecraft.nbt.CompoundNBT
 import net.minecraft.util.NonNullList
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.StringTextComponent
 import net.minecraft.util.text.TranslationTextComponent
-import net.minecraft.world.World
-import net.minecraftforge.common.capabilities.Capability
-import net.minecraftforge.common.util.INBTSerializable
-import net.minecraftforge.registries.ForgeRegistries
-import java.io.InputStream
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.random.Random
 
 /*
 fun <T : INBTSerializable<CompoundNBT>> World.ifHasCapability(capability: Capability<T>, func: T.() -> Unit) {

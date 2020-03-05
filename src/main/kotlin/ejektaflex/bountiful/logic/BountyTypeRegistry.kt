@@ -1,6 +1,6 @@
 package ejektaflex.bountiful.logic
 
-import ejektaflex.bountiful.api.data.entry.BountyType
+import ejektaflex.bountiful.data.entry.BountyType
 import ejektaflex.bountiful.data.ValueRegistry
 
 object BountyTypeRegistry : ValueRegistry<String>() {

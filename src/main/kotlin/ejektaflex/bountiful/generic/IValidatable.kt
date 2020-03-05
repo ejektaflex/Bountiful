@@ -1,4 +1,4 @@
-package ejektaflex.bountiful.api.generic
+package ejektaflex.bountiful.generic
 
 interface IValidatable {
     fun isValid(): Boolean

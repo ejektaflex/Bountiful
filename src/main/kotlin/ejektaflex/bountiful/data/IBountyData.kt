@@ -1,6 +1,6 @@
-package ejektaflex.bountiful.api.data
+package ejektaflex.bountiful.data
 
-import ejektaflex.bountiful.api.data.entry.BountyEntry
+import ejektaflex.bountiful.data.entry.BountyEntry
 import net.minecraft.nbt.CompoundNBT
 import net.minecraft.world.World
 import net.minecraftforge.common.util.INBTSerializable

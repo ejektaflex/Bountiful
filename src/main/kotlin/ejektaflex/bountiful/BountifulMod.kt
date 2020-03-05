@@ -1,9 +1,9 @@
 package ejektaflex.bountiful
 
 import ejektaflex.bountiful.api.BountifulAPIProvider
-import ejektaflex.bountiful.api.IMerge
-import ejektaflex.bountiful.api.data.json.JsonAdapter
-import ejektaflex.bountiful.api.ext.sendErrorMsg
+import ejektaflex.bountiful.generic.IMerge
+import ejektaflex.bountiful.data.json.JsonAdapter
+import ejektaflex.bountiful.ext.sendErrorMsg
 import ejektaflex.bountiful.data.BountifulResourceType
 import ejektaflex.bountiful.data.EntryPool
 import ejektaflex.bountiful.data.ValueRegistry

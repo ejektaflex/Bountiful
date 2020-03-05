@@ -1,13 +1,13 @@
 package ejektaflex.bountiful.logic
 
 import ejektaflex.bountiful.BountifulMod
-import ejektaflex.bountiful.api.data.IDecree
-import ejektaflex.bountiful.api.data.entry.BountyEntry
-import ejektaflex.bountiful.api.enum.EnumBountyRarity
-import ejektaflex.bountiful.api.ext.hackyRandom
-import ejektaflex.bountiful.api.ext.randomSplit
-import ejektaflex.bountiful.api.ext.supposedlyNotNull
-import ejektaflex.bountiful.api.ext.weightedRandomNorm
+import ejektaflex.bountiful.data.IDecree
+import ejektaflex.bountiful.data.entry.BountyEntry
+import ejektaflex.bountiful.enum.EnumBountyRarity
+import ejektaflex.bountiful.ext.hackyRandom
+import ejektaflex.bountiful.ext.randomSplit
+import ejektaflex.bountiful.ext.supposedlyNotNull
+import ejektaflex.bountiful.ext.weightedRandomNorm
 import ejektaflex.bountiful.content.ModContent
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.item.ItemBounty

@@ -1,7 +1,6 @@
-package ejektaflex.bountiful.api.enum
+package ejektaflex.bountiful.enum
 
 import ejektaflex.bountiful.BountifulMod
-import ejektaflex.bountiful.api.BountifulAPI
 import net.minecraft.item.Rarity
 
 enum class EnumBountyRarity(

@@ -1,7 +1,7 @@
-package ejektaflex.bountiful.api.ext
+package ejektaflex.bountiful.ext
 
-import ejektaflex.bountiful.api.data.entry.BountyEntry
-import ejektaflex.bountiful.api.data.entry.BountyType
+import ejektaflex.bountiful.data.entry.BountyEntry
+import ejektaflex.bountiful.data.entry.BountyType
 import net.minecraft.nbt.CompoundNBT
 import net.minecraftforge.common.util.INBTSerializable
 import kotlin.reflect.full.createInstance

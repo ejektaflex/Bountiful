@@ -1,4 +1,4 @@
-package ejektaflex.bountiful.api
+package ejektaflex.bountiful.generic
 
 interface IMerge<T : Any> {
 

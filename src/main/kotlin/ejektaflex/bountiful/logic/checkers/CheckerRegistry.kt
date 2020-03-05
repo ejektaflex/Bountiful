@@ -1,7 +1,7 @@
 package ejektaflex.bountiful.logic.checkers
 
-import ejektaflex.bountiful.api.data.IBountyData
-import ejektaflex.bountiful.api.data.entry.BountyEntry
+import ejektaflex.bountiful.data.IBountyData
+import ejektaflex.bountiful.data.entry.BountyEntry
 import ejektaflex.bountiful.data.ValueRegistry
 import ejektaflex.bountiful.logic.BountyProgress
 import ejektaflex.bountiful.logic.IBountyReward

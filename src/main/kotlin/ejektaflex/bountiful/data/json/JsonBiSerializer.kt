@@ -1,7 +1,6 @@
-package ejektaflex.bountiful.api.data
+package ejektaflex.bountiful.data.json
 
 import com.google.gson.*
-import ejektaflex.bountiful.api.data.json.JsonAdapter
 import java.lang.reflect.Type
 
 interface JsonBiSerializer<T> : JsonDeserializer<T>, JsonSerializer<T> {

@@ -1,16 +1,13 @@
 package ejektaflex.bountiful.registry
 
 import ejektaflex.bountiful.BountifulMod
-import ejektaflex.bountiful.api.data.IDecree
-import ejektaflex.bountiful.api.data.entry.BountyEntry
+import ejektaflex.bountiful.data.IDecree
+import ejektaflex.bountiful.data.entry.BountyEntry
 import ejektaflex.bountiful.data.Decree
 import ejektaflex.bountiful.data.ValueRegistry
 import ejektaflex.bountiful.logic.IBountyObjective
 import ejektaflex.bountiful.logic.IBountyReward
-import net.alexwells.kottle.FMLKotlinModLoadingContext
 import net.minecraftforge.fml.ModList
-import net.minecraftforge.fml.ModLoader
-import net.minecraftforge.fml.javafmlmod.FMLModContainer
 
 object DecreeRegistry : ValueRegistry<Decree>() {
 

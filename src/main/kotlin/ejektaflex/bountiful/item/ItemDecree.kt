@@ -1,7 +1,6 @@
 package ejektaflex.bountiful.item
 
-import ejektaflex.bountiful.api.data.IDecree
-import ejektaflex.bountiful.api.ext.hackyRandom
+import ejektaflex.bountiful.ext.hackyRandom
 import ejektaflex.bountiful.content.ModContent
 import ejektaflex.bountiful.data.Decree
 import ejektaflex.bountiful.registry.DecreeRegistry

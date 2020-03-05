@@ -1,7 +1,7 @@
-package ejektaflex.bountiful.api.data.entry
+package ejektaflex.bountiful.data.entry
 
 import com.google.gson.annotations.Expose
-import ejektaflex.bountiful.api.ext.toItemStack
+import ejektaflex.bountiful.ext.toItemStack
 import ejektaflex.bountiful.logic.IBountyObjective
 import ejektaflex.bountiful.logic.IBountyReward
 import net.minecraft.entity.player.PlayerEntity

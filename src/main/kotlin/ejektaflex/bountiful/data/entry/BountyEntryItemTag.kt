@@ -1,22 +1,17 @@
-package ejektaflex.bountiful.api.data.entry
+package ejektaflex.bountiful.data.entry
 
 import com.google.gson.annotations.Expose
-import ejektaflex.bountiful.api.ext.hackyRandom
-import ejektaflex.bountiful.api.ext.toItemStack
-import ejektaflex.bountiful.logic.BountyProgress
+import ejektaflex.bountiful.ext.hackyRandom
 import ejektaflex.bountiful.logic.IBountyObjective
 import ejektaflex.bountiful.logic.IBountyReward
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
 import net.minecraft.tags.ItemTags
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
 import net.minecraftforge.items.ItemHandlerHelper
-import kotlin.math.ceil
-import kotlin.math.max
 import kotlin.math.min
 
 class BountyEntryItemTag : AbstractBountyEntryStackLike(), IBountyObjective, IBountyReward {

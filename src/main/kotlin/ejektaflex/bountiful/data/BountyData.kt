@@ -1,13 +1,12 @@
 package ejektaflex.bountiful.data
 
 import ejektaflex.bountiful.BountifulMod
-import ejektaflex.bountiful.api.ext.setUnsortedList
-import ejektaflex.bountiful.api.data.IBountyData
-import ejektaflex.bountiful.api.data.entry.BountyEntry
-import ejektaflex.bountiful.api.enum.EnumBountyRarity
-import ejektaflex.bountiful.api.ext.getUnsortedList
-import ejektaflex.bountiful.api.ext.toBountyEntry
-import ejektaflex.bountiful.api.item.IItemBounty
+import ejektaflex.bountiful.ext.setUnsortedList
+import ejektaflex.bountiful.data.entry.BountyEntry
+import ejektaflex.bountiful.enum.EnumBountyRarity
+import ejektaflex.bountiful.ext.getUnsortedList
+import ejektaflex.bountiful.ext.toBountyEntry
+import ejektaflex.bountiful.item.IItemBounty
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.logic.BountyTypeRegistry
 import ejektaflex.bountiful.logic.IBountyObjective

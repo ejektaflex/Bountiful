@@ -1,4 +1,4 @@
-package ejektaflex.bountiful.api.data.json
+package ejektaflex.bountiful.data.json
 
 import com.google.gson.*
 import kotlin.reflect.KClass

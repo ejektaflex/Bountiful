@@ -1,7 +1,6 @@
-package ejektaflex.bountiful.api.data
+package ejektaflex.bountiful.data
 
-import ejektaflex.bountiful.api.data.entry.BountyEntry
-import ejektaflex.bountiful.api.generic.IIdentifiable
+import ejektaflex.bountiful.generic.IIdentifiable
 
 interface IDecree : IIdentifiable {
     val decreeTitle: String

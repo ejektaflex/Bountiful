@@ -1,8 +1,6 @@
 package ejektaflex.bountiful.data
 
 import com.google.gson.annotations.Expose
-import ejektaflex.bountiful.api.data.IValueRegistry
-import kotlinx.coroutines.yield
 
 open class ValueRegistry<T : Any> : IValueRegistry<T> {
 

@@ -1,4 +1,4 @@
-package ejektaflex.bountiful.api.generic
+package ejektaflex.bountiful.generic
 
 import kotlin.math.ceil
 import kotlin.math.max

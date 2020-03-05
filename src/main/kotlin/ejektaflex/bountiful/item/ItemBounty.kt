@@ -1,15 +1,12 @@
 package ejektaflex.bountiful.item
 
 import ejektaflex.bountiful.api.BountifulAPI
-import ejektaflex.bountiful.api.data.IDecree
-import ejektaflex.bountiful.api.enum.EnumBountyRarity
-import ejektaflex.bountiful.api.ext.sendTranslation
-import ejektaflex.bountiful.api.item.IItemBounty
+import ejektaflex.bountiful.data.IDecree
+import ejektaflex.bountiful.enum.EnumBountyRarity
+import ejektaflex.bountiful.ext.sendTranslation
 import ejektaflex.bountiful.content.ModContent
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.data.BountyNBT
-import ejektaflex.bountiful.data.Decree
-import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.logic.checkers.CheckerRegistry
 import ejektaflex.bountiful.registry.DecreeRegistry
 import net.minecraft.client.Minecraft

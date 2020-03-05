@@ -1,9 +1,8 @@
 package ejektaflex.bountiful.data
 
 import com.google.gson.annotations.Expose
-import ejektaflex.bountiful.api.IMerge
-import ejektaflex.bountiful.api.data.IEntryPool
-import ejektaflex.bountiful.api.data.entry.BountyEntry
+import ejektaflex.bountiful.generic.IMerge
+import ejektaflex.bountiful.data.entry.BountyEntry
 import net.minecraftforge.fml.ModList
 
 // Currently unused? Should only need a PoolRegistry and a DecreeRegistry

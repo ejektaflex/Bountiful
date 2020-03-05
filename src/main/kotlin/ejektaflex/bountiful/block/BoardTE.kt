@@ -2,7 +2,7 @@ package ejektaflex.bountiful.block
 
 import ejektaflex.bountiful.BountifulConfig
 import ejektaflex.bountiful.BountifulMod
-import ejektaflex.bountiful.api.ext.*
+import ejektaflex.bountiful.ext.*
 import ejektaflex.bountiful.content.ModContent
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.data.Decree

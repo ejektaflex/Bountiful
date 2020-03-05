@@ -1,4 +1,4 @@
-package ejektaflex.bountiful.api.generic
+package ejektaflex.bountiful.generic
 
 interface IIdentifiable {
     val id: String
