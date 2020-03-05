@@ -6,10 +6,7 @@ import net.minecraft.item.Rarity
 enum class BountyRarity(
         val level: Int,
         val itemRarity: Rarity,
-        val exponent: Double,
-        //val stat: BountifulStats.BountifulStat,
-        val bountyMult: Double = BountifulMod.config.rarityMultipliers[level],
-        val xp: Int = BountifulMod.config.xpBonuses[level]
+        val exponent: Double
 ) {
 
     Common(0, Rarity.COMMON, 1.0),

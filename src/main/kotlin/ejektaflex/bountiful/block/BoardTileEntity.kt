@@ -83,7 +83,7 @@ class BoardTileEntity : TileEntity(BountifulContent.Blocks.BOUNTYTILEENTITY), IT
 
                 val bountyItem = bounty.item as ItemBounty
 
-                if (BountifulMod.config.shouldCountdownOnBoard) {
+                if (BountifulConfig.SERVER.shouldCountdownOnBoard.get()) {
                     bountyItem.ensureTimerStarted(bounty, world!!)
                 }
 

@@ -1,5 +1,6 @@
 package ejektaflex.bountiful.data.bounty
 
+import ejektaflex.bountiful.BountifulConfig
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.data.bounty.enums.BountyNBT
 import ejektaflex.bountiful.data.bounty.enums.BountyRarity
@@ -25,7 +26,7 @@ import kotlin.math.max
 
 class BountyData : INBTSerializable<CompoundNBT> {
 
-    var boardStamp = BountifulMod.config.boardLifespan
+    var boardStamp = BountifulConfig.SERVER.boardLifespan.get()
     var bountyTime = 0L
     var rarity = 0
     val objectives = ValueRegistry<BountyEntry>()
@@ -48,7 +49,7 @@ class BountyData : INBTSerializable<CompoundNBT> {
         get() = BountyRarity.getRarityFromInt(rarity)
 
     fun boardTimeLeft(world: World): Long {
-        return max(boardStamp + BountifulMod.config.boardLifespan - world.gameTime , 0)
+        return max(boardStamp + BountifulConfig.SERVER.boardLifespan.get() - world.gameTime , 0)
     }
 
 

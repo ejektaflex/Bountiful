@@ -1,5 +1,6 @@
 package ejektaflex.bountiful.logic
 
+import ejektaflex.bountiful.BountifulConfig
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.data.bounty.enums.BountyRarity
@@ -35,7 +36,7 @@ object BountyCreator {
 
     fun calcRarity(): BountyRarity {
         var level = 0
-        val chance = BountifulMod.config.rarityChance
+        val chance = BountifulConfig.SERVER.rarityChance.get()
         for (i in 0 until 3) {
             if (rand.nextFloat() < chance) {
                 level += 1
@@ -187,13 +188,13 @@ object BountyCreator {
 
         for (obj in objs) {
             data.bountyTime += if (obj.timeMult != null) {
-                (worth * BountifulMod.config.timeMultiplier * obj.timeMult!!).toLong()
+                (worth * BountifulConfig.SERVER.timeMultiplier.get() * obj.timeMult!!).toLong()
             } else {
-                (worth * BountifulMod.config.timeMultiplier).toLong()
+                (worth * BountifulConfig.SERVER.timeMultiplier.get()).toLong()
             }
         }
 
-        data.bountyTime = max(data.bountyTime, BountifulMod.config.bountyTimeMin.toLong())
+        data.bountyTime = max(data.bountyTime, BountifulConfig.SERVER.bountyTimeMin.get().toLong() * 20)
 
         data.objectives.add(*objs.toTypedArray())
     }

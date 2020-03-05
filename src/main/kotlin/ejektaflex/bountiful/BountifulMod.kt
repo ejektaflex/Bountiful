@@ -59,7 +59,7 @@ object BountifulMod {
             //logger.error("########## FILENAME: $filename ##########")
 
             // Go through each namespace in order
-            nameLoop@ for (namespace in manager.resourceNamespaces - config.namespaceBlacklist) {
+            nameLoop@ for (namespace in manager.resourceNamespaces - BountifulConfig.SERVER.namespaceBlacklist.get()) {
 
                 //logger.warn("Inspecting namespace: $namespace")
 

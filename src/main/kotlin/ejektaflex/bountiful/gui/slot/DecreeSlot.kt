@@ -15,7 +15,6 @@ class DecreeSlot(val board: BoardTileEntity, index: Int, x: Int, y: Int) : SlotI
         return super.canTakeStack(playerIn) && board.numDecrees > 1
     }
 
-    // The only valid items are ItemBounty with valid BountyData.
     override fun isItemValid(stack: ItemStack): Boolean {
         return stack.item is ItemDecree
     }
