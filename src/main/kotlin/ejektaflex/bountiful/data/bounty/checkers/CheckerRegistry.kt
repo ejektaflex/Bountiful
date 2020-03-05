@@ -1,5 +1,6 @@
 package ejektaflex.bountiful.data.bounty.checkers
 
+import ejektaflex.bountiful.BountifulStats
 import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.util.ValueRegistry
@@ -34,6 +35,12 @@ object CheckerRegistry : ValueRegistry<KClass<out CheckHandler<*>>>() {
             for (reward in data.rewards.content) {
                 (reward as IBountyReward).reward(player)
             }
+
+            // Increase stats
+            player.addStat(BountifulStats.BOUNTIES_DONE, 1)
+            player.addStat(data.rarityEnum.stat, 1)
+
+            // Return success
             return true
         }
         return false

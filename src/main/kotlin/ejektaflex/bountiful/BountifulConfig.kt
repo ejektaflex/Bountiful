@@ -25,7 +25,7 @@ class BountifulConfig {
         ).defineInRange("maxBountiesPerBoard", 15, 1, 21)
 
         var boardAddFrequency: ForgeConfigSpec.IntValue = b
-                .comment("How often, in seconds, we should be adding to the bounty board.")
+                .comment("How often, in seconds, we should be adding a bounty to the bounty board.")
                 .defineInRange("boardCreationFrequency", 90, 1, 100000)
 
         var boardLifespan: ForgeConfigSpec.IntValue = b

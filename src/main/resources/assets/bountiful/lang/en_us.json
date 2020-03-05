@@ -30,12 +30,12 @@
 	"bountiful.rarity.Rare": "Rare",
 	"bountiful.rarity.Epic": "Epic",
 
-	"bountiful.stat.bountiesTaken": "Bounties Taken",
-	"bountiful.stat.bountiesCompleted": "Bounties Completed (Total)",
-	"bountiful.stat.bountiesCommon": "Bounties Completed (Common)",
-	"bountiful.stat.bountiesUncommon": "Bounties Completed (Uncommon)",
-	"bountiful.stat.bountiesRare": "Bounties Completed (Rare)",
-	"bountiful.stat.bountiesEpic": "Bounties Completed (Epic)",
+	"stat.bountiful.bounties_taken": "Bounties Taken",
+	"stat.bountiful.bounties_done": "Bounties Completed (Total)",
+	"stat.bountiful.bounties_done_0": "Bounties Completed (Common)",
+	"stat.bountiful.bounties_done_1": "Bounties Completed (Uncommon)",
+	"stat.bountiful.bounties_done_2": "Bounties Completed (Rare)",
+	"stat.bountiful.bounties_done_3": "Bounties Completed (Epic)",
 
 	"bountiful.tooltip.advanced": "Hold Shift for item details",
 	"bountiful.tooltip.time": "Time To Complete",

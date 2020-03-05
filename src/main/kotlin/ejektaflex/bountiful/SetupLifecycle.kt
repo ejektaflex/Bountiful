@@ -55,9 +55,8 @@ object SetupLifecycle {
 
     @SubscribeEvent
     fun gameSetup(event: FMLCommonSetupEvent) {
-        println("Registering data type adapters for JSON/Data conversion...")
         JsonSerializers.register()
-        println("Adding bounty board to world gen")
+
         JigsawJank.create().append(
                 ResourceLocation("minecraft","village/plains/houses")
         ) {
@@ -66,6 +65,7 @@ object SetupLifecycle {
             )
         }
 
+        BountifulStats.init()
     }
 
     fun validatePool(pool: EntryPool, sender: CommandSource? = null, log: Boolean = false): MutableList<BountyEntry> {
