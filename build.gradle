@@ -20,9 +20,9 @@ apply plugin: 'idea'
 apply plugin: 'maven-publish'
 apply plugin: 'kotlin'
 
-version = '1.0'
+version = '3.0.0-alpha1'
 group = 'ejektaflex.bountiful' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'modid'
+archivesBaseName = 'bountiful'
 
 
 
