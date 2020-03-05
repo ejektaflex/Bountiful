@@ -1,0 +1,105 @@
+{
+  "id": "chef_rews",
+  "content": [
+    {
+      "type": "item",
+      "content": "minecraft:bone_meal",
+      "amountRange": {
+        "min": 1,
+        "max": 24
+      },
+      "unitWorth": 150,
+      "weight": 800
+    },
+    {
+      "type": "item",
+      "content": "minecraft:stone_hoe",
+      "amountRange": {
+        "min": 1,
+        "max": 2
+      },
+      "unitWorth": 750,
+      "weight": 800
+    },
+    {
+      "type": "item",
+      "content": "minecraft:bucket",
+      "amountRange": {
+        "min": 1,
+        "max": 2
+      },
+      "unitWorth": 2000,
+      "weight": 700
+    },
+    {
+      "type": "item",
+      "content": "minecraft:iron_hoe",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 1700,
+      "weight": 150
+    },
+    {
+      "type": "item",
+      "content": "minecraft:beetroot_seeds",
+      "amountRange": {
+        "min": 8,
+        "max": 16
+      },
+      "unitWorth": 250,
+      "weight": 350
+    },
+    {
+      "type": "item",
+      "content": "minecraft:wheat_seeds",
+      "amountRange": {
+        "min": 8,
+        "max": 16
+      },
+      "unitWorth": 250,
+      "weight": 800
+    },
+    {
+      "type": "item",
+      "content": "minecraft:pumpkin_seeds",
+      "amountRange": {
+        "min": 8,
+        "max": 16
+      },
+      "unitWorth": 250,
+      "weight": 300
+    },
+    {
+      "type": "item",
+      "content": "minecraft:pumpkin_seeds",
+      "amountRange": {
+        "min": 8,
+        "max": 16
+      },
+      "unitWorth": 250,
+      "weight": 300
+    },
+    {
+      "type": "item",
+      "content": "minecraft:carrot",
+      "amountRange": {
+        "min": 8,
+        "max": 32
+      },
+      "unitWorth": 300,
+      "weight": 300
+    },
+    {
+      "type": "item",
+      "content": "minecraft:potato",
+      "amountRange": {
+        "min": 8,
+        "max": 32
+      },
+      "unitWorth": 300,
+      "weight": 300
+    }
+  ]
+}

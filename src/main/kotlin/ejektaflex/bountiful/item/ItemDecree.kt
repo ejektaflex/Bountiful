@@ -57,7 +57,7 @@ class ItemDecree() : Item(
             }
             tooltip.add(tip)
         } else {
-            tooltip.add(TranslationTextComponent(getTranslationKey()))
+            tooltip.add(TranslationTextComponent("bountiful.decree.notset"))
         }
 
         // TODO Add debug tool when holding sneak, showing which pools are being used
@@ -100,6 +100,8 @@ class ItemDecree() : Item(
     }
 
     companion object {
+
+
 
         fun makeStack(): ItemStack {
             val newDecree = ItemStack(ModContent.Items.DECREE)

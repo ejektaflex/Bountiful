@@ -1,0 +1,131 @@
+{
+  "id": "hunting_rews",
+  "content": [
+    {
+      "type": "item",
+      "content": "minecraft:bow",
+      "amountRange": {
+        "min": 1,
+        "max": 2
+      },
+      "unitWorth": 500,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "name": "Enchanted Book (Protection I)",
+      "content": "minecraft:enchanted_book",
+      "nbt": {
+        "StoredEnchantments": [
+          {
+            "id": "minecraft:protection",
+            "lvl": 1
+          }
+        ]
+      },
+      "amountRange": {
+        "min": 1,
+        "max": 2
+      },
+      "unitWorth": 2000,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "name": "Enchanted Book (Knockback I)",
+      "content": "minecraft:enchanted_book",
+      "nbt": {
+        "StoredEnchantments": [
+          {
+            "id": "minecraft:knockback",
+            "lvl": 1
+          }
+        ]
+      },
+      "amountRange": {
+        "min": 1,
+        "max": 2
+      },
+      "unitWorth": 2000,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "name": "Enchanted Book (Power I)",
+      "content": "minecraft:enchanted_book",
+      "nbt": {
+        "StoredEnchantments": [
+          {
+            "id": "minecraft:power",
+            "lvl": 1
+          }
+        ]
+      },
+      "amountRange": {
+        "min": 1,
+        "max": 2
+      },
+      "unitWorth": 2500,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "name": "Enchanted Book (Flame I)",
+      "content": "minecraft:enchanted_book",
+      "nbt": {
+        "StoredEnchantments": [
+          {
+            "id": "minecraft:flame",
+            "lvl": 1
+          }
+        ]
+      },
+      "amountRange": {
+        "min": 1,
+        "max": 2
+      },
+      "unitWorth": 2000,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:gold_ingot",
+      "amountRange": {
+        "min": 1,
+        "max": 3
+      },
+      "unitWorth": 2000,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:iron_ingot",
+      "amountRange": {
+        "min": 1,
+        "max": 6
+      },
+      "unitWorth": 1550,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:leather_horse_armor",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 2000,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:leather",
+      "amountRange": {
+        "min": 1,
+        "max": 16
+      },
+      "unitWorth": 300,
+      "weight": 1000
+    }
+  ]
+}

@@ -33,6 +33,7 @@ import net.minecraftforge.common.BasicTrade
 import net.minecraftforge.common.extensions.IForgeContainerType
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.event.entity.living.LivingDeathEvent
+import net.minecraftforge.event.village.VillagerTradesEvent
 import net.minecraftforge.event.village.WandererTradesEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.client.event.ConfigChangedEvent
@@ -178,12 +179,16 @@ object SetupLifecycle {
         }
     }
 
+    private val decreeTrade = BasicTrade(3, ItemStack(ModContent.Items.DECREE), 5, 5, 0.5f)
+
     @SubscribeEvent
     fun doWandererTrades(event: WandererTradesEvent) {
+        event.genericTrades.add(decreeTrade)
+    }
 
-        event.genericTrades.add(BasicTrade(1, ItemStack(ModContent.Items.DECREE), 5, 5, 0.05f))
-        event.rareTrades.add(BasicTrade(1, ItemStack(ModContent.Items.DECREE), 5, 5, 0.05f))
-
+    @SubscribeEvent
+    fun doVillagerTrades(event: VillagerTradesEvent) {
+        event.trades[2].add(decreeTrade)
     }
 
 }

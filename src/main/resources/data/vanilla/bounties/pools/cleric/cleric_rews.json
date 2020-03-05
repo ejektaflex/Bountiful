@@ -83,6 +83,24 @@
         },
         "unitWorth": 850,
         "weight": 200
+      },
+      {
+        "type": "item",
+        "content": "minecraft:enchanted_book",
+        "nbt": {
+          "StoredEnchantments": [
+            {
+              "id": "minecraft:smite",
+              "lvl": 1
+            }
+          ]
+        },
+        "amountRange": {
+          "min": 1,
+          "max": 2
+        },
+        "unitWorth": 1000,
+        "weight": 1000
       }
     ]
   }

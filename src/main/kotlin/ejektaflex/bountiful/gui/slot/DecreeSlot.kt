@@ -19,11 +19,7 @@ class DecreeSlot(val board: BoardTE, index: Int, x: Int, y: Int) : SlotItemHandl
 
     // The only valid items are ItemBounty with valid BountyData.
     override fun isItemValid(stack: ItemStack): Boolean {
-        return if (stack.item is ItemDecree) {
-            return stack.hasTag()
-        } else {
-            false
-        }
+        return stack.item is ItemDecree
     }
 
 }

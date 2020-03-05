@@ -50,6 +50,16 @@
         },
         "unitWorth": 850,
         "weight": 1000
+      },
+      {
+        "type": "item",
+        "content": "minecraft:diamond",
+        "amountRange": {
+          "min": 1,
+          "max": 12
+        },
+        "unitWorth": 2000,
+        "weight": 1000
       }
     ]
   }

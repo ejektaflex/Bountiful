@@ -116,6 +116,15 @@ class BoardTE : TileEntity(ModContent.Blocks.BOUNTYTILEENTITY), ITickableTileEnt
         if (!hasDecree) {
             handler.setStackInSlot(decreeSlots.hackyRandom(), ItemDecree.makeStack())
         }
+        // Initialize NBT data for new decrees
+
+        for (decSlot in decreeSlots) {
+            val stack = handler.getStackInSlot(decSlot)
+            if (stack.item is ItemDecree && !stack.hasTag()) {
+                (stack.item as ItemDecree).ensureDecree(stack)
+            }
+        }
+
     }
 
     override fun tick() {

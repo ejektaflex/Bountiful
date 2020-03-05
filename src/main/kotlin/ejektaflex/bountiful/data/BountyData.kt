@@ -85,7 +85,7 @@ class BountyData : IBountyData {
                 ) +
                 rews +
                 listOf(
-                        TranslationTextComponent("bountiful.tooltip.advanced")
+                        //TranslationTextComponent("bountiful.tooltip.advanced")
                 )
         ).flatten()
 

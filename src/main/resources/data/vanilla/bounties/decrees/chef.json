@@ -1,0 +1,14 @@
+{
+    "decreeTitle": "Chef",
+    "id": "chef",
+    "spawnsInBoard": true,
+    "isGreedy": false,
+    "objectivePools": [
+      "all_villager_objs",
+      "chef_objs"
+    ],
+    "rewardPools": [
+      "all_villager_rews",
+      "chef_rews"
+    ]
+  }

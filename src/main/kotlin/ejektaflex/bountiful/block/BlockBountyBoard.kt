@@ -21,9 +21,12 @@ import net.minecraftforge.fml.network.NetworkHooks
 class BlockBountyBoard() : Block(
         Properties.create(Material.WOOD)
                 .sound(SoundType.WOOD)
+                /*
                 .hardnessAndResistance(
                         if (BountifulMod.config.bountyBoardBreakable) 2f else -1f
                 )
+
+                 */
 ) {
 
     override fun onBlockActivated(state: BlockState, worldIn: World, pos: BlockPos, player: PlayerEntity, handIn: Hand, hit: BlockRayTraceResult): Boolean {

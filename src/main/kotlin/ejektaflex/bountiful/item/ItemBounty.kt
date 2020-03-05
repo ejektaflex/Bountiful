@@ -166,6 +166,7 @@ class ItemBounty() : Item(
         } catch (e: BountyCreationException) {
             return
         }
+
         if (stack.item is ItemBounty) {
             if (!stack.hasTag()) {
                 if (data != null) {
@@ -225,11 +226,26 @@ class ItemBounty() : Item(
 
     }
 
-
-
     // Don't flail arms randomly on NBT update
     override fun shouldCauseReequipAnimation(oldStack: ItemStack, newStack: ItemStack, slotChanged: Boolean): Boolean {
         return slotChanged
     }
+
+    companion object {
+
+        fun edit(stack: ItemStack, operation: ItemStack.(it: BountyData) -> Unit) {
+            if (stack.item is ItemBounty) {
+                val data = BountyData().apply { deserializeNBT(stack.tag!!) }
+                operation(stack, data)
+            } else {
+                throw Exception("${stack.displayName} is not an ItemBounty, so you cannot edit bounty data for it!")
+            }
+        }
+
+    }
+
+
+
+
 
 }

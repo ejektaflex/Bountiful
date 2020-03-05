@@ -1,5 +1,6 @@
 package ejektaflex.bountiful.registry
 
+import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.api.data.IDecree
 import ejektaflex.bountiful.api.data.entry.BountyEntry
 import ejektaflex.bountiful.data.Decree
@@ -17,16 +18,16 @@ object DecreeRegistry : ValueRegistry<Decree>() {
         return content.firstOrNull { it.id == id }
     }
 
-
-    val allObjectives: List<BountyEntry>
-        get() = getObjectives(content)
-
     private fun getEntryList(decrees: List<IDecree>, pools: IDecree.() -> List<String>): List<BountyEntry> {
         // Pool string list -> Pool list -> Only pools with all required mods acquired -> pool entries -> flattened
         return decrees.asSequence().map {
             pools(it)
-        }.flatten().toSet().map {
-            PoolRegistry.poolFor(it)!!
+        }.flatten().toSet().mapNotNull {
+            val opt = PoolRegistry.poolFor(it)
+            if (opt == null) {
+                BountifulMod.logger.error("Tried to get entry list for decrees ${decrees.map { d -> d.id }}; pool that was trying to be accessed: $it")
+            }
+            opt
         }.filter {
             it.modsRequired?.all { mName -> ModList.get().isLoaded(mName) } ?: true
         }.map {
