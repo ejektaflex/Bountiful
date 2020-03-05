@@ -1,7 +1,7 @@
 package ejektaflex.bountiful.gui
 
 import ejektaflex.bountiful.block.BoardTileEntity
-import ejektaflex.bountiful.ModContent
+import ejektaflex.bountiful.BountifulContent
 import ejektaflex.bountiful.gui.slot.BountySlot
 import ejektaflex.bountiful.gui.slot.DecreeSlot
 import net.minecraft.entity.player.PlayerEntity
@@ -15,7 +15,7 @@ import net.minecraftforge.items.SlotItemHandler
 import net.minecraftforge.items.wrapper.InvWrapper
 
 
-class BoardContainer(id: Int, val world: World, val pos: BlockPos, val inv: PlayerInventory) : Container(ModContent.Guis.BOARDCONTAINER, id) {
+class BoardContainer(id: Int, val world: World, val pos: BlockPos, val inv: PlayerInventory) : Container(BountifulContent.Guis.BOARDCONTAINER, id) {
 
     private val boardTE: BoardTileEntity by lazy {
         world.getTileEntity(pos) as BoardTileEntity

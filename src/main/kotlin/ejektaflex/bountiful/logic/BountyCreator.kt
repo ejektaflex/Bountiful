@@ -7,7 +7,7 @@ import ejektaflex.bountiful.ext.hackyRandom
 import ejektaflex.bountiful.ext.randomSplit
 import ejektaflex.bountiful.ext.supposedlyNotNull
 import ejektaflex.bountiful.ext.weightedRandomNorm
-import ejektaflex.bountiful.ModContent
+import ejektaflex.bountiful.BountifulContent
 import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.item.ItemBounty
@@ -27,8 +27,8 @@ object BountyCreator {
 
     fun createStack(world: World, decrees: List<Decree>): ItemStack {
 
-        return ItemStack(ModContent.Items.BOUNTY).apply {
-            (ModContent.Items.BOUNTY as ItemBounty).ensureBounty(this, world, decrees, calcRarity())
+        return ItemStack(BountifulContent.Items.BOUNTY).apply {
+            (BountifulContent.Items.BOUNTY as ItemBounty).ensureBounty(this, world, decrees, calcRarity())
         }
         //return ContentRegistry.bounty.let { ItemStack(it).apply { it.ensureBounty(this, world, rarity) } }
     }

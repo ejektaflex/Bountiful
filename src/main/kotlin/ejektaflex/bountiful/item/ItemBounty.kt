@@ -1,9 +1,8 @@
 package ejektaflex.bountiful.item
 
-import ejektaflex.bountiful.api.BountifulAPI
 import ejektaflex.bountiful.data.bounty.enums.BountyRarity
 import ejektaflex.bountiful.ext.sendTranslation
-import ejektaflex.bountiful.ModContent
+import ejektaflex.bountiful.BountifulContent
 import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.data.bounty.enums.BountyNBT
 import ejektaflex.bountiful.data.structure.Decree
@@ -30,7 +29,7 @@ import net.minecraftforge.registries.IForgeRegistryEntry
 
 
 class ItemBounty() : Item(
-        Item.Properties().maxStackSize(1).group(ModContent.BountifulGroup)
+        Item.Properties().maxStackSize(1).group(BountifulContent.BountifulGroup)
 ), IForgeRegistryEntry<Item> {
 
     /**
@@ -161,18 +160,16 @@ class ItemBounty() : Item(
     fun ensureBounty(stack: ItemStack, worldIn: World, decrees: List<Decree>, rarity: BountyRarity) {
 
         val data = try {
-            BountifulAPI.createBountyData(worldIn, rarity, decrees)
+            BountyCreator.create(rarity, decrees)
         } catch (e: BountyCreationException) {
             return
         }
 
         if (stack.item is ItemBounty) {
             if (!stack.hasTag()) {
-                if (data != null) {
-                    stack.tag = data.serializeNBT().apply {
-                        this.remove(BountyNBT.BountyStamp.key)
-                        this.putLong(BountyNBT.BoardStamp.key, worldIn.gameTime)
-                    }
+                stack.tag = data.serializeNBT().apply {
+                    this.remove(BountyNBT.BountyStamp.key)
+                    this.putLong(BountyNBT.BoardStamp.key, worldIn.gameTime)
                 }
             }
         } else {

@@ -1,6 +1,5 @@
 package ejektaflex.bountiful
 
-import ejektaflex.bountiful.api.BountifulAPIProvider
 import ejektaflex.bountiful.generic.IMerge
 import ejektaflex.bountiful.data.json.JsonAdapter
 import ejektaflex.bountiful.ext.sendErrorMsg
@@ -22,7 +21,7 @@ import java.lang.Exception
 import java.nio.file.Paths
 
 
-@Mod("bountiful")
+@Mod(BountifulMod.MODID)
 object BountifulMod {
 
     const val MODID = "bountiful"
@@ -31,18 +30,6 @@ object BountifulMod {
 
     init {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, BountifulConfig.serverSpec)
-    }
-
-    val configFolder = Paths.get("config", "bountiful").toFile().apply {
-        mkdirs()
-    }
-
-    val configDecrees = File(configFolder, "decrees").apply {
-        mkdirs()
-    }
-
-    val configPools = File(configFolder, "pools").apply {
-        mkdirs()
     }
 
     fun reloadBountyData(
@@ -126,21 +113,12 @@ object BountifulMod {
 
         }
 
-        //logger.info("Full location: $fullLocation")
-
-        //val res = manager.getResource(fullLocation)
-        //logger.info("TEXT: ${manager.getResource(fullLocation).inputStream.reader().readText()}")
-
-
-
     }
 
     init {
-        BountifulAPIProvider.changeAPI(BountifulAPIImpl)
         FMLKotlinModLoadingContext.get().modEventBus.register(SetupLifecycle)
     }
 
-    // Temporary dummy config until real config files are replaced
     val config = BountifulConfig()
 
 }

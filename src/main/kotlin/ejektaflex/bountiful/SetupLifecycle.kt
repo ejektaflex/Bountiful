@@ -45,14 +45,11 @@ object SetupLifecycle {
         BountifulMod.logger.info("Loading Bountiful listeners..")
     }
 
-    class BountifulLoadingException(reason: String) : Exception("Bountiful failed to load JSON data. Reason: $reason")
-
     @SubscribeEvent
     fun gameSetup(event: FMLCommonSetupEvent) {
         println("Registering data type adapters for JSON/Data conversion...")
         JsonSerializers.register()
     }
-
 
     fun validatePool(pool: EntryPool, sender: CommandSource? = null, log: Boolean = false): MutableList<BountyEntry> {
 
@@ -128,9 +125,9 @@ object SetupLifecycle {
     fun registerItems(event: RegistryEvent.Register<Item>) {
         println("Registering to: ${event.registry.registryName}, ${event.registry.registrySuperType}")
         event.registry.registerAll(
-                ModContent.Items.BOUNTY,
-                ModContent.Items.BOUNTYBOARD,
-                ModContent.Items.DECREE
+                BountifulContent.Items.BOUNTY,
+                BountifulContent.Items.BOUNTYBOARD,
+                BountifulContent.Items.DECREE
         )
     }
 
@@ -138,7 +135,7 @@ object SetupLifecycle {
     fun registerBlocks(event: RegistryEvent.Register<Block>) {
         println("Registering to: ${event.registry.registryName}, ${event.registry.registrySuperType}")
         event.registry.registerAll(
-                ModContent.Blocks.BOUNTYBOARD
+                BountifulContent.Blocks.BOUNTYBOARD
         )
     }
 
@@ -147,7 +144,7 @@ object SetupLifecycle {
         event.registry.register(
                 TileEntityType.Builder.create<BoardTileEntity>(Supplier {
                     BoardTileEntity()
-                }, ModContent.Blocks.BOUNTYBOARD)
+                }, BountifulContent.Blocks.BOUNTYBOARD)
                         .build(null)
                         .setRegistryName("${BountifulMod.MODID}:bounty-te")
         )
@@ -163,12 +160,12 @@ object SetupLifecycle {
 
     @SubscribeEvent
     fun onClientInit(event: FMLClientSetupEvent) {
-        ScreenManager.registerFactory(ModContent.Guis.BOARDCONTAINER) {
+        ScreenManager.registerFactory(BountifulContent.Guis.BOARDCONTAINER) {
             container, inv, textComponent ->  BoardScreen(container, inv, textComponent)
         }
     }
 
-    private val decreeTrade = BasicTrade(3, ItemStack(ModContent.Items.DECREE), 5, 5, 0.5f)
+    private val decreeTrade = BasicTrade(3, ItemStack(BountifulContent.Items.DECREE), 5, 5, 0.5f)
 
     @SubscribeEvent
     fun doWandererTrades(event: WandererTradesEvent) {

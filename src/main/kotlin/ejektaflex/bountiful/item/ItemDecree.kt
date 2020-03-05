@@ -1,7 +1,7 @@
 package ejektaflex.bountiful.item
 
 import ejektaflex.bountiful.ext.hackyRandom
-import ejektaflex.bountiful.ModContent
+import ejektaflex.bountiful.BountifulContent
 import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.registry.DecreeRegistry
 import net.minecraft.client.util.ITooltipFlag
@@ -19,7 +19,7 @@ import net.minecraft.util.text.TranslationTextComponent
 
 
 class ItemDecree() : Item(
-        Item.Properties().maxStackSize(1).group(ModContent.BountifulGroup)
+        Item.Properties().maxStackSize(1).group(BountifulContent.BountifulGroup)
 ) {
 
 
@@ -103,13 +103,13 @@ class ItemDecree() : Item(
 
 
         fun makeStack(): ItemStack {
-            val newDecree = ItemStack(ModContent.Items.DECREE)
+            val newDecree = ItemStack(BountifulContent.Items.DECREE)
             (newDecree.item as ItemDecree).ensureDecree(newDecree)
             return newDecree
         }
 
         fun makeStack(decree: Decree): ItemStack {
-            val newDecree = ItemStack(ModContent.Items.DECREE)
+            val newDecree = ItemStack(BountifulContent.Items.DECREE)
             (newDecree.item as ItemDecree).ensureDecree(newDecree, decree)
             return newDecree
         }

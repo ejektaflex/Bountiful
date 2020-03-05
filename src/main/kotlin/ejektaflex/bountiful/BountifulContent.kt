@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntityType
 import net.minecraftforge.registries.ObjectHolder
 
-object ModContent {
+object BountifulContent {
 
     object Blocks {
 
@@ -35,7 +35,7 @@ object ModContent {
         @JvmStatic lateinit var BOARDCONTAINER: ContainerType<BoardContainer>
     }
 
-    object BountifulGroup : ItemGroup("bountiful") {
+    object BountifulGroup : ItemGroup(BountifulMod.MODID) {
         override fun createIcon() = ItemStack(Items.DECREE)
     }
 
