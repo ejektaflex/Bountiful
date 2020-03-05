@@ -1,7 +1,7 @@
 package ejektaflex.bountiful.registry
 
 import ejektaflex.bountiful.data.structure.EntryPool
-import ejektaflex.bountiful.generic.ValueRegistry
+import ejektaflex.bountiful.util.ValueRegistry
 
 object PoolRegistry : ValueRegistry<EntryPool>() {
 

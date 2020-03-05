@@ -2,7 +2,7 @@ package ejektaflex.bountiful.data.bounty.checkers
 
 import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.data.bounty.BountyEntry
-import ejektaflex.bountiful.generic.ValueRegistry
+import ejektaflex.bountiful.util.ValueRegistry
 import ejektaflex.bountiful.logic.BountyProgress
 import ejektaflex.bountiful.logic.IBountyReward
 import net.minecraft.entity.player.PlayerEntity

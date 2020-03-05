@@ -17,10 +17,6 @@ class BoardScreen(container: BoardContainer, inv: PlayerInventory, name: ITextCo
         val name = I18n.format("block.bountiful.bountyboard")
         font.drawString(name, xSize / 2 - font.getStringWidth(name) - 12f, 6f, 0x170e0b)
 
-        // 'Decrees'
-        //val name2 = I18n.format("bountiful.decrees")
-        //font.drawString(name2, xSize - font.getStringWidth(name2) - 4f, 6f, 0x231610)
-
         // 'Inventory'
         font.drawString(playerInventory.displayName.unformattedComponentText, 8f, ySize - 93f, 0x170e0b)
         super.drawGuiContainerForegroundLayer(mouseX, mouseY)

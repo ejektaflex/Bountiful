@@ -1,17 +1,20 @@
 package ejektaflex.bountiful
 
-import ejektaflex.bountiful.data.bounty.BountyEntry
-import ejektaflex.bountiful.data.bounty.BountyEntryEntity
-import ejektaflex.bountiful.data.json.JsonSerializers
-import ejektaflex.bountiful.ext.sendErrorMsg
-import ejektaflex.bountiful.ext.sendMessage
+import com.google.common.collect.ImmutableList
+import com.mojang.datafixers.util.Pair
 import ejektaflex.bountiful.block.BoardTileEntity
 import ejektaflex.bountiful.data.bounty.BountyData
+import ejektaflex.bountiful.data.bounty.BountyEntry
+import ejektaflex.bountiful.data.bounty.BountyEntryEntity
 import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
+import ejektaflex.bountiful.data.json.JsonSerializers
 import ejektaflex.bountiful.data.structure.EntryPool
+import ejektaflex.bountiful.ext.sendErrorMsg
+import ejektaflex.bountiful.ext.sendMessage
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.gui.BoardScreen
 import ejektaflex.bountiful.item.ItemBounty
+import ejektaflex.bountiful.worldgen.JigsawJank
 import net.minecraft.block.Block
 import net.minecraft.client.gui.ScreenManager
 import net.minecraft.command.CommandSource
@@ -22,6 +25,12 @@ import net.minecraft.item.ItemStack
 import net.minecraft.resources.IResourceManager
 import net.minecraft.resources.IResourceManagerReloadListener
 import net.minecraft.tileentity.TileEntityType
+import net.minecraft.util.ResourceLocation
+import net.minecraft.world.gen.feature.ConfiguredFeature
+import net.minecraft.world.gen.feature.Feature
+import net.minecraft.world.gen.feature.IFeatureConfig
+import net.minecraft.world.gen.feature.jigsaw.*
+import net.minecraft.world.gen.feature.structure.VillagePieces
 import net.minecraftforge.common.BasicTrade
 import net.minecraftforge.common.extensions.IForgeContainerType
 import net.minecraftforge.event.RegistryEvent
@@ -35,7 +44,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent
 import java.util.function.Supplier
-import kotlin.Exception
 import kotlin.math.min
 
 @Mod.EventBusSubscriber
@@ -49,6 +57,15 @@ object SetupLifecycle {
     fun gameSetup(event: FMLCommonSetupEvent) {
         println("Registering data type adapters for JSON/Data conversion...")
         JsonSerializers.register()
+        println("Adding bounty board to world gen")
+        JigsawJank.create().append(
+                ResourceLocation("minecraft","village/plains/houses")
+        ) {
+            listOf(
+                    Pair.of(SingleJigsawPiece("bountiful:village/common/bounty_gazebo"), 2)
+            )
+        }
+
     }
 
     fun validatePool(pool: EntryPool, sender: CommandSource? = null, log: Boolean = false): MutableList<BountyEntry> {

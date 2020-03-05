@@ -1,4 +1,4 @@
-package ejektaflex.bountiful.generic
+package ejektaflex.bountiful.util
 
 import com.google.gson.annotations.Expose
 

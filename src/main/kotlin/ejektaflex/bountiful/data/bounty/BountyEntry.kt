@@ -7,8 +7,8 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.data.json.JsonBiSerializer
 import ejektaflex.bountiful.ext.hackyRandom
-import ejektaflex.bountiful.generic.IWeighted
-import ejektaflex.bountiful.generic.ItemRange
+import ejektaflex.bountiful.util.IWeighted
+import ejektaflex.bountiful.util.ItemRange
 import net.minecraft.nbt.*
 import net.minecraft.util.text.ITextComponent
 import net.minecraftforge.common.util.INBTSerializable

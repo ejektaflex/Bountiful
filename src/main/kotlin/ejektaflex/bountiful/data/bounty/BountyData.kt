@@ -6,7 +6,7 @@ import ejektaflex.bountiful.data.bounty.enums.BountyRarity
 import ejektaflex.bountiful.ext.setUnsortedList
 import ejektaflex.bountiful.ext.getUnsortedList
 import ejektaflex.bountiful.ext.toBountyEntry
-import ejektaflex.bountiful.generic.ValueRegistry
+import ejektaflex.bountiful.util.ValueRegistry
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.logic.BountyTypeRegistry
 import ejektaflex.bountiful.logic.IBountyObjective

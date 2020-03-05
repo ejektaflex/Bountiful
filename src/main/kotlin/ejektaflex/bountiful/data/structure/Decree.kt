@@ -1,9 +1,9 @@
 package ejektaflex.bountiful.data.structure
 
 import com.google.gson.annotations.Expose
-import ejektaflex.bountiful.generic.IMerge
+import ejektaflex.bountiful.util.IMerge
 import ejektaflex.bountiful.data.bounty.BountyEntry
-import ejektaflex.bountiful.generic.IIdentifiable
+import ejektaflex.bountiful.util.IIdentifiable
 import ejektaflex.bountiful.registry.PoolRegistry
 import net.minecraft.nbt.CompoundNBT
 import net.minecraftforge.common.util.INBTSerializable

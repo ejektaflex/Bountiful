@@ -1,7 +1,7 @@
 package ejektaflex.bountiful.ext
 
-import ejektaflex.bountiful.generic.IWeighted
-import ejektaflex.bountiful.generic.ItemRange
+import ejektaflex.bountiful.util.IWeighted
+import ejektaflex.bountiful.util.ItemRange
 import net.minecraft.command.CommandSource
 import net.minecraft.entity.Entity
 import net.minecraft.util.NonNullList

@@ -2,7 +2,7 @@ package ejektaflex.bountiful.data.bounty.enums
 
 import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.data.structure.EntryPool
-import ejektaflex.bountiful.generic.ValueRegistry
+import ejektaflex.bountiful.util.ValueRegistry
 import ejektaflex.bountiful.registry.DecreeRegistry
 import ejektaflex.bountiful.registry.PoolRegistry
 import net.minecraftforge.resource.IResourceType
