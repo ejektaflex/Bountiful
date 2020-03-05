@@ -1,5 +1,6 @@
 package ejektaflex.bountiful.item
 
+import ejektaflex.bountiful.BountifulConfig
 import ejektaflex.bountiful.data.bounty.enums.BountyRarity
 import ejektaflex.bountiful.ext.sendTranslation
 import ejektaflex.bountiful.BountifulContent
@@ -81,7 +82,11 @@ class ItemBounty() : Item(
             return super.onItemRightClick(worldIn, playerIn, handIn)
         }
 
-        cashIn(playerIn, handIn, atBoard = false)
+        if (!BountifulConfig.SERVER.cashInAtBountyBoard.get()) {
+            cashIn(playerIn, handIn)
+        } else {
+            playerIn.sendMessage(TranslationTextComponent("bountiful.bounty.turnin"))
+        }
 
         return super.onItemRightClick(worldIn, playerIn, handIn)
     }
@@ -181,7 +186,7 @@ class ItemBounty() : Item(
     }
 
     // Used to cash in the bounty for a reward
-    fun cashIn(player: PlayerEntity, hand: Hand, atBoard: Boolean = false): Boolean {
+    fun cashIn(player: PlayerEntity, hand: Hand): Boolean {
         val bountyItem = player.getHeldItem(hand)
         if (!bountyItem.hasTag()) {
             ensureBounty(player.getHeldItem(hand), player.world, DecreeRegistry.content, BountyCreator.calcRarity())

@@ -9,19 +9,16 @@
 	"bountiful.decree.invalid": "Invalid Decree",
 	"bountiful.decree.notset": "Bring this to a Bounty Board!",
 
-	"_comment": "Interface",
 	"bountiful.bounty.expired": "§4This bounty has expired.",
 	"bountiful.bounty.fulfilled": "§6Bounty Fulfilled!",
 	"bountiful.cannot.fulfill": "§aCannot fulfill bounty, you don't have everything needed!",
-	"bountiful.board.empty": "§6No bounties available, come back later!",
+	"bountiful.bounty.turnin": "Fullfill your bounty by right clicking on a bounty board.",
 
-	"_comment": "Commands",
 
 	"bountiful.bounty": "Bounty",
 
 	"bountiful.reloaded.data": "Json config files reloaded.",
 	"bountiful.reloading.data": "Reloading data..",
-	"bountiful.requirements.met": "§aBounty requirements met. Fullfill your bounty by right clicking on a bounty board.",
 	"bountiful.requirements.mobs.needed": "§cYou need to kill more mobs to fulfill this bounty.",
 	"bountiful.command.gen.invalid": "§6Rarity not found!",
 

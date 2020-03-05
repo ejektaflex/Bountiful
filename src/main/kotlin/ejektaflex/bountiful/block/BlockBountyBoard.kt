@@ -1,5 +1,7 @@
 package ejektaflex.bountiful.block
 
+import ejektaflex.bountiful.BountifulConfig
+import ejektaflex.bountiful.item.ItemBounty
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.SoundType
@@ -28,10 +30,23 @@ class BlockBountyBoard() : Block(
 
     override fun onBlockActivated(state: BlockState, worldIn: World, pos: BlockPos, player: PlayerEntity, handIn: Hand, hit: BlockRayTraceResult): Boolean {
         if (!worldIn.isRemote) {
-            val te = worldIn.getTileEntity(pos)
-            if (te is INamedContainerProvider) {
-                NetworkHooks.openGui(player as ServerPlayerEntity, te as INamedContainerProvider, te.pos)
+
+
+            if (!player.isSneaking) {
+
+                val holding = player.getHeldItem(handIn)
+
+                if (BountifulConfig.SERVER.cashInAtBountyBoard.get() && holding.item is ItemBounty) {
+                    (holding.item as ItemBounty).cashIn(player, handIn)
+                } else {
+                    val te = worldIn.getTileEntity(pos)
+                    if (te is INamedContainerProvider) {
+                        NetworkHooks.openGui(player as ServerPlayerEntity, te as INamedContainerProvider, te.pos)
+                    }
+                }
             }
+
+
         }
         return true
     }
