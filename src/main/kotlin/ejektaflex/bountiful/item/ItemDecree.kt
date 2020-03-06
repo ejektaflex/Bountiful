@@ -3,7 +3,7 @@ package ejektaflex.bountiful.item
 import ejektaflex.bountiful.ext.hackyRandom
 import ejektaflex.bountiful.BountifulContent
 import ejektaflex.bountiful.data.structure.Decree
-import ejektaflex.bountiful.registry.DecreeRegistry
+import ejektaflex.bountiful.data.registry.DecreeRegistry
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item

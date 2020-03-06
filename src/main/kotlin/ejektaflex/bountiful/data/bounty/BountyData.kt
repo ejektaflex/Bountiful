@@ -26,7 +26,7 @@ import kotlin.math.max
 
 class BountyData : INBTSerializable<CompoundNBT> {
 
-    var boardStamp = BountifulConfig.SERVER.boardLifespan.get()
+    var boardStamp = BountifulConfig.SERVER.boardLifespan.get() * 20
     var bountyTime = 0L
     var rarity = 0
     val objectives = ValueRegistry<BountyEntry>()

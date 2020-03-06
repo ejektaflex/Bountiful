@@ -39,11 +39,11 @@
         "content": "minecraft:creeper",
         "amountRange": {
           "min": 1,
-          "max": 14
+          "max": 12
         },
-        "unitWorth": 400,
+        "unitWorth": 450,
         "weight": 1000,
-        "timeMult": 2.5
+        "timeMult": 3.2
       }
     ]
   }

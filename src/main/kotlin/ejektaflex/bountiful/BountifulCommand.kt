@@ -12,8 +12,8 @@ import ejektaflex.bountiful.ext.supposedlyNotNull
 import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
 import ejektaflex.bountiful.item.ItemDecree
 import ejektaflex.bountiful.logic.BountyCreator
-import ejektaflex.bountiful.registry.DecreeRegistry
-import ejektaflex.bountiful.registry.PoolRegistry
+import ejektaflex.bountiful.data.registry.DecreeRegistry
+import ejektaflex.bountiful.data.registry.PoolRegistry
 import net.minecraft.command.CommandSource
 import net.minecraft.command.Commands.argument
 import net.minecraft.command.Commands.literal

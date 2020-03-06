@@ -1,0 +1,28 @@
+{
+  "display": {
+    "icon": {
+      "item": "bountiful:bountyboard"
+    },
+    "title": {
+      "translate": "bountiful.advancement.hopeful.title"
+    },
+    "description": {
+      "translate": "bountiful.advancement.hopeful.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
+  },
+  "criteria": {
+    "take_a_bounty": {
+      "trigger": "bountiful:bounty_taken"
+    }
+  },
+  "requirements": [
+    [
+      "take_a_bounty"
+    ]
+  ]
+}

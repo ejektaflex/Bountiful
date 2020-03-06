@@ -83,15 +83,18 @@ object BountifulMod {
 
                     //logger.info("New obj is: $newObj")
 
-                    if (obj != null) {
-                        //logger.warn("MERGING $obj with $newObj")
-                        if (newObj.canLoad) {
+                    if (newObj.canLoad) {
+                        if (obj != null) {
+                            //logger.warn("MERGING $obj with $newObj")
+
                             obj.merge(newObj)
+                            //logger.warn("RESULT IS: $obj")
+                        } else {
+                            obj = newObj
                         }
-                        //logger.warn("RESULT IS: $obj")
-                    } else {
-                        obj = newObj
                     }
+
+
                 }
 
 

@@ -1,7 +1,6 @@
 package ejektaflex.bountiful.block
 
 import ejektaflex.bountiful.BountifulConfig
-import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.ext.*
 import ejektaflex.bountiful.BountifulContent
 import ejektaflex.bountiful.data.bounty.BountyData
@@ -10,7 +9,7 @@ import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.item.ItemDecree
 import ejektaflex.bountiful.logic.BountyCreator
-import ejektaflex.bountiful.registry.DecreeRegistry
+import ejektaflex.bountiful.data.registry.DecreeRegistry
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.container.Container

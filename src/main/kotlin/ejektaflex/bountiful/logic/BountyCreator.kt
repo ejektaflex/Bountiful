@@ -1,7 +1,6 @@
 package ejektaflex.bountiful.logic
 
 import ejektaflex.bountiful.BountifulConfig
-import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.data.bounty.enums.BountyRarity
 import ejektaflex.bountiful.ext.hackyRandom
@@ -12,7 +11,7 @@ import ejektaflex.bountiful.BountifulContent
 import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.item.ItemBounty
-import ejektaflex.bountiful.registry.DecreeRegistry
+import ejektaflex.bountiful.data.registry.DecreeRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.util.NonNullList
 import net.minecraft.world.World

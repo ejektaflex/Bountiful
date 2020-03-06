@@ -1,4 +1,4 @@
-package ejektaflex.bountiful.registry
+package ejektaflex.bountiful.data.registry
 
 import ejektaflex.bountiful.data.structure.EntryPool
 import ejektaflex.bountiful.util.ValueRegistry

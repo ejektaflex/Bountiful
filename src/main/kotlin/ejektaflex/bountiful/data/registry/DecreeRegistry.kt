@@ -1,4 +1,4 @@
-package ejektaflex.bountiful.registry
+package ejektaflex.bountiful.data.registry
 
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.data.bounty.BountyEntry

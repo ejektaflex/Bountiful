@@ -1,7 +1,7 @@
 package ejektaflex.bountiful
 
-import com.google.common.collect.ImmutableList
 import com.mojang.datafixers.util.Pair
+import ejektaflex.bountiful.advancement.BountifulTriggers
 import ejektaflex.bountiful.block.BoardTileEntity
 import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.data.bounty.BountyEntry
@@ -26,11 +26,7 @@ import net.minecraft.resources.IResourceManager
 import net.minecraft.resources.IResourceManagerReloadListener
 import net.minecraft.tileentity.TileEntityType
 import net.minecraft.util.ResourceLocation
-import net.minecraft.world.gen.feature.ConfiguredFeature
-import net.minecraft.world.gen.feature.Feature
-import net.minecraft.world.gen.feature.IFeatureConfig
 import net.minecraft.world.gen.feature.jigsaw.*
-import net.minecraft.world.gen.feature.structure.VillagePieces
 import net.minecraftforge.common.BasicTrade
 import net.minecraftforge.common.extensions.IForgeContainerType
 import net.minecraftforge.event.RegistryEvent
@@ -65,6 +61,7 @@ object SetupLifecycle {
             )
         }
 
+        BountifulTriggers.register()
         BountifulStats.init()
     }
 

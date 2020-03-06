@@ -9,7 +9,7 @@ import ejektaflex.bountiful.data.bounty.enums.BountyNBT
 import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.data.bounty.checkers.CheckerRegistry
-import ejektaflex.bountiful.registry.DecreeRegistry
+import ejektaflex.bountiful.data.registry.DecreeRegistry
 import net.minecraft.client.Minecraft
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity

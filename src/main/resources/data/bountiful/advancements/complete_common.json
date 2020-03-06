@@ -1,0 +1,28 @@
+{
+  "parent": "bountiful:root",
+  "display": {
+    "icon": {
+      "item": "minecraft:bounty"
+    },
+    "title": {
+      "translate": "bountiful.advancement.hopeful.title"
+    },
+    "description": {
+      "translate": "bountiful.advancement.hopeful.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "finish_it": {
+      "trigger": "bountiful:bounty_complete_common"
+    }
+  },
+  "requirements": [
+    [
+      "finish_it"
+    ]
+  ]
+}
