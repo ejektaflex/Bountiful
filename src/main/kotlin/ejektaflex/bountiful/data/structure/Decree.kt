@@ -10,12 +10,13 @@ import net.minecraftforge.common.util.INBTSerializable
 
 data class Decree(
         @Expose var decreeTitle: String = "UNKNOWN",
-        @Expose override var id: String = "unknown_id",
         @Expose var spawnsInBoard: Boolean = false,
         @Expose var isGreedy: Boolean = false,
         @Expose var objectivePools: MutableList<String> = mutableListOf(),
         @Expose var rewardPools: MutableList<String> = mutableListOf()
 ) : INBTSerializable<CompoundNBT>, IMerge<Decree>, IIdentifiable {
+
+    override var id: String = "UNKNOWN_DECREE_ID"
 
     override fun serializeNBT(): CompoundNBT {
         return CompoundNBT().apply {

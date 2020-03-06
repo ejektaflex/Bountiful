@@ -9,7 +9,9 @@ import net.minecraftforge.fml.ModList
 
 // Currently unused? Should only need a PoolRegistry and a DecreeRegistry
 
-open class EntryPool(@Expose override val id: String) : ValueRegistry<BountyEntry>(), IMerge<EntryPool>, IIdentifiable {
+open class EntryPool() : ValueRegistry<BountyEntry>(), IMerge<EntryPool>, IIdentifiable {
+
+    override var id: String = "UNKNOWN_POOL_ID"
 
     @Expose
     var modsRequired: MutableList<String>? = null

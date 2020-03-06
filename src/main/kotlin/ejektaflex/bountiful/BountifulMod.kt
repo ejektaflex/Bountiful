@@ -54,6 +54,8 @@ object BountifulMod {
         // For each group of files with the same name
         fileLoop@ for ((filename, locations) in spaceMap) {
 
+            val filenameNoExtension = filename.substringBefore(".json")
+
             var obj: IMerge<Any>? = null
 
             //logger.error("########## FILENAME: $filename ##########")
@@ -80,6 +82,9 @@ object BountifulMod {
                         msgSender?.sendErrorMsg("Skipping resource $location. Reason: ${e.message}")
                         continue@nameLoop
                     } as IMerge<Any>
+
+                    // Set ID to filename
+                    newObj.id = filenameNoExtension
 
                     //logger.info("New obj is: $newObj")
 
