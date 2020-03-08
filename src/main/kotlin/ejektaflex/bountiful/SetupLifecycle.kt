@@ -54,12 +54,14 @@ object SetupLifecycle {
     fun gameSetup(event: FMLCommonSetupEvent) {
         JsonSerializers.register()
 
-        JigsawJank.create().append(
-                ResourceLocation("minecraft","village/plains/houses")
-        ) {
-            listOf(
-                    Pair.of(SingleJigsawPiece("bountiful:village/common/bounty_gazebo"), 2)
-            )
+        if (BountifulConfig.SERVER.villageGen.get()) {
+            JigsawJank.create().append(
+                    ResourceLocation("minecraft","village/plains/houses")
+            ) {
+                listOf(
+                        Pair.of(SingleJigsawPiece("bountiful:village/common/bounty_gazebo"), 2)
+                )
+            }
         }
 
         BountifulTriggers.register()

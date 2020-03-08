@@ -45,6 +45,13 @@ class BountifulConfig {
                 .comment("Whether bounties should start counting down as soon as they are created")
                 .define("instantCountdown", false)
 
+        var bountyBoardBreakable: ForgeConfigSpec.BooleanValue = b
+                .comment("Whether bounty boards should be able to be broken (currently will lose all decrees/bounties on break)")
+                .define("boardBreakable", false)
+
+        var villageGen: ForgeConfigSpec.BooleanValue = b
+                .comment("Whether bounty boards should sometimes generate in the world in plains villages")
+                .define("villageGen", true)
 
 
 
