@@ -17,6 +17,7 @@ import ejektaflex.bountiful.data.registry.PoolRegistry
 import net.minecraft.command.CommandSource
 import net.minecraft.command.Commands.argument
 import net.minecraft.command.Commands.literal
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.resources.IResourceManager
 import net.minecraftforge.items.ItemHandlerHelper
 
@@ -28,24 +29,18 @@ object BountifulCommand {
     fun generateCommand(dispatcher: CommandDispatcher<CommandSource>) {
         dispatcher.register(
                 literal("bo")
+                        .requires(::hasPermission)
+
                         .then(
-                                literal("dump").executes(dump())
-                        )
-                        .then(
-                                literal("test").executes(dump(true))
+                                literal("test")
+                                        .requires(::hasPermission)
+                                        .executes(dump(true))
                         )
 
                         .then(
-                                literal("time").then(
-                                        argument("num", integer()).executes { c ->
-                                            bSpeed(getInteger(c, "num"))
-                                            1
-                                        }
-                                )
-                        )
-
-                        .then(
-                                literal("dec").then(
+                                literal("decree")
+                                        .requires(::hasPermission)
+                                        .then(
                                         argument("decType", string())
                                                 .suggests { c, b ->
                                                     for (dec in DecreeRegistry.content) {
@@ -77,7 +72,9 @@ object BountifulCommand {
                         )
 
                         .then(
-                                literal("sample").then(
+                                literal("sample")
+                                        .requires(::hasPermission)
+                                        .then(
                                         argument("decType", string())
                                                 .suggests { c, b ->
                                                     for (dec in DecreeRegistry.content) {
@@ -103,7 +100,9 @@ object BountifulCommand {
                         )
 
                         .then(
-                                literal("reload").executes(reload())
+                                literal("reload")
+                                        .requires(::hasPermission)
+                                        .executes(reload())
                         ).apply {
                             if (BountifulMod.config.debugMode) {
                                 /*
@@ -117,11 +116,12 @@ object BountifulCommand {
         )
     }
 
-    private fun bSpeed(num: Int) = Command<CommandSource> {
-
-        BountifulConfig.SERVER.boardAddFrequency.set(num)
-
-        1
+    fun hasPermission(c: CommandSource): Boolean {
+        if (c.hasPermissionLevel(2) ||
+                (c.entity is PlayerEntity && c.asPlayer().isCreative)) {
+            return true
+        }
+        return false
     }
 
     private fun reload() = Command<CommandSource> {
