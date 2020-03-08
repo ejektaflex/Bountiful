@@ -1,14 +1,11 @@
 {
-    "decreeTitle": "Cleric's Supplies",
-    "id": "cleric",
     "spawnsInBoard": true,
-    "isGreedy": false,
     "objectivePools": [
       "all_villager_objs",
-      "cleric_objs"
+      "leatherer_objs"
     ],
     "rewardPools": [
       "all_villager_rews",
-      "cleric_rews"
+      "leatherer_rews"
     ]
   }

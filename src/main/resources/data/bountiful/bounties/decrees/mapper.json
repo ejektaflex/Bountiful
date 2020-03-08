@@ -1,8 +1,5 @@
 {
-  "decreeTitle": "Cartography",
-  "id": "mapper",
   "spawnsInBoard": true,
-  "isGreedy": false,
   "objectivePools": [
     "common_crafts",
     "all_villager_objs",

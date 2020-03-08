@@ -1,14 +1,11 @@
 {
-    "decreeTitle": "Shepherding",
-    "id": "shepherd",
     "spawnsInBoard": true,
-    "isGreedy": false,
     "objectivePools": [
       "all_villager_objs",
-      "shepherd_objs"
+      "librarian_objs"
     ],
     "rewardPools": [
       "all_villager_rews",
-      "shepherd_rews"
+      "librarian_rews"
     ]
   }

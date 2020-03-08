@@ -1,14 +1,11 @@
 {
-    "decreeTitle": "Butchering",
-    "id": "butcher",
     "spawnsInBoard": true,
-    "isGreedy": false,
     "objectivePools": [
       "all_villager_objs",
-      "butcher_objs"
+      "chef_objs"
     ],
     "rewardPools": [
       "all_villager_rews",
-      "butcher_rews"
+      "chef_rews"
     ]
   }

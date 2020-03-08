@@ -1,14 +1,11 @@
 {
-    "decreeTitle": "Fishing",
-    "id": "fisherman",
     "spawnsInBoard": true,
-    "isGreedy": false,
     "objectivePools": [
       "all_villager_objs",
-      "fisherman_objs"
+      "hunting_objs"
     ],
     "rewardPools": [
       "all_villager_rews",
-      "fisherman_rews"
+      "hunting_rews"
     ]
   }

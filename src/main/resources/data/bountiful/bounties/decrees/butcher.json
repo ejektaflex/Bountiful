@@ -1,14 +1,11 @@
 {
-    "decreeTitle": "Bounty Hunting",
-    "id": "hunting",
     "spawnsInBoard": true,
-    "isGreedy": false,
     "objectivePools": [
       "all_villager_objs",
-      "hunting_objs"
+      "butcher_objs"
     ],
     "rewardPools": [
       "all_villager_rews",
-      "hunting_rews"
+      "butcher_rews"
     ]
   }

@@ -102,7 +102,7 @@ class BoardTileEntity : TileEntity(BountifulContent.Blocks.BOUNTYTILEENTITY), IT
     }
 
     private fun addSingleBounty() {
-        println("Adding a single bounty")
+        //println("Adding a single bounty")
         val newStack = BountyCreator.createStack(world!!, decrees)
         val freeSlots = bountySlots - filledBountySlots
         if (freeSlots.isNotEmpty()) {

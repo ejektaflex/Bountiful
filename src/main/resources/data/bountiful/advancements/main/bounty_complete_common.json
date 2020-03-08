@@ -1,5 +1,5 @@
 {
-  "parent": "bountiful:root",
+  "parent": "bountiful:main/root",
   "display": {
     "icon": {
       "item": "minecraft:bounty"

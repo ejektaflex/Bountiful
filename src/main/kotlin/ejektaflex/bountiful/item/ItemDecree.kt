@@ -40,14 +40,13 @@ class ItemDecree() : Item(
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<ITextComponent>, flagIn: ITooltipFlag) {
 
         val id = stack.tag?.getString("id")
-        val title = stack.tag?.getString("title")
 
-        if (id != null && title != null) {
+        if (id != null) {
             val tip = if (stack.tag != null) {
                 StringTextComponent("§5").appendSibling(
                         StringTextComponent("§6")
                 ).appendSibling(
-                        StringTextComponent(title)
+                        TranslationTextComponent("bountiful.decree.${id}.name")
                 )
             } else {
                 TranslationTextComponent("bountiful.decree.invalid").appendSibling(
