@@ -19,6 +19,10 @@ class BountifulConfig {
     }
 
     class Server(b: ForgeConfigSpec.Builder) {
+
+        val boardCategory = b.push("bounty_board")!!
+
+
         var maxBountiesPerBoard: ForgeConfigSpec.IntValue = b.comment(
                 "The maximum number of bounties present at a given board " +
                         "before it must delete some bounties to make room for more."
@@ -33,22 +37,6 @@ class BountifulConfig {
                 " able to stay on a board (if it ISN'T pushed off by another bounty).")
                 .defineInRange("boardLifespan", 3600, 60, 600000)
 
-        var timeMultiplier: ForgeConfigSpec.DoubleValue = b
-                .comment("A global multiplier for the time needed to complete a bounty.")
-                .defineInRange("timeMultiplier", 7.5, 1.0, 10000.0)
-
-        var cashInAtBountyBoard: ForgeConfigSpec.BooleanValue = b
-                .comment("If true, you can fulfill bounties by right clicking on a bounty board.")
-                .define("cashInAtBoard", true)
-
-        var rarityChance: ForgeConfigSpec.DoubleValue = b
-                .comment(
-                        "The odds of any given bounty going from one tier up to the next.",
-                        "(Higher Rarity = Higher chance of more rare rewards to show up.)",
-                        "At 0.0, all bounties will be common. At 1.0, all bounties will be epic.",
-                        "At 0.5, there is a 50% chance of going from any rarity to the next.")
-                .defineInRange("rarityTierUpChance", 0.4, 0.0, 1.0)
-
         var bountyTimeMin: ForgeConfigSpec.IntValue = b
                 .comment("The minimum amount of time you should get to complete a bounty.")
                 .defineInRange("minBountyTime", 300, 10, 600000)
@@ -57,9 +45,53 @@ class BountifulConfig {
                 .comment("Whether bounties should start counting down as soon as they are created")
                 .define("instantCountdown", false)
 
+
+
+
+        val datapackCategory = b.pop().push("datapacks")!!
+
         var namespaceBlacklist: ForgeConfigSpec.ConfigValue<List<String>> = b
                 .comment("Namespaces (mod ids) that should get blacklisted from loading bounty data")
                 .define("blacklistedDataNamespaces", listOf())
+
+
+
+        val bountiesCategory = b.pop().push("bounties")!!
+
+        var timeMultiplier: ForgeConfigSpec.DoubleValue = b
+                .comment("A global multiplier for the time needed to complete a bounty.")
+                .defineInRange("timeMultiplier", 7.5, 1.0, 10000.0)
+
+        var cashInAtBountyBoard: ForgeConfigSpec.BooleanValue = b
+                .comment("If true, you can fulfill bounties by right clicking on a bounty board.",
+                        "If false, you can right click anywhere with a bounty."
+                )
+                .define("cashInAtBoard", true)
+
+        var rarityChance: ForgeConfigSpec.DoubleValue = b
+                .comment(
+                        "The odds of any given bounty going from one tier up to the next.",
+                        "(Higher Rarity = Higher chance of more rare rewards to show up.)",
+                        "At 0.0, all bounties will be common. At 1.0, all bounties will be epic.",
+                        "At 0.5, there is a 50% chance of going from any rarity to the next.",
+                        "(50% chance of at least Uncommon, 25% of at least Rare, 12.5% chance of Epic)"
+                )
+                .defineInRange("rarityTierUpChance", 0.4, 0.0, 1.0)
+
+
+
+        val entityCategory = b.pop().push("entity_bounties")!!
+
+        var coopKillsCount: ForgeConfigSpec.ConfigValue<Boolean> = b
+                .comment("When true, when a mob dies, players near the mob and the mob killer will also",
+                        "have their bounties counted towards, if applicable.")
+                .define("coopKillsCount", true)
+
+        var coopKillDistance: ForgeConfigSpec.ConfigValue<Double> = b
+                .comment("If coopKillsCount is true, this determines how far a player can be from the mob",
+                        "or other player for their bounties to also get updated."
+                )
+                .define("coopKillDistance", 6.0)
 
     }
 

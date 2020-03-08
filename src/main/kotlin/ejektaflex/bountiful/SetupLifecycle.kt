@@ -18,6 +18,7 @@ import ejektaflex.bountiful.worldgen.JigsawJank
 import net.minecraft.block.Block
 import net.minecraft.client.gui.ScreenManager
 import net.minecraft.command.CommandSource
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.container.ContainerType
 import net.minecraft.item.Item
@@ -96,21 +97,42 @@ object SetupLifecycle {
     @SubscribeEvent
     fun entityLivingDeath(e: LivingDeathEvent) {
         val deadEntity = e.entityLiving
+
+
         if (e.source.trueSource is PlayerEntity) {
             val player = e.source.trueSource as PlayerEntity
-            val bountyStacks = player.inventory.mainInventory.filter { it.item is ItemBounty && it.hasTag() }
-            if (bountyStacks.isNotEmpty()) {
-                bountyStacks.forEach { stack ->
-                    val data = BountyData.from(stack)
-                    val eObjs = data.objectives.content.filterIsInstance<BountyEntryEntity>()
-                    for (obj in eObjs) {
 
-                        if (obj.isSameEntity(deadEntity)) {
-                            obj.killedAmount = min(obj.killedAmount + 1, obj.amount)
-                            stack.tag = data.serializeNBT()
-                        }
+            if (BountifulConfig.SERVER.coopKillsCount.get()) {
 
+                val withinRange = player.world.players.filter {
+                    it.getDistance(player) <= BountifulConfig.SERVER.coopKillDistance.get() ||
+                            it.getDistance(deadEntity) <= BountifulConfig.SERVER.coopKillDistance.get()
+                }
+
+                withinRange.forEach {
+                    updateBountiesForEntity(it, deadEntity)
+                }
+
+            } else {
+                updateBountiesForEntity(player, deadEntity)
+            }
+
+        }
+    }
+
+    fun updateBountiesForEntity(player: PlayerEntity, deadEntity: LivingEntity) {
+        val bountyStacks = player.inventory.mainInventory.filter { it.item is ItemBounty && it.hasTag() }
+        if (bountyStacks.isNotEmpty()) {
+            bountyStacks.forEach { stack ->
+                val data = BountyData.from(stack)
+                val eObjs = data.objectives.content.filterIsInstance<BountyEntryEntity>()
+                for (obj in eObjs) {
+
+                    if (obj.isSameEntity(deadEntity)) {
+                        obj.killedAmount = min(obj.killedAmount + 1, obj.amount)
+                        stack.tag = data.serializeNBT()
                     }
+
                 }
             }
         }
