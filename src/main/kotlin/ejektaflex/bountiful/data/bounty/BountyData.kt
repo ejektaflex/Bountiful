@@ -33,6 +33,10 @@ class BountyData : INBTSerializable<CompoundNBT> {
     val rewards = ValueRegistry<BountyEntry>()
     var bountyStamp: Long? = null
 
+    fun timeTaken(world: World): Long {
+        return world.gameTime - (bountyStamp ?: world.gameTime)
+    }
+
     fun timeLeft(world: World): Long {
         return if (bountyStamp == null) {
             bountyTime

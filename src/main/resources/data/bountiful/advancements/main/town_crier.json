@@ -2,13 +2,13 @@
   "parent": "bountiful:main/bounty_complete",
   "display": {
     "icon": {
-      "item": "bountiful:bounty"
+      "item": "bountiful:decree"
     },
     "title": {
-      "translate": "bountiful.advancement.hopeful.title"
+      "translate": "bountiful.advancement.town_crier.title"
     },
     "description": {
-      "translate": "bountiful.advancement.hopeful.desc"
+      "translate": "bountiful.advancement.town_crier.desc"
     },
     "frame": "task",
     "show_toast": true,
@@ -17,7 +17,14 @@
   },
   "criteria": {
     "finish_it": {
-      "trigger": "bountiful:bounty_complete_common"
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "bountiful:decree"
+          }
+        ]
+      }
     }
   },
   "requirements": [

@@ -1,14 +1,14 @@
 {
-  "parent": "bountiful:main/bounty_complete",
+  "parent": "bountiful:main/root",
   "display": {
     "icon": {
       "item": "bountiful:bounty"
     },
     "title": {
-      "translate": "bountiful.advancement.hopeful.title"
+      "translate": "bountiful.advancement.bounty_complete.title"
     },
     "description": {
-      "translate": "bountiful.advancement.hopeful.desc"
+      "translate": "bountiful.advancement.bounty_complete.desc"
     },
     "frame": "task",
     "show_toast": true,
@@ -17,7 +17,7 @@
   },
   "criteria": {
     "finish_it": {
-      "trigger": "bountiful:bounty_complete_common"
+      "trigger": "bountiful:bounty_complete"
     }
   },
   "requirements": [

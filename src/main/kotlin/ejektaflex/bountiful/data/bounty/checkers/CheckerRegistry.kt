@@ -1,8 +1,10 @@
 package ejektaflex.bountiful.data.bounty.checkers
 
 import ejektaflex.bountiful.BountifulStats
+import ejektaflex.bountiful.advancement.BountifulTriggers
 import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.data.bounty.BountyEntry
+import ejektaflex.bountiful.data.bounty.enums.BountyRarity
 import ejektaflex.bountiful.util.ValueRegistry
 import ejektaflex.bountiful.logic.BountyProgress
 import ejektaflex.bountiful.logic.IBountyReward
@@ -43,7 +45,17 @@ object CheckerRegistry : ValueRegistry<KClass<out CheckHandler<*>>>() {
             player.addStat(data.rarityEnum.stat, 1)
 
             if (!player.world.isRemote) {
-                data.rarityEnum.trigger(player as ServerPlayerEntity)
+
+                BountifulTriggers.COMPLETE_STARTER.trigger((player as ServerPlayerEntity).advancements)
+
+                if (data.timeLeft(player.world) < (5 * 20)) {
+                    BountifulTriggers.PROCRASTINATOR.trigger(player.advancements)
+                } else if (data.timeTaken(player.world) < (60 * 20)) {
+                    BountifulTriggers.RUSH_ORDER.trigger(player.advancements)
+                }
+
+                //if (data.timeLeft(player.world) <= (20 * 60))
+
             }
 
 

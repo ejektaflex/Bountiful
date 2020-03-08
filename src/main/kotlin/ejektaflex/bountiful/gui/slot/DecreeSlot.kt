@@ -7,6 +7,11 @@ import net.minecraft.item.ItemStack
 import net.minecraftforge.items.SlotItemHandler
 
 class DecreeSlot(val board: BoardTileEntity, index: Int, x: Int, y: Int) : SlotItemHandler(board.handler, index, x, y) {
+
+    init {
+        //setBackgroundName(BountifulMod.MODID + ":bg")
+    }
+
     override fun onSlotChanged() {
         board.markDirty()
     }
@@ -16,7 +21,7 @@ class DecreeSlot(val board: BoardTileEntity, index: Int, x: Int, y: Int) : SlotI
     }
 
     override fun isItemValid(stack: ItemStack): Boolean {
-        return stack.item is ItemDecree
+        return super.isItemValid(stack) && stack.item is ItemDecree
     }
 
 }

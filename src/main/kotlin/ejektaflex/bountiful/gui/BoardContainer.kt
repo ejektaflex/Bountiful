@@ -2,10 +2,12 @@ package ejektaflex.bountiful.gui
 
 import ejektaflex.bountiful.block.BoardTileEntity
 import ejektaflex.bountiful.BountifulContent
+import ejektaflex.bountiful.advancement.BountifulTriggers
 import ejektaflex.bountiful.gui.slot.BountySlot
 import ejektaflex.bountiful.gui.slot.DecreeSlot
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.entity.player.ServerPlayerEntity
 import net.minecraft.inventory.container.Container
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
@@ -31,9 +33,7 @@ class BoardContainer(id: Int, val world: World, val pos: BlockPos, val inv: Play
         val bCols = 7
 
         for (j in 0 until bRows) {
-            // EIGHT! 7! NOT NINE! We need to make the DecreeSlots on the right side.
             for (k in 0 until bCols) {
-                println("Made slot with index $j $k: ${k + j * bCols}")
                 addSlot(BountySlot(boardTE, k + j * bCols, 8 + k * 18, 18 + j * 18))
             }
 

@@ -1,23 +1,23 @@
 {
-  "parent": "bountiful:main/bounty_complete",
+  "parent": "bountiful:main/town_crier",
   "display": {
     "icon": {
-      "item": "bountiful:bounty"
+      "item": "bountiful:decree"
     },
     "title": {
-      "translate": "bountiful.advancement.hopeful.title"
+      "translate": "bountiful.advancement.royal_mandate.title"
     },
     "description": {
-      "translate": "bountiful.advancement.hopeful.desc"
+      "translate": "bountiful.advancement.royal_mandate.desc"
     },
-    "frame": "task",
+    "frame": "goal",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false
   },
   "criteria": {
     "finish_it": {
-      "trigger": "bountiful:bounty_complete_common"
+      "trigger": "bountiful:royal_mandate"
     }
   },
   "requirements": [

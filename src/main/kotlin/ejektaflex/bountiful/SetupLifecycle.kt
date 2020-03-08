@@ -28,6 +28,9 @@ import net.minecraft.resources.IResourceManagerReloadListener
 import net.minecraft.tileentity.TileEntityType
 import net.minecraft.util.ResourceLocation
 import net.minecraft.world.gen.feature.jigsaw.*
+import net.minecraftforge.api.distmarker.Dist
+import net.minecraftforge.api.distmarker.OnlyIn
+import net.minecraftforge.client.event.TextureStitchEvent
 import net.minecraftforge.common.BasicTrade
 import net.minecraftforge.common.extensions.IForgeContainerType
 import net.minecraftforge.event.RegistryEvent
@@ -212,6 +215,15 @@ object SetupLifecycle {
     fun doVillagerTrades(event: VillagerTradesEvent) {
         event.trades[2].add(decreeTrade)
     }
+
+    /*
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    fun stitchingAtlas(event: TextureStitchEvent.Pre) {
+        event.addSprite(ResourceLocation(BountifulMod.MODID, "bg"))
+    }
+
+     */
 
 }
 

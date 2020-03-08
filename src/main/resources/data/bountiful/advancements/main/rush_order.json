@@ -5,19 +5,19 @@
       "item": "bountiful:bounty"
     },
     "title": {
-      "translate": "bountiful.advancement.hopeful.title"
+      "translate": "bountiful.advancement.rush_order.title"
     },
     "description": {
-      "translate": "bountiful.advancement.hopeful.desc"
+      "translate": "bountiful.advancement.rush_order.desc"
     },
-    "frame": "task",
+    "frame": "challenge",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false
   },
   "criteria": {
     "finish_it": {
-      "trigger": "bountiful:bounty_complete_common"
+      "trigger": "bountiful:rush_order"
     }
   },
   "requirements": [

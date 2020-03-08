@@ -4,16 +4,16 @@
       "item": "bountiful:bountyboard"
     },
     "title": {
-      "translate": "bountiful.advancement.hopeful.title"
+      "translate": "bountiful.advancement.bounty_taken.title"
     },
     "description": {
-      "translate": "bountiful.advancement.hopeful.desc"
+      "translate": "bountiful.advancement.bounty_taken.desc"
     },
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false,
-    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
+    "background": "bountiful:textures/block/bountyboard_top.png"
   },
   "criteria": {
     "take_a_bounty": {
