@@ -17,7 +17,7 @@ Crash log:
 What should have happened:
 
 **Minimal setup needed to reproduce**
-<!--- List the minimal set of mods and configuration changes required for the observed behaviour to occur --->
+
 - Forge version: 
 - Bountiful version: 
 - Other mods:
