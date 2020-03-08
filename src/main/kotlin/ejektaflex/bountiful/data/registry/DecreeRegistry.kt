@@ -10,6 +10,9 @@ import net.minecraftforge.fml.ModList
 
 object DecreeRegistry : ValueRegistry<Decree>() {
 
+    val ids: List<String>
+        get() = content.map { it.id }
+
     fun getDecree(id: String): Decree? {
         return content.firstOrNull { it.id == id }
     }

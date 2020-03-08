@@ -99,10 +99,7 @@ object BountifulMod {
                         }
                     }
 
-
                 }
-
-
 
             }
 
@@ -110,11 +107,10 @@ object BountifulMod {
             if (obj != null) {
 
                 if (obj is EntryPool) {
-                    SetupLifecycle.validatePool(obj, msgSender, true)
+                    SetupLifecycle.validatePool(obj, msgSender)
                 }
 
                 (fillType.reg as ValueRegistry<Any>).add(obj as Any)
-                //logger.error("Reg Size Is Now: ${fillType.reg.content.size}")
             }
 
         }

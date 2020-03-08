@@ -10,6 +10,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
+import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
 import net.minecraft.world.World
@@ -22,6 +23,15 @@ class ItemDecree() : Item(
         Item.Properties().maxStackSize(1).group(BountifulContent.BountifulGroup)
 ) {
 
+    init {
+        addPropertyOverride(ResourceLocation("bountiful", "decreestatus")) { stack, world, entity ->
+            if (stack.hasTag() && stack.tag?.getString("id") in DecreeRegistry.ids) {
+                1f
+            } else {
+                0f
+            }
+        }
+    }
 
     /**
      * Thrown when bounty NBT data could not be created

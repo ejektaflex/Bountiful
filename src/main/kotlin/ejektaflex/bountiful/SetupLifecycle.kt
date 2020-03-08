@@ -68,8 +68,6 @@ object SetupLifecycle {
 
     fun validatePool(pool: EntryPool, sender: CommandSource? = null, log: Boolean = false): MutableList<BountyEntry> {
 
-        BountifulMod.logger.info("Validating pool on side? isRemote?: ${sender?.world?.isRemote}")
-
         sender?.sendMessage("Validating pool '${pool.id}'")
 
         val validEntries = mutableListOf<BountyEntry>()

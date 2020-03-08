@@ -206,7 +206,7 @@ object BountifulCommand {
         it.source.sendMessage("Dumping Pools to console...")
         for (pool in PoolRegistry.content) {
 
-            SetupLifecycle.validatePool(pool, it.source, test)
+            SetupLifecycle.validatePool(pool, it.source, true)
 
         }
         it.source.sendMessage("Pools dumped.")
