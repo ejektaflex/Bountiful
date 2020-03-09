@@ -4,10 +4,14 @@ import ejektaflex.bountiful.ext.hackyRandom
 import ejektaflex.bountiful.BountifulContent
 import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.data.registry.DecreeRegistry
+import ejektaflex.bountiful.ext.getUnsortedList
+import ejektaflex.bountiful.ext.getUnsortedListTyped
+import ejektaflex.bountiful.ext.setUnsortedList
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.CompoundNBT
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.ResourceLocation
@@ -25,7 +29,7 @@ class ItemDecree() : Item(
 
     init {
         addPropertyOverride(ResourceLocation("bountiful", "decreestatus")) { stack, world, entity ->
-            if (stack.hasTag() && stack.tag?.getString("id") in DecreeRegistry.ids) {
+            if (stack.hasTag() && stack.tag!!.getUnsortedList("ids").isNotEmpty()) {
                 1f
             } else {
                 0f
@@ -49,18 +53,26 @@ class ItemDecree() : Item(
     @OnlyIn(Dist.CLIENT)
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<ITextComponent>, flagIn: ITooltipFlag) {
 
-        val id = stack.tag?.getString("id")
+        val ids = stack.tag?.getUnsortedList("ids")?.map {
+            nbt -> nbt.getString("id")
+        }
 
-        if (id != null) {
+        if (ids != null) {
             val tip = if (stack.tag != null) {
-                StringTextComponent("§5").appendSibling(
+                var str = StringTextComponent("§5").appendSibling(
                         StringTextComponent("§6")
-                ).appendSibling(
-                        TranslationTextComponent("bountiful.decree.${id}.name")
                 )
+                for (id in ids) {
+                    str = str.appendSibling(
+                            TranslationTextComponent("bountiful.decree.${id}.name")
+                    )
+                }
+
+                str
+
             } else {
                 TranslationTextComponent("bountiful.decree.invalid").appendSibling(
-                        StringTextComponent(" ($id)")
+                        StringTextComponent(" ($ids)")
                 )
             }
             tooltip.add(tip)
@@ -70,14 +82,6 @@ class ItemDecree() : Item(
 
         // TODO Add debug tool when holding sneak, showing which pools are being used
         //tooltip.add(StringTextComponent("Replace Me!"))
-    }
-
-    override fun onItemRightClick(worldIn: World, playerIn: PlayerEntity, handIn: Hand): ActionResult<ItemStack> {
-
-        val held = playerIn.getHeldItem(handIn)
-        //ensureDecree(held)
-
-        return super.onItemRightClick(worldIn, playerIn, handIn)
     }
 
     fun ensureDecree(stack: ItemStack, defaultData: Decree? = null) {
@@ -91,13 +95,17 @@ class ItemDecree() : Item(
                     return
                 }
 
-                stack.tag = data.serializeNBT()
+                stack.tag = CompoundNBT().apply {
+                    setUnsortedList("ids", listOf(data).toSet())
+                }
+
             } else {
 
                 // If the ID on the Decree is invalid, turn it into a new random decree
-                val tid = stack.tag!!.getString("id")
+                val tids = stack.tag!!.getUnsortedListTyped("ids") { Decree() }
 
-                if (DecreeRegistry.content.find { it.id == tid } == null) {
+
+                if (!tids.all { it.id in DecreeRegistry.ids }) {
                     ensureDecree(stack)
                 }
 

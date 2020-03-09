@@ -2,6 +2,7 @@ package ejektaflex.bountiful.ext
 
 import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.data.bounty.enums.BountyType
+import ejektaflex.bountiful.data.structure.Decree
 import net.minecraft.nbt.CompoundNBT
 import net.minecraftforge.common.util.INBTSerializable
 import kotlin.reflect.full.createInstance
@@ -25,6 +26,17 @@ fun CompoundNBT.getUnsortedList(key: String): Set<CompoundNBT> {
     val listTag = get(key) as CompoundNBT
     return listTag.keySet().map { index ->
         listTag.get(index) as CompoundNBT
+    }.toSet()
+}
+
+fun <T : INBTSerializable<CompoundNBT>> CompoundNBT.getUnsortedListTyped(key: String, fact: () -> T): Set<T> {
+    val listTag = get(key) as CompoundNBT
+    return listTag.keySet().map { index ->
+        listTag.get(index) as CompoundNBT
+    }.map {
+        fact().apply {
+            deserializeNBT(it)
+        }
     }.toSet()
 }
 

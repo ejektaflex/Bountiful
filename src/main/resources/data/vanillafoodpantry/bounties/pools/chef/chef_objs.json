@@ -64,13 +64,13 @@
     },
     {
       "type": "item",
-      "content": "vanillafoodpantry:rock_salt_ore",
+      "content": "vanillafoodpantry:rock_salt_crystals",
       "amountRange": {
         "min": 8,
         "max": 64
       },
       "unitWorth": 200,
-      "weight": 1000
+      "weight": 1350
     },
     {
       "type": "item",

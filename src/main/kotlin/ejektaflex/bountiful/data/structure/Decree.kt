@@ -11,7 +11,6 @@ import net.minecraftforge.common.util.INBTSerializable
 data class Decree(
         @Expose var decreeTitle: String = "UNKNOWN",
         @Expose var spawnsInBoard: Boolean = false,
-        @Expose var isGreedy: Boolean = false,
         @Expose var objectivePools: MutableList<String> = mutableListOf(),
         @Expose var rewardPools: MutableList<String> = mutableListOf()
 ) : INBTSerializable<CompoundNBT>, IMerge<Decree>, IIdentifiable {
@@ -21,7 +20,6 @@ data class Decree(
     override fun serializeNBT(): CompoundNBT {
         return CompoundNBT().apply {
             putString("id", this@Decree.id)
-            putString("title", this@Decree.decreeTitle)
         }
     }
 
@@ -30,7 +28,6 @@ data class Decree(
 
     override fun deserializeNBT(nbt: CompoundNBT?) {
         id = nbt!!.getString("id")
-        decreeTitle = nbt.getString("title")
     }
 
     override fun merge(other: Decree) {

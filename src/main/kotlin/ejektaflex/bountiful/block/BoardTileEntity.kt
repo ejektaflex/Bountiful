@@ -60,8 +60,11 @@ class BoardTileEntity : TileEntity(BountifulContent.Blocks.BOUNTYTILEENTITY), IT
                 it.item is ItemDecree
             }.map {
                 (it.item as ItemDecree).ensureDecree(it)
-                it.tag!!.getString("id")
-            }
+                //it.tag!!.getString("id")
+                it.tag!!.getUnsortedList("ids").map { decr ->
+                    decr.getString("id")
+                }
+            }.flatten()
 
             return ids.mapNotNull { DecreeRegistry.getDecree(it) }
         }
