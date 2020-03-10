@@ -58,17 +58,21 @@ object SetupLifecycle {
         JsonSerializers.register()
 
         if (BountifulConfig.SERVER.villageGen.get()) {
-            JigsawJank.create().append(ResourceLocation("minecraft","village/plains/houses")) {
-                listOf(Pair.of(SingleJigsawPiece("bountiful:village/common/bounty_gazebo"), 2))
+
+            val injectList = listOf(
+                    "village/plains/houses",
+                    "village/desert/houses",
+                    "village/savanna/houses",
+                    "village/taiga/houses",
+                    "village/snowy/houses"
+            )
+
+            for (place in injectList) {
+                JigsawJank.create().append(ResourceLocation("minecraft",place)) {
+                    listOf(Pair.of(SingleJigsawPiece("bountiful:village/common/bounty_gazebo"), 2))
+                }
             }
 
-            JigsawJank.create().append(ResourceLocation("minecraft","village/desert/houses")) {
-                listOf(Pair.of(SingleJigsawPiece("bountiful:village/common/bounty_gazebo"), 2))
-            }
-
-            JigsawJank.create().append(ResourceLocation("minecraft","village/savanna/houses")) {
-                listOf(Pair.of(SingleJigsawPiece("bountiful:village/common/bounty_gazebo"), 2))
-            }
         }
 
         BountifulTriggers.register()
