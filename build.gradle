@@ -22,7 +22,7 @@ apply plugin: 'kotlin'
 
 version = '3.0.0'
 group = 'ejektaflex.bountiful' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'bountiful'
+archivesBaseName = 'Bountiful'
 
 
 
