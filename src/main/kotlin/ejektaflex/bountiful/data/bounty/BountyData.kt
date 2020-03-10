@@ -26,7 +26,7 @@ import kotlin.math.max
 
 class BountyData : INBTSerializable<CompoundNBT> {
 
-    var boardStamp = BountifulConfig.SERVER.boardLifespan.get() * 20
+    var boardStamp = maxTimeAtBoard
     var bountyTime = 0L
     var rarity = 0
     val objectives = ValueRegistry<BountyEntry>()
@@ -53,7 +53,7 @@ class BountyData : INBTSerializable<CompoundNBT> {
         get() = BountyRarity.getRarityFromInt(rarity)
 
     fun boardTimeLeft(world: World): Long {
-        return max(boardStamp + BountifulConfig.SERVER.boardLifespan.get() - world.gameTime , 0)
+        return max(boardStamp + maxTimeAtBoard - world.gameTime , 0)
     }
 
 
@@ -151,6 +151,9 @@ class BountyData : INBTSerializable<CompoundNBT> {
         const val bountyTickFreq = 20L
         const val boardTickFreq = 20L
 
+        val maxTimeAtBoard: Int
+            get() = BountifulConfig.SERVER.boardLifespan.get() * 20
+
         fun isValidBounty(stack: ItemStack): Boolean {
             return try {
                 from(stack)
@@ -177,5 +180,6 @@ class BountyData : INBTSerializable<CompoundNBT> {
         }
 
     }
+
 
 }
