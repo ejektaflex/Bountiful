@@ -20,7 +20,7 @@ apply plugin: 'idea'
 apply plugin: 'maven-publish'
 apply plugin: 'kotlin'
 
-version = '3.0.0'
+version = "${modVersion}-${mcVersion}"
 group = 'ejektaflex.bountiful' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'Bountiful'
 
@@ -34,7 +34,7 @@ configurations {
 
 compileKotlin {
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "${jvmTarget}"
     }
 }
 
@@ -45,7 +45,7 @@ minecraft {
     // stable_#            Stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'snapshot', version: '20190719-1.14.3'
+    mappings channel: "${forgeMapType}", version: "${forgeMapping}"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -117,15 +117,15 @@ repositories {
 
 dependencies {
 
-    minecraft 'net.minecraftforge:forge:1.14.4-28.2.1'
+    minecraft "net.minecraftforge:forge:${mcVersion}-${forgeVersion}"
 
     compile "kottle:Kottle:$kottleVersion"
     mod "kottle:Kottle:$kottleVersion"
 
     // compile against the JEI API but do not include it at runtime
-    compileOnly fg.deobf("mezz.jei:jei-${mcVersion}:${jei_version}:api")
+    compileOnly fg.deobf("mezz.jei:jei-${mcVersion}:${jeiVersion}:api")
     // at runtime, use the full JEI jar
-    runtimeOnly fg.deobf("mezz.jei:jei-${mcVersion}:${jei_version}")
+    runtimeOnly fg.deobf("mezz.jei:jei-${mcVersion}:${jeiVersion}")
 
 
 
