@@ -34,7 +34,7 @@ configurations {
 
 compileKotlin {
     kotlinOptions {
-        jvmTarget = "${jvmTarget}"
+        jvmTarget = '1.8'
     }
 }
 
