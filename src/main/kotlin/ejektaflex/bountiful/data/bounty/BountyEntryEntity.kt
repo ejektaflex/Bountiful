@@ -13,7 +13,7 @@ import net.minecraft.util.text.StringTextComponent
 class BountyEntryEntity : BountyEntry(), IBountyObjective {
 
     @Expose
-    override var type: String = BountyType.Entity.id
+    override var bType: String = BountyType.Entity.id
 
     var killedAmount = 0
 
@@ -58,7 +58,7 @@ class BountyEntryEntity : BountyEntry(), IBountyObjective {
     }
 
     override fun toString(): String {
-        return "BountyEntry ($type) [Entity: $content, Amount: ${amount}, Weight: $weight]"
+        return "BountyEntry ($bType) [Entity: $content, Amount: ${amount}, Weight: $weight]"
     }
 
 

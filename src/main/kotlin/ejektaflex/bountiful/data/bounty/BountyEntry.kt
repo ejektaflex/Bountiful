@@ -21,7 +21,7 @@ abstract class BountyEntry : JsonBiSerializer<BountyEntry>, INBTSerializable<Com
 
     class EntryValidationException(reason: String) : Exception("An entry has failed validation and will not be loaded. Reason: $reason. Skipping entry..")
 
-    open var type: String = "UNKNOWN_TYPE"
+    open var bType: String = "UNKNOWN_TYPE"
 
     @Expose
     open var name: String? = null
@@ -114,7 +114,7 @@ abstract class BountyEntry : JsonBiSerializer<BountyEntry>, INBTSerializable<Com
 
     override fun serializeNBT(): CompoundNBT {
         return CompoundNBT().apply {
-            putString("type", type)
+            putString("type", bType)
             putString("content", content)
             putInt("unitWorth", unitWorth)
             nbtTag?.let {
@@ -130,7 +130,7 @@ abstract class BountyEntry : JsonBiSerializer<BountyEntry>, INBTSerializable<Com
     private val jsonParser = JsonParser()
 
     override fun deserializeNBT(tag: CompoundNBT) {
-        type = tag.getString("type")
+        bType = tag.getString("type")
         content = tag.getString("content")
         unitWorth = tag.getInt("unitWorth")
         if ("nbt" in tag) {

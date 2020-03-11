@@ -16,7 +16,7 @@ import kotlin.math.min
 class BountyEntryItem : AbstractBountyEntryStackLike(), IBountyObjective, IBountyReward {
 
     @Expose
-    override var type: String = BountyType.Item.id
+    override var bType: String = BountyType.Item.id
 
     val itemStack: ItemStack?
         get() {

@@ -18,11 +18,11 @@ import kotlin.math.min
 class BountyEntryItemTag : AbstractBountyEntryStackLike(), IBountyObjective, IBountyReward {
 
     @Expose
-    override var type: String = BountyType.ItemTag.id
+    override var bType: String = BountyType.ItemTag.id
 
 
     override fun validate() {
-        if (type == BountyType.ItemTag.id) {
+        if (bType == BountyType.ItemTag.id) {
             if (tagElements.isEmpty()) {
                 throw EntryValidationException("Tag '$content' does not exist or was empty!")
             }

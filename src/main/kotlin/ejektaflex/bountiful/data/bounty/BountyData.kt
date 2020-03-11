@@ -1,7 +1,6 @@
 package ejektaflex.bountiful.data.bounty
 
 import ejektaflex.bountiful.BountifulConfig
-import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.data.bounty.enums.BountyNBT
 import ejektaflex.bountiful.data.bounty.enums.BountyRarity
 import ejektaflex.bountiful.ext.setUnsortedList
@@ -61,7 +60,7 @@ class BountyData : INBTSerializable<CompoundNBT> {
         val passed = CheckerRegistry.passedChecks(Minecraft.getInstance().player!!, this)
 
         val objs = passed.toList().sortedBy {
-            BountyTypeRegistry.content.indexOf(it.first.type)
+            BountyTypeRegistry.content.indexOf(it.first.bType)
         }.map {
             (it.first as IBountyObjective).tooltipObjective(it.second)
         }

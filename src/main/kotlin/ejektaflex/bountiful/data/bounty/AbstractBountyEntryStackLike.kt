@@ -20,7 +20,7 @@ abstract class AbstractBountyEntryStackLike : BountyEntry(), IBountyObjective {
     }
 
     override fun toString(): String {
-        return "BountyEntry ($type) [Item: $content, Amount: ${amount} [${amountRange}], Worth: $unitWorth, NBT: $nbtTag, Weight: $weight]"
+        return "BountyEntry ($bType) [Item: $content, Amount: ${amount} [${amountRange}], Worth: $unitWorth, NBT: $nbtTag, Weight: $weight]"
     }
 
 
