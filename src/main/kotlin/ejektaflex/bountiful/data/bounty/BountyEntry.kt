@@ -21,6 +21,7 @@ abstract class BountyEntry : JsonBiSerializer<BountyEntry>, INBTSerializable<Com
 
     class EntryValidationException(reason: String) : Exception("An entry has failed validation and will not be loaded. Reason: $reason. Skipping entry..")
 
+    @SerializedName("type")
     open var bType: String = "UNKNOWN_TYPE"
 
     @Expose
