@@ -1,0 +1,45 @@
+{
+  "modsRequired": ["simplefarming"],
+  "content": [
+    {
+      "type": "item",
+      "content": "simplefarming:blackberries",
+      "amountRange": {
+        "min": 12,
+        "max": 48
+      },
+      "unitWorth": 40,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "simplefarming:blueberries",
+      "amountRange": {
+        "min": 12,
+        "max": 48
+      },
+      "unitWorth": 40,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "simplefarming:raspberries",
+      "amountRange": {
+        "min": 12,
+        "max": 48
+      },
+      "unitWorth": 40,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "simplefarming:strawberries",
+      "amountRange": {
+        "min": 12,
+        "max": 48
+      },
+      "unitWorth": 40,
+      "weight": 1000
+    }
+  ]
+}
