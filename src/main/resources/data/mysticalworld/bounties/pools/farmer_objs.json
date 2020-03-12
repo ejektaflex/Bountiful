@@ -1,0 +1,16 @@
+{
+  "modsRequired": ["mysticalworld"],
+  "content": [
+    {
+      "type": "item",
+      "content": "mysticalworld:aubergine",
+      "amountRange": {
+        "min": 4,
+        "max": 16
+      },
+      "unitWorth": 80,
+      "weight": 1000,
+      "timeMult": 3.0
+    }
+  ]
+}

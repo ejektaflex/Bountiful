@@ -18,7 +18,7 @@
           "min": 1,
           "max": 8
         },
-        "unitWorth": 450,
+        "unitWorth": 875,
         "weight": 1000
       },
       {
@@ -81,7 +81,7 @@
           "min": 1,
           "max": 2
         },
-        "unitWorth": 450,
+        "unitWorth": 750,
         "weight": 1000
       },
       {
