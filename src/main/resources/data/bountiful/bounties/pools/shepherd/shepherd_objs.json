@@ -8,7 +8,7 @@
           "min": 4,
           "max": 32
         },
-        "unitWorth": 82,
+        "unitWorth": 250,
         "weight": 1000
       },
       {
@@ -19,7 +19,7 @@
           "min": 2,
           "max": 16
         },
-        "unitWorth": 125,
+        "unitWorth": 200,
         "weight": 1000
       },
       {
@@ -29,7 +29,7 @@
           "min": 2,
           "max": 16
         },
-        "unitWorth": 125,
+        "unitWorth": 150,
         "weight": 1000
       },
       {
@@ -39,7 +39,7 @@
           "min": 2,
           "max": 8
         },
-        "unitWorth": 150,
+        "unitWorth": 175,
         "weight": 1000
       },
       {
@@ -50,6 +50,36 @@
           "max": 12
         },
         "unitWorth": 250,
+        "weight": 1000
+      },
+      {
+        "type": "item",
+        "content": "minecraft:orange_bed",
+        "amountRange": {
+          "min": 1,
+          "max": 2
+        },
+        "unitWorth": 800,
+        "weight": 1000
+      },
+      {
+        "type": "item",
+        "content": "minecraft:white_bed",
+        "amountRange": {
+          "min": 1,
+          "max": 6
+        },
+        "unitWorth": 750,
+        "weight": 1000
+      },
+      {
+        "type": "item",
+        "content": "minecraft:white_banner",
+        "amountRange": {
+          "min": 2,
+          "max": 10
+        },
+        "unitWorth": 750,
         "weight": 1000
       }
     ]
