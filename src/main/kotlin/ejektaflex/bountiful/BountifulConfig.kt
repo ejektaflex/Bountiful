@@ -75,6 +75,14 @@ class BountifulConfig {
                 )
                 .define("cashInAtBoard", true)
 
+        var worthRatio: ForgeConfigSpec.DoubleValue = b
+                .comment("The ratio of balance between bounty objectives and rewards.",
+                        "Numbers above 1.0 will give bounties higher requirements to complete,",
+                        "and numbers below 1.0 will give bounties lower requirements to complete.",
+                        "As such, changing this too much can have odd results."
+                )
+                .defineInRange("worthRatio", 1.0, 0.0, 4.0)
+
         var rarityChance: ForgeConfigSpec.DoubleValue = b
                 .comment(
                         "The odds of any given bounty going from one tier up to the next.",
