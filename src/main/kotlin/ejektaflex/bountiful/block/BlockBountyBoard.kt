@@ -2,6 +2,7 @@ package ejektaflex.bountiful.block
 
 import ejektaflex.bountiful.BountifulConfig
 import ejektaflex.bountiful.BountifulContent
+import ejektaflex.bountiful.ext.filledBountySlots
 import ejektaflex.bountiful.item.ItemBounty
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
@@ -16,11 +17,14 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundNBT
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.Hand
+import net.minecraft.util.ResourceLocation
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.BlockRayTraceResult
 import net.minecraft.world.IBlockReader
+import net.minecraft.world.IWorldReader
 import net.minecraft.world.World
 import net.minecraft.world.storage.loot.LootContext
+import net.minecraft.world.storage.loot.LootParameters
 import net.minecraftforge.common.ToolType
 import net.minecraftforge.fml.network.NetworkHooks
 
@@ -60,12 +64,10 @@ class BlockBountyBoard() : Block(
     }
 
     override fun onBlockPlacedBy(worldIn: World, pos: BlockPos, state: BlockState, placer: LivingEntity?, stack: ItemStack) {
-        if (!worldIn.isRemote) {
-            if (stack.hasTag() && stack.tag!!.get("boardData") is CompoundNBT) {
-                val te = worldIn.getTileEntity(pos)
-                if (te is BoardTileEntity) {
-                    te.handler.deserializeNBT(stack.tag!!.getCompound("boardData"))
-                }
+        if (!worldIn.isRemote && stack.hasTag()) {
+            val te = worldIn.getTileEntity(pos)
+            if (te is BoardTileEntity) {
+                //te.deserializeNBT(stack.tag.get("BoardData"))
             }
         }
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack)
@@ -78,7 +80,7 @@ class BlockBountyBoard() : Block(
         if (!worldIn.isRemote && te is BoardTileEntity) {
             // Create stack and serialize data
             val stack = ItemStack(BountifulContent.Items.BOUNTYBOARD)
-            stack.setTagInfo("boardData", te.handler.serializeNBT())
+            stack.setTagInfo("BlockEntityTag", te.serializeNBT())
 
             // Throw it on the ground
             val entity = ItemEntity(
@@ -96,6 +98,23 @@ class BlockBountyBoard() : Block(
 
         super.onBlockHarvested(worldIn, pos, state, player)
     }
+
+    /*
+    override fun getDrops(state: BlockState, builder: LootContext.Builder): MutableList<ItemStack> {
+        val te = builder.get(LootParameters.BLOCK_ENTITY)
+
+        if (te is BoardTileEntity) {
+            builder.withDynamicDrop(ResourceLocation("minecraft", "contents")) { a, b ->
+                for (item in te.handler.filledBountySlots) {
+                    b.
+                }
+            }
+        }
+
+        return super.getDrops(state, builder)
+    }
+
+     */
 
 
     // Will always have a tile entity
