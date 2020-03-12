@@ -46,7 +46,11 @@ class BountifulConfig {
                 .define("instantCountdown", false)
 
         var bountyBoardBreakable: ForgeConfigSpec.BooleanValue = b
-                .comment("Whether bounty boards should be able to be broken (currently will lose all decrees/bounties on break)")
+                .comment(
+                        "Whether bounty boards should be able to be broken (currently will lose all decrees/bounties on break)",
+                        "This feature requires a world restart to take effect."
+                )
+                .worldRestart()
                 .define("boardBreakable", false)
 
         var villageGen: ForgeConfigSpec.BooleanValue = b
