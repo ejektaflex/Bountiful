@@ -7,7 +7,7 @@
           "min": 4,
           "max": 48
         },
-        "unitWorth": 75,
+        "unitWorth": 70,
         "weight": 1000,
         "timeMult": 3.0
       },
