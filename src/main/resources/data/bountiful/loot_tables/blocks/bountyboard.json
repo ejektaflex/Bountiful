@@ -13,14 +13,7 @@
             },
             {
               "function": "minecraft:copy_nbt",
-              "source": "block_entity",
-              "ops": [
-                {
-                  "source": "inv",
-                  "target": "BlockEntityTag.inv",
-                  "op": "replace"
-                }
-              ]
+              "source": "block_entity"
             },
             {
               "function": "minecraft:set_contents",
