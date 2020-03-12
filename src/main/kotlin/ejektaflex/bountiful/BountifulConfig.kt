@@ -51,7 +51,7 @@ class BountifulConfig {
                         "This feature requires a world restart to take effect."
                 )
                 .worldRestart()
-                .define("boardBreakable", false)
+                .define("boardBreakable", true)
 
         var villageGen: ForgeConfigSpec.BooleanValue = b
                 .comment("Whether bounty boards should sometimes generate in the world in plains villages")
