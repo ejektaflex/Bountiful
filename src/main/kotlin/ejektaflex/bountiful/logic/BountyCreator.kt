@@ -49,8 +49,8 @@ object BountyCreator {
     fun create(inRarity: BountyRarity, decrees: List<Decree>): BountyData {
         val data = BountyData()
 
-        val toSatisfy = createRewards(data, inRarity, decrees)
-        createObjectives(data, inRarity, decrees, toSatisfy)
+        val toSatisfy = createRewards(data, inRarity, decrees) * BountifulConfig.SERVER.worthRatio.get()
+        createObjectives(data, inRarity, decrees, toSatisfy.toInt())
 
         return data
     }
