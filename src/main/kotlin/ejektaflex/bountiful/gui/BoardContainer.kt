@@ -37,7 +37,6 @@ class BoardContainer(id: Int, val world: World, val pos: BlockPos, val inv: Play
                 addSlot(BountySlot(boardTE, k + j * bCols, 8 + k * 18, 18 + j * 18))
             }
 
-            println("Making new slot with index ${BoardTileEntity.SIZE - 2 + j}")
             addSlot(DecreeSlot(boardTE, BoardTileEntity.SIZE - 3 + j, 19 + 7 * 18, 18 + j * 18))
         }
 
