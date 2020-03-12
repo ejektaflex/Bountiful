@@ -16,18 +16,20 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.BlockRayTraceResult
 import net.minecraft.world.IBlockReader
 import net.minecraft.world.World
+import net.minecraftforge.common.ToolType
 import net.minecraftforge.fml.network.NetworkHooks
 
 class BlockBountyBoard() : Block(
-        Properties.create(Material.WOOD)
-                .sound(SoundType.WOOD)
-
-                .hardnessAndResistance(
-                        if (BountifulConfig.SERVER.bountyBoardBreakable.get()) 2f else -1f
-                )
-
-
+        Properties.create(Material.WOOD).sound(SoundType.WOOD)
 ) {
+
+    val hardness: Float by lazy {
+        if (BountifulConfig.SERVER.bountyBoardBreakable.get()) 2f else -1f
+    }
+
+    override fun getBlockHardness(blockState: BlockState, worldIn: IBlockReader, pos: BlockPos): Float {
+        return hardness
+    }
 
     override fun onBlockActivated(state: BlockState, worldIn: World, pos: BlockPos, player: PlayerEntity, handIn: Hand, hit: BlockRayTraceResult): ActionResultType {
         if (!worldIn.isRemote) {
