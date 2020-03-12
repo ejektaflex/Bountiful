@@ -3,46 +3,6 @@
   "content": [
     {
       "type": "item",
-      "content": "simplefarming:blackberries",
-      "amountRange": {
-        "min": 12,
-        "max": 48
-      },
-      "unitWorth": 40,
-      "weight": 1000
-    },
-    {
-      "type": "item",
-      "content": "simplefarming:blueberries",
-      "amountRange": {
-        "min": 12,
-        "max": 48
-      },
-      "unitWorth": 40,
-      "weight": 1000
-    },
-    {
-      "type": "item",
-      "content": "simplefarming:raspberries",
-      "amountRange": {
-        "min": 12,
-        "max": 48
-      },
-      "unitWorth": 40,
-      "weight": 1000
-    },
-    {
-      "type": "item",
-      "content": "simplefarming:strawberries",
-      "amountRange": {
-        "min": 12,
-        "max": 48
-      },
-      "unitWorth": 40,
-      "weight": 1000
-    },
-    {
-      "type": "item",
       "content": "simplefarming:egg_sandwich",
       "amountRange": {
         "min": 1,
@@ -75,7 +35,7 @@
       "type": "item",
       "content": "simplefarming:jam",
       "amountRange": {
-        "min": 4,
+        "min": 2,
         "max": 16
       },
       "unitWorth": 150,
@@ -99,6 +59,26 @@
         "max": 6
       },
       "unitWorth": 350,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "vanillafoodpantry:natron_crystals",
+      "amountRange": {
+        "min": 8,
+        "max": 48
+      },
+      "unitWorth": 100,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "vanillafoodpantry:rock_salt_crystals",
+      "amountRange": {
+        "min": 8,
+        "max": 48
+      },
+      "unitWorth": 100,
       "weight": 1000
     }
   ]
