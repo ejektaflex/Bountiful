@@ -59,6 +59,18 @@ class BlockBountyBoard() : Block(
         return true
     }
 
+    override fun onBlockPlacedBy(worldIn: World, pos: BlockPos, state: BlockState, placer: LivingEntity?, stack: ItemStack) {
+        if (!worldIn.isRemote) {
+            if (stack.hasTag() && stack.tag!!.get("boardData") is CompoundNBT) {
+                val te = worldIn.getTileEntity(pos)
+                if (te is BoardTileEntity) {
+                    te.handler.deserializeNBT(stack.tag!!.getCompound("boardData"))
+                }
+            }
+        }
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack)
+    }
+
     override fun onBlockHarvested(worldIn: World, pos: BlockPos, state: BlockState, player: PlayerEntity) {
 
         val te = worldIn.getTileEntity(pos)
