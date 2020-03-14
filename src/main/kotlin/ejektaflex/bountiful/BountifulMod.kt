@@ -105,9 +105,9 @@ object BountifulMod {
 
             var obj: IMerge<Any>? = null
 
-            logger.error("########## FILENAME: $filename ##########")
+            //logger.error("########## FILENAME: $filename ##########")
 
-            logger.error("Locs: ${locations.map { it.toString() }}")
+            //logger.error("Locs: ${locations.map { it.toString() }}")
 
             val spaceList = manager.resourceNamespaces.toList()
 
@@ -126,7 +126,7 @@ object BountifulMod {
 
 
 
-            logger.warn("Compatloadableresources: ${compatLoadableResources.map { it.toString() }}")
+            //logger.warn("Compatloadableresources: ${compatLoadableResources.map { it.toString() }}")
 
             groupLoop@ for (validPathList in compatLoadableResources) {
 
@@ -135,7 +135,7 @@ object BountifulMod {
                 val blacklist = BountifulConfig.SERVER.blacklistedData.get()
 
                 if (locationToLoad.isBlacklisted(blacklist)) {
-                    logger.error("Blacklist failure: $locationToLoad")
+                    logger.warn("Bountiful location blacklisted by user: $locationToLoad")
                     continue@groupLoop
                 }
 
