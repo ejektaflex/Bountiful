@@ -65,11 +65,21 @@
         "content": "minecraft:guardian",
         "amountRange": {
           "min": 1,
-          "max": 12
+          "max": 5
         },
         "unitWorth": 1300,
         "weight": 1000,
         "timeMult": 2.5
+      },
+      {
+        "type": "item",
+        "content": "minecraft:turtle_egg",
+        "amountRange": {
+          "min": 1,
+          "max": 8
+        },
+        "unitWorth": 650,
+        "weight": 200
       }
     ]
   }
