@@ -30,6 +30,32 @@ object BountifulMod {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, BountifulConfig.serverSpec)
     }
 
+
+    fun rlFileName(rl: ResourceLocation) = rl.path.substringAfterLast("/")
+
+    fun rlFileNameNoExt(rl: ResourceLocation) = rlFileName(rl).substringBefore(".json")
+
+    fun loadResource(manager: IResourceManager, msgSender: CommandSource?, location: ResourceLocation, fillType: BountifulResourceType): IMerge<Any>? {
+
+        val res = manager.getResource(location)
+        val content = res.inputStream.reader().readText()
+
+        val newObj = try {
+            logger.info("Loading $location")
+            JsonAdapter.fromJsonExp(content, fillType.klazz)
+        } catch (e: Exception) {
+            logger.info("CANNOT LOAD JSON at $location. Reason: ${e.message}")
+            msgSender?.sendErrorMsg("Skipping resource $location. Reason: ${e.message}")
+            return null
+        } as IMerge<Any>
+
+        // Set ID to filename
+        newObj.id = rlFileNameNoExt(location)
+
+        return newObj
+    }
+
+
     fun reloadBountyData(
             server: MinecraftServer,
             manager: IResourceManager = server.resourceManager,
@@ -42,10 +68,6 @@ object BountifulMod {
 
         fillType.reg.empty()
 
-        //logger.warn("Namespaces: ${manager.resourceNamespaces}")
-
-        fun rlFileName(rl: ResourceLocation) = rl.path.substringAfterLast("/")
-
         // Get all resource locations, grouped by namespace
         val spaceMap = manager.getAllResourceLocations(folderName) {
             it.endsWith(extension)
@@ -54,55 +76,45 @@ object BountifulMod {
         // For each group of files with the same name
         fileLoop@ for ((filename, locations) in spaceMap) {
 
-            val filenameNoExtension = filename.substringBefore(".json")
-
             var obj: IMerge<Any>? = null
 
             logger.error("########## FILENAME: $filename ##########")
 
-            logger.error("Locs: ${locations.map{ it.toString() }}")
+            logger.error("Locs: ${locations.map { it.toString() }}")
 
-            // Go through each namespace in order
-            nameLoop@ for (namespace in manager.resourceNamespaces - BountifulConfig.SERVER.namespaceBlacklist.get()) {
+            val spaceList = manager.resourceNamespaces.toList()
 
-                logger.warn("Inspecting namespace: $namespace")
+            val compatLoadableResources = spaceList.map {
+                "$folderName/$it/$filename"
+            }.map {
+                listOf(locations.filter { loc -> loc.path == it })
+                        .sortedBy {
+                            spaceList.indexOf(it.first().namespace)
+                        }.flatten()
+            }.filter {
+                it.isNotEmpty()
+            }
 
-                // Try get the RL of the namespace for this file
-                val location = locations.find { it.namespace == namespace }
+            logger.warn("Compatloadableresources: ${compatLoadableResources.map { it.toString() }}")
 
-                logger.info("- Location found? $location (${location?.path})")
+            groupLoop@ for (validPathList in compatLoadableResources) {
 
-                if (location != null ) {
-                    logger.info("- - Yes!")
+                val locationToLoad = validPathList.last()
 
-                    val res = manager.getResource(location)
-                    val content = res.inputStream.reader().readText()
+                val newObj = loadResource(manager, msgSender, locationToLoad, fillType)
 
-                    val newObj = try {
-                        JsonAdapter.fromJsonExp(content, fillType.klazz)
-                    } catch (e: Exception) {
-                        msgSender?.sendErrorMsg("Skipping resource $location. Reason: ${e.message}")
-                        continue@nameLoop
-                    } as IMerge<Any>
-
-                    // Set ID to filename
-                    newObj.id = filenameNoExtension
-
-                    //logger.info("New obj is: $newObj")
-
+                if (newObj != null) {
                     if (newObj.canLoad) {
+                        logger.warn("Is about to load/set $locationToLoad")
                         if (obj != null) {
                             //logger.warn("MERGING $obj with $newObj")
-
                             obj.merge(newObj)
                             //logger.warn("RESULT IS: $obj")
                         } else {
                             obj = newObj
                         }
                     }
-
                 }
-
             }
 
             // Adding item to pool
