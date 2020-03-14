@@ -30,6 +30,59 @@ object BountifulMod {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, BountifulConfig.serverSpec)
     }
 
+
+    fun rlFileName(rl: ResourceLocation) = rl.path.substringAfterLast("/")
+
+    fun rlFileNameNoExt(rl: ResourceLocation) = rlFileName(rl).substringBefore(".json")
+
+    fun loadResource(manager: IResourceManager, msgSender: CommandSource?, location: BountifulResource, fillType: BountifulResourceType): IMerge<Any>? {
+
+        val res = manager.getResource(location.rl)
+        val content = res.inputStream.reader().readText()
+
+        val newObj = try {
+            logger.info("Loading $location")
+            JsonAdapter.fromJsonExp(content, fillType.klazz)
+        } catch (e: Exception) {
+            logger.info("CANNOT LOAD JSON at $location. Reason: ${e.message}")
+            msgSender?.sendErrorMsg("Skipping resource $location. Reason: ${e.message}")
+            return null
+        } as IMerge<Any>
+
+        // Set ID to filename
+        newObj.id = rlFileNameNoExt(location.rl)
+
+        return newObj
+    }
+
+    data class BountifulResource(val rl: ResourceLocation, val type: BountifulResourceType) {
+
+        val originPack: String by lazy {
+            rl.namespace
+        }
+
+        val originCompat: String by lazy {
+            rl.path.substringAfter("bounties/${type.folderName}/").substringBefore(rlFileName(rl)).dropLast(1)
+        }
+
+        val origin: String by lazy {
+            "$originPack/$originCompat"
+        }
+
+        override fun toString(): String {
+            return "BR{$origin}"
+        }
+
+        fun isBlacklisted(blacklist: List<String>): Boolean {
+            val blacklistRegexes = blacklist.map {
+                it.replace("*", "([a-zA-Z0-9\\-_.]+)").toRegex()
+            }
+
+            return blacklistRegexes.any { it.matches(origin) }
+        }
+
+    }
+
     fun reloadBountyData(
             server: MinecraftServer,
             manager: IResourceManager = server.resourceManager,
@@ -42,10 +95,6 @@ object BountifulMod {
 
         fillType.reg.empty()
 
-        //logger.warn("Namespaces: ${manager.resourceNamespaces}")
-
-        fun rlFileName(rl: ResourceLocation) = rl.path.substringAfterLast("/")
-
         // Get all resource locations, grouped by namespace
         val spaceMap = manager.getAllResourceLocations(folderName) {
             it.endsWith(extension)
@@ -54,53 +103,56 @@ object BountifulMod {
         // For each group of files with the same name
         fileLoop@ for ((filename, locations) in spaceMap) {
 
-            val filenameNoExtension = filename.substringBefore(".json")
-
             var obj: IMerge<Any>? = null
 
-            //logger.error("########## FILENAME: $filename ##########")
+            logger.error("########## FILENAME: $filename ##########")
 
-            // Go through each namespace in order
-            nameLoop@ for (namespace in manager.resourceNamespaces - BountifulConfig.SERVER.namespaceBlacklist.get()) {
+            logger.error("Locs: ${locations.map { it.toString() }}")
 
-                //logger.warn("Inspecting namespace: $namespace")
+            val spaceList = manager.resourceNamespaces.toList()
 
-                // Try get the RL of the namespace for this file
-                val location = locations.find { it.namespace == namespace }
+            val compatLoadableResources = spaceList.map {
+                "$folderName/$it/$filename"
+            }.map {
+                listOf(locations.filter { loc -> loc.path == it })
+                        .sortedBy {
+                            spaceList.indexOf(it.first().namespace)
+                        }.flatten()
+            }.filter {
+                it.isNotEmpty()
+            }.map {
+                list -> list.map { BountifulResource(it, fillType) }
+            }
 
-                //logger.info("- Location found? $location (${location?.path})")
 
-                if (location != null ) {
-                    //logger.info("- - Yes!")
 
-                    val res = manager.getResource(location)
-                    val content = res.inputStream.reader().readText()
+            logger.warn("Compatloadableresources: ${compatLoadableResources.map { it.toString() }}")
 
-                    val newObj = try {
-                        JsonAdapter.fromJsonExp(content, fillType.klazz)
-                    } catch (e: Exception) {
-                        msgSender?.sendErrorMsg("Skipping resource $location. Reason: ${e.message}")
-                        continue@nameLoop
-                    } as IMerge<Any>
+            groupLoop@ for (validPathList in compatLoadableResources) {
 
-                    // Set ID to filename
-                    newObj.id = filenameNoExtension
+                val locationToLoad = validPathList.last()
 
-                    //logger.info("New obj is: $newObj")
+                val blacklist = BountifulConfig.SERVER.blacklistedData.get()
 
+                if (locationToLoad.isBlacklisted(blacklist)) {
+                    logger.error("Blacklist failure: $locationToLoad")
+                    continue@groupLoop
+                }
+
+                val newObj = loadResource(manager, msgSender, locationToLoad, fillType)
+
+                if (newObj != null) {
                     if (newObj.canLoad) {
+                        //logger.warn("Is about to load/set $locationToLoad")
                         if (obj != null) {
                             //logger.warn("MERGING $obj with $newObj")
-
                             obj.merge(newObj)
                             //logger.warn("RESULT IS: $obj")
                         } else {
                             obj = newObj
                         }
                     }
-
                 }
-
             }
 
             // Adding item to pool
