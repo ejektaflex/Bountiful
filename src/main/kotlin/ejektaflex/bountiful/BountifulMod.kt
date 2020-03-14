@@ -58,20 +58,22 @@ object BountifulMod {
 
             var obj: IMerge<Any>? = null
 
-            //logger.error("########## FILENAME: $filename ##########")
+            logger.error("########## FILENAME: $filename ##########")
+
+            logger.error("Locs: ${locations.map{ it.toString() }}")
 
             // Go through each namespace in order
             nameLoop@ for (namespace in manager.resourceNamespaces - BountifulConfig.SERVER.namespaceBlacklist.get()) {
 
-                //logger.warn("Inspecting namespace: $namespace")
+                logger.warn("Inspecting namespace: $namespace")
 
                 // Try get the RL of the namespace for this file
                 val location = locations.find { it.namespace == namespace }
 
-                //logger.info("- Location found? $location (${location?.path})")
+                logger.info("- Location found? $location (${location?.path})")
 
                 if (location != null ) {
-                    //logger.info("- - Yes!")
+                    logger.info("- - Yes!")
 
                     val res = manager.getResource(location)
                     val content = res.inputStream.reader().readText()
