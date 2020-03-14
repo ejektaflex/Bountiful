@@ -35,9 +35,9 @@ object BountifulMod {
 
     fun rlFileNameNoExt(rl: ResourceLocation) = rlFileName(rl).substringBefore(".json")
 
-    fun loadResource(manager: IResourceManager, msgSender: CommandSource?, location: ResourceLocation, fillType: BountifulResourceType): IMerge<Any>? {
+    fun loadResource(manager: IResourceManager, msgSender: CommandSource?, location: BountifulResource, fillType: BountifulResourceType): IMerge<Any>? {
 
-        val res = manager.getResource(location)
+        val res = manager.getResource(location.rl)
         val content = res.inputStream.reader().readText()
 
         val newObj = try {
@@ -50,11 +50,38 @@ object BountifulMod {
         } as IMerge<Any>
 
         // Set ID to filename
-        newObj.id = rlFileNameNoExt(location)
+        newObj.id = rlFileNameNoExt(location.rl)
 
         return newObj
     }
 
+    data class BountifulResource(val rl: ResourceLocation, val type: BountifulResourceType) {
+
+        val originPack: String by lazy {
+            rl.namespace
+        }
+
+        val originCompat: String by lazy {
+            rl.path.substringAfter("bounties/${type.folderName}/").substringBefore(rlFileName(rl)).dropLast(1)
+        }
+
+        val origin: String by lazy {
+            "$originPack/$originCompat"
+        }
+
+        override fun toString(): String {
+            return "BR{$origin}"
+        }
+
+        fun isBlacklisted(blacklist: List<String>): Boolean {
+            val blacklistRegexes = blacklist.map {
+                it.replace("*", "([a-zA-Z0-9\\-_.]+)").toRegex()
+            }
+
+            return blacklistRegexes.any { it.matches(origin) }
+        }
+
+    }
 
     fun reloadBountyData(
             server: MinecraftServer,
@@ -93,7 +120,11 @@ object BountifulMod {
                         }.flatten()
             }.filter {
                 it.isNotEmpty()
+            }.map {
+                list -> list.map { BountifulResource(it, fillType) }
             }
+
+
 
             logger.warn("Compatloadableresources: ${compatLoadableResources.map { it.toString() }}")
 
@@ -101,11 +132,18 @@ object BountifulMod {
 
                 val locationToLoad = validPathList.last()
 
+                val blacklist = BountifulConfig.SERVER.blacklistedData.get()
+
+                if (locationToLoad.isBlacklisted(blacklist)) {
+                    logger.error("Blacklist failure: $locationToLoad")
+                    continue@groupLoop
+                }
+
                 val newObj = loadResource(manager, msgSender, locationToLoad, fillType)
 
                 if (newObj != null) {
                     if (newObj.canLoad) {
-                        logger.warn("Is about to load/set $locationToLoad")
+                        //logger.warn("Is about to load/set $locationToLoad")
                         if (obj != null) {
                             //logger.warn("MERGING $obj with $newObj")
                             obj.merge(newObj)

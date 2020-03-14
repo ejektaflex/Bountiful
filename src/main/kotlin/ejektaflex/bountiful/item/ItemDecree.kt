@@ -2,6 +2,7 @@ package ejektaflex.bountiful.item
 
 import ejektaflex.bountiful.ext.hackyRandom
 import ejektaflex.bountiful.BountifulContent
+import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.data.registry.DecreeRegistry
 import ejektaflex.bountiful.ext.getUnsortedList
@@ -90,22 +91,30 @@ class ItemDecree() : Item(
             if (!stack.hasTag()) {
 
                 val data = try {
-                    defaultData ?: DecreeRegistry.content.hackyRandom()
+                    listOf(
+                            if (DecreeRegistry.ids.isNotEmpty()) {
+                                defaultData ?: DecreeRegistry.content.hackyRandom()
+                            } else {
+                                Decree.INVALID
+                            }
+                    )
                 } catch (e: DecreeCreationException) {
+                    BountifulMod.logger.error(e.message)
                     return
                 }
 
                 stack.tag = CompoundNBT().apply {
-                    setUnsortedList("ids", listOf(data).toSet())
+                    setUnsortedList("ids", data.toSet())
                 }
 
             } else {
 
-                // If the ID on the Decree is invalid, turn it into a new random decree
+                // If the ID on the Decree is invalid AND the registry is not empty, turn it into a new random decree
                 val tids = stack.tag!!.getUnsortedListTyped("ids") { Decree() }
 
 
                 if (!tids.all { it.id in DecreeRegistry.ids }) {
+                    stack.tag = null
                     ensureDecree(stack)
                 }
 

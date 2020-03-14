@@ -54,16 +54,21 @@ class BountifulConfig {
                 .define("boardBreakable", true)
 
         var villageGen: ForgeConfigSpec.BooleanValue = b
-                .comment("Whether bounty boards should sometimes generate in the world in plains villages")
+                .comment("Whether bounty boards should sometimes generate in the world in villages")
                 .define("villageGen", true)
 
 
 
         val datapackCategory = b.pop().push("datapacks")!!
 
-        var namespaceBlacklist: ForgeConfigSpec.ConfigValue<List<String>> = b
-                .comment("Namespaces (mod ids) that should get blacklisted from loading bounty data")
-                .define("blacklistedDataNamespaces", listOf())
+        var blacklistedData: ForgeConfigSpec.ConfigValue<MutableList<String>> = b
+                .comment("Blacklists certain bounty data from loading (Use at your own risk)",
+                        "Format is (namespace)/(folder)",
+                        "Examples:",
+                        "\"bountiful/*\" would block all default Bountiful data from loading,",
+                        "\"bountiful/apotheosis\" would block Bountiful from loading data in",
+                        "\"bountiful/bounties/pools/apotheosis\" as well as \"bountiful/bounties/decrees/apotheosis\".")
+                .define("blacklistedData", mutableListOf())
 
 
 
