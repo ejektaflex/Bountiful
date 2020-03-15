@@ -22,6 +22,8 @@ import net.minecraft.client.Minecraft
 import net.minecraft.command.CommandSource
 import net.minecraft.command.Commands.argument
 import net.minecraft.command.Commands.literal
+import net.minecraft.entity.EntityType
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.resources.IResourceManager
 import net.minecraft.util.text.StringTextComponent
@@ -31,6 +33,8 @@ import net.minecraft.util.text.event.HoverEvent
 import net.minecraft.world.World
 import net.minecraftforge.fml.network.PacketDistributor
 import net.minecraftforge.items.ItemHandlerHelper
+import net.minecraftforge.registries.ForgeRegistries
+import kotlin.system.measureTimeMillis
 
 
 object BountifulCommand {
@@ -110,10 +114,17 @@ object BountifulCommand {
                         )
 
                         .then(
+
                                 literal("hand")
+                                        .requires(::hasPermission)
                                         .executes(hand())
                         )
 
+                        .then(
+                            literal("entities")
+                                    .requires(::hasPermission)
+                                    .executes(entities())
+                        )
 
                         .then(
                                 literal("reload")
@@ -140,6 +151,22 @@ object BountifulCommand {
         return false
     }
 
+
+    private fun entities() = Command<CommandSource> {
+
+        it.source.sendMessage("§6Dumping list of entities to §a/logs/bountiful.log§r...")
+
+        val time = measureTimeMillis {
+            BountifulMod.logFile.appendText("### Entities in Registry: ###")
+            for ((eKey, eType) in ForgeRegistries.ENTITIES.entries) {
+                BountifulMod.logFile.appendText("$eKey\n")
+            }
+        }
+
+        it.source.sendMessage("§6Dump complete! Took: ${time}ms")
+        
+        1
+    }
 
 
     private fun hand() = Command<CommandSource> {
