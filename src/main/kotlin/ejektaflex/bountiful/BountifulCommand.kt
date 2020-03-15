@@ -165,8 +165,8 @@ object BountifulCommand {
                 it.source.asPlayer()
             }, MessageClipboardCopy(asText))
 
-            val msg = StringTextComponent("§aItem: §9${holding.item.registryName}§r, §aBounty Entry§r: §6[Hover]§r").apply {
-                style.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, StringTextComponent("§6Bounty Entry (Click to copy to Clipboard):\n").appendSibling(
+            val msg = StringTextComponent("§aItem: §9${holding.item.registryName}§r, §aBounty Entry Copied To Clipboard!§r: §6[hover for preview]§r").apply {
+                style.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, StringTextComponent("§6Bounty Entry (Copied to Clipboard):\n").appendSibling(
                         StringTextComponent(asText).apply {
                             style.color = TextFormatting.DARK_PURPLE
                         }

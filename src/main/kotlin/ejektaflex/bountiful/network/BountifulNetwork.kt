@@ -9,38 +9,34 @@ import net.minecraftforge.fml.network.NetworkRegistry
 import java.util.function.Supplier
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
-import kotlin.reflect.full.primaryConstructor
 
 @Suppress("INACCESSIBLE_TYPE")
 object BountifulNetwork {
 
-
     private var msgId: Int = 0
 
     val channel = NetworkRegistry.ChannelBuilder
-            .named(ResourceLocation(BountifulMod.MODID, "network"))
+            .named(ResourceLocation(BountifulMod.MODID, "main"))
             .networkProtocolVersion { BountifulMod.VERSION }
             .clientAcceptedVersions { true }
             .serverAcceptedVersions { true }
             .simpleChannel()
 
 
-
-
-    fun <M : IMessage, H : IMessageHandler<M>> registerMessage(clazz: KClass<M>, handler: H) {
+    private fun <M : IPacketMessage> registerMessage(clazz: KClass<M>) {
 
         channel.registerMessage(
                 msgId++,
                 clazz.java,
-                { t: M, u: PacketBuffer -> t.encode(u) },
-                { t: PacketBuffer -> clazz.createInstance().apply { decode(t) }},
-                handler::handle
+                { msg: M, buff: PacketBuffer -> msg.encode(buff) },
+                { buff: PacketBuffer -> clazz.createInstance().apply { decode(buff) }},
+                { msg: M, buff: Supplier<NetworkEvent.Context> -> msg.handle(buff) }
         )
 
     }
 
     fun register() {
-        registerMessage(MessageClipboardCopy::class, MessageClipboardCopy.Handler)
+        registerMessage(MessageClipboardCopy::class)
     }
 
 }

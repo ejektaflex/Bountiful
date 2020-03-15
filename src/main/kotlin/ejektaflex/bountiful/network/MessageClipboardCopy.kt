@@ -2,10 +2,8 @@ package ejektaflex.bountiful.network
 
 import net.minecraft.client.Minecraft
 import net.minecraft.network.PacketBuffer
-import net.minecraftforge.fml.network.NetworkEvent
-import java.util.function.Supplier
 
-class MessageClipboardCopy(var copyText: String = "INVALID") : IMessage {
+class MessageClipboardCopy(var copyText: String = "INVALID") : IPacketMessage {
 
     override fun decode(buff: PacketBuffer) {
         copyText = buff.readString()
@@ -15,13 +13,8 @@ class MessageClipboardCopy(var copyText: String = "INVALID") : IMessage {
         buff.writeString(copyText)
     }
 
-
-    companion object Handler : IMessageHandler<MessageClipboardCopy> {
-        override fun handle(msg: MessageClipboardCopy, ctx: Supplier<NetworkEvent.Context>) {
-            ctx.get().enqueueWork {
-                Minecraft.getInstance().keyboardListener.clipboardString = msg.copyText
-            }
-        }
+    override fun execute() {
+        Minecraft.getInstance().keyboardListener.clipboardString = copyText
     }
 
 }
