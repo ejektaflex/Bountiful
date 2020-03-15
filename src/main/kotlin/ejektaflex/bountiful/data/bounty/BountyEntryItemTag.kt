@@ -1,6 +1,7 @@
 package ejektaflex.bountiful.data.bounty
 
 import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.data.bounty.enums.BountyType
 import ejektaflex.bountiful.ext.hackyRandom
 import ejektaflex.bountiful.logic.IBountyObjective
@@ -18,6 +19,7 @@ import kotlin.math.min
 class BountyEntryItemTag : AbstractBountyEntryStackLike(), IBountyObjective, IBountyReward {
 
     @Expose
+    @SerializedName("type")
     override var bType: String = BountyType.ItemTag.id
 
 

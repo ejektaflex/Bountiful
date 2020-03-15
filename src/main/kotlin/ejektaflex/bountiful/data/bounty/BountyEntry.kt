@@ -61,7 +61,7 @@ abstract class BountyEntry : JsonBiSerializer<BountyEntry>, INBTSerializable<Com
     open var timeMult: Double? = null
 
     @Expose
-    override var weight: Int = 100
+    override var weight: Int = 1000
 
     abstract val calculatedWorth: Int
 

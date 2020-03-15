@@ -6,20 +6,35 @@ import com.mojang.brigadier.arguments.IntegerArgumentType.getInteger
 import com.mojang.brigadier.arguments.IntegerArgumentType.integer
 import com.mojang.brigadier.arguments.StringArgumentType.getString
 import com.mojang.brigadier.arguments.StringArgumentType.string
+import ejektaflex.bountiful.data.bounty.BountyEntryItem
 import ejektaflex.bountiful.ext.sendErrorMsg
 import ejektaflex.bountiful.ext.sendMessage
 import ejektaflex.bountiful.ext.supposedlyNotNull
 import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
+import ejektaflex.bountiful.data.json.JsonAdapter
 import ejektaflex.bountiful.item.ItemDecree
 import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.data.registry.DecreeRegistry
 import ejektaflex.bountiful.data.registry.PoolRegistry
+import ejektaflex.bountiful.network.BountifulNetwork
+import ejektaflex.bountiful.network.MessageClipboardCopy
+import net.minecraft.client.Minecraft
 import net.minecraft.command.CommandSource
 import net.minecraft.command.Commands.argument
 import net.minecraft.command.Commands.literal
+import net.minecraft.entity.EntityType
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.resources.IResourceManager
+import net.minecraft.util.text.StringTextComponent
+import net.minecraft.util.text.TextFormatting
+import net.minecraft.util.text.event.ClickEvent
+import net.minecraft.util.text.event.HoverEvent
+import net.minecraft.world.World
+import net.minecraftforge.fml.network.PacketDistributor
 import net.minecraftforge.items.ItemHandlerHelper
+import net.minecraftforge.registries.ForgeRegistries
+import kotlin.system.measureTimeMillis
 
 
 object BountifulCommand {
@@ -29,7 +44,6 @@ object BountifulCommand {
     fun generateCommand(dispatcher: CommandDispatcher<CommandSource>) {
         dispatcher.register(
                 literal("bo")
-                        .requires(::hasPermission)
 
                         .then(
                                 literal("test")
@@ -100,6 +114,19 @@ object BountifulCommand {
                         )
 
                         .then(
+
+                                literal("hand")
+                                        .requires(::hasPermission)
+                                        .executes(hand())
+                        )
+
+                        .then(
+                            literal("entities")
+                                    .requires(::hasPermission)
+                                    .executes(entities())
+                        )
+
+                        .then(
                                 literal("reload")
                                         .requires(::hasPermission)
                                         .executes(reload())
@@ -122,6 +149,64 @@ object BountifulCommand {
             return true
         }
         return false
+    }
+
+
+    private fun entities() = Command<CommandSource> {
+
+        it.source.sendMessage("§6Dumping list of entities to §a/logs/bountiful.log§r...")
+
+        val time = measureTimeMillis {
+            BountifulMod.logFile.appendText("### Entities in Registry: ###")
+            for ((eKey, eType) in ForgeRegistries.ENTITIES.entries) {
+                BountifulMod.logFile.appendText("$eKey\n")
+            }
+        }
+
+        it.source.sendMessage("§6Dump complete! Took: ${time}ms")
+        
+        1
+    }
+
+
+    private fun hand() = Command<CommandSource> {
+
+        if (it.source.entity is PlayerEntity) {
+            val player = it.source.asPlayer()
+
+            val holding = player.heldItemMainhand
+
+            val newEntry = BountyEntryItem().apply {
+                content = holding.item.registryName.toString()
+                amount = holding.count
+                if (holding.hasTag()) {
+                    jsonNBT = JsonAdapter.parse(holding.tag.toString())
+                }
+                unitWorth = 1000
+            }
+
+            val asText = JsonAdapter.toJson(newEntry)
+
+
+            BountifulNetwork.channel.send(PacketDistributor.PLAYER.with {
+                it.source.asPlayer()
+            }, MessageClipboardCopy(asText))
+
+            val msg = StringTextComponent("§aItem: §9${holding.item.registryName}§r, §aBounty Entry Copied To Clipboard!§r: §6[hover for preview]§r").apply {
+                style.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, StringTextComponent("§6Bounty Entry (Copied to Clipboard):\n").appendSibling(
+                        StringTextComponent(asText).apply {
+                            style.color = TextFormatting.DARK_PURPLE
+                        }
+                ))
+            }
+
+            it.source.sendFeedback(msg, true)
+
+        } else {
+            it.source.sendErrorMsg("Must be a player to check their hand")
+        }
+
+        1
     }
 
     private fun reload() = Command<CommandSource> {

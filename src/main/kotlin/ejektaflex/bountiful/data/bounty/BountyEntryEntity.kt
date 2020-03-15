@@ -1,6 +1,7 @@
 package ejektaflex.bountiful.data.bounty
 
 import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.data.bounty.enums.BountyType
 import ejektaflex.bountiful.ext.toEntityType
 import ejektaflex.bountiful.logic.BountyProgress
@@ -13,6 +14,7 @@ import net.minecraft.util.text.StringTextComponent
 class BountyEntryEntity : BountyEntry(), IBountyObjective {
 
     @Expose
+    @SerializedName("type")
     override var bType: String = BountyType.Entity.id
 
     var killedAmount = 0
