@@ -5,20 +5,28 @@ import ejektaflex.bountiful.data.json.JsonAdapter
 import ejektaflex.bountiful.ext.sendErrorMsg
 import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
 import ejektaflex.bountiful.data.structure.EntryPool
+import ejektaflex.bountiful.network.BountifulNetwork
 import ejektaflex.bountiful.util.ValueRegistry
 import net.alexwells.kottle.FMLKotlinModLoadingContext
+import net.minecraft.client.Minecraft
 import net.minecraft.command.CommandSource
+import net.minecraft.network.PacketBuffer
 import net.minecraft.resources.IResourceManager
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.config.ModConfig
+import net.minecraftforge.fml.network.NetworkEvent
+import net.minecraftforge.fml.network.NetworkRegistry
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import java.io.File
 import java.lang.Exception
+import java.lang.reflect.TypeVariable
 import java.nio.file.Paths
+import java.util.function.Predicate
+import java.util.function.Supplier
 
 
 @Mod(BountifulMod.MODID)
@@ -28,8 +36,11 @@ object BountifulMod {
 
     val logger: Logger = LogManager.getLogger()
 
+    const val version = "3.1.0"
+
     init {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, BountifulConfig.serverSpec)
+        BountifulNetwork.register()
     }
 
     val logFolder = Paths.get("logs").toFile().apply {

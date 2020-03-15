@@ -16,6 +16,8 @@ import ejektaflex.bountiful.item.ItemDecree
 import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.data.registry.DecreeRegistry
 import ejektaflex.bountiful.data.registry.PoolRegistry
+import ejektaflex.bountiful.network.BountifulNetwork
+import ejektaflex.bountiful.network.MessageClipboardCopy
 import net.minecraft.client.Minecraft
 import net.minecraft.command.CommandSource
 import net.minecraft.command.Commands.argument
@@ -27,6 +29,7 @@ import net.minecraft.util.text.TextFormatting
 import net.minecraft.util.text.event.ClickEvent
 import net.minecraft.util.text.event.HoverEvent
 import net.minecraft.world.World
+import net.minecraftforge.fml.network.PacketDistributor
 import net.minecraftforge.items.ItemHandlerHelper
 
 
@@ -158,12 +161,9 @@ object BountifulCommand {
             val asText = JsonAdapter.toJson(newEntry)
 
 
-            println("AM side: ${it.source.world.isRemote}")
-            try {
-                Minecraft.getInstance().keyboardListener.clipboardString = asText
-            } catch (e: Exception) {
-                // Ignore
-            }
+            BountifulNetwork.channel.send(PacketDistributor.PLAYER.with {
+                it.source.asPlayer()
+            }, MessageClipboardCopy(asText))
 
             val msg = StringTextComponent("§aItem: §9${holding.item.registryName}§r, §aBounty Entry§r: §6[Hover]§r").apply {
                 style.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, StringTextComponent("§6Bounty Entry (Click to copy to Clipboard):\n").appendSibling(
