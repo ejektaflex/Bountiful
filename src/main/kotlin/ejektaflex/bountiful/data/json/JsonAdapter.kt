@@ -5,6 +5,8 @@ import kotlin.reflect.KClass
 
 object JsonAdapter {
 
+    val parser = JsonParser()
+
     var deserializers = mutableMapOf<Class<*>, JsonDeserializer<*>>()
     var serializers = mutableMapOf<Class<*>, JsonSerializer<*>>()
 
@@ -18,6 +20,15 @@ object JsonAdapter {
 
     val gson: Gson
         get() = buildGson()
+
+    fun prettify(jsonStr: String): String {
+        val jsonObj = parser.parse(jsonStr)
+        return gson.toJson(jsonObj)
+    }
+
+    fun parse(str: String): JsonElement {
+        return parser.parse(str)
+    }
 
     fun buildGson(): Gson {
         //excludeFieldsWithoutExposeAnnotation?

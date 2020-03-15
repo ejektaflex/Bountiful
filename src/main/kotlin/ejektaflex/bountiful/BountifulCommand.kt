@@ -6,19 +6,27 @@ import com.mojang.brigadier.arguments.IntegerArgumentType.getInteger
 import com.mojang.brigadier.arguments.IntegerArgumentType.integer
 import com.mojang.brigadier.arguments.StringArgumentType.getString
 import com.mojang.brigadier.arguments.StringArgumentType.string
+import ejektaflex.bountiful.data.bounty.BountyEntryItem
 import ejektaflex.bountiful.ext.sendErrorMsg
 import ejektaflex.bountiful.ext.sendMessage
 import ejektaflex.bountiful.ext.supposedlyNotNull
 import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
+import ejektaflex.bountiful.data.json.JsonAdapter
 import ejektaflex.bountiful.item.ItemDecree
 import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.data.registry.DecreeRegistry
 import ejektaflex.bountiful.data.registry.PoolRegistry
+import net.minecraft.client.Minecraft
 import net.minecraft.command.CommandSource
 import net.minecraft.command.Commands.argument
 import net.minecraft.command.Commands.literal
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.resources.IResourceManager
+import net.minecraft.util.text.StringTextComponent
+import net.minecraft.util.text.TextFormatting
+import net.minecraft.util.text.event.ClickEvent
+import net.minecraft.util.text.event.HoverEvent
+import net.minecraft.world.World
 import net.minecraftforge.items.ItemHandlerHelper
 
 
@@ -29,7 +37,6 @@ object BountifulCommand {
     fun generateCommand(dispatcher: CommandDispatcher<CommandSource>) {
         dispatcher.register(
                 literal("bo")
-                        .requires(::hasPermission)
 
                         .then(
                                 literal("test")
@@ -100,6 +107,12 @@ object BountifulCommand {
                         )
 
                         .then(
+                                literal("hand")
+                                        .executes(hand())
+                        )
+
+
+                        .then(
                                 literal("reload")
                                         .requires(::hasPermission)
                                         .executes(reload())
@@ -122,6 +135,51 @@ object BountifulCommand {
             return true
         }
         return false
+    }
+
+
+
+    private fun hand() = Command<CommandSource> {
+
+        if (it.source.entity is PlayerEntity) {
+            val player = it.source.asPlayer()
+
+            val holding = player.heldItemMainhand
+
+            val newEntry = BountyEntryItem().apply {
+                content = holding.item.registryName.toString()
+                amount = holding.count
+                if (holding.hasTag()) {
+                    jsonNBT = JsonAdapter.parse(holding.tag.toString())
+                }
+                unitWorth = 1000
+            }
+
+            val asText = JsonAdapter.toJson(newEntry)
+
+
+            println("AM side: ${it.source.world.isRemote}")
+            try {
+                Minecraft.getInstance().keyboardListener.clipboardString = asText
+            } catch (e: Exception) {
+                // Ignore
+            }
+
+            val msg = StringTextComponent("§aItem: §9${holding.item.registryName}§r, §aBounty Entry§r: §6[Hover]§r").apply {
+                style.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, StringTextComponent("§6Bounty Entry (Click to copy to Clipboard):\n").appendSibling(
+                        StringTextComponent(asText).apply {
+                            style.color = TextFormatting.DARK_PURPLE
+                        }
+                ))
+            }
+
+            it.source.sendFeedback(msg, true)
+
+        } else {
+            it.source.sendErrorMsg("Must be a player to check their hand")
+        }
+
+        1
     }
 
     private fun reload() = Command<CommandSource> {

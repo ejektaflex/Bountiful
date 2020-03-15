@@ -1,6 +1,7 @@
 package ejektaflex.bountiful.data.bounty
 
 import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.data.bounty.enums.BountyType
 import ejektaflex.bountiful.ext.toItemStack
 import ejektaflex.bountiful.logic.IBountyObjective
@@ -16,6 +17,7 @@ import kotlin.math.min
 class BountyEntryItem : AbstractBountyEntryStackLike(), IBountyObjective, IBountyReward {
 
     @Expose
+    @SerializedName("type")
     override var bType: String = BountyType.Item.id
 
     val itemStack: ItemStack?
