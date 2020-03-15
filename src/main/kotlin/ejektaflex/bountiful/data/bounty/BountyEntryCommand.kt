@@ -9,6 +9,7 @@ import ejektaflex.bountiful.logic.IBountyReward
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
+import net.minecraft.util.text.TextFormatting
 
 class BountyEntryCommand : BountyEntry(), IBountyReward {
 
@@ -18,12 +19,11 @@ class BountyEntryCommand : BountyEntry(), IBountyReward {
 
     override val calculatedWorth: Int = unitWorth
 
-
     override val formattedName: ITextComponent
         get() = StringTextComponent(name ?: content)
 
     override fun tooltipReward(): ITextComponent {
-        return StringTextComponent(name ?: content)
+        return formattedName.applyTextStyle(TextFormatting.GOLD)
     }
 
     override fun reward(player: PlayerEntity) {
