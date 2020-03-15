@@ -2,16 +2,16 @@
 package ejektaflex.bountiful.network
 
 import ejektaflex.bountiful.BountifulMod
-import net.minecraft.client.Minecraft
 import net.minecraft.network.PacketBuffer
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.fml.network.NetworkEvent
 import net.minecraftforge.fml.network.NetworkRegistry
-import net.minecraftforge.fml.network.simple.IndexedMessageCodec
-import net.minecraftforge.fml.network.simple.SimpleChannel
-import java.util.function.BiConsumer
 import java.util.function.Supplier
+import kotlin.reflect.KClass
+import kotlin.reflect.full.createInstance
+import kotlin.reflect.full.primaryConstructor
 
+@Suppress("INACCESSIBLE_TYPE")
 object BountifulNetwork {
 
 
@@ -19,7 +19,7 @@ object BountifulNetwork {
 
     val channel = NetworkRegistry.ChannelBuilder
             .named(ResourceLocation(BountifulMod.MODID, "network"))
-            .networkProtocolVersion { BountifulMod.version }
+            .networkProtocolVersion { BountifulMod.VERSION }
             .clientAcceptedVersions { true }
             .serverAcceptedVersions { true }
             .simpleChannel()
@@ -27,26 +27,20 @@ object BountifulNetwork {
 
 
 
-    fun register() {
-
+    fun <M : IMessage, H : IMessageHandler<M>> registerMessage(clazz: KClass<M>, handler: H) {
 
         channel.registerMessage(
                 msgId++,
-                MessageClipboardCopy::class.java,
-                MessageClipboardCopy::encode,
-                ::MessageClipboardCopy,
-                MessageClipboardCopy.Handler::handle
+                clazz.java,
+                { t: M, u: PacketBuffer -> t.encode(u) },
+                { t: PacketBuffer -> clazz.createInstance().apply { decode(t) }},
+                handler::handle
         )
-
-
-
-
-        //Doot.Doot()
-
 
     }
 
-
-
+    fun register() {
+        registerMessage(MessageClipboardCopy::class, MessageClipboardCopy.Handler)
+    }
 
 }

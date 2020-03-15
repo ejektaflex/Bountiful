@@ -36,7 +36,7 @@ object BountifulMod {
 
     val logger: Logger = LogManager.getLogger()
 
-    const val version = "3.1.0"
+    const val VERSION = "3.1.0"
 
     init {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, BountifulConfig.serverSpec)
