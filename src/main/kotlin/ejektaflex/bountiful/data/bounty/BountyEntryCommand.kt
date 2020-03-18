@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.data.bounty.enums.BountyType
-import ejektaflex.bountiful.ext.hackyRandom
 import ejektaflex.bountiful.logic.IBountyReward
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.text.ITextComponent
@@ -27,15 +26,12 @@ class BountyEntryCommand : BountyEntry(), IBountyReward {
     }
 
     override fun reward(player: PlayerEntity) {
-
         val server = player.server!!
-
         var newCommand = content
         newCommand = newCommand.replace("%player%", player.displayName.formattedText)
         newCommand = newCommand.replace("%amount%", amount.toString())
         BountifulMod.logger.info("About to run command: $newCommand")
         server.commandManager.handleCommand(server.commandSource, newCommand)
     }
-
 
 }

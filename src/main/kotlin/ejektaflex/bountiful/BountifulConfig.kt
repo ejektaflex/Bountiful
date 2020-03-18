@@ -63,10 +63,11 @@ class BountifulConfig {
 
         var blacklistedData: ForgeConfigSpec.ConfigValue<MutableList<String>> = b
                 .comment("Blacklists certain bounty data from loading (Use at your own risk)",
-                        "Format is (namespace)/(folder)",
+                        "Format is (namespace)/[decrees/pools]/(folder)",
                         "Examples:",
-                        "\"bountiful/*\" would block all default Bountiful data from loading,",
-                        "\"bountiful/apotheosis\" would block Bountiful from loading data in",
+                        "\"bountiful/*/*\" would block all default Bountiful data from loading,",
+                        "\"bountiful/decrees/*\" would block all default Bountiful decree data from loading,",
+                        "\"bountiful/*/apotheosis\" would block Bountiful from loading data in",
                         "\"bountiful/bounties/pools/apotheosis\" as well as \"bountiful/bounties/decrees/apotheosis\".")
                 .define("blacklistedData", mutableListOf())
 
@@ -116,6 +117,13 @@ class BountifulConfig {
                         "or other player for their bounties to also get updated."
                 )
                 .define("coopKillDistance", 6.0)
+
+        val experienceCategory = b.pop().push("experience_bounties")!!
+
+        var doXpDrop: ForgeConfigSpec.ConfigValue<Boolean> = b
+                .comment("If true, XP point bounty rewards will drop where the player is standing.",
+                        "If false, rewards will instantly be added to their XP bar.")
+                .define("doExperienceDrop", true)
 
     }
 

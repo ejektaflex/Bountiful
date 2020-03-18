@@ -92,6 +92,10 @@ object BountifulMod {
             "$originPack/$originCompat"
         }
 
+        val typedOrigin: String by lazy {
+            "$originPack/${type.folderName}/$originCompat"
+        }
+
         override fun toString(): String {
             return "BR{$origin}"
         }
@@ -101,7 +105,7 @@ object BountifulMod {
                 it.replace("*", "([a-zA-Z0-9\\-_.]+)").toRegex()
             }
 
-            return blacklistRegexes.any { it.matches(origin) }
+            return blacklistRegexes.any { it.matches(typedOrigin) }
         }
 
     }

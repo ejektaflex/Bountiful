@@ -2,7 +2,6 @@ package ejektaflex.bountiful.ext
 
 import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.data.bounty.enums.BountyType
-import ejektaflex.bountiful.data.structure.Decree
 import net.minecraft.nbt.CompoundNBT
 import net.minecraftforge.common.util.INBTSerializable
 import kotlin.reflect.full.createInstance
