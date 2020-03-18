@@ -4,7 +4,6 @@ import ejektaflex.bountiful.BountifulStats
 import ejektaflex.bountiful.advancement.BountifulTriggers
 import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.data.bounty.BountyEntry
-import ejektaflex.bountiful.data.bounty.enums.BountyRarity
 import ejektaflex.bountiful.util.ValueRegistry
 import ejektaflex.bountiful.logic.BountyProgress
 import ejektaflex.bountiful.logic.IBountyReward

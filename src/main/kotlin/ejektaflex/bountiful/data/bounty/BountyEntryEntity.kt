@@ -10,6 +10,8 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.nbt.CompoundNBT
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
+import net.minecraft.util.text.TextFormatting
+import net.minecraft.util.text.TranslationTextComponent
 
 class BountyEntryEntity : BountyEntry(), IBountyObjective {
 
@@ -53,7 +55,9 @@ class BountyEntryEntity : BountyEntry(), IBountyObjective {
         return StringTextComponent(progress.color).appendSibling(
                 formattedName
         ).appendSibling(
-                StringTextComponent(" Kills§r ")
+                TranslationTextComponent("bountiful.bounty.type.entity.kills").applyTextStyle(TextFormatting.RESET)
+        ).appendSibling(
+                StringTextComponent(" ")
         ).appendSibling(
                 StringTextComponent("§f${progress.stringNums}")
         )

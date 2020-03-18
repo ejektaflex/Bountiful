@@ -24,7 +24,8 @@ object DecreeRegistry : ValueRegistry<Decree>() {
         }.flatten().toSet().mapNotNull {
             val opt = PoolRegistry.poolFor(it)
             if (opt == null) {
-                BountifulMod.logger.error("Tried to get entry list for decrees ${decrees.map { d -> d.id }}; pool that was trying to be accessed: $it")
+                //BountifulMod.logger.error("Tried to get entry list for decrees ${decrees.map { d -> d.id }}; pool that was trying to be accessed: $it")
+                // That decree doesn't exist anymore!
             }
             opt
         }.filter {
