@@ -4,12 +4,10 @@ import ejektaflex.bountiful.BountifulConfig
 import ejektaflex.bountiful.data.bounty.checkers.CheckerRegistry
 import ejektaflex.bountiful.data.bounty.enums.BountyNBT
 import ejektaflex.bountiful.data.bounty.enums.BountyRarity
+import ejektaflex.bountiful.data.bounty.enums.BountyType
 import ejektaflex.bountiful.data.registry.DecreeRegistry
 import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.ext.*
-import ejektaflex.bountiful.logic.BountyTypeRegistry
-import ejektaflex.bountiful.logic.IBountyObjective
-import ejektaflex.bountiful.logic.IBountyReward
 import ejektaflex.bountiful.util.ValueRegistry
 import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.I18n
@@ -60,8 +58,10 @@ class BountyData : INBTSerializable<CompoundNBT> {
     fun tooltipInfo(world: World, advanced: Boolean): List<ITextComponent> {
         val passed = CheckerRegistry.passedChecks(Minecraft.getInstance().player!!, this)
 
+        val typeIds = BountyType.values().map { it.id }
+
         val objs = passed.toList().sortedBy {
-            BountyTypeRegistry.content.indexOf(it.first.bType)
+            typeIds.indexOf(it.first.bType)
         }.map {
             (it.first as IBountyObjective).tooltipObjective(it.second)
         }

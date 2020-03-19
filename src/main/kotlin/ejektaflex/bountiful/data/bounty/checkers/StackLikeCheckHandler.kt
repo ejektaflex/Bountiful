@@ -4,8 +4,7 @@ import ejektaflex.bountiful.data.bounty.AbstractBountyEntryStackLike
 import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.data.bounty.BountyEntryItem
 import ejektaflex.bountiful.data.bounty.BountyEntryItemTag
-import ejektaflex.bountiful.logic.BountyProgress
-import ejektaflex.bountiful.logic.StackPartition
+import ejektaflex.bountiful.data.bounty.BountyProgress
 import net.minecraft.item.ItemStack
 
 class StackLikeCheckHandler : CheckHandler<BountyEntryItem>() {

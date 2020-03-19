@@ -4,7 +4,7 @@ import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.data.bounty.BountyEntryEntity
 import ejektaflex.bountiful.data.bounty.BountyEntryExperience
-import ejektaflex.bountiful.logic.BountyProgress
+import ejektaflex.bountiful.data.bounty.BountyProgress
 import kotlin.math.max
 
 class ExperienceCheckHandler : CheckHandler<BountyEntryEntity>() {

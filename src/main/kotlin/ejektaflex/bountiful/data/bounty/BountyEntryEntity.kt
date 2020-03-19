@@ -4,8 +4,6 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.data.bounty.enums.BountyType
 import ejektaflex.bountiful.ext.toEntityType
-import ejektaflex.bountiful.logic.BountyProgress
-import ejektaflex.bountiful.logic.IBountyObjective
 import net.minecraft.entity.LivingEntity
 import net.minecraft.nbt.CompoundNBT
 import net.minecraft.util.text.ITextComponent

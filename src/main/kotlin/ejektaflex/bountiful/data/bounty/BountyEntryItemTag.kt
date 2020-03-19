@@ -4,8 +4,6 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.data.bounty.enums.BountyType
 import ejektaflex.bountiful.ext.hackyRandom
-import ejektaflex.bountiful.logic.IBountyObjective
-import ejektaflex.bountiful.logic.IBountyReward
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
