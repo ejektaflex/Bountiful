@@ -33,8 +33,12 @@ class BountyEntryExperience : BountyEntry(), IBountyObjective, IBountyReward {
         }
 
     override fun tooltipReward(): ITextComponent {
-        return StringTextComponent("§f${amount}§fx §b").appendSibling(
-                formattedName
+        return StringTextComponent(amount.toString() + "x ").applyTextStyle {
+            it.color = TextFormatting.WHITE
+        }.appendSibling(
+                formattedName.applyTextStyle {
+                    it.color = TextFormatting.AQUA
+                }
         )
     }
 
@@ -62,8 +66,6 @@ class BountyEntryExperience : BountyEntry(), IBountyObjective, IBountyReward {
             }
             else -> BountifulMod.logger.error("Experience reward tried to give '$content', which is invalid. Content must be 'points' or 'levels'")
         }
-
-
 
     }
 

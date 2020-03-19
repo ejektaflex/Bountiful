@@ -152,9 +152,17 @@ object BountifulCommand {
     }
 
 
-    private fun entities() = Command<CommandSource> {
+    private fun entities() = Command<CommandSource> { ctx ->
 
-        it.source.sendMessage("§6Dumping list of entities to §a/logs/bountiful.log§r...")
+        ctx.source.sendFeedback(
+                StringTextComponent("Dumping list of entities to ").applyTextStyle {
+                    it.color = TextFormatting.GOLD
+                }.appendSibling(
+                        StringTextComponent("/logs/bountiful.log...").applyTextStyle {
+                            it.color = TextFormatting.GREEN
+                        }
+                ),true
+        )
 
         val time = measureTimeMillis {
             BountifulMod.logFile.appendText("### Entities in Registry: ###")
@@ -163,7 +171,11 @@ object BountifulCommand {
             }
         }
 
-        it.source.sendMessage("§6Dump complete! Took: ${time}ms")
+        ctx.source.sendFeedback(
+                StringTextComponent("Dump complete! Took: ${time}ms").applyTextStyle {
+                    it.color = TextFormatting.GOLD
+                }, true
+        )
         
         1
     }

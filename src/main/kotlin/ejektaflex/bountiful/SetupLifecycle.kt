@@ -223,12 +223,9 @@ object SetupLifecycle {
                 val totals = idsA + idsB
                 val out = ItemDecree.makeStack()
                 (out.item as ItemDecree).setData(out, totals)
-
                 event.cost = 10
                 event.output = out
             }
-
-
         }
     }
 
@@ -243,15 +240,6 @@ object SetupLifecycle {
     fun doVillagerTrades(event: VillagerTradesEvent) {
         event.trades[2].add(decreeTrade)
     }
-
-    /*
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    fun stitchingAtlas(event: TextureStitchEvent.Pre) {
-        event.addSprite(ResourceLocation(BountifulMod.MODID, "bg"))
-    }
-
-     */
 
 }
 

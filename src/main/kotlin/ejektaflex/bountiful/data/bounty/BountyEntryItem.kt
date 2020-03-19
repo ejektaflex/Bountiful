@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
+import net.minecraft.util.text.TextFormatting
 import net.minecraftforge.items.ItemHandlerHelper
 import kotlin.math.min
 
@@ -19,6 +20,9 @@ class BountyEntryItem : AbstractBountyEntryStackLike(), IBountyObjective, IBount
     @Expose
     @SerializedName("type")
     override var bType: String = BountyType.Item.id
+
+    override val formattedName: ITextComponent
+        get() = StringTextComponent(itemStack?.displayName!!.formattedText)
 
     val itemStack: ItemStack?
         get() {
@@ -34,6 +38,14 @@ class BountyEntryItem : AbstractBountyEntryStackLike(), IBountyObjective, IBount
         }
         super.validate()
     }
+
+    override val validStacks: List<ItemStack>
+        get() {
+            val stack = content.toItemStack
+            nbtTag?.let { stack?.tag = it }
+
+            return listOfNotNull(stack)
+        }
 
     override fun reward(player: PlayerEntity) {
         var amountNeeded = amount
@@ -51,24 +63,6 @@ class BountyEntryItem : AbstractBountyEntryStackLike(), IBountyObjective, IBount
         stacksToGive.forEach { stack ->
             ItemHandlerHelper.giveItemToPlayer(player, stack)
         }
-    }
-
-    override val validStacks: List<ItemStack>
-        get() {
-            val stack = content.toItemStack
-            nbtTag?.let { stack?.tag = it }
-
-            return listOfNotNull(stack)
-        }
-
-    override val formattedName: ITextComponent
-        get() = StringTextComponent(itemStack?.displayName!!.formattedText)
-
-
-    override fun tooltipReward(): ITextComponent {
-        return StringTextComponent("§f${amount}§fx §b").appendSibling(
-                formattedName
-        )
     }
 
 }

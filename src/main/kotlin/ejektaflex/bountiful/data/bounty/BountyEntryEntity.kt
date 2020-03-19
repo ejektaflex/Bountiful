@@ -55,11 +55,15 @@ class BountyEntryEntity : BountyEntry(), IBountyObjective {
         return StringTextComponent(progress.color).appendSibling(
                 formattedName
         ).appendSibling(
+                StringTextComponent(" ")
+        ).appendSibling(
                 TranslationTextComponent("bountiful.bounty.type.entity.kills").applyTextStyle(TextFormatting.RESET)
         ).appendSibling(
                 StringTextComponent(" ")
         ).appendSibling(
-                StringTextComponent("§f${progress.stringNums}")
+                StringTextComponent(progress.stringNums).applyTextStyle {
+                    it.color = TextFormatting.WHITE
+                }
         )
     }
 

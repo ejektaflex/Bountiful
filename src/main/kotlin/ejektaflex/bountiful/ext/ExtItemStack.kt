@@ -1,5 +1,6 @@
 package ejektaflex.bountiful.ext
 
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundNBT
 import net.minecraftforge.fml.ModList

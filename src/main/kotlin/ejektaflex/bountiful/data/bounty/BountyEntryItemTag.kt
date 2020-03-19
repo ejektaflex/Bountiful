@@ -13,6 +13,7 @@ import net.minecraft.tags.ItemTags
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
+import net.minecraft.util.text.TextFormatting
 import net.minecraftforge.items.ItemHandlerHelper
 import kotlin.math.min
 
@@ -22,6 +23,8 @@ class BountyEntryItemTag : AbstractBountyEntryStackLike(), IBountyObjective, IBo
     @SerializedName("type")
     override var bType: String = BountyType.ItemTag.id
 
+    override val formattedName: ITextComponent
+        get() = StringTextComponent(name ?: content)
 
     override fun validate() {
         if (bType == BountyType.ItemTag.id) {
@@ -46,17 +49,6 @@ class BountyEntryItemTag : AbstractBountyEntryStackLike(), IBountyObjective, IBo
                 }
             }
         }
-
-
-
-    override val formattedName: ITextComponent
-        get() = StringTextComponent(name ?: content)
-
-    override fun tooltipReward(): ITextComponent {
-        return StringTextComponent("§f${amount}§fx §b").appendSibling(
-                formattedName
-        )
-    }
 
     override fun reward(player: PlayerEntity) {
         var amountNeeded = amount

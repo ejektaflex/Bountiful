@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundNBT
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
+import net.minecraft.util.text.TextFormatting
 import net.minecraft.util.text.TranslationTextComponent
 import net.minecraft.world.World
 import net.minecraftforge.common.util.INBTSerializable
@@ -71,21 +72,16 @@ class BountyData : INBTSerializable<CompoundNBT> {
 
 
         return listOf(
-                //"Board Time: ${formatTickTime(boardTimeLeft(world) / boardTickFreq)}",
                 listOf(
-                        StringTextComponent("§6").appendSibling(
-                            TranslationTextComponent("bountiful.tooltip.required")
-                        ).appendSibling(
-                                StringTextComponent(":§f ")
-                        )
+                        TranslationTextComponent("bountiful.tooltip.required").applyTextStyle {
+                            it.color = TextFormatting.GOLD
+                        }
                 ) +
                 objs +
                 listOf(
-                        StringTextComponent("§6").appendSibling(
-                                TranslationTextComponent("bountiful.tooltip.rewards")
-                        ).appendSibling(
-                                StringTextComponent(":§f ")
-                        )
+                        TranslationTextComponent("bountiful.tooltip.rewards").applyTextStyle {
+                            it.color = TextFormatting.GOLD
+                        }
                 ) +
                 rews +
                 listOf(
