@@ -95,7 +95,7 @@ class ItemBounty() : Item(
     @OnlyIn(Dist.CLIENT)
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<ITextComponent>, flagIn: ITooltipFlag) {
         if (stack.hasTag()) {
-            val bounty = BountyData().apply { deserializeNBT(stack.tag!!) }
+            val bounty = stack.toData(::BountyData)
             // TODO Reimplement advanced bounty tooltips
             //val bountyTipInfo = bounty.tooltipInfo(worldIn!!, Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
             val bountyTipInfo = bounty.tooltipInfo(worldIn!!, false)
@@ -182,8 +182,6 @@ class ItemBounty() : Item(
             throw Exception("${stack.displayName} is not an ItemBounty, so you cannot generate bounty data for it!")
         }
 
-
-
     }
 
     // Used to cash in the bounty for a reward
@@ -194,7 +192,7 @@ class ItemBounty() : Item(
             return false
         }
 
-        val bounty = BountyData().apply { deserializeNBT(bountyItem.tag!!) }
+        val bounty = bountyItem.toData(::BountyData)
 
         if (bounty.hasExpired(player.world)) {
             player.sendTranslation("bountiful.bounty.expired")
@@ -209,45 +207,11 @@ class ItemBounty() : Item(
 
         return false
 
-        /*
-
-            // Increment stats
-
-            // TODO Reimplement Scoreboard Stats
-            //player.addStat(BountifulStats.bountiesCompleted)
-            //player.addStat(bountyRarity.stat)
-
-            // Give XP
-            player.giveExperiencePoints(bountyRarity.xp)
-
-            true
-        }
-
-         */
-
-
     }
 
     // Don't flail arms randomly on NBT update
     override fun shouldCauseReequipAnimation(oldStack: ItemStack, newStack: ItemStack, slotChanged: Boolean): Boolean {
         return slotChanged
     }
-
-    companion object {
-
-        fun edit(stack: ItemStack, operation: ItemStack.(it: BountyData) -> Unit) {
-            if (stack.item is ItemBounty) {
-                val data = BountyData().apply { deserializeNBT(stack.tag!!) }
-                operation(stack, data)
-            } else {
-                throw Exception("${stack.displayName} is not an ItemBounty, so you cannot edit bounty data for it!")
-            }
-        }
-
-    }
-
-
-
-
 
 }

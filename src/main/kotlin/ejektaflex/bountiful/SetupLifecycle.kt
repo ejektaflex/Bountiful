@@ -9,10 +9,7 @@ import ejektaflex.bountiful.data.bounty.BountyEntryEntity
 import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
 import ejektaflex.bountiful.data.json.JsonSerializers
 import ejektaflex.bountiful.data.structure.EntryPool
-import ejektaflex.bountiful.ext.sendErrorMsg
-import ejektaflex.bountiful.ext.sendMessage
-import ejektaflex.bountiful.ext.setUnsortedList
-import ejektaflex.bountiful.ext.toData
+import ejektaflex.bountiful.ext.*
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.gui.BoardScreen
 import ejektaflex.bountiful.item.ItemBounty
@@ -190,7 +187,7 @@ object SetupLifecycle {
     @SubscribeEvent
     fun onTileEntityRegistry(event: RegistryEvent.Register<TileEntityType<*>>) {
         event.registry.register(
-                TileEntityType.Builder.create<BoardTileEntity>(Supplier {
+                TileEntityType.Builder.create(Supplier {
                     BoardTileEntity()
                 }, BountifulContent.Blocks.BOUNTYBOARD)
                         .build(null)
@@ -223,7 +220,9 @@ object SetupLifecycle {
             if (idsA != null && idsB !=  null) {
                 val totals = idsA + idsB
                 val out = ItemDecree.makeStack()
-                (out.item as ItemDecree).setData(out, totals)
+                out.edit<ItemDecree> {
+                    setData(it, totals)
+                }
                 event.cost = 10
                 event.output = out
             }

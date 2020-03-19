@@ -1,14 +1,11 @@
 package ejektaflex.bountiful.item
 
-import ejektaflex.bountiful.ext.hackyRandom
 import ejektaflex.bountiful.BountifulContent
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.data.registry.DecreeRegistry
 import ejektaflex.bountiful.data.structure.DecreeList
-import ejektaflex.bountiful.ext.getUnsortedList
-import ejektaflex.bountiful.ext.getUnsortedListTyped
-import ejektaflex.bountiful.ext.setUnsortedList
+import ejektaflex.bountiful.ext.*
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
@@ -133,18 +130,18 @@ class ItemDecree() : Item(
                 return null
             }
 
-            return DecreeList().apply { deserializeNBT(stack.tag!!) }
+            return stack.toData(::DecreeList)
         }
 
         fun makeStack(): ItemStack {
             val newDecree = ItemStack(BountifulContent.Items.DECREE)
-            (newDecree.item as ItemDecree).ensureDecree(newDecree)
+            newDecree.edit<ItemDecree> { ensureDecree(it) }
             return newDecree
         }
 
         fun makeStack(decree: Decree): ItemStack {
             val newDecree = ItemStack(BountifulContent.Items.DECREE)
-            (newDecree.item as ItemDecree).ensureDecree(newDecree, decree)
+            newDecree.edit<ItemDecree> { ensureDecree(it, decree) }
             return newDecree
         }
 

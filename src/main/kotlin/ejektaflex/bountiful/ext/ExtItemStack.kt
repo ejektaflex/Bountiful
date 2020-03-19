@@ -27,9 +27,9 @@ val CompoundNBT.toItemStack: ItemStack?
         }
     }
 
-inline fun <reified T : Item> ItemStack.edit(func: T.() -> Unit) {
+inline fun <reified T : Item> ItemStack.edit(func: T.(it: ItemStack) -> Unit) {
     if (item is T) {
-        func(item as T)
+        func(item as T, this)
     } else {
         throw Exception("Tried to edit stack ${stack.count}x ${stack.item.registryName} as if it was a ${T::class}")
     }

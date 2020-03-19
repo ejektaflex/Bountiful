@@ -6,7 +6,9 @@ import ejektaflex.bountiful.ext.setUnsortedListOfNbt
 import net.minecraft.nbt.CompoundNBT
 import net.minecraftforge.common.util.INBTSerializable
 
-class DecreeList(var ids: MutableList<String> = mutableListOf()) : INBTSerializable<CompoundNBT> {
+class DecreeList() : INBTSerializable<CompoundNBT> {
+
+    private var ids: MutableList<String> = mutableListOf()
 
     override fun deserializeNBT(nbt: CompoundNBT) {
         ids = nbt.getUnsortedList("ids").map {
@@ -15,7 +17,9 @@ class DecreeList(var ids: MutableList<String> = mutableListOf()) : INBTSerializa
     }
 
     operator fun plus(other: DecreeList): DecreeList {
-        return DecreeList((ids + other.ids).toMutableList())
+        return DecreeList().apply {
+            this@DecreeList.ids = (ids + other.ids).toMutableList()
+        }
     }
 
     override fun serializeNBT(): CompoundNBT {
