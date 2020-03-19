@@ -1,9 +1,6 @@
 package ejektaflex.bountiful.data.bounty.enums
 
-import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.BountifulStats
-import ejektaflex.bountiful.advancement.BountifulTrigger
-import ejektaflex.bountiful.advancement.BountifulTriggers
 import net.minecraft.entity.player.ServerPlayerEntity
 import net.minecraft.item.Rarity
 import net.minecraft.stats.Stats
@@ -47,7 +44,6 @@ enum class BountyRarity(
     fun trigger(playerEntity: ServerPlayerEntity) {
         //trigger.trigger(playerEntity.advancements)
     }
-
 
 
     companion object {

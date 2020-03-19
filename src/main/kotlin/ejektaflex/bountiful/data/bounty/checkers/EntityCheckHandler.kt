@@ -4,7 +4,7 @@ import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.data.bounty.BountyEntryEntity
 import ejektaflex.bountiful.logic.BountyProgress
 
-class EntityCheckHandler() : CheckHandler<BountyEntryEntity>() {
+class EntityCheckHandler : CheckHandler<BountyEntryEntity>() {
 
     override fun fulfill() {
         // Nothing needs to happen in order to fulfill this bounty objective type :)
@@ -12,7 +12,7 @@ class EntityCheckHandler() : CheckHandler<BountyEntryEntity>() {
 
     override fun objectiveStatus(): Map<BountyEntry, BountyProgress> {
 
-        var succ = mutableMapOf<BountyEntry, BountyProgress>()
+        val succ = mutableMapOf<BountyEntry, BountyProgress>()
 
         val entityObjs = data.objectives.content.filterIsInstance<BountyEntryEntity>()
 
@@ -22,7 +22,6 @@ class EntityCheckHandler() : CheckHandler<BountyEntryEntity>() {
 
         return succ
     }
-
 
 
 }

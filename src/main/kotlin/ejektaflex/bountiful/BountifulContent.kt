@@ -20,7 +20,8 @@ object BountifulContent {
         val BOUNTYBOARD = BlockBountyBoard().setRegistryName("bountyboard")
 
         @ObjectHolder(BountifulMod.MODID + ":bounty-te")
-        @JvmStatic lateinit var BOUNTYTILEENTITY: TileEntityType<BoardTileEntity>
+        @JvmStatic
+        lateinit var BOUNTYTILEENTITY: TileEntityType<BoardTileEntity>
 
     }
 
@@ -32,7 +33,8 @@ object BountifulContent {
 
     object Guis {
         @ObjectHolder(BountifulMod.MODID + ":bountyboard")
-        @JvmStatic lateinit var BOARDCONTAINER: ContainerType<BoardContainer>
+        @JvmStatic
+        lateinit var BOARDCONTAINER: ContainerType<BoardContainer>
     }
 
     object BountifulGroup : ItemGroup(BountifulMod.MODID) {

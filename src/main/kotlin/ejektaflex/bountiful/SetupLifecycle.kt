@@ -9,7 +9,10 @@ import ejektaflex.bountiful.data.bounty.BountyEntryEntity
 import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
 import ejektaflex.bountiful.data.json.JsonSerializers
 import ejektaflex.bountiful.data.structure.EntryPool
-import ejektaflex.bountiful.ext.*
+import ejektaflex.bountiful.ext.edit
+import ejektaflex.bountiful.ext.sendErrorMsg
+import ejektaflex.bountiful.ext.sendMessage
+import ejektaflex.bountiful.ext.toData
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.gui.BoardScreen
 import ejektaflex.bountiful.item.ItemBounty
@@ -27,7 +30,7 @@ import net.minecraft.resources.IResourceManager
 import net.minecraft.resources.IResourceManagerReloadListener
 import net.minecraft.tileentity.TileEntityType
 import net.minecraft.util.ResourceLocation
-import net.minecraft.world.gen.feature.jigsaw.*
+import net.minecraft.world.gen.feature.jigsaw.SingleJigsawPiece
 import net.minecraftforge.common.BasicTrade
 import net.minecraftforge.common.extensions.IForgeContainerType
 import net.minecraftforge.event.AnvilUpdateEvent
@@ -66,7 +69,7 @@ object SetupLifecycle {
             )
 
             for (place in injectList) {
-                JigsawJank.create().append(ResourceLocation("minecraft",place)) {
+                JigsawJank.create().append(ResourceLocation("minecraft", place)) {
                     listOf(Pair.of(SingleJigsawPiece("bountiful:village/common/bounty_gazebo"), 2))
                 }
             }
@@ -205,8 +208,8 @@ object SetupLifecycle {
 
     @SubscribeEvent
     fun onClientInit(event: FMLClientSetupEvent) {
-        ScreenManager.registerFactory(BountifulContent.Guis.BOARDCONTAINER) {
-            container, inv, textComponent ->  BoardScreen(container, inv, textComponent)
+        ScreenManager.registerFactory(BountifulContent.Guis.BOARDCONTAINER) { container, inv, textComponent ->
+            BoardScreen(container, inv, textComponent)
         }
     }
 
@@ -217,7 +220,7 @@ object SetupLifecycle {
             val idsA = ItemDecree.getData(event.left)
             val idsB = ItemDecree.getData(event.right)
 
-            if (idsA != null && idsB !=  null) {
+            if (idsA != null && idsB != null) {
                 val totals = idsA + idsB
                 val out = ItemDecree.makeStack()
                 out.edit<ItemDecree> {

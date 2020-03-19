@@ -6,8 +6,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundNBT
 import net.minecraftforge.common.util.INBTSerializable
 import net.minecraftforge.fml.ModList
-import kotlin.reflect.full.createInstance
-import kotlin.reflect.full.primaryConstructor
 
 val ItemStack.toNBT: CompoundNBT
     get() {

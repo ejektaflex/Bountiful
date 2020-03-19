@@ -1,24 +1,22 @@
 package ejektaflex.bountiful.data.bounty
 
 import ejektaflex.bountiful.BountifulConfig
+import ejektaflex.bountiful.data.bounty.checkers.CheckerRegistry
 import ejektaflex.bountiful.data.bounty.enums.BountyNBT
 import ejektaflex.bountiful.data.bounty.enums.BountyRarity
-import ejektaflex.bountiful.ext.setUnsortedList
 import ejektaflex.bountiful.ext.getUnsortedList
+import ejektaflex.bountiful.ext.setUnsortedList
 import ejektaflex.bountiful.ext.toBountyEntry
-import ejektaflex.bountiful.util.ValueRegistry
-import ejektaflex.bountiful.item.ItemBounty
+import ejektaflex.bountiful.ext.toData
 import ejektaflex.bountiful.logic.BountyTypeRegistry
 import ejektaflex.bountiful.logic.IBountyObjective
 import ejektaflex.bountiful.logic.IBountyReward
-import ejektaflex.bountiful.data.bounty.checkers.CheckerRegistry
-import ejektaflex.bountiful.ext.toData
+import ejektaflex.bountiful.util.ValueRegistry
 import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.I18n
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundNBT
 import net.minecraft.util.text.ITextComponent
-import net.minecraft.util.text.StringTextComponent
 import net.minecraft.util.text.TextFormatting
 import net.minecraft.util.text.TranslationTextComponent
 import net.minecraft.world.World
@@ -54,7 +52,7 @@ class BountyData : INBTSerializable<CompoundNBT> {
         get() = BountyRarity.getRarityFromInt(rarity)
 
     fun boardTimeLeft(world: World): Long {
-        return max(boardStamp + maxTimeAtBoard - world.gameTime , 0)
+        return max(boardStamp + maxTimeAtBoard - world.gameTime, 0)
     }
 
 
@@ -78,16 +76,16 @@ class BountyData : INBTSerializable<CompoundNBT> {
                             it.color = TextFormatting.GOLD
                         }
                 ) +
-                objs +
-                listOf(
-                        TranslationTextComponent("bountiful.tooltip.rewards").applyTextStyle {
-                            it.color = TextFormatting.GOLD
-                        }
-                ) +
-                rews +
-                listOf(
-                        //TranslationTextComponent("bountiful.tooltip.advanced")
-                )
+                        objs +
+                        listOf(
+                                TranslationTextComponent("bountiful.tooltip.rewards").applyTextStyle {
+                                    it.color = TextFormatting.GOLD
+                                }
+                        ) +
+                        rews +
+                        listOf(
+                                //TranslationTextComponent("bountiful.tooltip.advanced")
+                        )
         ).flatten()
 
     }
@@ -111,7 +109,6 @@ class BountyData : INBTSerializable<CompoundNBT> {
             formatTickTime(n)
         }
     }
-
 
 
     override fun deserializeNBT(tag: CompoundNBT) {

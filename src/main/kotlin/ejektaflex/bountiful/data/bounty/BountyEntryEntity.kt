@@ -55,7 +55,7 @@ class BountyEntryEntity : BountyEntry(), IBountyObjective {
         return StringTextComponent("").appendSibling(
                 formattedName.applyTextStyle(progress.color)
         ).appendSibling(
-            StringTextComponent(" ")
+                StringTextComponent(" ")
         ).appendSibling(
                 TranslationTextComponent("bountiful.bounty.type.entity.kills").applyTextStyle(progress.color)
         ).appendSibling(

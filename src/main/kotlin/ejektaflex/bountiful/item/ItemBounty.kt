@@ -1,16 +1,16 @@
 package ejektaflex.bountiful.item
 
 import ejektaflex.bountiful.BountifulConfig
-import ejektaflex.bountiful.data.bounty.enums.BountyRarity
-import ejektaflex.bountiful.ext.sendTranslation
 import ejektaflex.bountiful.BountifulContent
 import ejektaflex.bountiful.data.bounty.BountyData
-import ejektaflex.bountiful.data.bounty.enums.BountyNBT
-import ejektaflex.bountiful.data.structure.Decree
-import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.data.bounty.checkers.CheckerRegistry
+import ejektaflex.bountiful.data.bounty.enums.BountyNBT
+import ejektaflex.bountiful.data.bounty.enums.BountyRarity
 import ejektaflex.bountiful.data.registry.DecreeRegistry
+import ejektaflex.bountiful.data.structure.Decree
+import ejektaflex.bountiful.ext.sendTranslation
 import ejektaflex.bountiful.ext.toData
+import ejektaflex.bountiful.logic.BountyCreator
 import net.minecraft.client.Minecraft
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity
@@ -23,14 +23,14 @@ import net.minecraft.util.Hand
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
+import net.minecraft.util.text.TranslationTextComponent
 import net.minecraft.world.World
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.api.distmarker.OnlyIn
-import net.minecraft.util.text.TranslationTextComponent
 import net.minecraftforge.registries.IForgeRegistryEntry
 
 
-class ItemBounty() : Item(
+class ItemBounty : Item(
         Item.Properties().maxStackSize(1).group(BountifulContent.BountifulGroup)
 ), IForgeRegistryEntry<Item> {
 
@@ -46,7 +46,6 @@ class ItemBounty() : Item(
             } else {
                 0.0f
             }
-
         }
     }
 
@@ -55,7 +54,7 @@ class ItemBounty() : Item(
     override fun getDisplayName(stack: ItemStack): ITextComponent {
 
         return if (BountyData.isValidBounty(stack)) {
-            val bd = getBountyData(stack)
+            val bd = stack.toData(::BountyData)
             TranslationTextComponent("bountiful.rarity.${bd.rarityEnum.name}").apply {
 
                 appendSibling(StringTextComponent(" "))
@@ -78,7 +77,6 @@ class ItemBounty() : Item(
     }
 
     override fun onItemRightClick(worldIn: World, playerIn: PlayerEntity, handIn: Hand): ActionResult<ItemStack> {
-
         if (worldIn.isRemote) {
             return super.onItemRightClick(worldIn, playerIn, handIn)
         }
@@ -105,45 +103,12 @@ class ItemBounty() : Item(
         }
     }
 
-    fun getBountyData(stack: ItemStack): BountyData {
-        if (stack.hasTag() && stack.item is ItemBounty) {
-            return stack.toData(::BountyData)
-        } else {
-            throw Exception("${stack.item.registryName} is not an ItemBounty or has no NBT data!")
-        }
-    }
-
     override fun getRarity(stack: ItemStack): Rarity {
         return if (stack.hasTag() && BountyNBT.Rarity.key in stack.tag!!) {
             BountyRarity.getRarityFromInt(stack.tag!!.getInt(BountyNBT.Rarity.key)).itemRarity
         } else {
             super.getRarity(stack)
         }
-    }
-
-    private fun tickNumber(stack: ItemStack, amount: Int, key: String): Boolean {
-        if (stack.hasTag() && key in stack.tag!!) {
-            var time = stack.tag!!.getInt(key)
-            if (time > 0) {
-                time -= amount
-            }
-            if (time < 0) {
-                time = 0
-            }
-            stack.tag!!.putInt(key, time)
-            return (time <= 0)
-        }
-        return true
-    }
-
-    fun tryExpireBountyTime(stack: ItemStack) {
-        if (stack.hasTag() && BountyNBT.BountyTime.key in stack.tag!!) {
-            stack.tag!!.putInt(BountyNBT.BountyTime.key, 0)
-        }
-    }
-
-    fun tickBoardTime(stack: ItemStack): Boolean {
-        return tickNumber(stack, BountyData.boardTickFreq.toInt(), BountyNBT.BoardStamp.key)
     }
 
     fun ensureTimerStarted(stack: ItemStack, worldIn: World) {
@@ -155,9 +120,7 @@ class ItemBounty() : Item(
     override fun inventoryTick(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean) {
         if (!worldIn.isRemote) {
             if (worldIn.gameTime % BountyData.bountyTickFreq == 3L) {
-
                 ensureTimerStarted(stack, worldIn)
-
             }
         }
     }

@@ -7,7 +7,7 @@ import ejektaflex.bountiful.data.bounty.BountyEntryExperience
 import ejektaflex.bountiful.logic.BountyProgress
 import kotlin.math.max
 
-class ExperienceCheckHandler() : CheckHandler<BountyEntryEntity>() {
+class ExperienceCheckHandler : CheckHandler<BountyEntryEntity>() {
 
     companion object {
         fun incXpForNextLevel(level: Int): Int {
@@ -67,7 +67,6 @@ class ExperienceCheckHandler() : CheckHandler<BountyEntryEntity>() {
 
         return succ
     }
-
 
 
 }

@@ -1,4 +1,3 @@
-
 package ejektaflex.bountiful.network
 
 import ejektaflex.bountiful.BountifulMod
@@ -29,7 +28,7 @@ object BountifulNetwork {
                 msgId++,
                 clazz.java,
                 { msg: M, buff: PacketBuffer -> msg.encode(buff) },
-                { buff: PacketBuffer -> clazz.createInstance().apply { decode(buff) }},
+                { buff: PacketBuffer -> clazz.createInstance().apply { decode(buff) } },
                 { msg: M, buff: Supplier<NetworkEvent.Context> -> msg.handle(buff) }
         )
 

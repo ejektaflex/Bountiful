@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
-import net.minecraft.util.text.TextFormatting
 import net.minecraftforge.items.ItemHandlerHelper
 import kotlin.math.min
 

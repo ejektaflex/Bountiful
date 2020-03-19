@@ -34,7 +34,7 @@ class BountifulConfig {
 
         var boardLifespan: ForgeConfigSpec.IntValue = b
                 .comment("How long, in seconds, a bounty should be" +
-                " able to stay on a board (if it ISN'T pushed off by another bounty).")
+                        " able to stay on a board (if it ISN'T pushed off by another bounty).")
                 .defineInRange("boardLifespan", 3600, 60, 600000)
 
         var bountyTimeMin: ForgeConfigSpec.IntValue = b
@@ -58,7 +58,6 @@ class BountifulConfig {
                 .define("villageGen", true)
 
 
-
         val datapackCategory = b.pop().push("datapacks")!!
 
         var blacklistedData: ForgeConfigSpec.ConfigValue<MutableList<String>> = b
@@ -70,7 +69,6 @@ class BountifulConfig {
                         "\"bountiful/*/apotheosis\" would block Bountiful from loading data in",
                         "\"bountiful/bounties/pools/apotheosis\" as well as \"bountiful/bounties/decrees/apotheosis\".")
                 .define("blacklistedData", mutableListOf())
-
 
 
         val bountiesCategory = b.pop().push("bounties")!!
@@ -102,7 +100,6 @@ class BountifulConfig {
                         "(50% chance of at least Uncommon, 25% of at least Rare, 12.5% chance of Epic)"
                 )
                 .defineInRange("rarityTierUpChance", 0.4, 0.0, 1.0)
-
 
 
         val entityCategory = b.pop().push("entity_bounties")!!

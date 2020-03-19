@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.BountifulConfig
 import ejektaflex.bountiful.BountifulMod
-import ejektaflex.bountiful.data.bounty.checkers.ExperienceCheckHandler
 import ejektaflex.bountiful.data.bounty.enums.BountyType
 import ejektaflex.bountiful.logic.BountyProgress
 import ejektaflex.bountiful.logic.IBountyObjective

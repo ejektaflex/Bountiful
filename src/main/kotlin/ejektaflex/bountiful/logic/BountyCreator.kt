@@ -1,17 +1,17 @@
 package ejektaflex.bountiful.logic
 
 import ejektaflex.bountiful.BountifulConfig
+import ejektaflex.bountiful.BountifulContent
+import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.data.bounty.enums.BountyRarity
+import ejektaflex.bountiful.data.registry.DecreeRegistry
+import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.ext.hackyRandom
 import ejektaflex.bountiful.ext.randomSplit
 import ejektaflex.bountiful.ext.supposedlyNotNull
 import ejektaflex.bountiful.ext.weightedRandomNorm
-import ejektaflex.bountiful.BountifulContent
-import ejektaflex.bountiful.data.bounty.BountyData
-import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.item.ItemBounty
-import ejektaflex.bountiful.data.registry.DecreeRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.util.NonNullList
 import net.minecraft.world.World
@@ -73,7 +73,7 @@ object BountyCreator {
                 break
             }
 
-            toAdd.add( totalRewards.weightedRandomNorm(inRarity.exponent).pick() )
+            toAdd.add(totalRewards.weightedRandomNorm(inRarity.exponent).pick())
         }
 
         return toAdd
@@ -88,24 +88,6 @@ object BountyCreator {
         return toAdd.sumBy { it.calculatedWorth }
     }
 
-
-    val rando = Random()
-
-    /*
-
-        val highestObjWorth = objectives.maxBy { it.maxWorth }
-
-        // Add more objectives if this bounty still couldn't ever possibly hit max worth
-        // Later on we should sample for this
-
-        if (highestObjWorth != null) {
-            val neededOfThese = ceil(worth.toDouble() / highestObjWorth.maxWorth).toInt()
-            if (numObjectives < neededOfThese) {
-                numObjectives = neededOfThese
-            }
-        }
-     */
-
     fun getObjectivesWithinVariance(objs: List<BountyEntry>, worth: Int, variance: Double): List<BountyEntry> {
         val wRange = ceil(worth * variance)
 
@@ -119,7 +101,6 @@ object BountyCreator {
 
         return totalObjs
     }
-
 
     fun pickObjective(objectives: NonNullList<BountyEntry>, worth: Int): BountyEntry {
 
@@ -197,7 +178,5 @@ object BountyCreator {
 
         data.objectives.add(*objs.toTypedArray())
     }
-
-
 
 }

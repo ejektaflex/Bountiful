@@ -41,6 +41,4 @@ abstract class AbstractBountyEntryStackLike : BountyEntry(), IBountyObjective, I
         return "BountyEntry ($bType) [Item: $content, Amount: ${amount} [${amountRange}], Worth: $unitWorth, NBT: $nbtTag, Weight: $weight]"
     }
 
-
-
 }
