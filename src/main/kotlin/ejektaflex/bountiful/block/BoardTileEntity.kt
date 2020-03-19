@@ -9,7 +9,6 @@ import ejektaflex.bountiful.ext.*
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.item.ItemDecree
-import ejektaflex.bountiful.logic.BountyCreator
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.container.Container
@@ -105,7 +104,7 @@ class BoardTileEntity : TileEntity(BountifulContent.Blocks.BOUNTYTILEENTITY), IT
 
     private fun addSingleBounty() {
         //println("Adding a single bounty")
-        val newStack = BountyCreator.createStack(world!!, decrees)
+        val newStack = ItemBounty.create(world!!, decrees)
         val freeSlots = bountySlots - filledBountySlots
         if (freeSlots.isNotEmpty()) {
             handler[freeSlots.hackyRandom()] = newStack

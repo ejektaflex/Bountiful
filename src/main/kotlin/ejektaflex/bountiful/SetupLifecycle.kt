@@ -217,15 +217,9 @@ object SetupLifecycle {
     @SubscribeEvent
     fun anvilEvent(event: AnvilUpdateEvent) {
         if (event.left.item is ItemDecree && event.right.item is ItemDecree && event.left.hasTag() && event.right.hasTag()) {
-            println("Boom")
             val idsA = event.left.toData(::DecreeList)
             val idsB = event.right.toData(::DecreeList)
-
-            println("A: ${idsA.ids}")
-            println("B: ${idsB.ids}")
-
             val totals = idsA + idsB
-            println("Totals: ${totals.ids}")
             val out = ItemDecree.makeStack()
 
             out.edit<ItemDecree> {

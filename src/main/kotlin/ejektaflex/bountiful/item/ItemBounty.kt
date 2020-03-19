@@ -8,9 +8,9 @@ import ejektaflex.bountiful.data.bounty.enums.BountyNBT
 import ejektaflex.bountiful.data.bounty.enums.BountyRarity
 import ejektaflex.bountiful.data.registry.DecreeRegistry
 import ejektaflex.bountiful.data.structure.Decree
+import ejektaflex.bountiful.ext.edit
 import ejektaflex.bountiful.ext.sendTranslation
 import ejektaflex.bountiful.ext.toData
-import ejektaflex.bountiful.logic.BountyCreator
 import net.minecraft.client.Minecraft
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity
@@ -28,6 +28,7 @@ import net.minecraft.world.World
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.api.distmarker.OnlyIn
 import net.minecraftforge.registries.IForgeRegistryEntry
+import java.util.*
 
 
 class ItemBounty : Item(
@@ -129,7 +130,7 @@ class ItemBounty : Item(
     fun ensureBounty(stack: ItemStack, worldIn: World, decrees: List<Decree>, rarity: BountyRarity) {
 
         val data = try {
-            BountyCreator.create(rarity, decrees)
+            BountyData.create(rarity, decrees)
         } catch (e: BountyCreationException) {
             return
         }
@@ -151,7 +152,7 @@ class ItemBounty : Item(
     fun cashIn(player: PlayerEntity, hand: Hand): Boolean {
         val bountyItem = player.getHeldItem(hand)
         if (!bountyItem.hasTag()) {
-            ensureBounty(player.getHeldItem(hand), player.world, DecreeRegistry.content, BountyCreator.calcRarity())
+            ensureBounty(player.getHeldItem(hand), player.world, DecreeRegistry.content, calcRarity())
             return false
         }
 
@@ -175,6 +176,34 @@ class ItemBounty : Item(
     // Don't flail arms randomly on NBT update
     override fun shouldCauseReequipAnimation(oldStack: ItemStack, newStack: ItemStack, slotChanged: Boolean): Boolean {
         return slotChanged
+    }
+
+    companion object {
+
+
+        private val rand = Random()
+
+        fun calcRarity(): BountyRarity {
+            var level = 0
+            val chance = BountifulConfig.SERVER.rarityChance.get()
+            for (i in 0 until 3) {
+                if (rand.nextFloat() < chance) {
+                    level += 1
+                } else {
+                    break
+                }
+            }
+            return BountyRarity.getRarityFromInt(level)
+        }
+
+        fun create(world: World, decrees: List<Decree>): ItemStack {
+            return ItemStack(BountifulContent.Items.BOUNTY).apply {
+                edit<ItemBounty> {
+                    ensureBounty(it, world, decrees, calcRarity())
+                }
+            }
+        }
+
     }
 
 }

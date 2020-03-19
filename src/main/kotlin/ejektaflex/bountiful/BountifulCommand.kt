@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType.getInteger
 import com.mojang.brigadier.arguments.IntegerArgumentType.integer
 import com.mojang.brigadier.arguments.StringArgumentType.getString
 import com.mojang.brigadier.arguments.StringArgumentType.string
+import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.data.bounty.BountyEntryItem
 import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
 import ejektaflex.bountiful.data.json.JsonAdapter
@@ -15,7 +16,6 @@ import ejektaflex.bountiful.ext.sendErrorMsg
 import ejektaflex.bountiful.ext.sendMessage
 import ejektaflex.bountiful.ext.supposedlyNotNull
 import ejektaflex.bountiful.item.ItemDecree
-import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.network.BountifulNetwork
 import ejektaflex.bountiful.network.MessageClipboardCopy
 import net.minecraft.command.CommandSource
@@ -262,13 +262,13 @@ object BountifulCommand {
             // Since we can have at most 2 objectives, lets assume that worst case all 3 had this value
             val worthToMatch = reward.maxWorth * safety
 
-            val within = BountyCreator.getObjectivesWithinVariance(
+            val within = BountyData.getObjectivesWithinVariance(
                     DecreeRegistry.getObjectives(listOf(decree)),
                     worthToMatch,
                     0.2
             )
 
-            val nearest = BountyCreator.pickObjective(supposedlyNotNull(objs), worthToMatch).pick(worthToMatch)
+            val nearest = BountyData.pickObjective(supposedlyNotNull(objs), worthToMatch).pick(worthToMatch)
 
             if (within.isEmpty()) {
                 it.source.sendMessage("§cDecree can't handle theoretical bounty of $safety of §4${reward.amountRange.max}x[${reward.content}]§c, next closest obj was: §4${nearest.amount}x[${nearest.content}]§c")
