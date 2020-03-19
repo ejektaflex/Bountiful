@@ -7,7 +7,7 @@ import net.minecraftforge.common.util.INBTSerializable
 
 class DecreeList : INBTSerializable<CompoundNBT> {
 
-    private var ids: MutableList<String> = mutableListOf()
+    var ids: MutableList<String> = mutableListOf()
 
     override fun deserializeNBT(nbt: CompoundNBT) {
         ids = nbt.getUnsortedList("ids").map { tag ->
@@ -17,7 +17,7 @@ class DecreeList : INBTSerializable<CompoundNBT> {
 
     operator fun plus(other: DecreeList): DecreeList {
         return DecreeList().apply {
-            this@DecreeList.ids = (ids + other.ids).toMutableList()
+            this.ids = (this@DecreeList.ids + other.ids).toSet().toMutableList()
         }
     }
 

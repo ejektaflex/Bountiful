@@ -25,7 +25,7 @@ val CompoundNBT.toItemStack: ItemStack?
         }
     }
 
-inline fun <reified T : Item> ItemStack.edit(func: T.(it: ItemStack) -> Unit) {
+inline fun <reified T : Item> ItemStack.edit(func: T.(stack: ItemStack) -> Unit) {
     if (item is T) {
         func(item as T, this)
     } else {

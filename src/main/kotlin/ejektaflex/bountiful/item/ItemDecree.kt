@@ -122,14 +122,6 @@ class ItemDecree : Item(
 
     companion object {
 
-        fun getData(stack: ItemStack): DecreeList? {
-            if (!stack.hasTag()) {
-                return null
-            }
-
-            return stack.toData(::DecreeList)
-        }
-
         fun makeStack(): ItemStack {
             val newDecree = ItemStack(BountifulContent.Items.DECREE)
             newDecree.edit<ItemDecree> { ensureDecree(it) }

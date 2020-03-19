@@ -8,6 +8,7 @@ import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.data.bounty.BountyEntryEntity
 import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
 import ejektaflex.bountiful.data.json.JsonSerializers
+import ejektaflex.bountiful.data.structure.DecreeList
 import ejektaflex.bountiful.data.structure.EntryPool
 import ejektaflex.bountiful.ext.edit
 import ejektaflex.bountiful.ext.sendErrorMsg
@@ -215,20 +216,24 @@ object SetupLifecycle {
 
     @SubscribeEvent
     fun anvilEvent(event: AnvilUpdateEvent) {
-        if (event.left.item is ItemDecree && event.right.item is ItemDecree) {
+        if (event.left.item is ItemDecree && event.right.item is ItemDecree && event.left.hasTag() && event.right.hasTag()) {
             println("Boom")
-            val idsA = ItemDecree.getData(event.left)
-            val idsB = ItemDecree.getData(event.right)
+            val idsA = event.left.toData(::DecreeList)
+            val idsB = event.right.toData(::DecreeList)
 
-            if (idsA != null && idsB != null) {
-                val totals = idsA + idsB
-                val out = ItemDecree.makeStack()
-                out.edit<ItemDecree> {
-                    setData(it, totals)
-                }
-                event.cost = 10
-                event.output = out
+            println("A: ${idsA.ids}")
+            println("B: ${idsB.ids}")
+
+            val totals = idsA + idsB
+            println("Totals: ${totals.ids}")
+            val out = ItemDecree.makeStack()
+
+            out.edit<ItemDecree> {
+                setData(it, totals)
             }
+
+            event.cost = 5 + (totals.ids.size * 5)
+            event.output = out
         }
     }
 
