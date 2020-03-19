@@ -5,6 +5,7 @@ import ejektaflex.bountiful.BountifulContent
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.data.registry.DecreeRegistry
+import ejektaflex.bountiful.data.structure.DecreeList
 import ejektaflex.bountiful.ext.getUnsortedList
 import ejektaflex.bountiful.ext.getUnsortedListTyped
 import ejektaflex.bountiful.ext.setUnsortedList
@@ -18,6 +19,7 @@ import net.minecraft.util.Hand
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
+import net.minecraft.util.text.TextFormatting
 import net.minecraft.world.World
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.api.distmarker.OnlyIn
@@ -46,9 +48,9 @@ class ItemDecree() : Item(
     override fun getTranslationKey() = "bountiful.decree"
 
     override fun getDisplayName(stack: ItemStack): ITextComponent {
-        return StringTextComponent("§5").appendSibling(
-            TranslationTextComponent(getTranslationKey())
-        )
+        return TranslationTextComponent(getTranslationKey()).applyTextStyle {
+            it.color = TextFormatting.DARK_PURPLE
+        }
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -59,30 +61,30 @@ class ItemDecree() : Item(
         }
 
         if (ids != null) {
-            val tip = if (stack.tag != null) {
-                var str = StringTextComponent("§5").appendSibling(
-                        StringTextComponent("§6")
-                )
-                for (id in ids) {
-                    str = str.appendSibling(
-                            TranslationTextComponent("bountiful.decree.${id}.name")
-                    )
+            if (stack.tag != null) {
+                val components = ids.map {
+                    TranslationTextComponent("bountiful.decree.${it}.name").applyTextStyle {
+                        style -> style.color = TextFormatting.GOLD
+                    }
+                }.forEach {
+                    tooltip.add(it)
                 }
 
-                str
-
             } else {
-                TranslationTextComponent("bountiful.decree.invalid").appendSibling(
+                tooltip.add(TranslationTextComponent("bountiful.decree.invalid").appendSibling(
                         StringTextComponent(" ($ids)")
-                )
+                ))
             }
-            tooltip.add(tip)
         } else {
             tooltip.add(TranslationTextComponent("bountiful.decree.notset"))
         }
 
         // TODO Add debug tool when holding sneak, showing which pools are being used
         //tooltip.add(StringTextComponent("Replace Me!"))
+    }
+
+    fun setData(stack: ItemStack, list: DecreeList) {
+        stack.tag = list.serializeNBT()
     }
 
     fun ensureDecree(stack: ItemStack, defaultData: Decree? = null) {
@@ -126,7 +128,13 @@ class ItemDecree() : Item(
 
     companion object {
 
+        fun getData(stack: ItemStack): DecreeList? {
+            if (!stack.hasTag()) {
+                return null
+            }
 
+            return DecreeList().apply { deserializeNBT(stack.tag!!) }
+        }
 
         fun makeStack(): ItemStack {
             val newDecree = ItemStack(BountifulContent.Items.DECREE)

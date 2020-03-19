@@ -11,9 +11,11 @@ import ejektaflex.bountiful.data.json.JsonSerializers
 import ejektaflex.bountiful.data.structure.EntryPool
 import ejektaflex.bountiful.ext.sendErrorMsg
 import ejektaflex.bountiful.ext.sendMessage
+import ejektaflex.bountiful.ext.setUnsortedList
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.gui.BoardScreen
 import ejektaflex.bountiful.item.ItemBounty
+import ejektaflex.bountiful.item.ItemDecree
 import ejektaflex.bountiful.worldgen.JigsawJank
 import net.minecraft.block.Block
 import net.minecraft.client.gui.ScreenManager
@@ -30,6 +32,7 @@ import net.minecraft.util.ResourceLocation
 import net.minecraft.world.gen.feature.jigsaw.*
 import net.minecraftforge.common.BasicTrade
 import net.minecraftforge.common.extensions.IForgeContainerType
+import net.minecraftforge.event.AnvilUpdateEvent
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.event.entity.living.LivingDeathEvent
 import net.minecraftforge.event.village.VillagerTradesEvent
@@ -206,6 +209,26 @@ object SetupLifecycle {
     fun onClientInit(event: FMLClientSetupEvent) {
         ScreenManager.registerFactory(BountifulContent.Guis.BOARDCONTAINER) {
             container, inv, textComponent ->  BoardScreen(container, inv, textComponent)
+        }
+    }
+
+    @SubscribeEvent
+    fun anvilEvent(event: AnvilUpdateEvent) {
+        if (event.left.item is ItemDecree && event.right.item is ItemDecree) {
+            println("Boom")
+            val idsA = ItemDecree.getData(event.left)
+            val idsB = ItemDecree.getData(event.right)
+
+            if (idsA != null && idsB !=  null) {
+                val totals = idsA + idsB
+                val out = ItemDecree.makeStack()
+                (out.item as ItemDecree).setData(out, totals)
+
+                event.cost = 10
+                event.output = out
+            }
+
+
         }
     }
 
