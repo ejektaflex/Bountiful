@@ -78,7 +78,7 @@ class BoardTileEntity : TileEntity(BountifulContent.Blocks.BOUNTYTILEENTITY), IT
             if (bounty.item is ItemBounty) {
                 // Try get bounty data. If it fails, just skip to the next bounty.
                 val data = if (BountyData.isValidBounty(bounty)) {
-                    BountyData.from(bounty)
+                    bounty.toData(::BountyData)
                 } else {
                     continue
                 }

@@ -12,6 +12,7 @@ import ejektaflex.bountiful.data.structure.EntryPool
 import ejektaflex.bountiful.ext.sendErrorMsg
 import ejektaflex.bountiful.ext.sendMessage
 import ejektaflex.bountiful.ext.setUnsortedList
+import ejektaflex.bountiful.ext.toData
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.gui.BoardScreen
 import ejektaflex.bountiful.item.ItemBounty
@@ -135,7 +136,7 @@ object SetupLifecycle {
         val bountyStacks = player.inventory.mainInventory.filter { it.item is ItemBounty && it.hasTag() }
         if (bountyStacks.isNotEmpty()) {
             bountyStacks.forEach { stack ->
-                val data = BountyData.from(stack)
+                val data = stack.toData(::BountyData)
                 val eObjs = data.objectives.content.filterIsInstance<BountyEntryEntity>()
                 for (obj in eObjs) {
 

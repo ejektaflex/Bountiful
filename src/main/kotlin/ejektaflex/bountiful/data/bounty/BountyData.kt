@@ -12,6 +12,7 @@ import ejektaflex.bountiful.logic.BountyTypeRegistry
 import ejektaflex.bountiful.logic.IBountyObjective
 import ejektaflex.bountiful.logic.IBountyReward
 import ejektaflex.bountiful.data.bounty.checkers.CheckerRegistry
+import ejektaflex.bountiful.ext.toData
 import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.I18n
 import net.minecraft.item.ItemStack
@@ -151,26 +152,10 @@ class BountyData : INBTSerializable<CompoundNBT> {
 
         fun isValidBounty(stack: ItemStack): Boolean {
             return try {
-                from(stack)
+                stack.toData(::BountyData)
                 true
             } catch (e: Exception) {
                 false
-            }
-        }
-
-        fun from(stack: ItemStack): BountyData {
-            if (stack.item is ItemBounty) {
-                return (stack.item as ItemBounty).getBountyData(stack) as BountyData
-            } else {
-                throw Exception("${stack.displayName} is not an IItemBounty and cannot be converted to bounty data!")
-            }
-        }
-
-        fun safeData(stack: ItemStack): BountyData? {
-            return try {
-                from(stack)
-            } catch (e: Exception) {
-                null
             }
         }
 

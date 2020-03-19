@@ -16,13 +16,9 @@ abstract class AbstractBountyEntryStackLike : BountyEntry(), IBountyObjective, I
     abstract val validStacks: List<ItemStack>
 
     override fun tooltipObjective(progress: BountyProgress): ITextComponent {
-        return StringTextComponent(progress.color).applyTextStyle {
-            it.color = TextFormatting.WHITE
+        return formattedName.applyTextStyle {
+            it.color = progress.color
         }.appendSibling(
-                formattedName.applyTextStyle {
-                    it.color = TextFormatting.GOLD
-                }
-        ).appendSibling(
                 StringTextComponent(" ")
         ).appendSibling(
                 StringTextComponent(progress.stringNums).applyTextStyle {

@@ -10,6 +10,7 @@ import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.logic.BountyCreator
 import ejektaflex.bountiful.data.bounty.checkers.CheckerRegistry
 import ejektaflex.bountiful.data.registry.DecreeRegistry
+import ejektaflex.bountiful.ext.toData
 import net.minecraft.client.Minecraft
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity
@@ -40,12 +41,12 @@ class ItemBounty() : Item(
 
     init {
         addPropertyOverride(ResourceLocation("bountiful", "rarity")) { stack, world, entity ->
-            val bd = BountyData.safeData(stack)
-            if (bd != null) {
-                bd.rarity * 0.1f
+            if (stack.hasTag()) {
+                stack.toData(::BountyData).rarity * 0.1f
             } else {
                 0.0f
             }
+
         }
     }
 
@@ -106,7 +107,7 @@ class ItemBounty() : Item(
 
     fun getBountyData(stack: ItemStack): BountyData {
         if (stack.hasTag() && stack.item is ItemBounty) {
-            return BountyData().apply { deserializeNBT(stack.tag!!) }
+            return stack.toData(::BountyData)
         } else {
             throw Exception("${stack.item.registryName} is not an ItemBounty or has no NBT data!")
         }

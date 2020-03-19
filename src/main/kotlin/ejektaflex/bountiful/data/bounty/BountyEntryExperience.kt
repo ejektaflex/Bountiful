@@ -70,9 +70,11 @@ class BountyEntryExperience : BountyEntry(), IBountyObjective, IBountyReward {
     }
 
     override fun tooltipObjective(progress: BountyProgress): ITextComponent {
-        val result = StringTextComponent("§f${progress.color}").appendText("§r §f${progress.stringNums}")
-        result.appendSibling(formattedName)
-        return result
+        return StringTextComponent(progress.stringNums).applyTextStyle {
+            it.color = progress.color
+        }.appendSibling(
+                formattedName
+        )
     }
 
 }

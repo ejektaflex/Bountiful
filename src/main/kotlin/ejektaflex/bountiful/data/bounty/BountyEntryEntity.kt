@@ -52,18 +52,16 @@ class BountyEntryEntity : BountyEntry(), IBountyObjective {
         get() = (content.toEntityType?.name ?: StringTextComponent(content))
 
     override fun tooltipObjective(progress: BountyProgress): ITextComponent {
-        return StringTextComponent(progress.color).appendSibling(
-                formattedName
+        return StringTextComponent("").appendSibling(
+                formattedName.applyTextStyle(progress.color)
+        ).appendSibling(
+            StringTextComponent(" ")
+        ).appendSibling(
+                TranslationTextComponent("bountiful.bounty.type.entity.kills").applyTextStyle(progress.color)
         ).appendSibling(
                 StringTextComponent(" ")
         ).appendSibling(
-                TranslationTextComponent("bountiful.bounty.type.entity.kills").applyTextStyle(TextFormatting.RESET)
-        ).appendSibling(
-                StringTextComponent(" ")
-        ).appendSibling(
-                StringTextComponent(progress.stringNums).applyTextStyle {
-                    it.color = TextFormatting.WHITE
-                }
+                StringTextComponent(progress.stringNums).applyTextStyle(TextFormatting.WHITE)
         )
     }
 
