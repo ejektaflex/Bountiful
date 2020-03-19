@@ -34,18 +34,6 @@ data class Decree(
         rewardPools = mutableSetOf(*(rewardPools + other.rewardPools).toTypedArray()).toMutableList()
     }
 
-    /**
-    override val objectives: List<BountyEntry>
-        get() = getEntriesFromTagList(objectivePools)
-
-    override val rewards: List<BountyEntry>
-        get() = getEntriesFromTagList(rewardPools)
-    **/
-
-    private fun getEntriesFromTagList(poolTags: MutableList<String>): List<BountyEntry> {
-        return PoolRegistry.content.filter { it.id in poolTags }.map { it.content }.flatten()
-    }
-
     companion object {
         val INVALID = Decree(true).apply {
             id = "invalid_decree"

@@ -21,6 +21,15 @@ fun CompoundNBT.setUnsortedList(key: String, items: Set<INBTSerializable<Compoun
     put(key, listTag)
 }
 
+fun CompoundNBT.setUnsortedListOfNbt(key: String, items: Set<CompoundNBT>) {
+    val listTag = CompoundNBT().apply {
+        items.forEachIndexed { index, nbt ->
+            put(index.toString(), nbt)
+        }
+    }
+    put(key, listTag)
+}
+
 fun CompoundNBT.getUnsortedList(key: String): Set<CompoundNBT> {
     val listTag = get(key) as CompoundNBT
     return listTag.keySet().map { index ->
