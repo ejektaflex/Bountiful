@@ -1,32 +1,26 @@
 package ejektaflex.bountiful.item
 
-import ejektaflex.bountiful.ext.hackyRandom
 import ejektaflex.bountiful.BountifulContent
 import ejektaflex.bountiful.BountifulMod
-import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.data.registry.DecreeRegistry
+import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.data.structure.DecreeList
-import ejektaflex.bountiful.ext.getUnsortedList
-import ejektaflex.bountiful.ext.getUnsortedListTyped
-import ejektaflex.bountiful.ext.setUnsortedList
+import ejektaflex.bountiful.ext.*
 import net.minecraft.client.util.ITooltipFlag
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundNBT
-import net.minecraft.util.ActionResult
-import net.minecraft.util.Hand
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
 import net.minecraft.util.text.TextFormatting
+import net.minecraft.util.text.TranslationTextComponent
 import net.minecraft.world.World
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.api.distmarker.OnlyIn
-import net.minecraft.util.text.TranslationTextComponent
 
 
-class ItemDecree() : Item(
+class ItemDecree : Item(
         Item.Properties().maxStackSize(1).group(BountifulContent.BountifulGroup)
 ) {
 
@@ -48,7 +42,7 @@ class ItemDecree() : Item(
     override fun getTranslationKey() = "bountiful.decree"
 
     override fun getDisplayName(stack: ItemStack): ITextComponent {
-        return TranslationTextComponent(getTranslationKey()).applyTextStyle {
+        return TranslationTextComponent(translationKey).applyTextStyle {
             it.color = TextFormatting.DARK_PURPLE
         }
     }
@@ -56,15 +50,15 @@ class ItemDecree() : Item(
     @OnlyIn(Dist.CLIENT)
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<ITextComponent>, flagIn: ITooltipFlag) {
 
-        val ids = stack.tag?.getUnsortedList("ids")?.map {
-            nbt -> nbt.getString("id")
+        val ids = stack.tag?.getUnsortedList("ids")?.map { nbt ->
+            nbt.getString("id")
         }
 
         if (ids != null) {
             if (stack.tag != null) {
                 val components = ids.map {
-                    TranslationTextComponent("bountiful.decree.${it}.name").applyTextStyle {
-                        style -> style.color = TextFormatting.GOLD
+                    TranslationTextComponent("bountiful.decree.${it}.name").applyTextStyle { style ->
+                        style.color = TextFormatting.GOLD
                     }
                 }.forEach {
                     tooltip.add(it)
@@ -128,23 +122,15 @@ class ItemDecree() : Item(
 
     companion object {
 
-        fun getData(stack: ItemStack): DecreeList? {
-            if (!stack.hasTag()) {
-                return null
-            }
-
-            return DecreeList().apply { deserializeNBT(stack.tag!!) }
-        }
-
         fun makeStack(): ItemStack {
             val newDecree = ItemStack(BountifulContent.Items.DECREE)
-            (newDecree.item as ItemDecree).ensureDecree(newDecree)
+            newDecree.edit<ItemDecree> { ensureDecree(it) }
             return newDecree
         }
 
         fun makeStack(decree: Decree): ItemStack {
             val newDecree = ItemStack(BountifulContent.Items.DECREE)
-            (newDecree.item as ItemDecree).ensureDecree(newDecree, decree)
+            newDecree.edit<ItemDecree> { ensureDecree(it, decree) }
             return newDecree
         }
 

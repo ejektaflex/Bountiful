@@ -11,10 +11,7 @@ import net.minecraft.world.gen.feature.jigsaw.JigsawPiece
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper
 import org.apache.commons.lang3.reflect.FieldUtils
 import java.util.*
-import java.util.function.Supplier
 import java.util.function.UnaryOperator
-import java.util.stream.Collectors
-import java.util.stream.Stream
 
 /**
  * @author pau101, Paul Fulham. All credit for this class goes to him!

@@ -2,13 +2,11 @@ package ejektaflex.bountiful.gui
 
 import com.mojang.blaze3d.platform.GlStateManager
 import ejektaflex.bountiful.BountifulMod
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screen.inventory.ContainerScreen
 import net.minecraft.client.resources.I18n
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.ITextComponent
-import net.minecraftforge.fml.client.config.GuiUtils.drawTexturedModalRect
 
 class BoardScreen(container: BoardContainer, inv: PlayerInventory, name: ITextComponent) : ContainerScreen<BoardContainer>(container, inv, name) {
 

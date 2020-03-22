@@ -4,8 +4,6 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.data.bounty.enums.BountyType
 import ejektaflex.bountiful.ext.hackyRandom
-import ejektaflex.bountiful.logic.IBountyObjective
-import ejektaflex.bountiful.logic.IBountyReward
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -22,6 +20,8 @@ class BountyEntryItemTag : AbstractBountyEntryStackLike(), IBountyObjective, IBo
     @SerializedName("type")
     override var bType: String = BountyType.ItemTag.id
 
+    override val formattedName: ITextComponent
+        get() = StringTextComponent(name ?: content)
 
     override fun validate() {
         if (bType == BountyType.ItemTag.id) {
@@ -46,17 +46,6 @@ class BountyEntryItemTag : AbstractBountyEntryStackLike(), IBountyObjective, IBo
                 }
             }
         }
-
-
-
-    override val formattedName: ITextComponent
-        get() = StringTextComponent(name ?: content)
-
-    override fun tooltipReward(): ITextComponent {
-        return StringTextComponent("§f${amount}§fx §b").appendSibling(
-                formattedName
-        )
-    }
 
     override fun reward(player: PlayerEntity) {
         var amountNeeded = amount

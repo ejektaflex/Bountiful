@@ -4,9 +4,9 @@ import ejektaflex.bountiful.BountifulStats
 import ejektaflex.bountiful.advancement.BountifulTriggers
 import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.data.bounty.BountyEntry
+import ejektaflex.bountiful.data.bounty.BountyProgress
+import ejektaflex.bountiful.data.bounty.IBountyReward
 import ejektaflex.bountiful.util.ValueRegistry
-import ejektaflex.bountiful.logic.BountyProgress
-import ejektaflex.bountiful.logic.IBountyReward
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.ServerPlayerEntity
 import kotlin.reflect.KClass
@@ -56,7 +56,6 @@ object CheckerRegistry : ValueRegistry<KClass<out CheckHandler<*>>>() {
                 //if (data.timeLeft(player.world) <= (20 * 60))
 
             }
-
 
 
             // Return success

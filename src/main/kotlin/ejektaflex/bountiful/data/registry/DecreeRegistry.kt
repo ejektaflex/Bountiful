@@ -1,11 +1,10 @@
 package ejektaflex.bountiful.data.registry
 
-import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.data.structure.Decree
+import ejektaflex.bountiful.data.bounty.IBountyObjective
+import ejektaflex.bountiful.data.bounty.IBountyReward
 import ejektaflex.bountiful.util.ValueRegistry
-import ejektaflex.bountiful.logic.IBountyObjective
-import ejektaflex.bountiful.logic.IBountyReward
 import net.minecraftforge.fml.ModList
 
 object DecreeRegistry : ValueRegistry<Decree>() {

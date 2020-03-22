@@ -1,10 +1,10 @@
 package ejektaflex.bountiful.data.bounty.enums
 
+import ejektaflex.bountiful.data.registry.DecreeRegistry
+import ejektaflex.bountiful.data.registry.PoolRegistry
 import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.data.structure.EntryPool
 import ejektaflex.bountiful.util.ValueRegistry
-import ejektaflex.bountiful.data.registry.DecreeRegistry
-import ejektaflex.bountiful.data.registry.PoolRegistry
 import net.minecraftforge.resource.IResourceType
 import kotlin.reflect.KClass
 

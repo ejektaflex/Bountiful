@@ -4,11 +4,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.BountifulConfig
 import ejektaflex.bountiful.BountifulMod
-import ejektaflex.bountiful.data.bounty.checkers.ExperienceCheckHandler
 import ejektaflex.bountiful.data.bounty.enums.BountyType
-import ejektaflex.bountiful.logic.BountyProgress
-import ejektaflex.bountiful.logic.IBountyObjective
-import ejektaflex.bountiful.logic.IBountyReward
 import net.minecraft.entity.item.ExperienceOrbEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.text.ITextComponent
@@ -33,8 +29,12 @@ class BountyEntryExperience : BountyEntry(), IBountyObjective, IBountyReward {
         }
 
     override fun tooltipReward(): ITextComponent {
-        return StringTextComponent("§f${amount}§fx §b").appendSibling(
-                formattedName
+        return StringTextComponent(amount.toString() + "x ").applyTextStyle {
+            it.color = TextFormatting.WHITE
+        }.appendSibling(
+                formattedName.applyTextStyle {
+                    it.color = TextFormatting.AQUA
+                }
         )
     }
 
@@ -63,14 +63,14 @@ class BountyEntryExperience : BountyEntry(), IBountyObjective, IBountyReward {
             else -> BountifulMod.logger.error("Experience reward tried to give '$content', which is invalid. Content must be 'points' or 'levels'")
         }
 
-
-
     }
 
     override fun tooltipObjective(progress: BountyProgress): ITextComponent {
-        val result = StringTextComponent("§f${progress.color}").appendText("§r §f${progress.stringNums}")
-        result.appendSibling(formattedName)
-        return result
+        return StringTextComponent(progress.stringNums).applyTextStyle {
+            it.color = progress.color
+        }.appendSibling(
+                formattedName
+        )
     }
 
 }

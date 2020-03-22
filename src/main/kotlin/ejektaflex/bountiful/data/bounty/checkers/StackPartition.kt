@@ -1,4 +1,4 @@
-package ejektaflex.bountiful.logic
+package ejektaflex.bountiful.data.bounty.checkers
 
 import net.minecraft.item.ItemStack
 

@@ -1,15 +1,14 @@
 package ejektaflex.bountiful.block
 
 import ejektaflex.bountiful.BountifulConfig
-import ejektaflex.bountiful.ext.*
 import ejektaflex.bountiful.BountifulContent
 import ejektaflex.bountiful.data.bounty.BountyData
+import ejektaflex.bountiful.data.registry.DecreeRegistry
 import ejektaflex.bountiful.data.structure.Decree
+import ejektaflex.bountiful.ext.*
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.item.ItemDecree
-import ejektaflex.bountiful.logic.BountyCreator
-import ejektaflex.bountiful.data.registry.DecreeRegistry
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.container.Container
@@ -33,34 +32,33 @@ class BoardTileEntity : TileEntity(BountifulContent.Blocks.BOUNTYTILEENTITY), IT
         LazyOptional.of { handler }
     }
 
-    val handler: ItemStackHandler  by lazy {
+    val handler: ItemStackHandler by lazy {
         ItemStackHandler(SIZE)
     }
 
-    val bountyRange = 0 until 21
-    val decreeRange = 21 until 24
+    private val bountyRange = 0 until 21
+    private val decreeRange = 21 until 24
 
-    val bountySlots = bountyRange.toList()
-    val decreeSlots = decreeRange.toList()
+    private val bountySlots = bountyRange.toList()
+    private val decreeSlots = decreeRange.toList()
 
-    val filledBountySlots: List<Int>
+    private val filledBountySlots: List<Int>
         get() = handler.filledSlots(bountyRange)
 
-    val hasDecree: Boolean
+    private val hasDecree: Boolean
         get() = numDecrees > 0
 
     val numDecrees: Int
         get() = decreeSlots.map { handler.getStackInSlot(it) }.count { it.item is ItemDecree }
 
-    val decrees: List<Decree>
+    private val decrees: List<Decree>
         get() {
             val ids = decreeSlots.map {
                 handler.getStackInSlot(it)
             }.filter {
                 it.item is ItemDecree
             }.map {
-                (it.item as ItemDecree).ensureDecree(it)
-                //it.tag!!.getString("id")
+                it.edit<ItemDecree> { stack -> ensureDecree(stack) }
                 it.tag!!.getUnsortedList("ids").map { decr ->
                     decr.getString("id")
                 }
@@ -78,7 +76,7 @@ class BoardTileEntity : TileEntity(BountifulContent.Blocks.BOUNTYTILEENTITY), IT
             if (bounty.item is ItemBounty) {
                 // Try get bounty data. If it fails, just skip to the next bounty.
                 val data = if (BountyData.isValidBounty(bounty)) {
-                    BountyData.from(bounty)
+                    bounty.toData(::BountyData)
                 } else {
                     continue
                 }
@@ -106,7 +104,7 @@ class BoardTileEntity : TileEntity(BountifulContent.Blocks.BOUNTYTILEENTITY), IT
 
     private fun addSingleBounty() {
         //println("Adding a single bounty")
-        val newStack = BountyCreator.createStack(world!!, decrees)
+        val newStack = ItemBounty.create(world!!, decrees)
         val freeSlots = bountySlots - filledBountySlots
         if (freeSlots.isNotEmpty()) {
             handler[freeSlots.hackyRandom()] = newStack

@@ -8,10 +8,12 @@ import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.data.bounty.BountyEntryEntity
 import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
 import ejektaflex.bountiful.data.json.JsonSerializers
+import ejektaflex.bountiful.data.structure.DecreeList
 import ejektaflex.bountiful.data.structure.EntryPool
+import ejektaflex.bountiful.ext.edit
 import ejektaflex.bountiful.ext.sendErrorMsg
 import ejektaflex.bountiful.ext.sendMessage
-import ejektaflex.bountiful.ext.setUnsortedList
+import ejektaflex.bountiful.ext.toData
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.gui.BoardScreen
 import ejektaflex.bountiful.item.ItemBounty
@@ -29,7 +31,7 @@ import net.minecraft.resources.IResourceManager
 import net.minecraft.resources.IResourceManagerReloadListener
 import net.minecraft.tileentity.TileEntityType
 import net.minecraft.util.ResourceLocation
-import net.minecraft.world.gen.feature.jigsaw.*
+import net.minecraft.world.gen.feature.jigsaw.SingleJigsawPiece
 import net.minecraftforge.common.BasicTrade
 import net.minecraftforge.common.extensions.IForgeContainerType
 import net.minecraftforge.event.AnvilUpdateEvent
@@ -68,7 +70,7 @@ object SetupLifecycle {
             )
 
             for (place in injectList) {
-                JigsawJank.create().append(ResourceLocation("minecraft",place)) {
+                JigsawJank.create().append(ResourceLocation("minecraft", place)) {
                     listOf(Pair.of(SingleJigsawPiece("bountiful:village/common/bounty_gazebo"), 2))
                 }
             }
@@ -135,7 +137,7 @@ object SetupLifecycle {
         val bountyStacks = player.inventory.mainInventory.filter { it.item is ItemBounty && it.hasTag() }
         if (bountyStacks.isNotEmpty()) {
             bountyStacks.forEach { stack ->
-                val data = BountyData.from(stack)
+                val data = stack.toData(::BountyData)
                 val eObjs = data.objectives.content.filterIsInstance<BountyEntryEntity>()
                 for (obj in eObjs) {
 
@@ -189,7 +191,7 @@ object SetupLifecycle {
     @SubscribeEvent
     fun onTileEntityRegistry(event: RegistryEvent.Register<TileEntityType<*>>) {
         event.registry.register(
-                TileEntityType.Builder.create<BoardTileEntity>(Supplier {
+                TileEntityType.Builder.create(Supplier {
                     BoardTileEntity()
                 }, BountifulContent.Blocks.BOUNTYBOARD)
                         .build(null)
@@ -207,28 +209,25 @@ object SetupLifecycle {
 
     @SubscribeEvent
     fun onClientInit(event: FMLClientSetupEvent) {
-        ScreenManager.registerFactory(BountifulContent.Guis.BOARDCONTAINER) {
-            container, inv, textComponent ->  BoardScreen(container, inv, textComponent)
+        ScreenManager.registerFactory(BountifulContent.Guis.BOARDCONTAINER) { container, inv, textComponent ->
+            BoardScreen(container, inv, textComponent)
         }
     }
 
     @SubscribeEvent
     fun anvilEvent(event: AnvilUpdateEvent) {
-        if (event.left.item is ItemDecree && event.right.item is ItemDecree) {
-            println("Boom")
-            val idsA = ItemDecree.getData(event.left)
-            val idsB = ItemDecree.getData(event.right)
+        if (event.left.item is ItemDecree && event.right.item is ItemDecree && event.left.hasTag() && event.right.hasTag()) {
+            val idsA = event.left.toData(::DecreeList)
+            val idsB = event.right.toData(::DecreeList)
+            val totals = idsA + idsB
+            val out = ItemDecree.makeStack()
 
-            if (idsA != null && idsB !=  null) {
-                val totals = idsA + idsB
-                val out = ItemDecree.makeStack()
-                (out.item as ItemDecree).setData(out, totals)
-
-                event.cost = 10
-                event.output = out
+            out.edit<ItemDecree> {
+                setData(it, totals)
             }
 
-
+            event.cost = 5 + (totals.ids.size * 5)
+            event.output = out
         }
     }
 
@@ -243,15 +242,6 @@ object SetupLifecycle {
     fun doVillagerTrades(event: VillagerTradesEvent) {
         event.trades[2].add(decreeTrade)
     }
-
-    /*
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    fun stitchingAtlas(event: TextureStitchEvent.Pre) {
-        event.addSprite(ResourceLocation(BountifulMod.MODID, "bg"))
-    }
-
-     */
 
 }
 
