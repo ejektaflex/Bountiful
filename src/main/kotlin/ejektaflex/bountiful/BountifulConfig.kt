@@ -126,7 +126,8 @@ class BountifulConfig {
 
         var doXpDrop: ForgeConfigSpec.ConfigValue<Boolean> = b
                 .comment("If true, XP point bounty rewards will drop where the player is standing.",
-                        "If false, rewards will instantly be added to their XP bar.")
+                        "If false, rewards will instantly be added to their XP bar.",
+                        "(NOTE: Experience bounties are currently disabled)")
                 .define("doExperienceDrop", true)
 
     }
