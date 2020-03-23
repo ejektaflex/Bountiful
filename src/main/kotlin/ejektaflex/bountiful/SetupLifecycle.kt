@@ -40,6 +40,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent
 import net.minecraftforge.event.village.VillagerTradesEvent
 import net.minecraftforge.event.village.WandererTradesEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
+import net.minecraftforge.fml.ModList
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
@@ -81,6 +82,11 @@ object SetupLifecycle {
 
         BountifulTriggers.register()
         BountifulStats.init()
+
+        if (ModList.get().isLoaded("jei")) {
+            jeiConfig()
+        }
+
     }
 
     fun validatePool(pool: EntryPool, sender: CommandSource? = null, log: Boolean = false): MutableList<BountyEntry> {
@@ -107,6 +113,9 @@ object SetupLifecycle {
         return validEntries
     }
 
+    fun jeiConfig() {
+
+    }
 
     // Update mob bounties
     @SubscribeEvent
@@ -218,18 +227,10 @@ object SetupLifecycle {
 
     @SubscribeEvent
     fun anvilEvent(event: AnvilUpdateEvent) {
-        if (event.left.item is ItemDecree && event.right.item is ItemDecree && event.left.hasTag() && event.right.hasTag()) {
-            val idsA = event.left.toData(::DecreeList)
-            val idsB = event.right.toData(::DecreeList)
-            val totals = idsA + idsB
-            val out = ItemDecree.makeStack()
-
-            out.edit<ItemDecree> {
-                setData(it, totals)
-            }
-
-            event.cost = 5 + (totals.ids.size * 5)
-            event.output = out
+        val result = ItemDecree.combine(event.left, event.right)
+        if (result != null) {
+            event.output = result
+            event.cost = 5 + (event.output.toData(::DecreeList).ids.size * 5)
         }
     }
 

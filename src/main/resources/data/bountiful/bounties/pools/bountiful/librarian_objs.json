@@ -25,10 +25,11 @@
         "content": "minecraft:black_dye",
         "amountRange": {
           "min": 4,
-          "max": 24
+          "max": 12
         },
         "unitWorth": 150,
-        "weight": 1000
+        "weight": 1000,
+        "timeMult": 1.5
       },
       {
         "type": "item",

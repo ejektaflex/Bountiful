@@ -48,7 +48,46 @@
         "max": 32
       },
       "unitWorth": 200,
-      "weight": 5000
+      "weight": 500
+    },
+    {
+      "type": "item",
+      "content": "minecraft:tipped_arrow",
+      "nbt": {
+        "Potion": "minecraft:slowness"
+      },
+      "amountRange": {
+        "min": 4,
+        "max": 32
+      },
+      "unitWorth": 200,
+      "weight": 400
+    },
+    {
+      "type": "item",
+      "content": "minecraft:tipped_arrow",
+      "nbt": {
+        "Potion": "minecraft:harming"
+      },
+      "amountRange": {
+        "min": 4,
+        "max": 32
+      },
+      "unitWorth": 200,
+      "weight": 400
+    },
+    {
+      "type": "item",
+      "content": "minecraft:tipped_arrow",
+      "nbt": {
+        "Potion": "minecraft:poison"
+      },
+      "amountRange": {
+        "min": 4,
+        "max": 32
+      },
+      "unitWorth": 200,
+      "weight": 400
     }
   ]
 }
