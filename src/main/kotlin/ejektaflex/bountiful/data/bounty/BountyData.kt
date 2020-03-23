@@ -19,6 +19,7 @@ import net.minecraft.util.text.TextFormatting
 import net.minecraft.util.text.TranslationTextComponent
 import net.minecraft.world.World
 import net.minecraftforge.common.util.INBTSerializable
+import java.util.*
 import kotlin.math.ceil
 import kotlin.math.max
 
@@ -145,7 +146,8 @@ class BountyData : INBTSerializable<CompoundNBT> {
         val toAdd = createRewards(inRarity, decrees)
         rarity = BountyRarity.values().indexOf(inRarity)
         rewards.add(*toAdd.toTypedArray())
-        return toAdd.sumBy { it.calculatedWorth }
+        val assignedWorth = toAdd.sumBy { it.calculatedWorth }
+        return (assignedWorth * inRarity.worthMult).toInt()
     }
 
     private fun assignObjectives(inRarity: BountyRarity, decrees: List<Decree>, worth: Int) {
@@ -165,6 +167,7 @@ class BountyData : INBTSerializable<CompoundNBT> {
     }
 
     companion object {
+        private val rando = Random()
         const val bountyTickFreq = 20L
         const val boardTickFreq = 20L
 
@@ -193,6 +196,11 @@ class BountyData : INBTSerializable<CompoundNBT> {
             val rewards = DecreeRegistry.getRewards(decrees)
             var numRewards = (1..2).hackyRandom()
             val toAdd = mutableListOf<BountyEntry>()
+
+            // Higher tier bounties will have a chance of having an extra reward
+            if (rando.nextFloat() < inRarity.extraRewardChance) {
+                numRewards++
+            }
 
             for (i in 0 until numRewards) {
 

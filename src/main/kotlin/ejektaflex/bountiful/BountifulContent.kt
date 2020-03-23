@@ -16,13 +16,11 @@ import net.minecraftforge.registries.ObjectHolder
 object BountifulContent {
 
     object Blocks {
-
         val BOUNTYBOARD = BlockBountyBoard().setRegistryName("bountyboard")
 
         @ObjectHolder(BountifulMod.MODID + ":bounty-te")
         @JvmStatic
         lateinit var BOUNTYTILEENTITY: TileEntityType<BoardTileEntity>
-
     }
 
     object Items {
