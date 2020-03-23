@@ -71,7 +71,9 @@ object SetupLifecycle {
 
             for (place in injectList) {
                 JigsawJank.create().append(ResourceLocation("minecraft", place)) {
-                    listOf(Pair.of(SingleJigsawPiece("bountiful:village/common/bounty_gazebo"), 2))
+                    listOf(Pair.of(SingleJigsawPiece("bountiful:village/common/bounty_gazebo"),
+                            BountifulConfig.SERVER.villageGenRate.get()
+                    ))
                 }
             }
 

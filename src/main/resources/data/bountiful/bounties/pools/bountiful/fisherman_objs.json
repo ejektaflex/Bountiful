@@ -80,6 +80,16 @@
         },
         "unitWorth": 650,
         "weight": 200
+      },
+      {
+        "type": "item",
+        "content": "minecraft:kelp",
+        "amountRange": {
+          "min": 8,
+          "max": 64
+        },
+        "unitWorth": 25,
+        "weight": 1000
       }
     ]
   }
