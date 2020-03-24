@@ -1,0 +1,100 @@
+{
+  "content": [
+    {
+      "type": "item",
+      "content": "minecraft:wheat",
+      "amountRange": {
+        "min": 4,
+        "max": 48
+      },
+      "unitWorth": 70,
+      "weight": 1000,
+      "timeMult": 3.0
+    },
+    {
+      "type": "item",
+      "content": "minecraft:beetroot",
+      "amountRange": {
+        "min": 4,
+        "max": 48
+      },
+      "unitWorth": 70,
+      "weight": 1000,
+      "timeMult": 3.0
+    },
+    {
+      "type": "item",
+      "content": "minecraft:carrot",
+      "amountRange": {
+        "min": 4,
+        "max": 48
+      },
+      "unitWorth": 75,
+      "weight": 1000,
+      "timeMult": 3.0
+    },
+    {
+      "type": "item",
+      "content": "minecraft:potato",
+      "amountRange": {
+        "min": 4,
+        "max": 48
+      },
+      "unitWorth": 60,
+      "weight": 1000,
+      "timeMult": 3.0
+    },
+    {
+      "type": "item",
+      "content": "minecraft:emerald",
+      "amountRange": {
+        "min": 4,
+        "max": 12
+      },
+      "unitWorth": 1000,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:pumpkin",
+      "amountRange": {
+        "min": 2,
+        "max": 24
+      },
+      "unitWorth": 240,
+      "weight": 1000,
+      "timeMult": 3.0
+    },
+    {
+      "type": "item",
+      "content": "minecraft:melon",
+      "amountRange": {
+        "min": 2,
+        "max": 24
+      },
+      "unitWorth": 300,
+      "weight": 1000,
+      "timeMult": 2.5
+    },
+    {
+      "type": "item",
+      "content": "minecraft:golden_apple",
+      "amountRange": {
+        "min": 1,
+        "max": 6
+      },
+      "unitWorth": 12000,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:composter",
+      "amountRange": {
+        "min": 1,
+        "max": 3
+      },
+      "unitWorth": 500,
+      "weight": 1000
+    }
+  ]
+}

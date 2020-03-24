@@ -1,11 +1,10 @@
 package ejektaflex.bountiful.data.registry
 
-import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.data.structure.Decree
+import ejektaflex.bountiful.data.bounty.IBountyObjective
+import ejektaflex.bountiful.data.bounty.IBountyReward
 import ejektaflex.bountiful.util.ValueRegistry
-import ejektaflex.bountiful.logic.IBountyObjective
-import ejektaflex.bountiful.logic.IBountyReward
 import net.minecraftforge.fml.ModList
 
 object DecreeRegistry : ValueRegistry<Decree>() {
@@ -24,7 +23,8 @@ object DecreeRegistry : ValueRegistry<Decree>() {
         }.flatten().toSet().mapNotNull {
             val opt = PoolRegistry.poolFor(it)
             if (opt == null) {
-                BountifulMod.logger.error("Tried to get entry list for decrees ${decrees.map { d -> d.id }}; pool that was trying to be accessed: $it")
+                //BountifulMod.logger.error("Tried to get entry list for decrees ${decrees.map { d -> d.id }}; pool that was trying to be accessed: $it")
+                // That decree doesn't exist anymore!
             }
             opt
         }.filter {

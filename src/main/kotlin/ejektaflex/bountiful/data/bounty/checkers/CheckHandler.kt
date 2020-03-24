@@ -2,7 +2,7 @@ package ejektaflex.bountiful.data.bounty.checkers
 
 import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.data.bounty.BountyEntry
-import ejektaflex.bountiful.logic.BountyProgress
+import ejektaflex.bountiful.data.bounty.BountyProgress
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.NonNullList
@@ -13,7 +13,7 @@ abstract class CheckHandler<T : BountyEntry>() {
     lateinit var data: BountyData
     lateinit var inv: NonNullList<ItemStack>
 
-    constructor(inPlayer: PlayerEntity, inData: BountyData) : this() {}
+    constructor(inPlayer: PlayerEntity, inData: BountyData) : this()
 
     fun initialize(inPlayer: PlayerEntity, inData: BountyData) {
         player = inPlayer

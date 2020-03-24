@@ -1,10 +1,9 @@
 package ejektaflex.bountiful.data.bounty
 
 import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.data.bounty.enums.BountyType
 import ejektaflex.bountiful.ext.toItemStack
-import ejektaflex.bountiful.logic.IBountyObjective
-import ejektaflex.bountiful.logic.IBountyReward
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
@@ -16,7 +15,11 @@ import kotlin.math.min
 class BountyEntryItem : AbstractBountyEntryStackLike(), IBountyObjective, IBountyReward {
 
     @Expose
+    @SerializedName("type")
     override var bType: String = BountyType.Item.id
+
+    override val formattedName: ITextComponent
+        get() = StringTextComponent(itemStack?.displayName!!.formattedText)
 
     val itemStack: ItemStack?
         get() {
@@ -32,6 +35,14 @@ class BountyEntryItem : AbstractBountyEntryStackLike(), IBountyObjective, IBount
         }
         super.validate()
     }
+
+    override val validStacks: List<ItemStack>
+        get() {
+            val stack = content.toItemStack
+            nbtTag?.let { stack?.tag = it }
+
+            return listOfNotNull(stack)
+        }
 
     override fun reward(player: PlayerEntity) {
         var amountNeeded = amount
@@ -49,24 +60,6 @@ class BountyEntryItem : AbstractBountyEntryStackLike(), IBountyObjective, IBount
         stacksToGive.forEach { stack ->
             ItemHandlerHelper.giveItemToPlayer(player, stack)
         }
-    }
-
-    override val validStacks: List<ItemStack>
-        get() {
-            val stack = content.toItemStack
-            nbtTag?.let { stack?.tag = it }
-
-            return listOfNotNull(stack)
-        }
-
-    override val formattedName: ITextComponent
-        get() = StringTextComponent(itemStack?.displayName!!.formattedText)
-
-
-    override fun tooltipReward(): ITextComponent {
-        return StringTextComponent("§f${amount}§fx §b").appendSibling(
-                formattedName
-        )
     }
 
 }

@@ -1,0 +1,86 @@
+{
+  "content": [
+    {
+      "type": "item-tag",
+      "name": "Any Wool",
+      "content": "minecraft:wool",
+      "amountRange": {
+        "min": 4,
+        "max": 32
+      },
+      "unitWorth": 250,
+      "weight": 1000
+    },
+    {
+      "type": "item-tag",
+      "name": "Any Dye",
+      "content": "forge:dyes",
+      "amountRange": {
+        "min": 2,
+        "max": 16
+      },
+      "unitWorth": 200,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:white_dye",
+      "amountRange": {
+        "min": 2,
+        "max": 16
+      },
+      "unitWorth": 150,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:green_dye",
+      "amountRange": {
+        "min": 2,
+        "max": 8
+      },
+      "unitWorth": 175,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:pink_wool",
+      "amountRange": {
+        "min": 2,
+        "max": 12
+      },
+      "unitWorth": 250,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:orange_bed",
+      "amountRange": {
+        "min": 1,
+        "max": 2
+      },
+      "unitWorth": 800,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:white_bed",
+      "amountRange": {
+        "min": 1,
+        "max": 6
+      },
+      "unitWorth": 750,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:white_banner",
+      "amountRange": {
+        "min": 2,
+        "max": 10
+      },
+      "unitWorth": 750,
+      "weight": 1000
+    }
+  ]
+}

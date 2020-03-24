@@ -1,0 +1,95 @@
+{
+  "modsRequired": ["vanillafoodpantry"],
+  "content": [
+    {
+      "type": "item",
+      "content": "vanillafoodpantry:foodpowder_muscle_mix",
+      "amountRange": {
+        "min": 4,
+        "max": 12
+      },
+      "unitWorth": 400,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "vanillafoodpantry:butter_brick",
+      "amountRange": {
+        "min": 2,
+        "max": 12
+      },
+      "unitWorth": 300,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "vanillafoodpantry:happy_muffin",
+      "amountRange": {
+        "min": 1,
+        "max": 3
+      },
+      "unitWorth": 800,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "vanillafoodpantry:egg_minibread",
+      "amountRange": {
+        "min": 4,
+        "max": 8
+      },
+      "unitWorth": 400,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "vanillafoodpantry:berries_and_cream",
+      "amountRange": {
+        "min": 3,
+        "max": 6
+      },
+      "unitWorth": 480,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "vanillafoodpantry:cookie_sugar",
+      "amountRange": {
+        "min": 8,
+        "max": 24
+      },
+      "unitWorth": 200,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "vanillafoodpantry:rock_salt_crystals",
+      "amountRange": {
+        "min": 8,
+        "max": 64
+      },
+      "unitWorth": 200,
+      "weight": 1350
+    },
+    {
+      "type": "item",
+      "content": "vanillafoodpantry:foodpowder_muscle_mix",
+      "amountRange": {
+        "min": 4,
+        "max": 12
+      },
+      "unitWorth": 400,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "vanillafoodpantry:foodpowder_muscle_mix",
+      "amountRange": {
+        "min": 4,
+        "max": 12
+      },
+      "unitWorth": 400,
+      "weight": 1000
+    }
+  ]
+}

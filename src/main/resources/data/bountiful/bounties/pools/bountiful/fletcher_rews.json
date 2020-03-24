@@ -1,0 +1,93 @@
+{
+  "content": [
+    {
+      "type": "item",
+      "content": "minecraft:arrow",
+      "amountRange": {
+        "min": 8,
+        "max": 48
+      },
+      "unitWorth": 62,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:flint",
+      "amountRange": {
+        "min": 8,
+        "max": 24
+      },
+      "unitWorth": 80,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:bow",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 1000,
+      "weight": 1200
+    },
+    {
+      "type": "item",
+      "content": "minecraft:crossbow",
+      "amountRange": {
+        "min": 1,
+        "max": 1
+      },
+      "unitWorth": 2000,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:spectral_arrow",
+      "amountRange": {
+        "min": 2,
+        "max": 32
+      },
+      "unitWorth": 200,
+      "weight": 500
+    },
+    {
+      "type": "item",
+      "content": "minecraft:tipped_arrow",
+      "nbt": {
+        "Potion": "minecraft:slowness"
+      },
+      "amountRange": {
+        "min": 4,
+        "max": 32
+      },
+      "unitWorth": 200,
+      "weight": 400
+    },
+    {
+      "type": "item",
+      "content": "minecraft:tipped_arrow",
+      "nbt": {
+        "Potion": "minecraft:harming"
+      },
+      "amountRange": {
+        "min": 4,
+        "max": 32
+      },
+      "unitWorth": 200,
+      "weight": 400
+    },
+    {
+      "type": "item",
+      "content": "minecraft:tipped_arrow",
+      "nbt": {
+        "Potion": "minecraft:poison"
+      },
+      "amountRange": {
+        "min": 4,
+        "max": 32
+      },
+      "unitWorth": 200,
+      "weight": 400
+    }
+  ]
+}

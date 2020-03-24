@@ -9,7 +9,8 @@ import ejektaflex.bountiful.data.json.JsonBiSerializer
 import ejektaflex.bountiful.ext.hackyRandom
 import ejektaflex.bountiful.util.IWeighted
 import ejektaflex.bountiful.util.ItemRange
-import net.minecraft.nbt.*
+import net.minecraft.nbt.CompoundNBT
+import net.minecraft.nbt.JsonToNBT
 import net.minecraft.util.text.ITextComponent
 import net.minecraftforge.common.util.INBTSerializable
 import kotlin.math.abs
@@ -44,7 +45,6 @@ abstract class BountyEntry : JsonBiSerializer<BountyEntry>, INBTSerializable<Com
         }
 
 
-
     @Expose
     open var amountRange: ItemRange = ItemRange(1, 1)
 
@@ -61,14 +61,14 @@ abstract class BountyEntry : JsonBiSerializer<BountyEntry>, INBTSerializable<Com
     open var timeMult: Double? = null
 
     @Expose
-    override var weight: Int = 100
+    override var weight: Int = 1000
 
     abstract val calculatedWorth: Int
 
     var amount = 0
 
     private val worthRange: IntRange
-        get() = (amountRange!!.min * unitWorth)..(amountRange!!.max * unitWorth)
+        get() = (amountRange.min * unitWorth)..(amountRange.max * unitWorth)
 
     fun worthDistanceFrom(value: Int): Int {
         val rnge = worthRange
@@ -82,7 +82,6 @@ abstract class BountyEntry : JsonBiSerializer<BountyEntry>, INBTSerializable<Com
     fun cloned(): BountyEntry {
         return clone() as BountyEntry
     }
-
 
 
     open fun validate() {
@@ -108,9 +107,7 @@ abstract class BountyEntry : JsonBiSerializer<BountyEntry>, INBTSerializable<Com
     }
 
     val randCount: Int
-        get() = ((amountRange?.min ?: 1)..(amountRange?.max ?: Int.MAX_VALUE)).hackyRandom()
-
-
+        get() = (amountRange.min..amountRange.max).hackyRandom()
 
 
     override fun serializeNBT(): CompoundNBT {

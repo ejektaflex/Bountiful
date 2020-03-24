@@ -1,0 +1,94 @@
+{
+  "content": [
+    {
+      "type": "item",
+      "content": "minecraft:chicken",
+      "amountRange": {
+        "min": 4,
+        "max": 24
+      },
+      "unitWorth": 125,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:porkchop",
+      "amountRange": {
+        "min": 4,
+        "max": 24
+      },
+      "unitWorth": 200,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:rabbit",
+      "amountRange": {
+        "min": 4,
+        "max": 24
+      },
+      "unitWorth": 200,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:emerald",
+      "amountRange": {
+        "min": 1,
+        "max": 12
+      },
+      "unitWorth": 1000,
+      "weight": 2500
+    },
+    {
+      "type": "item",
+      "content": "minecraft:coal",
+      "amountRange": {
+        "min": 4,
+        "max": 40
+      },
+      "unitWorth": 125,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:mutton",
+      "amountRange": {
+        "min": 2,
+        "max": 20
+      },
+      "unitWorth": 200,
+      "weight": 700
+    },
+    {
+      "type": "item",
+      "content": "minecraft:beef",
+      "amountRange": {
+        "min": 2,
+        "max": 20
+      },
+      "unitWorth": 200,
+      "weight": 700
+    },
+    {
+      "type": "item",
+      "content": "minecraft:dried_kelp_block",
+      "amountRange": {
+        "min": 2,
+        "max": 16
+      },
+      "unitWorth": 200,
+      "weight": 500
+    },
+    {
+      "type": "item",
+      "content": "minecraft:sweet_berries",
+      "amountRange": {
+        "min": 2,
+        "max": 30
+      },
+      "unitWorth": 150,
+      "weight": 400
+    }
+  ]
+}

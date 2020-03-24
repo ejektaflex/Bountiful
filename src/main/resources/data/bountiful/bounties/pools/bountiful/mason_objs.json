@@ -1,0 +1,134 @@
+{
+  "content": [
+    {
+      "type": "item",
+      "content": "minecraft:cobblestone",
+      "amountRange": {
+        "min": 16,
+        "max": 128
+      },
+      "unitWorth": 40,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:stone",
+      "amountRange": {
+        "min": 16,
+        "max": 96
+      },
+      "unitWorth": 80,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:stone_bricks",
+      "amountRange": {
+        "min": 16,
+        "max": 64
+      },
+      "unitWorth": 100,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:gravel",
+      "amountRange": {
+        "min": 16,
+        "max": 96
+      },
+      "unitWorth": 75,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:sand",
+      "amountRange": {
+        "min": 16,
+        "max": 96
+      },
+      "unitWorth": 75,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:clay_ball",
+      "amountRange": {
+        "min": 16,
+        "max": 48
+      },
+      "unitWorth": 120,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:polished_granite",
+      "amountRange": {
+        "min": 16,
+        "max": 96
+      },
+      "unitWorth": 150,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:polished_diorite",
+      "amountRange": {
+        "min": 16,
+        "max": 96
+      },
+      "unitWorth": 150,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:polished_andesite",
+      "amountRange": {
+        "min": 16,
+        "max": 96
+      },
+      "unitWorth": 150,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:granite",
+      "amountRange": {
+        "min": 16,
+        "max": 96
+      },
+      "unitWorth": 60,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:diorite",
+      "amountRange": {
+        "min": 16,
+        "max": 96
+      },
+      "unitWorth": 60,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:andesite",
+      "amountRange": {
+        "min": 16,
+        "max": 96
+      },
+      "unitWorth": 60,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:quartz",
+      "amountRange": {
+        "min": 16,
+        "max": 96
+      },
+      "unitWorth": 150,
+      "weight": 1000
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "content": [
+    {
+      "type": "item",
+      "content": "minecraft:string",
+      "amountRange": {
+        "min": 3,
+        "max": 24
+      },
+      "unitWorth": 75,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:coal",
+      "amountRange": {
+        "min": 2,
+        "max": 12
+      },
+      "unitWorth": 150,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:cod",
+      "amountRange": {
+        "min": 3,
+        "max": 18
+      },
+      "unitWorth": 100,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:salmon",
+      "amountRange": {
+        "min": 3,
+        "max": 16
+      },
+      "unitWorth": 150,
+      "weight": 800
+    },
+    {
+      "type": "item",
+      "content": "minecraft:tropical_fish",
+      "amountRange": {
+        "min": 1,
+        "max": 8
+      },
+      "unitWorth": 200,
+      "weight": 400
+    },
+    {
+      "type": "item",
+      "content": "minecraft:pufferfish",
+      "amountRange": {
+        "min": 1,
+        "max": 8
+      },
+      "unitWorth": 300,
+      "weight": 200
+    },
+    {
+      "type": "entity",
+      "content": "minecraft:guardian",
+      "amountRange": {
+        "min": 1,
+        "max": 5
+      },
+      "unitWorth": 1300,
+      "weight": 1000,
+      "timeMult": 2.5
+    },
+    {
+      "type": "item",
+      "content": "minecraft:turtle_egg",
+      "amountRange": {
+        "min": 1,
+        "max": 8
+      },
+      "unitWorth": 650,
+      "weight": 200
+    },
+    {
+      "type": "item",
+      "content": "minecraft:kelp",
+      "amountRange": {
+        "min": 8,
+        "max": 64
+      },
+      "unitWorth": 25,
+      "weight": 1000
+    }
+  ]
+}

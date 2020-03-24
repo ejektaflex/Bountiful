@@ -6,20 +6,30 @@ import com.mojang.brigadier.arguments.IntegerArgumentType.getInteger
 import com.mojang.brigadier.arguments.IntegerArgumentType.integer
 import com.mojang.brigadier.arguments.StringArgumentType.getString
 import com.mojang.brigadier.arguments.StringArgumentType.string
+import ejektaflex.bountiful.data.bounty.BountyData
+import ejektaflex.bountiful.data.bounty.BountyEntryItem
+import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
+import ejektaflex.bountiful.data.json.JsonAdapter
+import ejektaflex.bountiful.data.registry.DecreeRegistry
+import ejektaflex.bountiful.data.registry.PoolRegistry
 import ejektaflex.bountiful.ext.sendErrorMsg
 import ejektaflex.bountiful.ext.sendMessage
 import ejektaflex.bountiful.ext.supposedlyNotNull
-import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
 import ejektaflex.bountiful.item.ItemDecree
-import ejektaflex.bountiful.logic.BountyCreator
-import ejektaflex.bountiful.data.registry.DecreeRegistry
-import ejektaflex.bountiful.data.registry.PoolRegistry
+import ejektaflex.bountiful.network.BountifulNetwork
+import ejektaflex.bountiful.network.MessageClipboardCopy
 import net.minecraft.command.CommandSource
 import net.minecraft.command.Commands.argument
 import net.minecraft.command.Commands.literal
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.resources.IResourceManager
+import net.minecraft.util.text.StringTextComponent
+import net.minecraft.util.text.TextFormatting
+import net.minecraft.util.text.event.HoverEvent
+import net.minecraftforge.fml.network.PacketDistributor
 import net.minecraftforge.items.ItemHandlerHelper
+import net.minecraftforge.registries.ForgeRegistries
+import kotlin.system.measureTimeMillis
 
 
 object BountifulCommand {
@@ -29,7 +39,6 @@ object BountifulCommand {
     fun generateCommand(dispatcher: CommandDispatcher<CommandSource>) {
         dispatcher.register(
                 literal("bo")
-                        .requires(::hasPermission)
 
                         .then(
                                 literal("test")
@@ -41,62 +50,75 @@ object BountifulCommand {
                                 literal("decree")
                                         .requires(::hasPermission)
                                         .then(
-                                        argument("decType", string())
-                                                .suggests { c, b ->
-                                                    for (dec in DecreeRegistry.content) {
-                                                        b.suggest(dec.id)
-                                                    }
-                                                    b.buildFuture()
-                                                }
-                                                .executes { c ->
+                                                argument("decType", string())
+                                                        .suggests { c, b ->
+                                                            for (dec in DecreeRegistry.content) {
+                                                                b.suggest(dec.id)
+                                                            }
+                                                            b.buildFuture()
+                                                        }
+                                                        .executes { c ->
 
-                                                    val decId = getString(c, "decType")
-                                                    val stack = ItemDecree.makeStack(decId)
+                                                            val decId = getString(c, "decType")
+                                                            val stack = ItemDecree.makeStack(decId)
 
-                                                    if (stack != null) {
+                                                            if (stack != null) {
 
-                                                        ItemHandlerHelper.giveItemToPlayer(
-                                                                c.source.asPlayer(),
-                                                                stack,
-                                                                c.source.asPlayer().inventory.currentItem
-                                                        )
+                                                                ItemHandlerHelper.giveItemToPlayer(
+                                                                        c.source.asPlayer(),
+                                                                        stack,
+                                                                        c.source.asPlayer().inventory.currentItem
+                                                                )
 
-                                                    } else {
-                                                        c.source.sendMessage("Decree ID $decId not found")
-                                                    }
+                                                            } else {
+                                                                c.source.sendMessage("Decree ID $decId not found")
+                                                            }
 
 
-                                                    1
-                                                }
-                                )
+                                                            1
+                                                        }
+                                        )
                         )
 
                         .then(
                                 literal("sample")
                                         .requires(::hasPermission)
                                         .then(
-                                        argument("decType", string())
-                                                .suggests { c, b ->
-                                                    for (dec in DecreeRegistry.content) {
-                                                        b.suggest(dec.id)
-                                                    }
-                                                    b.buildFuture()
-                                                }
-                                                .executes(
-                                                        sample(1)
-                                                )
-                                                .then(
-                                                        argument("safety", integer())
-                                                                .suggests { c, b ->
-                                                                    b.suggest(1)
-                                                                    b.suggest(2)
-                                                                    b.buildFuture()
-                                                                }
-                                                                .executes(
-                                                                        sample(-1)
-                                                                )
-                                                )
-                                )
+                                                argument("decType", string())
+                                                        .suggests { c, b ->
+                                                            for (dec in DecreeRegistry.content) {
+                                                                b.suggest(dec.id)
+                                                            }
+                                                            b.buildFuture()
+                                                        }
+                                                        .executes(
+                                                                sample(1)
+                                                        )
+                                                        .then(
+                                                                argument("safety", integer())
+                                                                        .suggests { c, b ->
+                                                                            b.suggest(1)
+                                                                            b.suggest(2)
+                                                                            b.buildFuture()
+                                                                        }
+                                                                        .executes(
+                                                                                sample(-1)
+                                                                        )
+                                                        )
+                                        )
+                        )
+
+                        .then(
+
+                                literal("hand")
+                                        .requires(::hasPermission)
+                                        .executes(hand())
+                        )
+
+                        .then(
+                                literal("entities")
+                                        .requires(::hasPermission)
+                                        .executes(entities())
                         )
 
                         .then(
@@ -122,6 +144,76 @@ object BountifulCommand {
             return true
         }
         return false
+    }
+
+
+    private fun entities() = Command<CommandSource> { ctx ->
+
+        ctx.source.sendFeedback(
+                StringTextComponent("Dumping list of entities to ").applyTextStyle {
+                    it.color = TextFormatting.GOLD
+                }.appendSibling(
+                        StringTextComponent("/logs/bountiful.log...").applyTextStyle {
+                            it.color = TextFormatting.GREEN
+                        }
+                ), true
+        )
+
+        val time = measureTimeMillis {
+            BountifulMod.logFile.appendText("### Entities in Registry: ###")
+            for ((eKey, eType) in ForgeRegistries.ENTITIES.entries) {
+                BountifulMod.logFile.appendText("$eKey\n")
+            }
+        }
+
+        ctx.source.sendFeedback(
+                StringTextComponent("Dump complete! Took: ${time}ms").applyTextStyle {
+                    it.color = TextFormatting.GOLD
+                }, true
+        )
+
+        1
+    }
+
+
+    private fun hand() = Command<CommandSource> {
+
+        if (it.source.entity is PlayerEntity) {
+            val player = it.source.asPlayer()
+
+            val holding = player.heldItemMainhand
+
+            val newEntry = BountyEntryItem().apply {
+                content = holding.item.registryName.toString()
+                amount = holding.count
+                if (holding.hasTag()) {
+                    jsonNBT = JsonAdapter.parse(holding.tag.toString())
+                }
+                unitWorth = 1000
+            }
+
+            val asText = JsonAdapter.toJson(newEntry)
+
+
+            BountifulNetwork.channel.send(PacketDistributor.PLAYER.with {
+                it.source.asPlayer()
+            }, MessageClipboardCopy(asText))
+
+            val msg = StringTextComponent("§aItem: §9${holding.item.registryName}§r, §aBounty Entry Copied To Clipboard!§r: §6[hover for preview]§r").apply {
+                style.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, StringTextComponent("§6Bounty Entry (Copied to Clipboard):\n").appendSibling(
+                        StringTextComponent(asText).apply {
+                            style.color = TextFormatting.DARK_PURPLE
+                        }
+                ))
+            }
+
+            it.source.sendFeedback(msg, true)
+
+        } else {
+            it.source.sendErrorMsg("Must be a player to check their hand")
+        }
+
+        1
     }
 
     private fun reload() = Command<CommandSource> {
@@ -170,13 +262,13 @@ object BountifulCommand {
             // Since we can have at most 2 objectives, lets assume that worst case all 3 had this value
             val worthToMatch = reward.maxWorth * safety
 
-            val within = BountyCreator.getObjectivesWithinVariance(
+            val within = BountyData.getObjectivesWithinVariance(
                     DecreeRegistry.getObjectives(listOf(decree)),
                     worthToMatch,
                     0.2
             )
 
-            val nearest = BountyCreator.pickObjective(supposedlyNotNull(objs), worthToMatch).pick(worthToMatch)
+            val nearest = BountyData.pickObjective(supposedlyNotNull(objs), worthToMatch).pick(worthToMatch)
 
             if (within.isEmpty()) {
                 it.source.sendMessage("§cDecree can't handle theoretical bounty of $safety of §4${reward.amountRange.max}x[${reward.content}]§c, next closest obj was: §4${nearest.amount}x[${nearest.content}]§c")
