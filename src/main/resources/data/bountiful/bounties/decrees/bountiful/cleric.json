@@ -1,0 +1,12 @@
+{
+    "spawnsInBoard": true,
+    "objectivePools": [
+      "all_villager_objs",
+      "cleric_objs"
+    ],
+    "rewardPools": [
+      "all_villager_rews",
+      "common_enchants",
+      "cleric_rews"
+    ]
+  }

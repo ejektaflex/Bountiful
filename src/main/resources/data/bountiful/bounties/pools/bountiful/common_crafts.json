@@ -1,0 +1,34 @@
+{
+  "content": [
+    {
+      "type": "item",
+      "content": "minecraft:iron_ingot",
+      "amountRange": {
+        "min": 1,
+        "max": 32
+      },
+      "unitWorth": 750,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:coal",
+      "amountRange": {
+        "min": 4,
+        "max": 48
+      },
+      "unitWorth": 100,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:diamond",
+      "amountRange": {
+        "min": 1,
+        "max": 12
+      },
+      "unitWorth": 3500,
+      "weight": 1000
+    }
+  ]
+}

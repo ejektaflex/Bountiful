@@ -2,13 +2,10 @@ package ejektaflex.bountiful.advancement
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonObject
-import ejektaflex.bountiful.BountifulMod
 import net.minecraft.advancements.ICriterionTrigger
 import net.minecraft.advancements.PlayerAdvancements
 import net.minecraft.advancements.criterion.CriterionInstance
 import net.minecraft.util.ResourceLocation
-import java.util.*
-import java.util.function.Consumer
 
 class BountifulTrigger(val resId: ResourceLocation) : ICriterionTrigger<CriterionInstance> {
 

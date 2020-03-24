@@ -1,18 +1,20 @@
 package ejektaflex.bountiful.data.bounty
 
 import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.data.bounty.enums.BountyType
 import ejektaflex.bountiful.ext.toEntityType
-import ejektaflex.bountiful.logic.BountyProgress
-import ejektaflex.bountiful.logic.IBountyObjective
 import net.minecraft.entity.LivingEntity
 import net.minecraft.nbt.CompoundNBT
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
+import net.minecraft.util.text.TextFormatting
+import net.minecraft.util.text.TranslationTextComponent
 
 class BountyEntryEntity : BountyEntry(), IBountyObjective {
 
     @Expose
+    @SerializedName("type")
     override var bType: String = BountyType.Entity.id
 
     var killedAmount = 0
@@ -48,12 +50,16 @@ class BountyEntryEntity : BountyEntry(), IBountyObjective {
         get() = (content.toEntityType?.name ?: StringTextComponent(content))
 
     override fun tooltipObjective(progress: BountyProgress): ITextComponent {
-        return StringTextComponent(progress.color).appendSibling(
-                formattedName
+        return StringTextComponent("").appendSibling(
+                formattedName.applyTextStyle(progress.color)
         ).appendSibling(
-                StringTextComponent(" Kills§r ")
+                StringTextComponent(" ")
         ).appendSibling(
-                StringTextComponent("§f${progress.stringNums}")
+                TranslationTextComponent("bountiful.bounty.type.entity.kills").applyTextStyle(progress.color)
+        ).appendSibling(
+                StringTextComponent(" ")
+        ).appendSibling(
+                StringTextComponent(progress.stringNums).applyTextStyle(TextFormatting.WHITE)
         )
     }
 

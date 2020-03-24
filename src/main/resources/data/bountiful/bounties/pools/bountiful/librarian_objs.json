@@ -1,0 +1,55 @@
+{
+  "content": [
+    {
+      "type": "item",
+      "content": "minecraft:paper",
+      "amountRange": {
+        "min": 4,
+        "max": 48
+      },
+      "unitWorth": 63,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:book",
+      "amountRange": {
+        "min": 4,
+        "max": 32
+      },
+      "unitWorth": 375,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:black_dye",
+      "amountRange": {
+        "min": 4,
+        "max": 12
+      },
+      "unitWorth": 150,
+      "weight": 1000,
+      "timeMult": 1.5
+    },
+    {
+      "type": "item",
+      "content": "minecraft:writable_book",
+      "amountRange": {
+        "min": 1,
+        "max": 5
+      },
+      "unitWorth": 750,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:lectern",
+      "amountRange": {
+        "min": 1,
+        "max": 3
+      },
+      "unitWorth": 1000,
+      "weight": 1000
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "content": [
+    {
+      "type": "item",
+      "content": "minecraft:leather",
+      "amountRange": {
+        "min": 1,
+        "max": 16
+      },
+      "unitWorth": 250,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:flint",
+      "amountRange": {
+        "min": 1,
+        "max": 32
+      },
+      "unitWorth": 58,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:rabbit_hide",
+      "amountRange": {
+        "min": 1,
+        "max": 12
+      },
+      "unitWorth": 200,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:rabbit_hide",
+      "amountRange": {
+        "min": 1,
+        "max": 4
+      },
+      "unitWorth": 2200,
+      "weight": 1000
+    }
+  ]
+}

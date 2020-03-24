@@ -1,0 +1,63 @@
+{
+  "content": [
+    {
+      "type": "item",
+      "content": "minecraft:stick",
+      "amountRange": {
+        "min": 8,
+        "max": 64
+      },
+      "unitWorth": 25,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:flint",
+      "amountRange": {
+        "min": 1,
+        "max": 32
+      },
+      "unitWorth": 58,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:string",
+      "amountRange": {
+        "min": 4,
+        "max": 36
+      },
+      "unitWorth": 108,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:feather",
+      "amountRange": {
+        "min": 4,
+        "max": 36
+      },
+      "unitWorth": 63,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:tripwire_hook",
+      "amountRange": {
+        "min": 2,
+        "max": 16
+      },
+      "unitWorth": 185,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:crossbow",
+      "amountRange": {
+        "min": 1,
+        "max": 6
+      },
+      "weight": 1000
+    }
+  ]
+}

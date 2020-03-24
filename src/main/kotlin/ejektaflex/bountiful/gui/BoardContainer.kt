@@ -1,13 +1,11 @@
 package ejektaflex.bountiful.gui
 
-import ejektaflex.bountiful.block.BoardTileEntity
 import ejektaflex.bountiful.BountifulContent
-import ejektaflex.bountiful.advancement.BountifulTriggers
+import ejektaflex.bountiful.block.BoardTileEntity
 import ejektaflex.bountiful.gui.slot.BountySlot
 import ejektaflex.bountiful.gui.slot.DecreeSlot
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.entity.player.ServerPlayerEntity
 import net.minecraft.inventory.container.Container
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
@@ -65,7 +63,7 @@ class BoardContainer(id: Int, val world: World, val pos: BlockPos, val inv: Play
             val itemstack1 = slot.stack
             itemstack = itemstack1.copy()
 
-            val containerSlots = inventorySlots.size - player!!.inventory.mainInventory.size
+            val containerSlots = inventorySlots.size - player.inventory.mainInventory.size
 
             if (index < containerSlots) {
                 if (!this.mergeItemStack(itemstack1, containerSlots, inventorySlots.size, true)) {

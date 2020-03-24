@@ -1,0 +1,100 @@
+{
+  "content": [
+    {
+      "type": "item",
+      "content": "minecraft:rotten_flesh",
+      "amountRange": {
+        "min": 1,
+        "max": 48
+      },
+      "unitWorth": 45,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:gold_ingot",
+      "amountRange": {
+        "min": 1,
+        "max": 8
+      },
+      "unitWorth": 875,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:rabbit_foot",
+      "amountRange": {
+        "min": 1,
+        "max": 4
+      },
+      "unitWorth": 600,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:scute",
+      "amountRange": {
+        "min": 1,
+        "max": 6
+      },
+      "unitWorth": 375,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:glass_bottle",
+      "amountRange": {
+        "min": 2,
+        "max": 16
+      },
+      "unitWorth": 125,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:nether_wart",
+      "amountRange": {
+        "min": 4,
+        "max": 20
+      },
+      "unitWorth": 70,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:cauldron",
+      "amountRange": {
+        "min": 1,
+        "max": 2
+      },
+      "unitWorth": 4000,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:potion",
+      "nbt": {
+        "Potion": "minecraft:fire_resistance"
+      },
+      "amountRange": {
+        "min": 1,
+        "max": 2
+      },
+      "unitWorth": 750,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:potion",
+      "nbt": {
+        "Potion": "minecraft:leaping"
+      },
+      "amountRange": {
+        "min": 1,
+        "max": 2
+      },
+      "unitWorth": 450,
+      "weight": 1000
+    }
+  ]
+}
