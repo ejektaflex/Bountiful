@@ -1,0 +1,35 @@
+{
+  "modsRequired": ["storagedrawers"],
+  "content": [
+    {
+      "type": "item",
+      "content": "storagedrawers:redstone_upgrade",
+      "amountRange": {
+        "min": 1,
+        "max": 2
+      },
+      "unitWorth": 1300,
+      "weight": 800
+    },
+    {
+      "type": "item",
+      "content": "storagedrawers:min_redstone_upgrade",
+      "amountRange": {
+        "min": 1,
+        "max": 2
+      },
+      "unitWorth": 1000,
+      "weight": 800
+    },
+    {
+      "type": "item",
+      "content": "storagedrawers:max_redstone_upgrade",
+      "amountRange": {
+        "min": 1,
+        "max": 2
+      },
+      "unitWorth": 1000,
+      "weight": 800
+    }
+  ]
+}

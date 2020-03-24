@@ -1,0 +1,15 @@
+{
+  "modsRequired": ["charm"],
+  "content": [
+    {
+      "type": "item",
+      "content": "charm:redstone_sand",
+      "amountRange": {
+        "min": 1,
+        "max": 4
+      },
+      "unitWorth": 2000,
+      "weight": 1000
+    }
+  ]
+}

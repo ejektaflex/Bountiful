@@ -10,7 +10,6 @@ import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
 import ejektaflex.bountiful.data.json.JsonSerializers
 import ejektaflex.bountiful.data.structure.DecreeList
 import ejektaflex.bountiful.data.structure.EntryPool
-import ejektaflex.bountiful.ext.edit
 import ejektaflex.bountiful.ext.sendErrorMsg
 import ejektaflex.bountiful.ext.sendMessage
 import ejektaflex.bountiful.ext.toData
@@ -40,6 +39,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent
 import net.minecraftforge.event.village.VillagerTradesEvent
 import net.minecraftforge.event.village.WandererTradesEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
+import net.minecraftforge.fml.ModList
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
@@ -71,7 +71,9 @@ object SetupLifecycle {
 
             for (place in injectList) {
                 JigsawJank.create().append(ResourceLocation("minecraft", place)) {
-                    listOf(Pair.of(SingleJigsawPiece("bountiful:village/common/bounty_gazebo"), 2))
+                    listOf(Pair.of(SingleJigsawPiece("bountiful:village/common/bounty_gazebo"),
+                            BountifulConfig.SERVER.villageGenRate.get()
+                    ))
                 }
             }
 
@@ -79,6 +81,11 @@ object SetupLifecycle {
 
         BountifulTriggers.register()
         BountifulStats.init()
+
+        if (ModList.get().isLoaded("jei")) {
+            jeiConfig()
+        }
+
     }
 
     fun validatePool(pool: EntryPool, sender: CommandSource? = null, log: Boolean = false): MutableList<BountyEntry> {
@@ -105,6 +112,9 @@ object SetupLifecycle {
         return validEntries
     }
 
+    fun jeiConfig() {
+        // currently unimplemented
+    }
 
     // Update mob bounties
     @SubscribeEvent
@@ -133,19 +143,17 @@ object SetupLifecycle {
         }
     }
 
-    fun updateBountiesForEntity(player: PlayerEntity, deadEntity: LivingEntity) {
+    private fun updateBountiesForEntity(player: PlayerEntity, deadEntity: LivingEntity) {
         val bountyStacks = player.inventory.mainInventory.filter { it.item is ItemBounty && it.hasTag() }
         if (bountyStacks.isNotEmpty()) {
             bountyStacks.forEach { stack ->
                 val data = stack.toData(::BountyData)
                 val eObjs = data.objectives.content.filterIsInstance<BountyEntryEntity>()
                 for (obj in eObjs) {
-
                     if (obj.isSameEntity(deadEntity)) {
                         obj.killedAmount = min(obj.killedAmount + 1, obj.amount)
                         stack.tag = data.serializeNBT()
                     }
-
                 }
             }
         }
@@ -216,18 +224,10 @@ object SetupLifecycle {
 
     @SubscribeEvent
     fun anvilEvent(event: AnvilUpdateEvent) {
-        if (event.left.item is ItemDecree && event.right.item is ItemDecree && event.left.hasTag() && event.right.hasTag()) {
-            val idsA = event.left.toData(::DecreeList)
-            val idsB = event.right.toData(::DecreeList)
-            val totals = idsA + idsB
-            val out = ItemDecree.makeStack()
-
-            out.edit<ItemDecree> {
-                setData(it, totals)
-            }
-
-            event.cost = 5 + (totals.ids.size * 5)
-            event.output = out
+        val result = ItemDecree.combine(event.left, event.right)
+        if (result != null) {
+            event.output = result
+            event.cost = 5 + (event.output.toData(::DecreeList).ids.size * 5)
         }
     }
 

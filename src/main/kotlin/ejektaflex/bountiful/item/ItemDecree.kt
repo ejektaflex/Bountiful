@@ -122,6 +122,23 @@ class ItemDecree : Item(
 
     companion object {
 
+        fun combine(stackA: ItemStack, stackB: ItemStack): ItemStack? {
+
+            if (stackA.item is ItemDecree && stackB.item is ItemDecree && stackA.hasTag() && stackB.hasTag()) {
+                val idsA = stackA.toData(::DecreeList)
+                val idsB = stackB.toData(::DecreeList)
+                val totals = idsA + idsB
+                val out = makeStack()
+
+                out.edit<ItemDecree> {
+                    setData(it, totals)
+                }
+
+                return out
+            }
+            return null
+        }
+
         fun makeStack(): ItemStack {
             val newDecree = ItemStack(BountifulContent.Items.DECREE)
             newDecree.edit<ItemDecree> { ensureDecree(it) }
@@ -137,6 +154,14 @@ class ItemDecree : Item(
         fun makeStack(decId: String): ItemStack? {
             val decree = DecreeRegistry.content.find { it.id == decId }
             return if (decree != null) makeStack(decree) else null
+        }
+
+        fun makeRandomStack(): ItemStack? {
+            return if (DecreeRegistry.ids.isNotEmpty()) {
+                makeStack(DecreeRegistry.content.hackyRandom())
+            } else {
+                null
+            }
         }
 
 

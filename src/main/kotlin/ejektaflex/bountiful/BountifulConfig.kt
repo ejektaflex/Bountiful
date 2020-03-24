@@ -57,6 +57,13 @@ class BountifulConfig {
                 .comment("Whether bounty boards should sometimes generate in the world in villages")
                 .define("villageGen", true)
 
+        var villageGenRate: ForgeConfigSpec.IntValue = b
+                .comment("How often boards should spawn in villages. Higher = more frequent.",
+                        "Note/Warning: Boards can show up multiple times, so higher numbers increase the",
+                        "likelihood of multiple boards showing up in a single village. This is due to how",
+                        "Minecraft generates villages in newer versions of Minecraft.")
+                .defineInRange("villageGenRate", 2, 1, 8)
+
 
         val datapackCategory = b.pop().push("datapacks")!!
 
@@ -119,7 +126,8 @@ class BountifulConfig {
 
         var doXpDrop: ForgeConfigSpec.ConfigValue<Boolean> = b
                 .comment("If true, XP point bounty rewards will drop where the player is standing.",
-                        "If false, rewards will instantly be added to their XP bar.")
+                        "If false, rewards will instantly be added to their XP bar.",
+                        "(NOTE: Experience bounties are currently disabled)")
                 .define("doExperienceDrop", true)
 
     }

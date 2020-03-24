@@ -1,0 +1,15 @@
+{
+  "modsRequired": ["farmingforblockheads"],
+  "content": [
+    {
+      "type": "item",
+      "content": "farmingforblockheads:chicken_nest",
+      "amountRange": {
+        "min": 1,
+        "max": 4
+      },
+      "unitWorth": 200,
+      "weight": 1000
+    }
+  ]
+}

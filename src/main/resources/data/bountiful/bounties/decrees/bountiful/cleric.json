@@ -6,6 +6,7 @@
     ],
     "rewardPools": [
       "all_villager_rews",
+      "common_enchants",
       "cleric_rews"
     ]
   }
