@@ -10,7 +10,6 @@ import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
 import ejektaflex.bountiful.data.json.JsonSerializers
 import ejektaflex.bountiful.data.structure.DecreeList
 import ejektaflex.bountiful.data.structure.EntryPool
-import ejektaflex.bountiful.ext.edit
 import ejektaflex.bountiful.ext.sendErrorMsg
 import ejektaflex.bountiful.ext.sendMessage
 import ejektaflex.bountiful.ext.toData
@@ -114,7 +113,7 @@ object SetupLifecycle {
     }
 
     fun jeiConfig() {
-
+        // currently unimplemented
     }
 
     // Update mob bounties
@@ -144,19 +143,17 @@ object SetupLifecycle {
         }
     }
 
-    fun updateBountiesForEntity(player: PlayerEntity, deadEntity: LivingEntity) {
+    private fun updateBountiesForEntity(player: PlayerEntity, deadEntity: LivingEntity) {
         val bountyStacks = player.inventory.mainInventory.filter { it.item is ItemBounty && it.hasTag() }
         if (bountyStacks.isNotEmpty()) {
             bountyStacks.forEach { stack ->
                 val data = stack.toData(::BountyData)
                 val eObjs = data.objectives.content.filterIsInstance<BountyEntryEntity>()
                 for (obj in eObjs) {
-
                     if (obj.isSameEntity(deadEntity)) {
                         obj.killedAmount = min(obj.killedAmount + 1, obj.amount)
                         stack.tag = data.serializeNBT()
                     }
-
                 }
             }
         }

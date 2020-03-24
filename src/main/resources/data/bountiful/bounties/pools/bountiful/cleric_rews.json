@@ -1,88 +1,87 @@
 {
-    "id": "cleric_rews",
-    "content": [
-      {
-        "type": "item",
-        "content": "minecraft:redstone",
-        "amountRange": {
-          "min": 1,
-          "max": 8
-        },
-        "unitWorth": 500,
-        "weight": 2500
+  "content": [
+    {
+      "type": "item",
+      "content": "minecraft:redstone",
+      "amountRange": {
+        "min": 1,
+        "max": 8
       },
-      {
-        "type": "item",
-        "content": "minecraft:lapis_lazuli",
-        "amountRange": {
-          "min": 1,
-          "max": 8
-        },
-        "unitWorth": 1000,
-        "weight": 1000
+      "unitWorth": 500,
+      "weight": 2500
+    },
+    {
+      "type": "item",
+      "content": "minecraft:lapis_lazuli",
+      "amountRange": {
+        "min": 1,
+        "max": 8
       },
-      {
-        "type": "item",
-        "content": "minecraft:glowstone",
-        "amountRange": {
-          "min": 1,
-          "max": 3
-        },
-        "unitWorth": 1000,
-        "weight": 1000
+      "unitWorth": 1000,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:glowstone",
+      "amountRange": {
+        "min": 1,
+        "max": 3
       },
-      {
-        "type": "item",
-        "content": "minecraft:ender_pearl",
-        "amountRange": {
-          "min": 1,
-          "max": 3
-        },
-        "unitWorth": 3500,
-        "weight": 1000
+      "unitWorth": 1000,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:ender_pearl",
+      "amountRange": {
+        "min": 1,
+        "max": 3
       },
-      {
-        "type": "item",
-        "content": "minecraft:experience_bottle",
-        "amountRange": {
-          "min": 1,
-          "max": 3
-        },
-        "unitWorth": 1500,
-        "weight": 1000
+      "unitWorth": 3500,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:experience_bottle",
+      "amountRange": {
+        "min": 1,
+        "max": 3
       },
-      {
-        "type": "item",
-        "content": "minecraft:cauldron",
-        "amountRange": {
-          "min": 1,
-          "max": 2
-        },
-        "unitWorth": 6000,
-        "weight": 200
+      "unitWorth": 1500,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:cauldron",
+      "amountRange": {
+        "min": 1,
+        "max": 2
       },
-      {
-        "type": "item",
-        "content": "minecraft:brewing_stand",
-        "amountRange": {
-          "min": 1,
-          "max": 1
-        },
-        "unitWorth": 1000,
-        "weight": 200
+      "unitWorth": 6000,
+      "weight": 200
+    },
+    {
+      "type": "item",
+      "content": "minecraft:brewing_stand",
+      "amountRange": {
+        "min": 1,
+        "max": 1
       },
-      {
-        "type": "item",
-        "content": "minecraft:potion",
-        "nbt": {
-          "Potion": "minecraft:healing"
-        },
-        "amountRange": {
-          "min": 1,
-          "max": 3
-        },
-        "unitWorth": 850,
-        "weight": 200
-      }
-    ]
-  }
+      "unitWorth": 1000,
+      "weight": 200
+    },
+    {
+      "type": "item",
+      "content": "minecraft:potion",
+      "nbt": {
+        "Potion": "minecraft:healing"
+      },
+      "amountRange": {
+        "min": 1,
+        "max": 3
+      },
+      "unitWorth": 850,
+      "weight": 200
+    }
+  ]
+}
