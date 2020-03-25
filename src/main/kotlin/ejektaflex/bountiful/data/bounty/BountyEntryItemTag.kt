@@ -37,12 +37,10 @@ class BountyEntryItemTag : AbstractBountyEntryStackLike(), IBountyObjective, IBo
 
     override val validStacks: List<ItemStack>
         get() {
-            val tag = ItemTags.getCollection().getOrCreate(ResourceLocation(content))
-
-            return tag.allElements.map { element ->
-                element.defaultInstance.apply {
+            return tagElements.map { element ->
+                ItemStack(element).apply {
                     count = amount
-                    this.tag?.let { t -> this.tag = t }
+                    nbtTag?.let { tag = it }
                 }
             }
         }
