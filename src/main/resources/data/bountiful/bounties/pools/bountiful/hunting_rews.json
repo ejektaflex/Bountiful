@@ -27,7 +27,7 @@
         "max": 2
       },
       "unitWorth": 2000,
-      "weight": 1000
+      "weight": 500
     },
     {
       "type": "item",
@@ -46,7 +46,7 @@
         "max": 2
       },
       "unitWorth": 2000,
-      "weight": 1000
+      "weight": 500
     },
     {
       "type": "item",
@@ -65,7 +65,7 @@
         "max": 2
       },
       "unitWorth": 2500,
-      "weight": 1000
+      "weight": 500
     },
     {
       "type": "item",
@@ -84,7 +84,7 @@
         "max": 2
       },
       "unitWorth": 2000,
-      "weight": 1000
+      "weight": 500
     },
     {
       "type": "item",
@@ -103,7 +103,7 @@
         "min": 1,
         "max": 6
       },
-      "unitWorth": 1550,
+      "unitWorth": 1200,
       "weight": 1000
     },
     {
