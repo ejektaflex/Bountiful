@@ -10,10 +10,10 @@
 
 	"bountiful.bounty.turnin": "通过右键点击悬赏板来领取你的奖励",
 
-	"bountiful.advancement.bounty_taken.title": "完成悬赏",
-	"bountiful.advancement.bounty_taken.desc": "在悬赏板获得一次奖励",
+	"bountiful.advancement.bounty_taken.title": "领取悬赏",
+	"bountiful.advancement.bounty_taken.desc": "在悬赏板领取一次悬赏任务",
 
-	"bountiful.advancement.bounty_complete.title": "诚实付出，诚实工作",
+	"bountiful.advancement.bounty_complete.title": "坦诚付出，坦诚工作",
 	"bountiful.advancement.bounty_complete.desc": "完成一个悬赏！",
 
 	"bountiful.advancement.rush_order.title": "紧急交付",
