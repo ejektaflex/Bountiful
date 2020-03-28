@@ -1,7 +1,10 @@
 package ejektaflex.bountiful.ext
 
+import ejektaflex.bountiful.BountifulMod
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundNBT
+import net.minecraftforge.common.util.INBTSerializable
 import net.minecraftforge.fml.ModList
 
 val ItemStack.toNBT: CompoundNBT
@@ -21,6 +24,38 @@ val CompoundNBT.toItemStack: ItemStack?
             tag = get("e_nbt") as CompoundNBT
         }
     }
+
+inline fun <reified T : Item> ItemStack.edit(func: T.(stack: ItemStack) -> Unit) {
+    if (item is T) {
+        func(item as T, this)
+    } else {
+        throw Exception("Tried to edit stack ${stack.count}x ${stack.item.registryName} as if it was a ${T::class}")
+    }
+}
+
+/*
+inline fun <reified T : INBTSerializable<CompoundNBT>> ItemStack.editNbt(func: T.() -> Unit) {
+    if ()
+}
+
+ */
+
+inline fun <reified T : INBTSerializable<CompoundNBT>> ItemStack.toData(func: () -> T): T {
+    return func().apply {
+        deserializeNBT(stack.tag)
+    }
+}
+
+inline fun <reified T : INBTSerializable<CompoundNBT>> ItemStack.toSafeData(func: () -> T): T? {
+    return try {
+        func().apply {
+            deserializeNBT(stack.tag)
+        }
+    } catch (e: Exception) {
+        BountifulMod.logger.error(e.message)
+        null
+    }
+}
 
 val ItemStack.modOriginName: String?
     get() {

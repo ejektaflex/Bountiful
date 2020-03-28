@@ -1,10 +1,8 @@
 package ejektaflex.bountiful.data.structure
 
 import com.google.gson.annotations.Expose
-import ejektaflex.bountiful.util.IMerge
-import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.util.IIdentifiable
-import ejektaflex.bountiful.data.registry.PoolRegistry
+import ejektaflex.bountiful.util.IMerge
 import net.minecraft.nbt.CompoundNBT
 import net.minecraftforge.common.util.INBTSerializable
 
@@ -32,18 +30,6 @@ data class Decree(
     override fun merge(other: Decree) {
         objectivePools = mutableSetOf(*(objectivePools + other.objectivePools).toTypedArray()).toMutableList()
         rewardPools = mutableSetOf(*(rewardPools + other.rewardPools).toTypedArray()).toMutableList()
-    }
-
-    /**
-    override val objectives: List<BountyEntry>
-        get() = getEntriesFromTagList(objectivePools)
-
-    override val rewards: List<BountyEntry>
-        get() = getEntriesFromTagList(rewardPools)
-    **/
-
-    private fun getEntriesFromTagList(poolTags: MutableList<String>): List<BountyEntry> {
-        return PoolRegistry.content.filter { it.id in poolTags }.map { it.content }.flatten()
     }
 
     companion object {

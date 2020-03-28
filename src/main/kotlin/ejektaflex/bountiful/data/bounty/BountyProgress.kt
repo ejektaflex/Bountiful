@@ -1,4 +1,6 @@
-package ejektaflex.bountiful.logic
+package ejektaflex.bountiful.data.bounty
+
+import net.minecraft.util.text.TextFormatting
 
 class BountyProgress(val pair: Pair<Int, Int>) {
 
@@ -8,7 +10,7 @@ class BountyProgress(val pair: Pair<Int, Int>) {
     val stringNums: String
         get() = "(${pair.first}/${pair.second})"
 
-    val color: String
-        get() = if (isFinished) "§a" else "§c"
+    val color: TextFormatting
+        get() = if (isFinished) TextFormatting.GREEN else TextFormatting.RED
 
 }

@@ -34,7 +34,7 @@ class BountifulConfig {
 
         var boardLifespan: ForgeConfigSpec.IntValue = b
                 .comment("How long, in seconds, a bounty should be" +
-                " able to stay on a board (if it ISN'T pushed off by another bounty).")
+                        " able to stay on a board (if it ISN'T pushed off by another bounty).")
                 .defineInRange("boardLifespan", 3600, 60, 600000)
 
         var bountyTimeMin: ForgeConfigSpec.IntValue = b
@@ -57,19 +57,25 @@ class BountifulConfig {
                 .comment("Whether bounty boards should sometimes generate in the world in villages")
                 .define("villageGen", true)
 
+        var villageGenRate: ForgeConfigSpec.IntValue = b
+                .comment("How often boards should spawn in villages. Higher = more frequent.",
+                        "Note/Warning: Boards can show up multiple times, so higher numbers increase the",
+                        "likelihood of multiple boards showing up in a single village. This is due to how",
+                        "Minecraft generates villages in newer versions of Minecraft.")
+                .defineInRange("villageGenRate", 2, 1, 8)
 
 
         val datapackCategory = b.pop().push("datapacks")!!
 
         var blacklistedData: ForgeConfigSpec.ConfigValue<MutableList<String>> = b
                 .comment("Blacklists certain bounty data from loading (Use at your own risk)",
-                        "Format is (namespace)/(folder)",
+                        "Format is (namespace)/[decrees/pools]/(folder)",
                         "Examples:",
-                        "\"bountiful/*\" would block all default Bountiful data from loading,",
-                        "\"bountiful/apotheosis\" would block Bountiful from loading data in",
+                        "\"bountiful/*/*\" would block all default Bountiful data from loading,",
+                        "\"bountiful/decrees/*\" would block all default Bountiful decree data from loading,",
+                        "\"bountiful/*/apotheosis\" would block Bountiful from loading data in",
                         "\"bountiful/bounties/pools/apotheosis\" as well as \"bountiful/bounties/decrees/apotheosis\".")
                 .define("blacklistedData", mutableListOf())
-
 
 
         val bountiesCategory = b.pop().push("bounties")!!
@@ -103,7 +109,6 @@ class BountifulConfig {
                 .defineInRange("rarityTierUpChance", 0.4, 0.0, 1.0)
 
 
-
         val entityCategory = b.pop().push("entity_bounties")!!
 
         var coopKillsCount: ForgeConfigSpec.ConfigValue<Boolean> = b
@@ -116,6 +121,14 @@ class BountifulConfig {
                         "or other player for their bounties to also get updated."
                 )
                 .define("coopKillDistance", 6.0)
+
+        val experienceCategory = b.pop().push("experience_bounties")!!
+
+        var doXpDrop: ForgeConfigSpec.ConfigValue<Boolean> = b
+                .comment("If true, XP point bounty rewards will drop where the player is standing.",
+                        "If false, rewards will instantly be added to their XP bar.",
+                        "(NOTE: Experience bounties are currently disabled)")
+                .define("doExperienceDrop", true)
 
     }
 

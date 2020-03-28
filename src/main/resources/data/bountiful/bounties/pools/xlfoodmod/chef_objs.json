@@ -1,0 +1,55 @@
+{
+  "modsRequired": ["xlfoodmod"],
+  "content": [
+    {
+      "type": "item",
+      "content": "xlfoodmod:chicken_pot_pie",
+      "amountRange": {
+        "min": 2,
+        "max": 8
+      },
+      "unitWorth": 300,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "xlfoodmod:corn_bread",
+      "amountRange": {
+        "min": 2,
+        "max": 8
+      },
+      "unitWorth": 300,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "xlfoodmod:ham",
+      "amountRange": {
+        "min": 2,
+        "max": 6
+      },
+      "unitWorth": 275,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "xlfoodmod:spaghetti",
+      "amountRange": {
+        "min": 1,
+        "max": 6
+      },
+      "unitWorth": 350,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "xlfoodmod:cheesy_bread",
+      "amountRange": {
+        "min": 1,
+        "max": 6
+      },
+      "unitWorth": 200,
+      "weight": 1000
+    }
+  ]
+}

@@ -1,64 +1,64 @@
 {
-    "content": [
-      {
-        "type": "item",
-        "content": "minecraft:rabbit_stew",
-        "amountRange": {
-          "min": 1,
-          "max": 6
-        },
-        "unitWorth": 800,
-        "weight": 1000
+  "content": [
+    {
+      "type": "item",
+      "content": "minecraft:rabbit_stew",
+      "amountRange": {
+        "min": 1,
+        "max": 6
       },
-      {
-        "type": "item",
-        "content": "minecraft:cooked_porkchop",
-        "amountRange": {
-          "min": 1,
-          "max": 16
-        },
-        "unitWorth": 200,
-        "weight": 1000
+      "unitWorth": 800,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:cooked_porkchop",
+      "amountRange": {
+        "min": 1,
+        "max": 16
       },
-      {
-        "type": "item",
-        "content": "minecraft:cooked_chicken",
-        "amountRange": {
-          "min": 1,
-          "max": 16
-        },
-        "unitWorth": 125,
-        "weight": 1000
+      "unitWorth": 200,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:cooked_chicken",
+      "amountRange": {
+        "min": 1,
+        "max": 16
       },
-      {
-        "type": "item",
-        "content": "minecraft:cooked_mutton",
-        "amountRange": {
-          "min": 1,
-          "max": 16
-        },
-        "unitWorth": 200,
-        "weight": 700
+      "unitWorth": 125,
+      "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "minecraft:cooked_mutton",
+      "amountRange": {
+        "min": 1,
+        "max": 16
       },
-      {
-        "type": "item",
-        "content": "minecraft:cooked_beef",
-        "amountRange": {
-          "min": 1,
-          "max": 16
-        },
-        "unitWorth": 250,
-        "weight": 700
+      "unitWorth": 200,
+      "weight": 700
+    },
+    {
+      "type": "item",
+      "content": "minecraft:cooked_beef",
+      "amountRange": {
+        "min": 1,
+        "max": 16
       },
-      {
-        "type": "item",
-        "content": "minecraft:cooked_chicken",
-        "amountRange": {
-          "min": 1,
-          "max": 16
-        },
-        "unitWorth": 250,
-        "weight": 700
-      }
-    ]
-  }
+      "unitWorth": 250,
+      "weight": 700
+    },
+    {
+      "type": "item",
+      "content": "minecraft:cooked_chicken",
+      "amountRange": {
+        "min": 1,
+        "max": 16
+      },
+      "unitWorth": 250,
+      "weight": 700
+    }
+  ]
+}

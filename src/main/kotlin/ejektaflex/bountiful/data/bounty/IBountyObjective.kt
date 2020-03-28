@@ -1,5 +1,6 @@
-package ejektaflex.bountiful.logic
+package ejektaflex.bountiful.data.bounty
 
+import ejektaflex.bountiful.data.bounty.BountyProgress
 import net.minecraft.util.text.ITextComponent
 
 interface IBountyObjective {

@@ -8,12 +8,15 @@ import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.data.bounty.BountyEntryEntity
 import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
 import ejektaflex.bountiful.data.json.JsonSerializers
+import ejektaflex.bountiful.data.structure.DecreeList
 import ejektaflex.bountiful.data.structure.EntryPool
 import ejektaflex.bountiful.ext.sendErrorMsg
 import ejektaflex.bountiful.ext.sendMessage
+import ejektaflex.bountiful.ext.toData
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.gui.BoardScreen
 import ejektaflex.bountiful.item.ItemBounty
+import ejektaflex.bountiful.item.ItemDecree
 import ejektaflex.bountiful.worldgen.JigsawJank
 import net.minecraft.block.Block
 import net.minecraft.client.gui.ScreenManager
@@ -27,17 +30,16 @@ import net.minecraft.resources.IResourceManager
 import net.minecraft.resources.IResourceManagerReloadListener
 import net.minecraft.tileentity.TileEntityType
 import net.minecraft.util.ResourceLocation
-import net.minecraft.world.gen.feature.jigsaw.*
-import net.minecraftforge.api.distmarker.Dist
-import net.minecraftforge.api.distmarker.OnlyIn
-import net.minecraftforge.client.event.TextureStitchEvent
+import net.minecraft.world.gen.feature.jigsaw.SingleJigsawPiece
 import net.minecraftforge.common.BasicTrade
 import net.minecraftforge.common.extensions.IForgeContainerType
+import net.minecraftforge.event.AnvilUpdateEvent
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.event.entity.living.LivingDeathEvent
 import net.minecraftforge.event.village.VillagerTradesEvent
 import net.minecraftforge.event.village.WandererTradesEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
+import net.minecraftforge.fml.ModList
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
@@ -68,8 +70,10 @@ object SetupLifecycle {
             )
 
             for (place in injectList) {
-                JigsawJank.create().append(ResourceLocation("minecraft",place)) {
-                    listOf(Pair.of(SingleJigsawPiece("bountiful:village/common/bounty_gazebo"), 2))
+                JigsawJank.create().append(ResourceLocation("minecraft", place)) {
+                    listOf(Pair.of(SingleJigsawPiece("bountiful:village/common/bounty_gazebo"),
+                            BountifulConfig.SERVER.villageGenRate.get()
+                    ))
                 }
             }
 
@@ -77,6 +81,11 @@ object SetupLifecycle {
 
         BountifulTriggers.register()
         BountifulStats.init()
+
+        if (ModList.get().isLoaded("jei")) {
+            jeiConfig()
+        }
+
     }
 
     fun validatePool(pool: EntryPool, sender: CommandSource? = null, log: Boolean = false): MutableList<BountyEntry> {
@@ -103,6 +112,9 @@ object SetupLifecycle {
         return validEntries
     }
 
+    fun jeiConfig() {
+        // currently unimplemented
+    }
 
     // Update mob bounties
     @SubscribeEvent
@@ -131,19 +143,17 @@ object SetupLifecycle {
         }
     }
 
-    fun updateBountiesForEntity(player: PlayerEntity, deadEntity: LivingEntity) {
+    private fun updateBountiesForEntity(player: PlayerEntity, deadEntity: LivingEntity) {
         val bountyStacks = player.inventory.mainInventory.filter { it.item is ItemBounty && it.hasTag() }
         if (bountyStacks.isNotEmpty()) {
             bountyStacks.forEach { stack ->
-                val data = BountyData.from(stack)
+                val data = stack.toData(::BountyData)
                 val eObjs = data.objectives.content.filterIsInstance<BountyEntryEntity>()
                 for (obj in eObjs) {
-
                     if (obj.isSameEntity(deadEntity)) {
                         obj.killedAmount = min(obj.killedAmount + 1, obj.amount)
                         stack.tag = data.serializeNBT()
                     }
-
                 }
             }
         }
@@ -189,7 +199,7 @@ object SetupLifecycle {
     @SubscribeEvent
     fun onTileEntityRegistry(event: RegistryEvent.Register<TileEntityType<*>>) {
         event.registry.register(
-                TileEntityType.Builder.create<BoardTileEntity>(Supplier {
+                TileEntityType.Builder.create(Supplier {
                     BoardTileEntity()
                 }, BountifulContent.Blocks.BOUNTYBOARD)
                         .build(null)
@@ -207,8 +217,17 @@ object SetupLifecycle {
 
     @SubscribeEvent
     fun onClientInit(event: FMLClientSetupEvent) {
-        ScreenManager.registerFactory(BountifulContent.Guis.BOARDCONTAINER) {
-            container, inv, textComponent ->  BoardScreen(container, inv, textComponent)
+        ScreenManager.registerFactory(BountifulContent.Guis.BOARDCONTAINER) { container, inv, textComponent ->
+            BoardScreen(container, inv, textComponent)
+        }
+    }
+
+    @SubscribeEvent
+    fun anvilEvent(event: AnvilUpdateEvent) {
+        val result = ItemDecree.combine(event.left, event.right)
+        if (result != null) {
+            event.output = result
+            event.cost = 5 + (event.output.toData(::DecreeList).ids.size * 5)
         }
     }
 
@@ -223,15 +242,6 @@ object SetupLifecycle {
     fun doVillagerTrades(event: VillagerTradesEvent) {
         event.trades[2].add(decreeTrade)
     }
-
-    /*
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    fun stitchingAtlas(event: TextureStitchEvent.Pre) {
-        event.addSprite(ResourceLocation(BountifulMod.MODID, "bg"))
-    }
-
-     */
 
 }
 

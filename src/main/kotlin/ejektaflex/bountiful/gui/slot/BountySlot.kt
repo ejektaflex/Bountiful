@@ -18,10 +18,7 @@ class BountySlot(val board: BoardTileEntity, index: Int, x: Int, y: Int) : SlotI
     override fun onTake(thePlayer: PlayerEntity, stack: ItemStack): ItemStack {
         thePlayer.addStat(BountifulStats.BOUNTIES_TAKEN, 1)
         if (!thePlayer.world.isRemote) {
-            println("Triggering!")
             BountifulTriggers.BOUNTY_TAKEN.trigger((thePlayer as ServerPlayerEntity).advancements)
-        } else {
-            println("Was remote")
         }
         return super.onTake(thePlayer, stack)
     }

@@ -1,30 +1,26 @@
 package ejektaflex.bountiful.item
 
-import ejektaflex.bountiful.ext.hackyRandom
 import ejektaflex.bountiful.BountifulContent
 import ejektaflex.bountiful.BountifulMod
-import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.data.registry.DecreeRegistry
-import ejektaflex.bountiful.ext.getUnsortedList
-import ejektaflex.bountiful.ext.getUnsortedListTyped
-import ejektaflex.bountiful.ext.setUnsortedList
+import ejektaflex.bountiful.data.structure.Decree
+import ejektaflex.bountiful.data.structure.DecreeList
+import ejektaflex.bountiful.ext.*
 import net.minecraft.client.util.ITooltipFlag
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundNBT
-import net.minecraft.util.ActionResult
-import net.minecraft.util.Hand
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
+import net.minecraft.util.text.TextFormatting
+import net.minecraft.util.text.TranslationTextComponent
 import net.minecraft.world.World
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.api.distmarker.OnlyIn
-import net.minecraft.util.text.TranslationTextComponent
 
 
-class ItemDecree() : Item(
+class ItemDecree : Item(
         Item.Properties().maxStackSize(1).group(BountifulContent.BountifulGroup)
 ) {
 
@@ -46,43 +42,43 @@ class ItemDecree() : Item(
     override fun getTranslationKey() = "bountiful.decree"
 
     override fun getDisplayName(stack: ItemStack): ITextComponent {
-        return StringTextComponent("§5").appendSibling(
-            TranslationTextComponent(getTranslationKey())
-        )
+        return TranslationTextComponent(translationKey).applyTextStyle {
+            it.color = TextFormatting.DARK_PURPLE
+        }
     }
 
     @OnlyIn(Dist.CLIENT)
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<ITextComponent>, flagIn: ITooltipFlag) {
 
-        val ids = stack.tag?.getUnsortedList("ids")?.map {
-            nbt -> nbt.getString("id")
+        val ids = stack.tag?.getUnsortedList("ids")?.map { nbt ->
+            nbt.getString("id")
         }
 
         if (ids != null) {
-            val tip = if (stack.tag != null) {
-                var str = StringTextComponent("§5").appendSibling(
-                        StringTextComponent("§6")
-                )
-                for (id in ids) {
-                    str = str.appendSibling(
-                            TranslationTextComponent("bountiful.decree.${id}.name")
-                    )
+            if (stack.tag != null) {
+                val components = ids.map {
+                    TranslationTextComponent("bountiful.decree.${it}.name").applyTextStyle { style ->
+                        style.color = TextFormatting.GOLD
+                    }
+                }.forEach {
+                    tooltip.add(it)
                 }
 
-                str
-
             } else {
-                TranslationTextComponent("bountiful.decree.invalid").appendSibling(
+                tooltip.add(TranslationTextComponent("bountiful.decree.invalid").appendSibling(
                         StringTextComponent(" ($ids)")
-                )
+                ))
             }
-            tooltip.add(tip)
         } else {
             tooltip.add(TranslationTextComponent("bountiful.decree.notset"))
         }
 
         // TODO Add debug tool when holding sneak, showing which pools are being used
         //tooltip.add(StringTextComponent("Replace Me!"))
+    }
+
+    fun setData(stack: ItemStack, list: DecreeList) {
+        stack.tag = list.serializeNBT()
     }
 
     fun ensureDecree(stack: ItemStack, defaultData: Decree? = null) {
@@ -126,23 +122,46 @@ class ItemDecree() : Item(
 
     companion object {
 
+        fun combine(stackA: ItemStack, stackB: ItemStack): ItemStack? {
 
+            if (stackA.item is ItemDecree && stackB.item is ItemDecree && stackA.hasTag() && stackB.hasTag()) {
+                val idsA = stackA.toData(::DecreeList)
+                val idsB = stackB.toData(::DecreeList)
+                val totals = idsA + idsB
+                val out = makeStack()
+
+                out.edit<ItemDecree> {
+                    setData(it, totals)
+                }
+
+                return out
+            }
+            return null
+        }
 
         fun makeStack(): ItemStack {
             val newDecree = ItemStack(BountifulContent.Items.DECREE)
-            (newDecree.item as ItemDecree).ensureDecree(newDecree)
+            newDecree.edit<ItemDecree> { ensureDecree(it) }
             return newDecree
         }
 
         fun makeStack(decree: Decree): ItemStack {
             val newDecree = ItemStack(BountifulContent.Items.DECREE)
-            (newDecree.item as ItemDecree).ensureDecree(newDecree, decree)
+            newDecree.edit<ItemDecree> { ensureDecree(it, decree) }
             return newDecree
         }
 
         fun makeStack(decId: String): ItemStack? {
             val decree = DecreeRegistry.content.find { it.id == decId }
             return if (decree != null) makeStack(decree) else null
+        }
+
+        fun makeRandomStack(): ItemStack? {
+            return if (DecreeRegistry.ids.isNotEmpty()) {
+                makeStack(DecreeRegistry.content.hackyRandom())
+            } else {
+                null
+            }
         }
 
 
