@@ -1,0 +1,5 @@
+[B114](../../index.md) / [ejektaflex.bountiful.data.bounty](../index.md) / [BountyData](index.md) / [getObjectivesWithinVariance](./get-objectives-within-variance.md)
+
+# getObjectivesWithinVariance
+
+`fun getObjectivesWithinVariance(objs: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`BountyEntry`](../-bounty-entry/index.md)`>, worth: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`, variance: `[`Double`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html)`): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`BountyEntry`](../-bounty-entry/index.md)`>` [(source)](https://github.com/ejektaflex/Bountiful/tree/develop/src/main/kotlin/ejektaflex/bountiful/data/bounty/BountyData.kt#L222)

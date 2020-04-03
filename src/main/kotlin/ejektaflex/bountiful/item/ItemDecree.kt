@@ -19,7 +19,11 @@ import net.minecraft.world.World
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.api.distmarker.OnlyIn
 
-
+/**
+ * A Decree [Item] in game.
+ *
+ * @constructor Creates a new Decree item.
+ */
 class ItemDecree : Item(
         Item.Properties().maxStackSize(1).group(BountifulContent.BountifulGroup)
 ) {
@@ -122,6 +126,11 @@ class ItemDecree : Item(
 
     companion object {
 
+        /**
+         * Attempts to combine two Decree items into a new one with both Decree IDs.
+         *
+         * @return The newly created Decree itemstack
+         */
         fun combine(stackA: ItemStack, stackB: ItemStack): ItemStack? {
 
             if (stackA.item is ItemDecree && stackB.item is ItemDecree && stackA.hasTag() && stackB.hasTag()) {
@@ -139,23 +148,43 @@ class ItemDecree : Item(
             return null
         }
 
+        /**
+         * Creates a new Decree [ItemStack] and assigns it a random valid Decree.
+         *
+         * @return The new Decree [ItemStack]
+         */
         fun makeStack(): ItemStack {
             val newDecree = ItemStack(BountifulContent.Items.DECREE)
             newDecree.edit<ItemDecree> { ensureDecree(it) }
             return newDecree
         }
 
+        /**
+         * Creates a new Decree [ItemStack] with specific Decree data.
+         *
+         * @return The new Decree [ItemStack]
+         */
         fun makeStack(decree: Decree): ItemStack {
             val newDecree = ItemStack(BountifulContent.Items.DECREE)
             newDecree.edit<ItemDecree> { ensureDecree(it, decree) }
             return newDecree
         }
 
+        /**
+         * Attempts to create a new Decree [ItemStack] with the given Decree ID,
+         * or returns null if no Decree exists with that ID.
+         *
+         * @return The new Decree [ItemStack]
+         */
         fun makeStack(decId: String): ItemStack? {
             val decree = DecreeRegistry.content.find { it.id == decId }
             return if (decree != null) makeStack(decree) else null
         }
 
+        /**
+         * Creates a new Decree [ItemStack] with a random Decree for data,
+         * or null if the Decree Registry is empty.
+         */
         fun makeRandomStack(): ItemStack? {
             return if (DecreeRegistry.ids.isNotEmpty()) {
                 makeStack(DecreeRegistry.content.hackyRandom())
