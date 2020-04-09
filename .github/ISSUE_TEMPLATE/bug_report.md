@@ -1,6 +1,9 @@
 ---
-name: 🐛 Bug Report
+name: "\U0001F41B Bug Report"
 about: Something is not working as expected
+title: ''
+labels: ''
+assignees: ''
 
 ---
 
