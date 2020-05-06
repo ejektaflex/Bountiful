@@ -45,8 +45,13 @@ open class CommonProxy : IProxy {
             val bountyStacks = player.inventory.mainInventory.filter { it.item is ItemBounty }
             if (bountyStacks.isNotEmpty()) {
                 bountyStacks.forEach { stack ->
-                    val data = BountyData.from(stack)
-                    BountyChecker.tryTakeEntities(player, data, stack, e.entityLiving)
+
+                    // Only update valid bounties
+                    if (BountyData.isValidBounty(stack)) {
+                        val data = BountyData.from(stack)
+                        BountyChecker.tryTakeEntities(player, data, stack, e.entityLiving)
+                    }
+
                 }
             }
         }
