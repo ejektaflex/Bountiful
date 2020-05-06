@@ -29,7 +29,7 @@ class BlockBountyBoard : Block(
         if (BountifulConfig.SERVER.bountyBoardBreakable.get()) 2f else -1f
     }
 
-    override fun getBlockHardness(blockState: BlockState, worldIn: IBlockReader, pos: BlockPos): Float {
+    override fun getBlockHardness(blockState: BlockState?, worldIn: IBlockReader?, pos: BlockPos?): Float {
         return hardness
     }
 
