@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 - Nothing as of yet
 
+## [3.1.1] - 2020-05-06
+### Fixes
+- Fixed possible crash when rendering tooltip with certain mods present
+
 ## [3.1.0] - 2020-03-27
 ### Added
 - "Tinkering" Decree for redstone objectives/rewards
