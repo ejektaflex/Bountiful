@@ -27,6 +27,7 @@ import net.minecraft.util.text.TranslationTextComponent
 import net.minecraft.world.World
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.api.distmarker.OnlyIn
+import net.minecraftforge.fml.loading.FMLEnvironment
 import net.minecraftforge.registries.IForgeRegistryEntry
 import java.util.*
 
@@ -62,12 +63,15 @@ class ItemBounty : Item(
 
                 appendSibling(super.getDisplayName(stack))
 
-                Minecraft.getInstance().world?.let { wrld ->
-                    appendSibling(
-                            StringTextComponent(
-                                    " §f(${bd.remainingTime(wrld)}§f)"
-                            )
-                    )
+                //  Only runs on physical client
+                if (FMLEnvironment.dist == Dist.CLIENT) {
+                    Minecraft.getInstance().world?.let { world ->
+                        appendSibling(
+                                StringTextComponent(
+                                        " §f(${bd.remainingTime(world)}§f)"
+                                )
+                        )
+                    }
                 }
 
             }
@@ -179,7 +183,6 @@ class ItemBounty : Item(
     }
 
     companion object {
-
 
         private val rand = Random()
 

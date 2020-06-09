@@ -2,8 +2,8 @@
   "modsRequired": ["mysticalworld"],
   "content": [
     {
-      "type": "item",
-      "content": "mysticalworld:copper_ingot",
+      "type": "item-tag",
+      "content": "forge:ingots/copper",
       "amountRange": {
         "min": 1,
         "max": 16
@@ -12,8 +12,8 @@
       "weight": 1000
     },
     {
-      "type": "item",
-      "content": "mysticalworld:tin_ingot",
+      "type": "item-tag",
+      "content": "forge:ingots/tin",
       "amountRange": {
         "min": 1,
         "max": 16
