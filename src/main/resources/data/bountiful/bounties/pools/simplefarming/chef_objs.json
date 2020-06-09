@@ -60,26 +60,6 @@
       },
       "unitWorth": 350,
       "weight": 1000
-    },
-    {
-      "type": "item",
-      "content": "vanillafoodpantry:natron_crystals",
-      "amountRange": {
-        "min": 8,
-        "max": 48
-      },
-      "unitWorth": 100,
-      "weight": 1000
-    },
-    {
-      "type": "item",
-      "content": "vanillafoodpantry:rock_salt_crystals",
-      "amountRange": {
-        "min": 8,
-        "max": 48
-      },
-      "unitWorth": 100,
-      "weight": 1000
     }
   ]
 }
