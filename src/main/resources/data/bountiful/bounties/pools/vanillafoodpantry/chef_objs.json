@@ -90,6 +90,16 @@
       },
       "unitWorth": 400,
       "weight": 1000
+    },
+    {
+      "type": "item",
+      "content": "vanillafoodpantry:natron_crystals",
+      "amountRange": {
+        "min": 8,
+        "max": 48
+      },
+      "unitWorth": 200,
+      "weight": 1000
     }
   ]
 }

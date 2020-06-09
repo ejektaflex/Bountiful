@@ -89,7 +89,7 @@ object BountifulMod {
         }
 
         override fun toString(): String {
-            return "BR{$origin}"
+            return "BR{$typedOrigin}"
         }
 
         fun isBlacklisted(blacklist: List<String>): Boolean {
