@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.1.2] - 2020-06-09
 ### Fixes
+- Update zh_cn & add ru_ru translations (thanks to EnderFor & JokerDima)
 - In 1.15, using ender pearls on a bounty board does not throw the pearl anymore
 - Some ingots now use Forge tags instead of hardcoded item registry names
 - Fix possible "Air" bounties when using Simple Farming and not Vanilla Food Pantry
