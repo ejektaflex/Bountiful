@@ -1,0 +1,75 @@
+{
+
+	"block.bountiful.bountyboard": "Доска объявлений",
+
+	"itemGroup.bountiful": "Bountiful",
+
+	"bountiful.decree": "Распоряжение",
+	"bountiful.decrees": "Распоряжения",
+	"bountiful.decree.invalid": "Некорректное распоряжение",
+	"bountiful.decree.notset": "Принесите к доске объявлений!",
+
+	"bountiful.bounty.turnin": "Получите свою награду, щелкнув ПКМ на доске объявлений.",
+
+	"bountiful.advancement.bounty_taken.title": "Работа по найму",
+	"bountiful.advancement.bounty_taken.desc": "Взять заказ с доски объявлений",
+
+	"bountiful.advancement.bounty_complete.title": "Оплата за честную работу",
+	"bountiful.advancement.bounty_complete.desc": "Выполнить заказ",
+
+	"bountiful.advancement.rush_order.title": "Срочная доставка!",
+	"bountiful.advancement.rush_order.desc": "Завершить заказ менее чем за минуту",
+
+	"bountiful.advancement.procrastinator.title": "Мастер-прокрастинатор",
+	"bountiful.advancement.procrastinator.desc": "Завершите сделку в последние 5 секунд",
+
+	"bountiful.advancement.town_crier.title": "Городской глашатый",
+	"bountiful.advancement.town_crier.desc": "Получить распоряжение",
+
+	"bountiful.advancement.royal_mandate.title": "Королевский мандат",
+	"bountiful.advancement.royal_mandate.desc": "Положить распоряжение на доску объявлений",
+
+	"bountiful.bounty": "Заказ",
+
+	"bountiful.decree.armorer.name": "Кузнеца",
+	"bountiful.decree.butcher.name": "Мясника",
+	"bountiful.decree.chef.name": "Шеф-повара",
+	"bountiful.decree.cleric.name": "Священика",
+	"bountiful.decree.farmer.name": "Фермера",
+	"bountiful.decree.fisherman.name": "Рыбака",
+	"bountiful.decree.fletcher.name": "Охотника",
+	"bountiful.decree.hunting.name": "Охотника",
+	"bountiful.decree.leatherer.name": "Кожевенника",
+	"bountiful.decree.librarian.name": "Библиотекаря",
+	"bountiful.decree.mapper.name": "Картографая",
+	"bountiful.decree.mason.name": "Каменьщика",
+	"bountiful.decree.shepherd.name": "Пастуха",
+	"bountiful.decree.tinker.name": "Ремесленика",
+	"bountiful.decree.toolsmith.name": "Инструментальщика",
+	"bountiful.decree.invalid_decree.name": "Недействительное распоряжение",
+
+	"bountiful.bounty.type.entity.kills": "- убить",
+
+	"bountiful.bounty.type.experience.levels": "Уровни опыта",
+	"bountiful.bounty.type.experience.points": "Очки опыта",
+
+
+	"bountiful.rarity.Common": "Простой",
+	"bountiful.rarity.Uncommon": "Необычный",
+	"bountiful.rarity.Rare": "Редкий",
+	"bountiful.rarity.Epic": "Эпический",
+
+	"stat.bountiful.bounties_taken": "Полученные заказы",
+	"stat.bountiful.bounties_done": "Завершенные заказы (Всего)",
+	"stat.bountiful.bounties_done_0": "Завершенные заказы (Простых)",
+	"stat.bountiful.bounties_done_1": "Завершенные заказы (Необычных))",
+	"stat.bountiful.bounties_done_2": "Завершенные заказы (Редких)",
+	"stat.bountiful.bounties_done_3": "Завершенные заказы (Эпических)",
+
+	"bountiful.tooltip.advanced": "Удерживайте Shift для деталей",
+	"bountiful.tooltip.time": "Время до завершения",
+	"bountiful.tooltip.required": "Требуется",
+	"bountiful.tooltip.rewards": "Вознаграждение",
+	"bountiful.tooltip.expired": "Истекший",
+	"bountiful.tooltip.requirements": "Требования не выполнены"
+}
