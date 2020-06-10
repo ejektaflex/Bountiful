@@ -41,8 +41,16 @@
 	"bountiful.decree.leatherer.name": "皮革悬赏",
 	"bountiful.decree.librarian.name": "图书悬赏",
 	"bountiful.decree.mapper.name": "绘图悬赏",
+	"bountiful.decree.mason.name": "建筑悬赏",
 	"bountiful.decree.shepherd.name": "牧羊悬赏",
+	"bountiful.decree.tinker.name": "红石悬赏",
 	"bountiful.decree.toolsmith.name": "工具悬赏",
+	"bountiful.decree.invalid_decree.name": "无效的悬赏令",
+
+	"bountiful.bounty.type.entity.kills": "击杀",
+
+	"bountiful.bounty.type.experience.levels": "经验等级",
+	"bountiful.bounty.type.experience.points": "经验点数",
 
 
 	"bountiful.rarity.Common": "普通",
