@@ -50,7 +50,7 @@ class BlockBountyBoard : Block(
             }
 
         }
-        return super.onBlockActivated(state, worldIn, pos, player, handIn, hit)
+        return ActionResultType.SUCCESS
     }
 
     override fun onBlockHarvested(worldIn: World, pos: BlockPos, state: BlockState, player: PlayerEntity) {
