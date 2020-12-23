@@ -205,7 +205,7 @@ object BountifulCommand {
             }, MessageClipboardCopy(asText))
 
             val msg = StringTextComponent("§aItem: §9${holding.item.registryName}§r, §aBounty Entry Copied To Clipboard!§r: §6[hover for preview]§r").apply {
-                style.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, StringTextComponent("§6Bounty Entry (Copied to Clipboard):\n").appendSibling(
+                style.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, StringTextComponent("§6Bounty Entry (Copied to Clipboard):\n").append(
                         StringTextComponent(asText).modStyle {
                             color = Color.fromTextFormatting(TextFormatting.DARK_PURPLE)
                         }

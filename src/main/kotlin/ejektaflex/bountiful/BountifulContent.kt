@@ -2,15 +2,16 @@ package ejektaflex.bountiful
 
 import ejektaflex.bountiful.block.BlockBountyBoard
 import ejektaflex.bountiful.block.BoardTileEntity
+import ejektaflex.bountiful.data.bounty.BountyData
+import ejektaflex.bountiful.ext.getUnsortedList
+import ejektaflex.bountiful.ext.toData
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.item.ItemDecree
 import net.minecraft.inventory.container.ContainerType
-import net.minecraft.item.BlockItem
-import net.minecraft.item.Item
-import net.minecraft.item.ItemGroup
-import net.minecraft.item.ItemStack
+import net.minecraft.item.*
 import net.minecraft.tileentity.TileEntityType
+import net.minecraft.util.ResourceLocation
 import net.minecraftforge.registries.ObjectHolder
 
 object BountifulContent {
@@ -24,8 +25,12 @@ object BountifulContent {
     }
 
     object Items {
+
         val BOUNTY = ItemBounty().setRegistryName("bounty")
+
         val BOUNTYBOARD = BlockItem(Blocks.BOUNTYBOARD, Item.Properties().group(BountifulGroup)).setRegistryName("bountyboard")
+
+
         val DECREE = ItemDecree().setRegistryName("decree")
     }
 

@@ -14,6 +14,7 @@ import net.minecraft.client.resources.I18n
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundNBT
 import net.minecraft.util.NonNullList
+import net.minecraft.util.text.Color
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.TextFormatting
 import net.minecraft.util.text.TranslationTextComponent
@@ -74,14 +75,14 @@ class BountyData : INBTSerializable<CompoundNBT> {
 
         return listOf(
                 listOf(
-                        TranslationTextComponent("bountiful.tooltip.required").applyTextStyle {
-                            it.color = TextFormatting.GOLD
+                        TranslationTextComponent("bountiful.tooltip.required").modStyle {
+                            color = Color.fromTextFormatting(TextFormatting.GOLD)
                         }
                 ) +
                         objs +
                         listOf(
-                                TranslationTextComponent("bountiful.tooltip.rewards").applyTextStyle {
-                                    it.color = TextFormatting.GOLD
+                                TranslationTextComponent("bountiful.tooltip.rewards").modStyle {
+                                    color = Color.fromTextFormatting(TextFormatting.GOLD)
                                 }
                         ) +
                         rews +

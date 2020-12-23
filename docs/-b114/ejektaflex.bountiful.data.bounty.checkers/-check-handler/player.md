@@ -1,5 +1,0 @@
-[B114](../../index.md) / [ejektaflex.bountiful.data.bounty.checkers](../index.md) / [CheckHandler](index.md) / [player](./player.md)
-
-# player
-
-`lateinit var player: PlayerEntity` [(source)](https://github.com/ejektaflex/Bountiful/tree/develop/src/main/kotlin/ejektaflex/bountiful/data/bounty/checkers/CheckHandler.kt#L12)

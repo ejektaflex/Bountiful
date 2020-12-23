@@ -16,6 +16,7 @@ import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
+import net.minecraft.item.ItemModelsProperties
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Rarity
 import net.minecraft.util.ActionResult
@@ -41,16 +42,6 @@ class ItemBounty : Item(
      */
     class BountyCreationException(err: String = "Bounty could not be created!") : Exception(err)
 
-    init {
-        addPropertyOverride(ResourceLocation("bountiful", "rarity")) { stack, world, entity ->
-            if (stack.hasTag()) {
-                stack.toData(::BountyData).rarity * 0.1f
-            } else {
-                0.0f
-            }
-        }
-    }
-
     override fun getTranslationKey() = "bountiful.bounty"
 
     override fun getDisplayName(stack: ItemStack): ITextComponent {
@@ -59,14 +50,14 @@ class ItemBounty : Item(
             val bd = stack.toData(::BountyData)
             TranslationTextComponent("bountiful.rarity.${bd.rarityEnum.name}").apply {
 
-                appendSibling(StringTextComponent(" "))
+                append(StringTextComponent(" "))
 
-                appendSibling(super.getDisplayName(stack))
+                append(super.getDisplayName(stack))
 
                 //  Only runs on physical client
                 if (FMLEnvironment.dist == Dist.CLIENT) {
                     Minecraft.getInstance().world?.let { world ->
-                        appendSibling(
+                        append(
                                 StringTextComponent(
                                         " §f(${bd.remainingTime(world)}§f)"
                                 )
@@ -89,7 +80,7 @@ class ItemBounty : Item(
         if (!BountifulConfig.SERVER.cashInAtBountyBoard.get()) {
             cashIn(playerIn, handIn)
         } else {
-            playerIn.sendMessage(TranslationTextComponent("bountiful.bounty.turnin"))
+            playerIn.sendStatusMessage(TranslationTextComponent("bountiful.bounty.turnin"), false)
         }
 
         return super.onItemRightClick(worldIn, playerIn, handIn)

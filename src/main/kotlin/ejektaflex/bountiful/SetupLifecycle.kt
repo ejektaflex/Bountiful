@@ -10,6 +10,7 @@ import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
 import ejektaflex.bountiful.data.json.JsonSerializers
 import ejektaflex.bountiful.data.structure.DecreeList
 import ejektaflex.bountiful.data.structure.EntryPool
+import ejektaflex.bountiful.ext.getUnsortedList
 import ejektaflex.bountiful.ext.sendErrorMsg
 import ejektaflex.bountiful.ext.sendMessage
 import ejektaflex.bountiful.ext.toData
@@ -25,6 +26,7 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.container.ContainerType
 import net.minecraft.item.Item
+import net.minecraft.item.ItemModelsProperties
 import net.minecraft.item.ItemStack
 import net.minecraft.resources.IResourceManager
 import net.minecraft.resources.IResourceManagerReloadListener
@@ -69,6 +71,9 @@ object SetupLifecycle {
                     "village/snowy/houses"
             )
 
+            // TODO Re-implement village generation
+
+            /*
             for (place in injectList) {
                 JigsawJank.create().append(ResourceLocation("minecraft", place)) {
                     listOf(Pair.of(SingleJigsawPiece("bountiful:village/common/bounty_gazebo"),
@@ -76,6 +81,8 @@ object SetupLifecycle {
                     ))
                 }
             }
+
+             */
 
         }
 
@@ -220,6 +227,26 @@ object SetupLifecycle {
         ScreenManager.registerFactory(BountifulContent.Guis.BOARDCONTAINER) { container, inv, textComponent ->
             BoardScreen(container, inv, textComponent)
         }
+
+        // Item Property Overrides
+
+        ItemModelsProperties.registerProperty(BountifulContent.Items.BOUNTY, ResourceLocation("bountiful", "rarity")) { stack, _, _ ->
+            if (stack.hasTag()) {
+                stack.toData(::BountyData).rarity * 0.1f
+            } else {
+                0.0f
+            }
+        }
+
+
+        ItemModelsProperties.registerProperty(BountifulContent.Items.DECREE, ResourceLocation("bountiful", "decreestatus")) { stack, world, entity ->
+            if (stack.hasTag() && stack.tag!!.getUnsortedList("ids").isNotEmpty()) {
+                1f
+            } else {
+                0f
+            }
+        }
+
     }
 
     @SubscribeEvent
