@@ -6,7 +6,9 @@ import net.minecraft.command.CommandSource
 import net.minecraft.entity.Entity
 import net.minecraft.util.NonNullList
 import net.minecraft.util.ResourceLocation
+import net.minecraft.util.text.IFormattableTextComponent
 import net.minecraft.util.text.StringTextComponent
+import net.minecraft.util.text.Style
 import net.minecraft.util.text.TranslationTextComponent
 import kotlin.math.max
 import kotlin.math.min
@@ -53,6 +55,11 @@ fun CommandSource.sendErrorMsg(str: String) {
 
 // TODO Make update this
 fun Entity.sendTranslation(key: String) = sendMessage(StringTextComponent("Key: $key"))
+
+fun IFormattableTextComponent.modStyle(func: Style.() -> Unit): IFormattableTextComponent {
+    style = style.apply(func)
+    return this
+}
 
 fun Int.clampTo(range: IntRange): Int {
     return max(range.first, min(this, range.last))
