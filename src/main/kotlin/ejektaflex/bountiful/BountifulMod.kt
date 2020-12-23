@@ -7,7 +7,6 @@ import ejektaflex.bountiful.ext.sendErrorMsg
 import ejektaflex.bountiful.network.BountifulNetwork
 import ejektaflex.bountiful.util.IMerge
 import ejektaflex.bountiful.util.ValueRegistry
-import net.alexwells.kottle.FMLKotlinModLoadingContext
 import net.minecraft.command.CommandSource
 import net.minecraft.resources.IResourceManager
 import net.minecraft.server.MinecraftServer
@@ -188,7 +187,8 @@ object BountifulMod {
     }
 
     init {
-        FMLKotlinModLoadingContext.get().modEventBus.register(SetupLifecycle)
+        // TODO !! Register Event Lifecycle Bus! !!
+        //FMLKotlinModLoadingContext.get().modEventBus.register(SetupLifecycle)
     }
 
     val config = BountifulConfig()

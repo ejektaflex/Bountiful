@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.BountifulConfig
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.data.bounty.enums.BountyType
+import ejektaflex.bountiful.ext.colored
+import ejektaflex.bountiful.ext.withSibling
 import net.minecraft.entity.item.ExperienceOrbEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.text.ITextComponent
@@ -29,12 +31,8 @@ class BountyEntryExperience : BountyEntry(), IBountyObjective, IBountyReward {
         }
 
     override fun tooltipReward(): ITextComponent {
-        return StringTextComponent(amount.toString() + "x ").applyTextStyle {
-            it.color = TextFormatting.WHITE
-        }.appendSibling(
-                formattedName.applyTextStyle {
-                    it.color = TextFormatting.AQUA
-                }
+        return StringTextComponent(amount.toString() + "x ").colored(TextFormatting.WHITE).withSibling(
+                formattedName.colored(TextFormatting.AQUA)
         )
     }
 
@@ -66,10 +64,8 @@ class BountyEntryExperience : BountyEntry(), IBountyObjective, IBountyReward {
     }
 
     override fun tooltipObjective(progress: BountyProgress): ITextComponent {
-        return StringTextComponent(progress.stringNums).applyTextStyle {
-            it.color = progress.color
-        }.appendSibling(
-                formattedName
+        return StringTextComponent(progress.stringNums).colored(progress.color).withSibling(
+            formattedName
         )
     }
 

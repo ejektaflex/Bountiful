@@ -19,7 +19,7 @@ class BountyEntryItem : AbstractBountyEntryStackLike(), IBountyObjective, IBount
     override var bType: String = BountyType.Item.id
 
     override val formattedName: ITextComponent
-        get() = StringTextComponent(itemStack?.displayName!!.formattedText)
+        get() = StringTextComponent(itemStack?.displayName!!.string) // .formattedName?
 
     val itemStack: ItemStack?
         get() {

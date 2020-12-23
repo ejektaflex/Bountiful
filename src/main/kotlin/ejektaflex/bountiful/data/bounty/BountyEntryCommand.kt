@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.data.bounty.enums.BountyType
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.util.text.Color
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
 import net.minecraft.util.text.TextFormatting
@@ -21,13 +22,15 @@ class BountyEntryCommand : BountyEntry(), IBountyReward {
         get() = StringTextComponent(name ?: content)
 
     override fun tooltipReward(): ITextComponent {
-        return formattedName.applyTextStyle(TextFormatting.GOLD)
+        return formattedName.apply {
+            style.color = Color.fromTextFormatting(TextFormatting.BOLD)
+        }
     }
 
     override fun reward(player: PlayerEntity) {
         val server = player.server!!
         var newCommand = content
-        newCommand = newCommand.replace("%player%", player.displayName.formattedText)
+        newCommand = newCommand.replace("%player%", player.displayName.string) // .formattedText?
         newCommand = newCommand.replace("%amount%", amount.toString())
         BountifulMod.logger.info("About to run command: $newCommand")
         server.commandManager.handleCommand(server.commandSource, newCommand)

@@ -6,10 +6,7 @@ import net.minecraft.command.CommandSource
 import net.minecraft.entity.Entity
 import net.minecraft.util.NonNullList
 import net.minecraft.util.ResourceLocation
-import net.minecraft.util.text.IFormattableTextComponent
-import net.minecraft.util.text.StringTextComponent
-import net.minecraft.util.text.Style
-import net.minecraft.util.text.TranslationTextComponent
+import net.minecraft.util.text.*
 import kotlin.math.max
 import kotlin.math.min
 
@@ -58,6 +55,16 @@ fun Entity.sendTranslation(key: String) = sendMessage(StringTextComponent("Key: 
 
 fun IFormattableTextComponent.modStyle(func: Style.() -> Unit): IFormattableTextComponent {
     style = style.apply(func)
+    return this
+}
+
+fun ITextComponent.colored(color: TextFormatting): ITextComponent {
+    style.color = Color.fromTextFormatting(color)
+    return this
+}
+
+fun ITextComponent.withSibling(component: ITextComponent): ITextComponent {
+    siblings.add(component)
     return this
 }
 

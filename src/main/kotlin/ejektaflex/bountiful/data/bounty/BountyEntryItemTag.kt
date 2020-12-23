@@ -33,7 +33,8 @@ class BountyEntryItemTag : AbstractBountyEntryStackLike(), IBountyObjective, IBo
     }
 
     val tagElements: List<Item>
-        get() = ItemTags.getCollection().getOrCreate(ResourceLocation(content)).allElements.toList()
+        //get() = ItemTags.getCollection().getOrCreate(ResourceLocation(content)).allElements.toList()
+        get() = ItemTags.createOptional(ResourceLocation(content)).allElements
 
     override val validStacks: List<ItemStack>
         get() {
