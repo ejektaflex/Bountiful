@@ -54,7 +54,7 @@ class BlockBountyBoard : Block(
 
         if (!worldIn.isRemote && te is BoardTileEntity) {
             // Create stack and serialize data
-            val stack = ItemStack(BountifulContent.Items.BOUNTYBOARD)
+            val stack = ItemStack(BountifulContent.BOUNTYBOARD)
             stack.setTagInfo("BlockEntityTag", te.serializeNBT())
 
             // Throw it on the ground
@@ -97,7 +97,7 @@ class BlockBountyBoard : Block(
         return true
     }
 
-    override fun createTileEntity(state: BlockState?, world: IBlockReader?): TileEntity? {
+    override fun createTileEntity(state: BlockState?, world: IBlockReader?): TileEntity {
         return BoardTileEntity()
     }
 

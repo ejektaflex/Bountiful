@@ -141,7 +141,7 @@ class ItemDecree : Item(
          * @return The new Decree [ItemStack]
          */
         fun makeStack(): ItemStack {
-            val newDecree = ItemStack(BountifulContent.Items.DECREE)
+            val newDecree = ItemStack(BountifulContent.DECREE)
             newDecree.edit<ItemDecree> { ensureDecree(it) }
             return newDecree
         }
@@ -152,7 +152,7 @@ class ItemDecree : Item(
          * @return The new Decree [ItemStack]
          */
         fun makeStack(decree: Decree): ItemStack {
-            val newDecree = ItemStack(BountifulContent.Items.DECREE)
+            val newDecree = ItemStack(BountifulContent.DECREE)
             newDecree.edit<ItemDecree> { ensureDecree(it, decree) }
             return newDecree
         }

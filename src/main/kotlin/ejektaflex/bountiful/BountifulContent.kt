@@ -15,47 +15,35 @@ import thedarkcolour.kotlinforforge.forge.KDeferredRegister
 
 object BountifulContent {
 
-    object Blocks {
+    val ContainerRegistry = KDeferredRegister(ForgeRegistries.CONTAINERS, BountifulMod.MODID)
+    val BlockRegistry = KDeferredRegister(ForgeRegistries.BLOCKS, BountifulMod.MODID)
+    val TileEntityRegistry = KDeferredRegister(ForgeRegistries.TILE_ENTITIES, BountifulMod.MODID)
+    val ItemRegistry = KDeferredRegister(ForgeRegistries.ITEMS, BountifulMod.MODID)
 
-        val BlockRegistry = KDeferredRegister(ForgeRegistries.BLOCKS, BountifulMod.MODID)
-        val TileEntityRegistry = KDeferredRegister(ForgeRegistries.TILE_ENTITIES, BountifulMod.MODID)
-
-        val BOUNTYBOARD by BlockRegistry.registerObject("bountyboard") {
-            BlockBountyBoard()
-        }
-
-
-        //@ObjectHolder(BountifulMod.MODID + ":bounty-te")
-        //var BOUNTYTILEENTITY: TileEntityType<BoardTileEntity> = TileEntityType(::BoardTileEntity, setOf(BOUNTYBOARD), null)
-        val BOUNTYTILEENTITY by TileEntityRegistry.registerObject("bounty-te") {
-            TileEntityType(::BoardTileEntity, setOf(BOUNTYBOARD), null)
-        }
+    val BOUNTYBOARD by BlockRegistry.registerObject("bountyboard") {
+        BlockBountyBoard()
     }
 
-    object Items {
-
-        val ItemRegistry = KDeferredRegister(ForgeRegistries.ITEMS, BountifulMod.MODID)
-
-        val BOUNTY by ItemRegistry.registerObject("bounty") {
-            ItemBounty()
-        }
-
-        val BOUNTYBOARD by ItemRegistry.registerObject("bountyboard") {
-            BlockItem(Blocks.BOUNTYBOARD, Item.Properties().group(BountifulGroup))
-        }
-
-        val DECREE by ItemRegistry.registerObject("decree", ::ItemDecree)
+    val BOUNTYTILEENTITY by TileEntityRegistry.registerObject("bounty-te") {
+        TileEntityType(::BoardTileEntity, setOf(BOUNTYBOARD), null)
     }
 
-    object Guis {
-        val ContainerRegistry = KDeferredRegister(ForgeRegistries.CONTAINERS, BountifulMod.MODID)
-        val BOARDCONTAINER by ContainerRegistry.registerObject("bountyboard") {
-            IForgeContainerType.create(::BoardContainer)
-        }
+    val BOUNTY by ItemRegistry.registerObject("bounty") {
+        ItemBounty()
+    }
+
+    val BOUNTYBOARDITEM by ItemRegistry.registerObject("bountyboard") {
+        BlockItem(BOUNTYBOARD, Item.Properties().group(BountifulGroup))
+    }
+
+    val DECREE by ItemRegistry.registerObject("decree", ::ItemDecree)
+
+    val BOARDCONTAINER: ContainerType<BoardContainer> by ContainerRegistry.registerObject("bountyboard") {
+        IForgeContainerType.create(::BoardContainer)
     }
 
     object BountifulGroup : ItemGroup(BountifulMod.MODID) {
-        override fun createIcon() = ItemStack(Items.DECREE)
+        override fun createIcon() = ItemStack(DECREE)
     }
 
 }

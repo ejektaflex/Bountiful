@@ -191,7 +191,7 @@ class ItemBounty : Item(
         }
 
         fun create(world: World, decrees: List<Decree>): ItemStack {
-            return ItemStack(BountifulContent.Items.BOUNTY).apply {
+            return ItemStack(BountifulContent.BOUNTY).apply {
                 edit<ItemBounty> {
                     ensureBounty(it, world, decrees, calcRarity())
                 }

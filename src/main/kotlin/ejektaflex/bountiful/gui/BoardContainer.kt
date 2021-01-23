@@ -22,7 +22,7 @@ import net.minecraft.network.PacketBuffer
 
 
 
-class BoardContainer(val windowId: Int, val inv: PlayerInventory, val boardTE: BoardTileEntity) : Container(BountifulContent.Guis.BOARDCONTAINER, windowId) {
+class BoardContainer(val windowId: Int, val inv: PlayerInventory, val boardTE: BoardTileEntity) : Container(BountifulContent.BOARDCONTAINER, windowId) {
 
     constructor(inWindow: Int, inInv: PlayerInventory, data: PacketBuffer) : this(inWindow, inInv, getTileEntity(inInv, data))
 

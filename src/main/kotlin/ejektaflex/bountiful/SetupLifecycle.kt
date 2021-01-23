@@ -41,6 +41,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent
 import net.minecraftforge.event.village.VillagerTradesEvent
 import net.minecraftforge.event.village.WandererTradesEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
+import net.minecraftforge.fml.DeferredWorkQueue
 import net.minecraftforge.fml.ModList
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
@@ -56,8 +57,10 @@ object SetupLifecycle {
 
     init {
         BountifulMod.logger.info("Loading Bountiful listeners..")
-        BountifulContent.Blocks.BlockRegistry.register(MOD_BUS)
-        BountifulContent.Items.ItemRegistry.register(MOD_BUS)
+        BountifulContent.TileEntityRegistry.register(MOD_BUS)
+        BountifulContent.BlockRegistry.register(MOD_BUS)
+        BountifulContent.ContainerRegistry.register(MOD_BUS)
+        BountifulContent.ItemRegistry.register(MOD_BUS)
     }
 
     @SubscribeEvent
@@ -190,7 +193,7 @@ object SetupLifecycle {
     fun onServerStarting(event: FMLServerStartingEvent) {
         //BountifulCommand.generateCommand(event.commandDispatcher)
     }
-
+    /*
     @SubscribeEvent
     fun registerItems(event: RegistryEvent.Register<Item>) {
         println("Registering to: ${event.registry.registryName}, ${event.registry.registrySuperType}")
@@ -209,32 +212,9 @@ object SetupLifecycle {
         )
     }
 
-    @SubscribeEvent
-    fun onClientInit(event: FMLClientSetupEvent) {
-        ScreenManager.registerFactory(BountifulContent.Guis.BOARDCONTAINER) { container, inv, textComponent ->
-            BoardScreen(container, inv, textComponent)
-        }
-
-        // Item Property Overrides
-
-        ItemModelsProperties.registerProperty(BountifulContent.Items.BOUNTY, ResourceLocation("bountiful", "rarity")) { stack, _, _ ->
-            if (stack.hasTag()) {
-                stack.toData(::BountyData).rarity * 0.1f
-            } else {
-                0.0f
-            }
-        }
+     */
 
 
-        ItemModelsProperties.registerProperty(BountifulContent.Items.DECREE, ResourceLocation("bountiful", "decreestatus")) { stack, world, entity ->
-            if (stack.hasTag() && stack.tag!!.getUnsortedList("ids").isNotEmpty()) {
-                1f
-            } else {
-                0f
-            }
-        }
-
-    }
 
     @SubscribeEvent
     fun anvilEvent(event: AnvilUpdateEvent) {

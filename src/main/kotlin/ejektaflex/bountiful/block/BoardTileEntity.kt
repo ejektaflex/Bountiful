@@ -25,7 +25,7 @@ import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.items.CapabilityItemHandler
 import net.minecraftforge.items.ItemStackHandler
 
-class BoardTileEntity : TileEntity(BountifulContent.Blocks.BOUNTYTILEENTITY), ITickableTileEntity, INamedContainerProvider {
+class BoardTileEntity : TileEntity(BountifulContent.BOUNTYTILEENTITY), ITickableTileEntity, INamedContainerProvider {
 
 
     // Lazy load lazy optional ( ... :| )
