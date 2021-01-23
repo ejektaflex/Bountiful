@@ -103,7 +103,7 @@ object BountifulMod {
 
     fun reloadBountyData(
             server: MinecraftServer,
-            manager: IResourceManager = server.resourceManager,
+            manager: IResourceManager,// = server.resourceManager,
             fillType: BountifulResourceType,
             msgSender: CommandSource? = null
     ) {

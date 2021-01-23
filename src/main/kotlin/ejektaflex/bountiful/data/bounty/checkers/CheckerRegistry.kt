@@ -45,12 +45,12 @@ object CheckerRegistry : ValueRegistry<KClass<out CheckHandler<*>>>() {
 
             if (!player.world.isRemote) {
 
-                BountifulTriggers.COMPLETE_STARTER.trigger((player as ServerPlayerEntity).advancements)
+                //BountifulTriggers.COMPLETE_STARTER.trigger((player as ServerPlayerEntity).advancements)
 
                 if (data.timeLeft(player.world) < (5 * 20)) {
-                    BountifulTriggers.PROCRASTINATOR.trigger(player.advancements)
+                    //BountifulTriggers.PROCRASTINATOR.trigger(player.advancements)
                 } else if (data.timeTaken(player.world) < (60 * 20)) {
-                    BountifulTriggers.RUSH_ORDER.trigger(player.advancements)
+                    //BountifulTriggers.RUSH_ORDER.trigger(player.advancements)
                 }
 
                 //if (data.timeLeft(player.world) <= (20 * 60))

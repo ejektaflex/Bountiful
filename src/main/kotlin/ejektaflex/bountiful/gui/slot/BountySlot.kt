@@ -1,7 +1,7 @@
 package ejektaflex.bountiful.gui.slot
 
 import ejektaflex.bountiful.BountifulStats
-import ejektaflex.bountiful.advancement.BountifulTriggers
+//import ejektaflex.bountiful.advancement.BountifulTriggers
 import ejektaflex.bountiful.block.BoardTileEntity
 import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.item.ItemBounty
@@ -18,7 +18,7 @@ class BountySlot(val board: BoardTileEntity, index: Int, x: Int, y: Int) : SlotI
     override fun onTake(thePlayer: PlayerEntity, stack: ItemStack): ItemStack {
         thePlayer.addStat(BountifulStats.BOUNTIES_TAKEN, 1)
         if (!thePlayer.world.isRemote) {
-            BountifulTriggers.BOUNTY_TAKEN.trigger((thePlayer as ServerPlayerEntity).advancements)
+            //BountifulTriggers.BOUNTY_TAKEN.trigger((thePlayer as ServerPlayerEntity).advancements)
         }
         return super.onTake(thePlayer, stack)
     }

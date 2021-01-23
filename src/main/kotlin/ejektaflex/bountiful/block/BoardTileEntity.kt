@@ -9,6 +9,7 @@ import ejektaflex.bountiful.ext.*
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.item.ItemDecree
+import net.minecraft.block.BlockState
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.container.Container
@@ -165,8 +166,8 @@ class BoardTileEntity : TileEntity(BountifulContent.Blocks.BOUNTYTILEENTITY), IT
         }
     }
 
-    override fun read(nbt: CompoundNBT) {
-        super.read(nbt)
+    override fun read(state: BlockState, nbt: CompoundNBT) {
+        super.read(state, nbt)
         handler.deserializeNBT(nbt.getCompound("inv"))
         newBoard = nbt.getBoolean("newBoard")
         pulseLeft = nbt.getInt("pulseLeft")

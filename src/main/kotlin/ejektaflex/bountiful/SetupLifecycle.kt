@@ -18,7 +18,7 @@ import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.gui.BoardScreen
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.item.ItemDecree
-import ejektaflex.bountiful.worldgen.JigsawJank
+//import ejektaflex.bountiful.worldgen.JigsawJank
 import net.minecraft.block.Block
 import net.minecraft.client.gui.ScreenManager
 import net.minecraft.command.CommandSource
@@ -86,7 +86,7 @@ object SetupLifecycle {
 
         }
 
-        BountifulTriggers.register()
+        //BountifulTriggers.register()
         BountifulStats.init()
 
         if (ModList.get().isLoaded("jei")) {
@@ -170,6 +170,7 @@ object SetupLifecycle {
     @SubscribeEvent
     fun onServerAboutToStart(event: FMLServerAboutToStartEvent) {
         BountifulMod.logger.info("Bountiful listening for resource reloads..")
+        /*
         event.server.resourceManager.addReloadListener(object : IResourceManagerReloadListener {
             override fun onResourceManagerReload(resourceManager: IResourceManager) {
                 BountifulMod.logger.info("Bountiful reloading resources! :D")
@@ -178,11 +179,13 @@ object SetupLifecycle {
                 }
             }
         })
+
+         */
     }
 
     @SubscribeEvent
     fun onServerStarting(event: FMLServerStartingEvent) {
-        BountifulCommand.generateCommand(event.commandDispatcher)
+        //BountifulCommand.generateCommand(event.commandDispatcher)
     }
 
     @SubscribeEvent

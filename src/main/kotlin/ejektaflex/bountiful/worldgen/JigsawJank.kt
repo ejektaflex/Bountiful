@@ -18,6 +18,9 @@ import java.util.function.UnaryOperator
  * Original file: https://gist.github.com/pau101/7d2beb32fd77fe9a870d48ac9b81d862
  * Modified slightly for Kotlin adaptation.
  */
+
+
+/*
 class JigsawJank private constructor(private val registry: OperatorRegistry) {
     fun append(name: ResourceLocation, additionalCategoryElements: () -> List<Pair<out JigsawPiece?, Int?>?>): JigsawJank {
         registry.functions[name] = UnaryOperator { pool: JigsawPattern -> appendPool(pool, additionalCategoryElements()) }
@@ -76,3 +79,5 @@ class JigsawJank private constructor(private val registry: OperatorRegistry) {
     }
 
 }
+
+ */

@@ -224,7 +224,7 @@ object BountifulCommand {
     private fun reload() = Command<CommandSource> {
 
         BountifulResourceType.values().forEach { type ->
-            BountifulMod.reloadBountyData(it.source.server, it.source.server.resourceManager, type, it.source)
+            //BountifulMod.reloadBountyData(it.source.server, it.source.server.resourceManager, type, it.source)
         }
 
         1
