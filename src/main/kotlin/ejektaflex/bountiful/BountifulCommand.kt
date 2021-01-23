@@ -291,6 +291,8 @@ object BountifulCommand {
         1
     }
 
+
+
     // TODO If test is true, warn on invalid pool entries
     private fun dump(test: Boolean = false) = Command<CommandSource> {
 

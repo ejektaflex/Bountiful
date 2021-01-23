@@ -4,6 +4,7 @@ import ejektaflex.bountiful.util.IWeighted
 import ejektaflex.bountiful.util.ItemRange
 import net.minecraft.command.CommandSource
 import net.minecraft.entity.Entity
+import net.minecraft.entity.player.ServerPlayerEntity
 import net.minecraft.util.NonNullList
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.*
@@ -52,6 +53,10 @@ fun CommandSource.sendErrorMsg(str: String) {
 
 // TODO Make update this
 fun Entity.sendTranslation(key: String) = sendMessage(StringTextComponent("Key: $key"))
+
+fun ServerPlayerEntity.sendTranslation() {
+
+}
 
 fun IFormattableTextComponent.modStyle(func: Style.() -> Unit): IFormattableTextComponent {
     style = style.apply(func)

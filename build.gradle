@@ -128,14 +128,18 @@ repositories {
         url = "https://dvs1.progwml6.com/files/maven/"
     }
     jcenter()
+    maven {
+        url "https://libraries.minecraft.net"
+    }
 }
 
 dependencies {
 
     minecraft "net.minecraftforge:forge:${mcVersion}-${forgeVersion}"
+    compile 'com.mojang:brigadier:1.0.17'
 
-    compile "kottle:Kottle:$kottleVersion"
-    mod "kottle:Kottle:$kottleVersion"
+    //compile "kottle:Kottle:$kottleVersion"
+    //mod "kottle:Kottle:$kottleVersion"
 
     // compile against the JEI API but do not include it at runtime
     compileOnly fg.deobf("mezz.jei:jei-${mcVersion}:${jeiVersion}:api")
