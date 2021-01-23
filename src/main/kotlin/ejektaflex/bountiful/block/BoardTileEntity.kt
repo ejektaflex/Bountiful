@@ -184,7 +184,8 @@ class BoardTileEntity : TileEntity(BountifulContent.Blocks.BOUNTYTILEENTITY), IT
     }
 
     override fun createMenu(i: Int, inv: PlayerInventory, player: PlayerEntity): Container? {
-        return BoardContainer(i, world!!, pos, inv)
+        return BoardContainer(i, inv, this)
+        //return BoardContainer(i, world!!, pos, inv)
     }
 
     override fun getDisplayName(): ITextComponent {

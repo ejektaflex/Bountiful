@@ -210,25 +210,6 @@ object SetupLifecycle {
     }
 
     @SubscribeEvent
-    fun onTileEntityRegistry(event: RegistryEvent.Register<TileEntityType<*>>) {
-        event.registry.register(
-                TileEntityType.Builder.create(Supplier {
-                    BoardTileEntity()
-                }, BountifulContent.Blocks.BOUNTYBOARD)
-                        .build(null)
-                        .setRegistryName("${BountifulMod.MODID}:bounty-te")
-        )
-    }
-
-    @SubscribeEvent
-    fun onContainerRegistry(event: RegistryEvent.Register<ContainerType<*>>) {
-        event.registry.register(IForgeContainerType.create { windowId, inv, data ->
-            val pos = data.readBlockPos()
-            BoardContainer(windowId, inv.player.world, pos, inv)
-        }.setRegistryName("bountyboard"))
-    }
-
-    @SubscribeEvent
     fun onClientInit(event: FMLClientSetupEvent) {
         ScreenManager.registerFactory(BountifulContent.Guis.BOARDCONTAINER) { container, inv, textComponent ->
             BoardScreen(container, inv, textComponent)
