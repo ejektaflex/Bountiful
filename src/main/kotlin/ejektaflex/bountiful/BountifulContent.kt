@@ -12,26 +12,39 @@ import net.minecraft.inventory.container.ContainerType
 import net.minecraft.item.*
 import net.minecraft.tileentity.TileEntityType
 import net.minecraft.util.ResourceLocation
+import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.ObjectHolder
+import thedarkcolour.kotlinforforge.forge.KDeferredRegister
 
 object BountifulContent {
 
     object Blocks {
-        val BOUNTYBOARD = BlockBountyBoard().setRegistryName("bountyboard")
 
-        @ObjectHolder(BountifulMod.MODID + ":bounty-te")
-        @JvmStatic
-        lateinit var BOUNTYTILEENTITY: TileEntityType<BoardTileEntity>
+        val BlockRegistry = KDeferredRegister(ForgeRegistries.BLOCKS, BountifulMod.MODID)
+
+        val BOUNTYBOARD by BlockRegistry.registerObject("bountyboard") {
+            BlockBountyBoard()
+        }
+
+            @ObjectHolder(BountifulMod.MODID + ":bounty-te")
+            @JvmStatic
+            lateinit var BOUNTYTILEENTITY: TileEntityType<BoardTileEntity>
     }
 
     object Items {
 
-        val BOUNTY = ItemBounty().setRegistryName("bounty")
+        val ItemRegistry = KDeferredRegister(ForgeRegistries.ITEMS, BountifulMod.MODID)
 
-        val BOUNTYBOARD = BlockItem(Blocks.BOUNTYBOARD, Item.Properties().group(BountifulGroup)).setRegistryName("bountyboard")
+        val BOUNTY by ItemRegistry.registerObject("bounty") {
+            ItemBounty()
+        }
+
+        val BOUNTYBOARD by ItemRegistry.registerObject("bountyboard") {
+            BlockItem(Blocks.BOUNTYBOARD, Item.Properties().group(BountifulGroup))
+        }
 
 
-        val DECREE = ItemDecree().setRegistryName("decree")
+        val DECREE by ItemRegistry.registerObject("decree", ::ItemDecree)
     }
 
     object Guis {

@@ -47,6 +47,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent
+import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import java.util.function.Supplier
 import kotlin.math.min
 
@@ -55,6 +56,8 @@ object SetupLifecycle {
 
     init {
         BountifulMod.logger.info("Loading Bountiful listeners..")
+        BountifulContent.Blocks.BlockRegistry.register(MOD_BUS)
+        BountifulContent.Items.ItemRegistry.register(MOD_BUS)
     }
 
     @SubscribeEvent
@@ -261,6 +264,7 @@ object SetupLifecycle {
         }
     }
 
+    /*
     private val decreeTrade = BasicTrade(3, ItemStack(BountifulContent.Items.DECREE), 5, 5, 0.5f)
 
     @SubscribeEvent
@@ -272,6 +276,8 @@ object SetupLifecycle {
     fun doVillagerTrades(event: VillagerTradesEvent) {
         event.trades[2].add(decreeTrade)
     }
+
+     */
 
 }
 
