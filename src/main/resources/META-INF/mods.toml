@@ -4,10 +4,11 @@
 # Note that there are a couple of TOML lists in this file.
 # Find more information on toml format here:  https://github.com/toml-lang/toml
 # The name of the mod loader bountyType to load - for regular FML @Mod mods it should be javafml
-modLoader="kotlinfml" #mandatory
+modLoader="kotlinforforge" #mandatory
 # A version range to match for said mod loader - for regular FML @Mod it will be the forge version
 loaderVersion="[1,)" #mandatory (24 is current forge version)
 # A URL to refer people to when problems occur with this mod
+license='''GNU Lesser General Public License v3.0'''
 [[mods]] #mandatory
 # The modid of the mod
 modId="bountiful" #mandatory
@@ -20,11 +21,12 @@ logoFile="examplemod.png" #optional
 # A text field displayed in the mod UI
 credits="Forge team!" #optional
 # A text field displayed in the mod UI
-authors="Ejektaflex (code, item art), AkiShirai (block art)" #optional
+authors="Ejektaflex (code, item/gui art), AkiShirai (block art)" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
 Bountiful adds bounty boards and bounties to the game.
 '''
+
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.bountiful]] #optional
     # the modid of the dependency
