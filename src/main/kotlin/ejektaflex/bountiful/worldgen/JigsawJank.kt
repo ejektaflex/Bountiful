@@ -19,6 +19,7 @@ import java.util.function.UnaryOperator
  * Modified slightly for Kotlin adaptation.
  */
 
+// TODO reimplement village generation
 
 /*
 class JigsawJank private constructor(private val registry: OperatorRegistry) {

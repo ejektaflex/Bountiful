@@ -36,6 +36,7 @@ import net.minecraft.world.gen.feature.jigsaw.SingleJigsawPiece
 import net.minecraftforge.common.BasicTrade
 import net.minecraftforge.common.extensions.IForgeContainerType
 import net.minecraftforge.event.AnvilUpdateEvent
+import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.event.entity.living.LivingDeathEvent
 import net.minecraftforge.event.village.VillagerTradesEvent
@@ -176,6 +177,9 @@ object SetupLifecycle {
     @SubscribeEvent
     fun onServerAboutToStart(event: FMLServerAboutToStartEvent) {
         BountifulMod.logger.info("Bountiful listening for resource reloads..")
+
+        // TODO reimplement resource reloading
+
         /*
         event.server.resourceManager.addReloadListener(object : IResourceManagerReloadListener {
             override fun onResourceManagerReload(resourceManager: IResourceManager) {
@@ -190,30 +194,9 @@ object SetupLifecycle {
     }
 
     @SubscribeEvent
-    fun onServerStarting(event: FMLServerStartingEvent) {
-        //BountifulCommand.generateCommand(event.commandDispatcher)
+    fun onRegisterCommands(event: RegisterCommandsEvent) {
+        BountifulCommand.generateCommand(event.dispatcher)
     }
-    /*
-    @SubscribeEvent
-    fun registerItems(event: RegistryEvent.Register<Item>) {
-        println("Registering to: ${event.registry.registryName}, ${event.registry.registrySuperType}")
-        event.registry.registerAll(
-                BountifulContent.Items.BOUNTY,
-                BountifulContent.Items.BOUNTYBOARD,
-                BountifulContent.Items.DECREE
-        )
-    }
-
-    @SubscribeEvent
-    fun registerBlocks(event: RegistryEvent.Register<Block>) {
-        println("Registering to: ${event.registry.registryName}, ${event.registry.registrySuperType}")
-        event.registry.registerAll(
-                BountifulContent.Blocks.BOUNTYBOARD
-        )
-    }
-
-     */
-
 
 
     @SubscribeEvent
@@ -224,6 +207,8 @@ object SetupLifecycle {
             event.cost = 5 + (event.output.toData(::DecreeList).ids.size * 5)
         }
     }
+
+    // TODO reimplement wandering decree trades
 
     /*
     private val decreeTrade = BasicTrade(3, ItemStack(BountifulContent.Items.DECREE), 5, 5, 0.5f)
