@@ -7,6 +7,7 @@ import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.data.bounty.BountyEntryEntity
 import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
+import ejektaflex.bountiful.data.json.BountyReloadListener
 import ejektaflex.bountiful.data.json.JsonSerializers
 import ejektaflex.bountiful.data.structure.DecreeList
 import ejektaflex.bountiful.data.structure.EntryPool
@@ -35,6 +36,7 @@ import net.minecraft.util.ResourceLocation
 import net.minecraft.world.gen.feature.jigsaw.SingleJigsawPiece
 import net.minecraftforge.common.BasicTrade
 import net.minecraftforge.common.extensions.IForgeContainerType
+import net.minecraftforge.event.AddReloadListenerEvent
 import net.minecraftforge.event.AnvilUpdateEvent
 import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.event.RegistryEvent
@@ -55,6 +57,8 @@ import kotlin.math.min
 
 @Mod.EventBusSubscriber
 object SetupLifecycle {
+
+    val reloadListener = BountyReloadListener()
 
     init {
         BountifulMod.logger.info("Loading Bountiful listeners..")
@@ -96,10 +100,6 @@ object SetupLifecycle {
         //BountifulTriggers.register()
         BountifulStats.init()
 
-        if (ModList.get().isLoaded("jei")) {
-            jeiConfig()
-        }
-
     }
 
     fun validatePool(pool: EntryPool, sender: CommandSource? = null, log: Boolean = false): MutableList<BountyEntry> {
@@ -124,10 +124,6 @@ object SetupLifecycle {
         }
 
         return validEntries
-    }
-
-    fun jeiConfig() {
-        // currently unimplemented
     }
 
     // Update mob bounties
@@ -175,28 +171,16 @@ object SetupLifecycle {
 
 
     @SubscribeEvent
-    fun onServerAboutToStart(event: FMLServerAboutToStartEvent) {
-        BountifulMod.logger.info("Bountiful listening for resource reloads..")
-
-        // TODO reimplement resource reloading
-
-        /*
-        event.server.resourceManager.addReloadListener(object : IResourceManagerReloadListener {
-            override fun onResourceManagerReload(resourceManager: IResourceManager) {
-                BountifulMod.logger.info("Bountiful reloading resources! :D")
-                BountifulResourceType.values().forEach { type ->
-                    BountifulMod.reloadBountyData(event.server, resourceManager, type)
-                }
-            }
-        })
-
-         */
+    fun onReloadData(event: AddReloadListenerEvent) {
+        BountifulMod.logger.info("Bountiful adding resource listener..")
+        event.addListener(reloadListener)
     }
 
     @SubscribeEvent
     fun onRegisterCommands(event: RegisterCommandsEvent) {
         BountifulCommand.generateCommand(event.dispatcher)
     }
+
 
 
     @SubscribeEvent

@@ -55,7 +55,7 @@ object BountifulMod {
         val content = res.inputStream.reader().readText()
 
         val newObj = try {
-            logger.info("Loading $location")
+            logger.info("Loading Bountiful location $location")
             JsonAdapter.fromJsonExp(content, fillType.klazz)
         } catch (e: Exception) {
             logger.info("CANNOT LOAD JSON at $location. Reason: ${e.message}")
