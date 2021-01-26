@@ -74,21 +74,10 @@ class BountyData : INBTSerializable<CompoundNBT> {
 
 
         return listOf(
-                listOf(
-                        TranslationTextComponent("bountiful.tooltip.required").modStyle {
-                            color = Color.fromTextFormatting(TextFormatting.GOLD)
-                        }
-                ) +
+                listOf(TranslationTextComponent("bountiful.tooltip.required").mergeStyle(TextFormatting.GOLD)) +
                         objs +
-                        listOf(
-                                TranslationTextComponent("bountiful.tooltip.rewards").modStyle {
-                                    color = Color.fromTextFormatting(TextFormatting.GOLD)
-                                }
-                        ) +
-                        rews +
-                        listOf(
-                                //TranslationTextComponent("bountiful.tooltip.advanced")
-                        )
+                        listOf(TranslationTextComponent("bountiful.tooltip.rewards").mergeStyle(TextFormatting.GOLD)) +
+                        rews
         ).flatten()
 
     }

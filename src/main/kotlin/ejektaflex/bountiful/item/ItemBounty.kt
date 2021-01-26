@@ -91,8 +91,7 @@ class ItemBounty : Item(
         if (stack.hasTag()) {
             val bounty = stack.toData(::BountyData)
             // TODO Reimplement advanced bounty tooltips
-            //val bountyTipInfo = bounty.tooltipInfo(worldIn!!, Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
-            val bountyTipInfo = bounty.tooltipInfo(worldIn!!, false)
+            val bountyTipInfo = bounty.tooltipInfo(worldIn!!, Minecraft.getInstance().player?.isSneaking == true)
             for (line in bountyTipInfo) {
                 tooltip.add(line)
             }
@@ -165,7 +164,6 @@ class ItemBounty : Item(
         }
 
         return false
-
     }
 
     // Don't flail arms randomly on NBT update

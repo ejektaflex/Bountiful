@@ -50,10 +50,10 @@ class BountyReloadListener : JsonReloadListener(JsonAdapter.gson, "bounties") {
             println("BoReloader loaded this: $loaded")
 
             when (loaded) {
-                is Decree -> decreeMap.getOrPut(rl.path) { mutableListOf() }.add(loaded.also { it.id =
+                is Decree -> decreeMap.getOrPut(rl.path.substringAfter('/')) { mutableListOf() }.add(loaded.also { it.id =
                     BountifulMod.rlFileNameNoExt(rl)
                 })
-                is EntryPool -> poolMap.getOrPut(rl.path) { mutableListOf() }.add(loaded.also { it.id =
+                is EntryPool -> poolMap.getOrPut(rl.path.substringAfter('/')) { mutableListOf() }.add(loaded.also { it.id =
                     BountifulMod.rlFileNameNoExt(rl)
                 })
             }

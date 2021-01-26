@@ -3,15 +3,11 @@ package ejektaflex.bountiful.data.bounty
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.data.bounty.enums.BountyType
-import ejektaflex.bountiful.ext.colored
 import ejektaflex.bountiful.ext.toEntityType
 import ejektaflex.bountiful.ext.withSibling
 import net.minecraft.entity.LivingEntity
 import net.minecraft.nbt.CompoundNBT
-import net.minecraft.util.text.ITextComponent
-import net.minecraft.util.text.StringTextComponent
-import net.minecraft.util.text.TextFormatting
-import net.minecraft.util.text.TranslationTextComponent
+import net.minecraft.util.text.*
 
 class BountyEntryEntity : BountyEntry(), IBountyObjective {
 
@@ -48,20 +44,20 @@ class BountyEntryEntity : BountyEntry(), IBountyObjective {
         return false
     }
 
-    override val formattedName: ITextComponent
-        get() = (content.toEntityType?.name ?: StringTextComponent(content))
+    override val formattedName: IFormattableTextComponent
+        get() = (StringTextComponent(content.toEntityType?.name?.unformattedComponentText ?: content))
 
     override fun tooltipObjective(progress: BountyProgress): ITextComponent {
         return StringTextComponent("").withSibling(
-                formattedName.colored(progress.color)
+                formattedName.mergeStyle(progress.color)
         ).withSibling(
                 StringTextComponent(" ")
         ).withSibling(
-                TranslationTextComponent("bountiful.bounty.type.entity.kills").colored(progress.color)
+                TranslationTextComponent("bountiful.bounty.type.entity.kills").mergeStyle(progress.color)
         ).withSibling(
                 StringTextComponent(" ")
         ).withSibling(
-                StringTextComponent(progress.stringNums).colored(TextFormatting.WHITE)
+                StringTextComponent(progress.stringNums).mergeStyle(TextFormatting.WHITE)
         )
     }
 

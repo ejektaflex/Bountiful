@@ -22,21 +22,20 @@ class BoardScreen(container: BoardContainer, inv: PlayerInventory, name: ITextCo
     }
 
     override fun drawGuiContainerBackgroundLayer(matrixStack: MatrixStack, partialTicks: Float, x: Int, y: Int) {
-        GlStateManager.color4f(1f, 1f, 1f, 1f)
         this.minecraft!!.textureManager.bindTexture(BACKGROUND)
         val x = (width - xSize) / 2
         val y = (height - ySize) / 2
         blit(matrixStack, x, y, 0, 0, xSize, ySize)
     }
 
-    /*
-    override fun render(mouseX: Int, mouseY: Int, partialTicks: Float) {
-        renderBackground()
-        super.render(mouseX, mouseY, partialTicks)
-        renderHoveredToolTip(mouseX, mouseY)
+
+    override fun render(matrixStack: MatrixStack, mouseX: Int, mouseY: Int, partialTicks: Float) {
+        renderBackground(matrixStack)
+        super.render(matrixStack, mouseX, mouseY, partialTicks)
+        renderHoveredTooltip(matrixStack, mouseX, mouseY)
     }
 
-     */
+
 
     companion object {
         private val BACKGROUND = ResourceLocation(BountifulMod.MODID, "textures/gui/container/bounty_board.png")

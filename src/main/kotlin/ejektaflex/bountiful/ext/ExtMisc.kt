@@ -63,11 +63,6 @@ fun IFormattableTextComponent.modStyle(func: Style.() -> Unit): IFormattableText
     return this
 }
 
-fun ITextComponent.colored(color: TextFormatting): ITextComponent {
-    style.color = Color.fromTextFormatting(color)
-    return this
-}
-
 fun ITextComponent.withSibling(component: ITextComponent): ITextComponent {
     siblings.add(component)
     return this

@@ -1,6 +1,5 @@
 package ejektaflex.bountiful.data.bounty
 
-import ejektaflex.bountiful.ext.colored
 import ejektaflex.bountiful.ext.withSibling
 import net.minecraft.item.ItemStack
 import net.minecraft.util.text.Color
@@ -19,13 +18,13 @@ abstract class AbstractBountyEntryStackLike : BountyEntry(), IBountyObjective, I
         return formattedName.apply {
             style.color = Color.fromTextFormatting(progress.color)
             siblings.add(StringTextComponent(" "))
-            siblings.add(StringTextComponent(progress.stringNums).colored(TextFormatting.WHITE))
+            siblings.add(StringTextComponent(progress.stringNums).mergeStyle(TextFormatting.WHITE))
         }
     }
 
     override fun tooltipReward(): ITextComponent {
-        return StringTextComponent(amount.toString() + "x ").colored(TextFormatting.WHITE).withSibling(
-                formattedName.colored(TextFormatting.AQUA)
+        return StringTextComponent(amount.toString() + "x ").mergeStyle(TextFormatting.WHITE).withSibling(
+                formattedName.mergeStyle(TextFormatting.AQUA)
         )
     }
 
