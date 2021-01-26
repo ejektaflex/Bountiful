@@ -121,7 +121,7 @@ object BountifulCommand {
                                         .requires(::hasPermission)
                                         .executes(entities())
                         )
-        
+
         )
     }
 

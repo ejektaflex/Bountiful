@@ -85,7 +85,7 @@ class BountyReloadListener : JsonReloadListener(JsonAdapter.gson, "bounties") {
             BountifulMod.logger.info("Validating pool '${it.id}'")
             val invalid = SetupLifecycle.validatePool(it, null, false)
             for (item in invalid) {
-                BountifulMod.logger.warn("Invalid pool: $item")
+                BountifulMod.logger.warn("Invalid pool item: $item")
             }
         }
 
