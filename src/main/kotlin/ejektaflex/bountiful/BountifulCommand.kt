@@ -12,7 +12,6 @@ import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
 import ejektaflex.bountiful.data.json.JsonAdapter
 import ejektaflex.bountiful.data.registry.DecreeRegistry
 import ejektaflex.bountiful.data.registry.PoolRegistry
-import ejektaflex.bountiful.ext.modStyle
 import ejektaflex.bountiful.ext.sendErrorMsg
 import ejektaflex.bountiful.ext.sendMessage
 import ejektaflex.bountiful.ext.supposedlyNotNull
@@ -153,12 +152,8 @@ object BountifulCommand {
 
         ctx.source.sendFeedback(
 
-            StringTextComponent("Dumping list of entities to ").modStyle {
-                color = Color.fromTextFormatting(TextFormatting.GOLD)
-            }.append(
-                        StringTextComponent("/logs/bountiful.log...").modStyle {
-                            color = Color.fromTextFormatting(TextFormatting.GREEN)
-                        }
+            StringTextComponent("Dumping list of entities to ").mergeStyle(TextFormatting.GOLD).append(
+                        StringTextComponent("/logs/bountiful.log...").mergeStyle(TextFormatting.GREEN)
                 ), true
         )
 
@@ -170,9 +165,7 @@ object BountifulCommand {
         }
 
         ctx.source.sendFeedback(
-                StringTextComponent("Dump complete! Took: ${time}ms").modStyle {
-                    color = Color.fromTextFormatting(TextFormatting.GOLD)
-                }, true
+                StringTextComponent("Dump complete! Took: ${time}ms").mergeStyle(TextFormatting.GOLD), true
         )
 
         1
@@ -202,11 +195,9 @@ object BountifulCommand {
                 it.source.asPlayer()
             }, MessageClipboardCopy(asText))
 
-            val msg = StringTextComponent("§aItem: §9${holding.item.registryName}§r, §aBounty Entry Copied To Clipboard!§r: §6[hover for preview]§r").modStyle {
-                hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, StringTextComponent("§6Bounty Entry (Copied to Clipboard):\n").append(
-                        StringTextComponent(asText).modStyle {
-                            color = Color.fromTextFormatting(TextFormatting.DARK_PURPLE)
-                        }
+            val msg = StringTextComponent("§aItem: §9${holding.item.registryName}§r, §aBounty Entry Copied To Clipboard!§r: §6[hover for preview]§r").apply {
+                style.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, StringTextComponent("§6Bounty Entry (Copied to Clipboard):\n").append(
+                        StringTextComponent(asText).mergeStyle(TextFormatting.DARK_PURPLE)
                 ))
             }
 

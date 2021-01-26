@@ -58,10 +58,6 @@ fun ServerPlayerEntity.sendTranslation() {
 
 }
 
-fun IFormattableTextComponent.modStyle(func: Style.() -> Unit): IFormattableTextComponent {
-    style = style.apply(func)
-    return this
-}
 
 fun ITextComponent.withSibling(component: ITextComponent): ITextComponent {
     siblings.add(component)

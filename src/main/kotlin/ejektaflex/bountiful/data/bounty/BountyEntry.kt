@@ -80,7 +80,7 @@ abstract class BountyEntry : JsonBiSerializer<BountyEntry>, INBTSerializable<Com
         }
     }
 
-    fun cloned(): BountyEntry {
+    private fun cloned(): BountyEntry {
         return clone() as BountyEntry
     }
 

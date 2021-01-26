@@ -11,9 +11,11 @@ import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.ext.edit
 import ejektaflex.bountiful.ext.sendTranslation
 import ejektaflex.bountiful.ext.toData
+import net.minecraft.block.BlockState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemModelsProperties
@@ -22,6 +24,7 @@ import net.minecraft.item.Rarity
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.ResourceLocation
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
 import net.minecraft.util.text.TranslationTextComponent
@@ -34,7 +37,7 @@ import java.util.*
 
 
 class ItemBounty : Item(
-        Item.Properties().maxStackSize(1).group(BountifulContent.BountifulGroup)
+        Properties().maxStackSize(1).group(BountifulContent.BountifulGroup)
 ), IForgeRegistryEntry<Item> {
 
     /**
@@ -90,7 +93,6 @@ class ItemBounty : Item(
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<ITextComponent>, flagIn: ITooltipFlag) {
         if (stack.hasTag()) {
             val bounty = stack.toData(::BountyData)
-            // TODO Reimplement advanced bounty tooltips
             val bountyTipInfo = bounty.tooltipInfo(worldIn!!, Minecraft.getInstance().player?.isSneaking == true)
             for (line in bountyTipInfo) {
                 tooltip.add(line)

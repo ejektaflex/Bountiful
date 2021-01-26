@@ -33,9 +33,7 @@ class ItemDecree : Item(
     override fun getTranslationKey() = "bountiful.decree"
 
     override fun getDisplayName(stack: ItemStack): ITextComponent {
-        return TranslationTextComponent(translationKey).modStyle {
-            color = Color.fromTextFormatting(TextFormatting.DARK_PURPLE)
-        }
+        return TranslationTextComponent(translationKey).mergeStyle(TextFormatting.DARK_PURPLE)
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -48,9 +46,7 @@ class ItemDecree : Item(
         if (ids != null) {
             if (stack.tag != null) {
                 val components = ids.map {
-                    TranslationTextComponent("bountiful.decree.${it}.name").modStyle {
-                        color = Color.fromTextFormatting(TextFormatting.GOLD)
-                    }
+                    TranslationTextComponent("bountiful.decree.${it}.name").mergeStyle(TextFormatting.GOLD)
                 }.forEach {
                     tooltip.add(it)
                 }
