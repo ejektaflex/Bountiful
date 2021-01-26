@@ -8,6 +8,7 @@ import ejektaflex.bountiful.ext.withSibling
 import net.minecraft.entity.LivingEntity
 import net.minecraft.nbt.CompoundNBT
 import net.minecraft.util.text.*
+import net.minecraftforge.registries.ForgeRegistries
 
 class BountyEntryEntity : BountyEntry(), IBountyObjective {
 
@@ -45,7 +46,11 @@ class BountyEntryEntity : BountyEntry(), IBountyObjective {
     }
 
     override val formattedName: IFormattableTextComponent
-        get() = (StringTextComponent(content.toEntityType?.name?.unformattedComponentText ?: content))
+        get() = TranslationTextComponent(
+            ForgeRegistries.ENTITIES.entries.find {
+                it.key.location.toString() == content
+            }?.value?.translationKey ?: "entity.generic.name"
+        )
 
     override fun tooltipObjective(progress: BountyProgress): ITextComponent {
         return StringTextComponent("").withSibling(
