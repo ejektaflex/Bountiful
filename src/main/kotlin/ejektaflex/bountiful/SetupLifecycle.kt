@@ -66,41 +66,13 @@ object SetupLifecycle {
         BountifulContent.BlockRegistry.register(MOD_BUS)
         BountifulContent.ContainerRegistry.register(MOD_BUS)
         BountifulContent.ItemRegistry.register(MOD_BUS)
-    }
 
-    @SubscribeEvent
-    fun gameSetup(event: FMLCommonSetupEvent) {
         JsonSerializers.register()
-
-        if (BountifulConfig.SERVER.villageGen.get()) {
-
-            val injectList = listOf(
-                    "village/plains/houses",
-                    "village/desert/houses",
-                    "village/savanna/houses",
-                    "village/taiga/houses",
-                    "village/snowy/houses"
-            )
-
-            // TODO Re-implement village generation
-
-            /*
-            for (place in injectList) {
-                JigsawJank.create().append(ResourceLocation("minecraft", place)) {
-                    listOf(Pair.of(SingleJigsawPiece("bountiful:village/common/bounty_gazebo"),
-                            BountifulConfig.SERVER.villageGenRate.get()
-                    ))
-                }
-            }
-
-             */
-
-        }
 
         //BountifulTriggers.register()
         BountifulStats.init()
-
     }
+
 
     fun validatePool(pool: EntryPool, sender: CommandSource? = null, log: Boolean = false): MutableList<BountyEntry> {
 

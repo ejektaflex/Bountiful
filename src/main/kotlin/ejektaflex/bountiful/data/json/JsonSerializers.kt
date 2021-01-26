@@ -11,6 +11,7 @@ import ejektaflex.bountiful.data.bounty.enums.BountyType
 object JsonSerializers {
 
     fun register() {
+        println("BOREG registering json ser")
         JsonAdapter.register(bountyDeserializer)
         JsonAdapter.register(bountySerializer)
     }
