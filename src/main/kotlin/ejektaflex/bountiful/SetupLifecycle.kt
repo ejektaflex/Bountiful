@@ -123,7 +123,6 @@ object SetupLifecycle {
     }
 
 
-
     @SubscribeEvent
     fun anvilEvent(event: AnvilUpdateEvent) {
         val result = ItemDecree.combine(event.left, event.right)

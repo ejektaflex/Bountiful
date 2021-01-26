@@ -21,6 +21,7 @@ object BountifulContent {
     val BlockRegistry = KDeferredRegister(ForgeRegistries.BLOCKS, BountifulMod.MODID)
     val TileEntityRegistry = KDeferredRegister(ForgeRegistries.TILE_ENTITIES, BountifulMod.MODID)
     val ItemRegistry = KDeferredRegister(ForgeRegistries.ITEMS, BountifulMod.MODID)
+    val FeatureRegistry = KDeferredRegister(ForgeRegistries.FEATURES, BountifulMod.MODID)
 
     val BOUNTYBOARD by BlockRegistry.registerObject("bountyboard") {
         BlockBountyBoard()

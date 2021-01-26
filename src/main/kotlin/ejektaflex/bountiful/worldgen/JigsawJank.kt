@@ -1,5 +1,24 @@
 package ejektaflex.bountiful.worldgen
 
+import com.google.common.collect.ImmutableList
+import com.mojang.datafixers.util.Either
+import com.mojang.datafixers.util.Pair
+import ejektaflex.bountiful.BountifulMod
+import net.minecraft.client.Minecraft
+import net.minecraft.util.ResourceLocation
+import net.minecraft.util.registry.Registry
+import net.minecraft.world.gen.feature.jigsaw.JigsawPattern
+import net.minecraft.world.gen.feature.jigsaw.JigsawPattern.PlacementBehaviour
+import net.minecraft.world.gen.feature.jigsaw.JigsawPatternRegistry
+import net.minecraft.world.gen.feature.jigsaw.JigsawPiece
+import net.minecraft.world.gen.feature.jigsaw.LegacySingleJigsawPiece
+import net.minecraft.world.gen.feature.structure.PlainsVillagePools
+import net.minecraft.world.gen.feature.template.ProcessorLists
+import net.minecraft.world.gen.feature.template.StructureProcessorList
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper
+import java.util.function.Function
+import java.util.function.Supplier
+
 /**
  * @author pau101, Paul Fulham. All credit for this class goes to him!
  * Original file: https://gist.github.com/pau101/7d2beb32fd77fe9a870d48ac9b81d862
@@ -7,6 +26,42 @@ package ejektaflex.bountiful.worldgen
  */
 
 // TODO reimplement village generation
+
+fun main() {
+
+    JigsawPatternRegistry.func_244094_a(
+        JigsawPattern(
+            ResourceLocation("bountiful:village/common/bounty_board_centerz"), ResourceLocation("empty"), ImmutableList.of(
+                Pair.of(JigsawPiece.func_242849_a("bountiful:village/common/bounty_gazebo"), 10)
+            ), PlacementBehaviour.RIGID
+        )
+    )
+
+    //val pool = PlainsVillagePools.field_244090_a
+
+    val pool = Minecraft.getInstance().integratedServer!!.func_244267_aX()
+        .getRegistry(Registry.JIGSAW_POOL_KEY).entries
+        .find { it.key.location.toString() == "minecraft:village/plains/houses" }?.value;
+
+    val list = ObfuscationReflectionHelper
+        .getPrivateValue<ArrayList<JigsawPiece>, JigsawPattern>(
+            JigsawPattern::class.java,
+            pool,
+            "jigsawPieces"
+        ) as MutableList<JigsawPiece>;
+
+    val piece = JigsawPiece.func_242849_a("bountiful:village/common/bounty_gazebo").apply(PlacementBehaviour.RIGID)
+
+    repeat(100) {
+        list.add(piece)
+        println("OK! $piece")
+    }
+
+
+
+
+
+}
 
 /*
 class JigsawJank private constructor(private val registry: OperatorRegistry) {
