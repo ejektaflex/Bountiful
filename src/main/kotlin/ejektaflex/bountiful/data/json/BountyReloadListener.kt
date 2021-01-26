@@ -10,6 +10,7 @@ import ejektaflex.bountiful.data.registry.DecreeRegistry
 import ejektaflex.bountiful.data.registry.PoolRegistry
 import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.data.structure.EntryPool
+import ejektaflex.bountiful.util.ValueRegistry
 import net.minecraft.client.resources.JsonReloadListener
 import net.minecraft.item.crafting.IRecipe
 import net.minecraft.item.crafting.IRecipeType
@@ -19,6 +20,7 @@ import net.minecraft.resources.IResourceManager
 import net.minecraft.util.JSONUtils
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.common.crafting.CraftingHelper
+import net.minecraftforge.fml.ModList
 import java.lang.IllegalArgumentException
 import java.util.function.Function
 
@@ -45,7 +47,6 @@ class BountyReloadListener : JsonReloadListener(JsonAdapter.gson, "bounties") {
             println("BoReloader has type of file: $typeOfFile")
 
             val loaded = JsonAdapter.fromJson(element, typeOfFile.klazz)
-            //val loaded = JsonAdapter.fromJsonExp(element.toString(), typeOfFile.klazz)
 
             println("BoReloader loaded this: $loaded")
 
@@ -53,7 +54,7 @@ class BountyReloadListener : JsonReloadListener(JsonAdapter.gson, "bounties") {
                 is Decree -> decreeMap.getOrPut(rl.path.substringAfter('/')) { mutableListOf() }.add(loaded.also { it.id =
                     BountifulMod.rlFileNameNoExt(rl)
                 })
-                is EntryPool -> poolMap.getOrPut(rl.path.substringAfter('/')) { mutableListOf() }.add(loaded.also { it.id =
+                is EntryPool -> poolMap.getOrPut(rl.path.substringAfter('/').substringAfter('/').also { println("DERP: $it") }) { mutableListOf() }.add(loaded.also { it.id =
                     BountifulMod.rlFileNameNoExt(rl)
                 })
             }
@@ -62,7 +63,7 @@ class BountyReloadListener : JsonReloadListener(JsonAdapter.gson, "bounties") {
         // Merge decrees and pools based on paths
 
         val decreesMapped = decreeMap.map { entry -> entry.key to entry.value.reduce { a, b ->
-            a.merge(b)
+            if (b.canLoad) a.merge(b) else a
         } }.toMap().values.toList()
 
         DecreeRegistry.restore(decreesMapped)
@@ -70,13 +71,19 @@ class BountyReloadListener : JsonReloadListener(JsonAdapter.gson, "bounties") {
         println("BoReg Decs: ${DecreeRegistry.ids}")
 
         val poolsMapped = poolMap.map { entry -> entry.key to entry.value.reduce { a, b ->
-            a.merge(b)
+            if (b.canLoad) a.merge(b) else a
         } }.toMap().values.toList()
 
         PoolRegistry.restore(poolsMapped)
 
         println("BoReg Pools: ${PoolRegistry.content.map { it.id }}")
 
+
+    }
+
+    fun <T : Any> restore(reg: ValueRegistry<T>, inMap: Map<String, List<T>>) {
+
+        ModList.get().mods.map { it.modId }
 
     }
 
