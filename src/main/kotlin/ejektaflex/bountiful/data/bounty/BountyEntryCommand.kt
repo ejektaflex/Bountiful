@@ -5,7 +5,9 @@ import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.data.bounty.enums.BountyType
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.util.text.*
+import net.minecraft.util.text.IFormattableTextComponent
+import net.minecraft.util.text.StringTextComponent
+import net.minecraft.util.text.TextFormatting
 
 class BountyEntryCommand : BountyEntry(), IBountyReward {
 

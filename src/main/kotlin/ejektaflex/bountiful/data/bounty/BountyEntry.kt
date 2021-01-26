@@ -12,7 +12,6 @@ import ejektaflex.bountiful.util.ItemRange
 import net.minecraft.nbt.CompoundNBT
 import net.minecraft.nbt.JsonToNBT
 import net.minecraft.util.text.IFormattableTextComponent
-import net.minecraft.util.text.ITextComponent
 import net.minecraftforge.common.util.INBTSerializable
 import kotlin.math.abs
 import kotlin.math.ceil

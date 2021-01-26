@@ -14,7 +14,6 @@ import net.minecraft.client.resources.I18n
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundNBT
 import net.minecraft.util.NonNullList
-import net.minecraft.util.text.Color
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.TextFormatting
 import net.minecraft.util.text.TranslationTextComponent
@@ -232,7 +231,7 @@ class BountyData : INBTSerializable<CompoundNBT> {
             // If there are no objectives within variance from target worth, just get the one with the smallest distance
             // Otherwise, if one/some exist, pick at random.
             return if (inVariance.isEmpty()) {
-                objectives.minBy { it.worthDistanceFrom(worth) }!!.pick(worth)
+                objectives.minByOrNull { it.worthDistanceFrom(worth) }!!.pick(worth)
             } else {
                 inVariance.hackyRandom().pick(worth)
             }

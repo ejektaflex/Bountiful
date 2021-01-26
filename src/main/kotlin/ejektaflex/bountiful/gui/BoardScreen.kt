@@ -1,7 +1,6 @@
 package ejektaflex.bountiful.gui
 
 import com.mojang.blaze3d.matrix.MatrixStack
-import com.mojang.blaze3d.platform.GlStateManager
 import ejektaflex.bountiful.BountifulMod
 import net.minecraft.client.gui.screen.inventory.ContainerScreen
 import net.minecraft.client.resources.I18n

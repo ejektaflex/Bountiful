@@ -23,7 +23,6 @@ import net.minecraft.command.Commands.argument
 import net.minecraft.command.Commands.literal
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.resources.IResourceManager
-import net.minecraft.util.text.Color
 import net.minecraft.util.text.StringTextComponent
 import net.minecraft.util.text.TextFormatting
 import net.minecraft.util.text.event.HoverEvent

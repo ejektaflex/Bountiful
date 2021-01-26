@@ -1,18 +1,5 @@
 package ejektaflex.bountiful.worldgen
 
-import com.google.common.collect.ImmutableList
-import com.mojang.datafixers.util.Pair
-import net.minecraft.util.ResourceLocation
-import net.minecraft.world.gen.feature.jigsaw.JigsawManager
-import net.minecraft.world.gen.feature.jigsaw.JigsawPattern
-import net.minecraft.world.gen.feature.jigsaw.JigsawPattern.PlacementBehaviour
-import net.minecraft.world.gen.feature.jigsaw.JigsawPatternRegistry
-import net.minecraft.world.gen.feature.jigsaw.JigsawPiece
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper
-import org.apache.commons.lang3.reflect.FieldUtils
-import java.util.*
-import java.util.function.UnaryOperator
-
 /**
  * @author pau101, Paul Fulham. All credit for this class goes to him!
  * Original file: https://gist.github.com/pau101/7d2beb32fd77fe9a870d48ac9b81d862

@@ -1,12 +1,11 @@
 package ejektaflex.bountiful.gui.slot
 
-import ejektaflex.bountiful.BountifulStats
 //import ejektaflex.bountiful.advancement.BountifulTriggers
+import ejektaflex.bountiful.BountifulStats
 import ejektaflex.bountiful.block.BoardTileEntity
 import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.item.ItemBounty
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.ServerPlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraftforge.items.SlotItemHandler
 

@@ -1,12 +1,5 @@
 package ejektaflex.bountiful.advancement
 
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonObject
-import net.minecraft.advancements.ICriterionTrigger
-import net.minecraft.advancements.PlayerAdvancements
-import net.minecraft.advancements.criterion.CriterionInstance
-import net.minecraft.loot.ConditionArrayParser
-import net.minecraft.util.ResourceLocation
 /*
 class BountifulTrigger(val resId: ResourceLocation) : ICriterionTrigger<CriterionInstance> {
 

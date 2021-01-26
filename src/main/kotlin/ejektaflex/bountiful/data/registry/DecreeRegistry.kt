@@ -1,9 +1,9 @@
 package ejektaflex.bountiful.data.registry
 
 import ejektaflex.bountiful.data.bounty.BountyEntry
-import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.data.bounty.IBountyObjective
 import ejektaflex.bountiful.data.bounty.IBountyReward
+import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.util.ValueRegistry
 import net.minecraftforge.fml.ModList
 

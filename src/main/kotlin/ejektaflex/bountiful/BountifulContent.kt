@@ -6,11 +6,13 @@ import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.item.ItemDecree
 import net.minecraft.inventory.container.ContainerType
-import net.minecraft.item.*
+import net.minecraft.item.BlockItem
+import net.minecraft.item.Item
+import net.minecraft.item.ItemGroup
+import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntityType
 import net.minecraftforge.common.extensions.IForgeContainerType
 import net.minecraftforge.registries.ForgeRegistries
-import net.minecraftforge.registries.ObjectHolder
 import thedarkcolour.kotlinforforge.forge.KDeferredRegister
 
 object BountifulContent {

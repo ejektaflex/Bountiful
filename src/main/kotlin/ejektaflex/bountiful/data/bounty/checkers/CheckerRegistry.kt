@@ -1,14 +1,12 @@
 package ejektaflex.bountiful.data.bounty.checkers
 
 import ejektaflex.bountiful.BountifulStats
-import ejektaflex.bountiful.advancement.BountifulTriggers
 import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.data.bounty.BountyProgress
 import ejektaflex.bountiful.data.bounty.IBountyReward
 import ejektaflex.bountiful.util.ValueRegistry
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.ServerPlayerEntity
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 

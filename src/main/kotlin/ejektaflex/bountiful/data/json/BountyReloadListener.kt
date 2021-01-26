@@ -1,30 +1,17 @@
 package ejektaflex.bountiful.data.json
 
-import com.google.common.collect.ImmutableMap
 import com.google.gson.JsonElement
-import com.google.gson.JsonParseException
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.SetupLifecycle
 import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
-import ejektaflex.bountiful.data.bounty.enums.BountyType
 import ejektaflex.bountiful.data.registry.DecreeRegistry
 import ejektaflex.bountiful.data.registry.PoolRegistry
 import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.data.structure.EntryPool
-import ejektaflex.bountiful.util.IMerge
-import ejektaflex.bountiful.util.ValueRegistry
 import net.minecraft.client.resources.JsonReloadListener
-import net.minecraft.item.crafting.IRecipe
-import net.minecraft.item.crafting.IRecipeType
-import net.minecraft.item.crafting.RecipeManager
 import net.minecraft.profiler.IProfiler
 import net.minecraft.resources.IResourceManager
-import net.minecraft.util.JSONUtils
 import net.minecraft.util.ResourceLocation
-import net.minecraftforge.common.crafting.CraftingHelper
-import net.minecraftforge.fml.ModList
-import java.lang.IllegalArgumentException
-import java.util.function.Function
 
 class BountyReloadListener : JsonReloadListener(JsonAdapter.gson, "bounties") {
 
@@ -107,12 +94,5 @@ class BountyReloadListener : JsonReloadListener(JsonAdapter.gson, "bounties") {
         BountifulMod.logger.info("Found Entry Pools: ${PoolRegistry.ids}")
 
     }
-
-    fun <T : Any> restore(reg: ValueRegistry<T>, inMap: Map<String, List<T>>) {
-
-        ModList.get().mods.map { it.modId }
-
-    }
-
 
 }

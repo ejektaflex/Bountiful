@@ -2,7 +2,6 @@ package ejektaflex.bountiful.data.bounty
 
 import ejektaflex.bountiful.ext.withSibling
 import net.minecraft.item.ItemStack
-import net.minecraft.util.text.Color
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
 import net.minecraft.util.text.TextFormatting

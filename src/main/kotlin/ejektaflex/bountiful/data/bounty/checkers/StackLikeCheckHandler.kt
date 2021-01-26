@@ -1,10 +1,6 @@
 package ejektaflex.bountiful.data.bounty.checkers
 
-import ejektaflex.bountiful.data.bounty.AbstractBountyEntryStackLike
-import ejektaflex.bountiful.data.bounty.BountyEntry
-import ejektaflex.bountiful.data.bounty.BountyEntryItem
-import ejektaflex.bountiful.data.bounty.BountyEntryItemTag
-import ejektaflex.bountiful.data.bounty.BountyProgress
+import ejektaflex.bountiful.data.bounty.*
 import net.minecraft.item.ItemStack
 
 class StackLikeCheckHandler : CheckHandler<BountyEntryItem>() {

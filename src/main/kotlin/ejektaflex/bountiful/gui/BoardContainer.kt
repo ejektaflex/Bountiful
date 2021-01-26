@@ -8,18 +8,10 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.container.Container
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTUtil.readBlockPos
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
+import net.minecraft.network.PacketBuffer
 import net.minecraftforge.items.IItemHandler
 import net.minecraftforge.items.SlotItemHandler
 import net.minecraftforge.items.wrapper.InvWrapper
-import net.minecraft.tileentity.TileEntity
-
-import net.minecraft.network.PacketBuffer
-
-
-
 
 
 class BoardContainer(val windowId: Int, val inv: PlayerInventory, val boardTE: BoardTileEntity) : Container(BountifulContent.BOARDCONTAINER, windowId) {
