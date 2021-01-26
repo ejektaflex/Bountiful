@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap
 import com.google.gson.JsonElement
 import com.google.gson.JsonParseException
 import ejektaflex.bountiful.BountifulMod
+import ejektaflex.bountiful.SetupLifecycle
 import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
 import ejektaflex.bountiful.data.bounty.enums.BountyType
 import ejektaflex.bountiful.data.registry.DecreeRegistry
@@ -68,16 +69,26 @@ class BountyReloadListener : JsonReloadListener(JsonAdapter.gson, "bounties") {
 
         DecreeRegistry.restore(decreesMapped)
 
-        println("BoReg Decs: ${DecreeRegistry.ids}")
+        BountifulMod.logger.info("Found decrees: ${DecreeRegistry.ids}")
 
         val poolsMapped = poolMap.map { entry -> entry.key to entry.value.reduce { a, b ->
             if (b.canLoad) a.merge(b) else a
         } }.toMap().values.toList()
 
+
+        BountifulMod.logger.info("Validating Entry Pools..")
+
+        poolsMapped.forEach {
+            BountifulMod.logger.info("Validating pool '${it.id}'")
+            val invalid = SetupLifecycle.validatePool(it, null, false)
+            for (item in invalid) {
+                BountifulMod.logger.warn("Invalid pool: $item")
+            }
+        }
+
         PoolRegistry.restore(poolsMapped)
 
-        println("BoReg Pools: ${PoolRegistry.content.map { it.id }}")
-
+        BountifulMod.logger.info("Found Entry Pools: ${PoolRegistry.ids}")
 
     }
 

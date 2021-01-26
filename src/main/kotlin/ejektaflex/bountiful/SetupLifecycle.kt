@@ -1,58 +1,28 @@
 package ejektaflex.bountiful
 
-import com.mojang.datafixers.util.Pair
-import ejektaflex.bountiful.advancement.BountifulTriggers
-import ejektaflex.bountiful.block.BoardTileEntity
 import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.data.bounty.BountyEntryEntity
-import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
 import ejektaflex.bountiful.data.json.BountyReloadListener
 import ejektaflex.bountiful.data.json.JsonSerializers
 import ejektaflex.bountiful.data.structure.DecreeList
 import ejektaflex.bountiful.data.structure.EntryPool
-import ejektaflex.bountiful.ext.getUnsortedList
 import ejektaflex.bountiful.ext.sendErrorMsg
 import ejektaflex.bountiful.ext.sendMessage
 import ejektaflex.bountiful.ext.toData
-import ejektaflex.bountiful.gui.BoardContainer
-import ejektaflex.bountiful.gui.BoardScreen
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.item.ItemDecree
 //import ejektaflex.bountiful.worldgen.JigsawJank
-import net.minecraft.block.Block
-import net.minecraft.client.gui.ScreenManager
 import net.minecraft.command.CommandSource
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.inventory.container.ContainerType
-import net.minecraft.item.Item
-import net.minecraft.item.ItemModelsProperties
-import net.minecraft.item.ItemStack
-import net.minecraft.resources.IResourceManager
-import net.minecraft.resources.IResourceManagerReloadListener
-import net.minecraft.tileentity.TileEntityType
-import net.minecraft.util.ResourceLocation
-import net.minecraft.world.gen.feature.jigsaw.SingleJigsawPiece
-import net.minecraftforge.common.BasicTrade
-import net.minecraftforge.common.extensions.IForgeContainerType
 import net.minecraftforge.event.AddReloadListenerEvent
 import net.minecraftforge.event.AnvilUpdateEvent
 import net.minecraftforge.event.RegisterCommandsEvent
-import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.event.entity.living.LivingDeathEvent
-import net.minecraftforge.event.village.VillagerTradesEvent
-import net.minecraftforge.event.village.WandererTradesEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
-import net.minecraftforge.fml.DeferredWorkQueue
-import net.minecraftforge.fml.ModList
 import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
-import java.util.function.Supplier
 import kotlin.math.min
 
 @Mod.EventBusSubscriber
@@ -78,7 +48,7 @@ object SetupLifecycle {
 
         sender?.sendMessage("Validating pool '${pool.id}'")
 
-        val validEntries = mutableListOf<BountyEntry>()
+        val invalidEntries = mutableListOf<BountyEntry>()
 
         if (log) {
             BountifulMod.logger.info("Pool: ${pool.id}")
@@ -89,20 +59,19 @@ object SetupLifecycle {
             }
             try {
                 entry.validate()
-                validEntries.add(entry)
             } catch (e: Exception) {
                 sender?.sendErrorMsg(e.message!!)
+                invalidEntries.add(entry)
             }
         }
 
-        return validEntries
+        return invalidEntries
     }
 
     // Update mob bounties
     @SubscribeEvent
     fun entityLivingDeath(e: LivingDeathEvent) {
         val deadEntity = e.entityLiving
-
 
         if (e.source.trueSource is PlayerEntity) {
             val player = e.source.trueSource as PlayerEntity
