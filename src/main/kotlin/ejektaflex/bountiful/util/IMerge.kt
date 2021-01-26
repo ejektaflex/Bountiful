@@ -4,6 +4,6 @@ interface IMerge<T : Any> : IIdentifiable {
 
     val canLoad: Boolean
 
-    fun merge(other: T)
+    fun merge(other: T): T
 
 }

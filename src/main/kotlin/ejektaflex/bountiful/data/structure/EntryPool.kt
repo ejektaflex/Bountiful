@@ -25,9 +25,10 @@ open class EntryPool : ValueRegistry<BountyEntry>(), IMerge<EntryPool>, IIdentif
             }
         }
 
-    override fun merge(other: EntryPool) {
+    override fun merge(other: EntryPool): EntryPool {
         content.addAll(other.content)
         modsRequired = other.modsRequired
+        return this
     }
 
 

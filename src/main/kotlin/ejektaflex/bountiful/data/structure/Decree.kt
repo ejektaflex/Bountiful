@@ -27,9 +27,10 @@ data class Decree(
         id = nbt!!.getString("id")
     }
 
-    override fun merge(other: Decree) {
+    override fun merge(other: Decree): Decree {
         objectivePools = mutableSetOf(*(objectivePools + other.objectivePools).toTypedArray()).toMutableList()
         rewardPools = mutableSetOf(*(rewardPools + other.rewardPools).toTypedArray()).toMutableList()
+        return this
     }
 
     companion object {
