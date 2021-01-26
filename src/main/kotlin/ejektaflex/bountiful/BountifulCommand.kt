@@ -18,6 +18,7 @@ import ejektaflex.bountiful.ext.supposedlyNotNull
 import ejektaflex.bountiful.item.ItemDecree
 import ejektaflex.bountiful.network.BountifulNetwork
 import ejektaflex.bountiful.network.MessageClipboardCopy
+import net.minecraft.client.Minecraft
 import net.minecraft.command.CommandSource
 import net.minecraft.command.Commands.argument
 import net.minecraft.command.Commands.literal
@@ -120,21 +121,7 @@ object BountifulCommand {
                                         .requires(::hasPermission)
                                         .executes(entities())
                         )
-
-                        .then(
-                                literal("reload")
-                                        .requires(::hasPermission)
-                                        .executes(reload())
-                        ).apply {
-                            if (BountifulMod.config.debugMode) {
-                                /*
-                                then(
-                                        literal("debug_reinitDefaultContent").executes(reinitDefaultContent())
-                                )
-
-                                 */
-                            }
-                        }
+        
         )
     }
 
@@ -204,15 +191,6 @@ object BountifulCommand {
 
         } else {
             it.source.sendErrorMsg("Must be a player to check their hand")
-        }
-
-        1
-    }
-
-    private fun reload() = Command<CommandSource> {
-
-        BountifulResourceType.values().forEach { type ->
-            //BountifulMod.reloadBountyData(it.source.server, it.source.server.resourceManager, type, it.source)
         }
 
         1
@@ -293,7 +271,16 @@ object BountifulCommand {
         it.source.sendMessage("Dumping Pools to console...")
         for (pool in PoolRegistry.content) {
 
-            SetupLifecycle.validatePool(pool, it.source, true)
+            val invalid = SetupLifecycle.validatePool(pool, it.source, true)
+
+            if (invalid.isNotEmpty()) {
+                it.source.sendMessage("Some items are invalid. Invalid entries have been printed in the log.")
+
+                for (item in invalid) {
+                    BountifulMod.logger.warn("Invalid item from pool '${pool.id}': $item")
+                }
+
+            }
 
         }
         it.source.sendMessage("Pools dumped.")
