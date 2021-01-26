@@ -11,6 +11,7 @@ import ejektaflex.bountiful.data.registry.DecreeRegistry
 import ejektaflex.bountiful.data.registry.PoolRegistry
 import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.data.structure.EntryPool
+import ejektaflex.bountiful.util.IMerge
 import ejektaflex.bountiful.util.ValueRegistry
 import net.minecraft.client.resources.JsonReloadListener
 import net.minecraft.item.crafting.IRecipe
@@ -36,28 +37,38 @@ class BountyReloadListener : JsonReloadListener(JsonAdapter.gson, "bounties") {
         val decreeMap = mutableMapOf<String, MutableList<Decree>>()
         val poolMap = mutableMapOf<String, MutableList<EntryPool>>()
 
+        BountifulMod.logger.info("Loading Bounty Data. We will probably skip some data since certain mods are not loaded.")
+
         for ((rl, element) in objectIn) {
             if (rl.path.startsWith("_")) { continue }
 
-            println("BoReloader wants to load resource at: $rl. It is: $element")
+            //BountifulMod.logger.info("Loading resource at $rl.")
+
             val toGrab = rl.path.substringBefore('/')
 
-            println("TOGRAB: $toGrab")
-
             val typeOfFile = BountifulResourceType.values().find { it.folderName == toGrab } ?: continue // ignore non resource types!
-            println("BoReloader has type of file: $typeOfFile")
 
             val loaded = JsonAdapter.fromJson(element, typeOfFile.klazz)
 
-            println("BoReloader loaded this: $loaded")
-
             when (loaded) {
-                is Decree -> decreeMap.getOrPut(rl.path.substringAfter('/')) { mutableListOf() }.add(loaded.also { it.id =
-                    BountifulMod.rlFileNameNoExt(rl)
-                })
-                is EntryPool -> poolMap.getOrPut(rl.path.substringAfter('/').substringAfter('/').also { println("DERP: $it") }) { mutableListOf() }.add(loaded.also { it.id =
-                    BountifulMod.rlFileNameNoExt(rl)
-                })
+                is Decree -> {
+                    decreeMap.getOrPut(rl.path.substringAfter('/')) { mutableListOf() }.add(loaded.also { it.id =
+                        BountifulMod.rlFileNameNoExt(rl)
+                    })
+                }
+                is EntryPool -> {
+                    if (!loaded.canLoad) {
+                        BountifulMod.logger.info("Skipping load of $rl as dependencies are not met: ${loaded.modsRequired}")
+                        continue
+                    }
+                    poolMap.getOrPut(
+                        rl.path
+                            .substringAfter('/')
+                            .substringAfter('/')
+                    ) { mutableListOf() }.add(loaded.also { it.id =
+                        BountifulMod.rlFileNameNoExt(rl)
+                    })
+                }
             }
         }
 
@@ -71,8 +82,13 @@ class BountyReloadListener : JsonReloadListener(JsonAdapter.gson, "bounties") {
 
         BountifulMod.logger.info("Found decrees: ${DecreeRegistry.ids}")
 
+        BountifulMod.logger.info("Merging Entry Pools..")
+
+
         val poolsMapped = poolMap.map { entry -> entry.key to entry.value.reduce { a, b ->
-            if (b.canLoad) a.merge(b) else a
+            if (b.canLoad) a.merge(b) else a.also {
+                BountifulMod.logger.info("Not merging ${b.id} which requires ${b.modsRequired}")
+            }
         } }.toMap().values.toList()
 
 
