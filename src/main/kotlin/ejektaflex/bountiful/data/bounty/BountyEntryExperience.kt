@@ -5,12 +5,10 @@ import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.BountifulConfig
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.data.bounty.enums.BountyType
+import ejektaflex.bountiful.ext.withSibling
 import net.minecraft.entity.item.ExperienceOrbEntity
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.util.text.ITextComponent
-import net.minecraft.util.text.StringTextComponent
-import net.minecraft.util.text.TextFormatting
-import net.minecraft.util.text.TranslationTextComponent
+import net.minecraft.util.text.*
 
 class BountyEntryExperience : BountyEntry(), IBountyObjective, IBountyReward {
 
@@ -21,7 +19,7 @@ class BountyEntryExperience : BountyEntry(), IBountyObjective, IBountyReward {
     override val calculatedWorth: Int
         get() = unitWorth * amount
 
-    override val formattedName: ITextComponent
+    override val formattedName: IFormattableTextComponent
         get() = when (content) {
             "levels" -> TranslationTextComponent("bountiful.bounty.type.experience.levels")
             "points" -> TranslationTextComponent("bountiful.bounty.type.experience.points")
@@ -29,12 +27,8 @@ class BountyEntryExperience : BountyEntry(), IBountyObjective, IBountyReward {
         }
 
     override fun tooltipReward(): ITextComponent {
-        return StringTextComponent(amount.toString() + "x ").applyTextStyle {
-            it.color = TextFormatting.WHITE
-        }.appendSibling(
-                formattedName.applyTextStyle {
-                    it.color = TextFormatting.AQUA
-                }
+        return StringTextComponent(amount.toString() + "x ").mergeStyle(TextFormatting.WHITE).withSibling(
+                formattedName.mergeStyle(TextFormatting.AQUA)
         )
     }
 
@@ -66,10 +60,8 @@ class BountyEntryExperience : BountyEntry(), IBountyObjective, IBountyReward {
     }
 
     override fun tooltipObjective(progress: BountyProgress): ITextComponent {
-        return StringTextComponent(progress.stringNums).applyTextStyle {
-            it.color = progress.color
-        }.appendSibling(
-                formattedName
+        return StringTextComponent(progress.stringNums).mergeStyle(progress.color).withSibling(
+            formattedName
         )
     }
 

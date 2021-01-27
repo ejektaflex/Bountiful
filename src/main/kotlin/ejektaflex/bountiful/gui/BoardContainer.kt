@@ -8,17 +8,21 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.container.Container
 import net.minecraft.item.ItemStack
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
+import net.minecraft.network.PacketBuffer
 import net.minecraftforge.items.IItemHandler
 import net.minecraftforge.items.SlotItemHandler
 import net.minecraftforge.items.wrapper.InvWrapper
 
 
-class BoardContainer(id: Int, val world: World, val pos: BlockPos, val inv: PlayerInventory) : Container(BountifulContent.Guis.BOARDCONTAINER, id) {
+class BoardContainer(val windowId: Int, val inv: PlayerInventory, val boardTE: BoardTileEntity) : Container(BountifulContent.BOARDCONTAINER, windowId) {
 
-    private val boardTE: BoardTileEntity by lazy {
-        world.getTileEntity(pos) as BoardTileEntity
+    constructor(inWindow: Int, inInv: PlayerInventory, data: PacketBuffer) : this(inWindow, inInv, getTileEntity(inInv, data))
+
+    companion object {
+        fun getTileEntity(inv: PlayerInventory, data: PacketBuffer): BoardTileEntity {
+            val tileAtPos = inv.player.world.getTileEntity(data.readBlockPos())
+            return tileAtPos as? BoardTileEntity ?: throw IllegalStateException("Tile entity is not correct! $tileAtPos")
+        }
     }
 
     private val playerInvHandler: IItemHandler by lazy {

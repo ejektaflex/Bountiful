@@ -1,12 +1,6 @@
 package ejektaflex.bountiful.advancement
 
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonObject
-import net.minecraft.advancements.ICriterionTrigger
-import net.minecraft.advancements.PlayerAdvancements
-import net.minecraft.advancements.criterion.CriterionInstance
-import net.minecraft.util.ResourceLocation
-
+/*
 class BountifulTrigger(val resId: ResourceLocation) : ICriterionTrigger<CriterionInstance> {
 
     var listeners: MutableMap<PlayerAdvancements, MutableSet<ICriterionTrigger.Listener<CriterionInstance>>?> = mutableMapOf()
@@ -38,4 +32,7 @@ class BountifulTrigger(val resId: ResourceLocation) : ICriterionTrigger<Criterio
         }
     }
 
+
 }
+
+ */

@@ -7,7 +7,7 @@ import ejektaflex.bountiful.ext.toItemStack
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
-import net.minecraft.util.text.ITextComponent
+import net.minecraft.util.text.IFormattableTextComponent
 import net.minecraft.util.text.StringTextComponent
 import net.minecraftforge.items.ItemHandlerHelper
 import kotlin.math.min
@@ -18,8 +18,8 @@ class BountyEntryItem : AbstractBountyEntryStackLike(), IBountyObjective, IBount
     @SerializedName("type")
     override var bType: String = BountyType.Item.id
 
-    override val formattedName: ITextComponent
-        get() = StringTextComponent(itemStack?.displayName!!.formattedText)
+    override val formattedName: IFormattableTextComponent
+        get() = StringTextComponent(itemStack?.displayName!!.string) // .formattedName?
 
     val itemStack: ItemStack?
         get() {

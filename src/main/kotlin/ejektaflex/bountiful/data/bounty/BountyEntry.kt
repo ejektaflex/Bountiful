@@ -11,7 +11,7 @@ import ejektaflex.bountiful.util.IWeighted
 import ejektaflex.bountiful.util.ItemRange
 import net.minecraft.nbt.CompoundNBT
 import net.minecraft.nbt.JsonToNBT
-import net.minecraft.util.text.ITextComponent
+import net.minecraft.util.text.IFormattableTextComponent
 import net.minecraftforge.common.util.INBTSerializable
 import kotlin.math.abs
 import kotlin.math.ceil
@@ -79,7 +79,7 @@ abstract class BountyEntry : JsonBiSerializer<BountyEntry>, INBTSerializable<Com
         }
     }
 
-    fun cloned(): BountyEntry {
+    private fun cloned(): BountyEntry {
         return clone() as BountyEntry
     }
 
@@ -143,6 +143,6 @@ abstract class BountyEntry : JsonBiSerializer<BountyEntry>, INBTSerializable<Com
         }
     }
 
-    abstract val formattedName: ITextComponent
+    abstract val formattedName: IFormattableTextComponent
 
 }

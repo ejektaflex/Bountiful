@@ -73,21 +73,10 @@ class BountyData : INBTSerializable<CompoundNBT> {
 
 
         return listOf(
-                listOf(
-                        TranslationTextComponent("bountiful.tooltip.required").applyTextStyle {
-                            it.color = TextFormatting.GOLD
-                        }
-                ) +
+                listOf(TranslationTextComponent("bountiful.tooltip.required").mergeStyle(TextFormatting.GOLD)) +
                         objs +
-                        listOf(
-                                TranslationTextComponent("bountiful.tooltip.rewards").applyTextStyle {
-                                    it.color = TextFormatting.GOLD
-                                }
-                        ) +
-                        rews +
-                        listOf(
-                                //TranslationTextComponent("bountiful.tooltip.advanced")
-                        )
+                        listOf(TranslationTextComponent("bountiful.tooltip.rewards").mergeStyle(TextFormatting.GOLD)) +
+                        rews
         ).flatten()
 
     }
@@ -242,7 +231,7 @@ class BountyData : INBTSerializable<CompoundNBT> {
             // If there are no objectives within variance from target worth, just get the one with the smallest distance
             // Otherwise, if one/some exist, pick at random.
             return if (inVariance.isEmpty()) {
-                objectives.minBy { it.worthDistanceFrom(worth) }!!.pick(worth)
+                objectives.minByOrNull { it.worthDistanceFrom(worth) }!!.pick(worth)
             } else {
                 inVariance.hackyRandom().pick(worth)
             }

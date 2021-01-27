@@ -4,8 +4,10 @@ import ejektaflex.bountiful.util.IWeighted
 import ejektaflex.bountiful.util.ItemRange
 import net.minecraft.command.CommandSource
 import net.minecraft.entity.Entity
+import net.minecraft.entity.player.ServerPlayerEntity
 import net.minecraft.util.NonNullList
 import net.minecraft.util.ResourceLocation
+import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
 import net.minecraft.util.text.TranslationTextComponent
 import kotlin.math.max
@@ -52,7 +54,17 @@ fun CommandSource.sendErrorMsg(str: String) {
 }
 
 // TODO Make update this
-fun Entity.sendTranslation(key: String) = sendMessage(StringTextComponent("Key: $key"))
+fun Entity.sendTranslation(key: String) = sendMessage(TranslationTextComponent(key), uniqueID)
+
+fun ServerPlayerEntity.sendTranslation() {
+
+}
+
+
+fun ITextComponent.withSibling(component: ITextComponent): ITextComponent {
+    siblings.add(component)
+    return this
+}
 
 fun Int.clampTo(range: IntRange): Int {
     return max(range.first, min(this, range.last))

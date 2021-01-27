@@ -9,7 +9,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.tags.ItemTags
 import net.minecraft.util.ResourceLocation
-import net.minecraft.util.text.ITextComponent
+import net.minecraft.util.text.IFormattableTextComponent
 import net.minecraft.util.text.StringTextComponent
 import net.minecraftforge.items.ItemHandlerHelper
 import kotlin.math.min
@@ -20,7 +20,7 @@ class BountyEntryItemTag : AbstractBountyEntryStackLike(), IBountyObjective, IBo
     @SerializedName("type")
     override var bType: String = BountyType.ItemTag.id
 
-    override val formattedName: ITextComponent
+    override val formattedName: IFormattableTextComponent
         get() = StringTextComponent(name ?: content)
 
     override fun validate() {
@@ -33,7 +33,7 @@ class BountyEntryItemTag : AbstractBountyEntryStackLike(), IBountyObjective, IBo
     }
 
     val tagElements: List<Item>
-        get() = ItemTags.getCollection().getOrCreate(ResourceLocation(content)).allElements.toList()
+        get() = ItemTags.getCollection().get(ResourceLocation(content))?.allElements?.toList() ?: listOf()
 
     override val validStacks: List<ItemStack>
         get() {

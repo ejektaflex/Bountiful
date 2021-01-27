@@ -18,6 +18,7 @@ import ejektaflex.bountiful.ext.supposedlyNotNull
 import ejektaflex.bountiful.item.ItemDecree
 import ejektaflex.bountiful.network.BountifulNetwork
 import ejektaflex.bountiful.network.MessageClipboardCopy
+import net.minecraft.client.Minecraft
 import net.minecraft.command.CommandSource
 import net.minecraft.command.Commands.argument
 import net.minecraft.command.Commands.literal
@@ -121,20 +122,6 @@ object BountifulCommand {
                                         .executes(entities())
                         )
 
-                        .then(
-                                literal("reload")
-                                        .requires(::hasPermission)
-                                        .executes(reload())
-                        ).apply {
-                            if (BountifulMod.config.debugMode) {
-                                /*
-                                then(
-                                        literal("debug_reinitDefaultContent").executes(reinitDefaultContent())
-                                )
-
-                                 */
-                            }
-                        }
         )
     }
 
@@ -150,12 +137,9 @@ object BountifulCommand {
     private fun entities() = Command<CommandSource> { ctx ->
 
         ctx.source.sendFeedback(
-                StringTextComponent("Dumping list of entities to ").applyTextStyle {
-                    it.color = TextFormatting.GOLD
-                }.appendSibling(
-                        StringTextComponent("/logs/bountiful.log...").applyTextStyle {
-                            it.color = TextFormatting.GREEN
-                        }
+
+            StringTextComponent("Dumping list of entities to ").mergeStyle(TextFormatting.GOLD).append(
+                        StringTextComponent("/logs/bountiful.log...").mergeStyle(TextFormatting.GREEN)
                 ), true
         )
 
@@ -167,9 +151,7 @@ object BountifulCommand {
         }
 
         ctx.source.sendFeedback(
-                StringTextComponent("Dump complete! Took: ${time}ms").applyTextStyle {
-                    it.color = TextFormatting.GOLD
-                }, true
+                StringTextComponent("Dump complete! Took: ${time}ms").mergeStyle(TextFormatting.GOLD), true
         )
 
         1
@@ -200,10 +182,8 @@ object BountifulCommand {
             }, MessageClipboardCopy(asText))
 
             val msg = StringTextComponent("§aItem: §9${holding.item.registryName}§r, §aBounty Entry Copied To Clipboard!§r: §6[hover for preview]§r").apply {
-                style.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, StringTextComponent("§6Bounty Entry (Copied to Clipboard):\n").appendSibling(
-                        StringTextComponent(asText).apply {
-                            style.color = TextFormatting.DARK_PURPLE
-                        }
+                style.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, StringTextComponent("§6Bounty Entry (Copied to Clipboard):\n").append(
+                        StringTextComponent(asText).mergeStyle(TextFormatting.DARK_PURPLE)
                 ))
             }
 
@@ -211,15 +191,6 @@ object BountifulCommand {
 
         } else {
             it.source.sendErrorMsg("Must be a player to check their hand")
-        }
-
-        1
-    }
-
-    private fun reload() = Command<CommandSource> {
-
-        BountifulResourceType.values().forEach { type ->
-            BountifulMod.reloadBountyData(it.source.server, it.source.server.resourceManager, type, it.source)
         }
 
         1
@@ -286,6 +257,8 @@ object BountifulCommand {
         1
     }
 
+
+
     // TODO If test is true, warn on invalid pool entries
     private fun dump(test: Boolean = false) = Command<CommandSource> {
 
@@ -298,7 +271,16 @@ object BountifulCommand {
         it.source.sendMessage("Dumping Pools to console...")
         for (pool in PoolRegistry.content) {
 
-            SetupLifecycle.validatePool(pool, it.source, true)
+            val invalid = SetupLifecycle.validatePool(pool, it.source, true)
+
+            if (invalid.isNotEmpty()) {
+                it.source.sendMessage("Some items are invalid. Invalid entries have been printed in the log.")
+
+                for (item in invalid) {
+                    BountifulMod.logger.warn("Invalid item from pool '${pool.id}': $item")
+                }
+
+            }
 
         }
         it.source.sendMessage("Pools dumped.")

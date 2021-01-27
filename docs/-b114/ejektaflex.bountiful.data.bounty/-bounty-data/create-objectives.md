@@ -1,5 +1,0 @@
-[B114](../../index.md) / [ejektaflex.bountiful.data.bounty](../index.md) / [BountyData](index.md) / [createObjectives](./create-objectives.md)
-
-# createObjectives
-
-`fun createObjectives(rewards: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`BountyEntry`](../-bounty-entry/index.md)`>, inRarity: `[`BountyRarity`](../../ejektaflex.bountiful.data.bounty.enums/-bounty-rarity/index.md)`, decrees: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Decree`](../../ejektaflex.bountiful.data.structure/-decree/index.md)`>, worth: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`BountyEntry`](../-bounty-entry/index.md)`>` [(source)](https://github.com/ejektaflex/Bountiful/tree/develop/src/main/kotlin/ejektaflex/bountiful/data/bounty/BountyData.kt#L251)

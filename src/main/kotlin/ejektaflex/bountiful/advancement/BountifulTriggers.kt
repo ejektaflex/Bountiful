@@ -1,11 +1,7 @@
 package ejektaflex.bountiful.advancement
 
-import ejektaflex.bountiful.BountifulMod
-import net.minecraft.advancements.CriteriaTriggers
-import net.minecraft.util.ResourceLocation
-
 object BountifulTriggers {
-
+    /*
     val BOUNTY_TAKEN = BountifulTrigger(ResourceLocation(BountifulMod.MODID, "bounty_taken"))
 
     val COMPLETE_STARTER = BountifulTrigger(ResourceLocation(BountifulMod.MODID, "bounty_complete"))
@@ -44,5 +40,7 @@ object BountifulTriggers {
             CriteriaTriggers.register(trigger)
         }
     }
+
+     */
 
 }

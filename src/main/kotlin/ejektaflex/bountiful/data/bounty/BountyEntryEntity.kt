@@ -4,12 +4,11 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.data.bounty.enums.BountyType
 import ejektaflex.bountiful.ext.toEntityType
+import ejektaflex.bountiful.ext.withSibling
 import net.minecraft.entity.LivingEntity
 import net.minecraft.nbt.CompoundNBT
-import net.minecraft.util.text.ITextComponent
-import net.minecraft.util.text.StringTextComponent
-import net.minecraft.util.text.TextFormatting
-import net.minecraft.util.text.TranslationTextComponent
+import net.minecraft.util.text.*
+import net.minecraftforge.registries.ForgeRegistries
 
 class BountyEntryEntity : BountyEntry(), IBountyObjective {
 
@@ -46,20 +45,24 @@ class BountyEntryEntity : BountyEntry(), IBountyObjective {
         return false
     }
 
-    override val formattedName: ITextComponent
-        get() = (content.toEntityType?.name ?: StringTextComponent(content))
+    override val formattedName: IFormattableTextComponent
+        get() = TranslationTextComponent(
+            ForgeRegistries.ENTITIES.entries.find {
+                it.key.location.toString() == content
+            }?.value?.translationKey ?: "entity.generic.name"
+        )
 
     override fun tooltipObjective(progress: BountyProgress): ITextComponent {
-        return StringTextComponent("").appendSibling(
-                formattedName.applyTextStyle(progress.color)
-        ).appendSibling(
+        return StringTextComponent("").withSibling(
+                formattedName.mergeStyle(progress.color)
+        ).withSibling(
                 StringTextComponent(" ")
-        ).appendSibling(
-                TranslationTextComponent("bountiful.bounty.type.entity.kills").applyTextStyle(progress.color)
-        ).appendSibling(
+        ).withSibling(
+                TranslationTextComponent("bountiful.bounty.type.entity.kills").mergeStyle(progress.color)
+        ).withSibling(
                 StringTextComponent(" ")
-        ).appendSibling(
-                StringTextComponent(progress.stringNums).applyTextStyle(TextFormatting.WHITE)
+        ).withSibling(
+                StringTextComponent(progress.stringNums).mergeStyle(TextFormatting.WHITE)
         )
     }
 

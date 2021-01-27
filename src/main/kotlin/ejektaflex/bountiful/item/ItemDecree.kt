@@ -10,7 +10,6 @@ import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundNBT
-import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
 import net.minecraft.util.text.TextFormatting
@@ -25,18 +24,8 @@ import net.minecraftforge.api.distmarker.OnlyIn
  * @constructor Creates a new Decree item.
  */
 class ItemDecree : Item(
-        Item.Properties().maxStackSize(1).group(BountifulContent.BountifulGroup)
+        Properties().maxStackSize(1).group(BountifulContent.BountifulGroup)
 ) {
-
-    init {
-        addPropertyOverride(ResourceLocation("bountiful", "decreestatus")) { stack, world, entity ->
-            if (stack.hasTag() && stack.tag!!.getUnsortedList("ids").isNotEmpty()) {
-                1f
-            } else {
-                0f
-            }
-        }
-    }
 
     /**
      * Thrown when bounty NBT data could not be created
@@ -46,9 +35,7 @@ class ItemDecree : Item(
     override fun getTranslationKey() = "bountiful.decree"
 
     override fun getDisplayName(stack: ItemStack): ITextComponent {
-        return TranslationTextComponent(translationKey).applyTextStyle {
-            it.color = TextFormatting.DARK_PURPLE
-        }
+        return TranslationTextComponent(translationKey).mergeStyle(TextFormatting.DARK_PURPLE)
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -61,15 +48,13 @@ class ItemDecree : Item(
         if (ids != null) {
             if (stack.tag != null) {
                 val components = ids.map {
-                    TranslationTextComponent("bountiful.decree.${it}.name").applyTextStyle { style ->
-                        style.color = TextFormatting.GOLD
-                    }
+                    TranslationTextComponent("bountiful.decree.${it}.name").mergeStyle(TextFormatting.GOLD)
                 }.forEach {
                     tooltip.add(it)
                 }
 
             } else {
-                tooltip.add(TranslationTextComponent("bountiful.decree.invalid").appendSibling(
+                tooltip.add(TranslationTextComponent("bountiful.decree.invalid").append(
                         StringTextComponent(" ($ids)")
                 ))
             }
@@ -154,7 +139,7 @@ class ItemDecree : Item(
          * @return The new Decree [ItemStack]
          */
         fun makeStack(): ItemStack {
-            val newDecree = ItemStack(BountifulContent.Items.DECREE)
+            val newDecree = ItemStack(BountifulContent.DECREE)
             newDecree.edit<ItemDecree> { ensureDecree(it) }
             return newDecree
         }
@@ -165,7 +150,7 @@ class ItemDecree : Item(
          * @return The new Decree [ItemStack]
          */
         fun makeStack(decree: Decree): ItemStack {
-            val newDecree = ItemStack(BountifulContent.Items.DECREE)
+            val newDecree = ItemStack(BountifulContent.DECREE)
             newDecree.edit<ItemDecree> { ensureDecree(it, decree) }
             return newDecree
         }

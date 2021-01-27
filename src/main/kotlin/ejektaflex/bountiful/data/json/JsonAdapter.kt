@@ -30,7 +30,7 @@ object JsonAdapter {
         return parser.parse(str)
     }
 
-    fun buildGson(): Gson {
+    private fun buildGson(): Gson {
         //excludeFieldsWithoutExposeAnnotation?
         var gsonProto = GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation()
         for (deser in deserializers) {
