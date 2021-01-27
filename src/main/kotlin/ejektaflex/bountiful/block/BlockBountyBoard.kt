@@ -22,11 +22,20 @@ import net.minecraft.world.World
 import net.minecraftforge.fml.network.NetworkHooks
 
 class BlockBountyBoard : Block(
-        Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(
-            if (BountifulConfig.SERVER.bountyBoardBreakable.get()) 2f else -1f
-        )
+        Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(10f)
 ) {
 
+    override fun getPlayerRelativeBlockHardness(
+        state: BlockState,
+        player: PlayerEntity,
+        worldIn: IBlockReader,
+        pos: BlockPos
+    ): Float {
+        return if (BountifulConfig.SERVER.bountyBoardBreakable.get())
+            super.getPlayerRelativeBlockHardness(state, player, worldIn, pos)
+        else
+            -1f
+    }
 
     override fun onBlockActivated(state: BlockState, worldIn: World, pos: BlockPos, player: PlayerEntity, handIn: Hand, hit: BlockRayTraceResult): ActionResultType {
         if (!worldIn.isRemote) {

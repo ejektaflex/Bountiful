@@ -45,6 +45,20 @@ object SetupLifecycle {
 
         FORGE_BUS.addListener(::onCommonSetup)
 
+        FORGE_BUS.addListener<FMLServerAboutToStartEvent> { event ->
+            if (BountifulConfig.SERVER.villageGen.get()) {
+                listOf("plains", "savanna", "snowy", "taiga", "desert").forEach { villageType ->
+                    BountifulMod.logger.info("Registering Bounty Board Jigsaw Piece for Village Type: $villageType")
+                    JigsawHelper.registerJigsaw(
+                        event.server,
+                        ResourceLocation("bountiful:village/common/bounty_gazebo"),
+                        ResourceLocation("minecraft:village/$villageType/houses"),
+                        BountifulConfig.SERVER.villageGenRate.get()
+                    )
+                }
+            }
+        }
+
         JsonSerializers.register()
 
         //BountifulTriggers.register()
@@ -135,17 +149,7 @@ object SetupLifecycle {
     @SubscribeEvent @JvmStatic
     fun onCommonSetup(event: FMLServerAboutToStartEvent) {
         // Register villager generation jigsaws
-        if (BountifulConfig.SERVER.villageGen.get()) {
-            listOf("plains", "savanna", "snowy", "taiga", "desert").forEach { villageType ->
-                BountifulMod.logger.info("Registering Bounty Board Jigsaw Piece for Village Type: $villageType")
-                JigsawHelper.registerJigsaw(
-                    event.server,
-                    ResourceLocation("bountiful:village/common/bounty_gazebo"),
-                    ResourceLocation("minecraft:village/$villageType/houses"),
-                    BountifulConfig.SERVER.villageGenRate.get()
-                )
-            }
-        }
+
     }
 
     @SubscribeEvent
