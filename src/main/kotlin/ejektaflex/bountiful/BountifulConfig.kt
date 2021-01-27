@@ -22,7 +22,6 @@ class BountifulConfig {
 
         val boardCategory = b.push("bounty_board")!!
 
-
         var maxBountiesPerBoard: ForgeConfigSpec.IntValue = b.comment(
                 "The maximum number of bounties present at a given board " +
                         "before it must delete some bounties to make room for more."
@@ -63,19 +62,6 @@ class BountifulConfig {
                         "likelihood of multiple boards showing up in a single village. This is due to how",
                         "Minecraft generates villages in newer versions of Minecraft.")
                 .defineInRange("villageGenRate", 2, 1, 16)
-
-
-        val datapackCategory = b.pop().push("datapacks")!!
-
-        var blacklistedData: ForgeConfigSpec.ConfigValue<MutableList<String>> = b
-                .comment("Blacklists certain bounty data from loading (Use at your own risk)",
-                        "Format is (namespace)/[decrees/pools]/(folder)",
-                        "Examples:",
-                        "\"bountiful/*/*\" would block all default Bountiful data from loading,",
-                        "\"bountiful/decrees/*\" would block all default Bountiful decree data from loading,",
-                        "\"bountiful/*/apotheosis\" would block Bountiful from loading data in",
-                        "\"bountiful/bounties/pools/apotheosis\" as well as \"bountiful/bounties/decrees/apotheosis\".")
-                .define("blacklistedData", mutableListOf())
 
 
         val bountiesCategory = b.pop().push("bounties")!!
