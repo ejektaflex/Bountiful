@@ -62,7 +62,7 @@ class BountifulConfig {
                         "Note/Warning: Boards can show up multiple times, so higher numbers increase the",
                         "likelihood of multiple boards showing up in a single village. This is due to how",
                         "Minecraft generates villages in newer versions of Minecraft.")
-                .defineInRange("villageGenRate", 2, 1, 8)
+                .defineInRange("villageGenRate", 2, 1, 16)
 
 
         val datapackCategory = b.pop().push("datapacks")!!

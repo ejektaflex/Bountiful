@@ -1,5 +1,6 @@
 package ejektaflex.bountiful
 
+//import ejektaflex.bountiful.worldgen.JigsawJank
 import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.data.bounty.BountyEntryEntity
@@ -12,16 +13,19 @@ import ejektaflex.bountiful.ext.sendMessage
 import ejektaflex.bountiful.ext.toData
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.item.ItemDecree
-//import ejektaflex.bountiful.worldgen.JigsawJank
+import ejektaflex.bountiful.worldgen.JigsawHelper
 import net.minecraft.command.CommandSource
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.util.ResourceLocation
 import net.minecraftforge.event.AddReloadListenerEvent
 import net.minecraftforge.event.AnvilUpdateEvent
 import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.event.entity.living.LivingDeathEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
+import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent
+import thedarkcolour.kotlinforforge.forge.FORGE_BUS
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import kotlin.math.min
 
@@ -36,6 +40,10 @@ object SetupLifecycle {
         BountifulContent.BlockRegistry.register(MOD_BUS)
         BountifulContent.ContainerRegistry.register(MOD_BUS)
         BountifulContent.ItemRegistry.register(MOD_BUS)
+
+        FORGE_BUS.register(this)
+
+        FORGE_BUS.addListener(::onCommonSetup)
 
         JsonSerializers.register()
 
@@ -120,8 +128,25 @@ object SetupLifecycle {
     @SubscribeEvent
     fun onRegisterCommands(event: RegisterCommandsEvent) {
         BountifulCommand.generateCommand(event.dispatcher)
+
+
     }
 
+    @SubscribeEvent @JvmStatic
+    fun onCommonSetup(event: FMLServerAboutToStartEvent) {
+        // Register villager generation jigsaws
+        if (BountifulConfig.SERVER.villageGen.get()) {
+            listOf("plains", "savanna", "snowy", "taiga", "desert").forEach { villageType ->
+                BountifulMod.logger.info("Registering Bounty Board Jigsaw Piece for Village Type: $villageType")
+                JigsawHelper.registerJigsaw(
+                    event.server,
+                    ResourceLocation("bountiful:village/common/bounty_gazebo"),
+                    ResourceLocation("minecraft:village/$villageType/houses"),
+                    BountifulConfig.SERVER.villageGenRate.get()
+                )
+            }
+        }
+    }
 
     @SubscribeEvent
     fun anvilEvent(event: AnvilUpdateEvent) {
