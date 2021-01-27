@@ -1,0 +1,124 @@
+
+plugins {
+	id 'fabric-loom' version '0.4-SNAPSHOT'
+	id 'maven-publish'
+	id 'org.jetbrains.kotlin.jvm' version '1.4.10'
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
+
+compileKotlin.kotlinOptions.jvmTarget = "1.8"
+
+repositories {
+	maven {
+		url = uri("https://maven.pkg.github.com/ejektaflex/kambrik")
+		credentials {
+			username = project.findProperty("gpr.user")
+			password = project.findProperty("gpr.key")
+		}
+	}
+	maven { url 'https://jitpack.io' }
+	mavenCentral()
+	maven {
+		name = "Fabric"
+		url = "http://maven.fabricmc.net/"
+	}
+}
+
+dependencies {
+	//to change the versions see the gradle.properties file
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+	modImplementation "net.fabricmc:fabric-language-kotlin:1.4.21+build.1"
+
+
+	compileOnly("com.google.code.findbugs:jsr305:3.0.2")
+
+	// Fabric API. This is technically optional, but you probably want it anyway.
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	//modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
+
+	modApi("me.shedaniel.cloth:config-2:4.7.0-unstable") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+	include "me.shedaniel.cloth:config-2:4.7.0-unstable"
+
+	// WorldEdit Fabric Edition
+	//modApi "com.github.EngineHub.WorldEdit:worldedit-fabric:b33d96bbf8699921eb8e1f44e6c0a74bfa5a1f47"
+
+	modImplementation "io.github.prospector:modmenu:1.14.6+build.31"
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+}
+
+processResources {
+	inputs.property "version", project.version
+
+	from(sourceSets.main.resources.srcDirs) {
+		include "fabric.mod.json"
+		expand "version": project.version
+	}
+
+	from(sourceSets.main.resources.srcDirs) {
+		exclude "fabric.mod.json"
+	}
+}
+
+// ensure that the encoding is set to UTF-8, no matter what the system default is
+// this fixes some edge cases with special characters not displaying correctly
+// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+tasks.withType(JavaCompile) {
+	options.encoding = "UTF-8"
+}
+
+// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+// if it is present.
+// If you remove this task, sources will not be generated.
+task sourcesJar(type: Jar, dependsOn: classes) {
+	classifier = "sources"
+	from sourceSets.main.allSource
+}
+
+jar {
+	from "LICENSE"
+}
+
+
+// configure the maven publication
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			// add all the jars that should be included when publishing to maven
+			artifact(remapJar) {
+				builtBy remapJar
+			}
+			artifact(sourcesJar) {
+				builtBy remapSourcesJar
+			}
+		}
+	}
+
+	// select the repositories you want to publish to
+	repositories {
+		// uncomment to publish to the local maven
+		// mavenLocal()
+	}
+}
+compileKotlin {
+	kotlinOptions {
+		jvmTarget = "1.8"
+	}
+}
+compileTestKotlin {
+	kotlinOptions {
+		jvmTarget = "1.8"
+	}
+}
