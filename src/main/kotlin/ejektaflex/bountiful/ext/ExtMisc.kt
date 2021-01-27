@@ -54,7 +54,7 @@ fun CommandSource.sendErrorMsg(str: String) {
 }
 
 // TODO Make update this
-fun Entity.sendTranslation(key: String) = sendMessage(StringTextComponent("Key: $key"), uniqueID)
+fun Entity.sendTranslation(key: String) = sendMessage(TranslationTextComponent(key), uniqueID)
 
 fun ServerPlayerEntity.sendTranslation() {
 

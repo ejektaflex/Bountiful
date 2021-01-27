@@ -14,6 +14,7 @@ import ejektaflex.bountiful.ext.toData
 import net.minecraft.client.Minecraft
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.entity.Entity
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -71,17 +72,29 @@ class ItemBounty : Item(
     }
 
     override fun onItemRightClick(worldIn: World, playerIn: PlayerEntity, handIn: Hand): ActionResult<ItemStack> {
-        if (worldIn.isRemote) {
+        if (worldIn.isRemote()) {
             return super.onItemRightClick(worldIn, playerIn, handIn)
         }
 
         if (!BountifulConfig.SERVER.cashInAtBountyBoard.get()) {
             cashIn(playerIn, handIn)
         } else {
-            playerIn.sendStatusMessage(TranslationTextComponent("bountiful.bounty.turnin"), false)
+            playerIn.sendTranslation("bountiful.bounty.turnin")
         }
 
         return super.onItemRightClick(worldIn, playerIn, handIn)
+    }
+
+    override fun onUse(worldIn: World, livingEntityIn: LivingEntity, stack: ItemStack, count: Int) {
+        if (worldIn.isRemote) {
+            return super.onUse(worldIn, livingEntityIn, stack, count)
+        }
+
+        if (!BountifulConfig.SERVER.cashInAtBountyBoard.get()) {
+            //cashIn(playerIn, handIn)
+        } else {
+            //playerIn.sendTranslation("bountiful.bounty.turnin")
+        }
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -158,6 +171,8 @@ class ItemBounty : Item(
 
         if (succ) {
             bountyItem.shrink(bountyItem.maxStackSize)
+        } else {
+            player.sendTranslation("bountiful.tooltip.requirements")
         }
 
         return false
