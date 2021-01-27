@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) as closely as it can.
 
+## [3.3.0] - 2021-01-27
+### Ported
+- Port from 1.15.2 to 1.16.4
+- Mostly complete feature parity, exceptions listed here
+### Changes
+- Changed Kotlin dependency mod from *Kottle* to *Kotlin for Forge*.
+### Removals
+- Item-Tag bounty objectives temporarily not working
+- Removed the `/bo hand` command. You should now reload like normal with `/reload`.
+- Removed decrees from Villager & Wandering Trader trades temporarily.
+### Fixes
+- Fixed bounty boards not generating in some villages. They will now appear much more reliably.
+
+
 ## [3.1.2] - 2020-06-09
 ### Fixes
 - Update zh_cn & add ru_ru translations (thanks to EnderFor & JokerDima)
