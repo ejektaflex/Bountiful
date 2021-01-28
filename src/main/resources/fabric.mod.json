@@ -20,16 +20,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      {
-        "adapter": "kotlin",
-        "value": "io.ejekta.bountiful.common.Bountiful"
-      }
+      "io.ejekta.bountiful.common.Bountiful"
     ],
     "client": [
-      {
-        "adapter": "kotlin",
-        "value": "io.ejekta.bountiful.client.BountifulClient"
-      }
+      "io.ejekta.bountiful.client.BountifulClient"
     ]
   },
   "mixins": [
@@ -37,7 +31,6 @@
   ],
 
   "depends": {
-    "fabric-language-kotlin": ">=1.4.21",
     "fabricloader": ">=0.8.2",
     "fabric": "*",
     "minecraft": "1.16.x"

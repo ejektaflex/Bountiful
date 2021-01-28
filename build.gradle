@@ -1,8 +1,9 @@
 
 plugins {
-	id 'fabric-loom' version '0.4-SNAPSHOT'
+	id 'fabric-loom' version '0.5-SNAPSHOT'
 	id 'maven-publish'
-	id 'org.jetbrains.kotlin.jvm' version '1.4.10'
+	id 'org.jetbrains.kotlin.jvm' version '1.4.21'
+	id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.21'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -15,15 +16,9 @@ group = project.maven_group
 compileKotlin.kotlinOptions.jvmTarget = "1.8"
 
 repositories {
-	maven {
-		url = uri("https://maven.pkg.github.com/ejektaflex/kambrik")
-		credentials {
-			username = project.findProperty("gpr.user")
-			password = project.findProperty("gpr.key")
-		}
-	}
-	maven { url 'https://jitpack.io' }
 	mavenCentral()
+	//jcenter()
+	maven { url = "https://kotlin.bintray.com/kotlinx" }
 	maven {
 		name = "Fabric"
 		url = "http://maven.fabricmc.net/"
@@ -36,28 +31,19 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	modImplementation "net.fabricmc:fabric-language-kotlin:1.4.21+build.1"
+	modImplementation files("libs/fabric-language-kotlin-1.4.21+local.jar")
 
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.1")
+	include("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.1")
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+	include("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
 
-	compileOnly("com.google.code.findbugs:jsr305:3.0.2")
+	compile("com.google.code.findbugs:jsr305:3.0.2")
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-	//modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
-
-	modApi("me.shedaniel.cloth:config-2:4.7.0-unstable") {
-		exclude(group: "net.fabricmc.fabric-api")
-	}
-	include "me.shedaniel.cloth:config-2:4.7.0-unstable"
-
-	// WorldEdit Fabric Edition
-	//modApi "com.github.EngineHub.WorldEdit:worldedit-fabric:b33d96bbf8699921eb8e1f44e6c0a74bfa5a1f47"
-
-	modImplementation "io.github.prospector:modmenu:1.14.6+build.31"
-	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-
 }
+
 
 processResources {
 	inputs.property "version", project.version
