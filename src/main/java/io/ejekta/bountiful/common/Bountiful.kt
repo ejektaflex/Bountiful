@@ -1,26 +1,24 @@
 @file:UseSerializers(IdentitySer::class)
 package io.ejekta.bountiful.common
 
+import io.ejekta.bountiful.common.bounty.BountyData
+import io.ejekta.bountiful.common.bounty.BountyDataEntry
+import io.ejekta.bountiful.common.bounty.BountyType
+import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.serial.IdentitySer
-import io.ejekta.bountiful.common.serial.Test
-import io.ejekta.bountiful.common.util.JsonStrict.toJson
-import io.ejekta.bountiful.common.util.JsonStrict.toTag
 import kotlinx.serialization.*
-import kotlinx.serialization.json.*
-import kotlinx.serialization.modules.SerializersModule
 import net.fabricmc.api.ModInitializer
-import net.minecraft.client.realms.util.JsonUtils
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.LongArrayTag
-import net.minecraft.nbt.NbtHelper
+import net.minecraft.nbt.*
 import net.minecraft.util.Identifier
-import net.minecraft.util.JsonHelper
+import net.minecraft.util.Rarity
 import kotlin.reflect.typeOf
 
 class Bountiful : ModInitializer {
-    val ID = "bountiful"
+
+    companion object {
+        val ID = "bountiful"
+        fun id(str: String) = Identifier(ID, str)
+    }
 
     @ExperimentalStdlibApi
     inline fun <reified T : Any> doot() {
@@ -32,50 +30,31 @@ class Bountiful : ModInitializer {
     override fun onInitialize() {
         println("Common init")
 
-        val nbt = CompoundTag().apply {
-            putString("hello", "there")
+        val durability = CompoundTag().apply {
+            put("Durability", LongArrayTag(listOf(1L, 2L, 3L)))
         }
 
-        val jsonish = buildJsonObject {
-            put("hi", "sir")
-            putJsonArray("alist") {
-                add("of")
-                add("stuff")
-                add(4)
-            }
+        val bd = BountyData().apply {
+            timeStarted = 100
+            timeToComplete = 300
+            rarity = Rarity.EPIC
+            objectives.add(
+                BountyDataEntry(BountyType.ITEM, "minecraft:dirt", 2)
+            )
+            rewards.add(
+                BountyDataEntry(BountyType.ITEM, "minecraft:iron_ingot", 10).apply {
+                    nbtData = durability
+                }
+            )
         }
 
-        val tag = LongArrayTag(listOf(1L, 2L, 3L))
-
-        println("NBT: $nbt")
-
-        println("JSON: $jsonish")
-
-        val tagged = jsonish.toTag()
-
-        println("TAGGED: $tagged")
-
-        val jsonAgain = tagged.toJson()
-
-        println("JSONAGAIN: $jsonAgain")
-
-        println("TAGFROMLONG: ${tag.toJson().toTag().toJson().toTag()::class.simpleName}")
-
-        /*
-        println(realJson.encodeToString(
-            Test(Identifier("bountiful", "blahblah"))
-        ))
-
-         */
-
-        //Json.par
-
-        //Json.stringify()
-
-
-        throw Exception("no")
-
-
+        BountifulContent.register()
 
     }
+
+
+
+
+
+
 }

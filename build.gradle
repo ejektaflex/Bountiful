@@ -31,7 +31,9 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	modImplementation files("libs/fabric-language-kotlin-1.4.21+local.jar")
+	//modImplementation files("libs/fabric-language-kotlin-1.4.21+local.jar")
+
+
 
 	implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.1")
 	include("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.1")

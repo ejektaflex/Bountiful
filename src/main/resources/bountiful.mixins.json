@@ -4,8 +4,8 @@
   "package": "io.ejekta.bountiful.common.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MutableListTag",
-    "MutableLongArrayTag"
+    "MutableCompoundTag",
+    "MutableListTag"
   ],
   "client": [
   ],

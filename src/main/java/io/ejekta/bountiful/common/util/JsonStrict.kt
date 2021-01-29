@@ -1,7 +1,6 @@
 package io.ejekta.bountiful.common.util
 
 import io.ejekta.bountiful.common.mixin.MutableListTag
-import io.ejekta.bountiful.common.mixin.MutableLongArrayTag
 import kotlinx.serialization.json.*
 import net.minecraft.nbt.*
 
@@ -20,7 +19,7 @@ object JsonStrict {
         }
     }
 
-    fun JsonObject.toTag(): CompoundTag {
+    fun JsonObject.toTag(): Tag {
         return CompoundTag().apply {
             forEach { k, v ->
                 put(k, v.toTag())
@@ -41,7 +40,10 @@ object JsonStrict {
     }
 
     fun JsonArray.toTag(): ListTag {
+        val firstItem = firstOrNull() ?: return ListTag()
+
         val list = ListTag() as MutableListTag
+        list.setTagType((-37).toByte())
         list.items.addAll(map { it.toTag() })
         return list as ListTag
     }
@@ -58,7 +60,7 @@ object JsonStrict {
             // Weird territory below
             is IntArrayTag -> toJson()
             is ByteArrayTag -> toJson()
-            is LongArrayTag -> JsonArray((this as MutableLongArrayTag).items.map { JsonPrimitive(it) })
+            //is LongArrayTag -> toJson()
             // Even weirder territory below
             is ByteTag -> JsonPrimitive(byte)
             is ShortTag -> JsonPrimitive(short)

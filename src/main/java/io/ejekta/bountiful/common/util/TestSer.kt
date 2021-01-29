@@ -2,7 +2,7 @@ package io.ejekta.bountiful.common.util
 
 import io.ejekta.bountiful.common.util.JsonStrict.toTag
 import kotlinx.serialization.json.*
-import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.*
 
 fun main() {
 
@@ -18,6 +18,20 @@ fun main() {
             add(4)
         }
     }
+
+
+    val what2 = CompoundTag().apply {
+        putLongArray("hi", listOf(1L, 2L, 3L))
+        put("derp", TagFreeMarker)
+        put("doot", ListTag().apply {
+            this.add(StringTag.of("hullo"))
+        })
+    }
+
+    println("WHAT2: $what2")
+
+    println("Byte of list1: ${what2.getList("doot",-37)}")
+    println("Byte of list2: ${what2.getList("doot",44)}")
 
     println("NBT: $nbt")
 

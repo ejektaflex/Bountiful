@@ -12,4 +12,8 @@ import java.util.List;
 public interface MutableListTag {
     @Accessor("value")
     List<Tag> getItems();
+
+    @Accessor("type")
+    void setTagType(byte newType);
+
 }
