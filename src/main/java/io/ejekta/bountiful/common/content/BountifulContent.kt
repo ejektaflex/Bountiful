@@ -10,7 +10,7 @@ object BountifulContent {
 
     fun register() {
         CommandRegistrationCallback.EVENT.register(BountifulCommands.registerCommands())
-        Registry.register(Registry.ITEM, Bountiful.id("bounty_item"), BOUNTY_ITEM)
+        Registry.register(Registry.ITEM, Bountiful.id("bounty"), BOUNTY_ITEM)
     }
 
 }

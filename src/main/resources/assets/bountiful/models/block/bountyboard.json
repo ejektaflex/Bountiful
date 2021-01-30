@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "bountiful:block/bountyboard",
+    "down": "bountiful:block/bountyboard_top",
+    "up": "bountiful:block/bountyboard_top",
+    "north": "bountiful:block/bountyboard",
+    "east": "bountiful:block/bountyboard",
+    "south": "bountiful:block/bountyboard",
+    "west": "bountiful:block/bountyboard"
+  }
+}

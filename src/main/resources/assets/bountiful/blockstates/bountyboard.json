@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "bountiful:block/bountyboard" }
+  }
+}

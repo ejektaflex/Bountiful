@@ -8,6 +8,7 @@
     "MutableListTag"
   ],
   "client": [
+    "ModelPredicateProviderRegistrar"
   ],
   "injectors": {
     "defaultRequire": 1

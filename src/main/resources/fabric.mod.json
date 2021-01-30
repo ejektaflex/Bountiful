@@ -21,6 +21,9 @@
   "entrypoints": {
     "main": [
       "io.ejekta.bountiful.common.Bountiful"
+    ],
+    "client": [
+      "io.ejekta.bountiful.client.BountifulClient"
     ]
   },
   "mixins": [

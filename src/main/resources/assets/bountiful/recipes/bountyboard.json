@@ -1,0 +1,32 @@
+{
+  "conditions": [
+    {
+      "type": "bountiful:bounty_conditional"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern":
+  [
+    "PPP",
+    "APA",
+    "PAP"
+  ],
+  "key":
+  {
+    "P":
+    {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    },
+    "A":
+    {
+      "type": "forge:ore_dict",
+      "ore": "paper"
+    }
+  },
+  "result":
+  {
+    "item": "bountiful:bountyboard",
+    "count": 1
+  }
+}
