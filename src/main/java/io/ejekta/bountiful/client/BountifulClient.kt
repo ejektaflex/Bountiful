@@ -3,9 +3,11 @@ package io.ejekta.bountiful.client
 import io.ejekta.bountiful.common.Bountiful
 import io.ejekta.bountiful.common.bounty.logic.BountyData
 import io.ejekta.bountiful.common.bounty.logic.BountyRarity
+import io.ejekta.bountiful.common.content.BoardScreen
 import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.mixin.ModelPredicateProviderRegistrar
 import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.item.ModelPredicateProvider
 import net.minecraft.client.item.ModelPredicateProviderRegistry
@@ -29,6 +31,8 @@ class BountifulClient : ClientModInitializer {
             val rarity = BountyData[itemStack].rarity
             rarity.ordinal.toFloat() / 10f
         }
+
+        ScreenRegistry.register(BountifulContent.BOARD_SCREEN_HANDLER, ::BoardScreen)
 
         println("Registered rarity property")
 

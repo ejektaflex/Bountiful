@@ -2,20 +2,25 @@ package io.ejekta.bountiful.common.content
 
 import io.ejekta.bountiful.common.Bountiful
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
+import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemGroup
+import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.util.registry.Registry
 
 object BountifulContent {
 
     val BOUNTY_ITEM = BountyItem()
 
-    val BOARD = BountyBoard()
+    val BOARD = BoardBlock()
 
-    val BOARD_ENTITY: BlockEntityType<BoardBlockEntity> =
-        BlockEntityType.Builder.create(::BoardBlockEntity, BOARD).build(null)
+    val BOARD_ENTITY: BlockEntityType<BoardBlockEntity> = BlockEntityType.Builder
+        .create(::BoardBlockEntity, BOARD).build(null)
+
+    val BOARD_SCREEN_HANDLER: ScreenHandlerType<BoardScreenHandler> = ScreenHandlerRegistry
+        .registerSimple(Bountiful.id("board"), ::BoardScreenHandler)
 
     fun register() {
         CommandRegistrationCallback.EVENT.register(BountifulCommands.registerCommands())
