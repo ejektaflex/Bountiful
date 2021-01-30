@@ -1,9 +1,10 @@
 @file:UseSerializers(IdentitySer::class)
 package io.ejekta.bountiful.common
 
-import io.ejekta.bountiful.common.bounty.BountyData
-import io.ejekta.bountiful.common.bounty.BountyDataEntry
-import io.ejekta.bountiful.common.bounty.BountyType
+import io.ejekta.bountiful.common.bounty.logic.BountyData
+import io.ejekta.bountiful.common.bounty.logic.BountyDataEntry
+import io.ejekta.bountiful.common.bounty.logic.BountyRarity
+import io.ejekta.bountiful.common.bounty.logic.BountyType
 import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.serial.IdentitySer
 import kotlinx.serialization.*
@@ -37,7 +38,7 @@ class Bountiful : ModInitializer {
         val bd = BountyData().apply {
             timeStarted = 100
             timeToComplete = 300
-            rarity = Rarity.EPIC
+            rarity = BountyRarity.EPIC
             objectives.add(
                 BountyDataEntry(BountyType.ITEM, "minecraft:dirt", 2)
             )

@@ -2,12 +2,14 @@ package io.ejekta.bountiful.common.util
 
 import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
+import net.minecraft.text.TranslatableText
+import net.minecraft.util.Formatting
 
 object GameTime {
 
     fun formatTimeExpirable(n: Long): Text {
         return if (n <= 0) {
-            LiteralText("bountiful.tooltip.expired")
+            TranslatableText("bountiful.tooltip.expired").formatted(Formatting.RED)
         } else {
             formatTickTime(n)
         }

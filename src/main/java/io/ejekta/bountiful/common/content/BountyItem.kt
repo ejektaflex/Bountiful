@@ -1,6 +1,7 @@
 package io.ejekta.bountiful.common.content
 
-import io.ejekta.bountiful.common.bounty.BountyData
+import io.ejekta.bountiful.common.bounty.logic.BountyData
+import io.ejekta.bountiful.common.bounty.logic.BountyRarity
 import io.ejekta.bountiful.common.util.clientWorld
 import io.ejekta.bountiful.common.util.isClient
 import net.fabricmc.api.EnvType
@@ -15,6 +16,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
+import net.minecraft.util.Formatting
 import net.minecraft.util.Rarity
 import net.minecraft.world.World
 import org.spongepowered.asm.mixin.MixinEnvironment
@@ -29,18 +31,20 @@ class BountyItem : Item(
     override fun getName(stack: ItemStack?): Text {
         return if (stack != null && clientWorld() != null) {
             val data = BountyData[stack]
-            TranslatableText(data.rarity.name.toLowerCase().capitalize() + " Bounty (").append(
-                data.formattedTimeLeft(clientWorld()!!)
-            ).append(LiteralText(")"))
+            var text = TranslatableText(data.rarity.name.toLowerCase().capitalize() + " Bounty ").formatted(data.rarity.color)
+            if (data.rarity == BountyRarity.LEGENDARY) {
+                text = text.formatted(Formatting.BOLD)
+            }
+            text = text.append(
+                    LiteralText("(")
+                        .append(data.formattedTimeLeft(clientWorld()!!))
+                        .append(LiteralText(")"))
+                        .formatted(Formatting.WHITE)
+                )
+            return text
         } else {
             LiteralText("No Bounty Stack Given")
         }
-    }
-
-    override fun getRarity(stack: ItemStack?): Rarity {
-        return stack?.let {
-            BountyData[it].rarity
-        } ?: Rarity.COMMON
     }
 
     override fun appendTooltip(
@@ -59,12 +63,15 @@ class BountyItem : Item(
     companion object {
 
         fun create(): ItemStack {
-
             return ItemStack(BountifulContent.BOUNTY_ITEM).apply {
-                BountyData.set(this, BountyData())
+                BountyData[this] = BountyData()
             }
+        }
 
-
+        fun create(data: BountyData): ItemStack {
+            return ItemStack(BountifulContent.BOUNTY_ITEM).apply {
+                BountyData[this] = data
+            }
         }
 
     }
