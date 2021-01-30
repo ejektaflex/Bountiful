@@ -5,6 +5,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventory
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
 
@@ -13,8 +14,8 @@ class BoardScreenHandler @JvmOverloads constructor(
     syncId: Int,
     playerInventory: PlayerInventory,
     inventory: Inventory = SimpleInventory(9)
-) :
-    ScreenHandler(BountifulContent.BOARD_SCREEN_HANDLER, syncId) {
+) : ScreenHandler(BountifulContent.BOARD_SCREEN_HANDLER, syncId) {
+
     private val inventory: Inventory
     override fun canUse(player: PlayerEntity): Boolean {
         return inventory.canPlayerUse(player)

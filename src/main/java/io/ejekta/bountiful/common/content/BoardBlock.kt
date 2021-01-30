@@ -73,7 +73,7 @@ class BoardBlock : BlockWithEntity(
         if (state.block !== newState.block) {
             val blockEntity = world.getBlockEntity(pos)
             if (blockEntity is BoardBlockEntity) {
-                ItemScatterer.spawn(world, pos, blockEntity)
+                //ItemScatterer.spawn(world, pos, blockEntity) TO DO redo this!
                 // update comparators
                 world.updateComparators(pos, this)
             }
