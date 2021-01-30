@@ -19,10 +19,11 @@ import net.minecraft.screen.NamedScreenHandlerFactory
 
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
+import net.minecraft.util.Tickable
 import java.util.*
 
 
-class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), NamedScreenHandlerFactory {
+class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, NamedScreenHandlerFactory {
 
     //override val content = DefaultedList.ofSize(900, ItemStack.EMPTY)
 
@@ -34,6 +35,13 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), NamedScreen
 
     private fun getInventory(player: PlayerEntity): BoardInventory {
         return getInventory(player.uuid)
+    }
+
+    override fun tick() {
+        val time = world?.time ?: return
+        if ((time + 13L) % 20L == 0L) {
+
+        }
     }
 
     override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity?): ScreenHandler {

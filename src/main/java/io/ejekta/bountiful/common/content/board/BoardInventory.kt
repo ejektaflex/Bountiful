@@ -9,7 +9,7 @@ import net.minecraft.util.collection.DefaultedList
 
 class BoardInventory : Inventory {
 
-    val content: DefaultedList<ItemStack> = DefaultedList.ofSize(9, ItemStack.EMPTY)
+    val content: DefaultedList<ItemStack> = DefaultedList.ofSize(BoardBlock.SIZE, ItemStack.EMPTY)
 
     override fun canPlayerUse(player: PlayerEntity) = true
 

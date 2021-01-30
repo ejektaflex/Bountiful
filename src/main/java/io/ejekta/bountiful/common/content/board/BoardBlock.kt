@@ -16,7 +16,7 @@ class BoardBlock : BlockWithEntity(
     FabricBlockSettings.of(Material.WOOD).hardness(0.4f)
 ), BlockEntityProvider {
 
-    override fun getRenderType(state: BlockState?): BlockRenderType? {
+    override fun getRenderType(state: BlockState?): BlockRenderType {
         return BlockRenderType.MODEL
     }
 
@@ -78,6 +78,10 @@ class BoardBlock : BlockWithEntity(
 
     override fun getComparatorOutput(state: BlockState?, world: World?, pos: BlockPos?): Int {
         return super.getComparatorOutput(state, world, pos)
+    }
+
+    companion object {
+        const val SIZE = 24
     }
 
 }

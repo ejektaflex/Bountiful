@@ -1,6 +1,7 @@
 package io.ejekta.bountiful.common.content.gui
 
 import io.ejekta.bountiful.common.content.BountifulContent
+import io.ejekta.bountiful.common.content.board.BoardBlock
 import net.minecraft.item.ItemStack
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventory
@@ -13,7 +14,7 @@ import net.minecraft.screen.slot.Slot
 class BoardScreenHandler @JvmOverloads constructor(
     syncId: Int,
     playerInventory: PlayerInventory,
-    inventory: Inventory = SimpleInventory(9)
+    inventory: Inventory = SimpleInventory(BoardBlock.SIZE)
 ) : ScreenHandler(BountifulContent.BOARD_SCREEN_HANDLER, syncId) {
 
     private val inventory: Inventory
@@ -50,28 +51,28 @@ class BoardScreenHandler @JvmOverloads constructor(
     //The client will call the other constructor with an empty Inventory and the screenHandler will automatically
     //sync this empty inventory with the inventory on the server.
     init {
-        checkSize(inventory, 9)
+        checkSize(inventory, BoardBlock.SIZE)
         this.inventory = inventory
         //some inventories do custom logic when a player opens it.
         inventory.onOpen(playerInventory.player)
 
+        val bRows = 3
+        val bCols = 7
 
+        for (j in 0 until bRows) {
+            for (k in 0 until bCols) {
+                addSlot(BoardBountySlot(inventory, k + j * bCols, 8 + k * 18, 18 + j * 18))
+            }
+
+            addSlot(BoardDecreeSlot(inventory, inventory.size() - 3 + j, 19 + 7 * 18, 18 + j * 18))
+        }
 
         //This will place the slot in the correct locations for a 3x3 Grid. The slots exist on both server and client!
         //This will not render the background of the slots however, this is the Screens job
-        var l: Int
-        //Our inventory
-        var m = 0
-        while (m < 3) {
-            l = 0
-            while (l < 3) {
-                addSlot(Slot(inventory, l + m * 3, 62 + l * 18, 17 + m * 18))
-                ++l
-            }
-            ++m
-        }
+
         //The player inventory
-        m = 0
+        var m = 0
+        var l = 0
         while (m < 3) {
             l = 0
             while (l < 9) {
