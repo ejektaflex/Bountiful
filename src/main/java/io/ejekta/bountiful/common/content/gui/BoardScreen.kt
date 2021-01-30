@@ -1,8 +1,6 @@
-package io.ejekta.bountiful.common.content
+package io.ejekta.bountiful.common.content.gui
 
 import net.minecraft.client.util.math.MatrixStack
-
-import javax.swing.Spring.height
 
 import com.mojang.blaze3d.systems.RenderSystem
 import io.ejekta.bountiful.common.Bountiful

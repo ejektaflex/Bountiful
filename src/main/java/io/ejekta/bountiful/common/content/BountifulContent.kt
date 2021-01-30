@@ -1,6 +1,9 @@
 package io.ejekta.bountiful.common.content
 
 import io.ejekta.bountiful.common.Bountiful
+import io.ejekta.bountiful.common.content.board.BoardBlock
+import io.ejekta.bountiful.common.content.board.BoardBlockEntity
+import io.ejekta.bountiful.common.content.gui.BoardScreenHandler
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry
 import net.minecraft.block.entity.BlockEntityType

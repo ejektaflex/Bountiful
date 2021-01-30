@@ -1,16 +1,15 @@
-package io.ejekta.bountiful.common.content
+package io.ejekta.bountiful.common.content.board
 
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.inventory.Inventories
+import net.minecraft.util.collection.DefaultedList
 
 
+class BoardInventory : Inventory {
 
-
-interface BoardInventory : Inventory {
-
-    val content: MutableList<ItemStack>
+    val content: DefaultedList<ItemStack> = DefaultedList.ofSize(9, ItemStack.EMPTY)
 
     override fun canPlayerUse(player: PlayerEntity) = true
 
@@ -26,6 +25,9 @@ interface BoardInventory : Inventory {
         return content.size
     }
 
+    override fun markDirty() {
+        println("BoardInv marked as dirty!")
+    }
 
     override fun setStack(slot: Int, stack: ItemStack?) {
         stack?.let { content[slot] = it }

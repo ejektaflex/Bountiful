@@ -1,4 +1,4 @@
-package io.ejekta.bountiful.common.content
+package io.ejekta.bountiful.common.content.board
 
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
@@ -10,13 +10,6 @@ import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
-import net.minecraft.util.ItemScatterer
-import net.minecraft.screen.NamedScreenHandlerFactory
-
-
-
-
-
 
 
 class BoardBlock : BlockWithEntity(

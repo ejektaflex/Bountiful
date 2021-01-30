@@ -1,11 +1,11 @@
-package io.ejekta.bountiful.common.content
+package io.ejekta.bountiful.common.content.gui
 
+import io.ejekta.bountiful.common.content.BountifulContent
 import net.minecraft.item.ItemStack
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventory
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
-import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
 
@@ -54,6 +54,8 @@ class BoardScreenHandler @JvmOverloads constructor(
         this.inventory = inventory
         //some inventories do custom logic when a player opens it.
         inventory.onOpen(playerInventory.player)
+
+
 
         //This will place the slot in the correct locations for a 3x3 Grid. The slots exist on both server and client!
         //This will not render the background of the slots however, this is the Screens job

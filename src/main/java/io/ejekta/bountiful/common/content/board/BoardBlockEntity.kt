@@ -1,9 +1,8 @@
-package io.ejekta.bountiful.common.content
+package io.ejekta.bountiful.common.content.board
 
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
+import io.ejekta.bountiful.common.content.BountifulContent
+import io.ejekta.bountiful.common.content.gui.BoardScreenHandler
 import net.minecraft.block.entity.BlockEntity
-import net.minecraft.item.ItemStack
-import net.minecraft.util.collection.DefaultedList
 import net.minecraft.inventory.Inventories
 
 import net.minecraft.nbt.CompoundTag
@@ -15,13 +14,10 @@ import net.minecraft.text.TranslatableText
 import net.minecraft.entity.player.PlayerEntity
 
 import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.inventory.SimpleInventory
 import net.minecraft.nbt.ListTag
-import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.NamedScreenHandlerFactory
 
 import net.minecraft.screen.ScreenHandler
-import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import java.util.*
 
@@ -30,13 +26,13 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), NamedScreen
 
     //override val content = DefaultedList.ofSize(900, ItemStack.EMPTY)
 
-    val inventories = mutableMapOf<UUID, UniqueInv>()
+    private val inventories = mutableMapOf<UUID, BoardInventory>()
 
-    private fun getInventory(uuid: UUID): UniqueInv {
-        return inventories.getOrPut(uuid) { UniqueInv() }
+    private fun getInventory(uuid: UUID): BoardInventory {
+        return inventories.getOrPut(uuid) { BoardInventory() }
     }
 
-    private fun getInventory(player: PlayerEntity): UniqueInv {
+    private fun getInventory(player: PlayerEntity): BoardInventory {
         return getInventory(player.uuid)
     }
 
@@ -64,7 +60,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), NamedScreen
     override fun toTag(tag: CompoundTag?): CompoundTag? {
         super.toTag(tag)
         val bigList = ListTag()
-        inventories.map { entry ->
+        inventories.forEach { entry ->
             val userTag = CompoundTag()
             userTag.putUuid("uuid", entry.key)
             Inventories.toTag(userTag, entry.value.content)
