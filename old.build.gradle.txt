@@ -4,6 +4,7 @@ plugins {
 	id 'maven-publish'
 	id 'org.jetbrains.kotlin.jvm' version '1.4.21'
 	id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.21'
+	id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -31,15 +32,20 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.1")
-	shadow("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.1")
-	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
-	shadowJar("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+	modApi("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.1")
+	include("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.1")
+	modApi("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+	include("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
 
 	compile("com.google.code.findbugs:jsr305:3.0.2")
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+
+shadowJar {
+	//configurations = [project.configurations.compile]
+	configurations = [project.configurations.shadow]
 }
 
 
