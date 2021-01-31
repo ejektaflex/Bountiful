@@ -1,5 +1,7 @@
 package io.ejekta.bountiful.common.content.board
 
+import io.ejekta.bountiful.common.bounty.logic.BountyData
+import io.ejekta.bountiful.common.content.BountyItem
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
@@ -35,21 +37,23 @@ class BoardBlock : BlockWithEntity(
 
                 val holding = player.getStackInHand(hand)
 
-                println("Should open GUI")
-
-                val screenHandlerFactory = state!!.createScreenHandlerFactory(world, pos)
-
-                if (screenHandlerFactory != null) {
-                    //With this call the server will request the client to open the appropriate Screenhandler
-                        println("SHOULD REALLY OPEN GUI")
-                    player.openHandledScreen(screenHandlerFactory)
+                if (holding.item is BountyItem) {
+                    val data = BountyData[holding]
+                    data.tryCashIn(player, holding)
+                } else {
+                    val screenHandlerFactory = state!!.createScreenHandlerFactory(world, pos)
+                    if (screenHandlerFactory != null) {
+                        player.openHandledScreen(screenHandlerFactory)
+                    }
                 }
+
+
 
             }
 
         }
 
-        return super.onUse(state, world, pos, player, hand, hit)
+        return ActionResult.PASS
     }
 
     override fun createBlockEntity(world: BlockView?): BlockEntity? {

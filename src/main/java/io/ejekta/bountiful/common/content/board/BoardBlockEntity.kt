@@ -64,7 +64,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, N
 
     override fun tick() {
         val ourWorld = world ?: return
-        //if (ourWorld.isClient) return
+        if (ourWorld.isClient) return
         if ((ourWorld.time + 13L) % 20L == 0L) {
             randomlyAddBounty()
         }

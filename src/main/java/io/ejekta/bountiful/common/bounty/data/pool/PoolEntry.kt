@@ -1,27 +1,27 @@
 package io.ejekta.bountiful.common.bounty.data.pool
 
 import io.ejekta.bountiful.common.bounty.logic.BountyDataEntry
+import io.ejekta.bountiful.common.bounty.logic.BountyRarity
 import io.ejekta.bountiful.common.bounty.logic.BountyType
 import io.ejekta.bountiful.common.serial.Format
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
-import kotlinx.serialization.json.JsonObject
 import net.minecraft.nbt.StringNbtReader
 import net.minecraft.nbt.Tag
 
 @Serializable
 class PoolEntry private constructor() {
     var type = BountyType.NULL
+    var rarity = BountyRarity.COMMON
     var content = "Nope"
     var amount = EntryRange(-1, -1)
     var unitWorth = -1000.0
-    var weight = -1000.0
-    var timeMult = 0.0
+    var weightMult = 1.0
+    var timeMult = 1.0
+    var repRequired = 0.0
 
     var mystery: Boolean = false
 
     var nbt: String? = null
-
 
     var nbtData: Tag?
         get() = nbt?.let { StringNbtReader.parse(it) }
@@ -48,8 +48,6 @@ class PoolEntry private constructor() {
             amount = EntryRange(1, 1)
             content = "NO_CONTENT"
             unitWorth = 1000.0
-            weight = 1000.0
-            timeMult = 1.0
         }
 
     }

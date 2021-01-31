@@ -8,13 +8,11 @@ import io.ejekta.bountiful.common.bounty.logic.BountyRarity
 import io.ejekta.bountiful.common.bounty.logic.BountyType
 import io.ejekta.bountiful.common.util.id
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
-import net.minecraft.item.ItemStack
 import net.minecraft.network.MessageType
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.LiteralText
-import net.minecraft.util.Rarity
 
 
 object BountifulCommands {
@@ -113,7 +111,7 @@ object BountifulCommands {
 
         try {
             println(player)
-            data.cashIn(player)
+            data.tryCashIn(player, held)
         } catch (e: Exception) {
             e.printStackTrace()
         }

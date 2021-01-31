@@ -6,6 +6,7 @@ import io.ejekta.bountiful.common.util.GameTime
 import io.ejekta.bountiful.common.util.JsonStrict.toJson
 import io.ejekta.bountiful.common.util.JsonStrict.toTag
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.serializer
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
@@ -16,11 +17,13 @@ import net.minecraft.text.TranslatableText
 import net.minecraft.util.Formatting
 import net.minecraft.util.Rarity
 import net.minecraft.world.World
+import java.util.*
 import kotlin.math.max
 
 @Serializable
 class BountyData {
 
+    var owner: String? = null // UUID
     var timeStarted = -1L
     var timeToComplete = -1L
     var rarity = BountyRarity.COMMON
@@ -33,10 +36,8 @@ class BountyData {
 
     fun save() = Format.NBT.encodeToJsonElement(serializer(), this)
 
-    fun cashIn(player: PlayerEntity) {
+    fun tryCashIn(player: PlayerEntity, stack: ItemStack) {
         val objs = objectives.map {
-            println("${this.save()},,, $it,, $player")
-            println(it.type)
             it().finishObjective(this, it, player)
         }
 
@@ -44,6 +45,7 @@ class BountyData {
             rewards.forEach {
                 it().giveReward(this, it, player)
             }
+            stack.decrement(stack.maxCount)
         } else {
             player.sendMessage(TranslatableText("bountiful.tooltip.requirements"), false)
             println("All objectives finished but some returned false!")
@@ -78,37 +80,19 @@ class BountyData {
         return lines
     }
 
-    companion object {
+    companion object : ItemData<BountyData>(serializer()) {
 
-        operator fun get(stack: ItemStack) : BountyData {
-            return if (stack.hasTag()) {
-                val data = stack.tag!!.toJson()
-                return try {
-                    Format.NBT.decodeFromJsonElement(serializer(), data)
-                } catch (e: Exception) {
-                    setSafeData(stack)
-                }
-            } else {
-                setSafeData(stack)
-            }
-        }
-
-        fun getUnsafe(stack: ItemStack) : BountyData {
-            val data = stack.tag!!.toJson()
-            return Format.NBT.decodeFromJsonElement(serializer(), data)
-        }
-
-        operator fun set(stack: ItemStack, value: BountyData) {
-            stack.tag = Format.NBT.encodeToJsonElement(serializer(), value).toTag() as CompoundTag
-        }
-
-        fun edit(stack: ItemStack, func: BountyData.() -> Unit) {
-            get(stack).apply(func).also { set(stack, it) }
-        }
-
-        fun setSafeData(stack: ItemStack): BountyData {
-            return BountyData().apply {
-                stack.tag = Format.NBT.encodeToJsonElement(serializer(), this).toTag() as CompoundTag
+        override val creator: () -> BountyData = {
+            BountyData().apply {
+                timeStarted = 100
+                timeToComplete = 300
+                rarity = BountyRarity.EPIC
+                objectives.add(
+                    BountyDataEntry(BountyType.ITEM, "minecraft:dirt", 2)
+                )
+                rewards.add(
+                    BountyDataEntry(BountyType.ITEM, "minecraft:iron_ingot", 10)
+                )
             }
         }
 

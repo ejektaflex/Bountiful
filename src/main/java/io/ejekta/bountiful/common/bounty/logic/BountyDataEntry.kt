@@ -6,11 +6,20 @@ import kotlinx.serialization.Serializable
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.StringNbtReader
 import net.minecraft.nbt.Tag
+import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
+import net.minecraft.util.Formatting
 
 // Tracks the status of a given bounty
 @Serializable
-data class BountyDataEntry(val type: BountyType, val content: String, val amount: Int, var nbt: String? = null) {
+data class BountyDataEntry(
+    val type: BountyType,
+    val content: String,
+    val amount: Int,
+    var nbt: String? = null,
+    var name: String? = null,
+    var isMystery: Boolean = false
+) {
 
     var nbtData: Tag?
         get() = nbt?.let { StringNbtReader.parse(it) }
@@ -21,8 +30,16 @@ data class BountyDataEntry(val type: BountyType, val content: String, val amount
     operator fun invoke() = type.logic
 
     fun formatted(data: BountyData, player: PlayerEntity, isObj: Boolean): Text {
-        val progress = type.logic.getProgress(data, this, player)
-        return type.logic.format(this, isObj, progress)
+        return when (isMystery) {
+            true -> LiteralText("???").formatted(Formatting.BOLD).append(
+                LiteralText("x$amount").formatted(Formatting.WHITE)
+            )
+            false -> {
+                val progress = type.logic.getProgress(data, this, player)
+                type.logic.format(this, isObj, progress)
+            }
+        }
+
     }
 
 }
