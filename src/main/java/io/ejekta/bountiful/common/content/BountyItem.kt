@@ -62,15 +62,9 @@ class BountyItem : Item(
 
     companion object {
 
-        fun create(): ItemStack {
+        fun create(data: BountyData? = null): ItemStack {
             return ItemStack(BountifulContent.BOUNTY_ITEM).apply {
-                BountyData[this] = BountyData()
-            }
-        }
-
-        fun create(data: BountyData): ItemStack {
-            return ItemStack(BountifulContent.BOUNTY_ITEM).apply {
-                BountyData[this] = data
+                BountyData[this] = data ?: BountyData()
             }
         }
 

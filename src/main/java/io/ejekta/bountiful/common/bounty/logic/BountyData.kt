@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.common.bounty.logic
 
+import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.serial.Format
 import io.ejekta.bountiful.common.util.GameTime
 import io.ejekta.bountiful.common.util.JsonStrict.toJson
@@ -77,8 +78,6 @@ class BountyData {
         return lines
     }
 
-
-
     companion object {
 
         operator fun get(stack: ItemStack) : BountyData {
@@ -112,6 +111,32 @@ class BountyData {
                 stack.tag = Format.NBT.encodeToJsonElement(serializer(), this).toTag() as CompoundTag
             }
         }
+
+        fun default() = BountyData().apply {
+            timeStarted = 100
+            timeToComplete = 300
+            rarity = BountyRarity.EPIC
+            objectives.add(
+                BountyDataEntry(BountyType.ITEM, "minecraft:dirt", 2)
+            )
+            rewards.add(
+                BountyDataEntry(BountyType.ITEM, "minecraft:iron_ingot", 10)
+            )
+        }
+
+        fun default2() = BountyData().apply {
+            timeStarted = 100
+            timeToComplete = 300
+            rarity = BountyRarity.COMMON
+            objectives.add(
+                BountyDataEntry(BountyType.ITEM, "minecraft:yellow_wool", 1)
+            )
+            rewards.add(
+                BountyDataEntry(BountyType.ITEM, "minecraft:bookshelf", 3)
+            )
+        }
+
+        fun defaultRandom() = listOf(default(), default2()).random()
 
     }
 

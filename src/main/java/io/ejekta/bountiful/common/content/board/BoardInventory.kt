@@ -1,5 +1,7 @@
 package io.ejekta.bountiful.common.content.board
 
+import io.ejekta.bountiful.common.bounty.logic.BountyData
+import io.ejekta.bountiful.common.content.BountyItem
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
@@ -10,6 +12,24 @@ import net.minecraft.util.collection.DefaultedList
 class BoardInventory : Inventory {
 
     val content: DefaultedList<ItemStack> = DefaultedList.ofSize(BoardBlock.SIZE, ItemStack.EMPTY)
+
+    val bountySlots = 0 until 21
+    val decreeSlots = 21 until 24
+
+    fun addBounty(slot: Int, data: BountyData? = null) {
+        if (slot !in bountySlots) return
+        setStack(slot, BountyItem.create(data))
+    }
+
+    fun addRandomBounty(data: BountyData? = null): Int {
+        val slot = bountySlots.random()
+        setStack(slot, BountyItem.create(data))
+        return slot
+    }
+
+    fun removeRandomBounty(except: Int) {
+        setStack((bountySlots - except).random(), ItemStack.EMPTY)
+    }
 
     override fun canPlayerUse(player: PlayerEntity) = true
 

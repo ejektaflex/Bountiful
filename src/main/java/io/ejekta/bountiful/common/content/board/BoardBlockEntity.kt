@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.common.content.board
 
+import io.ejekta.bountiful.common.bounty.logic.BountyData
 import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.content.gui.BoardScreenHandler
 import net.minecraft.block.entity.BlockEntity
@@ -37,10 +38,30 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, N
         return getInventory(player.uuid)
     }
 
-    override fun tick() {
-        val time = world?.time ?: return
-        if ((time + 13L) % 20L == 0L) {
+    private fun randomlyAddBounty() {
+        val ourWorld = world ?: return
+        for (player in ourWorld.players) {
+            val commonBounty = BountyData.defaultRandom().apply {
+                timeStarted = ourWorld.time
+                timeToComplete = 3000
+            }
+            if (player.uuid in inventories) {
+                val inv = getInventory(player.uuid)
+                // Add a random bounty
+                val added = inv.addRandomBounty(commonBounty)
+                // Remove two other random bounties (could switch 2 to (1..2).random()
+                // for lower frequency (or listOf(1, 1, 2).random() even)
+                repeat(listOf(0, 0, 1, 2).random()) {
+                    inv.removeRandomBounty(except = added)
+                }
+            }
+        }
+    }
 
+    override fun tick() {
+        val ourWorld = world ?: return
+        if ((ourWorld.time + 13L) % 60L == 0L) {
+            randomlyAddBounty()
         }
     }
 
