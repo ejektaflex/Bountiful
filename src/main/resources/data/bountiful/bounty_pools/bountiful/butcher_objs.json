@@ -1,0 +1,94 @@
+
+{
+	"content": [
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:chicken",
+			"amount": {
+				"min": 2,
+				"max": 16
+			},
+			"unitWorth": 70
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:porkchop",
+			"amount": {
+				"min": 2,
+				"max": 16
+			},
+			"unitWorth": 145
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:rabbit",
+			"amount": {
+				"min": 1,
+				"max": 4
+			},
+			"unitWorth": 250
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:coal",
+			"amount": {
+				"min": 6,
+				"max": 48
+			},
+			"unitWorth": 65
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "minecraft:mutton",
+			"amount": {
+				"min": 3,
+				"max": 16
+			},
+			"unitWorth": 145
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "minecraft:beef",
+			"amount": {
+				"min": 2,
+				"max": 24
+			},
+			"unitWorth": 100
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "RARE",
+			"content": "minecraft:dried_kelp_block",
+			"amount": {
+				"min": 2,
+				"max": 24
+			},
+			"unitWorth": 100
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "EPIC",
+			"content": "minecraft:sweet_berries",
+			"amount": {
+				"min": 2,
+				"max": 24
+			},
+			"unitWorth": 100
+		}
+
+
+
+	]
+
+
+}

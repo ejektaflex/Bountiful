@@ -1,0 +1,182 @@
+
+{
+	"content": [
+
+		{
+            "type": "ITEM",
+            "content": "minecraft:iron_helmet",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 5000,
+            "nbt": "{Damage:0}"
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:iron_chestplate",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 8000,
+            "nbt": "{Damage:0}"
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:iron_leggings",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 7000,
+            "nbt": "{Damage:0}"
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:iron_boots",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 4000,
+            "nbt": "{Damage:0}"
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:bell",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 24000
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:chainmail_leggings",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 3000,
+            "nbt": "{Damage:0}"
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:chainmail_boots",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1000,
+            "nbt": "{Damage:0}"
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:shield",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1000,
+            "nbt": "{Damage:0}"
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "RARE",
+            "content": "minecraft:golden_horse_armor",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 6000
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "RARE",
+            "content": "minecraft:iron_horse_armor",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 6000
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "EPIC",
+            "content": "minecraft:diamond_horse_armor",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 12000
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "EPIC",
+            "content": "minecraft:diamond_helmet",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 10000,
+            "nbt": "{Damage:0}"
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "EPIC",
+            "content": "minecraft:diamond_chestplate",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 16000,
+            "nbt": "{Damage:0}"
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "EPIC",
+            "content": "minecraft:diamond_leggings",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 14000,
+            "nbt": "{Damage:0}"
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "EPIC",
+            "content": "minecraft:diamond_boots",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 8000,
+            "nbt": "{Damage:0}"
+        }
+
+
+
+	]
+
+
+}

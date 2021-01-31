@@ -1,0 +1,50 @@
+
+{
+	"content": [
+
+		{
+            "type": "ITEM",
+            "content": "minecraft:coal",
+            "amount": {
+                "min": 4,
+                "max": 32
+            },
+            "unitWorth": 65
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:iron_ingot",
+            "amount": {
+                "min": 2,
+                "max": 16
+            },
+            "unitWorth": 250
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:flint",
+            "amount": {
+                "min": 4,
+                "max": 48
+            },
+            "unitWorth": 32
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "RARE",
+            "content": "minecraft:diamond",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 2000
+        }
+
+
+	]
+
+
+}

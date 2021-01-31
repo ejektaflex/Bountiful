@@ -1,14 +1,20 @@
 package io.ejekta.bountiful.common.content
 
 import com.mojang.brigadier.Command
+import io.ejekta.bountiful.common.Bountiful
 import io.ejekta.bountiful.common.bounty.data.pool.PoolEntry
 import io.ejekta.bountiful.common.bounty.logic.BountyData
 import io.ejekta.bountiful.common.bounty.logic.BountyDataEntry
 import io.ejekta.bountiful.common.bounty.logic.BountyRarity
 import io.ejekta.bountiful.common.bounty.logic.BountyType
+import io.ejekta.bountiful.common.serial.Format
 import io.ejekta.bountiful.common.util.id
+import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.network.MessageType
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
@@ -46,10 +52,14 @@ object BountifulCommands {
             nbtData = held.tag
         }
 
-        val saved = newPoolEntry.save()
+        val saved = newPoolEntry.save(Format.Hand)
 
         println(saved)
         player.sendMessage(LiteralText(saved), MessageType.CHAT, player.uuid)
+
+        val packet = PacketByteBuf(Unpooled.buffer())
+        packet.writeString(saved)
+        ServerPlayNetworking.send(player, Bountiful.id("copydata"), packet)
 
 
         1

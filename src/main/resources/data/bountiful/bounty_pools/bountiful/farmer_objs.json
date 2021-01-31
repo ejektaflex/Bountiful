@@ -2,6 +2,114 @@
 {
 	"content": [
 
+		{
+			"type": "ITEM",
+			"content": "minecraft:wheat",
+			"amount": {
+				"min": 4,
+				"max": 24
+			},
+			"unitWorth": 50
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:beetroot",
+			"amount": {
+				"min": 4,
+				"max": 24
+			},
+			"unitWorth": 65
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:carrot",
+			"amount": {
+				"min": 4,
+				"max": 24
+			},
+			"unitWorth": 35
+		},
+
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:potato",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 1000.0
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:pumpkin",
+			"amount": {
+				"min": 2,
+				"max": 8
+			},
+			"unitWorth": 165
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "minecraft:melon",
+			"amount": {
+				"min": 2,
+				"max": 8
+			},
+			"unitWorth": 250
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "minecraft:melon_slice",
+			"amount": {
+				"min": 2,
+				"max": 32
+			},
+			"unitWorth": 50
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "minecraft:baked_potato",
+			"amount": {
+				"min": 4,
+				"max": 16
+			},
+			"unitWorth": 75
+		},
+		
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "minecraft:beetroot_soup",
+			"amount": {
+				"min": 1,
+				"max": 6
+			},
+			"unitWorth": 375
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "RARE",
+			"content": "minecraft:mushroom_stew",
+			"amount": {
+				"min": 1,
+				"max": 6
+			},
+			"unitWorth": 300
+		}
+
+
+
 	]
 
 

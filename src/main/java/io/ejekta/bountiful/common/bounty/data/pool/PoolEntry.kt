@@ -5,6 +5,7 @@ import io.ejekta.bountiful.common.bounty.logic.BountyRarity
 import io.ejekta.bountiful.common.bounty.logic.BountyType
 import io.ejekta.bountiful.common.serial.Format
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import net.minecraft.nbt.StringNbtReader
 import net.minecraft.nbt.Tag
 
@@ -18,6 +19,7 @@ class PoolEntry private constructor() {
     var weightMult = 1.0
     var timeMult = 1.0
     var repRequired = 0.0
+    var repMult = 1.0
 
     var mystery: Boolean = false
 
@@ -29,7 +31,7 @@ class PoolEntry private constructor() {
             nbt = value?.asString()
         }
 
-    fun save() = Format.DataPack.encodeToString(serializer(), this)
+    fun save(format: Json = Format.DataPack) = format.encodeToString(serializer(), this)
 
     fun toEntry(): BountyDataEntry {
         return BountyDataEntry(type, content, amount.pick(), nbt)

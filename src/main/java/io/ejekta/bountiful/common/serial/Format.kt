@@ -7,6 +7,9 @@ object Format {
         encodeDefaults = true
         prettyPrint = true
     }
+    val Hand = Json {
+        prettyPrint = true
+    }
     val NBT = Json {
         //encodeDefaults = true
     }

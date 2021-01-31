@@ -1,0 +1,60 @@
+
+{
+	"content": [
+
+		{
+            "type": "ITEM",
+            "content": "minecraft:coal",
+            "amount": {
+                "min": 1,
+                "max": 24
+            },
+            "unitWorth": 65
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:iron_ingot",
+            "amount": {
+                "min": 2,
+                "max": 16
+            },
+            "unitWorth": 250
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:lava_bucket",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1000
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:diamond",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 2000
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:gold_ingot",
+            "amount": {
+                "min": 2,
+                "max": 6
+            },
+            "unitWorth": 350
+        }
+
+	]
+
+
+}

@@ -1,0 +1,119 @@
+
+{
+	"content": [
+
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:bread",
+			"amount": {
+				"min": 2,
+				"max": 16
+			},
+			"unitWorth": 165
+		},
+		
+		{
+			"type": "ITEM",
+			"content": "minecraft:pumpkin_pie",
+			"amount": {
+				"min": 1,
+				"max": 8
+			},
+			"unitWorth": 250
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:apple",
+			"amount": {
+				"min": 1,
+				"max": 4
+			},
+			"unitWorth": 250
+		},
+
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "minecraft:cookie",
+			"amount": {
+				"min": 2,
+				"max": 32
+			},
+			"unitWorth": 150
+		},
+
+
+		{
+			"type": "ITEM",
+			"rarity": "RARE",
+			"content": "minecraft:suspicious_stew",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 1000.0
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "RARE",
+			"content": "minecraft:cake",
+			"amount": {
+				"min": 1,
+				"max": 2
+			},
+			"unitWorth": 1000.0
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "RARE",
+			"content": "minecraft:honey_bottle",
+			"amount": {
+				"min": 1,
+				"max": 3
+			},
+			"unitWorth": 1000.0
+		}
+
+		{
+			"type": "ITEM",
+			"rarity": "EPIC",
+			"content": "minecraft:golden_carrot",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 1000.0
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "EPIC",
+			"content": "minecraft:glistering_melon_slice",
+			"amount": {
+				"min": 3,
+				"max": 6
+			},
+			"unitWorth": 1000.0
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "LEGENDARY",
+			"content": "minecraft:golden_apple",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 8000.0
+		}
+
+
+	]
+
+
+}
