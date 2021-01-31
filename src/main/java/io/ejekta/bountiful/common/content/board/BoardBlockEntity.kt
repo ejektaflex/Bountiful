@@ -40,27 +40,32 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, N
 
     private fun randomlyAddBounty() {
         val ourWorld = world ?: return
+
+        val slotToAddTo = BoardInventory.bountySlots.random()
+        println("Going to add to slow: $slotToAddTo")
+        val slotsToRemove = (0 until listOf(0, 0, 1, 2).random()).map {
+            (BoardInventory.bountySlots - slotToAddTo).random()
+        }
+
+        val commonBounty = BountyData.defaultRandom().apply {
+            timeStarted = ourWorld.time
+            timeToComplete = 3000
+        }
+
         for (player in ourWorld.players) {
-            val commonBounty = BountyData.defaultRandom().apply {
-                timeStarted = ourWorld.time
-                timeToComplete = 3000
-            }
+
             if (player.uuid in inventories) {
                 val inv = getInventory(player.uuid)
-                // Add a random bounty
-                val added = inv.addRandomBounty(commonBounty)
-                // Remove two other random bounties (could switch 2 to (1..2).random()
-                // for lower frequency (or listOf(1, 1, 2).random() even)
-                repeat(listOf(0, 0, 1, 2).random()) {
-                    inv.removeRandomBounty(except = added)
-                }
+                inv.addBounty(slotToAddTo, commonBounty)
+                slotsToRemove.forEach { i -> inv.removeStack(i) }
             }
         }
     }
 
     override fun tick() {
         val ourWorld = world ?: return
-        if ((ourWorld.time + 13L) % 60L == 0L) {
+        //if (ourWorld.isClient) return
+        if ((ourWorld.time + 13L) % 20L == 0L) {
             randomlyAddBounty()
         }
     }

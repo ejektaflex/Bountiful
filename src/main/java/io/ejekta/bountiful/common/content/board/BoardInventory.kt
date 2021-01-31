@@ -13,13 +13,12 @@ class BoardInventory : Inventory {
 
     val content: DefaultedList<ItemStack> = DefaultedList.ofSize(BoardBlock.SIZE, ItemStack.EMPTY)
 
-    val bountySlots = 0 until 21
-    val decreeSlots = 21 until 24
 
     fun addBounty(slot: Int, data: BountyData? = null) {
         if (slot !in bountySlots) return
         setStack(slot, BountyItem.create(data))
     }
+
 
     fun addRandomBounty(data: BountyData? = null): Int {
         val slot = bountySlots.random()
@@ -63,6 +62,11 @@ class BoardInventory : Inventory {
 
     override fun removeStack(slot: Int): ItemStack? {
         return Inventories.removeStack(content, slot)
+    }
+
+    companion object {
+        val bountySlots = 0 until 21
+        val decreeSlots = 21 until 24
     }
 
 }
