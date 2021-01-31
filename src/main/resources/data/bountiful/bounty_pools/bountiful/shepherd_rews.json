@@ -1,0 +1,73 @@
+
+{
+	"content": [
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:shears",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 2000,
+            "nbt": "{Damage:0}"
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:lapis_block",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1000
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:blue_carpet",
+            "amount": {
+                "min": 1,
+                "max": 6
+            },
+            "unitWorth": 250
+        },
+
+        {
+            "type": "ITEM",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:blue_bed",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1500
+        },
+
+        {
+            "type": "ITEM",
+            "rarity": "RARE",
+            "content": "minecraft:blue_banner",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1000.0
+        },
+
+        {
+            "type": "ITEM",
+            "rarity": "EPIC",
+            "content": "minecraft:painting",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 665
+        }
+
+
+	]
+
+
+}

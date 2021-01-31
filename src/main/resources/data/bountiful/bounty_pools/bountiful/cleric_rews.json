@@ -1,0 +1,73 @@
+
+{
+	"content": [
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:redstone",
+            "amount": {
+                "min": 1,
+                "max": 6
+            },
+            "unitWorth": 500
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:lapis_lazuli",
+            "amount": {
+                "min": 1,
+                "max": 3
+            },
+            "unitWorth": 800
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:glowstone",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 2000
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "RARE",
+            "content": "minecraft:ender_pearl",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 4000
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "EPIC",
+            "content": "minecraft:experience_bottle",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1000.0
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "LEGENDARY",
+            "content": "minecraft:ender_pearl",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 2500
+        }
+
+
+	]
+
+
+}

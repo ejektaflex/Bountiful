@@ -1,0 +1,220 @@
+
+{
+	"content": [
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:white_wool",
+            "amount": {
+                "min": 4,
+                "max": 20
+            },
+            "unitWorth": 55
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:brown_wool",
+            "amount": {
+                "min": 4,
+                "max": 20
+            },
+            "unitWorth": 55
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:black_wool",
+            "amount": {
+                "min": 4,
+                "max": 20
+            },
+            "unitWorth": 55
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:gray_wool",
+            "amount": {
+                "min": 4,
+                "max": 20
+            },
+            "unitWorth": 55
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:white_dye",
+            "amount": {
+                "min": 4,
+                "max": 16
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:gray_dye",
+            "amount": {
+                "min": 4,
+                "max": 16
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:black_dye",
+            "amount": {
+                "min": 4,
+                "max": 16
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:light_blue_dye",
+            "amount": {
+                "min": 4,
+                "max": 16
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:lime_dye",
+            "amount": {
+                "min": 4,
+                "max": 16
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:yellow_dye",
+            "amount": {
+                "min": 4,
+                "max": 16
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:orange_dye",
+            "amount": {
+                "min": 4,
+                "max": 16
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:red_dye",
+            "amount": {
+                "min": 4,
+                "max": 16
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:pink_dye",
+            "amount": {
+                "min": 4,
+                "max": 16
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:light_gray_dye",
+            "amount": {
+                "min": 4,
+                "max": 16
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "RARE",
+            "content": "minecraft:purple_dye",
+            "amount": {
+                "min": 4,
+                "max": 16
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "RARE",
+            "content": "minecraft:magenta_dye",
+            "amount": {
+                "min": 4,
+                "max": 16
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "RARE",
+            "content": "minecraft:blue_dye",
+            "amount": {
+                "min": 4,
+                "max": 16
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "RARE",
+            "content": "minecraft:cyan_dye",
+            "amount": {
+                "min": 4,
+                "max": 16
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "RARE",
+            "content": "minecraft:green_dye",
+            "amount": {
+                "min": 4,
+                "max": 16
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "RARE",
+            "content": "minecraft:brown_dye",
+            "amount": {
+                "min": 4,
+                "max": 16
+            },
+            "unitWorth": 800
+        }
+
+
+	]
+
+
+}

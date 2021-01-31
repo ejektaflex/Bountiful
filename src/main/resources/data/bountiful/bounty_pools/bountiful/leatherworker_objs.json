@@ -1,0 +1,50 @@
+
+{
+	"content": [
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:leather",
+            "amount": {
+                "min": 2,
+                "max": 10
+            },
+            "unitWorth": 165
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:flint",
+            "amount": {
+                "min": 16,
+                "max": 32
+            },
+            "unitWorth": 35
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:rabbit_hide",
+            "amount": {
+                "min": 1,
+                "max": 12
+            },
+            "unitWorth": 200
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "RARE",
+            "content": "minecraft:scute",
+            "amount": {
+                "min": 2,
+                "max": 6
+            },
+            "unitWorth": 250
+        }
+
+	]
+
+
+}
