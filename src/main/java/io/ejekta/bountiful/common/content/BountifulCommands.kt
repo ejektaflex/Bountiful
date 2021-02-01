@@ -168,8 +168,8 @@ object BountifulCommands {
 
             val dataPath = currentRelativePath.resolve("../src/main/resources/data/bountiful")
 
-            val decreeName = "butcher"
-            val poolName = "butcher"
+            val decreeName = "farmer"
+            val poolName = "farmer"
 
             val dec = dataPath.resolve("bounty_decrees/$decreeName.json").toFile()
             val decree = Format.Normal.decodeFromString(Decree.serializer(), dec.readText())
@@ -222,6 +222,7 @@ object BountifulCommands {
 
             val rep = getInteger(ctx, "rep")
 
+            println("RARITY WEIGHTS:")
             BountyRarity.values().forEach { rarity ->
                 println("${rarity.name}\t ${rarity.weightAdjustedFor(rep)}")
             }

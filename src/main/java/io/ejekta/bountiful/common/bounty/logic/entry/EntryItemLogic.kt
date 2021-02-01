@@ -19,7 +19,7 @@ object EntryItemLogic : IEntryLogic {
         val item = Registry.ITEM.get(Identifier(entry.content))
         return when (isObj) {
             true -> item.name.colored(progress).append(progress.needed.colored(Formatting.WHITE))
-            false -> progress.giving.append(item.name.colored(Formatting.AQUA))
+            false -> progress.giving.append(item.name.colored(entry.rarity.color))
         }
     }
 

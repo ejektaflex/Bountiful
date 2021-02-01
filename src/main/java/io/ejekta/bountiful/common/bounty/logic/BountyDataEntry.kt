@@ -18,7 +18,8 @@ data class BountyDataEntry(
     val amount: Int,
     var nbt: String? = null,
     var name: String? = null,
-    var isMystery: Boolean = false
+    var isMystery: Boolean = false,
+    var rarity: BountyRarity = BountyRarity.COMMON
 ) {
 
     var nbtData: Tag?

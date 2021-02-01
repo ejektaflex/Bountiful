@@ -38,7 +38,7 @@ class PoolEntry private constructor() {
     fun save(format: Json = Format.DataPack) = format.encodeToString(serializer(), this)
 
     fun toEntry(worth: Double? = null): BountyDataEntry {
-        return BountyDataEntry(type, content, amountAt(worth), nbt)
+        return BountyDataEntry(type, content, amountAt(worth), nbt, isMystery = false, rarity = rarity)
     }
 
     fun amountAt(worth: Double? = null): Int {
