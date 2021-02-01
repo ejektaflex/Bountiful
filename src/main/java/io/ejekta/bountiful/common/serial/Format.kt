@@ -13,4 +13,5 @@ object Format {
     val NBT = Json {
         //encodeDefaults = true
     }
+    val Normal = Json {  }
 }

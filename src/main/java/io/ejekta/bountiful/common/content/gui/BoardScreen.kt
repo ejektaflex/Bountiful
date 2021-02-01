@@ -52,7 +52,7 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory?, title: T
     }
 
     companion object {
-        private val TEXTURE = Bountiful.id("textures/gui/container/bounty_board2.png")
+        private val TEXTURE = Bountiful.id("textures/gui/container/bounty_board.png")
     }
 }
 

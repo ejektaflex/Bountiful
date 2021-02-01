@@ -1,0 +1,9 @@
+{
+	"id": "farmer",
+	"objectives": [
+		"farmer_objs"
+	],
+	"rewards": [
+		"farmer_rews"
+	]
+}

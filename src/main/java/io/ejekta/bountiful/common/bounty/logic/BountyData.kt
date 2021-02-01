@@ -53,6 +53,10 @@ class BountyData {
 
     }
 
+    override fun toString(): String {
+        return Format.DataPack.encodeToString(ser, this)
+    }
+
     // ### Formatting ### //
 
     fun formattedTimeLeft(world: World): Text {

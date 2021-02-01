@@ -16,7 +16,7 @@ object BountyCreator {
     }
 
     private fun getRewardPoolsFor(decrees: Set<Decree>): Set<Pool> {
-        return decrees.map { it.objectivePools }.flatten().toSet()
+        return decrees.map { it.rewardPools }.flatten().toSet()
     }
 
     private fun getRewardsFor(decrees: Set<Decree>): Set<PoolEntry> {
@@ -27,16 +27,19 @@ object BountyCreator {
         return getObjectivePoolsFor(decrees).map { it.content }.flatten().toSet()
     }
 
-    fun createBounty(decrees: Set<Decree>, rep: Int) {
-
-
+    fun createBounty(decrees: Set<Decree>, rep: Int): BountyData {
 
         val bd = BountyData()
 
         val worth = createRewards(bd, decrees, rep)
 
+        println("Created rewards worth $worth")
+
         createObjectives(bd, decrees, rep, worth)
 
+        println("Final bounty: $bd")
+
+        return bd
     }
 
     fun getObjectivesWithinVariance(objs: List<PoolEntry>, worth: Double, variance: Double): List<PoolEntry> {
@@ -74,7 +77,7 @@ object BountyCreator {
 
         println("Must create objectives that have a worth that adds up to $worth (actually $worthNeeded)")
 
-        var objs = getObjectivesFor(decrees).filter {
+        val objs = getObjectivesFor(decrees).filter {
             it.content !in data.rewards.map { rew -> rew.content }
         }
 
@@ -95,7 +98,6 @@ object BountyCreator {
         val rewards = getRewardsFor(decrees)
         // Num rewards to give
         val numRewards = (1..2).random()
-        var worth = 0.0
         val toReturn = mutableListOf<PoolEntry>()
 
         for (i in 0 until numRewards) {
@@ -117,10 +119,12 @@ object BountyCreator {
         }
 
         data.rarity = toReturn.maxOf { it.rarity }
+
+
         val worths = toReturn.map { it.unitWorth to it.toEntry() }
 
         data.rewards.addAll(worths.map { it.second })
-        return worths.sumOf { it.first }
+        return worths.sumOf { it.first * it.second.amount }
     }
 
 

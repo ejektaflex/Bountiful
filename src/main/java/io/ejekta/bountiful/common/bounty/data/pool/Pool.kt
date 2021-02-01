@@ -4,14 +4,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Pool(
-    val id: String = "DEFAULT_POOL",
+    var id: String = "DEFAULT_POOL",
     val content: MutableList<PoolEntry> = mutableListOf()
 ) {
 
-    fun pick() {
 
-
-
-    }
 
 }
