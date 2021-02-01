@@ -5,6 +5,7 @@ import io.ejekta.bountiful.common.bounty.data.pool.Pool
 import io.ejekta.bountiful.common.bounty.data.pool.PoolEntry
 import io.ejekta.bountiful.common.bounty.logic.BountyData
 import io.ejekta.bountiful.common.bounty.logic.BountyDataEntry
+import io.ejekta.bountiful.common.bounty.logic.BountyRarity
 import io.ejekta.bountiful.common.util.randomSplit
 import io.ejekta.bountiful.common.util.weightedRandomDblBy
 import kotlin.math.ceil
@@ -112,7 +113,7 @@ object BountyCreator {
             }
 
             val picked = totalRewards.weightedRandomDblBy {
-                weightMult * rarity.weightAt(rep) * timeMult * repMult
+                weightMult * rarity.weightAdjustedFor(rep) * timeMult * repMult
             }
 
             toReturn.add(picked)

@@ -1,0 +1,8 @@
+{
+	"objectives": [
+		"cartographer_objs"
+	],
+	"rewards": [
+		"cartographer_rews"
+	]
+}

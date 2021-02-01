@@ -1,6 +1,9 @@
 package io.ejekta.bountiful.common.content
 
 import com.mojang.brigadier.Command
+import com.mojang.brigadier.arguments.IntegerArgumentType.getInteger
+import com.mojang.brigadier.arguments.IntegerArgumentType.integer
+import com.mojang.brigadier.builder.RequiredArgumentBuilder.argument
 import io.ejekta.bountiful.common.Bountiful
 import io.ejekta.bountiful.common.bounty.data.pool.Decree
 import io.ejekta.bountiful.common.bounty.data.pool.Pool
@@ -48,7 +51,18 @@ object BountifulCommands {
                     CommandManager.literal("load").executes(load())
                 )
                 .then(
-                    CommandManager.literal("gen").executes(gen())
+                    CommandManager.literal("gen")
+                        .then(
+                            CommandManager.argument("rep", integer())
+                                .executes(gen())
+                        )
+                )
+                .then(
+                    CommandManager.literal("weights")
+                        .then(
+                            CommandManager.argument("rep", integer())
+                                .executes(weights())
+                        )
                 )
         )
     }
@@ -154,9 +168,12 @@ object BountifulCommands {
 
             val dataPath = currentRelativePath.resolve("../src/main/resources/data/bountiful")
 
-            val dec = dataPath.resolve("bounty_decrees/farmer.json").toFile()
+            val decreeName = "butcher"
+            val poolName = "butcher"
+
+            val dec = dataPath.resolve("bounty_decrees/$decreeName.json").toFile()
             val decree = Format.Normal.decodeFromString(Decree.serializer(), dec.readText())
-            decree.id = "farmer"
+            decree.id = decreeName
             println("Dec: $decree")
 
             BountifulContent.Decrees.add(decree)
@@ -169,8 +186,8 @@ object BountifulCommands {
                 return pool
             }
 
-            val farmerObj = doot(dataPath, "farmer_objs")
-            val farmerRew = doot(dataPath, "farmer_rews")
+            val farmerObj = doot(dataPath, "${poolName}_objs")
+            val farmerRew = doot(dataPath, "${poolName}_rews")
 
             BountifulContent.Pools.add(farmerObj)
             BountifulContent.Pools.add(farmerRew)
@@ -188,9 +205,29 @@ object BountifulCommands {
         val player = ctx.source.entity as? ServerPlayerEntity ?: return@Command 0
         val held = player.mainHandStack
 
-        val bd = BountyCreator.createBounty(setOf(BountifulContent.Decrees.first()), 0)
+        val rep = getInteger(ctx, "rep")
+
+        val bd = BountyCreator.createBounty(setOf(BountifulContent.Decrees.first()), rep)
 
         player.giveItemStack(BountyItem.create(bd))
+
+        1
+    }
+
+    private fun weights() = Command<ServerCommandSource> { ctx ->
+
+        try {
+            val player = ctx.source.entity as? ServerPlayerEntity ?: return@Command 0
+            val held = player.mainHandStack
+
+            val rep = getInteger(ctx, "rep")
+
+            BountyRarity.values().forEach { rarity ->
+                println("${rarity.name}\t ${rarity.weightAdjustedFor(rep)}")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
         1
     }

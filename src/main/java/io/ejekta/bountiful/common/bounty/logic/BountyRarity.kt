@@ -1,6 +1,7 @@
 package io.ejekta.bountiful.common.bounty.logic
 
 import net.minecraft.util.Formatting
+import kotlin.math.max
 import kotlin.math.pow
 
 enum class BountyRarity(val color: Formatting, val weight: Int, val repTier: Int) {
@@ -10,16 +11,20 @@ enum class BountyRarity(val color: Formatting, val weight: Int, val repTier: Int
     EPIC(Formatting.LIGHT_PURPLE, 128, 25),
     LEGENDARY(Formatting.GOLD, 64, 30);
 
-    fun weightAt(rep: Int): Double {
-        return weight.toDouble() / ((1.5).pow(ordinal))
+    fun weightAdjustedFor(currRarity: BountyRarity): Double {
+        return weight.toDouble() / (rarityWeightScaling.pow(max(currRarity.ordinal - ordinal, 0)))
     }
+
+    fun weightAdjustedFor(rep: Int) = weightAdjustedFor(forReputation(rep))
 
     companion object {
         fun forReputation(rep: Int): BountyRarity {
-            return values().first { it.repTier >= rep }
+            return values().last { rep >= it.repTier  }
         }
 
-        fun weightAt(rep: Int) = forReputation(rep).weightAt(rep)
+        val rarityWeightScaling = 2.0
+
+        //fun weightAdjustedFor(rep: Int) =
     }
 
 }

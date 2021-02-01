@@ -1,8 +1,8 @@
 {
 	"objectives": [
-		"farmer_objs"
+		"armorer_objs"
 	],
 	"rewards": [
-		"farmer_rews"
+		"armorer_rews"
 	]
 }
