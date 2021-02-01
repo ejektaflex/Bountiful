@@ -8,6 +8,10 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import net.minecraft.nbt.StringNbtReader
 import net.minecraft.nbt.Tag
+import kotlin.math.abs
+import kotlin.math.ceil
+import kotlin.math.max
+import kotlin.math.min
 
 @Serializable
 class PoolEntry private constructor() {
@@ -33,8 +37,32 @@ class PoolEntry private constructor() {
 
     fun save(format: Json = Format.DataPack) = format.encodeToString(serializer(), this)
 
-    fun toEntry(): BountyDataEntry {
-        return BountyDataEntry(type, content, amount.pick(), nbt)
+    fun toEntry(worth: Double? = null): BountyDataEntry {
+        return BountyDataEntry(type, content, amountAt(worth), nbt)
+    }
+
+    fun amountAt(worth: Double? = null): Int {
+        var toGive = if (worth != null) {
+            max(1, ceil(worth.toDouble() / unitWorth).toInt())
+        } else {
+            amount.pick()
+        }
+        // Clamp amount into amount range
+        toGive = min(toGive, amount.max)
+        toGive = max(toGive, amount.min)
+        return toGive
+    }
+
+    private val worthRange: Pair<Double, Double>
+        get() = (amount.min * unitWorth) to (amount.max * unitWorth)
+
+    fun worthDistanceFrom(value: Double): Int {
+        val rnge = worthRange
+        return if (value >= rnge.first && value <= rnge.second) {
+            0
+        } else {
+            min(abs(rnge.first - value), abs(rnge.second - value)).toInt()
+        }
     }
 
     @Serializable

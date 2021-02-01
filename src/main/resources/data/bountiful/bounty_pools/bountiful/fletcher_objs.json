@@ -1,0 +1,72 @@
+
+{
+	"content": [
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:stick",
+            "amount": {
+                "min": 8,
+                "max": 64
+            },
+            "unitWorth": 30
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:gravel",
+            "amount": {
+                "min": 16,
+                "max": 32
+            },
+            "unitWorth": 30
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:flint",
+            "amount": {
+                "min": 16,
+                "max": 32
+            },
+            "unitWorth": 35
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:string",
+            "amount": {
+                "min": 4,
+                "max": 28
+            },
+            "unitWorth": 70
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "RARE",
+            "content": "minecraft:feather",
+            "amount": {
+                "min": 6,
+                "max": 36
+            },
+            "unitWorth": 40
+        },
+
+        {
+            "type": "ITEM",
+			"rarity": "EPIC",
+            "content": "minecraft:tripwire_hook",
+            "amount": {
+                "min": 4,
+                "max": 12
+            },
+            "unitWorth": 125
+        }
+
+
+	]
+
+
+}

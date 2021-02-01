@@ -59,9 +59,13 @@ class BoardScreenHandler @JvmOverloads constructor(
         val bRows = 3
         val bCols = 7
 
+        val bountySlotSize = 20
+        val adjustX = 14
+        val adjustY = 3
+
         for (j in 0 until bRows) {
             for (k in 0 until bCols) {
-                addSlot(BoardBountySlot(inventory, k + j * bCols, 8 + k * 18, 18 + j * 18))
+                addSlot(BoardBountySlot(inventory, k + j * bCols, 8 + k * bountySlotSize + adjustX, 18 + j * bountySlotSize + adjustY))
             }
 
             addSlot(BoardDecreeSlot(inventory, inventory.size() - 3 + j, 19 + 7 * 18, 18 + j * 18))
@@ -76,7 +80,7 @@ class BoardScreenHandler @JvmOverloads constructor(
         while (m < 3) {
             l = 0
             while (l < 9) {
-                addSlot(Slot(playerInventory, l + m * 9 + 9, 8 + l * 18, 84 + m * 18))
+                addSlot(Slot(playerInventory, l + m * 9 + 9, 8 + l * 18 + adjustX, 84 + m * 18 + adjustY))
                 ++l
             }
             ++m
@@ -84,7 +88,7 @@ class BoardScreenHandler @JvmOverloads constructor(
         //The player Hotbar
         m = 0
         while (m < 9) {
-            addSlot(Slot(playerInventory, m, 8 + m * 18, 142))
+            addSlot(Slot(playerInventory, m, 8 + m * 18 + 14, 142 + 3))
             ++m
         }
     }

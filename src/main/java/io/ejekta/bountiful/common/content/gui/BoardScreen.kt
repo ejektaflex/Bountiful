@@ -16,6 +16,11 @@ import net.minecraft.text.Text
 class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory?, title: Text?) :
     HandledScreen<ScreenHandler?>(handler, inventory, title) {
 
+    init {
+        backgroundWidth = 199
+        backgroundHeight = 180
+    }
+
     override fun drawBackground(matrices: MatrixStack, delta: Float, mouseX: Int, mouseY: Int) {
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f)
         client!!.textureManager.bindTexture(TEXTURE)
@@ -30,13 +35,24 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory?, title: T
         drawMouseoverTooltip(matrices, mouseX, mouseY)
     }
 
+    override fun drawForeground(matrices: MatrixStack?, mouseX: Int, mouseY: Int) {
+
+        textRenderer.draw(matrices, title, titleX.toFloat(), titleY.toFloat() + 1, 0xEADAB5)
+        textRenderer.draw(
+            matrices, playerInventory.displayName,
+            playerInventoryTitleX.toFloat(), playerInventoryTitleY.toFloat() + 5, 0xEADAB5
+        )
+
+        //super.drawForeground(matrices, mouseX, mouseY)
+    }
+
     override fun init() {
         super.init()
         titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2
     }
 
     companion object {
-        private val TEXTURE = Bountiful.id("textures/gui/container/bounty_board.png")
+        private val TEXTURE = Bountiful.id("textures/gui/container/bounty_board2.png")
     }
 }
 

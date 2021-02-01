@@ -27,6 +27,10 @@ data class BountyDataEntry(
             nbt = value?.asString()
         }
 
+    override fun toString(): String {
+        return "BDE[type=$type, content=$content, amount=$amount, isNbtNull=${nbt == null}, name=$name, mystery=$isMystery]"
+    }
+
     operator fun invoke() = type.logic
 
     fun formatted(data: BountyData, player: PlayerEntity, isObj: Boolean): Text {

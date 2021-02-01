@@ -31,10 +31,20 @@ val ItemStack.identifier: Identifier
 val ItemStack.id: Identifier
     get() = identifier
 
+fun randomSplit(num: Double, ways: Int): List<Double> {
+    val bits = (0 until ways).map { Random.nextDouble() }
+    val sum = bits.sum()
+    return bits.map { (it / sum) * num }
+}
 
-fun <T : Any> List<T>.weightedRandomBy(func: T.() -> Int): T {
+fun <T : Any> List<T>.weightedRandomIntBy(func: T.() -> Int): T {
     val mapped = map { it to func(it) }.toMap()
     return mapped.weightedRandomInt()
+}
+
+fun <T : Any> List<T>.weightedRandomDblBy(func: T.() -> Double): T {
+    val mapped = map { it to func(it) }.toMap()
+    return mapped.weightedRandomDbl()
 }
 
 fun <T : Any> Map<T, Int>.weightedRandomInt(): T {

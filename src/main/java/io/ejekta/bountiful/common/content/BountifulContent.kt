@@ -3,6 +3,7 @@ package io.ejekta.bountiful.common.content
 import io.ejekta.bountiful.common.Bountiful
 import io.ejekta.bountiful.common.bounty.data.pool.Decree
 import io.ejekta.bountiful.common.bounty.data.pool.Pool
+import io.ejekta.bountiful.common.bounty.data.pool.PoolEntry
 import io.ejekta.bountiful.common.content.board.BoardBlock
 import io.ejekta.bountiful.common.content.board.BoardBlockEntity
 import io.ejekta.bountiful.common.content.gui.BoardScreenHandler
