@@ -9,7 +9,7 @@
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 5000,
+            "unitWorth": 4000,
             "nbt": "{Damage:0}"
         },
 
@@ -20,7 +20,7 @@
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 8000,
+            "unitWorth": 6400,
             "nbt": "{Damage:0}"
         },
 
@@ -31,7 +31,7 @@
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 7000,
+            "unitWorth": 5600,
             "nbt": "{Damage:0}"
         },
 
@@ -42,7 +42,7 @@
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 4000,
+            "unitWorth": 3200,
             "nbt": "{Damage:0}"
         },
 
@@ -65,7 +65,7 @@
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 3000,
+            "unitWorth": 4200,
             "nbt": "{Damage:0}"
         },
 
@@ -77,7 +77,7 @@
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 1000,
+            "unitWorth": 2400,
             "nbt": "{Damage:0}"
         },
 
@@ -101,7 +101,7 @@
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 6000
+            "unitWorth": 5000
         },
 
         {
@@ -112,7 +112,7 @@
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 6000
+            "unitWorth": 5000
         },
 
         {

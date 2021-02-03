@@ -85,19 +85,35 @@ object BountyCreator {
 
 
 
-        val worthGroups = randomSplit(worthNeeded, numObjectives)
-
+        val worthGroups = randomSplit(worthNeeded, numObjectives).toMutableList()
 
         println("Split into: $worthGroups")
 
-        for (w in worthGroups) {
+        while (worthGroups.isNotEmpty()) {
+            val w = worthGroups.removeAt(0)
+
             val alreadyPicked = data.objectives.map { it.content }
             val unpicked = objs.filter { it.content !in alreadyPicked }
 
+            if (unpicked.isEmpty()) {
+                println("Ran out of objectives to pick from! Already picked: $alreadyPicked")
+            }
+
             val picked = pickObjective(unpicked, w)
+
+            // Append on a new worth to add obj for
+            // if we still haven't fulfilled it
+            if (picked.worth < w * 0.8) {
+                println("Cannot satisfy all, must append another (${picked.worth}, $w)")
+                worthGroups.add(w - picked.worth)
+            }
+
             println("Picked an item with worth: $w (above)")
             data.objectives.add(picked)
+
+
         }
+
 
     }
 

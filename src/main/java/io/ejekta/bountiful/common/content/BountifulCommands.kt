@@ -205,13 +205,17 @@ object BountifulCommands {
 
     private fun gen() = Command<ServerCommandSource> { ctx ->
 
-        val player = ctx.source.entity as? ServerPlayerEntity ?: return@Command 0
+        try {
+            val player = ctx.source.entity as? ServerPlayerEntity ?: return@Command 0
 
-        val rep = getInteger(ctx, "rep")
+            val rep = getInteger(ctx, "rep")
 
-        val bd = BountyCreator.createBounty(BountifulContent.Decrees.toSet(), rep)
+            val bd = BountyCreator.createBounty(BountifulContent.Decrees.toSet(), rep)
 
-        player.giveItemStack(BountyItem.create(bd))
+            player.giveItemStack(BountyItem.create(bd))
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
         1
     }

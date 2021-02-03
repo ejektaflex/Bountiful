@@ -38,7 +38,10 @@ class PoolEntry private constructor() {
     fun save(format: Json = Format.DataPack) = format.encodeToString(serializer(), this)
 
     fun toEntry(worth: Double? = null): BountyDataEntry {
-        return BountyDataEntry(type, content, amountAt(worth), nbt, isMystery = false, rarity = rarity)
+        val amt = amountAt(worth)
+        return BountyDataEntry(type, content, amountAt(worth), nbt, isMystery = false, rarity = rarity).apply {
+            this.worth = amt * unitWorth
+        }
     }
 
     fun amountAt(worth: Double? = null): Int {
@@ -53,7 +56,7 @@ class PoolEntry private constructor() {
         return toGive
     }
 
-    private val worthRange: Pair<Double, Double>
+    val worthRange: Pair<Double, Double>
         get() = (amount.min * unitWorth) to (amount.max * unitWorth)
 
     fun worthDistanceFrom(value: Double): Int {

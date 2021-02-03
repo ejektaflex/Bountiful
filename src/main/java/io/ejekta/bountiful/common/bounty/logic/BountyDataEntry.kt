@@ -3,6 +3,7 @@ package io.ejekta.bountiful.common.bounty.logic
 import io.ejekta.bountiful.common.bounty.logic.entry.EntryItemLogic
 import io.ejekta.bountiful.common.bounty.logic.entry.IEntryLogic
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.StringNbtReader
 import net.minecraft.nbt.Tag
@@ -21,6 +22,9 @@ data class BountyDataEntry(
     var isMystery: Boolean = false,
     var rarity: BountyRarity = BountyRarity.COMMON
 ) {
+
+    @Transient
+    var worth = Double.MIN_VALUE
 
     var nbtData: Tag?
         get() = nbt?.let { StringNbtReader.parse(it) }
