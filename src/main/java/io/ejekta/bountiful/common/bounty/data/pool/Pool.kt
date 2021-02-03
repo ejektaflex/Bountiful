@@ -9,6 +9,16 @@ data class Pool(
     val replace: Boolean = false
 ) : IMerge<Pool> {
 
+    override fun merge(other: Pool) {
+        when (other.replace) {
+            true -> {
+                content.clear()
+                content.addAll(other.content)
+            }
+            false -> content.addAll(other.content)
+        }
+    }
+
     override fun merged(other: Pool): Pool {
         return when (other.replace) {
             true -> Pool(id, other.content)

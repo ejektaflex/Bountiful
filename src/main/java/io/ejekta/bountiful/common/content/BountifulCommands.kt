@@ -51,6 +51,9 @@ object BountifulCommands {
                     CommandManager.literal("load").executes(load())
                 )
                 .then(
+                    CommandManager.literal("farm").executes(farm())
+                )
+                .then(
                     CommandManager.literal("gen")
                         .then(
                             CommandManager.argument("rep", integer())
@@ -203,7 +206,6 @@ object BountifulCommands {
     private fun gen() = Command<ServerCommandSource> { ctx ->
 
         val player = ctx.source.entity as? ServerPlayerEntity ?: return@Command 0
-        val held = player.mainHandStack
 
         val rep = getInteger(ctx, "rep")
 
@@ -226,6 +228,21 @@ object BountifulCommands {
             BountyRarity.values().forEach { rarity ->
                 println("${rarity.name}\t ${rarity.weightAdjustedFor(rep)}")
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        1
+    }
+
+    private fun farm() = Command<ServerCommandSource> { ctx ->
+
+        try {
+            BountifulContent.Decrees.add(Decree(
+                "farmer",
+                mutableSetOf("farmer_objs"),
+                mutableSetOf("farmer_rews")
+            ))
         } catch (e: Exception) {
             e.printStackTrace()
         }

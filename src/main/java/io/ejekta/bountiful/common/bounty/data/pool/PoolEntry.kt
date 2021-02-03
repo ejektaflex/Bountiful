@@ -68,6 +68,7 @@ class PoolEntry private constructor() {
     @Serializable
     class EntryRange(val min: Int, val max: Int) {
         fun pick(): Int = (min..max).random()
+        override fun toString() = "[$min - $max]"
     }
 
     companion object {

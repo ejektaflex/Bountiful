@@ -51,7 +51,16 @@ object BountifulIO : SimpleSynchronousResourceReloadListener {
         println("Trying to load pool piece: ${res.id}")
         if (res.type != ResourceType.POOL) throw Exception("$res is not a Pool!")
         val content = manager.getResource(res.id).inputStream.reader().readText()
-        return Format.Normal.decodeFromString(Pool.serializer(), content)
+        return Format.Normal.decodeFromString(Pool.serializer(), content).apply {
+            id = res.name
+        }
+    }
+
+    private fun loadPool(file: File): Pool {
+        val content = file.readText()
+        return Format.Normal.decodeFromString(Pool.serializer(), content).apply {
+            id = file.nameWithoutExtension
+        }
     }
 
     private fun loadDecree(res: BountifulResource, manager: ResourceManager): Decree {
@@ -80,7 +89,6 @@ object BountifulIO : SimpleSynchronousResourceReloadListener {
             println("Loading Pool: $poolId")
             val pools = resources.map { loadPool(it, resourceManager) }
             val pool = pools.reduce { a, b -> a.merged(b) }
-            pool.id = poolId
             BountifulContent.Pools.add(pool)
         }
 
@@ -88,6 +96,12 @@ object BountifulIO : SimpleSynchronousResourceReloadListener {
         println("Printing all config files: ")
         poolConfigs.toFile().listFiles()?.forEach { file ->
             println("Found config file: $file")
+            val pool = loadPool(file)
+            val existingPool = BountifulContent.Pools.find { it.id == pool.id }
+            existingPool?.let {
+                println("Merging in config pool..")
+                it.merge(pool)
+            }
         }
 
 
