@@ -2,6 +2,7 @@ package io.ejekta.bountiful.client
 
 import io.ejekta.bountiful.common.Bountiful
 import io.ejekta.bountiful.common.bounty.logic.BountyData
+import io.ejekta.bountiful.common.bounty.logic.DecreeList
 import io.ejekta.bountiful.common.content.gui.BoardScreen
 import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.mixin.ModelPredicateProviderRegistrar
@@ -23,10 +24,18 @@ class BountifulClient : ClientModInitializer {
 
         ModelPredicateProviderRegistrar.registerInvoker(
             BountifulContent.BOUNTY_ITEM,
-            Identifier(Bountiful.ID, "rarity")
+            Bountiful.id("rarity")
         ) { itemStack: ItemStack, _: ClientWorld?, _: LivingEntity? ->
             val rarity = BountyData[itemStack].rarity
             rarity.ordinal.toFloat() / 10f
+        }
+
+        ModelPredicateProviderRegistrar.registerInvoker(
+            BountifulContent.DECREE_ITEM,
+            Bountiful.id("status")
+        ) { itemStack: ItemStack, _: ClientWorld?, _: LivingEntity? ->
+            val data = DecreeList[itemStack]
+            if (data.ids.isNotEmpty()) 1f else 0f
         }
 
         ClientPlayNetworking.registerGlobalReceiver(

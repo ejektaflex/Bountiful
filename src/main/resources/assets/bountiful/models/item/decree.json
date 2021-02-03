@@ -5,11 +5,11 @@
   },
   "overrides": [
     {
-      "predicate": { "bountiful:decreestatus": 0.0 },
+      "predicate": { "bountiful:status": 0.0 },
       "model": "bountiful:item/decree-unknown"
     },
     {
-      "predicate": { "bountiful:decreestatus": 1.0 },
+      "predicate": { "bountiful:status": 1.0 },
       "model": "bountiful:item/decree-known"
     }
   ]
