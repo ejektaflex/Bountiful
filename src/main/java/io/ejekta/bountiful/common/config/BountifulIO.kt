@@ -2,11 +2,9 @@ package io.ejekta.bountiful.common.config
 
 import io.ejekta.bountiful.common.Bountiful
 import io.ejekta.bountiful.common.bounty.data.pool.Decree
-import io.ejekta.bountiful.common.bounty.data.pool.IMerge
 import io.ejekta.bountiful.common.bounty.data.pool.Pool
 import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.serial.Format
-import kotlinx.serialization.SerializationStrategy
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
 import net.minecraft.resource.ResourceManager
 import net.minecraft.util.Identifier
@@ -38,6 +36,10 @@ object BountifulIO : SimpleSynchronousResourceReloadListener {
         configFolder.resolve(ResourceType.POOL.folderName).assuredly
     }
 
+    private val decreeConfigs: Path by lazy {
+        configFolder.resolve(ResourceType.DECREE.folderName).assuredly
+    }
+
     private data class BountifulResource(
         val id: Identifier,
         val type: ResourceType
@@ -63,10 +65,19 @@ object BountifulIO : SimpleSynchronousResourceReloadListener {
         }
     }
 
+    private fun loadDecree(file: File): Decree {
+        val content = file.readText()
+        return Format.Normal.decodeFromString(Decree.serializer(), content).apply {
+            id = file.nameWithoutExtension
+        }
+    }
+
     private fun loadDecree(res: BountifulResource, manager: ResourceManager): Decree {
         if (res.type != ResourceType.DECREE) throw Exception("$res is not a Decree!")
         val content = manager.getResource(res.id).inputStream.reader().readText()
-        return Format.Normal.decodeFromString(Decree.serializer(), content)
+        return Format.Normal.decodeFromString(Decree.serializer(), content).apply {
+            id = res.name
+        }
     }
 
     private fun getResources(manager: ResourceManager, type: ResourceType): List<BountifulResource> {
@@ -83,6 +94,9 @@ object BountifulIO : SimpleSynchronousResourceReloadListener {
 
     override fun apply(resourceManager: ResourceManager) {
 
+        BountifulContent.Pools.clear()
+        BountifulContent.Decrees.clear()
+
         getResources(resourceManager, ResourceType.POOL).groupBy {
             it.name
         }.forEach { (poolId, resources) ->
@@ -92,10 +106,18 @@ object BountifulIO : SimpleSynchronousResourceReloadListener {
             BountifulContent.Pools.add(pool)
         }
 
+        getResources(resourceManager, ResourceType.DECREE).groupBy {
+            it.name
+        }.forEach { (poolId, resources) ->
+            println("Loading Decree: $poolId")
+            val decrees = resources.map { loadDecree(it, resourceManager) }
+            val decree = decrees.reduce { a, b -> a.merged(b) }
+            BountifulContent.Decrees.add(decree)
+        }
 
-        println("Printing all config files: ")
+        println("Printing all pool config files: ")
         poolConfigs.toFile().listFiles()?.forEach { file ->
-            println("Found config file: $file")
+            println("Found pool config file: $file")
             val pool = loadPool(file)
             val existingPool = BountifulContent.Pools.find { it.id == pool.id }
             existingPool?.let {
@@ -104,6 +126,16 @@ object BountifulIO : SimpleSynchronousResourceReloadListener {
             }
         }
 
+        println("Printing all decree config files: ")
+        decreeConfigs.toFile().listFiles()?.forEach { file ->
+            println("Found decree config file: $file")
+            val pool = loadDecree(file)
+            val existingPool = BountifulContent.Decrees.find { it.id == pool.id }
+            existingPool?.let {
+                println("Merging in config decree..")
+                it.merge(pool)
+            }
+        }
 
     }
 

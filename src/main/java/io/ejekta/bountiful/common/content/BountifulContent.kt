@@ -24,6 +24,8 @@ object BountifulContent {
 
     val BOUNTY_ITEM = BountyItem()
 
+    val DECREE_ITEM = DecreeItem()
+
     val BOARD = BoardBlock()
 
     val BOARD_ENTITY: BlockEntityType<BoardBlockEntity> = BlockEntityType.Builder
@@ -35,6 +37,7 @@ object BountifulContent {
     fun register() {
         CommandRegistrationCallback.EVENT.register(BountifulCommands.registerCommands())
         Registry.register(Registry.ITEM, Bountiful.id("bounty"), BOUNTY_ITEM)
+        Registry.register(Registry.ITEM, Bountiful.id("decree"), DECREE_ITEM)
         Registry.register(Registry.BLOCK, Bountiful.id("bountyboard"), BOARD)
         Registry.register(Registry.ITEM, Bountiful.id("bountyboard"),
             BlockItem(BOARD, Item.Settings().group(ItemGroup.MISC))

@@ -16,10 +16,10 @@
             "type": "ITEM",
             "content": "minecraft:iron_ingot",
             "amount": {
-                "min": 2,
-                "max": 16
+                "min": 3,
+                "max": 28
             },
-            "unitWorth": 250
+            "unitWorth": 400
         },
 
         {

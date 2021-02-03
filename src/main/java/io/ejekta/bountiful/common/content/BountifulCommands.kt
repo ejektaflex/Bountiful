@@ -209,7 +209,7 @@ object BountifulCommands {
 
         val rep = getInteger(ctx, "rep")
 
-        val bd = BountyCreator.createBounty(setOf(BountifulContent.Decrees.first()), rep)
+        val bd = BountyCreator.createBounty(BountifulContent.Decrees.toSet(), rep)
 
         player.giveItemStack(BountyItem.create(bd))
 

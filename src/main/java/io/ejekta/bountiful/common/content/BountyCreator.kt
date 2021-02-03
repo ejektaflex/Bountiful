@@ -47,6 +47,7 @@ object BountyCreator {
         val wRange = ceil(worth * variance)
 
         // TODO Make sure to filter out non-objectives
+
         val objGroups = objs.groupBy { it.worthDistanceFrom(worth) }
 
         val groupsInRange = objGroups.filter { it.key <= wRange }
@@ -82,12 +83,18 @@ object BountyCreator {
             it.content !in data.rewards.map { rew -> rew.content }
         }
 
+
+
         val worthGroups = randomSplit(worthNeeded, numObjectives)
+
 
         println("Split into: $worthGroups")
 
         for (w in worthGroups) {
-            val picked = pickObjective(objs, w)
+            val alreadyPicked = data.objectives.map { it.content }
+            val unpicked = objs.filter { it.content !in alreadyPicked }
+
+            val picked = pickObjective(unpicked, w)
             println("Picked an item with worth: $w (above)")
             data.objectives.add(picked)
         }
