@@ -1,16 +1,17 @@
 {
-  "required": true,
-  "minVersion": "0.8",
-  "package": "io.ejekta.bountiful.common.mixin",
-  "compatibilityLevel": "JAVA_8",
-  "mixins": [
-    "MutableCompoundTag",
-    "MutableListTag"
-  ],
-  "client": [
-    "ModelPredicateProviderRegistrar"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+	"required": true,
+	"minVersion": "0.8",
+	"package": "io.ejekta.bountiful.common.mixin",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [
+		"MutableCompoundTag",
+		"MutableListTag",
+		"SimpleInventoryAccessor"
+	],
+	"client": [
+		"ModelPredicateProviderRegistrar"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
 }

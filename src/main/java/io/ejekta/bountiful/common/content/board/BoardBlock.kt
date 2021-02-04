@@ -85,7 +85,7 @@ class BoardBlock : BlockWithEntity(
     }
 
     companion object {
-        const val SIZE = 24
+        const val BOUNTY_SIZE = 24
     }
 
 }

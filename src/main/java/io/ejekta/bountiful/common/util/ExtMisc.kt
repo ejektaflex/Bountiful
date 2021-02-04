@@ -7,9 +7,11 @@ import net.fabricmc.api.EnvType
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
+import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 import kotlin.random.Random
@@ -36,6 +38,11 @@ fun randomSplit(num: Double, ways: Int): List<Double> {
     val sum = bits.sum()
     return bits.map { (it / sum) * num }
 }
+
+val Inventory.content: DefaultedList<ItemStack>
+    get() = DefaultedList.ofSize(size(), ItemStack.EMPTY).apply {
+        (0 until size()).forEach { i -> this[i] = getStack(i) }
+    }
 
 fun <T : Any> List<T>.weightedRandomIntBy(func: T.() -> Int): T {
     val mapped = map { it to func(it) }.toMap()

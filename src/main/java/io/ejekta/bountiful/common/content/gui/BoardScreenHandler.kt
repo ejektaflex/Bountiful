@@ -2,6 +2,7 @@ package io.ejekta.bountiful.common.content.gui
 
 import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.content.board.BoardBlock
+import io.ejekta.bountiful.common.content.board.BoardInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventory
@@ -14,10 +15,11 @@ import net.minecraft.screen.slot.Slot
 class BoardScreenHandler @JvmOverloads constructor(
     syncId: Int,
     playerInventory: PlayerInventory,
-    inventory: Inventory = SimpleInventory(BoardBlock.SIZE)
+    inventory: Inventory = BoardInventory()
 ) : ScreenHandler(BountifulContent.BOARD_SCREEN_HANDLER, syncId) {
 
     private val inventory: Inventory
+
     override fun canUse(player: PlayerEntity): Boolean {
         return inventory.canPlayerUse(player)
     }
@@ -51,7 +53,7 @@ class BoardScreenHandler @JvmOverloads constructor(
     //The client will call the other constructor with an empty Inventory and the screenHandler will automatically
     //sync this empty inventory with the inventory on the server.
     init {
-        checkSize(inventory, BoardBlock.SIZE)
+        checkSize(inventory, BoardBlock.BOUNTY_SIZE)
         this.inventory = inventory
         //some inventories do custom logic when a player opens it.
         inventory.onOpen(playerInventory.player)
@@ -59,9 +61,9 @@ class BoardScreenHandler @JvmOverloads constructor(
         val bRows = 3
         val bCols = 7
 
-        val bountySlotSize = 20
-        val adjustX = 14
-        val adjustY = 3
+        val bountySlotSize = 18
+        val adjustX = 0
+        val adjustY = 0
 
         for (j in 0 until bRows) {
             for (k in 0 until bCols) {
@@ -88,7 +90,7 @@ class BoardScreenHandler @JvmOverloads constructor(
         //The player Hotbar
         m = 0
         while (m < 9) {
-            addSlot(Slot(playerInventory, m, 8 + m * 18 + 14, 142 + 3))
+            addSlot(Slot(playerInventory, m, 8 + m * 18 + adjustX, 142 + adjustY))
             ++m
         }
     }
