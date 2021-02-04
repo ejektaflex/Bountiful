@@ -42,6 +42,10 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, N
         return existing.maxByOrNull { it.numBounties }?.cloned(player.inventory.main)
     }
 
+    fun updateCompletedBounties(player: PlayerEntity) {
+        getBounties(player).completed += 1
+    }
+
     // only used for getting the profile to load bounties into
     private fun bountiesToLoadTo(uuid: UUID): BountyInventory {
         return bountyMap.getOrPut(uuid) {
@@ -124,6 +128,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, N
             val uuid = userTag.getUuid("uuid")
             val entry = bountiesToLoadTo(uuid)
             Inventories.fromTag(userTag, (entry as SimpleInventoryAccessor).stacks)
+            entry.completed = userTag.getInt("completed")
         }
 
         println("Loaded tag $tag")
@@ -141,6 +146,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, N
             val userTag = CompoundTag()
             userTag.putUuid("uuid", uuid)
             Inventories.toTag(userTag, (inv as SimpleInventoryAccessor).stacks)
+            userTag.putInt("completed", inv.completed)
             bountyList.add(userTag)
         }
         tag?.put("decree_inv", decreeList)

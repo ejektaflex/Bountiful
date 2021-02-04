@@ -39,7 +39,14 @@ class BoardBlock : BlockWithEntity(
 
                 if (holding.item is BountyItem) {
                     val data = BountyData[holding]
-                    data.tryCashIn(player, holding)
+                    val success = data.tryCashIn(player, holding)
+
+                    if (success) {
+                        val bountyEntity = world.getBlockEntity(pos) as? BoardBlockEntity ?: return ActionResult.FAIL
+                        bountyEntity.updateCompletedBounties(player)
+                        bountyEntity.markDirty()
+                    }
+
                 } else {
                     val screenHandlerFactory = state!!.createScreenHandlerFactory(world, pos)
                     if (screenHandlerFactory != null) {

@@ -36,19 +36,21 @@ class BountyData {
 
     fun save() = Format.NBT.encodeToJsonElement(serializer(), this)
 
-    fun tryCashIn(player: PlayerEntity, stack: ItemStack) {
+    fun tryCashIn(player: PlayerEntity, stack: ItemStack): Boolean {
         val objs = objectives.map {
             it().finishObjective(this, it, player)
         }
 
-        if (objs.all { it }) {
+        return if (objs.all { it }) {
             rewards.forEach {
                 it().giveReward(this, it, player)
             }
             stack.decrement(stack.maxCount)
+            true
         } else {
             player.sendMessage(TranslatableText("bountiful.tooltip.requirements"), false)
             println("All objectives finished but some returned false!")
+            false
         }
 
     }
