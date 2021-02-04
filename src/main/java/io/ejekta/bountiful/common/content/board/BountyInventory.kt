@@ -27,10 +27,14 @@ class BountyInventory : SimpleInventory(SIZE) {
         setStack((bountySlots - except).random(), ItemStack.EMPTY)
     }
 
-    fun cloned(): BountyInventory {
+    fun cloned(blacklist: List<ItemStack>): BountyInventory {
         val newInv = BountyInventory()
         for (i in 0 until size()) {
-            newInv.setStack(i, getStack(i).copy())
+            val stack = getStack(i)
+            // do not sync over any stacks the player had in their inventory
+            if (!blacklist.any { it.item is BountyItem && ItemStack.areTagsEqual(it, stack) }) {
+                newInv.setStack(i, stack.copy())
+            }
         }
         return newInv
     }

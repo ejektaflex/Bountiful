@@ -24,6 +24,7 @@ import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
 import net.minecraft.util.Tickable
+import net.minecraft.world.World
 import java.util.*
 
 
@@ -35,16 +36,23 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, N
 
     private val bountyMap = mutableMapOf<UUID, BountyInventory>()
 
-    private fun getBounties(uuid: UUID): BountyInventory {
+    private fun bountiesToSyncWith(player: PlayerEntity): BountyInventory? {
+        val online = world?.players?.map { it.uuid } ?: return null
+        val existing = online.mapNotNull { bountyMap[it] }
+        return existing.maxByOrNull { it.numBounties }?.cloned(player.inventory.main)
+    }
+
+    // only used for getting the profile to load bounties into
+    private fun bountiesToLoadTo(uuid: UUID): BountyInventory {
         return bountyMap.getOrPut(uuid) {
-            bountyMap.values.maxByOrNull { bountyInventory ->
-                bountyInventory.numBounties
-            }?.cloned() ?: BountyInventory()
+            BountyInventory()
         }
     }
 
     private fun getBounties(player: PlayerEntity): BountyInventory {
-        return getBounties(player.uuid)
+        return bountyMap.getOrPut(player.uuid) {
+            bountiesToSyncWith(player) ?: BountyInventory()
+        }
     }
 
     private fun getEntireInventory(player: PlayerEntity): BoardInventory {
@@ -66,12 +74,20 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, N
         }
 
         for (player in ourWorld.players) {
-            if (player.uuid in bountyMap) {
-                val inv = getBounties(player.uuid)
-                inv.addBounty(slotToAddTo, commonBounty)
-                slotsToRemove.forEach { i -> inv.removeStack(i) }
+            val inv = getBounties(player)
+            inv.addBounty(slotToAddTo, commonBounty)
+            slotsToRemove.forEach { i -> inv.removeStack(i) }
+        }
+
+        // copy over server version
+
+        // Cull offline players
+        bountyMap.keys.forEach { uuid ->
+            if ( uuid !in ourWorld.players.map { it.uuid }) {
+                bountyMap.remove(uuid)
             }
         }
+
     }
 
     override fun tick() {
@@ -106,7 +122,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, N
         bountyList.forEach { tagged ->
             val userTag = tagged as CompoundTag
             val uuid = userTag.getUuid("uuid")
-            val entry = getBounties(uuid)
+            val entry = bountiesToLoadTo(uuid)
             Inventories.fromTag(userTag, (entry as SimpleInventoryAccessor).stacks)
         }
 
