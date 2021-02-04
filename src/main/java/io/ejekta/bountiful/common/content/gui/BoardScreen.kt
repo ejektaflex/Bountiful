@@ -45,10 +45,13 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory?, title: T
             playerInventoryTitleX.toFloat(), playerInventoryTitleY.toFloat() + 1, 0xEADAB5
         )
 
+
         val lvl = (screenHandler as? BoardScreenHandler)?.level ?: 0
+
         textRenderer.draw(
-            matrices, LiteralText("Reputation: $lvl"),
-            playerInventoryTitleX.toFloat() + 90, playerInventoryTitleY.toFloat() + 1, BountyRarity.forReputation(lvl).color.colorValue!!
+            matrices, LiteralText("Reputation: ")
+                .append(LiteralText("$lvl").formatted(BountyRarity.forReputation(lvl).color)),
+            playerInventoryTitleX.toFloat() + 90, playerInventoryTitleY.toFloat() + 1, 0xEADAB5
         )
 
         //super.drawForeground(matrices, mouseX, mouseY)

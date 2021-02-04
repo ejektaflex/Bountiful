@@ -49,7 +49,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
 
     val level: Int
         get() {
-            val invs = getOnlinePlayerInventories()
+            val invs = bountyMap.values
             val total = invs.sumOf { it.completed }
             return totalLevel(total)
         }
