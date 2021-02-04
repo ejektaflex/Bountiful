@@ -6,7 +6,14 @@ import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.content.BountyCreator
 import io.ejekta.bountiful.common.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.common.mixin.SimpleInventoryAccessor
+import io.ejekta.bountiful.common.serial.Format
+import io.ejekta.bountiful.common.util.JsonStrict.toJson
+import io.ejekta.bountiful.common.util.JsonStrict.toTag
 import io.ejekta.bountiful.common.util.content
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.json.decodeFromJsonElement
+import kotlinx.serialization.json.encodeToJsonElement
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.inventory.Inventories
@@ -39,18 +46,19 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
 
     private val bountyMap = mutableMapOf<UUID, BountyInventory>()
 
+    private var finishMap = mutableMapOf<String, Int>()
+    private val finishSerializer = MapSerializer(String.serializer(), Int.serializer())
+
     private fun getOnlinePlayerInventories(): List<BountyInventory> {
         val online = world?.players?.map { it.uuid } ?: return listOf()
         return online.mapNotNull { bountyMap[it] }
     }
 
     val invs = getOnlinePlayerInventories()
-    val totalRep = invs.sumOf { it.completed }.toDouble()
 
     val level: Int
         get() {
-            val invs = bountyMap.values
-            val total = invs.sumOf { it.completed }
+            val total = finishMap.values.sum()
             return totalLevel(total)
         }
 
@@ -78,7 +86,8 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
     }
 
     fun updateCompletedBounties(player: PlayerEntity) {
-        getBounties(player).completed += 1
+        val old = finishMap.getOrPut(player.uuidAsString) { 0 }
+        finishMap[player.uuidAsString] = old + 1
     }
 
     // only used for getting the profile to load bounties into
@@ -164,14 +173,15 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
             (decrees as SimpleInventoryAccessor).stacks
         )
 
+        val doneMap = tag.getCompound("completed").toJson()
+        finishMap = Format.Normal.decodeFromJsonElement(finishSerializer, doneMap).toMutableMap()
+
         val bountyList = tag.getList("bounty_inv", 10) ?: return
         bountyList.forEach { tagged ->
             val userTag = tagged as CompoundTag
             val uuid = userTag.getUuid("uuid")
             val entry = bountiesToLoadTo(uuid)
             Inventories.fromTag(userTag, (entry as SimpleInventoryAccessor).stacks)
-            entry.completed = userTag.getInt("completed")
-            //entry.level = userTag.getInt("reputation")
         }
 
         println("Loaded tag $tag")
@@ -181,6 +191,10 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
     override fun toTag(tag: CompoundTag?): CompoundTag? {
         super.toTag(tag)
 
+        val doneMap = Format.Normal.encodeToJsonElement(finishSerializer, finishMap).toTag() as CompoundTag
+
+        tag?.put("completed", doneMap)
+
         val decreeList = CompoundTag()
         Inventories.toTag(decreeList, decrees.content)
 
@@ -189,7 +203,6 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
             val userTag = CompoundTag()
             userTag.putUuid("uuid", uuid)
             Inventories.toTag(userTag, (inv as SimpleInventoryAccessor).stacks)
-            userTag.putInt("completed", inv.completed)
             //userTag.putInt("reputation", inv.level)
             bountyList.add(userTag)
         }

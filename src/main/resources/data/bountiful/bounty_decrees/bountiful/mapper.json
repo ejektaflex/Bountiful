@@ -1,0 +1,8 @@
+{
+	"objectives": [
+		"mapper_objs"
+	],
+	"rewards": [
+		"mapper_rews"
+	]
+}

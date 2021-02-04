@@ -14,8 +14,6 @@ class BountyInventory : SimpleInventory(SIZE) {
         setStack(slot, BountyItem.create(data))
     }
 
-    var completed = 0
-
     val numBounties: Int
         get() = content.count { it.item == BountifulContent.BOUNTY_ITEM }
 
