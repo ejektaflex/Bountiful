@@ -4,12 +4,14 @@ import net.minecraft.client.util.math.MatrixStack
 
 import com.mojang.blaze3d.systems.RenderSystem
 import io.ejekta.bountiful.common.Bountiful
+import io.ejekta.bountiful.common.bounty.logic.BountyRarity
 
 import net.minecraft.entity.player.PlayerInventory
 
 import net.minecraft.screen.ScreenHandler
 
 import net.minecraft.client.gui.screen.ingame.HandledScreen
+import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 
 
@@ -41,6 +43,12 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory?, title: T
         textRenderer.draw(
             matrices, playerInventory.displayName,
             playerInventoryTitleX.toFloat(), playerInventoryTitleY.toFloat() + 1, 0xEADAB5
+        )
+
+        val lvl = (screenHandler as? BoardScreenHandler)?.level ?: 0
+        textRenderer.draw(
+            matrices, LiteralText("Reputation: $lvl"),
+            playerInventoryTitleX.toFloat() + 90, playerInventoryTitleY.toFloat() + 1, BountyRarity.forReputation(lvl).color.colorValue!!
         )
 
         //super.drawForeground(matrices, mouseX, mouseY)

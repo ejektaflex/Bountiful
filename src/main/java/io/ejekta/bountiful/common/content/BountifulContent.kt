@@ -38,7 +38,7 @@ object BountifulContent {
         .create(::BoardBlockEntity, BOARD).build(null)
 
     val BOARD_SCREEN_HANDLER: ScreenHandlerType<BoardScreenHandler> = ScreenHandlerRegistry
-        .registerSimple(Bountiful.id("board"), ::BoardScreenHandler)
+        .registerExtended(Bountiful.id("board"), ::BoardScreenHandler)
 
     fun register() {
         CommandRegistrationCallback.EVENT.register(BountifulCommands.registerCommands())
