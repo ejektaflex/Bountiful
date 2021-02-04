@@ -15,7 +15,7 @@ import net.minecraft.screen.slot.Slot
 class BoardScreenHandler @JvmOverloads constructor(
     syncId: Int,
     playerInventory: PlayerInventory,
-    inventory: Inventory = BoardInventory()
+    inventory: Inventory = SimpleInventory(24)
 ) : ScreenHandler(BountifulContent.BOARD_SCREEN_HANDLER, syncId) {
 
     private val inventory: Inventory

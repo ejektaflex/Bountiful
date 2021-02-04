@@ -36,7 +36,11 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, N
     private val bountyMap = mutableMapOf<UUID, BountyInventory>()
 
     private fun getBounties(uuid: UUID): BountyInventory {
-        return bountyMap.getOrPut(uuid) { BountyInventory() }
+        return bountyMap.getOrPut(uuid) {
+            bountyMap.values.maxByOrNull { bountyInventory ->
+                bountyInventory.numBounties
+            }?.cloned() ?: BountyInventory()
+        }
     }
 
     private fun getBounties(player: PlayerEntity): BountyInventory {
