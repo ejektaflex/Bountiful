@@ -37,10 +37,10 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory?, title: T
 
     override fun drawForeground(matrices: MatrixStack?, mouseX: Int, mouseY: Int) {
 
-        textRenderer.draw(matrices, title, titleX.toFloat(), titleY.toFloat() + 1, 0xEADAB5)
+        textRenderer.draw(matrices, title, titleX.toFloat() - 10, titleY.toFloat() + 1, 0xEADAB5)
         textRenderer.draw(
             matrices, playerInventory.displayName,
-            playerInventoryTitleX.toFloat(), playerInventoryTitleY.toFloat() + 5, 0xEADAB5
+            playerInventoryTitleX.toFloat(), playerInventoryTitleY.toFloat() + 1, 0xEADAB5
         )
 
         //super.drawForeground(matrices, mouseX, mouseY)

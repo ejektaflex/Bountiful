@@ -15,7 +15,7 @@ import net.minecraft.screen.slot.Slot
 class BoardScreenHandler @JvmOverloads constructor(
     syncId: Int,
     playerInventory: PlayerInventory,
-    inventory: Inventory = SimpleInventory(24)
+    inventory: Inventory = BoardInventory()
 ) : ScreenHandler(BountifulContent.BOARD_SCREEN_HANDLER, syncId) {
 
     private val inventory: Inventory
@@ -58,6 +58,8 @@ class BoardScreenHandler @JvmOverloads constructor(
         //some inventories do custom logic when a player opens it.
         inventory.onOpen(playerInventory.player)
 
+        val boardInv = inventory as BoardInventory
+
         val bRows = 3
         val bCols = 7
 
@@ -70,7 +72,7 @@ class BoardScreenHandler @JvmOverloads constructor(
                 addSlot(BoardBountySlot(inventory, k + j * bCols, 8 + k * bountySlotSize + adjustX, 18 + j * bountySlotSize + adjustY))
             }
 
-            addSlot(BoardDecreeSlot(inventory, inventory.size() - 3 + j, 19 + 7 * 18, 18 + j * 18))
+            addSlot(BoardDecreeSlot(boardInv, inventory.size() - 3 + j, 19 + 7 * 18, 18 + j * 18))
         }
 
         //This will place the slot in the correct locations for a 3x3 Grid. The slots exist on both server and client!

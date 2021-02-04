@@ -43,7 +43,7 @@ object BountyCreator {
 
         createObjectives(bd, decrees, rep, worth)
 
-        println("Final bounty: $bd")
+        //println("Final bounty: $bd")
 
         return bd
     }
