@@ -34,6 +34,11 @@ object BountyCreator {
 
         val worth = createRewards(bd, decrees, rep)
 
+        // return early if we have no rewards :(
+        if (bd.rewards.isEmpty()) {
+            return bd
+        }
+
         println("Created rewards worth $worth")
 
         createObjectives(bd, decrees, rep, worth)
@@ -97,6 +102,7 @@ object BountyCreator {
 
             if (unpicked.isEmpty()) {
                 println("Ran out of objectives to pick from! Already picked: $alreadyPicked")
+                break
             }
 
             val picked = pickObjective(unpicked, w)
@@ -120,6 +126,11 @@ object BountyCreator {
 
     fun createRewards(data: BountyData, decrees: Set<Decree>, rep: Int): Double {
         val rewards = getRewardsFor(decrees)
+
+        if (rewards.isEmpty()) {
+            return 0.0
+        }
+
         // Num rewards to give
         val numRewards = (1..2).random()
         val toReturn = mutableListOf<PoolEntry>()

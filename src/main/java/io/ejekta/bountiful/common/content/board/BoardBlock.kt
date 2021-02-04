@@ -2,6 +2,7 @@ package io.ejekta.bountiful.common.content.board
 
 import io.ejekta.bountiful.common.bounty.logic.BountyData
 import io.ejekta.bountiful.common.content.BountyItem
+import io.ejekta.bountiful.common.content.DecreeItem
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
@@ -63,8 +64,10 @@ class BoardBlock : BlockWithEntity(
         return ActionResult.PASS
     }
 
-    override fun createBlockEntity(world: BlockView?): BlockEntity? {
-        return BoardBlockEntity()
+    override fun createBlockEntity(world: BlockView?): BlockEntity {
+        return BoardBlockEntity().apply {
+            decrees.setStack((0..2).random(), DecreeItem.create())
+        }
     }
 
     override fun onStateReplaced(

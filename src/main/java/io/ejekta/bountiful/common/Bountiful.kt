@@ -36,23 +36,6 @@ class Bountiful : ModInitializer {
     override fun onInitialize() {
         println("Common init")
 
-        val durability = CompoundTag().apply {
-            put("Durability", LongArrayTag(listOf(1L, 2L, 3L)))
-        }
-
-        val bd = BountyData().apply {
-            timeStarted = 100
-            timeToComplete = 300
-            rarity = BountyRarity.EPIC
-            objectives.add(
-                BountyDataEntry(BountyType.ITEM, "minecraft:dirt", 2)
-            )
-            rewards.add(
-                BountyDataEntry(BountyType.ITEM, "minecraft:iron_ingot", 10).apply {
-                    nbtData = durability
-                }
-            )
-        }
 
         BountifulContent.register()
 

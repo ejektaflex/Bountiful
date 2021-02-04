@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.common.bounty.logic
 
+import io.ejekta.bountiful.common.Bountiful
 import io.ejekta.bountiful.common.serial.Format
 import io.ejekta.bountiful.common.util.GameTime
 import io.ejekta.bountiful.common.util.JsonStrict.toJson
@@ -23,7 +24,9 @@ data class DecreeList(val ids: MutableList<String> = mutableListOf()) {
 
     fun tooltipInfo(world: World): List<Text> {
         val lines = mutableListOf<Text>()
-        lines += ids.map { TranslatableText(it) }
+        lines += ids.map {
+            TranslatableText("${Bountiful.ID}.decree.$it.name").formatted(Formatting.GOLD)
+        }
         return lines
     }
 

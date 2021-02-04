@@ -50,14 +50,15 @@ class DecreeItem : Item(
 
     companion object {
 
-        /*
-        fun create(data: BountyData? = null): ItemStack {
-            return ItemStack(BountifulContent.BOUNTY_ITEM).apply {
-                BountyData[this] = data ?: BountyData()
+        fun create(data: DecreeList? = null): ItemStack {
+            return ItemStack(BountifulContent.DECREE_ITEM).apply {
+                DecreeList[this] = data ?: DecreeList(
+                    mutableListOf(
+                        BountifulContent.Decrees.random().id
+                    )
+                )
             }
         }
-
-         */
 
     }
 

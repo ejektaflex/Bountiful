@@ -1,7 +1,11 @@
 package io.ejekta.bountiful.common.content.board
 
+import io.ejekta.bountiful.common.bounty.data.pool.Decree
 import io.ejekta.bountiful.common.bounty.logic.BountyData
+import io.ejekta.bountiful.common.bounty.logic.DecreeList
 import io.ejekta.bountiful.common.content.BountifulContent
+import io.ejekta.bountiful.common.content.BountyCreator
+import io.ejekta.bountiful.common.content.DecreeItem
 import io.ejekta.bountiful.common.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.common.mixin.SimpleInventoryAccessor
 import io.ejekta.bountiful.common.util.content
@@ -32,7 +36,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, N
 
     //override val content = DefaultedList.ofSize(900, ItemStack.EMPTY)
 
-    private val decrees = SimpleInventory(3)
+    val decrees = SimpleInventory(3)
 
     private val bountyMap = mutableMapOf<UUID, BountyInventory>()
 
@@ -63,6 +67,12 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, N
         return BoardInventory(getBounties(player), decrees)
     }
 
+    private fun getBoardDecrees(): Set<Decree> {
+        return BountifulContent.getDecrees(
+            decrees.content.map { DecreeList[it].ids }.flatten().toSet()
+        )
+    }
+
     private fun randomlyAddBounty() {
         val ourWorld = world ?: return
 
@@ -72,10 +82,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, N
             (BountyInventory.bountySlots - slotToAddTo).random()
         }
 
-        val commonBounty = BountyData.defaultRandom().apply {
-            timeStarted = ourWorld.time
-            timeToComplete = 3000
-        }
+        val commonBounty = BountyCreator.createBounty(getBoardDecrees(), 0)
 
         for (player in ourWorld.players) {
             val inv = getBounties(player)

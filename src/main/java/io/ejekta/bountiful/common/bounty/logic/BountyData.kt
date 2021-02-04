@@ -89,44 +89,10 @@ class BountyData {
     companion object : ItemData<BountyData>(serializer()) {
 
         override val creator: () -> BountyData = {
-            BountyData().apply {
-                timeStarted = 100
-                timeToComplete = 300
-                rarity = BountyRarity.EPIC
-                objectives.add(
-                    BountyDataEntry(BountyType.ITEM, "minecraft:dirt", 2)
-                )
-                rewards.add(
-                    BountyDataEntry(BountyType.ITEM, "minecraft:iron_ingot", 10)
-                )
-            }
+            BountyData()
         }
 
-        fun default() = BountyData().apply {
-            timeStarted = 100
-            timeToComplete = 300
-            rarity = BountyRarity.EPIC
-            objectives.add(
-                BountyDataEntry(BountyType.ITEM, "minecraft:dirt", 2)
-            )
-            rewards.add(
-                BountyDataEntry(BountyType.ITEM, "minecraft:iron_ingot", 10)
-            )
-        }
 
-        fun default2() = BountyData().apply {
-            timeStarted = 100
-            timeToComplete = 300
-            rarity = BountyRarity.COMMON
-            objectives.add(
-                BountyDataEntry(BountyType.ITEM, "minecraft:yellow_wool", 1)
-            )
-            rewards.add(
-                BountyDataEntry(BountyType.ITEM, "minecraft:bookshelf", 3)
-            )
-        }
-
-        fun defaultRandom() = listOf(default(), default2()).random()
 
     }
 

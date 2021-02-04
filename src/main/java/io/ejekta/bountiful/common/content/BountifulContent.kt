@@ -22,6 +22,12 @@ object BountifulContent {
 
     val Pools = mutableListOf<Pool>()
 
+    fun getDecrees(ids: Set<String>): Set<Decree> {
+        return ids.mapNotNull { id ->
+            Decrees.find { it.id == id }
+        }.toSet()
+    }
+
     val BOUNTY_ITEM = BountyItem()
 
     val DECREE_ITEM = DecreeItem()
