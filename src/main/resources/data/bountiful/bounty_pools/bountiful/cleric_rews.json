@@ -24,8 +24,52 @@
 
         {
             "type": "ITEM",
+            "content": "minecraft:potion",
+            "amount": {
+                "min": 1,
+                "max": 3
+            },
+            "unitWorth": 550,
+            "nbt": "{Potion:\"minecraft:healing\"}"
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:potion",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 600,
+            "nbt": "{Potion:\"minecraft:fire_resistance\"}"
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:enchanted_book",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1000,
+            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:unbreaking\"}]}"
+        },
+
+        {
+            "type": "ITEM",
 			"rarity": "UNCOMMON",
             "content": "minecraft:glowstone",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 2000
+        },
+
+        {
+            "type": "ITEM",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:ghast_tear",
             "amount": {
                 "min": 1,
                 "max": 1
@@ -42,6 +86,18 @@
                 "max": 1
             },
             "unitWorth": 4000
+        },
+
+        {
+            "type": "ITEM",
+            "rarity": "RARE",
+            "content": "minecraft:potion",
+            "amount": {
+                "min": 1,
+                "max": 2
+            },
+            "unitWorth": 1500,
+            "nbt": "{Potion:\"minecraft:luck\"}"
         },
 
         {
@@ -64,6 +120,18 @@
                 "max": 1
             },
             "unitWorth": 2500
+        },
+
+        {
+            "type": "ITEM",
+            "rarity": "LEGENDARY",
+            "content": "minecraft:enchanted_book",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 2500,
+            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:mending\"}]}"
         }
 
 

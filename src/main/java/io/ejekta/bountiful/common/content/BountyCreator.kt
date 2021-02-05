@@ -61,13 +61,15 @@ object BountyCreator {
         return totalObjs
     }
 
-    fun pickObjective(objs: List<PoolEntry>, worth: Double): BountyDataEntry {
-        val variance = 0.2
+    fun pickObjective(objs: List<PoolEntry>, worth: Double, rep: Int): BountyDataEntry {
+        val variance = 0.25
         val inVariance = getObjectivesWithinVariance(objs, worth, variance)
 
         // Picks a random pool within the variance. If none exist, get the objective with the closest worth distance.
         val pickedPool = if (inVariance.isNotEmpty()) {
-            inVariance.random()
+            inVariance.weightedRandomDblBy {
+                weightMult * rarity.weightAdjustedFor(rep)
+            }
         } else {
             println("Nothing was in variance")
             objs.minByOrNull { it.worthDistanceFrom(worth) }!!
@@ -105,11 +107,11 @@ object BountyCreator {
                 break
             }
 
-            val picked = pickObjective(unpicked, w)
+            val picked = pickObjective(unpicked, w, rep)
 
             // Append on a new worth to add obj for
             // if we still haven't fulfilled it
-            if (picked.worth < w * 0.8) {
+            if (picked.worth < w * 0.5) {
                 println("Cannot satisfy all, must append another (${picked.worth}, $w)")
                 worthGroups.add(w - picked.worth)
             }
@@ -147,7 +149,7 @@ object BountyCreator {
             }
 
             val picked = totalRewards.weightedRandomDblBy {
-                weightMult * rarity.weightAdjustedFor(rep) * timeMult * repMult
+                weightMult * rarity.weightAdjustedFor(rep)
             }
 
             toReturn.add(picked)

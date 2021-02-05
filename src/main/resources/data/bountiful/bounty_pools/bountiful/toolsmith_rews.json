@@ -15,46 +15,12 @@
 
         {
             "type": "ITEM",
-            "content": "minecraft:stone_shovel",
-            "amount": {
-                "min": 1,
-                "max": 1
-            },
-            "unitWorth": 100,
-            "nbt": "{Damage:0}"
-        },
-
-        {
-            "type": "ITEM",
             "content": "minecraft:stone_pickaxe",
             "amount": {
                 "min": 1,
                 "max": 2
             },
             "unitWorth": 300,
-            "nbt": "{Damage:0}"
-        },
-
-        {
-            "type": "ITEM",
-            "content": "minecraft:stone_hoe",
-            "amount": {
-                "min": 1,
-                "max": 2
-            },
-            "unitWorth": 200,
-            "nbt": "{Damage:0}"
-        },
-
-        {
-            "type": "ITEM",
-			"rarity": "UNCOMMON",
-            "content": "minecraft:iron_shovel",
-            "amount": {
-                "min": 1,
-                "max": 1
-            },
-            "unitWorth": 900,
             "nbt": "{Damage:0}"
         },
 
@@ -73,24 +39,12 @@
         {
             "type": "ITEM",
 			"rarity": "UNCOMMON",
-            "content": "minecraft:iron_hoe",
-            "amount": {
-                "min": 1,
-                "max": 1
-            },
-            "unitWorth": 1800,
-            "nbt": "{Damage:0}"
-        },
-
-        {
-            "type": "ITEM",
-			"rarity": "UNCOMMON",
             "content": "minecraft:bell",
             "amount": {
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 20000
+            "unitWorth": 12000
         }
 
 

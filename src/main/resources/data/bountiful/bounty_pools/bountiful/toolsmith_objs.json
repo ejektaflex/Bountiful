@@ -2,25 +2,6 @@
 {
 	"content": [
 
-		{
-            "type": "ITEM",
-            "content": "minecraft:coal",
-            "amount": {
-                "min": 4,
-                "max": 32
-            },
-            "unitWorth": 65
-        },
-
-        {
-            "type": "ITEM",
-            "content": "minecraft:iron_ingot",
-            "amount": {
-                "min": 3,
-                "max": 28
-            },
-            "unitWorth": 500
-        },
 
         {
             "type": "ITEM",

@@ -34,8 +34,29 @@
 
 		{
 			"type": "ITEM",
+			"content": "minecraft:leather",
+			"amount": {
+				"min": 2,
+				"max": 8
+			},
+			"unitWorth": 150
+		},
+
+		{
+			"type": "ITEM",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:cooked_beef",
+			"amount": {
+				"min": 2,
+				"max": 12
+			},
+			"unitWorth": 125
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "minecraft:cooked_mutton",
 			"amount": {
 				"min": 2,
 				"max": 12

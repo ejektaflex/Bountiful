@@ -2,24 +2,69 @@
 {
 	"content": [
 
-		{
+
+        {
             "type": "ITEM",
-            "content": "minecraft:coal",
+            "content": "minecraft:lava_bucket",
             "amount": {
                 "min": 1,
-                "max": 24
+                "max": 2
             },
-            "unitWorth": 65
+            "unitWorth": 1800
         },
 
         {
             "type": "ITEM",
-            "content": "minecraft:iron_ingot",
+            "content": "minecraft:leather_helmet",
             "amount": {
-                "min": 2,
-                "max": 16
+                "min": 1,
+                "max": 3
             },
-            "unitWorth": 250
+            "unitWorth": 1000,
+            "nbt": "{Damage:0}"
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:leather_chestplate",
+            "amount": {
+                "min": 1,
+                "max": 4
+            },
+            "unitWorth": 1600,
+            "nbt": "{Damage:0}"
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:leather_leggings",
+            "amount": {
+                "min": 1,
+                "max": 3
+            },
+            "unitWorth": 1400,
+            "nbt": "{Damage:0}"
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:leather_boots",
+            "amount": {
+                "min": 1,
+                "max": 3
+            },
+            "unitWorth": 800,
+            "nbt": "{Damage:0}"
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:blast_furnace",
+            "amount": {
+                "min": 1,
+                "max": 4
+            },
+            "unitWorth": 2400
         },
 
         {
@@ -38,7 +83,7 @@
             "content": "minecraft:diamond",
             "amount": {
                 "min": 1,
-                "max": 1
+                "max": 4
             },
             "unitWorth": 2000
         },

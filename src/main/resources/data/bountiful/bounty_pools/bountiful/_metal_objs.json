@@ -1,0 +1,60 @@
+{
+	"content": [
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:coal",
+			"amount": {
+				"min": 3,
+				"max": 24
+			},
+			"unitWorth": 65
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:iron_ingot",
+			"amount": {
+				"min": 3,
+				"max": 28
+			},
+			"unitWorth": 500
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:chain",
+			"amount": {
+				"min": 1,
+				"max": 16
+			},
+			"unitWorth": 400
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:iron_bars",
+			"amount": {
+				"min": 4,
+				"max": 24
+			},
+			"unitWorth": 150
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "LEGENDARY",
+			"content": "minecraft:netherite_ingot",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 4000
+		}
+
+
+
+	]
+
+
+}

@@ -1,8 +1,10 @@
 {
 	"objectives": [
-		"fisherman_objs"
+		"fisherman_objs",
+		"_all_objs"
 	],
 	"rewards": [
-		"fisherman_rews"
+		"fisherman_rews",
+		"_all_rews"
 	]
 }

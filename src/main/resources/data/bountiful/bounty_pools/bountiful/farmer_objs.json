@@ -4,6 +4,46 @@
 
 		{
 			"type": "ITEM",
+			"content": "minecraft:bone_meal",
+			"amount": {
+				"min": 4,
+				"max": 48
+			},
+			"unitWorth": 50
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:bone_meal",
+			"amount": {
+				"min": 4,
+				"max": 36
+			},
+			"unitWorth": 150
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:oak_sapling",
+			"amount": {
+				"min": 3,
+				"max": 36
+			},
+			"unitWorth": 50
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:sugar",
+			"amount": {
+				"min": 3,
+				"max": 36
+			},
+			"unitWorth": 40
+		},
+
+		{
+			"type": "ITEM",
 			"content": "minecraft:wheat",
 			"amount": {
 				"min": 4,
@@ -51,6 +91,17 @@
 				"max": 8
 			},
 			"unitWorth": 165
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "minecraft:composter",
+			"amount": {
+				"min": 1,
+				"max": 6
+			},
+			"unitWorth": 200
 		},
 
 		{

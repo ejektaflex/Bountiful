@@ -7,7 +7,17 @@
             "content": "minecraft:paper",
             "amount": {
                 "min": 4,
-                "max": 32
+                "max": 48
+            },
+            "unitWorth": 45
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:sugar_cane",
+            "amount": {
+                "min": 4,
+                "max": 48
             },
             "unitWorth": 40
         },
@@ -17,9 +27,19 @@
             "content": "minecraft:book",
             "amount": {
                 "min": 1,
-                "max": 6
+                "max": 24
             },
             "unitWorth": 250
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:lectern",
+            "amount": {
+                "min": 1,
+                "max": 2
+            },
+            "unitWorth": 1000
         },
 
         {
@@ -35,7 +55,7 @@
 
         {
             "type": "ITEM",
-			"rarity": "RARE",
+			"rarity": "UNCOMMON",
             "content": "minecraft:writable_book",
             "amount": {
                 "min": 1,

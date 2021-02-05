@@ -24,6 +24,38 @@
 
         {
             "type": "ITEM",
+            "content": "minecraft:magma_cream",
+            "amount": {
+                "min": 2,
+                "max": 6
+            },
+            "unitWorth": 450
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:potion",
+            "amount": {
+                "min": 2,
+                "max": 8
+            },
+            "unitWorth": 100,
+            "nbt": "{Potion:\"minecraft:water\"}"
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:potion",
+            "amount": {
+                "min": 2,
+                "max": 6
+            },
+            "unitWorth": 200,
+            "nbt": "{Potion:\"minecraft:awkward\"}"
+        },
+
+        {
+            "type": "ITEM",
 			"rarity": "UNCOMMON",
             "content": "minecraft:rabbit_foot",
             "amount": {
@@ -35,6 +67,17 @@
 
         {
             "type": "ITEM",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:cauldron",
+            "amount": {
+                "min": 1,
+                "max": 2
+            },
+            "unitWorth": 4200
+        },
+
+        {
+            "type": "ITEM",
 			"rarity": "RARE",
             "content": "minecraft:glass_bottle",
             "amount": {
@@ -42,6 +85,17 @@
                 "max": 16
             },
             "unitWorth": 110
+        },
+
+        {
+            "type": "ITEM",
+            "rarity": "RARE",
+            "content": "minecraft:ghast_tear",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1500
         },
 
         {

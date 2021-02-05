@@ -34,6 +34,26 @@
 
         {
             "type": "ITEM",
+            "content": "minecraft:target",
+            "amount": {
+                "min": 1,
+                "max": 2
+            },
+            "unitWorth": 750
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:fletching_table",
+            "amount": {
+                "min": 1,
+                "max": 4
+            },
+            "unitWorth": 400
+        },
+
+        {
+            "type": "ITEM",
 			"rarity": "UNCOMMON",
             "content": "minecraft:string",
             "amount": {

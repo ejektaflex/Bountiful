@@ -1,0 +1,30 @@
+{
+	"content": [
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:emerald",
+			"amount": {
+				"min": 1,
+				"max": 4
+			},
+			"unitWorth": 1000
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "EPIC",
+			"content": "minecraft:emerald",
+			"amount": {
+				"min": 1,
+				"max": 4
+			},
+			"unitWorth": 800
+		}
+
+
+
+	]
+
+
+}
