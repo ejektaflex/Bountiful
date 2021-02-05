@@ -22,7 +22,7 @@ enum class BountyRarity(val color: Formatting, val weight: Int, val repTier: Int
             return values().last { rep >= it.repTier  }
         }
 
-        val rarityWeightScaling = 2.5
+        const val rarityWeightScaling = 2.25
 
         //fun weightAdjustedFor(rep: Int) =
     }

@@ -8,6 +8,7 @@ import io.ejekta.bountiful.common.config.PoolEntry
 import io.ejekta.bountiful.common.util.randomSplit
 import io.ejekta.bountiful.common.util.weightedRandomDblBy
 import kotlin.math.ceil
+import kotlin.math.pow
 
 object BountyCreator {
 
@@ -27,7 +28,7 @@ object BountyCreator {
         return getObjectivePoolsFor(decrees).map { it.content }.flatten().toSet()
     }
 
-    fun createBounty(decrees: Set<Decree>, rep: Int): BountyData {
+    fun createBounty(decrees: Set<Decree>, rep: Int, startTime: Long = 0L): BountyData {
 
         val bd = BountyData()
 
@@ -38,16 +39,21 @@ object BountyCreator {
             return bd
         }
 
+        //bd.timeToComplete += bd.rewards.map { it.worth.toLong() }.sum() * 10
+
         println("Created rewards worth $worth")
 
         createObjectives(bd, decrees, rep, worth)
 
-        //println("Final bounty: $bd")
+        bd.timeStarted = startTime
+        bd.timeToComplete += 15000L
+
+        //bd.timeToComplete = bd.timeToComplete.toDouble().pow(0.95).toLong() // curve off high value items
 
         return bd
     }
 
-    fun getObjectivesWithinVariance(objs: List<PoolEntry>, worth: Double, variance: Double): List<PoolEntry> {
+    private fun getObjectivesWithinVariance(objs: List<PoolEntry>, worth: Double, variance: Double): List<PoolEntry> {
         val wRange = ceil(worth * variance)
 
         // TODO Make sure to filter out non-objectives
@@ -60,12 +66,12 @@ object BountyCreator {
         return totalObjs
     }
 
-    fun pickObjective(objs: List<PoolEntry>, worth: Double, rep: Int): BountyDataEntry {
+    private fun pickObjective(data: BountyData, objs: List<PoolEntry>, worth: Double, rep: Int): BountyDataEntry {
         val variance = 0.25
         val inVariance = getObjectivesWithinVariance(objs, worth, variance)
 
         // Picks a random pool within the variance. If none exist, get the objective with the closest worth distance.
-        val pickedPool = if (inVariance.isNotEmpty()) {
+        val picked = if (inVariance.isNotEmpty()) {
             inVariance.weightedRandomDblBy {
                 weightMult * rarity.weightAdjustedFor(rep)
             }
@@ -73,7 +79,12 @@ object BountyCreator {
             println("Nothing was in variance")
             objs.minByOrNull { it.worthDistanceFrom(worth) }!!
         }
-        return pickedPool.toEntry(worth).also { println("picked $it") }
+
+        val entry = picked.toEntry(worth)
+
+        data.timeToComplete += (picked.timeMult * entry.worth).toLong() * 7
+
+        return entry
     }
 
     fun createObjectives(data: BountyData, decrees: Set<Decree>, rep: Int, worth: Double) {
@@ -106,7 +117,7 @@ object BountyCreator {
                 break
             }
 
-            val picked = pickObjective(unpicked, w, rep)
+            val picked = pickObjective(data, unpicked, w, rep)
 
             // Append on a new worth to add obj for
             // if we still haven't fulfilled it
