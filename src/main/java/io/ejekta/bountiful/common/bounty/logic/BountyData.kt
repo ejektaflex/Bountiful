@@ -1,23 +1,16 @@
 package io.ejekta.bountiful.common.bounty.logic
 
-import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.serial.Format
 import io.ejekta.bountiful.common.util.GameTime
-import io.ejekta.bountiful.common.util.JsonStrict.toJson
-import io.ejekta.bountiful.common.util.JsonStrict.toTag
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.serializer
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Formatting
-import net.minecraft.util.Rarity
 import net.minecraft.world.World
-import java.util.*
 import kotlin.math.max
 
 @Serializable
@@ -87,13 +80,7 @@ class BountyData {
     }
 
     companion object : ItemData<BountyData>(serializer()) {
-
-        override val creator: () -> BountyData = {
-            BountyData()
-        }
-
-
-
+        override val creator: () -> BountyData = { BountyData() }
     }
 
 }

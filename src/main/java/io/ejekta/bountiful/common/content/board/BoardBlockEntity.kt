@@ -1,7 +1,7 @@
 package io.ejekta.bountiful.common.content.board
 
-import io.ejekta.bountiful.common.bounty.data.pool.Decree
-import io.ejekta.bountiful.common.bounty.logic.DecreeList
+import io.ejekta.bountiful.common.bounty.logic.DecreeData
+import io.ejekta.bountiful.common.config.Decree
 import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.content.BountyCreator
 import io.ejekta.bountiful.common.content.gui.BoardScreenHandler
@@ -12,28 +12,20 @@ import io.ejekta.bountiful.common.util.JsonStrict.toTag
 import io.ejekta.bountiful.common.util.content
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.json.decodeFromJsonElement
-import kotlinx.serialization.json.encodeToJsonElement
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
-import net.minecraft.block.entity.BlockEntity
-import net.minecraft.inventory.Inventories
-
-import net.minecraft.nbt.CompoundTag
-
 import net.minecraft.block.BlockState
-
-import net.minecraft.text.TranslatableText
-
+import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.player.PlayerEntity
-
 import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SimpleInventory
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.network.PacketByteBuf
-
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
+import net.minecraft.text.TranslatableText
 import net.minecraft.util.Tickable
 import java.util.*
 
@@ -109,7 +101,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
 
     private fun getBoardDecrees(): Set<Decree> {
         return BountifulContent.getDecrees(
-            decrees.content.map { DecreeList[it].ids }.flatten().toSet()
+            decrees.content.map { DecreeData[it].ids }.flatten().toSet()
         )
     }
 

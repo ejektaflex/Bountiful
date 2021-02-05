@@ -4,8 +4,6 @@ import io.ejekta.bountiful.common.serial.Format
 import io.ejekta.bountiful.common.util.JsonStrict.toJson
 import io.ejekta.bountiful.common.util.JsonStrict.toTag
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.json.decodeFromJsonElement
-import kotlinx.serialization.json.encodeToJsonElement
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 

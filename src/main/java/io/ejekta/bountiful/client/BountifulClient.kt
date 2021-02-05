@@ -2,9 +2,9 @@ package io.ejekta.bountiful.client
 
 import io.ejekta.bountiful.common.Bountiful
 import io.ejekta.bountiful.common.bounty.logic.BountyData
-import io.ejekta.bountiful.common.bounty.logic.DecreeList
-import io.ejekta.bountiful.common.content.gui.BoardScreen
+import io.ejekta.bountiful.common.bounty.logic.DecreeData
 import io.ejekta.bountiful.common.content.BountifulContent
+import io.ejekta.bountiful.common.content.gui.BoardScreen
 import io.ejekta.bountiful.common.mixin.ModelPredicateProviderRegistrar
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
@@ -13,7 +13,6 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
-import net.minecraft.util.Identifier
 
 class BountifulClient : ClientModInitializer {
 
@@ -34,7 +33,7 @@ class BountifulClient : ClientModInitializer {
             BountifulContent.DECREE_ITEM,
             Bountiful.id("status")
         ) { itemStack: ItemStack, _: ClientWorld?, _: LivingEntity? ->
-            val data = DecreeList[itemStack]
+            val data = DecreeData[itemStack]
             if (data.ids.isNotEmpty()) 1f else 0f
         }
 

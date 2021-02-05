@@ -3,10 +3,10 @@ package io.ejekta.bountiful.common.content.gui
 import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.content.board.BoardBlock
 import io.ejekta.bountiful.common.content.board.BoardInventory
-import net.minecraft.item.ItemStack
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.inventory.Inventory
 import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.inventory.Inventory
+import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot

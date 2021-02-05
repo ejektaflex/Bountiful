@@ -1,4 +1,4 @@
-package io.ejekta.bountiful.common.bounty.data.pool
+package io.ejekta.bountiful.common.config
 
 import io.ejekta.bountiful.common.bounty.logic.BountyDataEntry
 import io.ejekta.bountiful.common.bounty.logic.BountyRarity

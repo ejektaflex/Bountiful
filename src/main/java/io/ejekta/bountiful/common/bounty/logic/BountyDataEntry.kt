@@ -1,7 +1,5 @@
 package io.ejekta.bountiful.common.bounty.logic
 
-import io.ejekta.bountiful.common.bounty.logic.entry.EntryItemLogic
-import io.ejekta.bountiful.common.bounty.logic.entry.IEntryLogic
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.entity.player.PlayerEntity

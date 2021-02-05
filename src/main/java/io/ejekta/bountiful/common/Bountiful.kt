@@ -1,22 +1,15 @@
 @file:UseSerializers(IdentitySer::class)
 package io.ejekta.bountiful.common
 
-import io.ejekta.bountiful.common.bounty.logic.BountyData
-import io.ejekta.bountiful.common.bounty.logic.BountyDataEntry
-import io.ejekta.bountiful.common.bounty.logic.BountyRarity
-import io.ejekta.bountiful.common.bounty.logic.BountyType
 import io.ejekta.bountiful.common.config.BountifulIO
 import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.serial.IdentitySer
-import kotlinx.serialization.*
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.UseSerializers
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
-import net.minecraft.nbt.*
 import net.minecraft.resource.ResourceType
 import net.minecraft.util.Identifier
-import java.io.File
-import java.nio.file.Paths
-import kotlin.reflect.typeOf
 
 class Bountiful : ModInitializer {
 

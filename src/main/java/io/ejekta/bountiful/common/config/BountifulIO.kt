@@ -1,8 +1,6 @@
 package io.ejekta.bountiful.common.config
 
 import io.ejekta.bountiful.common.Bountiful
-import io.ejekta.bountiful.common.bounty.data.pool.Decree
-import io.ejekta.bountiful.common.bounty.data.pool.Pool
 import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.serial.Format
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener

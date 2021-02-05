@@ -1,8 +1,13 @@
 package io.ejekta.bountiful.common.util
 
 import io.ejekta.bountiful.common.util.JsonStrict.toTag
-import kotlinx.serialization.json.*
-import net.minecraft.nbt.*
+import kotlinx.serialization.json.add
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonArray
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.StringTag
 
 fun main() {
 

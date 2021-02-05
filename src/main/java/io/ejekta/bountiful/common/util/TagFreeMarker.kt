@@ -1,11 +1,9 @@
 package io.ejekta.bountiful.common.util
 
-import net.minecraft.nbt.EndTag
 import net.minecraft.nbt.PositionTracker
 import net.minecraft.nbt.Tag
 import net.minecraft.nbt.TagReader
 import net.minecraft.text.LiteralText
-import net.minecraft.text.Text
 import java.io.DataInput
 import java.io.DataOutput
 

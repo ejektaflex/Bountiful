@@ -1,11 +1,10 @@
 package io.ejekta.bountiful.common.content
 
-import io.ejekta.bountiful.common.bounty.data.pool.Decree
-import io.ejekta.bountiful.common.bounty.data.pool.Pool
-import io.ejekta.bountiful.common.bounty.data.pool.PoolEntry
 import io.ejekta.bountiful.common.bounty.logic.BountyData
 import io.ejekta.bountiful.common.bounty.logic.BountyDataEntry
-import io.ejekta.bountiful.common.bounty.logic.BountyRarity
+import io.ejekta.bountiful.common.config.Decree
+import io.ejekta.bountiful.common.config.Pool
+import io.ejekta.bountiful.common.config.PoolEntry
 import io.ejekta.bountiful.common.util.randomSplit
 import io.ejekta.bountiful.common.util.weightedRandomDblBy
 import kotlin.math.ceil

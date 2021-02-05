@@ -3,15 +3,14 @@ package io.ejekta.bountiful.common.content
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.arguments.IntegerArgumentType.getInteger
 import com.mojang.brigadier.arguments.IntegerArgumentType.integer
-import com.mojang.brigadier.builder.RequiredArgumentBuilder.argument
 import io.ejekta.bountiful.common.Bountiful
-import io.ejekta.bountiful.common.bounty.data.pool.Decree
-import io.ejekta.bountiful.common.bounty.data.pool.Pool
-import io.ejekta.bountiful.common.bounty.data.pool.PoolEntry
 import io.ejekta.bountiful.common.bounty.logic.BountyData
 import io.ejekta.bountiful.common.bounty.logic.BountyDataEntry
 import io.ejekta.bountiful.common.bounty.logic.BountyRarity
 import io.ejekta.bountiful.common.bounty.logic.BountyType
+import io.ejekta.bountiful.common.config.Decree
+import io.ejekta.bountiful.common.config.Pool
+import io.ejekta.bountiful.common.config.PoolEntry
 import io.ejekta.bountiful.common.serial.Format
 import io.ejekta.bountiful.common.util.id
 import io.netty.buffer.Unpooled
@@ -25,9 +24,6 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.LiteralText
 import java.nio.file.Path
 import java.nio.file.Paths
-
-
-
 
 
 object BountifulCommands {
@@ -242,11 +238,13 @@ object BountifulCommands {
     private fun farm() = Command<ServerCommandSource> { ctx ->
 
         try {
-            BountifulContent.Decrees.add(Decree(
+            BountifulContent.Decrees.add(
+                Decree(
                 "farmer",
                 mutableSetOf("farmer_objs"),
                 mutableSetOf("farmer_rews")
-            ))
+            )
+            )
         } catch (e: Exception) {
             e.printStackTrace()
         }

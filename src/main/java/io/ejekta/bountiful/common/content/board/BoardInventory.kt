@@ -1,13 +1,9 @@
 package io.ejekta.bountiful.common.content.board
 
-import io.ejekta.bountiful.common.bounty.logic.BountyData
-import io.ejekta.bountiful.common.content.BountyItem
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.DoubleInventory
 import net.minecraft.inventory.Inventory
-import net.minecraft.item.ItemStack
 import net.minecraft.inventory.SimpleInventory
-import net.minecraft.util.collection.DefaultedList
 
 
 class BoardInventory(
