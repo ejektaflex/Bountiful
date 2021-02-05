@@ -16,8 +16,15 @@ data class DecreeData(val ids: MutableList<String> = mutableListOf()) {
 
     fun tooltipInfo(world: World): List<Text> {
         val lines = mutableListOf<Text>()
-        lines += ids.map {
-            TranslatableText("${Bountiful.ID}.decree.$it.name").formatted(Formatting.GOLD)
+        lines += when (ids.isNotEmpty()) {
+            true -> {
+                ids.map {
+                    TranslatableText("${Bountiful.ID}.decree.$it.name").formatted(Formatting.GOLD)
+                }
+            }
+            false -> {
+                listOf(TranslatableText("bountiful.decree.notset"))
+            }
         }
         return lines
     }

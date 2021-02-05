@@ -114,7 +114,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
             (BountyInventory.bountySlots - slotToAddTo).random()
         }
 
-        val commonBounty = BountyCreator.createBounty(getBoardDecrees(), 0)
+        val commonBounty = BountyCreator.createBounty(getBoardDecrees(), level)
 
         for (player in ourWorld.players) {
             val inv = getBounties(player)
@@ -136,9 +136,24 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
     override fun tick() {
         val ourWorld = world ?: return
         if (ourWorld.isClient) return
+
         if ((ourWorld.time + 13L) % 20L == 0L) {
+            // Change bounty population
             randomlyAddBounty()
+
+            // Set unset decrees
+            (decrees as SimpleInventoryAccessor).stacks.forEach { stack ->
+                DecreeData.edit(stack) {
+                    if (ids.isEmpty() && BountifulContent.Decrees.isNotEmpty()) {
+                        ids.add(BountifulContent.Decrees.random().id)
+                    }
+                }
+            }
+
         }
+
+
+
     }
 
     override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity?): ScreenHandler {

@@ -46,12 +46,14 @@ class BoardBlock : BlockWithEntity(
                         val bountyEntity = world.getBlockEntity(pos) as? BoardBlockEntity ?: return ActionResult.FAIL
                         bountyEntity.updateCompletedBounties(player)
                         bountyEntity.markDirty()
+                        return ActionResult.success(true)
                     }
 
                 } else {
                     val screenHandlerFactory = state!!.createScreenHandlerFactory(world, pos)
                     if (screenHandlerFactory != null) {
                         player.openHandledScreen(screenHandlerFactory)
+                        return ActionResult.success(false)
                     }
                 }
 
@@ -61,7 +63,7 @@ class BoardBlock : BlockWithEntity(
 
         }
 
-        return ActionResult.PASS
+        return ActionResult.FAIL
     }
 
     override fun createBlockEntity(world: BlockView?): BlockEntity {
