@@ -110,7 +110,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
 
         val slotToAddTo = BountyInventory.bountySlots.random()
         //println("Going to add to slow: $slotToAddTo")
-        val slotsToRemove = (0 until listOf(0, 0, 1, 2).random()).map {
+        val slotsToRemove = (0 until listOf(0, 0, 0, 1, 1, 2, 2).random()).map {
             (BountyInventory.bountySlots - slotToAddTo).random()
         }
 
@@ -137,7 +137,8 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
         val ourWorld = world ?: return
         if (ourWorld.isClient) return
 
-        if ((ourWorld.time + 13L) % 20L == 0L) {
+        val updateFreq = 45
+        if ((ourWorld.time + 13L) % (20L * updateFreq) == 0L) {
             // Change bounty population
             randomlyAddBounty()
 

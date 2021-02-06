@@ -35,19 +35,14 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory?, title: T
 
     override fun drawForeground(matrices: MatrixStack?, mouseX: Int, mouseY: Int) {
 
-        textRenderer.draw(matrices, title, titleX.toFloat() - 10, titleY.toFloat() + 1, 0xEADAB5)
-        textRenderer.draw(
-            matrices, playerInventory.displayName,
-            playerInventoryTitleX.toFloat(), playerInventoryTitleY.toFloat() + 1, 0xEADAB5
-        )
-
+        textRenderer.draw(matrices, title, titleX.toFloat() - 29, titleY.toFloat() + 1, 0xEADAB5)
 
         val lvl = (screenHandler as? BoardScreenHandler)?.level ?: 0
 
         textRenderer.draw(
             matrices, LiteralText("Reputation: ")
                 .append(LiteralText("$lvl").formatted(BountyRarity.forReputation(lvl).color)),
-            playerInventoryTitleX.toFloat() + 90, playerInventoryTitleY.toFloat() + 1, 0xEADAB5
+            playerInventoryTitleX.toFloat(), playerInventoryTitleY.toFloat() + 1, 0xEADAB5
         )
 
         //super.drawForeground(matrices, mouseX, mouseY)
