@@ -100,7 +100,7 @@ object BountifulIO : SimpleSynchronousResourceReloadListener {
         }.forEach { (poolId, resources) ->
             println("Loading Pool: $poolId")
             val pools = resources.map { loadPool(it, resourceManager) }
-            val pool = pools.reduce { a, b -> a.merged(b) }
+            val pool = pools.reduce { a, b -> if (b.canLoad) a.merged(b) else a }
             BountifulContent.Pools.add(pool)
         }
 

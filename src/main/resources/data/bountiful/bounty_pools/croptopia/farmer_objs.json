@@ -1,0 +1,29 @@
+
+{
+	"requires": ["croptopia"],
+	"content": [
+
+		{
+			"type": "ITEM",
+			"content": "croptopia:corn",
+			"amount": {
+				"min": 4,
+				"max": 36
+			},
+			"unitWorth": 50
+		},
+
+		{
+			"type": "ITEM",
+			"content": "croptopia:pineapple",
+			"amount": {
+				"min": 4,
+				"max": 16
+			},
+			"unitWorth": 85
+		}
+
+	]
+
+
+}

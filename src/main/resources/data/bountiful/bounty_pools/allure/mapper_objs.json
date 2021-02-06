@@ -1,0 +1,30 @@
+
+{
+	"requires": ["allure"],
+	"content": [
+
+		{
+			"type": "ITEM",
+			"content": "allure:framed_glass_pane",
+			"amount": {
+				"min": 4,
+				"max": 16
+			},
+			"unitWorth": 200
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "allure:gold_bars",
+			"amount": {
+				"min": 4,
+				"max": 20
+			},
+			"unitWorth": 130
+		}
+
+	]
+
+
+}

@@ -81,6 +81,16 @@
             },
             "unitWorth": 1000.0,
             "nbt": "{Damage:0,RepairCost:1,Enchantments:[{lvl:1s,id:\"minecraft:infinity\"}]}"
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:spectral_arrow",
+            "amount": {
+                "min": 3,
+                "max": 10
+            },
+            "unitWorth": 400
         }
 
 

@@ -13,7 +13,7 @@ import net.minecraft.util.registry.Registry
 import kotlin.math.min
 
 
-object EntryItemLogic : IEntryLogic {
+object ItemLogic : IEntryLogic {
 
     override fun format(entry: BountyDataEntry, isObj: Boolean, progress: Pair<Int, Int>): Text {
         val item = Registry.ITEM.get(Identifier(entry.content))

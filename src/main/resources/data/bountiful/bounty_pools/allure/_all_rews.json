@@ -1,0 +1,19 @@
+{
+	"requires": ["allure"],
+	"content": [
+
+		{
+			"type": "ITEM",
+			"rarity": "LEGENDARY",
+			"content": "allure:totem_of_returning",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 8000
+		}
+
+	]
+
+
+}
