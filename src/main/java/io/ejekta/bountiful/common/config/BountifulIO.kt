@@ -127,11 +127,11 @@ object BountifulIO : SimpleSynchronousResourceReloadListener {
         println("Printing all decree config files: ")
         decreeConfigs.toFile().listFiles()?.forEach { file ->
             println("Found decree config file: $file")
-            val pool = loadDecree(file)
-            val existingPool = BountifulContent.Decrees.find { it.id == pool.id }
+            val decree = loadDecree(file)
+            val existingPool = BountifulContent.Decrees.find { it.id == decree.id }
             existingPool?.let {
                 println("Merging in config decree..")
-                it.merge(pool)
+                it.merge(decree)
             }
         }
 

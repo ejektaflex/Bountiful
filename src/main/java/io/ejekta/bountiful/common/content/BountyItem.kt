@@ -43,12 +43,12 @@ class BountyItem : Item(
     override fun appendTooltip(
         stack: ItemStack?,
         world: World?,
-        tooltip: MutableList<Text>,
+        tooltip: MutableList<Text>?,
         context: TooltipContext?
     ) {
         if (stack != null && world != null) {
             val data = BountyData[stack].tooltipInfo(world)
-            tooltip.addAll(data)
+            tooltip?.addAll(data)
         }
         super.appendTooltip(stack, world, tooltip, context)
     }

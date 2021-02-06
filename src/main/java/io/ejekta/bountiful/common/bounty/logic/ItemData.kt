@@ -7,7 +7,9 @@ import kotlinx.serialization.KSerializer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 
-abstract class ItemData<T>(val ser: KSerializer<T>) {
+abstract class ItemData<T> {
+
+    abstract val ser: KSerializer<T>
 
     abstract val creator: () -> T
 

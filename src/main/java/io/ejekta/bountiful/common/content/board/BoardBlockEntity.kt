@@ -116,7 +116,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
 
         val commonBounty = BountyCreator.createBounty(getBoardDecrees(), level, ourWorld.time)
 
-        for (player in ourWorld.players) {
+        for (player in ourWorld.players.toMutableList()) {
             val inv = getBounties(player)
             inv.addBounty(slotToAddTo, commonBounty)
             slotsToRemove.forEach { i -> inv.removeStack(i) }

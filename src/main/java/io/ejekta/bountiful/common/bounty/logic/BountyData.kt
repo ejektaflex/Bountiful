@@ -79,7 +79,8 @@ class BountyData {
         return lines
     }
 
-    companion object : ItemData<BountyData>(serializer()) {
+    companion object : ItemData<BountyData>() {
+        override val ser = BountyData.serializer()
         override val creator: () -> BountyData = { BountyData() }
     }
 

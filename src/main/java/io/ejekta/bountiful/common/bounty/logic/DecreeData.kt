@@ -2,6 +2,7 @@ package io.ejekta.bountiful.common.bounty.logic
 
 import io.ejekta.bountiful.common.Bountiful
 import io.ejekta.bountiful.common.serial.Format
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.serializer
 import net.minecraft.text.Text
@@ -29,7 +30,8 @@ data class DecreeData(val ids: MutableList<String> = mutableListOf()) {
         return lines
     }
 
-    companion object : ItemData<DecreeData>(serializer()) {
+    companion object : ItemData<DecreeData>() {
+        override val ser = DecreeData.serializer()
         override val creator: () -> DecreeData = { DecreeData() }
     }
 
