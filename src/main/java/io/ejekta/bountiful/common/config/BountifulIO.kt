@@ -21,14 +21,9 @@ object BountifulIO : SimpleSynchronousResourceReloadListener {
             }
         }
 
-    private val configFolder: Path by lazy {
-        Paths.get("config/bountiful").assuredly
-    }
-
+    private val configFolder: Path by lazy { Paths.get("config/bountiful").assuredly }
     private val poolConfigs: Path by lazy { configFolder.resolve("bounty_pools").assuredly }
-
     private val decreeConfigs: Path by lazy { configFolder.resolve("bounty_decrees").assuredly }
-
     private val configFile: File by lazy { configFolder.resolve("bountiful.json").toFile() }
 
     fun saveConfig() {

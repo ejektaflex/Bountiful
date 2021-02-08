@@ -3,6 +3,7 @@ package io.ejekta.bountiful.common.bounty.logic.entry
 import io.ejekta.bountiful.common.bounty.logic.BountyData
 import io.ejekta.bountiful.common.bounty.logic.BountyDataEntry
 import io.ejekta.bountiful.common.util.id
+import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
@@ -65,9 +66,18 @@ object ItemLogic : IEntryLogic {
         val toGive = (0 until entry.amount).chunked(item.maxCount).map { it.size }
 
         for (amtToGive in toGive) {
-            player.giveItemStack(ItemStack(item, entry.amount).apply {
+            val stack = ItemStack(item, amtToGive).apply {
                 tag = entry.nbtData as CompoundTag?
-            })
+            }
+
+            if (!player.giveItemStack(stack)) {
+                val stackEntity = ItemEntity(player.world, player.pos.x, player.pos.y, player.pos.z, stack).apply {
+                    setPickupDelay(0)
+                }
+                player.world.spawnEntity(stackEntity)
+            }
+
+            //player.giveItemStack()
         }
 
         return true
