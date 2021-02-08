@@ -5,9 +5,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Decree(
-    var id: String = "DEFAULT_DECREE",
+    override var id: String = "DEFAULT_DECREE",
     val objectives: MutableSet<String>,
-    val rewards: MutableSet<String>
+    val rewards: MutableSet<String>,
+    override val requires: MutableList<String> = mutableListOf()
     ) : IMerge<Decree> {
 
     val objectivePools: List<Pool>

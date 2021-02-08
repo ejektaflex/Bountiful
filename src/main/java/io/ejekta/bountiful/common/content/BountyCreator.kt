@@ -2,6 +2,7 @@ package io.ejekta.bountiful.common.content
 
 import io.ejekta.bountiful.common.bounty.logic.BountyData
 import io.ejekta.bountiful.common.bounty.logic.BountyDataEntry
+import io.ejekta.bountiful.common.config.BountifulIO
 import io.ejekta.bountiful.common.config.Decree
 import io.ejekta.bountiful.common.config.Pool
 import io.ejekta.bountiful.common.config.PoolEntry
@@ -41,12 +42,12 @@ object BountyCreator {
 
         //bd.timeToComplete += bd.rewards.map { it.worth.toLong() }.sum() * 10
 
-        println("Created rewards worth $worth")
+        //println("Created rewards worth $worth")
 
         createObjectives(bd, decrees, rep, worth)
 
         bd.timeStarted = startTime
-        bd.timeToComplete += 15000L
+        bd.timeToComplete += 15000L + BountifulIO.config.bonusTime
 
         //bd.timeToComplete = bd.timeToComplete.toDouble().pow(0.95).toLong() // curve off high value items
 
@@ -76,7 +77,7 @@ object BountyCreator {
                 weightMult * rarity.weightAdjustedFor(rep)
             }
         } else {
-            println("Nothing was in variance")
+            //println("Nothing was in variance")
             objs.minByOrNull { it.worthDistanceFrom(worth) }!!
         }
 
@@ -94,7 +95,7 @@ object BountyCreator {
         var worthNeeded = worth * objNeededMult
         val numObjectives = (1..2).random()
 
-        println("Must create objectives that have a worth that adds up to $worth (actually $worthNeeded)")
+        //println("Must create objectives that have a worth that adds up to $worth (actually $worthNeeded)")
 
         val objs = getObjectivesFor(decrees).filter {
             it.content !in data.rewards.map { rew -> rew.content }
@@ -104,7 +105,7 @@ object BountyCreator {
 
         val worthGroups = randomSplit(worthNeeded, numObjectives).toMutableList()
 
-        println("Split into: $worthGroups")
+        //println("Split into: $worthGroups")
 
         while (worthGroups.isNotEmpty()) {
             val w = worthGroups.removeAt(0)
@@ -122,11 +123,11 @@ object BountyCreator {
             // Append on a new worth to add obj for
             // if we still haven't fulfilled it
             if (picked.worth < w * 0.5) {
-                println("Cannot satisfy all, must append another (${picked.worth}, $w)")
+                //println("Cannot satisfy all, must append another (${picked.worth}, $w)")
                 worthGroups.add(w - picked.worth)
             }
 
-            println("Picked an item with worth: $w (above)")
+            //println("Picked an item with worth: $w (above)")
             data.objectives.add(picked)
 
 

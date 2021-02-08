@@ -15,7 +15,7 @@
   },
 
   "license": "GPL 3.0",
-  "icon": "assets/makkit/icon.png",
+  "icon": "assets/bountiful/textures/block/bountyboard.png",
 
   "environment": "*",
   "entrypoints": {
@@ -24,6 +24,9 @@
     ],
     "client": [
       "io.ejekta.bountiful.client.BountifulClient"
+    ],
+    "modmenu": [
+      "io.ejekta.bountiful.common.config.BountifulModMenu"
     ]
   },
   "mixins": [

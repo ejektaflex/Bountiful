@@ -3,6 +3,8 @@ package io.ejekta.bountiful.common.content
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.arguments.IntegerArgumentType.getInteger
 import com.mojang.brigadier.arguments.IntegerArgumentType.integer
+import com.mojang.brigadier.arguments.StringArgumentType.getString
+import com.mojang.brigadier.arguments.StringArgumentType.string
 import io.ejekta.bountiful.common.Bountiful
 import io.ejekta.bountiful.common.bounty.logic.BountyData
 import io.ejekta.bountiful.common.bounty.logic.BountyDataEntry
@@ -16,6 +18,8 @@ import io.ejekta.bountiful.common.util.id
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.minecraft.command.CommandSource
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.network.MessageType
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.command.CommandManager
@@ -28,9 +32,18 @@ import java.nio.file.Paths
 
 object BountifulCommands {
 
+    fun hasPermission(c: ServerCommandSource): Boolean {
+        if (c.hasPermissionLevel(2) ||
+            (c.entity is PlayerEntity && c.player.isCreative)) {
+            return true
+        }
+        return false
+    }
+
     fun registerCommands() = CommandRegistrationCallback { dispatcher, dedicated ->
         dispatcher.register(
             CommandManager.literal("bo")
+                .requires(::hasPermission)
                 .then(
                     CommandManager.literal("tweak").executes(tweak())
                 )
@@ -61,6 +74,24 @@ object BountifulCommands {
                         .then(
                             CommandManager.argument("rep", integer())
                                 .executes(weights())
+                        )
+                )
+                .then(
+                    CommandManager.literal("decree")
+                        .then(
+                            CommandManager.argument("decType", string())
+                                .suggests { context, builder ->
+                                    BountifulContent.Decrees.forEach { dec ->
+                                        builder.suggest(dec.id)
+                                    }
+                                    builder.buildFuture()
+                                }
+                                .executes {
+                                    val decId = getString(it, "decType")
+                                    val stack = DecreeItem.create(decId)
+                                    it.source.player.giveItemStack(stack)
+                                    1
+                                }
                         )
                 )
         )

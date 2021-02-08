@@ -1,0 +1,370 @@
+
+{
+	"requires": ["runik"],
+	"content": [
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "runik:rune_actis",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 500,
+			"weightMult": 0.35
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "runik:rune_mira",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 500,
+			"weightMult": 0.35
+		},
+
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "runik:rune_thol",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 500,
+			"weightMult": 0.35
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "runik:rune_vesna",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 500,
+			"weightMult": 0.35
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "runik:rune_dega",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 500,
+			"weightMult": 0.35
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "runik:rune_fargis",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 500,
+			"weightMult": 0.35
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "runik:rune_kando",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 500,
+			"weightMult": 0.35
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "runik:rune_kasso",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 500,
+			"weightMult": 0.35
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "runik:rune_dram",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 500,
+			"weightMult": 0.35
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "runik:rune_grisa",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 500,
+			"weightMult": 0.35
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "runik:rune_igas",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 500,
+			"weightMult": 0.35
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "runik:rune_loten",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 500,
+			"weightMult": 0.35
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "runik:rune_goran",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 500,
+			"weightMult": 0.35
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "runik:rune_itma",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 500,
+			"weightMult": 0.35
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "runik:rune_vana",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 500,
+			"weightMult": 0.35
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "runik:rune_zaag",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 500,
+			"weightMult": 0.35
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "runik:rune_runa",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 500,
+			"weightMult": 0.35
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "runik:rune_wagi",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 500,
+			"weightMult": 0.3
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "RARE",
+			"content": "runik:mana_equalizer",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 3000,
+			"weightMult": 0.3
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "EPIC",
+			"content": "runik:mana_equalizer_pristine",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 4000,
+			"weightMult": 0.3
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "RARE",
+			"content": "runik:mana_pocketwatch_broken",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 3000,
+			"weightMult": 0.3
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "EPIC",
+			"content": "runik:mana_pocketwatch",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 4000,
+			"weightMult": 0.3
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "RARE",
+			"content": "runik:living_twig",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 3000,
+			"weightMult": 0.3
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "EPIC",
+			"content": "runik:res_branch",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 5500,
+			"weightMult": 0.3
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "RARE",
+			"content": "runik:manastrength_charm",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 2000,
+			"weightMult": 0.3
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "RARE",
+			"content": "runik:manablood_catalyzer",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 2000,
+			"weightMult": 0.3
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "RARE",
+			"content": "runik:manasense_catalyzer",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 2500,
+			"weightMult": 0.3
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "UNCOMMON",
+			"content": "runik:manaflask_sm",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 3000,
+			"weightMult": 0.3
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "RARE",
+			"content": "runik:manaflask_md",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 4000,
+			"weightMult": 0.3
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "EPIC",
+			"content": "runik:manaflask_lg",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 5000,
+			"weightMult": 0.2
+		}
+
+	]
+
+
+}

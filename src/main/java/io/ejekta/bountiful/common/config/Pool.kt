@@ -5,14 +5,20 @@ import net.fabricmc.loader.api.FabricLoader
 
 @Serializable
 data class Pool(
-    var id: String = "DEFAULT_POOL",
+    override var id: String = "DEFAULT_POOL",
     val content: MutableList<PoolEntry> = mutableListOf(),
     val replace: Boolean = false,
-    val requires: MutableList<String> = mutableListOf()
+    override val requires: MutableList<String> = mutableListOf()
 ) : IMerge<Pool> {
 
-    val canLoad: Boolean
-        get() = requires.all { FabricLoader.getInstance().isModLoaded(it) }
+    fun setup(newId: String) {
+        id = newId
+        // Do weight normalization
+        val overallMult = content.size
+        content.takeIf { it.isNotEmpty() }?.forEach {
+            it.weightMult /= overallMult
+        }
+    }
 
     override fun merge(other: Pool) {
         when (other.replace) {

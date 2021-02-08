@@ -1,9 +1,12 @@
 package io.ejekta.bountiful.common.content.board
 
+import io.ejekta.bountiful.common.Bountiful
 import io.ejekta.bountiful.common.bounty.logic.DecreeData
+import io.ejekta.bountiful.common.config.BountifulIO
 import io.ejekta.bountiful.common.config.Decree
 import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.content.BountyCreator
+import io.ejekta.bountiful.common.content.DecreeItem
 import io.ejekta.bountiful.common.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.common.mixin.SimpleInventoryAccessor
 import io.ejekta.bountiful.common.serial.Format
@@ -24,6 +27,7 @@ import net.minecraft.nbt.ListTag
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Tickable
@@ -53,6 +57,17 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
             val total = finishMap.values.sum()
             return totalLevel(total)
         }
+
+    fun setDecree() {
+        if (world is ServerWorld && decrees.isEmpty) {
+            val slot = (0..2).random()
+            val stack = DecreeItem.create()
+            decrees.setStack(
+                slot,
+                stack
+            )
+        }
+    }
 
     fun xpNeeded(done: Int, start: Int = 0): Int {
         val units = start + 1
@@ -108,6 +123,10 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
     private fun randomlyAddBounty() {
         val ourWorld = world ?: return
 
+        if (decrees.isEmpty) {
+            return
+        }
+
         val slotToAddTo = BountyInventory.bountySlots.random()
         //println("Going to add to slow: $slotToAddTo")
         val slotsToRemove = (0 until listOf(0, 0, 0, 1, 1, 2, 2).random()).map {
@@ -122,12 +141,12 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
             slotsToRemove.forEach { i -> inv.removeStack(i) }
         }
 
-        // copy over server version
-
-        // Cull offline players
-        bountyMap.keys.forEach { uuid ->
-            if ( uuid !in ourWorld.players.map { it.uuid }) {
-                bountyMap.remove(uuid)
+        if (ourWorld.players.isNotEmpty()) {
+            // Cull offline players
+            bountyMap.keys.toMutableList().forEach { uuid ->
+                if ( uuid !in ourWorld.players.map { it.uuid }) {
+                    bountyMap.remove(uuid)
+                }
             }
         }
 
@@ -138,7 +157,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
         if (ourWorld.isClient) return
 
         val updateFreq = 45
-        if ((ourWorld.time + 13L) % (20L * updateFreq) == 0L) {
+        if ((ourWorld.time + 13L) % (20L * BountifulIO.config.boardUpdateFrequency) == 0L) {
             // Change bounty population
             randomlyAddBounty()
 
@@ -168,6 +187,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
     }
 
     override fun writeScreenOpeningData(serverPlayerEntity: ServerPlayerEntity, packetByteBuf: PacketByteBuf) {
+        setDecree()
         packetByteBuf.writeInt(level)
     }
 

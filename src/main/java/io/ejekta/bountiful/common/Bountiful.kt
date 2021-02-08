@@ -1,6 +1,7 @@
 @file:UseSerializers(IdentitySer::class)
 package io.ejekta.bountiful.common
 
+import io.ejekta.bountiful.common.config.BountifulConfig
 import io.ejekta.bountiful.common.config.BountifulIO
 import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.serial.IdentitySer
@@ -29,7 +30,7 @@ class Bountiful : ModInitializer {
     override fun onInitialize() {
         println("Common init")
 
-
+        BountifulIO.loadConfig()
         BountifulContent.register()
 
     }

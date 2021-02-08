@@ -16,7 +16,7 @@ import net.minecraft.world.World
 
 
 class BoardBlock : BlockWithEntity(
-    FabricBlockSettings.of(Material.WOOD).hardness(0.4f)
+    FabricBlockSettings.of(Material.WOOD).hardness(-1f)
 ), BlockEntityProvider {
 
     override fun getRenderType(state: BlockState?): BlockRenderType {
@@ -67,9 +67,7 @@ class BoardBlock : BlockWithEntity(
     }
 
     override fun createBlockEntity(world: BlockView?): BlockEntity {
-        return BoardBlockEntity().apply {
-            decrees.setStack((0..2).random(), DecreeItem.create())
-        }
+        return BoardBlockEntity()
     }
 
     override fun onStateReplaced(

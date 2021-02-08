@@ -49,6 +49,16 @@ class DecreeItem : Item(
             }
         }
 
+        fun create(decId: String): ItemStack {
+            return ItemStack(BountifulContent.DECREE_ITEM).apply {
+                DecreeData[this] =  DecreeData(
+                    mutableListOf(
+                        BountifulContent.Decrees.find { it.id == decId }?.id
+                    ).filterNotNull().toMutableList()
+                )
+            }
+        }
+
     }
 
 }

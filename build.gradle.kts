@@ -30,10 +30,13 @@ version = modVersion
 
 repositories {
 	mavenCentral()
-	//jcenter()
+	jcenter()
 	maven(url = "https://kotlin.bintray.com/kotlinx")
 	maven(url = "http://maven.fabricmc.net/") {
 		name = "Fabric"
+	}
+	maven(url = "https://maven.terraformersmc.com/") {
+		name = "Mod Menu"
 	}
 }
 
@@ -52,7 +55,16 @@ dependencies {
 	modApi("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
 	include("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
 
-	compile("com.google.code.findbugs:jsr305:3.0.2")
+	modApi("me.shedaniel.cloth:config-2:4.8.3") {
+		exclude(group = "net.fabricmc.fabric-api")
+	}
+
+	implementation("com.google.code.findbugs:jsr305:3.0.2")
+
+	modApi("com.terraformersmc:modmenu:1.16.6") {
+		exclude(module = "fabric-api")
+		exclude(module = "config-2")
+	}
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${fabricVersion}")

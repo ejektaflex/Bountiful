@@ -14,12 +14,6 @@ class BoardInventory(
     decreeSrc
 ) {
 
-    //val content: DefaultedList<ItemStack> = DefaultedList.ofSize(BoardBlock.BOUNTY_SIZE, ItemStack.EMPTY)
-
-
-
-
-
     override fun canPlayerUse(player: PlayerEntity) = true
 
     companion object {
