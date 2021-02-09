@@ -33,6 +33,8 @@ object BountifulContent {
 
     val BOARD = BoardBlock()
 
+    val BOARD_ITEM = BlockItem(BOARD, Item.Settings().group(ItemGroup.MISC))
+
     val BOARD_ENTITY: BlockEntityType<BoardBlockEntity> = BlockEntityType.Builder
         .create(::BoardBlockEntity, BOARD).build(null)
 
@@ -44,9 +46,7 @@ object BountifulContent {
         Registry.register(Registry.ITEM, Bountiful.id("bounty"), BOUNTY_ITEM)
         Registry.register(Registry.ITEM, Bountiful.id("decree"), DECREE_ITEM)
         Registry.register(Registry.BLOCK, Bountiful.id("bountyboard"), BOARD)
-        Registry.register(Registry.ITEM, Bountiful.id("bountyboard"),
-            BlockItem(BOARD, Item.Settings().group(ItemGroup.MISC))
-        )
+        Registry.register(Registry.ITEM, Bountiful.id("bountyboard"), BOARD_ITEM)
         Registry.register(Registry.BLOCK_ENTITY_TYPE, Bountiful.id("board-be"), BOARD_ENTITY)
     }
 

@@ -69,15 +69,13 @@ object ItemLogic : IEntryLogic {
             val stack = ItemStack(item, amtToGive).apply {
                 tag = entry.nbtData as CompoundTag?
             }
-
+            // Try give directly to player, otherwise drop at feet
             if (!player.giveItemStack(stack)) {
                 val stackEntity = ItemEntity(player.world, player.pos.x, player.pos.y, player.pos.z, stack).apply {
                     setPickupDelay(0)
                 }
                 player.world.spawnEntity(stackEntity)
             }
-
-            //player.giveItemStack()
         }
 
         return true
