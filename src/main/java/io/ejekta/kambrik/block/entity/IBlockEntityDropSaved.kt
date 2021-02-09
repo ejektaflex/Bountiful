@@ -1,0 +1,39 @@
+package io.ejekta.kambrik.block.entity
+
+import io.ejekta.bountiful.common.content.BountifulContent
+import io.ejekta.bountiful.common.content.board.BoardBlockEntity
+import net.minecraft.block.BlockState
+import net.minecraft.block.entity.BlockEntity
+import net.minecraft.entity.ItemEntity
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.ItemStack
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
+
+interface IBlockEntityDropSaved {
+
+    fun getItemToSaveTo(world: World?, pos: BlockPos?, state: BlockState?, player: PlayerEntity?): ItemStack
+
+    fun onBreak(world: World?, pos: BlockPos?, state: BlockState?, player: PlayerEntity?) {
+        if (pos == null) return
+        val be = world?.getBlockEntity(pos) as? BoardBlockEntity ?: return
+        val stack = getItemToSaveTo(world, pos, state, player).apply {
+            if (tag == null) {
+                tag = CompoundTag()
+            }
+            tag!!.put("BlockEntityTag", be.toTag(CompoundTag()))
+        }
+        val entity = ItemEntity(
+            world,
+            player?.pos?.x ?: pos.x.toDouble(),
+            player?.pos?.y ?: pos.y.toDouble(),
+            player?.pos?.z ?: pos.z.toDouble(),
+            stack
+        ).apply {
+            setToDefaultPickupDelay()
+        }
+        world.spawnEntity(entity)
+    }
+
+}

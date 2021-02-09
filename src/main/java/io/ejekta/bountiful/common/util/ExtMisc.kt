@@ -5,28 +5,19 @@ import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.MinecraftClient
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
-import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
-import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 import kotlin.random.Random
 
-fun isClient(): Boolean = FabricLoader.getInstance().environmentType == EnvType.CLIENT
+fun isClientSide(): Boolean = FabricLoader.getInstance().environmentType == EnvType.CLIENT
 
 fun clientWorld(): World? {
-    return if (isClient()) {
+    return if (isClientSide()) {
         MinecraftClient.getInstance().world
     } else {
         null
     }
 }
-
-val ItemStack.identifier: Identifier
-    get() = Registry.ITEM.getId(item)
-
-// Shorthand
-val ItemStack.id: Identifier
-    get() = identifier
 
 fun randomSplit(num: Double, ways: Int): List<Double> {
     val bits = (0 until ways).map { Random.nextDouble() }
@@ -34,7 +25,7 @@ fun randomSplit(num: Double, ways: Int): List<Double> {
     return bits.map { (it / sum) * num }
 }
 
-val Inventory.content: DefaultedList<ItemStack>
+val Inventory.readOnlyCopy: DefaultedList<ItemStack>
     get() = DefaultedList.ofSize(size(), ItemStack.EMPTY).apply {
         (0 until size()).forEach { i -> this[i] = getStack(i) }
     }

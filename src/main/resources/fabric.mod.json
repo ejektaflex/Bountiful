@@ -20,6 +20,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
+      "io.ejekta.kambrik.Kambrik",
       "io.ejekta.bountiful.common.Bountiful"
     ],
     "client": [
@@ -27,6 +28,12 @@
     ],
     "modmenu": [
       "io.ejekta.bountiful.common.config.BountifulModMenu"
+    ],
+    "kambrik": [
+      {
+        "adapter": "kotlin",
+        "value": "io.ejekta.bountiful.neux.BountifulContents"
+      }
     ]
   },
   "mixins": [

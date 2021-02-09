@@ -3,7 +3,7 @@ package io.ejekta.bountiful.common.content.board
 import io.ejekta.bountiful.common.bounty.logic.BountyData
 import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.content.BountyItem
-import io.ejekta.bountiful.common.util.content
+import io.ejekta.bountiful.common.util.readOnlyCopy
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 
@@ -15,7 +15,7 @@ class BountyInventory : SimpleInventory(SIZE) {
     }
 
     val numBounties: Int
-        get() = content.count { it.item == BountifulContent.BOUNTY_ITEM }
+        get() = readOnlyCopy.count { it.item == BountifulContent.BOUNTY_ITEM }
 
     fun addRandomBounty(data: BountyData? = null): Int {
         val slot = bountySlots.random()

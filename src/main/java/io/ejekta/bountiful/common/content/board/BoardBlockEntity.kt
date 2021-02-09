@@ -1,6 +1,5 @@
 package io.ejekta.bountiful.common.content.board
 
-import io.ejekta.bountiful.common.Bountiful
 import io.ejekta.bountiful.common.bounty.logic.DecreeData
 import io.ejekta.bountiful.common.config.BountifulIO
 import io.ejekta.bountiful.common.config.Decree
@@ -12,7 +11,7 @@ import io.ejekta.bountiful.common.mixin.SimpleInventoryAccessor
 import io.ejekta.bountiful.common.serial.Format
 import io.ejekta.bountiful.common.util.JsonStrict.toJson
 import io.ejekta.bountiful.common.util.JsonStrict.toTag
-import io.ejekta.bountiful.common.util.content
+import io.ejekta.bountiful.common.util.readOnlyCopy
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
@@ -116,7 +115,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
 
     private fun getBoardDecrees(): Set<Decree> {
         return BountifulContent.getDecrees(
-            decrees.content.map { DecreeData[it].ids }.flatten().toSet()
+            decrees.readOnlyCopy.map { DecreeData[it].ids }.flatten().toSet()
         )
     }
 
@@ -224,7 +223,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
         tag?.put("completed", doneMap)
 
         val decreeList = CompoundTag()
-        Inventories.toTag(decreeList, decrees.content)
+        Inventories.toTag(decreeList, decrees.readOnlyCopy)
 
         val bountyList = ListTag()
         bountyMap.forEach { (uuid, inv) ->

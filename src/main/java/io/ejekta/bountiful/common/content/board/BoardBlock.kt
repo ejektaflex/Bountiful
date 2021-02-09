@@ -3,11 +3,11 @@ package io.ejekta.bountiful.common.content.board
 import io.ejekta.bountiful.common.bounty.logic.BountyData
 import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.content.BountyItem
+import io.ejekta.kambrik.block.entity.IBlockEntityDropSaved
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.ItemEntity
-import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
@@ -21,34 +21,20 @@ import net.minecraft.world.World
 
 class BoardBlock : BlockWithEntity(
     FabricBlockSettings.of(Material.WOOD).hardness(5f).resistance(3600000f)
-), BlockEntityProvider {
+), BlockEntityProvider, IBlockEntityDropSaved {
 
     override fun getRenderType(state: BlockState?): BlockRenderType {
         return BlockRenderType.MODEL
     }
 
-    override fun onBreak(world: World?, pos: BlockPos?, state: BlockState?, player: PlayerEntity?) {
-        if (world?.isClient == false && pos != null) {
-            val be = world.getBlockEntity(pos) as? BoardBlockEntity ?: return
-            val stack = ItemStack(BountifulContent.BOARD).apply {
-                if (tag == null) {
-                    tag = CompoundTag()
-                }
-                tag!!.put("BlockEntityTag", be.toTag(CompoundTag()))
-            }
-            val entity = ItemEntity(
-                world,
-                pos.x.toDouble(),
-                pos.y.toDouble(),
-                pos.z.toDouble(),
-                stack
-            ).apply {
-                setToDefaultPickupDelay()
-            }
-            world.spawnEntity(entity)
-        }
+    override fun getItemToSaveTo(world: World?, pos: BlockPos?, state: BlockState?, player: PlayerEntity?): ItemStack {
+        return ItemStack(BountifulContent.BOARD)
     }
 
+    override fun onBreak(world: World?, pos: BlockPos?, state: BlockState?, player: PlayerEntity?) {
+        super<BlockWithEntity>.onBreak(world, pos, state, player)
+        super<IBlockEntityDropSaved>.onBreak(world, pos, state, player)
+    }
 
     override fun onUse(
         state: BlockState?,
@@ -84,8 +70,6 @@ class BoardBlock : BlockWithEntity(
                     }
                 }
 
-
-
             }
 
         }
@@ -95,30 +79,6 @@ class BoardBlock : BlockWithEntity(
 
     override fun createBlockEntity(world: BlockView?): BlockEntity {
         return BoardBlockEntity()
-    }
-
-    override fun onStateReplaced(
-        state: BlockState,
-        world: World,
-        pos: BlockPos?,
-        newState: BlockState,
-        moved: Boolean
-    ) {
-        if (state.block !== newState.block) {
-            val blockEntity = world.getBlockEntity(pos)
-            if (blockEntity is BoardBlockEntity) {
-                //ItemScatterer.spawn(world, pos, blockEntity) TO DO redo this!
-                // update comparators
-                world.updateComparators(pos, this)
-            }
-            super.onStateReplaced(state, world, pos, newState, moved)
-        }
-    }
-
-    override fun hasComparatorOutput(state: BlockState?) = true
-
-    override fun getComparatorOutput(state: BlockState?, world: World?, pos: BlockPos?): Int {
-        return super.getComparatorOutput(state, world, pos)
     }
 
     companion object {

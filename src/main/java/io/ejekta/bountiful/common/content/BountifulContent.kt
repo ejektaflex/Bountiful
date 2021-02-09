@@ -6,6 +6,7 @@ import io.ejekta.bountiful.common.config.Pool
 import io.ejekta.bountiful.common.content.board.BoardBlock
 import io.ejekta.bountiful.common.content.board.BoardBlockEntity
 import io.ejekta.bountiful.common.content.gui.BoardScreenHandler
+import io.ejekta.kambrik.ext.registerForMod
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry
 import net.minecraft.block.entity.BlockEntityType
@@ -43,10 +44,12 @@ object BountifulContent {
 
     fun register() {
         CommandRegistrationCallback.EVENT.register(BountifulCommands.registerCommands())
-        Registry.register(Registry.ITEM, Bountiful.id("bounty"), BOUNTY_ITEM)
-        Registry.register(Registry.ITEM, Bountiful.id("decree"), DECREE_ITEM)
+        Registry.ITEM.registerForMod(Bountiful.ID) { mapOf(
+                "bounty" to BOUNTY_ITEM,
+                "decree" to DECREE_ITEM,
+                "bountyboard" to BOARD_ITEM
+        ) }
         Registry.register(Registry.BLOCK, Bountiful.id("bountyboard"), BOARD)
-        Registry.register(Registry.ITEM, Bountiful.id("bountyboard"), BOARD_ITEM)
         Registry.register(Registry.BLOCK_ENTITY_TYPE, Bountiful.id("board-be"), BOARD_ENTITY)
     }
 

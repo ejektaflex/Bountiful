@@ -1,4 +1,4 @@
-package io.ejekta.bountiful.common.serial
+package io.ejekta.kambrik.serializers
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer

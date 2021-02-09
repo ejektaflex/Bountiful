@@ -14,7 +14,7 @@ import io.ejekta.bountiful.common.config.Decree
 import io.ejekta.bountiful.common.config.Pool
 import io.ejekta.bountiful.common.config.PoolEntry
 import io.ejekta.bountiful.common.serial.Format
-import io.ejekta.bountiful.common.util.id
+import io.ejekta.kambrik.ext.id
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking

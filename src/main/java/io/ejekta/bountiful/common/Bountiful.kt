@@ -1,10 +1,10 @@
 @file:UseSerializers(IdentitySer::class)
 package io.ejekta.bountiful.common
 
-import io.ejekta.bountiful.common.config.BountifulConfig
 import io.ejekta.bountiful.common.config.BountifulIO
 import io.ejekta.bountiful.common.content.BountifulContent
-import io.ejekta.bountiful.common.serial.IdentitySer
+import io.ejekta.bountiful.neux.BountifulContents
+import io.ejekta.kambrik.serializers.IdentitySer
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.UseSerializers
 import net.fabricmc.api.ModInitializer
@@ -32,6 +32,8 @@ class Bountiful : ModInitializer {
 
         BountifulIO.loadConfig()
         BountifulContent.register()
+
+
 
     }
 
