@@ -1,7 +1,5 @@
 package io.ejekta.bountiful.common.config
 
-import io.ejekta.bountiful.common.Bountiful
-import io.ejekta.bountiful.common.serial.Format
 import kotlinx.serialization.Serializable
 import me.shedaniel.clothconfig2.api.ConfigBuilder
 import net.minecraft.client.MinecraftClient

@@ -1,4 +1,4 @@
-package io.ejekta.bountiful.common.bounty.logic
+package io.ejekta.bountiful.common.bounty
 
 import net.minecraft.util.Formatting
 import kotlin.math.max

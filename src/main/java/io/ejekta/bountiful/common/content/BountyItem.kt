@@ -1,7 +1,7 @@
 package io.ejekta.bountiful.common.content
 
-import io.ejekta.bountiful.common.bounty.logic.BountyData
-import io.ejekta.bountiful.common.bounty.logic.BountyRarity
+import io.ejekta.bountiful.common.bounty.BountyData
+import io.ejekta.bountiful.common.bounty.BountyRarity
 import io.ejekta.bountiful.common.util.clientWorld
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.minecraft.client.item.TooltipContext

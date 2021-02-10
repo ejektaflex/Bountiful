@@ -3,7 +3,6 @@ package io.ejekta.bountiful.common.config
 import io.ejekta.bountiful.common.Bountiful
 import io.ejekta.bountiful.common.config.loading.ResourceLoadStrategy
 import io.ejekta.bountiful.common.content.BountifulContent
-import io.ejekta.bountiful.common.serial.Format
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
 import net.minecraft.resource.ResourceManager
 import java.io.File

@@ -32,7 +32,7 @@
     "kambrik": [
       {
         "adapter": "kotlin",
-        "value": "io.ejekta.bountiful.neux.BountifulContents"
+        "value": "io.ejekta.bountiful.common.content.BountifulContent"
       }
     ]
   },

@@ -1,7 +1,7 @@
-package io.ejekta.bountiful.common.bounty.logic.entry
+package io.ejekta.bountiful.common.bounty.entry
 
-import io.ejekta.bountiful.common.bounty.logic.BountyData
-import io.ejekta.bountiful.common.bounty.logic.BountyDataEntry
+import io.ejekta.bountiful.common.bounty.BountyData
+import io.ejekta.bountiful.common.bounty.BountyDataEntry
 import io.ejekta.kambrik.ext.id
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity

@@ -1,16 +1,14 @@
 package io.ejekta.bountiful.common.content.board
 
-import io.ejekta.bountiful.common.bounty.logic.BountyData
+import io.ejekta.bountiful.common.bounty.BountyData
 import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.content.BountyItem
 import io.ejekta.kambrik.block.entity.IBlockEntityDropSaved
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
-import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult

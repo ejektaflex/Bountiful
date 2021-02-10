@@ -1,7 +1,6 @@
 package io.ejekta.bountiful.common.config
 
 import kotlinx.serialization.Serializable
-import net.fabricmc.loader.api.FabricLoader
 
 @Serializable
 data class Pool(

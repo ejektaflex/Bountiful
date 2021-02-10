@@ -1,6 +1,6 @@
 package io.ejekta.bountiful.common.content
 
-import io.ejekta.bountiful.common.bounty.logic.DecreeData
+import io.ejekta.bountiful.common.bounty.DecreeData
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.Item

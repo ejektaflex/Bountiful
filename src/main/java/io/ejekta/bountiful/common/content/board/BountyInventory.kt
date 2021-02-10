@@ -1,6 +1,6 @@
 package io.ejekta.bountiful.common.content.board
 
-import io.ejekta.bountiful.common.bounty.logic.BountyData
+import io.ejekta.bountiful.common.bounty.BountyData
 import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.content.BountyItem
 import io.ejekta.bountiful.common.util.readOnlyCopy
@@ -16,16 +16,6 @@ class BountyInventory : SimpleInventory(SIZE) {
 
     val numBounties: Int
         get() = readOnlyCopy.count { it.item == BountifulContent.BOUNTY_ITEM }
-
-    fun addRandomBounty(data: BountyData? = null): Int {
-        val slot = bountySlots.random()
-        setStack(slot, BountyItem.create(data))
-        return slot
-    }
-
-    fun removeRandomBounty(except: Int) {
-        setStack((bountySlots - except).random(), ItemStack.EMPTY)
-    }
 
     fun cloned(blacklist: List<ItemStack>): BountyInventory {
         val newInv = BountyInventory()

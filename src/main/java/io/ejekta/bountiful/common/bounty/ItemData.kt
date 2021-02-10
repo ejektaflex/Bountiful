@@ -1,6 +1,6 @@
-package io.ejekta.bountiful.common.bounty.logic
+package io.ejekta.bountiful.common.bounty
 
-import io.ejekta.bountiful.common.serial.Format
+import io.ejekta.bountiful.common.config.Format
 import io.ejekta.bountiful.common.util.JsonStrict.toJson
 import io.ejekta.bountiful.common.util.JsonStrict.toTag
 import kotlinx.serialization.KSerializer

@@ -2,10 +2,7 @@
 package io.ejekta.bountiful.common
 
 import io.ejekta.bountiful.common.config.BountifulIO
-import io.ejekta.bountiful.common.content.BountifulContent
-import io.ejekta.bountiful.neux.BountifulContents
-import io.ejekta.kambrik.serializers.IdentitySer
-import kotlinx.serialization.ExperimentalSerializationApi
+import io.ejekta.kambrikx.serializers.IdentitySer
 import kotlinx.serialization.UseSerializers
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
@@ -25,17 +22,9 @@ class Bountiful : ModInitializer {
             .registerReloadListener(BountifulIO)
     }
 
-    @ExperimentalSerializationApi
-    @ExperimentalStdlibApi
     override fun onInitialize() {
         println("Common init")
-
         BountifulIO.loadConfig()
-        BountifulContent.register()
-
-
-
     }
-
 
 }

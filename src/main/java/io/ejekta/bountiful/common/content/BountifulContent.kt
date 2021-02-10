@@ -6,7 +6,7 @@ import io.ejekta.bountiful.common.config.Pool
 import io.ejekta.bountiful.common.content.board.BoardBlock
 import io.ejekta.bountiful.common.content.board.BoardBlockEntity
 import io.ejekta.bountiful.common.content.gui.BoardScreenHandler
-import io.ejekta.kambrik.ext.registerForMod
+import io.ejekta.kambrik.registration.KambricAutoRegistrar
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry
 import net.minecraft.block.entity.BlockEntityType
@@ -14,9 +14,12 @@ import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemGroup
 import net.minecraft.screen.ScreenHandlerType
-import net.minecraft.util.registry.Registry
 
-object BountifulContent {
+object BountifulContent : KambricAutoRegistrar {
+
+    override fun manualRegister() {
+        CommandRegistrationCallback.EVENT.register(BountifulCommands.registerCommands())
+    }
 
     val Decrees = mutableListOf<Decree>()
 
@@ -28,13 +31,13 @@ object BountifulContent {
         }.toSet()
     }
 
-    val BOUNTY_ITEM = BountyItem()
+    val BOUNTY_ITEM = "bounty" forItem BountyItem()
 
-    val DECREE_ITEM = DecreeItem()
+    val DECREE_ITEM = "decree" forItem DecreeItem()
 
-    val BOARD = BoardBlock()
+    val BOARD = "board" forBlock BoardBlock()
 
-    val BOARD_ITEM = BlockItem(BOARD, Item.Settings().group(ItemGroup.MISC))
+    val BOARD_ITEM = "bountyboard" forItem BlockItem(BOARD, Item.Settings().group(ItemGroup.MISC))
 
     val BOARD_ENTITY: BlockEntityType<BoardBlockEntity> = BlockEntityType.Builder
         .create(::BoardBlockEntity, BOARD).build(null)
@@ -42,15 +45,5 @@ object BountifulContent {
     val BOARD_SCREEN_HANDLER: ScreenHandlerType<BoardScreenHandler> = ScreenHandlerRegistry
         .registerExtended(Bountiful.id("board"), ::BoardScreenHandler)
 
-    fun register() {
-        CommandRegistrationCallback.EVENT.register(BountifulCommands.registerCommands())
-        Registry.ITEM.registerForMod(Bountiful.ID) { mapOf(
-                "bounty" to BOUNTY_ITEM,
-                "decree" to DECREE_ITEM,
-                "bountyboard" to BOARD_ITEM
-        ) }
-        Registry.register(Registry.BLOCK, Bountiful.id("bountyboard"), BOARD)
-        Registry.register(Registry.BLOCK_ENTITY_TYPE, Bountiful.id("board-be"), BOARD_ENTITY)
-    }
 
 }

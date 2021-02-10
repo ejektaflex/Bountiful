@@ -1,8 +1,8 @@
 package io.ejekta.bountiful.client
 
 import io.ejekta.bountiful.common.Bountiful
-import io.ejekta.bountiful.common.bounty.logic.BountyData
-import io.ejekta.bountiful.common.bounty.logic.DecreeData
+import io.ejekta.bountiful.common.bounty.BountyData
+import io.ejekta.bountiful.common.bounty.DecreeData
 import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.content.gui.BoardScreen
 import io.ejekta.bountiful.common.mixin.ModelPredicateProviderRegistrar

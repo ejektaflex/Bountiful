@@ -1,7 +1,7 @@
-package io.ejekta.bountiful.common.bounty.logic
+package io.ejekta.bountiful.common.bounty
 
-import io.ejekta.bountiful.common.bounty.logic.entry.ItemLogic
-import io.ejekta.bountiful.common.bounty.logic.entry.IEntryLogic
+import io.ejekta.bountiful.common.bounty.entry.IEntryLogic
+import io.ejekta.bountiful.common.bounty.entry.ItemLogic
 
 enum class BountyType(
     val isObj: Boolean = true,

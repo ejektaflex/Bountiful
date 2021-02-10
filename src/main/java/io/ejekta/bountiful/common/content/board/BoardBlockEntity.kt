@@ -1,6 +1,6 @@
 package io.ejekta.bountiful.common.content.board
 
-import io.ejekta.bountiful.common.bounty.logic.DecreeData
+import io.ejekta.bountiful.common.bounty.DecreeData
 import io.ejekta.bountiful.common.config.BountifulIO
 import io.ejekta.bountiful.common.config.Decree
 import io.ejekta.bountiful.common.content.BountifulContent
@@ -8,7 +8,7 @@ import io.ejekta.bountiful.common.content.BountyCreator
 import io.ejekta.bountiful.common.content.DecreeItem
 import io.ejekta.bountiful.common.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.common.mixin.SimpleInventoryAccessor
-import io.ejekta.bountiful.common.serial.Format
+import io.ejekta.bountiful.common.config.Format
 import io.ejekta.bountiful.common.util.JsonStrict.toJson
 import io.ejekta.bountiful.common.util.JsonStrict.toTag
 import io.ejekta.bountiful.common.util.readOnlyCopy

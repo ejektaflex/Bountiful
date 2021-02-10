@@ -1,4 +1,4 @@
-package io.ejekta.bountiful.common.bounty.logic
+package io.ejekta.bountiful.common.bounty
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient

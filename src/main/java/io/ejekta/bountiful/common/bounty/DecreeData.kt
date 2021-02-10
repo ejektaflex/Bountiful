@@ -1,10 +1,8 @@
-package io.ejekta.bountiful.common.bounty.logic
+package io.ejekta.bountiful.common.bounty
 
 import io.ejekta.bountiful.common.Bountiful
-import io.ejekta.bountiful.common.serial.Format
-import kotlinx.serialization.KSerializer
+import io.ejekta.bountiful.common.config.Format
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.serializer
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Formatting

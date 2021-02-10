@@ -2,7 +2,7 @@ package io.ejekta.bountiful.common.content.gui
 
 import com.mojang.blaze3d.systems.RenderSystem
 import io.ejekta.bountiful.common.Bountiful
-import io.ejekta.bountiful.common.bounty.logic.BountyRarity
+import io.ejekta.bountiful.common.bounty.BountyRarity
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory

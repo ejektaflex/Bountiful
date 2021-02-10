@@ -1,9 +1,8 @@
-package io.ejekta.bountiful.common.bounty.logic
+package io.ejekta.bountiful.common.bounty
 
-import io.ejekta.bountiful.common.serial.Format
+import io.ejekta.bountiful.common.config.Format
 import io.ejekta.bountiful.common.util.GameTime
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.serializer
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack

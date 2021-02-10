@@ -1,12 +1,12 @@
 package io.ejekta.kambrik
 
+import io.ejekta.kambrik.internal.KambrikMarker
 import io.ejekta.kambrik.internal.KambrikRegistrar
+import io.ejekta.kambrik.registration.KambricAutoRegistrar
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.loader.api.FabricLoader
 
 class Kambrik : ModInitializer {
-
-    interface KambrikMarker
 
     override fun onInitialize() {
         println("Hello world from Kambrik!")
@@ -14,8 +14,11 @@ class Kambrik : ModInitializer {
         FabricLoader.getInstance().getEntrypointContainers(ID, KambrikMarker::class.java).forEach {
             println("Got this: $it, ${it.entrypoint}, could do Kambrik init here")
             println("It came from: ${it.provider.metadata.id}")
-            KambrikRegistrar.doRegistrationFor(it.provider.metadata.id)
+            when (it.entrypoint ) {
+                is KambricAutoRegistrar -> KambrikRegistrar.doRegistrationFor(it)
+            }
         }
+
     }
 
     companion object {
