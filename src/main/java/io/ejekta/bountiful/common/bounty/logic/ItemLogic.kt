@@ -1,4 +1,4 @@
-package io.ejekta.bountiful.common.bounty.entry
+package io.ejekta.bountiful.common.bounty.logic
 
 import io.ejekta.bountiful.common.bounty.BountyData
 import io.ejekta.bountiful.common.bounty.BountyDataEntry

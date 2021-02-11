@@ -78,7 +78,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
         }
     }
 
-    fun totalLevel(done: Int, per: Int = 1): Int {
+    fun totalLevel(done: Int, per: Int = 2): Int {
         val unit = per * 5
         return if (done > unit) {
             5 + totalLevel(done - unit, per + 1)

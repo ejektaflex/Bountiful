@@ -70,5 +70,8 @@
 	"bountiful.tooltip.required": "Exigido",
 	"bountiful.tooltip.rewards": "Recompensa(s)",
 	"bountiful.tooltip.expired": "Expirado",
-	"bountiful.tooltip.requirements": "Requisitos não atendidos."
+
+	"bountiful.tooltip.requirements": "Requisitos não atendidos.",
+	"bountiful.bounty.expired": "This bounty has expired.",
+	"bountiful.decree.runewright.name": "Runewright"
   }

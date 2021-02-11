@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.common.bounty
 
+import io.ejekta.bountiful.common.config.BountifulIO
 import io.ejekta.bountiful.common.config.Format
 import io.ejekta.bountiful.common.util.GameTime
 import kotlinx.serialization.Serializable
@@ -12,6 +13,7 @@ import net.minecraft.util.Formatting
 import net.minecraft.world.World
 import kotlin.math.max
 
+@Suppress("RemoveRedundantQualifierName")
 @Serializable
 class BountyData {
 
@@ -23,12 +25,21 @@ class BountyData {
     val rewards = mutableListOf<BountyDataEntry>()
 
     private fun timeLeft(world: World): Long {
-        return max(timeStarted - world.time + timeToComplete, 0L)
+        return when (BountifulIO.config.bountyExpiryTimers) {
+            true -> max(timeStarted - world.time + timeToComplete, 0L)
+            false -> 1L
+        }
     }
 
     fun save() = Format.NBT.encodeToJsonElement(serializer(), this)
 
     fun tryCashIn(player: PlayerEntity, stack: ItemStack): Boolean {
+
+        if (timeLeft(player.world) <= 0) {
+            player.sendMessage(TranslatableText("bountiful.bounty.expired"), false)
+            return false
+        }
+
         val objs = objectives.map {
             it().finishObjective(this, it, player)
         }
@@ -41,7 +52,6 @@ class BountyData {
             true
         } else {
             player.sendMessage(TranslatableText("bountiful.tooltip.requirements"), false)
-            println("All objectives finished but some returned false!")
             false
         }
 
@@ -57,24 +67,16 @@ class BountyData {
         return GameTime.formatTimeExpirable(timeLeft(world) / 20)
     }
 
-    private fun formattedObjectives(): List<Text> {
-        return objectives.map {
-            it.formatted(this, MinecraftClient.getInstance().player!!, true)
-        }
-    }
-
-    private fun formattedRewards(): List<Text> {
-        return rewards.map {
-            it.formatted(this, MinecraftClient.getInstance().player!!, false)
-        }
-    }
-
     fun tooltipInfo(world: World): List<Text> {
         val lines = mutableListOf<Text>()
         lines += TranslatableText("bountiful.tooltip.required").formatted(Formatting.GOLD).append(":")
-        lines += formattedObjectives()
+        lines += objectives.map {
+            it.formatted(this, MinecraftClient.getInstance().player!!, true)
+        }
         lines += TranslatableText("bountiful.tooltip.rewards").formatted(Formatting.GOLD).append(":")
-        lines += formattedRewards()
+        lines += rewards.map {
+            it.formatted(this, MinecraftClient.getInstance().player!!, false)
+        }
         return lines
     }
 

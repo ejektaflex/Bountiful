@@ -12,7 +12,9 @@ class BountifulConfig {
     // select * from f_format_names('2020'); => ID, Name
 
     var boardUpdateFrequency: Int = 45
-    var bonusTime: Int = 0
+    var bountyBonusTime: Int = 0
+    var bountyExpiryTimers = true
+
 
     fun buildScreen(): Screen {
         val builder = ConfigBuilder.create()
@@ -22,7 +24,7 @@ class BountifulConfig {
 
         val creator = builder.entryBuilder()
 
-        val board = builder.getOrCreateCategory(LiteralText("General"))
+        val board = builder.getOrCreateCategory(LiteralText("General - Board"))
 
         board.addEntry(
             creator.startIntSlider(
@@ -39,14 +41,28 @@ class BountifulConfig {
         board.addEntry(
             creator.startIntSlider(
                 LiteralText("Bonus Time"),
-                bonusTime,
+                bountyBonusTime,
                 0, 6000
             ).setDefaultValue(45).setTooltip(
                 LiteralText("How much bonus time is given to bounties")
             ).setSaveConsumer {
-                bonusTime = it
+                bountyBonusTime = it
             }.build()
         )
+
+        val bounty = builder.getOrCreateCategory(LiteralText("General - Bounty"))
+
+        bounty.addEntry(
+            creator.startBooleanToggle(
+                LiteralText("Expiry Timers"),
+                bountyExpiryTimers
+            ).setDefaultValue(true).setTooltip(
+                LiteralText("Whether bounties should have a time and expire")
+            ).setSaveConsumer {
+                bountyExpiryTimers = it
+            }.build()
+        )
+
 
         return builder.build()
     }

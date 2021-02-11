@@ -41,6 +41,23 @@ object BountifulCommands {
 
     fun registerCommands() = CommandRegistrationCallback { dispatcher, dedicated ->
         dispatcher.register(
+
+            /*
+
+            requires(::hasPermission)
+
+            literal("tweak") { does(tweak()) }
+            literal("hand") { does(hand()) }
+            ...
+            literal("gen") {
+                argInt("rep") {
+                    does(gen())
+                }
+            }
+
+             */
+
+
             CommandManager.literal("bo")
                 .requires(::hasPermission)
                 .then(

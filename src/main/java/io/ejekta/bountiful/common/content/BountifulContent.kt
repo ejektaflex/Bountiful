@@ -35,7 +35,7 @@ object BountifulContent : KambricAutoRegistrar {
 
     val DECREE_ITEM = "decree" forItem DecreeItem()
 
-    val BOARD = "board" forBlock BoardBlock()
+    val BOARD = "bountyboard" forBlock BoardBlock()
 
     val BOARD_ITEM = "bountyboard" forItem BlockItem(BOARD, Item.Settings().group(ItemGroup.MISC))
 

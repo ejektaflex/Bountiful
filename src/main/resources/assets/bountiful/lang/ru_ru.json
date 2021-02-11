@@ -9,6 +9,7 @@
 	"bountiful.decree.invalid": "Некорректное распоряжение",
 	"bountiful.decree.notset": "Принесите к доске объявлений!",
 
+	"bountiful.bounty.expired": "Срок этого вознаграждения истек.",
 	"bountiful.bounty.turnin": "Получите свою награду, щелкнув ПКМ на доске объявлений.",
 
 	"bountiful.advancement.bounty_taken.title": "Работа по найму",
@@ -71,5 +72,6 @@
 	"bountiful.tooltip.required": "Требуется",
 	"bountiful.tooltip.rewards": "Вознаграждение",
 	"bountiful.tooltip.expired": "Истекший",
-	"bountiful.tooltip.requirements": "Требования не выполнены"
+	"bountiful.tooltip.requirements": "Требования не выполнены",
+	"bountiful.decree.runewright.name": "Runewright"
 }

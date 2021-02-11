@@ -2,6 +2,7 @@ package io.ejekta.bountiful.common.content
 
 import io.ejekta.bountiful.common.bounty.BountyData
 import io.ejekta.bountiful.common.bounty.BountyRarity
+import io.ejekta.bountiful.common.config.BountifulIO
 import io.ejekta.bountiful.common.util.clientWorld
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.minecraft.client.item.TooltipContext
@@ -28,12 +29,14 @@ class BountyItem : Item(
             if (data.rarity == BountyRarity.LEGENDARY) {
                 text = text.formatted(Formatting.BOLD)
             }
-            text = text.append(
+            if (BountifulIO.config.bountyExpiryTimers) {
+                text = text.append(
                     LiteralText("(")
                         .append(data.formattedTimeLeft(clientWorld()!!))
                         .append(LiteralText(")"))
                         .formatted(Formatting.WHITE)
                 )
+            }
             return text
         } else {
             LiteralText("No Bounty Stack Given")

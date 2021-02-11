@@ -21,11 +21,11 @@ object BountyCreator {
     }
 
     private fun getRewardsFor(decrees: Set<Decree>): Set<PoolEntry> {
-        return getRewardPoolsFor(decrees).map { it.content }.flatten().toSet()
+        return getRewardPoolsFor(decrees).map { it.content }.flatten().filter { it.type.isReward }.toSet()
     }
 
     private fun getObjectivesFor(decrees: Set<Decree>): Set<PoolEntry> {
-        return getObjectivePoolsFor(decrees).map { it.content }.flatten().toSet()
+        return getObjectivePoolsFor(decrees).map { it.content }.flatten().filter { it.type.isObj }.toSet()
     }
 
     fun createBounty(decrees: Set<Decree>, rep: Int, startTime: Long = 0L): BountyData {
@@ -46,7 +46,7 @@ object BountyCreator {
         createObjectives(bd, decrees, rep, worth)
 
         bd.timeStarted = startTime
-        bd.timeToComplete += 15000L + BountifulIO.config.bonusTime
+        bd.timeToComplete += 15000L + BountifulIO.config.bountyBonusTime
 
         //bd.timeToComplete = bd.timeToComplete.toDouble().pow(0.95).toLong() // curve off high value items
 
