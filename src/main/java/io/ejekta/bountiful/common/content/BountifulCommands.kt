@@ -253,7 +253,7 @@ object BountifulCommands {
 
             val rep = getInteger(ctx, "rep")
 
-            val bd = BountyCreator.createBounty(BountifulContent.Decrees.toSet(), rep)
+            val bd = BountyCreator.create(BountifulContent.Decrees.toSet(), rep)
 
             player.giveItemStack(BountyItem.create(bd))
         } catch (e: Exception) {

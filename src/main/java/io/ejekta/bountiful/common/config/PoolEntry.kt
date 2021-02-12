@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.common.config
 
+import io.ejekta.bountiful.common.bounty.BountyData
 import io.ejekta.bountiful.common.bounty.BountyDataEntry
 import io.ejekta.bountiful.common.bounty.BountyRarity
 import io.ejekta.bountiful.common.bounty.BountyType
@@ -22,7 +23,7 @@ class PoolEntry private constructor() {
     var weightMult = 1.0
     var timeMult = 1.0
     var repRequired = 0.0
-    var repMult = 1.0
+    val forbid: MutableList<ForbiddenContent> = mutableListOf()
 
     var mystery: Boolean = false
 
@@ -67,11 +68,22 @@ class PoolEntry private constructor() {
         }
     }
 
+    fun forbids(entry: PoolEntry): Boolean {
+        return forbid.any { it.type == entry.type && it.content == entry.content }
+    }
+
+    fun forbidsAny(entries: List<PoolEntry>): Boolean {
+        return entries.any { forbids(it) }
+    }
+
     @Serializable
     class EntryRange(val min: Int, val max: Int) {
         fun pick(): Int = (min..max).random()
         override fun toString() = "[$min - $max]"
     }
+
+    @Serializable
+    class ForbiddenContent(val type: BountyType, val content: String)
 
     companion object {
 

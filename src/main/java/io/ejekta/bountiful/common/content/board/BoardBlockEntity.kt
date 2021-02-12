@@ -132,7 +132,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
             (BountyInventory.bountySlots - slotToAddTo).random()
         }
 
-        val commonBounty = BountyCreator.createBounty(getBoardDecrees(), level, ourWorld.time)
+        val commonBounty = BountyCreator.create(getBoardDecrees(), level, ourWorld.time)
 
         for (player in ourWorld.players.toMutableList()) {
             val inv = getBounties(player)

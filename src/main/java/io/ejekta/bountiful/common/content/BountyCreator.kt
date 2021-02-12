@@ -10,137 +10,47 @@ import io.ejekta.bountiful.common.util.randomSplit
 import io.ejekta.bountiful.common.util.weightedRandomDblBy
 import kotlin.math.ceil
 
-object BountyCreator {
+class BountyCreator private constructor(private val decrees: Set<Decree>, private val rep: Int, private val startTime: Long = 0L) {
 
-    private fun getObjectivePoolsFor(decrees: Set<Decree>): Set<Pool> {
-        return decrees.map { it.objectivePools }.flatten().toSet()
-    }
+    var data = BountyData()
 
-    private fun getRewardPoolsFor(decrees: Set<Decree>): Set<Pool> {
-        return decrees.map { it.rewardPools }.flatten().toSet()
-    }
+    fun create(): BountyData {
+        data = BountyData()
 
-    private fun getRewardsFor(decrees: Set<Decree>): Set<PoolEntry> {
-        return getRewardPoolsFor(decrees).map { it.content }.flatten().filter { it.type.isReward }.toSet()
-    }
+        // Gen reward entries and max rarity
+        val rewardEntries = genRewardEntries()
+        data.rarity = rewardEntries.maxOf { it.rarity }
 
-    private fun getObjectivesFor(decrees: Set<Decree>): Set<PoolEntry> {
-        return getObjectivePoolsFor(decrees).map { it.content }.flatten().filter { it.type.isObj }.toSet()
-    }
-
-    fun createBounty(decrees: Set<Decree>, rep: Int, startTime: Long = 0L): BountyData {
-
-        val bd = BountyData()
-
-        val worth = createRewards(bd, decrees, rep)
+        // Gen rewards and total worth
+        val rewards = genRewards(rewardEntries)
+        val totalRewardWorth = rewards.sumOf { it.worth }
+        data.rewards.addAll(rewards)
 
         // return early if we have no rewards :(
-        if (bd.rewards.isEmpty()) {
-            return bd
+        if (rewards.isEmpty()) {
+            return data
         }
 
-        //bd.timeToComplete += bd.rewards.map { it.worth.toLong() }.sum() * 10
+        // Gen objectives
+        val objectives = genObjectives(totalRewardWorth, rewardEntries)
+        data.objectives.addAll(objectives)
 
-        //println("Created rewards worth $worth")
+        data.timeStarted = startTime
+        data.timeToComplete += 15000L + BountifulIO.config.bountyBonusTime
 
-        createObjectives(bd, decrees, rep, worth)
 
-        bd.timeStarted = startTime
-        bd.timeToComplete += 15000L + BountifulIO.config.bountyBonusTime
-
-        //bd.timeToComplete = bd.timeToComplete.toDouble().pow(0.95).toLong() // curve off high value items
-
-        return bd
+        return data
     }
 
-    private fun getObjectivesWithinVariance(objs: List<PoolEntry>, worth: Double, variance: Double): List<PoolEntry> {
-        val wRange = ceil(worth * variance)
-
-        // TODO Make sure to filter out non-objectives
-
-        val objGroups = objs.groupBy { it.worthDistanceFrom(worth) }
-
-        val groupsInRange = objGroups.filter { it.key <= wRange }
-        val totalObjs = groupsInRange.values.flatten()
-
-        return totalObjs
+    private fun genRewards(entries: List<PoolEntry>): List<BountyDataEntry> {
+        return entries.map { it.toEntry() }
     }
 
-    private fun pickObjective(data: BountyData, objs: List<PoolEntry>, worth: Double, rep: Int): BountyDataEntry {
-        val variance = 0.25
-        val inVariance = getObjectivesWithinVariance(objs, worth, variance)
-
-        // Picks a random pool within the variance. If none exist, get the objective with the closest worth distance.
-        val picked = if (inVariance.isNotEmpty()) {
-            inVariance.weightedRandomDblBy {
-                weightMult * rarity.weightAdjustedFor(rep)
-            }
-        } else {
-            //println("Nothing was in variance")
-            objs.minByOrNull { it.worthDistanceFrom(worth) }!!
-        }
-
-        val entry = picked.toEntry(worth)
-
-        data.timeToComplete += (picked.timeMult * entry.worth).toLong() * 7
-
-        return entry
-    }
-
-    fun createObjectives(data: BountyData, decrees: Set<Decree>, rep: Int, worth: Double) {
-        // -30 = 150% / 1.5x needed, 30 = 50% / 0.5x needed
-        // 1 - (rep / 60.0)
-        val objNeededMult = 1 - (rep / 60.0)
-        var worthNeeded = worth * objNeededMult
-        val numObjectives = (1..2).random()
-
-        //println("Must create objectives that have a worth that adds up to $worth (actually $worthNeeded)")
-
-        val objs = getObjectivesFor(decrees).filter {
-            it.content !in data.rewards.map { rew -> rew.content }
-        }
-
-
-
-        val worthGroups = randomSplit(worthNeeded, numObjectives).toMutableList()
-
-        //println("Split into: $worthGroups")
-
-        while (worthGroups.isNotEmpty()) {
-            val w = worthGroups.removeAt(0)
-
-            val alreadyPicked = data.objectives.map { it.content }
-            val unpicked = objs.filter { it.content !in alreadyPicked }
-
-            if (unpicked.isEmpty()) {
-                println("Ran out of objectives to pick from! Already picked: $alreadyPicked")
-                break
-            }
-
-            val picked = pickObjective(data, unpicked, w, rep)
-
-            // Append on a new worth to add obj for
-            // if we still haven't fulfilled it
-            if (picked.worth < w * 0.5) {
-                //println("Cannot satisfy all, must append another (${picked.worth}, $w)")
-                worthGroups.add(w - picked.worth)
-            }
-
-            //println("Picked an item with worth: $w (above)")
-            data.objectives.add(picked)
-
-
-        }
-
-
-    }
-
-
-    fun createRewards(data: BountyData, decrees: Set<Decree>, rep: Int): Double {
+    private fun genRewardEntries(): List<PoolEntry> {
         val rewards = getRewardsFor(decrees)
 
         if (rewards.isEmpty()) {
-            return 0.0
+            return emptyList()
         }
 
         // Num rewards to give
@@ -164,18 +74,101 @@ object BountyCreator {
 
             toReturn.add(picked)
         }
-
-        data.rarity = toReturn.maxOf { it.rarity }
-
-
-        val worths = toReturn.map { it.unitWorth to it.toEntry() }
-
-        data.rewards.addAll(worths.map { it.second })
-        return worths.sumOf { it.first * it.second.amount }
+        return toReturn
     }
 
+    private fun genObjectives(worth: Double, rewardPools: List<PoolEntry>): List<BountyDataEntry> {
+        // -30 = 150% / 1.5x needed, 30 = 50% / 0.5x needed
+        // 1 - (rep / 60.0)
+        val objNeededMult = 1 - (rep / 60.0)
+        val worthNeeded = worth * objNeededMult
+        val numObjectives = (1..2).random()
+        val toReturn = mutableListOf<BountyDataEntry>()
 
+        val objs = getObjectivesFor(decrees).filter {
+            it.content !in data.rewards.map { rew -> rew.content }
+        }.filter { entry ->
+            // obj entry can not be in any reward forbidlist
+            // no rew entry can be in this obj entry's forbidlist either
+            !entry.forbidsAny(rewardPools) && !rewardPools.any { it.forbids(entry) }
+        }
 
+        val worthGroups = randomSplit(worthNeeded, numObjectives).toMutableList()
 
+        while (worthGroups.isNotEmpty()) {
+            val w = worthGroups.removeAt(0)
+
+            val alreadyPicked = toReturn.map { it.content }
+            val unpicked = objs.filter { it.content !in alreadyPicked }
+
+            if (unpicked.isEmpty()) {
+                //println("Ran out of objectives to pick from! Already picked: $alreadyPicked")
+                break
+            }
+
+            val picked = pickObjective(unpicked, w)
+            val entry = picked.toEntry(w)
+
+            // Add time based on entry
+            data.timeToComplete += (picked.timeMult * entry.worth).toLong() * 7
+
+            // Append on a new worth to add obj for
+            // if we still haven't fulfilled it
+            if (entry.worth < w * 0.5) {
+                worthGroups.add(w - entry.worth)
+            }
+
+            toReturn.add(entry)
+        }
+
+        return toReturn
+    }
+
+    private fun pickObjective(objs: List<PoolEntry>, worth: Double): PoolEntry {
+        val variance = 0.25
+        val inVariance = getObjectivesWithinVariance(objs, worth, variance)
+
+        // Picks a random pool within the variance. If none exist, get the objective with the closest worth distance.
+        val picked = if (inVariance.isNotEmpty()) {
+            inVariance.weightedRandomDblBy {
+                weightMult * rarity.weightAdjustedFor(rep)
+            }
+        } else {
+            objs.minByOrNull { it.worthDistanceFrom(worth) }!!
+        }
+
+        return picked
+    }
+
+    companion object {
+
+        fun create(decrees: Set<Decree>, rep: Int, startTime: Long = 0L): BountyData {
+            return BountyCreator(decrees, rep, startTime).create()
+        }
+
+        private fun getObjectivePoolsFor(decrees: Set<Decree>): Set<Pool> {
+            return decrees.map { it.objectivePools }.flatten().toSet()
+        }
+
+        private fun getRewardPoolsFor(decrees: Set<Decree>): Set<Pool> {
+            return decrees.map { it.rewardPools }.flatten().toSet()
+        }
+
+        private fun getRewardsFor(decrees: Set<Decree>): Set<PoolEntry> {
+            return getRewardPoolsFor(decrees).map { it.content }.flatten().filter { it.type.isReward }.toSet()
+        }
+
+        private fun getObjectivesFor(decrees: Set<Decree>): Set<PoolEntry> {
+            return getObjectivePoolsFor(decrees).map { it.content }.flatten().filter { it.type.isObj }.toSet()
+        }
+
+        private fun getObjectivesWithinVariance(objs: List<PoolEntry>, worth: Double, variance: Double): List<PoolEntry> {
+            val wRange = ceil(worth * variance)
+            val objGroups = objs.groupBy { it.worthDistanceFrom(worth) }
+            val groupsInRange = objGroups.filter { it.key <= wRange }.values
+            return groupsInRange.flatten()
+        }
+
+    }
 
 }

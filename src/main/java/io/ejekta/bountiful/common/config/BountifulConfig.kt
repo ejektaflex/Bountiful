@@ -67,7 +67,7 @@ class BountifulConfig {
         return builder.build()
     }
 
-    fun onSave() {
+    private fun onSave() {
         BountifulIO.saveConfig()
         BountifulIO.loadConfig()
     }
