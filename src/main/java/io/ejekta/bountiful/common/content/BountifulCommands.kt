@@ -11,11 +11,13 @@ import io.ejekta.bountiful.common.bounty.BountyDataEntry
 import io.ejekta.bountiful.common.bounty.BountyRarity
 import io.ejekta.bountiful.common.bounty.BountyType
 import io.ejekta.bountiful.common.config.*
+import io.ejekta.kambrik.commands.*
 import io.ejekta.kambrik.ext.id
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.ItemStack
 import net.minecraft.network.MessageType
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.command.CommandManager
@@ -28,7 +30,7 @@ import java.nio.file.Paths
 
 object BountifulCommands {
 
-    fun hasPermission(c: ServerCommandSource): Boolean {
+    private fun hasPermission(c: ServerCommandSource): Boolean {
         if (c.hasPermissionLevel(2) ||
             (c.entity is PlayerEntity && c.player.isCreative)) {
             return true
@@ -37,105 +39,41 @@ object BountifulCommands {
     }
 
     fun registerCommands() = CommandRegistrationCallback { dispatcher, dedicated ->
+
         dispatcher.register(
+            serverCommand("bo") {
+                requires(::hasPermission)
 
-            /*
+                literalExecutes("tweak", tweak())
+                literalExecutes("hand", hand())
+                literalExecutes("testing", testing())
+                literalExecutes("complete", complete())
+                literalExecutes("load", load())
+                literalExecutes("farm", farm())
 
-            requires(::hasPermission)
-
-            literal("tweak") { does(tweak()) }
-            literal("hand") { does(hand()) }
-            ...
-            literal("gen") {
-                argInt("rep") {
-                    does(gen())
+                literal("pool") {
+                    literal("addto") {
+                        stringArgExecutes("poolName", addHandToPool(), BountifulContent.Pools.map { it.id })
+                    }
+                    literal("create") {
+                        stringArgExecutes("poolName", addPool(), BountifulContent.Pools.map { it.id })
+                    }
                 }
+
+                literal("gen") { intArgExecutes("rep", gen()) }
+                literal("weights") { intArgExecutes("rep", weights()) }
+
+                literal("decree") {
+                    stringArgExecutes("decType", {
+                        val decId = getString(it, "decType")
+                        val stack = DecreeItem.create(decId)
+                        it.source.player.giveItemStack(stack)
+                        1
+                    }, BountifulContent.Pools.map { it.id })
+                }
+
             }
 
-             */
-
-
-            CommandManager.literal("bo")
-                .requires(::hasPermission)
-                .then(
-                    CommandManager.literal("tweak").executes(tweak())
-                )
-                .then(
-                    CommandManager.literal("hand").executes(hand())
-                )
-                .then(
-                    CommandManager.literal("testing").executes(testing())
-                )
-                .then(
-                    CommandManager.literal("complete").executes(complete())
-                )
-                .then(
-                    CommandManager.literal("load").executes(load())
-                )
-                .then(
-                    CommandManager.literal("farm").executes(farm())
-                )
-                .then(
-                    CommandManager.literal("pool")
-                        .then(
-                            CommandManager.literal("addto")
-                                .then(
-                                    CommandManager.argument("poolName", string())
-                                        .suggests { _, builder ->
-                                            BountifulContent.Pools.forEach { pool ->
-                                                builder.suggest(pool.id)
-                                            }
-                                            builder.buildFuture()
-                                        }
-                                        .executes(addHandToPool())
-                                )
-                        )
-                        .then(
-                            CommandManager.literal("create")
-                                .then(
-                                    CommandManager.argument("poolName", string())
-                                        .suggests { _, builder ->
-                                            BountifulContent.Pools.forEach { pool ->
-                                                builder.suggest(pool.id)
-                                            }
-                                            builder.buildFuture()
-                                        }
-                                        .executes(addPool())
-                                )
-                        )
-                )
-                .then(
-                    CommandManager.literal("gen")
-                        .then(
-                            CommandManager.argument("rep", integer())
-                                .executes(gen())
-                        )
-                )
-                .then(
-                    CommandManager.literal("weights")
-                        .then(
-                            CommandManager.argument("rep", integer())
-                                .executes(weights())
-                        )
-                )
-                .then(
-                    CommandManager.literal("decree")
-                        .then(
-                            CommandManager.argument("decType", string())
-                                .suggests { context, builder ->
-                                    BountifulContent.Decrees.forEach { dec ->
-                                        builder.suggest(dec.id)
-                                    }
-                                    builder.buildFuture()
-                                }
-                                .executes {
-                                    val decId = getString(it, "decType")
-                                    val stack = DecreeItem.create(decId)
-                                    it.source.player.giveItemStack(stack)
-                                    1
-                                }
-                        )
-                )
         )
     }
 
@@ -146,7 +84,7 @@ object BountifulCommands {
 
         val newPoolEntry = PoolEntry.create().apply {
             content = held.id.toString()
-            nbtData = held.tag
+            nbtData = if (player.mainHandStack == ItemStack.EMPTY) null else held.tag
         }
 
         val saved = newPoolEntry.save(Format.Hand)
@@ -159,7 +97,6 @@ object BountifulCommands {
         ServerPlayNetworking.send(player, Bountiful.id("copydata"), packet)
 
         1
-
     }
 
     private fun addHandToPool() = Command<ServerCommandSource> { ctx ->
