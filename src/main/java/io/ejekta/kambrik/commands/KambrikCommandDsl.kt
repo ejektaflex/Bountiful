@@ -10,14 +10,27 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
 
-fun serverCommand(base: String, func: LiteralArgumentBuilder<ServerCommandSource>.() -> Unit): LiteralArgumentBuilder<ServerCommandSource> {
-    return CommandManager.literal(base).apply(func)
+
+
+class KambrikLiteral<S>(lit: String) : LiteralArgumentBuilder<S>(lit) {
+    operator fun String.invoke(func: KambrikLiteral<S>.() -> Unit) {
+        then(
+            KambrikLiteral<S>(this).apply(func)
+        )
+    }
+    infix fun String.execs(cmd: Command<S>) {
+        this {
+            executes(cmd)
+        }
+    }
 }
 
-fun ArgumentBuilder<ServerCommandSource, *>.literal(word: String, func: LiteralArgumentBuilder<ServerCommandSource>.() -> Unit) {
-    then(
-        CommandManager.literal(word).apply(func)
-    )
+fun kambrikLiteral(base: String, func: KambrikLiteral<ServerCommandSource>.() -> Unit): KambrikLiteral<ServerCommandSource> {
+    return KambrikLiteral<ServerCommandSource>(base).apply(func)
+}
+
+fun ArgumentBuilder<ServerCommandSource, *>.literal(word: String, func: KambrikLiteral<ServerCommandSource>.() -> Unit) {
+    kambrikLiteral(word, func)
 }
 
 fun LiteralArgumentBuilder<ServerCommandSource>.literalExecutes(word: String, cmd: Command<ServerCommandSource>) {
@@ -25,6 +38,8 @@ fun LiteralArgumentBuilder<ServerCommandSource>.literalExecutes(word: String, cm
         executes(cmd)
     }
 }
+
+
 
 fun <T> ArgumentBuilder<ServerCommandSource, *>.argument(word: String, type: ArgumentType<T>, func: RequiredArgumentBuilder<ServerCommandSource, T>.() -> Unit) {
     then(

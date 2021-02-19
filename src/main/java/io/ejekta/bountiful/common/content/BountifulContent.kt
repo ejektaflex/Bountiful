@@ -8,12 +8,9 @@ import io.ejekta.bountiful.common.content.board.BoardBlockEntity
 import io.ejekta.bountiful.common.content.gui.BoardScreenHandler
 import io.ejekta.kambrik.registration.KambricAutoRegistrar
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
-import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry
-import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemGroup
-import net.minecraft.screen.ScreenHandlerType
 
 object BountifulContent : KambricAutoRegistrar {
 
