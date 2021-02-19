@@ -44,6 +44,8 @@ object BountifulIO : SimpleSynchronousResourceReloadListener {
         val text = file.readText()
         val pool = Format.DataPack.decodeFromString(Pool.serializer(), text)
         pool.func()
+        val saved = Format.Hand.encodeToString(Pool.serializer(), pool)
+        file.writeText(saved)
     }
 
     fun saveConfig() {

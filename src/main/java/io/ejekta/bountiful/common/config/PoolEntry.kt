@@ -92,7 +92,7 @@ class PoolEntry private constructor() {
             type = BountyType.ITEM
             amount = EntryRange(1, 1)
             content = "NO_CONTENT"
-            unitWorth = 1000.0
+            unitWorth = 100.0
         }
 
     }

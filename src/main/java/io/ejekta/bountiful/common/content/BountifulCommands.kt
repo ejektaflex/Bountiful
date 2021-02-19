@@ -76,16 +76,32 @@ object BountifulCommands {
                     CommandManager.literal("farm").executes(farm())
                 )
                 .then(
-                    CommandManager.literal("addpool")
+                    CommandManager.literal("pool")
                         .then(
-                            CommandManager.argument("poolName", string())
-                                .suggests { context, builder ->
-                                    BountifulContent.Pools.forEach { pool ->
-                                        builder.suggest(pool.id)
-                                    }
-                                    builder.buildFuture()
-                                }
-                                .executes(addPool())
+                            CommandManager.literal("addto")
+                                .then(
+                                    CommandManager.argument("poolName", string())
+                                        .suggests { _, builder ->
+                                            BountifulContent.Pools.forEach { pool ->
+                                                builder.suggest(pool.id)
+                                            }
+                                            builder.buildFuture()
+                                        }
+                                        .executes(addHandToPool())
+                                )
+                        )
+                        .then(
+                            CommandManager.literal("create")
+                                .then(
+                                    CommandManager.argument("poolName", string())
+                                        .suggests { _, builder ->
+                                            BountifulContent.Pools.forEach { pool ->
+                                                builder.suggest(pool.id)
+                                            }
+                                            builder.buildFuture()
+                                        }
+                                        .executes(addPool())
+                                )
                         )
                 )
                 .then(
@@ -146,6 +162,29 @@ object BountifulCommands {
 
     }
 
+    private fun addHandToPool() = Command<ServerCommandSource> { ctx ->
+        val player = ctx.source.entity as? ServerPlayerEntity ?: return@Command 0
+        val held = player.mainHandStack
+        val poolName = getString(ctx, "poolName")
+
+        val newPoolEntry = PoolEntry.create().apply {
+            content = held.id.toString()
+            nbtData = held.tag
+        }
+
+        if (poolName.trim() != "") {
+            BountifulIO.editPoolConfig(poolName) {
+                content.add(newPoolEntry)
+            }
+            player.sendMessage(LiteralText("Item added to pool '$poolName'."), MessageType.CHAT, player.uuid)
+            player.sendMessage(LiteralText("Edit 'config/bountiful/bounty_pools/$poolName.json' to edit details."), MessageType.CHAT, player.uuid)
+        } else {
+            player.sendMessage(LiteralText("Invalid pool name!"), MessageType.CHAT, player.uuid)
+        }
+
+        1
+    }
+
     private fun addPool() = Command<ServerCommandSource> { ctx ->
 
         val player = ctx.source.entity as? ServerPlayerEntity ?: return@Command 0
@@ -154,6 +193,7 @@ object BountifulCommands {
         if (poolName.trim() != "") {
             BountifulIO.getOrCreatePoolConfig(poolName)
             player.sendMessage(LiteralText("Pool '$poolName' created (if it did not exist)"), MessageType.CHAT, player.uuid)
+            player.sendMessage(LiteralText("Use '/reload' to see changes."), MessageType.CHAT, player.uuid)
         } else {
             player.sendMessage(LiteralText("Invalid pool name!"), MessageType.CHAT, player.uuid)
         }
