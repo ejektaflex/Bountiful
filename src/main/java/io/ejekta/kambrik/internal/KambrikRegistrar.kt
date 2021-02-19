@@ -8,15 +8,14 @@ import net.minecraft.util.registry.Registry
 import net.minecraft.util.registry.SimpleRegistry
 
 object KambrikRegistrar {
-    //data class RegistryMap<T>(val registry: SimpleRegistry<T>, val items: MutableMap<String, T>)
-    //data class ModRegistrar(val modId: String, val content: MutableList<RegistryMap<*>>)
 
     data class RegistrationEntry<T>(val registry: Registry<T>, val itemId: String, val item: T) {
         fun register(modId: String) = registry.register(Identifier(modId, itemId), item)
     }
+
     data class ModResistrar(val requestor: KambricAutoRegistrar, val content: MutableList<RegistrationEntry<*>> = mutableListOf())
 
-    val registrars = mutableMapOf<KambricAutoRegistrar, ModResistrar>()
+    private val registrars = mutableMapOf<KambricAutoRegistrar, ModResistrar>()
 
     operator fun get(requester: KambricAutoRegistrar): ModResistrar {
         return registrars.getOrPut(requester) { ModResistrar(requester) }

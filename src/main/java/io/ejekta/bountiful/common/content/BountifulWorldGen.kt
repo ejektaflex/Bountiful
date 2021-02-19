@@ -26,8 +26,6 @@ object BountifulWorldGen {
 
         val piece = StructurePoolElement.method_30434(nbtLocation.toString()).apply(StructurePool.Projection.RIGID)
 
-        val countList = (pool as StructurePoolAccessor).bo_getStructureCounts()
-
         repeat(weight) {
             pieceList.add(piece)
         }

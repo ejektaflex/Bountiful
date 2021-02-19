@@ -25,6 +25,27 @@ object BountifulIO : SimpleSynchronousResourceReloadListener {
     private val decreeConfigs: Path by lazy { configFolder.resolve("bounty_decrees").assuredly }
     private val configFile: File by lazy { configFolder.resolve("bountiful.json").toFile() }
 
+    private fun poolConfigFiles(): List<File> {
+        return poolConfigs.toFile().listFiles { dir, name -> dir.isFile && name.endsWith(".json") }?.toList() ?: listOf()
+    }
+
+    fun getOrCreatePoolConfig(name: String): File {
+        return poolConfigFiles().find { it.nameWithoutExtension == name } ?: File(poolConfigs.toFile(), "${name}.json").apply {
+            createNewFile()
+            val emptyPool = Pool().apply { setup(name) }
+            writeText(
+                Format.DataPack.encodeToString(Pool.serializer(), emptyPool)
+            )
+        }
+    }
+
+    fun editPoolConfig(name: String, func: Pool.() -> Unit) {
+        val file = getOrCreatePoolConfig(name)
+        val text = file.readText()
+        val pool = Format.DataPack.decodeFromString(Pool.serializer(), text)
+        pool.func()
+    }
+
     fun saveConfig() {
         configFile.writeText(
             Format.DataPack.encodeToString(BountifulConfig.serializer(), config)

@@ -14,9 +14,7 @@ class Kambrik : ModInitializer {
         FabricLoader.getInstance().getEntrypointContainers(ID, KambrikMarker::class.java).forEach {
             println("Got this: $it, ${it.entrypoint}, could do Kambrik init here")
             println("It came from: ${it.provider.metadata.id}")
-            when (it.entrypoint ) {
-                is KambricAutoRegistrar -> KambrikRegistrar.doRegistrationFor(it)
-            }
+            KambrikRegistrar.doRegistrationFor(it)
         }
 
     }

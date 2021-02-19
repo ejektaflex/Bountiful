@@ -16,7 +16,4 @@ import java.util.List;
 public interface StructurePoolAccessor {
     @Accessor("elements")
     List<StructurePoolElement> bo_getStructureElements();
-
-    @Accessor("elementCounts")
-    List<Pair<StructurePoolElement, Integer>> bo_getStructureCounts();
 }

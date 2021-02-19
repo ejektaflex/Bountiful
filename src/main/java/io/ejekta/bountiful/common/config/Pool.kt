@@ -1,13 +1,14 @@
 package io.ejekta.bountiful.common.config
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 data class Pool(
-    override var id: String = "DEFAULT_POOL",
-    val content: MutableList<PoolEntry> = mutableListOf(),
+    @Transient override var id: String = "DEFAULT_POOL",
     val replace: Boolean = false,
-    override val requires: MutableList<String> = mutableListOf()
+    override val requires: MutableList<String> = mutableListOf(),
+    val content: MutableList<PoolEntry> = mutableListOf()
 ) : IMerge<Pool> {
 
     fun setup(newId: String) {
@@ -31,8 +32,8 @@ data class Pool(
 
     override fun merged(other: Pool): Pool {
         return when (other.replace) {
-            true -> Pool(id, other.content)
-            else -> Pool(id, (content + other.content).toMutableList())
+            true -> Pool(id, content = other.content)
+            else -> Pool(id, content = (content + other.content).toMutableList())
         }
     }
 

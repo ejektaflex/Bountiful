@@ -10,10 +10,7 @@ import io.ejekta.bountiful.common.bounty.BountyData
 import io.ejekta.bountiful.common.bounty.BountyDataEntry
 import io.ejekta.bountiful.common.bounty.BountyRarity
 import io.ejekta.bountiful.common.bounty.BountyType
-import io.ejekta.bountiful.common.config.Decree
-import io.ejekta.bountiful.common.config.Pool
-import io.ejekta.bountiful.common.config.PoolEntry
-import io.ejekta.bountiful.common.config.Format
+import io.ejekta.bountiful.common.config.*
 import io.ejekta.kambrik.ext.id
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
@@ -79,6 +76,19 @@ object BountifulCommands {
                     CommandManager.literal("farm").executes(farm())
                 )
                 .then(
+                    CommandManager.literal("addpool")
+                        .then(
+                            CommandManager.argument("poolName", string())
+                                .suggests { context, builder ->
+                                    BountifulContent.Pools.forEach { pool ->
+                                        builder.suggest(pool.id)
+                                    }
+                                    builder.buildFuture()
+                                }
+                                .executes(addPool())
+                        )
+                )
+                .then(
                     CommandManager.literal("gen")
                         .then(
                             CommandManager.argument("rep", integer())
@@ -118,7 +128,6 @@ object BountifulCommands {
         val player = ctx.source.entity as? ServerPlayerEntity ?: return@Command 0
         val held = player.mainHandStack
 
-
         val newPoolEntry = PoolEntry.create().apply {
             content = held.id.toString()
             nbtData = held.tag
@@ -133,9 +142,23 @@ object BountifulCommands {
         packet.writeString(saved)
         ServerPlayNetworking.send(player, Bountiful.id("copydata"), packet)
 
-
         1
 
+    }
+
+    private fun addPool() = Command<ServerCommandSource> { ctx ->
+
+        val player = ctx.source.entity as? ServerPlayerEntity ?: return@Command 0
+        val poolName = getString(ctx, "poolName")
+
+        if (poolName.trim() != "") {
+            BountifulIO.getOrCreatePoolConfig(poolName)
+            player.sendMessage(LiteralText("Pool '$poolName' created (if it did not exist)"), MessageType.CHAT, player.uuid)
+        } else {
+            player.sendMessage(LiteralText("Invalid pool name!"), MessageType.CHAT, player.uuid)
+        }
+
+        1
     }
 
     private fun tweak() = Command<ServerCommandSource> { ctx ->
@@ -146,14 +169,11 @@ object BountifulCommands {
         if (held.item is BountyItem) {
             player.sendMessage(LiteralText("Hello!"), MessageType.CHAT, player.uuid)
 
-            val j = BountyData[held].save()
-
             BountyData.edit(held) {
                 timeToComplete += 1000
                 rarity = BountyRarity.values()[(rarity.ordinal + 1) % BountyRarity.values().size]
             }
 
-            println(j)
 
             println(held.tag)
         }
@@ -197,7 +217,6 @@ object BountifulCommands {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
 
         1
     }
