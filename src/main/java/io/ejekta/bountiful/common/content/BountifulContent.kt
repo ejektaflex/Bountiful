@@ -39,11 +39,8 @@ object BountifulContent : KambricAutoRegistrar {
 
     val BOARD_ITEM = "bountyboard" forItem BlockItem(BOARD, Item.Settings().group(ItemGroup.MISC))
 
-    val BOARD_ENTITY: BlockEntityType<BoardBlockEntity> = BlockEntityType.Builder
-        .create(::BoardBlockEntity, BOARD).build(null)
+    val BOARD_ENTITY = "board-be".forBlockEntity(BOARD, ::BoardBlockEntity)
 
-    val BOARD_SCREEN_HANDLER: ScreenHandlerType<BoardScreenHandler> = ScreenHandlerRegistry
-        .registerExtended(Bountiful.id("board"), ::BoardScreenHandler)
-
+    val BOARD_SCREEN_HANDLER = forExtendedScreen(Bountiful.id("board"), ::BoardScreenHandler)
 
 }

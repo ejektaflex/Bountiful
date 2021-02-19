@@ -5,7 +5,7 @@ import net.minecraft.util.registry.Registry
 import net.minecraft.util.registry.SimpleRegistry
 
 
-fun <T> SimpleRegistry<T>.register(id: Identifier, obj: T) {
+fun <T> Registry<T>.register(id: Identifier, obj: T) {
     Registry.register(this, id, obj)
 }
 

@@ -2,9 +2,12 @@
 package io.ejekta.bountiful.common
 
 import io.ejekta.bountiful.common.config.BountifulIO
+import io.ejekta.bountiful.common.content.BountifulWorldGen
 import io.ejekta.kambrikx.serializers.IdentitySer
 import kotlinx.serialization.UseSerializers
 import net.fabricmc.api.ModInitializer
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
+import net.fabricmc.fabric.api.event.server.ServerStartCallback
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.resource.ResourceType
 import net.minecraft.util.Identifier
@@ -25,6 +28,23 @@ class Bountiful : ModInitializer {
     override fun onInitialize() {
         println("Common init")
         BountifulIO.loadConfig()
+
+        ServerLifecycleEvents.SERVER_STARTING.register(ServerLifecycleEvents.ServerStarting { server ->
+            listOf("plains", "savanna", "snowy", "taiga", "desert").forEach { villageType ->
+
+                println("Registering Bounty Board Jigsaw Piece for Village Type: $villageType")
+
+
+                BountifulWorldGen.registerJigsaw(
+                    server,
+                    Identifier("bountiful:village/common/bounty_gazebo"),
+                    Identifier("minecraft:village/$villageType/houses"),
+                    10_000
+                )
+
+            }
+        })
+
     }
 
 }
