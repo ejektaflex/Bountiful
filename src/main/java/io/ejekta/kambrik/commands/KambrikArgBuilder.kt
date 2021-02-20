@@ -2,10 +2,15 @@ package io.ejekta.kambrik.commands
 
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.arguments.ArgumentType
+import com.mojang.brigadier.arguments.FloatArgumentType
 import com.mojang.brigadier.arguments.IntegerArgumentType.integer
 import com.mojang.brigadier.arguments.StringArgumentType.string
 import com.mojang.brigadier.builder.ArgumentBuilder
+import com.mojang.brigadier.suggestion.SuggestionProvider
+import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import com.mojang.brigadier.tree.CommandNode
+import io.ejekta.bountiful.common.content.BountifulCommands
+import io.ejekta.kambrik.ext.addAll
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
 
@@ -30,10 +35,15 @@ open class KambrikArgBuilder<A : ArgumentBuilder<ServerCommandSource, *>>(val ar
     fun <T> argument(
         type: ArgumentType<T>,
         word: String,
-        items: List<String>? = null,
+        items: SuggestionProvider<ServerCommandSource>?,
         func: KambrikArgBuilder<ServerRequiredArg>.() -> Unit = {}
     ): ServerRequiredArg {
         val req = KambrikArgBuilder<ServerRequiredArg>(CommandManager.argument(word, type)).apply(func)
+
+        items?.let {
+            req.arg.suggests(items)
+        }
+
         req.finalize()
         subArgs.add(req)
         return req.arg
@@ -45,13 +55,18 @@ open class KambrikArgBuilder<A : ArgumentBuilder<ServerCommandSource, *>>(val ar
     }
 
     fun stringArg(
-        word: String, items: List<String>? = null, func: ArgDsl<ServerRequiredArg> = {}
+        word: String, items: SuggestionProvider<ServerCommandSource>? = null, func: ArgDsl<ServerRequiredArg> = {}
     ) = argument(string(), word, items, func)
 
     fun intArg(
         word: String, range: IntRange? = null,
-        items: List<String>? = null, func: ArgDsl<ServerRequiredArg> = {}
+        items: SuggestionProvider<ServerCommandSource>? = null, func: ArgDsl<ServerRequiredArg> = {}
     ) = argument(if (range != null) integer(range.first, range.last) else integer(), word, items, func)
+
+    fun floatArg(
+        word: String, range: ClosedFloatingPointRange<Float>? = null,
+        items: SuggestionProvider<ServerCommandSource>? = null, func: ArgDsl<ServerRequiredArg> = {}
+    ) = argument(if (range != null) FloatArgumentType.floatArg(range.start, range.endInclusive) else FloatArgumentType.floatArg(), word, items, func)
 
     operator fun String.invoke(func: ArgDsl<ServerLiteralArg>) {
         literal(this, func)
@@ -59,6 +74,13 @@ open class KambrikArgBuilder<A : ArgumentBuilder<ServerCommandSource, *>>(val ar
 
     infix fun String.runs(cmd: Command<ServerCommandSource>) {
         this { this.executes(cmd) }
+    }
+
+    fun suggestionList(list: List<String>): SuggestionProvider<ServerCommandSource> {
+        return SuggestionProvider<ServerCommandSource> { context, builder ->
+            builder.addAll(list)
+            builder.buildFuture()
+        }
     }
 
     infix fun ServerRequiredArg.runs(cmd: Command<ServerCommandSource>) {

@@ -8,4 +8,3 @@ import net.minecraft.server.command.ServerCommandSource
 internal typealias ServerLiteralArg = LiteralArgumentBuilder<ServerCommandSource>
 internal typealias ServerRequiredArg = RequiredArgumentBuilder<ServerCommandSource, *>
 internal typealias ArgDsl<T> = KambrikArgBuilder<T>.() -> Unit
-internal typealias ReqArgDsl<A, T> = KambrikReqArgBuilder<A>.() -> Unit

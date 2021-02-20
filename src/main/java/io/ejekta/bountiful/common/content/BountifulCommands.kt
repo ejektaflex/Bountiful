@@ -1,14 +1,17 @@
 package io.ejekta.bountiful.common.content
 
 import com.mojang.brigadier.Command
+import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.IntegerArgumentType.getInteger
 import com.mojang.brigadier.arguments.StringArgumentType.getString
+import com.mojang.brigadier.suggestion.SuggestionProvider
 import io.ejekta.bountiful.common.Bountiful
 import io.ejekta.bountiful.common.bounty.BountyData
 import io.ejekta.bountiful.common.bounty.BountyRarity
 import io.ejekta.bountiful.common.config.*
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.commands.*
+import io.ejekta.kambrik.ext.addAll
 import io.ejekta.kambrik.ext.id
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
@@ -22,7 +25,7 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.LiteralText
 
 
-object BountifulCommands {
+object BountifulCommands : CommandRegistrationCallback {
 
     private fun hasPermission(c: ServerCommandSource): Boolean {
         if (c.hasPermissionLevel(2) ||
@@ -35,47 +38,21 @@ object BountifulCommands {
     private val suggestedPools: List<String>
         get() = BountifulContent.Pools.map { it.id }
 
-    val commands = CommandRegistrationCallback { dispatcher, dedicated ->
-
-        Kambrik.addCommand("box", dispatcher) {
+    override fun register(dispatcher: CommandDispatcher<ServerCommandSource>, dedicated: Boolean) {
+        Kambrik.addCommand("bo", dispatcher) {
+            requires(::hasPermission)
 
             "hand" runs hand()
             "complete" runs complete()
 
             "pool" {
-                "addto" {
-                    stringArg("poolName", items = suggestedPools) runs addHandToPool()
-                }
-                "create" {
-                    stringArg("poolName", items = suggestedPools) runs addPool()
-                }
+                val pools = suggestionList(suggestedPools)
+                "addto" { stringArg("poolName", items = pools) runs addHandToPool() }
+                "create" { stringArg("poolName", items = pools) runs addPool() }
             }
 
-            "gen" {
-                intArg("rep", 0..30) runs gen()
-            }
-
-            "gen2" {
-                intArg("rep", 0..30).apply {
-                    executes(gen())
-                }
-            }
-
-            "gen3" {
-                intArg("rep") runs gen()
-            }
-
-            "weights" {
-                intArg("rep") {
-                    executes(weights())
-                }
-            }
-
-            "gen4" {
-                intArg("rep") {
-                    executes(gen())
-                }
-            }
+            "gen" { intArg("rep", -30..30) runs gen() }
+            "weights" { intArg("rep", -30..30) runs weights() }
 
             "decree" {
                 stringArg("decType") runs {
@@ -86,38 +63,6 @@ object BountifulCommands {
                 }
             }
         }
-
-        dispatcher.register(
-            kambrikLiteral("bo") {
-                requires(::hasPermission)
-
-                "hand" execs hand()
-                "complete" execs complete()
-
-                "pool" {
-                    "addto" {
-                        stringArgExecutes("poolName", addHandToPool(), BountifulContent.Pools.map { it.id })
-                    }
-                    "create" {
-                        stringArgExecutes("poolName", addPool(), BountifulContent.Pools.map { it.id })
-                    }
-                }
-
-                "gen" { intArgExecutes("rep", gen()) }
-                "weights" { intArgExecutes("rep", weights()) }
-
-                "decree" {
-                    stringArgExecutes("decType", {
-                        val decId = getString(it, "decType")
-                        val stack = DecreeItem.create(decId)
-                        it.source.player.giveItemStack(stack)
-                        1
-                    }, BountifulContent.Pools.map { it.id })
-                }
-
-            }
-
-        )
     }
 
     private fun hand() = Command<ServerCommandSource> { ctx ->
