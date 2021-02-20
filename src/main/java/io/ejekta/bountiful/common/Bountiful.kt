@@ -7,7 +7,6 @@ import io.ejekta.kambrikx.serializers.IdentitySer
 import kotlinx.serialization.UseSerializers
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
-import net.fabricmc.fabric.api.event.server.ServerStartCallback
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.resource.ResourceType
 import net.minecraft.util.Identifier

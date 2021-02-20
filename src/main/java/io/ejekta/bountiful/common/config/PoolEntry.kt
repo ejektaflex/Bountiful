@@ -1,6 +1,5 @@
 package io.ejekta.bountiful.common.config
 
-import io.ejekta.bountiful.common.bounty.BountyData
 import io.ejekta.bountiful.common.bounty.BountyDataEntry
 import io.ejekta.bountiful.common.bounty.BountyRarity
 import io.ejekta.bountiful.common.bounty.BountyType

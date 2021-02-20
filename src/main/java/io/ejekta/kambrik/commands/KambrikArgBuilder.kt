@@ -1,18 +1,18 @@
 package io.ejekta.kambrik.commands
 
 import com.mojang.brigadier.Command
+import com.mojang.brigadier.Message
 import com.mojang.brigadier.arguments.ArgumentType
 import com.mojang.brigadier.arguments.FloatArgumentType
 import com.mojang.brigadier.arguments.IntegerArgumentType.integer
 import com.mojang.brigadier.arguments.StringArgumentType.string
 import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.suggestion.SuggestionProvider
-import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import com.mojang.brigadier.tree.CommandNode
-import io.ejekta.bountiful.common.content.BountifulCommands
 import io.ejekta.kambrik.ext.addAll
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
+import net.minecraft.text.LiteralText
 
 open class KambrikArgBuilder<A : ArgumentBuilder<ServerCommandSource, *>>(val arg: A) :
     ArgumentBuilder<ServerCommandSource, KambrikArgBuilder<A>>() {
@@ -76,9 +76,18 @@ open class KambrikArgBuilder<A : ArgumentBuilder<ServerCommandSource, *>>(val ar
         this { this.executes(cmd) }
     }
 
-    fun suggestionList(list: List<String>): SuggestionProvider<ServerCommandSource> {
+    fun suggestionList(func: () -> List<String>): SuggestionProvider<ServerCommandSource> {
         return SuggestionProvider<ServerCommandSource> { context, builder ->
-            builder.addAll(list)
+            builder.addAll(func())
+            builder.buildFuture()
+        }
+    }
+
+    fun suggestionListTooltipped(func: () -> List<Pair<String, Message>>): SuggestionProvider<ServerCommandSource> {
+        return SuggestionProvider<ServerCommandSource> { _, builder ->
+            for ((item, msg) in func()) {
+                builder.suggest(item, msg)
+            }
             builder.buildFuture()
         }
     }

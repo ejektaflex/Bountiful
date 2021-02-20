@@ -2,7 +2,6 @@ package io.ejekta.kambrik
 
 import io.ejekta.kambrik.internal.KambrikMarker
 import io.ejekta.kambrik.internal.KambrikRegistrar
-import io.ejekta.kambrik.registration.KambricAutoRegistrar
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.loader.api.FabricLoader
 

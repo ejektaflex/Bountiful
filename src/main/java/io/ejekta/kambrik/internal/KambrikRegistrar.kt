@@ -5,7 +5,6 @@ import io.ejekta.kambrik.registration.KambricAutoRegistrar
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
-import net.minecraft.util.registry.SimpleRegistry
 
 object KambrikRegistrar {
 

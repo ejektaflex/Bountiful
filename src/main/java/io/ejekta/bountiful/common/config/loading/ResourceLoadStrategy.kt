@@ -1,7 +1,7 @@
 package io.ejekta.bountiful.common.config.loading
 
-import io.ejekta.bountiful.common.config.IMerge
 import io.ejekta.bountiful.common.config.Format
+import io.ejekta.bountiful.common.config.IMerge
 import kotlinx.serialization.DeserializationStrategy
 import net.minecraft.resource.ResourceManager
 import net.minecraft.util.Identifier

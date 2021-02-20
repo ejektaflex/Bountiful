@@ -4,14 +4,12 @@ import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.IntegerArgumentType.getInteger
 import com.mojang.brigadier.arguments.StringArgumentType.getString
-import com.mojang.brigadier.suggestion.SuggestionProvider
 import io.ejekta.bountiful.common.Bountiful
 import io.ejekta.bountiful.common.bounty.BountyData
 import io.ejekta.bountiful.common.bounty.BountyRarity
 import io.ejekta.bountiful.common.config.*
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.commands.*
-import io.ejekta.kambrik.ext.addAll
 import io.ejekta.kambrik.ext.id
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
@@ -23,6 +21,8 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.LiteralText
+import net.minecraft.text.MutableText
+import net.minecraft.text.TranslatableText
 
 
 object BountifulCommands : CommandRegistrationCallback {
@@ -35,9 +35,6 @@ object BountifulCommands : CommandRegistrationCallback {
         return false
     }
 
-    private val suggestedPools: List<String>
-        get() = BountifulContent.Pools.map { it.id }
-
     override fun register(dispatcher: CommandDispatcher<ServerCommandSource>, dedicated: Boolean) {
         Kambrik.addCommand("bo", dispatcher) {
             requires(::hasPermission)
@@ -46,8 +43,16 @@ object BountifulCommands : CommandRegistrationCallback {
             "complete" runs complete()
 
             "pool" {
-                val pools = suggestionList(suggestedPools)
-                "addto" { stringArg("poolName", items = pools) runs addHandToPool() }
+
+                val pools = suggestionListTooltipped {
+                    BountifulContent.Pools.map { pool ->
+                        pool.id to LiteralText("Used In: ").append(pool.usedInDecrees.map { it.translation }.reduce { acc, decree ->
+                            acc.append(", ").append(decree)
+                        })
+                    }
+                }
+
+                "addhand" { stringArg("poolName", items = pools) runs addHandToPool() }
                 "create" { stringArg("poolName", items = pools) runs addPool() }
             }
 
@@ -132,7 +137,6 @@ object BountifulCommands : CommandRegistrationCallback {
         val data = BountyData[held]
 
         try {
-            println(player)
             data.tryCashIn(player, held)
         } catch (e: Exception) {
             e.printStackTrace()

@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.common.config
 
+import io.ejekta.bountiful.common.content.BountifulContent
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -19,6 +20,9 @@ data class Pool(
             it.weightMult /= overallMult
         }
     }
+
+    val usedInDecrees: List<Decree>
+        get() = BountifulContent.Decrees.filter { this.id in it.allPoolIds }
 
     override fun merge(other: Pool) {
         when (other.replace) {
