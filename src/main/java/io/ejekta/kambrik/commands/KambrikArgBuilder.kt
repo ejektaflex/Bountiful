@@ -1,7 +1,6 @@
 package io.ejekta.kambrik.commands
 
 import com.mojang.brigadier.Command
-import com.mojang.brigadier.Message
 import com.mojang.brigadier.arguments.ArgumentType
 import com.mojang.brigadier.arguments.FloatArgumentType
 import com.mojang.brigadier.arguments.IntegerArgumentType.integer
@@ -9,10 +8,9 @@ import com.mojang.brigadier.arguments.StringArgumentType.string
 import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.suggestion.SuggestionProvider
 import com.mojang.brigadier.tree.CommandNode
-import io.ejekta.kambrik.ext.addAll
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
-import net.minecraft.text.LiteralText
+import kotlin.reflect.KClass
 
 open class KambrikArgBuilder<A : ArgumentBuilder<ServerCommandSource, *>>(val arg: A) :
     ArgumentBuilder<ServerCommandSource, KambrikArgBuilder<A>>() {
@@ -36,7 +34,7 @@ open class KambrikArgBuilder<A : ArgumentBuilder<ServerCommandSource, *>>(val ar
         type: ArgumentType<T>,
         word: String,
         items: SuggestionProvider<ServerCommandSource>?,
-        func: KambrikArgBuilder<ServerRequiredArg>.() -> Unit = {}
+        func: ArgDsl<ServerRequiredArg> = {}
     ): ServerRequiredArg {
         val req = KambrikArgBuilder<ServerRequiredArg>(CommandManager.argument(word, type)).apply(func)
 
@@ -76,21 +74,7 @@ open class KambrikArgBuilder<A : ArgumentBuilder<ServerCommandSource, *>>(val ar
         this { this.executes(cmd) }
     }
 
-    fun suggestionList(func: () -> List<String>): SuggestionProvider<ServerCommandSource> {
-        return SuggestionProvider<ServerCommandSource> { context, builder ->
-            builder.addAll(func())
-            builder.buildFuture()
-        }
-    }
 
-    fun suggestionListTooltipped(func: () -> List<Pair<String, Message>>): SuggestionProvider<ServerCommandSource> {
-        return SuggestionProvider<ServerCommandSource> { _, builder ->
-            for ((item, msg) in func()) {
-                builder.suggest(item, msg)
-            }
-            builder.buildFuture()
-        }
-    }
 
     infix fun ServerRequiredArg.runs(cmd: Command<ServerCommandSource>) {
         println("This ${this@runs.name} ${this.name} new executes $cmd")

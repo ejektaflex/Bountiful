@@ -12,8 +12,8 @@ class BountifulConfig {
     // select * from f_format_names('2020'); => ID, Name
 
     var boardUpdateFrequency: Int = 45
-    var bountyBonusTime: Int = 0
-    var bountyExpiryTimers = true
+    var flatBonusTimePerBounty: Int = 0
+    var shouldBountiesHaveTimersAndExpire = true
 
 
     fun buildScreen(): Screen {
@@ -41,12 +41,12 @@ class BountifulConfig {
         board.addEntry(
             creator.startIntSlider(
                 LiteralText("Bonus Time"),
-                bountyBonusTime,
+                flatBonusTimePerBounty,
                 0, 6000
             ).setDefaultValue(45).setTooltip(
                 LiteralText("How much bonus time is given to bounties")
             ).setSaveConsumer {
-                bountyBonusTime = it
+                flatBonusTimePerBounty = it
             }.build()
         )
 
@@ -55,11 +55,11 @@ class BountifulConfig {
         bounty.addEntry(
             creator.startBooleanToggle(
                 LiteralText("Expiry Timers"),
-                bountyExpiryTimers
+                shouldBountiesHaveTimersAndExpire
             ).setDefaultValue(true).setTooltip(
-                LiteralText("Whether bounties should have a time and expire")
+                LiteralText("Whether bounties should have a timer and expire")
             ).setSaveConsumer {
-                bountyExpiryTimers = it
+                shouldBountiesHaveTimersAndExpire = it
             }.build()
         )
 
@@ -70,10 +70,6 @@ class BountifulConfig {
     private fun onSave() {
         BountifulIO.saveConfig()
         BountifulIO.loadConfig()
-    }
-
-    companion object {
-
     }
 
 }
