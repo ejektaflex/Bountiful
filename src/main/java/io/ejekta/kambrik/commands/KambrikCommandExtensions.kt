@@ -80,6 +80,7 @@ fun ArgumentBuilder<ServerCommandSource, *>.intArgExecutes(
     func: RequiredArgumentBuilder<ServerCommandSource, Int>.() -> Unit = {}
 ) {
     argument(word, integer()) {
+        println("This ${this@intArgExecutes} ${this.name} old executes $cmd")
         executes(cmd)
         apply(func)
         suggests?.let {

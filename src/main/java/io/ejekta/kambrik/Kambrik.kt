@@ -1,26 +1,20 @@
 package io.ejekta.kambrik
 
-import io.ejekta.kambrik.internal.KambrikMarker
-import io.ejekta.kambrik.internal.KambrikRegistrar
-import io.ejekta.kambrik.registration.KambricAutoRegistrar
-import net.fabricmc.api.ModInitializer
-import net.fabricmc.loader.api.FabricLoader
+import com.mojang.brigadier.CommandDispatcher
+import io.ejekta.kambrik.commands.ArgDsl
+import io.ejekta.kambrik.commands.KambrikArgBuilder
+import io.ejekta.kambrik.commands.ServerLiteralArg
+import net.minecraft.server.command.CommandManager
+import net.minecraft.server.command.ServerCommandSource
 
-class Kambrik : ModInitializer {
+object Kambrik {
 
-    override fun onInitialize() {
-        println("Hello world from Kambrik!")
-
-        FabricLoader.getInstance().getEntrypointContainers(ID, KambrikMarker::class.java).forEach {
-            println("Got this: $it, ${it.entrypoint}, could do Kambrik init here")
-            println("It came from: ${it.provider.metadata.id}")
-            KambrikRegistrar.doRegistrationFor(it)
-        }
-
-    }
-
-    companion object {
-        const val ID = "kambrik"
+    fun addCommand(baseCommandName: String, toDispatcher: CommandDispatcher<ServerCommandSource>, func: ArgDsl<ServerLiteralArg>) {
+        toDispatcher.register(
+            KambrikArgBuilder(
+                CommandManager.literal(baseCommandName)
+            ).apply(func).finalize()
+        )
     }
 
 }

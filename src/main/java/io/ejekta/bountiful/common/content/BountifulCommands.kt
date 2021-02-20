@@ -7,6 +7,7 @@ import io.ejekta.bountiful.common.Bountiful
 import io.ejekta.bountiful.common.bounty.BountyData
 import io.ejekta.bountiful.common.bounty.BountyRarity
 import io.ejekta.bountiful.common.config.*
+import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.commands.*
 import io.ejekta.kambrik.ext.id
 import io.netty.buffer.Unpooled
@@ -31,7 +32,61 @@ object BountifulCommands {
         return false
     }
 
-    fun registerCommands() = CommandRegistrationCallback { dispatcher, dedicated ->
+    private val suggestedPools: List<String>
+        get() = BountifulContent.Pools.map { it.id }
+
+    val commands = CommandRegistrationCallback { dispatcher, dedicated ->
+
+        Kambrik.addCommand("box", dispatcher) {
+
+            "hand" runs hand()
+            "complete" runs complete()
+
+            "pool" {
+                "addto" {
+                    stringArg("poolName", items = suggestedPools) runs addHandToPool()
+                }
+                "create" {
+                    stringArg("poolName", items = suggestedPools) runs addPool()
+                }
+            }
+
+            "gen" {
+                intArg("rep", 0..30) runs gen()
+            }
+
+            "gen2" {
+                intArg("rep", 0..30).apply {
+                    executes(gen())
+                }
+            }
+
+            "gen3" {
+                intArg("rep") runs gen()
+            }
+
+            "weights" {
+                intArg("rep") {
+                    executes(weights())
+                }
+            }
+
+            "gen4" {
+                intArg("rep") {
+                    executes(gen())
+                }
+            }
+
+            "decree" {
+                stringArg("decType") runs {
+                    val decId = getString(it, "decType")
+                    val stack = DecreeItem.create(decId)
+                    it.source.player.giveItemStack(stack)
+                    1
+                }
+            }
+        }
+
         dispatcher.register(
             kambrikLiteral("bo") {
                 requires(::hasPermission)

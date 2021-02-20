@@ -15,7 +15,7 @@ import net.minecraft.item.ItemGroup
 object BountifulContent : KambricAutoRegistrar {
 
     override fun manualRegister() {
-        CommandRegistrationCallback.EVENT.register(BountifulCommands.registerCommands())
+        CommandRegistrationCallback.EVENT.register(BountifulCommands.commands)
     }
 
     val Decrees = mutableListOf<Decree>()

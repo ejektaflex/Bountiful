@@ -20,7 +20,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.ejekta.kambrik.Kambrik",
+      "io.ejekta.kambrik.KambrikMod",
       "io.ejekta.bountiful.common.Bountiful"
     ],
     "client": [
