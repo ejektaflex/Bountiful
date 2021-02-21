@@ -1,4 +1,4 @@
-package io.ejekta.bountiful.common.config
+package io.ejekta.bountiful.common.data
 
 import io.ejekta.bountiful.common.content.BountifulContent
 import kotlinx.serialization.Serializable

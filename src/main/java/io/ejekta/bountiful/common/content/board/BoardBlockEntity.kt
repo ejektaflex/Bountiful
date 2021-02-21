@@ -2,7 +2,7 @@ package io.ejekta.bountiful.common.content.board
 
 import io.ejekta.bountiful.common.bounty.DecreeData
 import io.ejekta.bountiful.common.config.BountifulIO
-import io.ejekta.bountiful.common.config.Decree
+import io.ejekta.bountiful.common.data.Decree
 import io.ejekta.bountiful.common.config.Format
 import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.content.BountyCreator

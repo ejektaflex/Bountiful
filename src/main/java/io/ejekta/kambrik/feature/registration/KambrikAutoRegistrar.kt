@@ -1,4 +1,4 @@
-package io.ejekta.kambrik.registration
+package io.ejekta.kambrik.feature.registration
 
 import io.ejekta.kambrik.internal.KambrikMarker
 import io.ejekta.kambrik.internal.registration.KambrikRegistrar
@@ -27,12 +27,12 @@ import java.util.function.Supplier
 
 
 @Suppress("UNCHECKED_CAST")
-interface KambricAutoRegistrar : KambrikMarker {
+interface KambrikAutoRegistrar : KambrikMarker {
 
     fun manualRegister()
 
     fun <T> String.forRegistration(reg: Registry<T>, obj: T): T {
-        return KambrikRegistrar.register(this@KambricAutoRegistrar, reg, this, obj)
+        return KambrikRegistrar.register(this@KambrikAutoRegistrar, reg, this, obj)
     }
 
     infix fun String.forItem(item: Item): Item = forRegistration(Registry.ITEM, item)

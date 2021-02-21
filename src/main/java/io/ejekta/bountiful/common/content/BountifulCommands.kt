@@ -8,6 +8,7 @@ import io.ejekta.bountiful.common.Bountiful
 import io.ejekta.bountiful.common.bounty.BountyData
 import io.ejekta.bountiful.common.bounty.BountyRarity
 import io.ejekta.bountiful.common.config.*
+import io.ejekta.bountiful.common.data.PoolEntry
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.api.command.*
 import io.ejekta.kambrik.ext.id
@@ -25,17 +26,9 @@ import net.minecraft.text.LiteralText
 
 object BountifulCommands : CommandRegistrationCallback {
 
-    private fun hasPermission(c: ServerCommandSource): Boolean {
-        if (c.hasPermissionLevel(2) ||
-            (c.entity is PlayerEntity && c.player.isCreative)) {
-            return true
-        }
-        return false
-    }
-
     override fun register(dispatcher: CommandDispatcher<ServerCommandSource>, dedicated: Boolean) {
         Kambrik.Command.addCommand("bo", dispatcher) {
-            requires(::hasPermission)
+            requires(Kambrik.Command::hasBasicCreativePermission)
 
             "hand" runs hand()
             "complete" runs complete()
@@ -58,19 +51,17 @@ object BountifulCommands : CommandRegistrationCallback {
             "weights" { intArg("rep", -30..30) runs weights() }
 
             "decree" {
-                stringArg("decType") runs {
-                    val decId = getString(it, "decType")
+                stringArg("decType") runs playerCommand { player ->
+                    val decId = getString("decType")
                     val stack = DecreeItem.create(decId)
-                    it.source.player.giveItemStack(stack)
+                    player.giveItemStack(stack)
                     1
                 }
             }
         }
     }
 
-    private fun hand() = Command<ServerCommandSource> { ctx ->
-
-        val player = ctx.source.entity as? ServerPlayerEntity ?: return@Command 0
+    private fun hand() = playerCommand { player ->
         val held = player.mainHandStack
 
         val newPoolEntry = PoolEntry.create().apply {
@@ -90,10 +81,9 @@ object BountifulCommands : CommandRegistrationCallback {
         1
     }
 
-    private fun addHandToPool() = Command<ServerCommandSource> { ctx ->
-        val player = ctx.source.entity as? ServerPlayerEntity ?: return@Command 0
+    private fun addHandToPool() = playerCommand { player ->
+        val poolName = getString("poolName")
         val held = player.mainHandStack
-        val poolName = getString(ctx, "poolName")
 
         val newPoolEntry = PoolEntry.create().apply {
             content = held.id.toString()
@@ -113,10 +103,8 @@ object BountifulCommands : CommandRegistrationCallback {
         1
     }
 
-    private fun addPool() = Command<ServerCommandSource> { ctx ->
-
-        val player = ctx.source.entity as? ServerPlayerEntity ?: return@Command 0
-        val poolName = getString(ctx, "poolName")
+    private fun addPool() = playerCommand { player ->
+        val poolName = getString("poolName")
 
         if (poolName.trim() != "") {
             BountifulIO.getOrCreatePoolConfig(poolName)
@@ -143,10 +131,9 @@ object BountifulCommands : CommandRegistrationCallback {
         1
     }
 
-    private fun gen() = Command<ServerCommandSource> { ctx ->
-        val player = ctx.source.entity as? ServerPlayerEntity ?: return@Command 0
+    private fun gen() = playerCommand { player ->
         try {
-            val rep = getInteger(ctx, "rep")
+            val rep = getInt("rep")
             val bd = BountyCreator.create(BountifulContent.Decrees.toSet(), rep)
             player.giveItemStack(BountyItem.create(bd))
         } catch (e: Exception) {
@@ -157,7 +144,6 @@ object BountifulCommands : CommandRegistrationCallback {
     }
 
     private fun weights() = Command<ServerCommandSource> { ctx ->
-
         try {
             val rep = getInteger(ctx, "rep")
 

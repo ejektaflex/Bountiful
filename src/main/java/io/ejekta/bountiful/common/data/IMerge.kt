@@ -1,4 +1,4 @@
-package io.ejekta.bountiful.common.config
+package io.ejekta.bountiful.common.data
 
 import net.fabricmc.loader.api.FabricLoader
 

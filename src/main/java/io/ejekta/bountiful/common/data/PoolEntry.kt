@@ -1,8 +1,9 @@
-package io.ejekta.bountiful.common.config
+package io.ejekta.bountiful.common.data
 
 import io.ejekta.bountiful.common.bounty.BountyDataEntry
 import io.ejekta.bountiful.common.bounty.BountyRarity
 import io.ejekta.bountiful.common.bounty.BountyType
+import io.ejekta.bountiful.common.config.Format
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import net.minecraft.nbt.StringNbtReader

@@ -1,18 +1,18 @@
 package io.ejekta.bountiful.common.content
 
 import io.ejekta.bountiful.common.Bountiful
-import io.ejekta.bountiful.common.config.Decree
-import io.ejekta.bountiful.common.config.Pool
+import io.ejekta.bountiful.common.data.Decree
+import io.ejekta.bountiful.common.data.Pool
 import io.ejekta.bountiful.common.content.board.BoardBlock
 import io.ejekta.bountiful.common.content.board.BoardBlockEntity
 import io.ejekta.bountiful.common.content.gui.BoardScreenHandler
-import io.ejekta.kambrik.registration.KambricAutoRegistrar
+import io.ejekta.kambrik.feature.registration.KambrikAutoRegistrar
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemGroup
 
-object BountifulContent : KambricAutoRegistrar {
+object BountifulContent : KambrikAutoRegistrar {
 
     override fun manualRegister() {
         CommandRegistrationCallback.EVENT.register(BountifulCommands)

@@ -3,9 +3,9 @@ package io.ejekta.bountiful.common.content
 import io.ejekta.bountiful.common.bounty.BountyData
 import io.ejekta.bountiful.common.bounty.BountyDataEntry
 import io.ejekta.bountiful.common.config.BountifulIO
-import io.ejekta.bountiful.common.config.Decree
-import io.ejekta.bountiful.common.config.Pool
-import io.ejekta.bountiful.common.config.PoolEntry
+import io.ejekta.bountiful.common.data.Decree
+import io.ejekta.bountiful.common.data.Pool
+import io.ejekta.bountiful.common.data.PoolEntry
 import io.ejekta.bountiful.common.util.randomSplit
 import io.ejekta.bountiful.common.util.weightedRandomDblBy
 import kotlin.math.ceil
