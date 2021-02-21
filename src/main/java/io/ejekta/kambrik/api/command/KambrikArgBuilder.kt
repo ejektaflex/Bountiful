@@ -1,4 +1,4 @@
-package io.ejekta.kambrik.commands
+package io.ejekta.kambrik.api.command
 
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.arguments.ArgumentType
@@ -10,9 +10,8 @@ import com.mojang.brigadier.suggestion.SuggestionProvider
 import com.mojang.brigadier.tree.CommandNode
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
-import kotlin.reflect.KClass
 
-open class KambrikArgBuilder<A : ArgumentBuilder<ServerCommandSource, *>>(val arg: A) :
+class KambrikArgBuilder<A : ArgumentBuilder<ServerCommandSource, *>>(val arg: A) :
     ArgumentBuilder<ServerCommandSource, KambrikArgBuilder<A>>() {
 
     private val subArgs = mutableListOf<KambrikArgBuilder<*>>()
@@ -73,8 +72,6 @@ open class KambrikArgBuilder<A : ArgumentBuilder<ServerCommandSource, *>>(val ar
     infix fun String.runs(cmd: Command<ServerCommandSource>) {
         this { this.executes(cmd) }
     }
-
-
 
     infix fun ServerRequiredArg.runs(cmd: Command<ServerCommandSource>) {
         println("This ${this@runs.name} ${this.name} new executes $cmd")

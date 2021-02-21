@@ -1,8 +1,7 @@
 package io.ejekta.kambrik.registration
 
-import io.ejekta.bountiful.common.content.board.BoardBlockEntity
 import io.ejekta.kambrik.internal.KambrikMarker
-import io.ejekta.kambrik.internal.KambrikRegistrar
+import io.ejekta.kambrik.internal.registration.KambrikRegistrar
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry
 import net.minecraft.block.Block
 import net.minecraft.block.entity.BlockEntity

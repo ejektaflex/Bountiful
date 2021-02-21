@@ -1,12 +1,13 @@
-package io.ejekta.kambrik.internal
+package io.ejekta.kambrik.internal.registration
 
 import io.ejekta.kambrik.ext.register
+import io.ejekta.kambrik.internal.KambrikMarker
 import io.ejekta.kambrik.registration.KambricAutoRegistrar
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 
-object KambrikRegistrar {
+internal object KambrikRegistrar {
 
     data class RegistrationEntry<T>(val registry: Registry<T>, val itemId: String, val item: T) {
         fun register(modId: String) = registry.register(Identifier(modId, itemId), item)

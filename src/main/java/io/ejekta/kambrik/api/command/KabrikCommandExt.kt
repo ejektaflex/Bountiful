@@ -1,4 +1,4 @@
-package io.ejekta.kambrik.commands
+package io.ejekta.kambrik.api.command
 
 import com.mojang.brigadier.Message
 import com.mojang.brigadier.builder.LiteralArgumentBuilder

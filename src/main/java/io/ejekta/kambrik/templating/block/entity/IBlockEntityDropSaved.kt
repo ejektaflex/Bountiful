@@ -1,4 +1,4 @@
-package io.ejekta.kambrik.block.entity
+package io.ejekta.kambrik.templating.block.entity
 
 import io.ejekta.bountiful.common.content.board.BoardBlockEntity
 import net.minecraft.block.BlockState
@@ -9,6 +9,9 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
+/**
+ * Used for blocks which save their NBT data into their respective itemstack
+ */
 interface IBlockEntityDropSaved {
 
     fun getItemToSaveTo(world: World?, pos: BlockPos?, state: BlockState?, player: PlayerEntity?): ItemStack

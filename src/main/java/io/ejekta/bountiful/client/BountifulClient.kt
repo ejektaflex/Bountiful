@@ -46,10 +46,7 @@ class BountifulClient : ClientModInitializer {
             }
         }
 
-
         ScreenRegistry.register(BountifulContent.BOARD_SCREEN_HANDLER, ::BoardScreen)
-
-        println("Registered rarity property")
 
     }
 

@@ -9,7 +9,7 @@ import io.ejekta.bountiful.common.bounty.BountyData
 import io.ejekta.bountiful.common.bounty.BountyRarity
 import io.ejekta.bountiful.common.config.*
 import io.ejekta.kambrik.Kambrik
-import io.ejekta.kambrik.commands.*
+import io.ejekta.kambrik.api.command.*
 import io.ejekta.kambrik.ext.id
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
@@ -21,8 +21,6 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.LiteralText
-import net.minecraft.text.MutableText
-import net.minecraft.text.TranslatableText
 
 
 object BountifulCommands : CommandRegistrationCallback {
@@ -36,7 +34,7 @@ object BountifulCommands : CommandRegistrationCallback {
     }
 
     override fun register(dispatcher: CommandDispatcher<ServerCommandSource>, dedicated: Boolean) {
-        Kambrik.addCommand("bo", dispatcher) {
+        Kambrik.Command.addCommand("bo", dispatcher) {
             requires(::hasPermission)
 
             "hand" runs hand()

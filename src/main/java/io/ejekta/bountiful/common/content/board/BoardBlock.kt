@@ -3,7 +3,7 @@ package io.ejekta.bountiful.common.content.board
 import io.ejekta.bountiful.common.bounty.BountyData
 import io.ejekta.bountiful.common.content.BountifulContent
 import io.ejekta.bountiful.common.content.BountyItem
-import io.ejekta.kambrik.block.entity.IBlockEntityDropSaved
+import io.ejekta.kambrik.templating.block.entity.IBlockEntityDropSaved
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity

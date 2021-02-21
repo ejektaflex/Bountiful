@@ -2,7 +2,7 @@
 package io.ejekta.bountiful.common
 
 import io.ejekta.bountiful.common.config.BountifulIO
-import io.ejekta.bountiful.common.content.BountifulWorldGen
+import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrikx.serializers.IdentitySer
 import kotlinx.serialization.UseSerializers
 import net.fabricmc.api.ModInitializer
@@ -34,7 +34,7 @@ class Bountiful : ModInitializer {
                 println("Registering Bounty Board Jigsaw Piece for Village Type: $villageType")
 
 
-                BountifulWorldGen.registerJigsaw(
+                Kambrik.Structure.addToStructurePool(
                     server,
                     Identifier("bountiful:village/common/bounty_gazebo"),
                     Identifier("minecraft:village/$villageType/houses"),

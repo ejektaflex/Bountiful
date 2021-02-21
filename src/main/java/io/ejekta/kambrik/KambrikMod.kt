@@ -1,11 +1,11 @@
 package io.ejekta.kambrik
 
 import io.ejekta.kambrik.internal.KambrikMarker
-import io.ejekta.kambrik.internal.KambrikRegistrar
+import io.ejekta.kambrik.internal.registration.KambrikRegistrar
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.loader.api.FabricLoader
 
-class KambrikMod : ModInitializer {
+internal class KambrikMod : ModInitializer {
 
     override fun onInitialize() {
         println("Hello world from Kambrik!")
@@ -18,7 +18,7 @@ class KambrikMod : ModInitializer {
 
     }
 
-    companion object {
+    internal companion object {
         const val ID = "kambrik"
     }
 
