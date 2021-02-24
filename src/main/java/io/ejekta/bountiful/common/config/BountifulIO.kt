@@ -6,13 +6,10 @@ import io.ejekta.bountiful.common.data.Decree
 import io.ejekta.bountiful.common.data.Pool
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.api.file.KambrikConfigFile
-import io.ejekta.kambrik.api.file.KambrikConfigLocation
-import io.ejekta.kambrik.api.file.KambrikReadFailMode
+import io.ejekta.kambrik.api.file.KambrikParseFailMode
 import io.ejekta.kambrik.ext.ensured
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
 import net.minecraft.resource.ResourceManager
-import java.io.File
-import java.nio.file.Paths
 
 object BountifulIO : SimpleSynchronousResourceReloadListener {
 
@@ -23,12 +20,12 @@ object BountifulIO : SimpleSynchronousResourceReloadListener {
     private val poolConfigs = rootFolder.ensured("bounty_pools")
     private val decreeConfigs = rootFolder.ensured("bounty_decrees")
 
-    private val configFile = KambrikConfigFile(rootFolder, "bountiful.json", Format.DataPack, KambrikReadFailMode.LEAVE, BountifulConfigData.serializer()) { BountifulConfigData() }
+    private val configFile = KambrikConfigFile(rootFolder, "bountiful.json", Format.DataPack, KambrikParseFailMode.LEAVE, BountifulConfigData.serializer()) { BountifulConfigData() }
 
     fun getPoolFile(poolName: String): KambrikConfigFile<Pool> {
         return KambrikConfigFile(
             poolConfigs,
-            "$poolName.json", Format.Hand, KambrikReadFailMode.LEAVE, Pool.serializer()) {
+            "$poolName.json", Format.Hand, KambrikParseFailMode.LEAVE, Pool.serializer()) {
             Pool().apply { setup(poolName) }
         }
     }

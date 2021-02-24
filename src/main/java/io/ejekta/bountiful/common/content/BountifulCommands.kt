@@ -18,8 +18,8 @@ import net.minecraft.item.ItemStack
 import net.minecraft.network.MessageType
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.command.ServerCommandSource
-import net.minecraft.text.HoverEvent
-import net.minecraft.text.LiteralText
+import net.minecraft.text.*
+import java.io.File
 
 
 object BountifulCommands : CommandRegistrationCallback {
@@ -79,6 +79,13 @@ object BountifulCommands : CommandRegistrationCallback {
         1
     }
 
+    private fun MutableText.fileOpenerText(file: File): Text {
+        return styled {
+            it.withClickEvent(ClickEvent(ClickEvent.Action.OPEN_FILE, file.absolutePath))
+                .withHoverEvent(HoverEvent(HoverEvent.Action.SHOW_TEXT, LiteralText("Click to open file '${file.name}'")))
+        }
+    }
+
     private fun addHandToPool() = playerCommand { player ->
         val poolName = getString("poolName")
         val held = player.mainHandStack
@@ -90,12 +97,11 @@ object BountifulCommands : CommandRegistrationCallback {
 
         if (poolName.trim() != "") {
 
-            BountifulIO.getPoolFile(poolName).edit {
-                content.add(newPoolEntry)
+            val file = BountifulIO.getPoolFile(poolName).apply {
+                edit { content.add(newPoolEntry) }
             }
 
-            player.sendMessage(LiteralText("Item added to pool '$poolName'."), MessageType.CHAT, player.uuid)
-            player.sendMessage(LiteralText("Edit 'config/bountiful/bounty_pools/$poolName.json' to edit details."), MessageType.CHAT, player.uuid)
+            player.sendMessage(LiteralText("Edit §6'config/bountiful/bounty_pools/$poolName.json'§r to edit details.").fileOpenerText(file.getOrCreateFile()), MessageType.CHAT, player.uuid)
         } else {
             player.sendMessage(LiteralText("Invalid pool name!"), MessageType.CHAT, player.uuid)
         }

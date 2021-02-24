@@ -6,9 +6,9 @@ import kotlinx.serialization.json.Json
 import java.io.File
 import java.nio.file.Path
 
-data class KambrikConfigFile<T>(val location: Path, val name: String, val format: Json = Json, val mode: KambrikReadFailMode, val serializer: KSerializer<T>, val default: () -> T) {
+data class KambrikConfigFile<T>(val location: Path, val name: String, val format: Json = Json, val mode: KambrikParseFailMode, val serializer: KSerializer<T>, val default: () -> T) {
 
-    private fun getOrCreateFile(): File {
+    fun getOrCreateFile(): File {
         return location.assured.resolve(name).toFile().apply {
             if (!exists()) {
                 createNewFile()
@@ -30,7 +30,7 @@ data class KambrikConfigFile<T>(val location: Path, val name: String, val format
                 println("Kambrik is set to ${mode.name} this file data for safety")
                 e.printStackTrace()
 
-                if (mode == KambrikReadFailMode.OVERWRITE) {
+                if (mode == KambrikParseFailMode.OVERWRITE) {
                     write()
                 }
 
@@ -46,8 +46,10 @@ data class KambrikConfigFile<T>(val location: Path, val name: String, val format
         }
     }
 
-    fun edit(func: T.() -> Unit) {
-        write(read().apply(func))
+    fun edit(func: T.() -> Unit): T {
+        val data = read().apply(func)
+        write(data)
+        return data
     }
 
 }

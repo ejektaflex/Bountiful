@@ -1,6 +1,9 @@
 package io.ejekta.kambrik.api.file
 
-enum class KambrikReadFailMode {
+/**
+ * Determines what to do when a file cannot be parsed correctly
+ */
+enum class KambrikParseFailMode {
     /**
      * If a file cannot be read, it will use the default data instead
      */

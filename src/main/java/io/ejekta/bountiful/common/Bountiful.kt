@@ -19,9 +19,7 @@ class Bountiful : ModInitializer {
     }
 
     init {
-        ResourceManagerHelper
-            .get(ResourceType.SERVER_DATA)
-            .registerReloadListener(BountifulIO)
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(BountifulIO)
     }
 
     override fun onInitialize() {

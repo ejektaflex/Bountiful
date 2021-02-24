@@ -1,5 +1,6 @@
 package io.ejekta.kambrik.internal.registration
 
+import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.ext.register
 import io.ejekta.kambrik.internal.KambrikMarker
 import io.ejekta.kambrik.feature.registration.KambrikAutoRegistrar
@@ -22,17 +23,18 @@ internal object KambrikRegistrar {
     }
 
     fun <T> register(requester: KambrikAutoRegistrar, reg: Registry<T>, itemId: String, obj: T): T {
-        println("Kambrik registering '${requester::class.qualifiedName} for $itemId' for autoregistration")
+        Kambrik.Log.fine("Kambrik registering '${requester::class.qualifiedName} for $itemId' for autoregistration")
         this[requester].content.add(RegistrationEntry(reg, itemId, obj))
         return obj
     }
 
     fun doRegistrationFor(container: EntrypointContainer<KambrikMarker>) {
-        println("Kambrik doing real registration for mod ${container.provider.metadata.id}")
-        val registrar = this[container.entrypoint as? KambrikAutoRegistrar ?: return]
-        registrar.requestor.manualRegister()
-        registrar.content.forEach { entry ->
-            entry.register(container.provider.metadata.id)
+        Kambrik.Log.fine("Kambrik doing real registration for mod ${container.provider.metadata.id}")
+        val registrar = this[container.entrypoint as? KambrikAutoRegistrar ?: return].apply {
+            requestor.manualRegister()
+            content.forEach { entry ->
+                entry.register(container.provider.metadata.id)
+            }
         }
     }
 
