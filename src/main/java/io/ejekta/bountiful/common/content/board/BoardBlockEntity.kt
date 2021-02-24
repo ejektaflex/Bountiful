@@ -156,7 +156,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
         if (ourWorld.isClient) return
 
         val updateFreq = 45
-        if ((ourWorld.time + 13L) % (20L * BountifulIO.config.boardUpdateFrequency) == 0L) {
+        if ((ourWorld.time + 13L) % (20L * BountifulIO.configData.boardUpdateFrequency) == 0L) {
             // Change bounty population
             randomlyAddBounty()
 

@@ -36,7 +36,7 @@ class BountyCreator private constructor(private val decrees: Set<Decree>, privat
         data.objectives.addAll(objectives)
 
         data.timeStarted = startTime
-        data.timeToComplete += 15000L + BountifulIO.config.flatBonusTimePerBounty
+        data.timeToComplete += 15000L + BountifulIO.configData.flatBonusTimePerBounty
 
 
         return data

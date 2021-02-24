@@ -3,7 +3,6 @@ package io.ejekta.bountiful.common.content
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.IntegerArgumentType.getInteger
-import com.mojang.brigadier.arguments.StringArgumentType.getString
 import io.ejekta.bountiful.common.Bountiful
 import io.ejekta.bountiful.common.bounty.BountyData
 import io.ejekta.bountiful.common.bounty.BountyRarity
@@ -15,12 +14,11 @@ import io.ejekta.kambrik.ext.id
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.network.MessageType
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.command.ServerCommandSource
-import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.text.HoverEvent
 import net.minecraft.text.LiteralText
 
 
@@ -91,9 +89,11 @@ object BountifulCommands : CommandRegistrationCallback {
         }
 
         if (poolName.trim() != "") {
-            BountifulIO.editPoolConfig(poolName) {
+
+            BountifulIO.getPoolFile(poolName).edit {
                 content.add(newPoolEntry)
             }
+
             player.sendMessage(LiteralText("Item added to pool '$poolName'."), MessageType.CHAT, player.uuid)
             player.sendMessage(LiteralText("Edit 'config/bountiful/bounty_pools/$poolName.json' to edit details."), MessageType.CHAT, player.uuid)
         } else {
@@ -107,7 +107,7 @@ object BountifulCommands : CommandRegistrationCallback {
         val poolName = getString("poolName")
 
         if (poolName.trim() != "") {
-            BountifulIO.getOrCreatePoolConfig(poolName)
+            BountifulIO.getPoolFile(poolName).ensureExistence()
             player.sendMessage(LiteralText("Pool '$poolName' created (if it did not exist)"), MessageType.CHAT, player.uuid)
             player.sendMessage(LiteralText("Use '/reload' to see changes."), MessageType.CHAT, player.uuid)
         } else {
@@ -117,8 +117,7 @@ object BountifulCommands : CommandRegistrationCallback {
         1
     }
 
-    private fun complete() = Command<ServerCommandSource> { ctx ->
-        val player = ctx.source.entity as? ServerPlayerEntity ?: return@Command 0
+    private fun complete() = playerCommand { player ->
         val held = player.mainHandStack
         val data = BountyData[held]
 

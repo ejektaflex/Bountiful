@@ -7,9 +7,7 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.text.LiteralText
 
 @Serializable
-class BountifulConfig {
-
-    // select * from f_format_names('2020'); => ID, Name
+class BountifulConfigData {
 
     var boardUpdateFrequency: Int = 45
     var flatBonusTimePerBounty: Int = 0

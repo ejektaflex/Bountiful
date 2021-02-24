@@ -6,7 +6,7 @@ import com.terraformersmc.modmenu.api.ModMenuApi
 class BountifulModMenu : ModMenuApi {
     override fun getModConfigScreenFactory(): ConfigScreenFactory<*> {
         return ConfigScreenFactory {
-            BountifulIO.config.buildScreen()
+            BountifulIO.configData.buildScreen()
         }
     }
 }
