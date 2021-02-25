@@ -1,8 +1,9 @@
-package io.ejekta.bountiful.content.gui
+package io.ejekta.bountiful.client
 
 import com.mojang.blaze3d.systems.RenderSystem
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyRarity
+import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
@@ -11,7 +12,7 @@ import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 
 
-class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory?, title: Text?) :
+class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory, title: Text) :
     HandledScreen<ScreenHandler?>(handler, inventory, title) {
 
     init {

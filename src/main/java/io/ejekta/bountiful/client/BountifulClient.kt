@@ -4,7 +4,6 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.content.BountifulContent
-import io.ejekta.bountiful.content.gui.BoardScreen
 import io.ejekta.bountiful.mixin.ModelPredicateProviderRegistrar
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
