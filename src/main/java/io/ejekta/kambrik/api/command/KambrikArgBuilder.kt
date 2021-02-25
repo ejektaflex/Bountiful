@@ -74,7 +74,6 @@ class KambrikArgBuilder<A : ArgumentBuilder<ServerCommandSource, *>>(val arg: A)
     }
 
     infix fun ServerRequiredArg.runs(cmd: Command<ServerCommandSource>) {
-        println("This ${this@runs.name} ${this.name} new executes $cmd")
         this@runs.executes(cmd)
     }
 

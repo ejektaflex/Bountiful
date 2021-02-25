@@ -21,18 +21,18 @@
   "entrypoints": {
     "main": [
       "io.ejekta.kambrik.KambrikMod",
-      "io.ejekta.bountiful.common.Bountiful"
+      "io.ejekta.bountiful.Bountiful"
     ],
     "client": [
       "io.ejekta.bountiful.client.BountifulClient"
     ],
     "modmenu": [
-      "io.ejekta.bountiful.common.config.BountifulModMenu"
+      "io.ejekta.bountiful.config.BountifulModMenu"
     ],
     "kambrik": [
       {
         "adapter": "kotlin",
-        "value": "io.ejekta.bountiful.common.content.BountifulContent"
+        "value": "io.ejekta.bountiful.content.BountifulContent"
       }
     ]
   },

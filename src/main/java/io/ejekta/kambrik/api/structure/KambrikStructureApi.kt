@@ -1,6 +1,6 @@
 package io.ejekta.kambrik.api.structure
 
-import io.ejekta.bountiful.common.mixin.StructurePoolAccessor
+import io.ejekta.bountiful.mixin.StructurePoolAccessor
 import net.minecraft.server.MinecraftServer
 import net.minecraft.structure.pool.StructurePool
 import net.minecraft.structure.pool.StructurePoolElement

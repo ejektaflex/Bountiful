@@ -1,5 +1,6 @@
 package io.ejekta.kambrik.api.file
 
+import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.ext.internal.assured
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
@@ -26,8 +27,8 @@ data class KambrikConfigFile<T>(val location: Path, val name: String, val format
             try {
                 format.decodeFromString(serializer, contents)
             } catch (e: Exception) {
-                println("Kambrik could not correctly load config data at: $location - $name, reason: ${e.message}")
-                println("Kambrik is set to ${mode.name} this file data for safety")
+                Kambrik.Logger.error("Kambrik could not correctly load config data at: $location => $name, reason: ${e.message}")
+                Kambrik.Logger.error("Kambrik is set to ${mode.name} this file data for safety")
                 e.printStackTrace()
 
                 if (mode == KambrikParseFailMode.OVERWRITE) {

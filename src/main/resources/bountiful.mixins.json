@@ -1,7 +1,7 @@
 {
 	"required": true,
 	"minVersion": "0.8",
-	"package": "io.ejekta.bountiful.common.mixin",
+	"package": "io.ejekta.bountiful.mixin",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
 		"MutableCompoundTag",

@@ -1,6 +1,6 @@
 package io.ejekta.kambrik.templating.block.entity
 
-import io.ejekta.bountiful.common.content.board.BoardBlockEntity
+import io.ejekta.bountiful.content.board.BoardBlockEntity
 import net.minecraft.block.BlockState
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity

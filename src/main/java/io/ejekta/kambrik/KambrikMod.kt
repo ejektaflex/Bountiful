@@ -8,11 +8,11 @@ import net.fabricmc.loader.api.FabricLoader
 internal class KambrikMod : ModInitializer {
 
     override fun onInitialize() {
-        println("Hello world from Kambrik!")
+        Kambrik.Logger.info("Hello world from Kambrik!")
 
         FabricLoader.getInstance().getEntrypointContainers(ID, KambrikMarker::class.java).forEach {
-            println("Got this: $it, ${it.entrypoint}, could do Kambrik init here")
-            println("It came from: ${it.provider.metadata.id}")
+            Kambrik.Logger.debug("Got mod entrypoint: $it, ${it.entrypoint}, will do Kambrik init here")
+            Kambrik.Logger.debug("It came from: ${it.provider.metadata.id}")
             KambrikRegistrar.doRegistrationFor(it)
         }
 
