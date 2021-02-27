@@ -9,9 +9,9 @@ import io.ejekta.bountiful.content.BountyCreator
 import io.ejekta.bountiful.content.DecreeItem
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.mixin.SimpleInventoryAccessor
-import io.ejekta.bountiful.util.JsonStrict.toJson
-import io.ejekta.bountiful.util.JsonStrict.toTag
 import io.ejekta.bountiful.util.readOnlyCopy
+import io.ejekta.kambrikx.serial.JsonStrict.toLenientJson
+import io.ejekta.kambrikx.serial.JsonStrict.toLenientTag
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
@@ -155,7 +155,6 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
         val ourWorld = world ?: return
         if (ourWorld.isClient) return
 
-        val updateFreq = 45
         if ((ourWorld.time + 13L) % (20L * BountifulIO.configData.boardUpdateFrequency) == 0L) {
             // Change bounty population
             randomlyAddBounty()
@@ -200,7 +199,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
             (decrees as SimpleInventoryAccessor).stacks
         )
 
-        val doneMap = tag.getCompound("completed").toJson()
+        val doneMap = tag.getCompound("completed").toLenientJson()
         finishMap = Format.Normal.decodeFromJsonElement(finishSerializer, doneMap).toMutableMap()
 
         val bountyList = tag.getList("bounty_inv", 10) ?: return
@@ -218,7 +217,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
     override fun toTag(tag: CompoundTag?): CompoundTag? {
         super.toTag(tag)
 
-        val doneMap = Format.Normal.encodeToJsonElement(finishSerializer, finishMap).toTag() as CompoundTag
+        val doneMap = Format.Normal.encodeToJsonElement(finishSerializer, finishMap).toLenientTag() as CompoundTag
 
         tag?.put("completed", doneMap)
 
