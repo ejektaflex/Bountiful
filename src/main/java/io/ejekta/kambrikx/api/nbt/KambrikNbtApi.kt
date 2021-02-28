@@ -11,20 +11,19 @@ import kotlinx.serialization.json.encodeToJsonElement
 import net.minecraft.nbt.Tag
 
 class KambrikNbtApi internal constructor() {
-    fun <T> toNbt(serializer: KSerializer<T>, obj: T, format: Json = Json, mode: NbtMode = NbtMode.LENIENT): Tag {
-        return format.encodeToJsonElement(serializer, obj).toTag(mode)
+    fun <T> toNbt(serializer: KSerializer<T>, obj: T, format: Json = Json): Tag {
+        return format.encodeToJsonElement(serializer, obj).toTag(NbtMode.LENIENT)
     }
 
-    inline fun <reified T> toNbt(obj: T, format: Json = Json, mode: NbtMode = NbtMode.LENIENT): Tag {
-        return format.encodeToJsonElement(obj).toTag(mode)
+    inline fun <reified T> toNbt(obj: T, format: Json = Json): Tag {
+        return format.encodeToJsonElement(obj).toTag(NbtMode.LENIENT)
     }
 
-    fun <T> fromNbt(serializer: KSerializer<T>, tag: Tag, format: Json = Json, mode: NbtMode = NbtMode.LENIENT): T {
-        return format.decodeFromJsonElement(serializer, tag.toJson(mode))
+    fun <T> fromNbt(serializer: KSerializer<T>, tag: Tag, format: Json = Json): T {
+        return format.decodeFromJsonElement(serializer, tag.toJson(NbtMode.LENIENT))
     }
 
-    inline fun <reified T> fromNbt(tag: Tag, format: Json = Json, mode: NbtMode = NbtMode.LENIENT): T {
-        return format.decodeFromJsonElement<T>(tag.toJson(mode))
+    inline fun <reified T> fromNbt(tag: Tag, format: Json = Json): T {
+        return format.decodeFromJsonElement<T>(tag.toJson(NbtMode.LENIENT))
     }
-
 }
