@@ -1,22 +1,45 @@
 package io.ejekta.kambrikx.serial.convert
 
-import io.ejekta.bountiful.mixin.MutableListTag
 import io.ejekta.kambrikx.serial.JsonStrict.toLenientTag
 import kotlinx.serialization.json.*
 import net.minecraft.nbt.*
 
 object TagConverterLenient : TagConverter() {
 
-    override fun toTag(jsonArray: JsonArray): Tag {
-        jsonArray.run {
-            val list = ListTag() as MutableListTag
-            list.setTagType((-37).toByte())
-            list.items.addAll(map { it.toLenientTag() })
-            return list as ListTag
+    override fun toTag(jsonElement: JsonElement): Tag {
+        return when (jsonElement) {
+            is JsonObject -> fromJsonObject(jsonElement)
+            is JsonPrimitive -> fromJsonPrimitive(jsonElement)
+            is JsonArray -> fromJsonArray(jsonElement)
+            else -> super.toTag(jsonElement)
         }
     }
 
-    override fun toTag(jsonObject: JsonObject): Tag {
+    private fun fromJsonArray(jsonArray: JsonArray): Tag {
+        /*
+        jsonArray.run {
+            val list = ListTag() as MutableListTag
+            list.setTagType((-37).toByte())
+            list.items.addAll(map { toTag(it) })
+            return list as ListTag
+        }
+         */
+        return ListTag().apply {
+            addAll(
+                jsonArray.map { toTag(it) }
+            )
+        }
+    }
+
+    private fun toJsonArray(tag: AbstractListTag<*>): JsonArray {
+        return buildJsonArray {
+            for (item in tag) {
+                add(toJson(item))
+            }
+        }
+    }
+
+    override fun fromJsonObject(jsonObject: JsonObject): Tag {
         return CompoundTag().apply {
             jsonObject.forEach { k, v ->
                 put(k, v.toLenientTag())
@@ -26,21 +49,13 @@ object TagConverterLenient : TagConverter() {
 
     override fun toJson(tag: Tag): JsonElement {
         tag.run {
+            @Suppress("UNCHECKED_CAST")
             return when (this) {
                 is CompoundTag -> fromCompoundTag(this)
-                is ListTag -> toJson(this)
+                is AbstractNumberTag -> JsonPrimitive(number)
+                is ListTag -> toJsonArray(this)
                 is StringTag -> JsonPrimitive(asString())
-                is IntTag -> JsonPrimitive(int)
-                is DoubleTag -> JsonPrimitive(double)
-                is LongTag -> JsonPrimitive(long)
-                is FloatTag -> JsonPrimitive(float)
-                // Weird territory below
-                //is IntArrayTag -> toJson(this)
-                //is ByteArrayTag -> toJson(this)
-                is LongArrayTag -> fromNumberArrayTag(this)
-                // Even weirder territory below
-                //is ByteTag -> JsonPrimitive(byte)
-                //is ShortTag -> JsonPrimitive(short)
+                is LongArrayTag, is IntArrayTag, is ByteArrayTag -> fromNumberArrayTag(tag as AbstractListTag<out AbstractNumberTag>)
                 else -> throw Exception("Not implemented yet! I'm a: ${this::class.simpleName}")
             }
         }

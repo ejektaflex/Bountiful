@@ -1,7 +1,5 @@
 package io.ejekta.kambrikx.serial.convert
 
-import io.ejekta.kambrik.ext.internal.tagType
-import io.ejekta.kambrikx.serial.TagType
 import io.ejekta.kambrikx.serial.convert.BoxedTag.Companion.TAG_DATA
 import io.ejekta.kambrikx.serial.convert.BoxedTag.Companion.TAG_TYPE
 import kotlinx.serialization.json.*
@@ -9,13 +7,23 @@ import net.minecraft.nbt.*
 
 object TagConverterStrict : TagConverter() {
 
-
-    override fun toTag(jsonArray: JsonArray): Tag {
-        TODO()
+    override fun toJson(tag: Tag): JsonElement {
+        return when (tag) {
+            is CompoundTag -> fromCompoundTag(tag)
+            else -> toBoxedJson(tag)
+        }
     }
 
-    override fun toTag(jsonObject: JsonObject): Tag {
-        val failsafe = { TagConverterLenient.toTag(jsonObject) }
+    override fun toTag(jsonElement: JsonElement): Tag {
+        return when (jsonElement) {
+            is JsonObject -> fromJsonObject(jsonElement)
+            is JsonPrimitive -> fromJsonPrimitive(jsonElement)
+            else -> super.toTag(jsonElement)
+        }
+    }
+
+    override fun fromJsonObject(jsonObject: JsonObject): Tag {
+        val failsafe = { toCompoundTag(jsonObject) }
         jsonObject.run {
             if (TAG_TYPE in this && TAG_DATA in this) {
                 val tt = (get(TAG_TYPE) as? JsonPrimitive) ?: return failsafe()
@@ -23,27 +31,28 @@ object TagConverterStrict : TagConverter() {
                 if (!tt.isString) {
                     return failsafe()
                 }
-                val typed = TagType.values().find { it.shortname == tt.content } ?: return failsafe()
-                return convertToTag(typed, td)
+                return Json.decodeFromJsonElement(BoxedTag.serializer(), this).toTag()
             } else {
                 return failsafe()
             }
         }
     }
 
-    private fun convertToTag(type: TagType, element: JsonElement): Tag {
-        return when (type) {
-            TagType.INT_ARRAY_TAG -> toIntArrayTag(element.jsonArray)
-            TagType.LONG_ARRAY_TAG -> toLongArrayTag(element.jsonArray)
-            else -> throw Exception("Could not convert tag of type: $type, we must implement it yet!")
+    private fun toCompoundTag(jsonObject: JsonObject): CompoundTag {
+        return CompoundTag().apply {
+            jsonObject.forEach { k, v ->
+                put(k, toTag(v))
+            }
         }
     }
 
-    override fun toJson(tag: Tag): JsonElement {
-        return when (tag) {
-            is CompoundTag -> fromCompoundTag(tag)
-            else -> BoxedTag.of(tag).data
-        }
+    private fun toBoxedJson(tag: Tag): JsonObject {
+        return Json.encodeToJsonElement(BoxedTag.serializer(), BoxedTag.of(tag)).jsonObject
     }
+
+    private fun fromBoxedJson(boxedTag: BoxedTag): Tag {
+        return boxedTag.toTag()
+    }
+
 
 }

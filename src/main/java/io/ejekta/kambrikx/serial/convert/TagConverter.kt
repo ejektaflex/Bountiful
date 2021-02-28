@@ -5,16 +5,16 @@ import net.minecraft.nbt.*
 
 abstract class TagConverter {
 
-    fun toTag(jsonElement: JsonElement): Tag {
-        return when (jsonElement) {
-            is JsonObject -> toTag(jsonElement)
-            is JsonPrimitive -> toTag(jsonElement)
-            is JsonArray -> toTag(jsonElement)
-            else -> throw Exception("Nope!")
-        }
+
+    abstract fun fromJsonObject(jsonObject: JsonObject): Tag
+
+    abstract fun toJson(tag: Tag): JsonElement
+
+    open fun toTag(jsonElement: JsonElement): Tag {
+        throw Exception("Nope!")
     }
 
-    private fun toTag(jsonPrimitive: JsonPrimitive): Tag {
+    protected fun fromJsonPrimitive(jsonPrimitive: JsonPrimitive): Tag {
         jsonPrimitive.run {
             return when {
                 isString -> StringTag.of(content)
@@ -27,14 +27,6 @@ abstract class TagConverter {
             }
         }
     }
-
-    abstract fun toTag(jsonArray: JsonArray): Tag
-
-    abstract fun toTag(jsonObject: JsonObject): Tag
-
-
-
-    abstract fun toJson(tag: Tag): JsonElement
 
     protected fun fromCompoundTag(compoundTag: CompoundTag): JsonObject {
         if (compoundTag.isEmpty) return buildJsonObject {  }

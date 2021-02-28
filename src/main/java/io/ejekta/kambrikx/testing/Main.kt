@@ -2,6 +2,7 @@ package io.ejekta.kambrikx.testing
 
 import io.ejekta.kambrikx.serial.TagType
 import io.ejekta.kambrikx.serial.convert.BoxedTag
+import io.ejekta.kambrikx.serial.convert.TagConverter
 import io.ejekta.kambrikx.serial.convert.TagConverterLenient
 import io.ejekta.kambrikx.serial.convert.TagConverterStrict
 import kotlinx.serialization.json.Json
@@ -37,13 +38,29 @@ fun main(args: Array<String>) {
 
      */
 
-    //val bt = BoxedTag(TagType.COMPOUND_TAG, buildJsonObject { put("hello", "there") })
-    val orig = LongArrayTag(longArrayOf(1L, 2L, 1337L))
-    val bt = TagConverterStrict.toJson(orig)
+    val converter: TagConverter = TagConverterLenient
 
-    println(orig)
-    println(bt)
+    //val orig = LongArrayTag(longArrayOf(1L, 2L, 1337L))
+    val orig = CompoundTag().apply {
+        putString("Hello", "World!")
+        putInt("IntTest", 100)
+        putDouble("DblTest", 110.5)
+        putBoolean("BlnTest", true)
+        putFloat("FltTest", 1.2f)
+        putLongArray("LongItems", longArrayOf(1L, 2L, 100L))
+        putByteArray("ByteItems", byteArrayOf(1, 2, 32))
+        putIntArray("IntrItems", intArrayOf(1, 2, 64))
+    }
 
+    println("Original: \t$orig")
+
+    val bt = converter.toJson(orig)
+    println("Convrt'd: \t$bt")
+
+    val be = converter.toTag(bt)
+    println("Back2NBT: \t$be")
+
+    println("Equal: ${orig.toString() == be.toString()}")
 
 
 
