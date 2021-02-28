@@ -1,42 +1,17 @@
 package io.ejekta.kambrikx.testing
 
-import io.ejekta.kambrikx.serial.TagType
-import io.ejekta.kambrikx.serial.convert.BoxedTag
-import io.ejekta.kambrikx.serial.convert.TagConverter
-import io.ejekta.kambrikx.serial.convert.TagConverterLenient
-import io.ejekta.kambrikx.serial.convert.TagConverterStrict
+import io.ejekta.kambrik.Kambrik
+import io.ejekta.kambrikx.api.nbt.NbtMode
+import io.ejekta.kambrikx.ext.toLenientJson
+import io.ejekta.kambrikx.ext.toLenientTag
+import io.ejekta.kambrikx.api.nbt.TagConverter
+import io.ejekta.kambrikx.api.nbt.TagConverterLenient
+import io.ejekta.kambrikx.ext.NBT
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
 import net.minecraft.nbt.*
 
 fun main(args: Array<String>) {
-
-    /*
-    val converter = listOf(
-            TagConverterLenient,
-            TagConverterStrict
-    )[1]
-
-    //val testTag = LongArrayTag(longArrayOf(1L, 2L, 9223372036854775807))
-    val testTag = CompoundTag().apply {
-        putBoolean("bool", true)
-        putInt("num", 5)
-    }
-
-    val jsonified = converter.toJson(testTag)
-
-    println(testTag)
-    println(jsonified)
-
-    val backported = converter.toTag(jsonified)
-
-    println(backported)
-
-     */
 
     val converter: TagConverter = TagConverterLenient
 
@@ -61,6 +36,38 @@ fun main(args: Array<String>) {
     println("Back2NBT: \t$be")
 
     println("Equal: ${orig.toString() == be.toString()}")
+
+
+
+
+    @Serializable
+    data class DamageCounter(val name: String, val damage: Float)
+
+    val asNbt = Kambrik.NBT.toNbt(DamageCounter("Test Counter", 5f), mode = NbtMode.STRICT)
+    println(asNbt) // => {damage:5.0d,name:"Test Counter"}
+
+    val asObjAgain = Kambrik.NBT.fromNbt<DamageCounter>( DamageCounter.serializer(), asNbt, mode = NbtMode.STRICT)
+    println(asObjAgain) // => DamageCounter(name=Test Counter, damage=5.0)
+
+    /*
+    val ser = Json.encodeToJsonElement(DamageCounter.serializer(), DamageCounter("Test", 1.2f)).toLenientTag()
+
+    println("Ser: $ser")
+
+    val jso = ser.toLenientJson()
+
+    println("Jso: $jso")
+
+    val deser = Json.decodeFromJsonElement(DamageCounter.serializer(), jso)
+
+    println("Deser: $deser")
+    */
+
+
+
+
+
+
 
 
 

@@ -10,8 +10,8 @@ import io.ejekta.bountiful.content.DecreeItem
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.mixin.SimpleInventoryAccessor
 import io.ejekta.bountiful.util.readOnlyCopy
-import io.ejekta.kambrikx.serial.JsonStrict.toLenientJson
-import io.ejekta.kambrikx.serial.JsonStrict.toLenientTag
+import io.ejekta.kambrikx.ext.toLenientJson
+import io.ejekta.kambrikx.ext.toLenientTag
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory

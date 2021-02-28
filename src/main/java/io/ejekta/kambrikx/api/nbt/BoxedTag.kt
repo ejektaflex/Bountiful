@@ -1,7 +1,6 @@
-package io.ejekta.kambrikx.serial.convert
+package io.ejekta.kambrikx.api.nbt
 
 import io.ejekta.kambrik.ext.internal.tagType
-import io.ejekta.kambrikx.serial.TagType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
@@ -9,9 +8,9 @@ import net.minecraft.nbt.*
 
 @Serializable
 data class BoxedTag(
-        @SerialName(TAG_TYPE)
+    @SerialName(TAG_TYPE)
         val type: TagType,
-        @SerialName(TAG_DATA)
+    @SerialName(TAG_DATA)
         val data: JsonElement
 ) {
 

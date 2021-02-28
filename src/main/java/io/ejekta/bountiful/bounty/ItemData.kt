@@ -1,8 +1,8 @@
 package io.ejekta.bountiful.bounty
 
 import io.ejekta.bountiful.config.Format
-import io.ejekta.kambrikx.serial.JsonStrict.toStrictTag
-import io.ejekta.kambrikx.serial.convert.TagConverterStrict
+import io.ejekta.kambrikx.ext.toStrictTag
+import io.ejekta.kambrikx.api.nbt.TagConverterStrict
 import kotlinx.serialization.KSerializer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag

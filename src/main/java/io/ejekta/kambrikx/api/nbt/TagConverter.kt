@@ -1,4 +1,4 @@
-package io.ejekta.kambrikx.serial.convert
+package io.ejekta.kambrikx.api.nbt
 
 import kotlinx.serialization.json.*
 import net.minecraft.nbt.*

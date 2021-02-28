@@ -1,6 +1,6 @@
-package io.ejekta.kambrikx.serial.convert
+package io.ejekta.kambrikx.api.nbt
 
-import io.ejekta.kambrikx.serial.JsonStrict.toLenientTag
+import io.ejekta.kambrikx.ext.toLenientTag
 import kotlinx.serialization.json.*
 import net.minecraft.nbt.*
 

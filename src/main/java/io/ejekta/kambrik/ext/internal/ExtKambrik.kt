@@ -1,6 +1,6 @@
 package io.ejekta.kambrik.ext.internal
 
-import io.ejekta.kambrikx.serial.TagType
+import io.ejekta.kambrikx.api.nbt.TagType
 import net.minecraft.nbt.Tag
 import java.nio.file.Path
 

@@ -1,7 +1,7 @@
-package io.ejekta.kambrikx.serial.convert
+package io.ejekta.kambrikx.api.nbt
 
-import io.ejekta.kambrikx.serial.convert.BoxedTag.Companion.TAG_DATA
-import io.ejekta.kambrikx.serial.convert.BoxedTag.Companion.TAG_TYPE
+import io.ejekta.kambrikx.api.nbt.BoxedTag.Companion.TAG_DATA
+import io.ejekta.kambrikx.api.nbt.BoxedTag.Companion.TAG_TYPE
 import kotlinx.serialization.json.*
 import net.minecraft.nbt.*
 
