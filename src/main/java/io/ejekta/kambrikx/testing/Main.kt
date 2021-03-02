@@ -19,7 +19,7 @@ fun main(args: Array<String>) {
 
     val b = encodeToTag(
         Person.serializer(),
-        Person("Bobby", 35)
+        Person("Bobby", 35, listOf(4, 6, 8))
     )
 
     println("Result: $b")

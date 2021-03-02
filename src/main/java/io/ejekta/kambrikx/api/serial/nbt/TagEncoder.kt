@@ -4,8 +4,10 @@ import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.encoding.AbstractDecoder
 import kotlinx.serialization.encoding.CompositeDecoder.Companion.DECODE_DONE
+import kotlinx.serialization.encoding.CompositeEncoder
 import kotlinx.serialization.internal.NamedValueDecoder
 import kotlinx.serialization.internal.NamedValueEncoder
 import kotlinx.serialization.modules.EmptySerializersModule
@@ -16,9 +18,18 @@ import net.minecraft.nbt.Tag
 
 @InternalSerializationApi
 @ExperimentalSerializationApi
-class TagEncoder : NamedValueEncoder() {
+class TagEncoder : BaseTagEncoder() {
 
-    var root = CompoundTag()
+    override var root = CompoundTag()
+
+    override fun beginStructure(descriptor: SerialDescriptor): CompositeEncoder {
+        return when (descriptor.kind) {
+            StructureKind.LIST -> TagListTypeEncoder {
+                root.put(currentTag, this)
+            }
+            else -> super.beginStructure(descriptor)
+        }
+    }
 
     override fun encodeTaggedInt(tag: String, value: Int) {
         root.putInt(tag, value)
@@ -54,6 +65,10 @@ class TagEncoder : NamedValueEncoder() {
 
     override fun encodeTaggedShort(tag: String, value: Short) {
         root.putShort(tag, value)
+    }
+
+    override fun endEncode(descriptor: SerialDescriptor) {
+        super.endEncode(descriptor)
     }
 
     companion object {
