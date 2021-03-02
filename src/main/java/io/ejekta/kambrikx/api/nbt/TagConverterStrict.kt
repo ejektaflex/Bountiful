@@ -8,6 +8,7 @@ import net.minecraft.nbt.*
 object TagConverterStrict : TagConverter() {
 
     override fun toJson(tag: Tag): JsonElement {
+        //println("\t\t - Converting tag to JSON: $tag")
         return when (tag) {
             is CompoundTag -> fromCompoundTag(tag)
             else -> toBoxedJson(tag)
@@ -15,34 +16,12 @@ object TagConverterStrict : TagConverter() {
     }
 
     override fun toTag(jsonElement: JsonElement): Tag {
+        //println("\t\t - Converting JSON to tag: $jsonElement")
         return when (jsonElement) {
             is JsonObject -> fromJsonObject(jsonElement)
             is JsonPrimitive -> fromJsonPrimitive(jsonElement)
+            is JsonArray -> TagConverterLenient.toTag(jsonElement) // Strict serializers should not normally get an array, so we'll do it leniently
             else -> super.toTag(jsonElement)
-        }
-    }
-
-    override fun fromJsonObject(jsonObject: JsonObject): Tag {
-        val failsafe = { toCompoundTag(jsonObject) }
-        jsonObject.run {
-            if (TAG_TYPE in this && TAG_DATA in this) {
-                val tt = (get(TAG_TYPE) as? JsonPrimitive) ?: return failsafe()
-                val td = get(TAG_DATA) ?: return failsafe()
-                if (!tt.isString) {
-                    return failsafe()
-                }
-                return Json.decodeFromJsonElement(BoxedTag.serializer(), this).toTag()
-            } else {
-                return failsafe()
-            }
-        }
-    }
-
-    private fun toCompoundTag(jsonObject: JsonObject): CompoundTag {
-        return CompoundTag().apply {
-            jsonObject.forEach { k, v ->
-                put(k, toTag(v))
-            }
         }
     }
 

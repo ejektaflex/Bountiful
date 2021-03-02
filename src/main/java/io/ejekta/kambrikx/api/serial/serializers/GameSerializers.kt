@@ -36,7 +36,7 @@ object IdentitySer : KSerializer<Identifier> {
 @Serializer(forClass = CompoundTag::class)
 object NbtTagSer : KSerializer<CompoundTag> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("TestDescriptor", PrimitiveKind.STRING)
-    val mode = NbtMode.STRICT
+    private val mode = NbtMode.STRICT
     override fun serialize(encoder: Encoder, value: CompoundTag) {
         encoder.encodeSerializableValue(JsonObject.serializer(), value.toJson(mode).jsonObject)
     }
@@ -44,4 +44,6 @@ object NbtTagSer : KSerializer<CompoundTag> {
         return decoder.decodeSerializableValue(JsonObject.serializer()).toTag(mode) as CompoundTag
     }
 }
+
+
 

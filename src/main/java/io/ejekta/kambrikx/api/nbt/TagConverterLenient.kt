@@ -39,14 +39,6 @@ object TagConverterLenient : TagConverter() {
         }
     }
 
-    override fun fromJsonObject(jsonObject: JsonObject): Tag {
-        return CompoundTag().apply {
-            jsonObject.forEach { k, v ->
-                put(k, v.toLenientTag())
-            }
-        }
-    }
-
     override fun toJson(tag: Tag): JsonElement {
         tag.run {
             @Suppress("UNCHECKED_CAST")

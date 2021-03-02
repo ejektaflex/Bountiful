@@ -6,12 +6,34 @@ import net.minecraft.nbt.*
 abstract class TagConverter {
 
 
-    abstract fun fromJsonObject(jsonObject: JsonObject): Tag
+    fun fromJsonObject(jsonObject: JsonObject): Tag {
+        val failsafe = { toCompoundTag(jsonObject) }
+        jsonObject.run {
+            if (BoxedTag.TAG_TYPE in this && BoxedTag.TAG_DATA in this) {
+                val tt = (get(BoxedTag.TAG_TYPE) as? JsonPrimitive) ?: return failsafe()
+                val td = get(BoxedTag.TAG_DATA) ?: return failsafe()
+                if (!tt.isString) {
+                    return failsafe()
+                }
+                return Json.decodeFromJsonElement(BoxedTag.serializer(), this).toTag()
+            } else {
+                return failsafe()
+            }
+        }
+    }
 
     abstract fun toJson(tag: Tag): JsonElement
 
     open fun toTag(jsonElement: JsonElement): Tag {
         throw Exception("Nope!")
+    }
+
+    private fun toCompoundTag(jsonObject: JsonObject): CompoundTag {
+        return CompoundTag().apply {
+            jsonObject.forEach { k, v ->
+                put(k, TagConverterStrict.toTag(v))
+            }
+        }
     }
 
     protected fun fromJsonPrimitive(jsonPrimitive: JsonPrimitive): Tag {

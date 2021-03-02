@@ -23,7 +23,7 @@ class KambrikNbtApi internal constructor() {
         return format.decodeFromJsonElement(serializer, tag.toJson(NbtMode.LENIENT))
     }
 
-    inline fun <reified T> fromNbt(tag: Tag, format: Json = Json): T {
-        return format.decodeFromJsonElement<T>(tag.toJson(NbtMode.LENIENT))
+    inline fun <reified T> fromNbt(tag: Tag, format: Json = Json, mode: NbtMode = NbtMode.LENIENT): T {
+        return format.decodeFromJsonElement<T>(tag.toJson(mode))
     }
 }
