@@ -9,18 +9,25 @@ import kotlinx.serialization.modules.polymorphic
 
 @ExperimentalSerializationApi
 val NbtFormatTest = NbtFormat {
-    writePolymorphic = false
+    serializersModule = SerializersModule {
+        polymorphic(Vehicle::class) {
+            subclass(Car::class, Car.serializer())
+        }
+    }
 }
 
 @Serializable
-class Vehicle(val type: String, val gas: Float, val tirePressure: List<Double>)
+abstract class Vehicle(val type: String)
+
+@Serializable
+class Car(val wheels: Int) : Vehicle("Automobile")
 
 @InternalSerializationApi
 fun main(args: Array<String>) {
-    val truck = Vehicle("Truck", 100f, mutableListOf(28.1, 32.0, 31.5, 34.6))
-    val asNbt = encodeToTag(truck)
+    val car: Vehicle = Car(4)
+    val asNbt = NbtFormatTest.encodeToTag(car)
 
-    println("Result: $asNbt") // => Result: {tirePressure:[28.1d,32.0d,31.5d,34.6d],gas:100.0f,type:"Truck"}
+    println("Result: $asNbt") // => Result: {tirePressure:[28.1d,32.0d,31.5d,34.6d],gas:100.0d,type:"Truck"}
 }
 
 

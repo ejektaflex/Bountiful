@@ -4,9 +4,10 @@ import io.ejekta.kambrikx.api.serial.nbt.NbtFormatConfig
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.CompositeEncoder
+import kotlinx.serialization.internal.AbstractPolymorphicSerializer
 import kotlinx.serialization.internal.NamedValueEncoder
+import kotlinx.serialization.modules.SerializersModule
 import net.minecraft.nbt.*
-import kotlin.reflect.KClass
 
 @InternalSerializationApi
 abstract class BaseTagEncoder(
@@ -16,6 +17,9 @@ abstract class BaseTagEncoder(
 
     abstract val root: Tag
     abstract fun addTag(name: String?, tag: Tag)
+
+    @ExperimentalSerializationApi
+    override val serializersModule: SerializersModule = config.serializersModule
 
     @ExperimentalSerializationApi
     override fun beginStructure(descriptor: SerialDescriptor): CompositeEncoder {
@@ -47,22 +51,22 @@ abstract class BaseTagEncoder(
 
     @Suppress("UNCHECKED_CAST")
     @ExperimentalSerializationApi
-    private fun <T: Any> dynamicFindPoly(cap: KClass<*>, value: T): SerializationStrategy<T>? {
-        return config.serializersModule.getPolymorphic(cap as KClass<in T>, value)
+    private fun <T: Any> getPolymorphicSerializer(ser: SerializationStrategy<T>, value: T): SerializationStrategy<T> {
+        val abs = ser as AbstractPolymorphicSerializer<T>
+        return abs.findPolymorphicSerializer(this, value)
     }
 
     @ExperimentalSerializationApi
     override fun <T> encodeSerializableValue(serializer: SerializationStrategy<T>, value: T) {
-        if (serializer.descriptor.kind is PolymorphicKind.OPEN) {
-
-            val capKlass = serializer.descriptor.capturedKClass
-
-            val polymorphed = dynamicFindPoly(capKlass as KClass<*>, value as Any)
-                ?: throw Exception("Could not find a matching polymorphed class for ${serializer.descriptor.serialName} => $value")
-
-            super.encodeSerializableValue(polymorphed as SerializationStrategy<T>, value)
+        if (value is Any) {
+            if (serializer.descriptor.kind is PolymorphicKind.OPEN) {
+                val polymorphicSerializer = getPolymorphicSerializer(serializer, value)
+                super.encodeSerializableValue(polymorphicSerializer, value)
+            } else {
+                super.encodeSerializableValue(serializer, value)
+            }
         } else {
-            super.encodeSerializableValue(serializer, value)
+            throw Exception("Trying to encode $value, which is not a subtype of 'Any'!")
         }
     }
 
