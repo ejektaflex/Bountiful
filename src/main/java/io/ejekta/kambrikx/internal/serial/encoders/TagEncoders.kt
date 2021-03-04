@@ -1,5 +1,6 @@
 package io.ejekta.kambrikx.internal.serial.encoders
 
+import io.ejekta.kambrikx.api.serial.nbt.NbtFormatConfig
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerializationStrategy
@@ -14,7 +15,7 @@ import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
 
 @InternalSerializationApi
-class TagEncoder : BaseTagEncoder() {
+class TagEncoder(config: NbtFormatConfig) : BaseTagEncoder(config) {
     override var root: Tag = EndTag.INSTANCE
 
     override fun addTag(name: String?, tag: Tag) {
@@ -26,9 +27,9 @@ class TagEncoder : BaseTagEncoder() {
         super.beginStructure(descriptor)
         val ending: (Tag) -> Unit = { root = it }
         return when (descriptor.kind) {
-            StructureKind.LIST -> TagListEncoder(ending)
-            StructureKind.CLASS -> TagClassEncoder(ending)
-            StructureKind.MAP -> TagMapEncoder(ending)
+            StructureKind.LIST -> TagListEncoder(config, ending)
+            StructureKind.CLASS -> TagClassEncoder(config, ending)
+            StructureKind.MAP -> TagMapEncoder(config, ending)
             else -> super.beginStructure(descriptor)
         }
     }
@@ -36,7 +37,7 @@ class TagEncoder : BaseTagEncoder() {
 
 @InternalSerializationApi
 @ExperimentalSerializationApi
-open class TagClassEncoder(onEnd: (Tag) -> Unit = {}) : BaseTagEncoder(onEnd) {
+open class TagClassEncoder(config: NbtFormatConfig, onEnd: (Tag) -> Unit = {}) : BaseTagEncoder(config, onEnd) {
     override var root = CompoundTag()
     override fun addTag(name: String?, tag: Tag) {
         root.put(name, tag)
@@ -44,16 +45,16 @@ open class TagClassEncoder(onEnd: (Tag) -> Unit = {}) : BaseTagEncoder(onEnd) {
 }
 
 @InternalSerializationApi
-class TagListEncoder(onEnd: (Tag) -> Unit) : BaseTagEncoder(onEnd) {
+class TagListEncoder(config: NbtFormatConfig, onEnd: (Tag) -> Unit) : BaseTagEncoder(config, onEnd) {
     override val root = ListTag()
     override fun addTag(name: String?, tag: Tag) {
-        root.add(tag)
+        root.add(name!!.toInt(), tag)
     }
 }
 
 @InternalSerializationApi
 @ExperimentalSerializationApi
-class TagMapEncoder(onEnd: (Tag) -> Unit = {}) : BaseTagEncoder(onEnd) {
+class TagMapEncoder(config: NbtFormatConfig, onEnd: (Tag) -> Unit = {}) : BaseTagEncoder(config, onEnd) {
     override var root = CompoundTag()
     private var theKey = ""
     private fun String?.isKey() = (this?.toInt() ?: 0) % 2 == 0
