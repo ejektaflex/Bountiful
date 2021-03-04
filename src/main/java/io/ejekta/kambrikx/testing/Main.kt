@@ -22,12 +22,12 @@ fun main(args: Array<String>) {
     }
 
     @Serializable
-    data class Person(val name: String, val age: Int)
+    data class Person(val name: String, val age: Int, val items: List<Int>, val isOld: Boolean)
 
     val b = encodeToTag(
         ListSerializer(Person.serializer()),
         listOf(
-            Person("Bobby", 55)
+            Person("Bobby", 55, listOf(4, 6, 8), false)
         )
     )
 

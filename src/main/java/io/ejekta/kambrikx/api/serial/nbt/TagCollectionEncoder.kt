@@ -8,9 +8,7 @@ import kotlinx.serialization.encoding.CompositeEncoder
 import net.minecraft.nbt.*
 
 @InternalSerializationApi
-abstract class TagCollectionEncoder(override val root: Tag, onEnd: Tag.() -> Unit) : BaseTagEncoder(onEnd) {
-
-    abstract fun addTag(name: String, tag: Tag)
+abstract class TagCollectionEncoder(override val root: Tag, onEnd: (Tag) -> Unit) : BaseTagEncoder(onEnd) {
 
     @ExperimentalSerializationApi
     override fun beginStructure(descriptor: SerialDescriptor): CompositeEncoder {
@@ -18,12 +16,10 @@ abstract class TagCollectionEncoder(override val root: Tag, onEnd: Tag.() -> Uni
         //println(descriptor)
         return when (descriptor.kind) {
             StructureKind.LIST -> TagListTypeEncoder {
-                addTag(descriptor.serialName, this)
-                onEnd()
+                addTag(descriptor.serialName, it)
             }
             StructureKind.CLASS -> TagClassEncoder {
-                addTag(descriptor.serialName, this)
-                onEnd()
+                addTag(descriptor.serialName, it)
             }
             else -> throw Exception("Could not begin !")
         }

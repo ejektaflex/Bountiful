@@ -10,26 +10,31 @@ import net.minecraft.nbt.Tag
 
 @InternalSerializationApi
 @ExperimentalSerializationApi
-class TagClassEncoder(onEnd: Tag.() -> Unit = {}) : BaseTagEncoder(onEnd) {
+class TagClassEncoder(onEnd: (Tag) -> Unit = {}) : BaseTagEncoder(onEnd) {
 
     override var root = CompoundTag()
+
+    override fun addTag(name: String, tag: Tag) {
+        root.put(name, tag)
+    }
 
     override fun beginStructure(descriptor: SerialDescriptor): CompositeEncoder {
         super.beginStructure(descriptor)
         return when (descriptor.kind) {
             StructureKind.LIST -> TagListTypeEncoder {
-                println("Uhh $currentTagOrNull")
+                println("TAG IS: $it ($currentTagOrNull) ON: $root")
+                addTag(currentTag, it)
             }
             else -> throw Exception(" Could not begin ! ")
         }
     }
 
-    override fun endEncode(descriptor: SerialDescriptor) {
-        super.endEncode(descriptor)
+    // Why would I ever want to compose these names together? Leave only base name
+    override fun composeName(parentName: String, childName: String): String {
+        return childName
     }
 
     override fun encodeTaggedInt(tag: String, value: Int) {
-        println("ENCODED INT")
         root.putInt(tag, value)
     }
 
