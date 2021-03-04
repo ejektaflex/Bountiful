@@ -9,22 +9,21 @@ import net.minecraft.nbt.EndTag
 import net.minecraft.nbt.Tag
 
 @InternalSerializationApi
-class TagEncoder(onEnd: (Tag) -> Unit = { }) : BaseTagEncoder(onEnd) {
+class TagEncoder : BaseTagEncoder({}) {
 
     override var root: Tag = EndTag.INSTANCE
 
-    override fun addTag(name: String, tag: Tag) {
+    override fun addTag(name: String?, tag: Tag) {
         throw Exception("Cannot add tag in base encoder!")
     }
 
     @ExperimentalSerializationApi
     override fun beginStructure(descriptor: SerialDescriptor): CompositeEncoder {
         super.beginStructure(descriptor)
+        val ending: (Tag) -> Unit = { root = it }
         return when (descriptor.kind) {
-            StructureKind.LIST -> TagListTypeEncoder {
-                root = it
-            }
-            StructureKind.CLASS -> TagClassEncoder(onEnd)
+            StructureKind.LIST -> TagListTypeEncoder(ending)
+            StructureKind.CLASS -> TagClassEncoder(ending)
             else -> super.beginStructure(descriptor)
         }
     }

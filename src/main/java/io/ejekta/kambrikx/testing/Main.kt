@@ -32,7 +32,7 @@ fun main(args: Array<String>) {
         ListSerializer(Person.serializer()),
         listOf(
             Person("Bobby", 55, mapOf(
-                "keys" to 2
+                "keys" to 23
             ))
         )
     )

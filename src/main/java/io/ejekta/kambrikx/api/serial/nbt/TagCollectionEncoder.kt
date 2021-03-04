@@ -10,21 +10,6 @@ import net.minecraft.nbt.*
 @InternalSerializationApi
 abstract class TagCollectionEncoder(override val root: Tag, onEnd: (Tag) -> Unit) : BaseTagEncoder(onEnd) {
 
-    @ExperimentalSerializationApi
-    override fun beginStructure(descriptor: SerialDescriptor): CompositeEncoder {
-        super.beginStructure(descriptor)
-        //println(descriptor)
-        return when (descriptor.kind) {
-            StructureKind.LIST -> TagListTypeEncoder {
-                addTag(descriptor.serialName, it)
-            }
-            StructureKind.CLASS -> TagClassEncoder {
-                addTag(descriptor.serialName, it)
-            }
-            else -> throw Exception("Could not begin ! Was a: ${descriptor.kind}")
-        }
-    }
-
     override fun encodeTaggedInt(tag: String, value: Int) {
         addTag(tag, IntTag.of(value))
     }

@@ -14,22 +14,8 @@ class TagClassEncoder(onEnd: (Tag) -> Unit = {}) : BaseTagEncoder(onEnd) {
 
     override var root = CompoundTag()
 
-    override fun addTag(name: String, tag: Tag) {
+    override fun addTag(name: String?, tag: Tag) {
         root.put(name, tag)
-    }
-
-    override fun beginStructure(descriptor: SerialDescriptor): CompositeEncoder {
-        super.beginStructure(descriptor)
-        return when (descriptor.kind) {
-            StructureKind.LIST -> TagListTypeEncoder {
-                addTag(currentTag, it)
-            }
-            StructureKind.CLASS -> TagClassEncoder {
-                addTag(currentTag, it)
-            }
-
-            else -> throw Exception(" Could not begin ! Was a: ${descriptor.kind}")
-        }
     }
 
     // Why would I ever want to compose these names together? Leave only base name
