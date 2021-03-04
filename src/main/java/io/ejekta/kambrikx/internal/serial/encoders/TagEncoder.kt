@@ -1,4 +1,4 @@
-package io.ejekta.kambrikx.api.serial.nbt
+package io.ejekta.kambrikx.internal.serial.encoders
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
@@ -9,7 +9,7 @@ import net.minecraft.nbt.EndTag
 import net.minecraft.nbt.Tag
 
 @InternalSerializationApi
-class TagEncoder : BaseTagEncoder({}) {
+class TagEncoder : BaseTagEncoder() {
 
     override var root: Tag = EndTag.INSTANCE
 

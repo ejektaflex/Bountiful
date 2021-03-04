@@ -1,4 +1,4 @@
-package io.ejekta.kambrikx.api.serial.nbt
+package io.ejekta.kambrikx.internal.serial.encoders
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
@@ -20,18 +20,6 @@ class TagMapEncoder(onEnd: (Tag) -> Unit = {}) : BaseTagEncoder(onEnd) {
         } else {
             root.put(theKey, tag)
         }
-    }
-
-    override fun encodeTaggedString(tag: String, value: String) {
-        addTag(tag, StringTag.of(value))
-    }
-
-    override fun encodeTaggedInt(tag: String, value: Int) {
-        addTag(tag, IntTag.of(value))
-    }
-
-    override fun encodeTaggedBoolean(tag: String, value: Boolean) {
-        addTag(tag, ByteTag.of(value))
     }
 
 }

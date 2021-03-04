@@ -1,11 +1,8 @@
 package io.ejekta.kambrikx.testing
 
-import io.ejekta.kambrikx.api.serial.nbt.TagClassEncoder
-import io.ejekta.kambrikx.api.serial.nbt.TagEncoder
+import io.ejekta.kambrikx.internal.serial.encoders.TagEncoder
 import kotlinx.serialization.*
 import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.json.JsonElement
-import net.minecraft.nbt.Tag
 
 
 @InternalSerializationApi
@@ -25,7 +22,7 @@ fun main(args: Array<String>) {
     data class Wallet(val money: Double)
 
     @Serializable
-    data class Person(val name: String, val age: Int, val items: Map<String, Map<Boolean, String>>)
+    data class Person(val name: String, val age: Int, val items: Map<String, Map<Long, String>>)
 
 
     val b = encodeToTag(
@@ -33,8 +30,8 @@ fun main(args: Array<String>) {
         listOf(
             Person("Bobby", 55, mapOf(
                 "keys" to mapOf(
-                    true to "hai",
-                    false to "there"
+                    2L to "hai",
+                    4L to "there"
                 )
             ))
         )
