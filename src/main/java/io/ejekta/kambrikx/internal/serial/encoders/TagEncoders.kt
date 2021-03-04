@@ -2,13 +2,31 @@ package io.ejekta.kambrikx.internal.serial.encoders
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.encoding.CompositeEncoder
+import kotlinx.serialization.modules.EmptySerializersModule
+import kotlinx.serialization.serializer
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.EndTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
+
+@InternalSerializationApi
+fun <T> encodeToTag(serializer: SerializationStrategy<T>, obj: T): Any {
+    val encoder = TagEncoder()
+    encoder.encodeSerializableValue(serializer, obj)
+    return encoder.root
+}
+
+@ExperimentalSerializationApi
+@InternalSerializationApi
+inline fun <reified T> encodeToTag(obj: T): Any {
+    val encoder = TagEncoder()
+    encoder.encodeSerializableValue(EmptySerializersModule.serializer(), obj)
+    return encoder.root
+}
 
 @InternalSerializationApi
 class TagEncoder : BaseTagEncoder() {
