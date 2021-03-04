@@ -26,6 +26,9 @@ abstract class BaseTagEncoder(open val onEnd: Tag.() -> Unit = {}) : NamedValueE
             StructureKind.CLASS -> TagClassEncoder {
                 addTag(currentTagOrNull, it)
             }
+            StructureKind.MAP -> TagMapEncoder {
+                addTag(currentTagOrNull, it)
+            }
             else -> throw Exception("Could not begin ! Was a: ${descriptor.kind}")
         }
     }

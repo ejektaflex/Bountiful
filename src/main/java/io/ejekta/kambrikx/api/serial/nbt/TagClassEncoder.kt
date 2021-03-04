@@ -2,9 +2,6 @@ package io.ejekta.kambrikx.api.serial.nbt
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.StructureKind
-import kotlinx.serialization.encoding.CompositeEncoder
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 
@@ -57,11 +54,6 @@ class TagClassEncoder(onEnd: (Tag) -> Unit = {}) : BaseTagEncoder(onEnd) {
 
     override fun encodeTaggedShort(tag: String, value: Short) {
         root.putShort(tag, value)
-    }
-
-
-    companion object {
-
     }
 
 }

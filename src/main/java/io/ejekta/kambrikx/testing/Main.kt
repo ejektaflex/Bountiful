@@ -25,14 +25,17 @@ fun main(args: Array<String>) {
     data class Wallet(val money: Double)
 
     @Serializable
-    data class Person(val name: String, val age: Int, val items: Map<String, Int>)
+    data class Person(val name: String, val age: Int, val items: Map<String, Map<Boolean, String>>)
 
 
     val b = encodeToTag(
         ListSerializer(Person.serializer()),
         listOf(
             Person("Bobby", 55, mapOf(
-                "keys" to 23
+                "keys" to mapOf(
+                    true to "hai",
+                    false to "there"
+                )
             ))
         )
     )
