@@ -16,7 +16,7 @@ abstract class BaseTagEncoder(open val onEnd: Tag.() -> Unit = {}) : NamedValueE
 
     @ExperimentalSerializationApi
     override fun beginStructure(descriptor: SerialDescriptor): CompositeEncoder {
-        println("Tag is of kind: ${descriptor.kind} for curr: $currentTagOrNull in ctx: \t\t${this::class.simpleName}")
+        //println("Tag is of kind: ${descriptor.kind} for curr: $currentTagOrNull in ctx: \t\t${this::class.simpleName}")
         return this
     }
 

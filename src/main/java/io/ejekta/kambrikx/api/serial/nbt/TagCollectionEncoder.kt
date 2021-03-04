@@ -21,7 +21,7 @@ abstract class TagCollectionEncoder(override val root: Tag, onEnd: (Tag) -> Unit
             StructureKind.CLASS -> TagClassEncoder {
                 addTag(descriptor.serialName, it)
             }
-            else -> throw Exception("Could not begin !")
+            else -> throw Exception("Could not begin ! Was a: ${descriptor.kind}")
         }
     }
 

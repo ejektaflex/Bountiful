@@ -22,10 +22,13 @@ class TagClassEncoder(onEnd: (Tag) -> Unit = {}) : BaseTagEncoder(onEnd) {
         super.beginStructure(descriptor)
         return when (descriptor.kind) {
             StructureKind.LIST -> TagListTypeEncoder {
-                println("TAG IS: $it ($currentTagOrNull) ON: $root")
                 addTag(currentTag, it)
             }
-            else -> throw Exception(" Could not begin ! ")
+            StructureKind.CLASS -> TagClassEncoder {
+                addTag(currentTag, it)
+            }
+
+            else -> throw Exception(" Could not begin ! Was a: ${descriptor.kind}")
         }
     }
 
