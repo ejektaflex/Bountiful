@@ -14,21 +14,6 @@ import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
 
 @InternalSerializationApi
-fun <T> encodeToTag(serializer: SerializationStrategy<T>, obj: T): Any {
-    val encoder = TagEncoder()
-    encoder.encodeSerializableValue(serializer, obj)
-    return encoder.root
-}
-
-@ExperimentalSerializationApi
-@InternalSerializationApi
-inline fun <reified T> encodeToTag(obj: T): Any {
-    val encoder = TagEncoder()
-    encoder.encodeSerializableValue(EmptySerializersModule.serializer(), obj)
-    return encoder.root
-}
-
-@InternalSerializationApi
 class TagEncoder : BaseTagEncoder() {
     override var root: Tag = EndTag.INSTANCE
 
