@@ -18,9 +18,8 @@ abstract class BaseTagEncoder(open val onEnd: Tag.() -> Unit = {}) : NamedValueE
     @ExperimentalSerializationApi
     override fun beginStructure(descriptor: SerialDescriptor): CompositeEncoder {
         super.beginStructure(descriptor)
-        //println(descriptor)
         return when (descriptor.kind) {
-            StructureKind.LIST -> TagListTypeEncoder { addTag(currentTagOrNull, it) }
+            StructureKind.LIST -> TagListEncoder { addTag(currentTagOrNull, it) }
             StructureKind.CLASS -> TagClassEncoder { addTag(currentTagOrNull, it) }
             StructureKind.MAP -> TagMapEncoder { addTag(currentTagOrNull, it) }
             else -> throw Exception("Could not begin ! Was a: ${descriptor.kind}")
