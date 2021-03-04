@@ -50,10 +50,10 @@ dependencies {
 	mappings("net.fabricmc:yarn:${yarnMappings}:v2")
 	modImplementation("net.fabricmc:fabric-loader:${loaderVersion}")
 
-	modApi("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.1")
-	include("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.1")
-	modApi("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
-	include("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+	modApi("org.jetbrains.kotlinx:kotlinx-serialization-core:1.1.0")
+	include("org.jetbrains.kotlinx:kotlinx-serialization-core:1.1.0")
+	modApi("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
+	include("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
 
 	modApi("me.shedaniel.cloth:config-2:4.8.3") {
 		exclude(group = "net.fabricmc.fabric-api")

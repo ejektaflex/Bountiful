@@ -1,7 +1,11 @@
 package io.ejekta.kambrikx.testing
 
+import io.ejekta.kambrikx.api.serial.nbt.TagClassEncoder
 import io.ejekta.kambrikx.api.serial.nbt.TagEncoder
 import kotlinx.serialization.*
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.json.JsonElement
+import net.minecraft.nbt.Tag
 
 
 @InternalSerializationApi
@@ -9,17 +13,22 @@ import kotlinx.serialization.*
 fun main(args: Array<String>) {
 
     fun <T> encodeToTag(serializer: SerializationStrategy<T>, obj: T): Any {
+        //lateinit var result: Tag
+        //val encoder = TagEncoder { result = this }
         val encoder = TagEncoder()
         encoder.encodeSerializableValue(serializer, obj)
+        //return result
         return encoder.root
     }
 
     @Serializable
-    data class Person(val name: String, val age: Int, val money: List<Int> = listOf())
+    data class Person(val name: String, val age: Int)
 
     val b = encodeToTag(
-        Person.serializer(),
-        Person("Bobby", 35, listOf(4, 6, 8))
+        ListSerializer(Person.serializer()),
+        listOf(
+            Person("Bobby", 55)
+        )
     )
 
     println("Result: $b")
