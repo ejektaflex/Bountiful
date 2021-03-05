@@ -41,7 +41,7 @@ fun main(args: Array<String>) {
     val logger = Kambrik.Logging.createLogger("doot")
 
 
-    val test = "hai"
+    val test = 0L
     println("AsJson: ${JsonTest.encodeToString(test)}")
 
     val asNbt = NbtFormatTest.encodeToTag(test)

@@ -8,6 +8,7 @@ import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.plus
+import net.minecraft.nbt.Tag
 
 class NbtFormatConfig {
 
@@ -35,7 +36,7 @@ open class NbtFormat internal constructor(val config: NbtFormatConfig) : SerialF
     companion object Default : NbtFormat(NbtFormatConfig())
 
     @InternalSerializationApi
-    fun <T> encodeToTag(serializer: SerializationStrategy<T>, obj: T): Any {
+    fun <T> encodeToTag(serializer: SerializationStrategy<T>, obj: T): Tag {
         return when (serializer.descriptor.kind) {
             is PrimitiveKind -> {
                 val enc = TaglessEncoder(config, 0)
