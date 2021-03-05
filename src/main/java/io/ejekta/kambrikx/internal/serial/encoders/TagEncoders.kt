@@ -6,13 +6,14 @@ import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.StructureKind
+import kotlinx.serialization.encoding.AbstractEncoder
 import kotlinx.serialization.encoding.CompositeEncoder
 import kotlinx.serialization.modules.EmptySerializersModule
+import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.serializer
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.EndTag
-import net.minecraft.nbt.ListTag
-import net.minecraft.nbt.Tag
+import net.minecraft.nbt.*
+
+
 
 @InternalSerializationApi
 class TagEncoder(config: NbtFormatConfig) : BaseTagEncoder(config) {
@@ -22,8 +23,6 @@ class TagEncoder(config: NbtFormatConfig) : BaseTagEncoder(config) {
     override fun addTag(name: String?, tag: Tag) {
         root = tag
     }
-
-
 
     @ExperimentalSerializationApi
     override fun beginStructure(descriptor: SerialDescriptor): CompositeEncoder {
@@ -46,6 +45,22 @@ open class TagClassEncoder(config: NbtFormatConfig, level: Int, onEnd: (Tag) -> 
         //println("Class encoding '$name', $tag")
         root.put(name, tag)
     }
+}
+
+@InternalSerializationApi
+@ExperimentalSerializationApi
+open class TaglessEncoder(config: NbtFormatConfig, level: Int, onEnd: (Tag) -> Unit = {}) : AbstractEncoder() {
+    override val serializersModule = config.serializersModule
+    lateinit var root: Tag
+    override fun encodeInt(value: Int) { root = IntTag.of(value) }
+    override fun encodeString(value: String) { root = StringTag.of(value) }
+    override fun encodeBoolean(value: Boolean) { root = ByteTag.of(value) }
+    override fun encodeDouble(value: Double) { root = DoubleTag.of(value) }
+    override fun encodeByte(value: Byte) { root = ByteTag.of(value) }
+    override fun encodeChar(value: Char) { root = StringTag.of(value.toString()) }
+    override fun encodeFloat(value: Float) { root = FloatTag.of(value) }
+    override fun encodeLong(value: Long) { root = LongTag.of(value) }
+    override fun encodeShort(value: Short) { root = ShortTag.of(value) }
 }
 
 @InternalSerializationApi

@@ -12,18 +12,24 @@ import kotlinx.serialization.modules.polymorphic
 import net.minecraft.nbt.CompoundTag
 import kotlin.math.log
 
+val serMod = SerializersModule {
+    polymorphic(Vehicle::class) {
+        subclass(Car::class, Car.serializer())
+    }
+}
+
 @ExperimentalSerializationApi
 val NbtFormatTest = NbtFormat {
-    serializersModule = SerializersModule {
-        polymorphic(Vehicle::class) {
-            subclass(Car::class, Car.serializer())
-        }
-    }
+    serializersModule = serMod
     writePolymorphic = false
 }
 
+val JsonTest = Json {
+    serializersModule = serMod
+}
+
 @Serializable
-abstract class Vehicle(val type: String)
+abstract class Vehicle(val typed: String)
 
 @Serializable
 class Car(val wheels: Int) : Vehicle("Automobile")
@@ -35,8 +41,8 @@ fun main(args: Array<String>) {
     val logger = Kambrik.Logging.createLogger("doot")
 
 
-    val test = 1
-    println("AsJson: ${Json.encodeToString(test)}")
+    val test = "hai"
+    println("AsJson: ${JsonTest.encodeToString(test)}")
 
     val asNbt = NbtFormatTest.encodeToTag(test)
 
