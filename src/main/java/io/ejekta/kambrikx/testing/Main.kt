@@ -2,6 +2,7 @@
 
 package io.ejekta.kambrikx.testing
 
+import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrikx.api.serial.nbt.NbtFormat
 import kotlinx.serialization.*
 import kotlinx.serialization.builtins.IntArraySerializer
@@ -9,6 +10,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import net.minecraft.nbt.CompoundTag
+import kotlin.math.log
 
 @ExperimentalSerializationApi
 val NbtFormatTest = NbtFormat {
@@ -17,6 +19,7 @@ val NbtFormatTest = NbtFormat {
             subclass(Car::class, Car.serializer())
         }
     }
+    writePolymorphic = false
 }
 
 @Serializable
@@ -29,7 +32,10 @@ class Car(val wheels: Int) : Vehicle("Automobile")
 fun main(args: Array<String>) {
     val car: Vehicle = Car(4)
 
-    val test = mapOf(true to (Car(5) to 3))
+    val logger = Kambrik.Logging.createLogger("doot")
+
+
+    val test = 1
     println("AsJson: ${Json.encodeToString(test)}")
 
     val asNbt = NbtFormatTest.encodeToTag(test)

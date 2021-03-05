@@ -1,5 +1,6 @@
 package io.ejekta.kambrikx.api.serial.nbt
 
+import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrikx.internal.serial.encoders.TagEncoder
 import kotlinx.serialization.*
 import kotlinx.serialization.modules.EmptySerializersModule
@@ -7,6 +8,14 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.plus
 
 class NbtFormatConfig {
+
+    private val NbtEncodingMarker = Kambrik.Logging.createMarker("NBT-SERIAL")
+
+    private val logger = Kambrik.Logger
+
+    internal fun logInfo(level: Int, msg: String) {
+        logger.info(NbtEncodingMarker, "\t".repeat(level) + msg)
+    }
 
     var classDiscriminator: String = "type"
 

@@ -30,9 +30,9 @@ class TagEncoder(config: NbtFormatConfig) : BaseTagEncoder(config) {
         super.beginStructure(descriptor)
         val ending: (Tag) -> Unit = { root = it }
         return when (descriptor.kind) {
-            StructureKind.LIST -> TagListEncoder(config, ending)
-            StructureKind.CLASS -> TagClassEncoder(config, ending)
-            StructureKind.MAP -> TagMapEncoder(config, ending)
+            StructureKind.LIST -> TagListEncoder(config, 1, ending)
+            StructureKind.CLASS -> TagClassEncoder(config, 1, ending)
+            StructureKind.MAP -> TagMapEncoder(config, 1, ending)
             else -> super.beginStructure(descriptor)
         }
     }
@@ -40,7 +40,7 @@ class TagEncoder(config: NbtFormatConfig) : BaseTagEncoder(config) {
 
 @InternalSerializationApi
 @ExperimentalSerializationApi
-open class TagClassEncoder(config: NbtFormatConfig, onEnd: (Tag) -> Unit = {}) : BaseTagEncoder(config, onEnd) {
+open class TagClassEncoder(config: NbtFormatConfig, level: Int, onEnd: (Tag) -> Unit = {}) : BaseTagEncoder(config, level, onEnd) {
     override var root = CompoundTag()
     override fun addTag(name: String?, tag: Tag) {
         //println("Class encoding '$name', $tag")
@@ -49,7 +49,7 @@ open class TagClassEncoder(config: NbtFormatConfig, onEnd: (Tag) -> Unit = {}) :
 }
 
 @InternalSerializationApi
-class TagListEncoder(config: NbtFormatConfig, onEnd: (Tag) -> Unit) : BaseTagEncoder(config, onEnd) {
+class TagListEncoder(config: NbtFormatConfig, level: Int, onEnd: (Tag) -> Unit) : BaseTagEncoder(config, level, onEnd) {
     override val root = ListTag()
     override fun addTag(name: String?, tag: Tag) {
         if (name != config.classDiscriminator) {
@@ -60,7 +60,7 @@ class TagListEncoder(config: NbtFormatConfig, onEnd: (Tag) -> Unit) : BaseTagEnc
 
 @InternalSerializationApi
 @ExperimentalSerializationApi
-class TagMapEncoder(config: NbtFormatConfig, onEnd: (Tag) -> Unit = {}) : BaseTagEncoder(config, onEnd) {
+class TagMapEncoder(config: NbtFormatConfig, level: Int, onEnd: (Tag) -> Unit = {}) : BaseTagEncoder(config, level, onEnd) {
     override var root = CompoundTag()
     private var theKey = ""
     private var isKey = true

@@ -12,7 +12,8 @@ import net.minecraft.nbt.*
 @InternalSerializationApi
 abstract class BaseTagEncoder(
     @JvmField protected val config: NbtFormatConfig,
-    open val onEnd: Tag.() -> Unit = {}
+    private var level: Int = 0,
+    open val onEnd: Tag.() -> Unit = {},
 ) : NamedValueEncoder() {
 
     abstract val root: Tag
@@ -28,9 +29,9 @@ abstract class BaseTagEncoder(
         super.beginStructure(descriptor)
         //println("Kind: ${descriptor.kind}")
         return when (descriptor.kind) {
-            StructureKind.LIST -> TagListEncoder(config) { addTag(currentTagOrNull, it) }
-            StructureKind.CLASS -> TagClassEncoder(config) { addTag(currentTagOrNull, it) }
-            StructureKind.MAP -> TagMapEncoder(config) { addTag(currentTagOrNull, it) }
+            StructureKind.LIST -> TagListEncoder(config, level + 1) { addTag(currentTagOrNull, it) }
+            StructureKind.CLASS -> TagClassEncoder(config, level + 1) { addTag(currentTagOrNull, it) }
+            StructureKind.MAP -> TagMapEncoder(config, level + 1) { addTag(currentTagOrNull, it) }
             else -> throw Exception("Could not begin ! Was a: ${descriptor.kind}")
         }.apply {
             if (encodePolymorphic) {
@@ -64,13 +65,13 @@ abstract class BaseTagEncoder(
     override fun <T> encodeSerializableValue(serializer: SerializationStrategy<T>, value: T) {
         //println("Desc kind: ${serializer.descriptor.kind}")
         if (value is Any) {
-            if (serializer.descriptor.kind is PolymorphicKind.OPEN) {
-                val polymorphicSerializer = getPolymorphicSerializer(serializer, value)
-                super.encodeSerializableValue(polymorphicSerializer, value)
+            val serial = if (serializer.descriptor.kind is PolymorphicKind.OPEN) {
+                getPolymorphicSerializer(serializer, value)
             } else {
-                //println("Ser: $serializer, Val: $value, Kind: ${serializer.descriptor.kind::class.qualifiedName}")
-                super.encodeSerializableValue(serializer, value)
+                serializer
             }
+            config.logInfo(level, "Kind: ${serial.descriptor.kind::class.simpleName} (Value: ${value!!::class.simpleName})")
+            super.encodeSerializableValue(serial, value)
         } else {
             throw Exception("Trying to encode $value, which is not a subtype of 'Any'! D:")
         }
