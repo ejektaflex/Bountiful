@@ -18,9 +18,12 @@ import net.minecraft.nbt.Tag
 class TagEncoder(config: NbtFormatConfig) : BaseTagEncoder(config) {
     override var root: Tag = EndTag.INSTANCE
 
+    // Currently, primitive encodings directly call addTag("PRIMITIVE", tag)
     override fun addTag(name: String?, tag: Tag) {
-        throw Exception("Cannot add tag in base encoder!")
+        root = tag
     }
+
+
 
     @ExperimentalSerializationApi
     override fun beginStructure(descriptor: SerialDescriptor): CompositeEncoder {
@@ -40,6 +43,7 @@ class TagEncoder(config: NbtFormatConfig) : BaseTagEncoder(config) {
 open class TagClassEncoder(config: NbtFormatConfig, onEnd: (Tag) -> Unit = {}) : BaseTagEncoder(config, onEnd) {
     override var root = CompoundTag()
     override fun addTag(name: String?, tag: Tag) {
+        //println("Class encoding '$name', $tag")
         root.put(name, tag)
     }
 }
@@ -48,7 +52,9 @@ open class TagClassEncoder(config: NbtFormatConfig, onEnd: (Tag) -> Unit = {}) :
 class TagListEncoder(config: NbtFormatConfig, onEnd: (Tag) -> Unit) : BaseTagEncoder(config, onEnd) {
     override val root = ListTag()
     override fun addTag(name: String?, tag: Tag) {
-        root.add(name!!.toInt(), tag)
+        if (name != config.classDiscriminator) {
+            root.add(name!!.toInt(), tag)
+        }
     }
 }
 
@@ -57,13 +63,21 @@ class TagListEncoder(config: NbtFormatConfig, onEnd: (Tag) -> Unit) : BaseTagEnc
 class TagMapEncoder(config: NbtFormatConfig, onEnd: (Tag) -> Unit = {}) : BaseTagEncoder(config, onEnd) {
     override var root = CompoundTag()
     private var theKey = ""
-    private fun String?.isKey() = (this?.toInt() ?: 0) % 2 == 0
+    private var isKey = true
 
     override fun addTag(name: String?, tag: Tag) {
-        if (name.isKey()) {
-            theKey = tag.asString() ?: "DEFAULT_KEY"
-        } else {
-            root.put(theKey, tag)
+        //println("Boop $name '$theKey' $tag (${tag::class})")
+        if (name != config.classDiscriminator) {
+
+            if (isKey) {
+                theKey = tag.asString() ?: "DEFAULT_KEY"
+            } else {
+                root.put(theKey, tag)
+            }
+
+            isKey = !isKey
+
         }
+
     }
 }
