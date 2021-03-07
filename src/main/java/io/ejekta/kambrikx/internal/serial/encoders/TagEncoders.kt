@@ -13,8 +13,6 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.serializer
 import net.minecraft.nbt.*
 
-
-
 @InternalSerializationApi
 class TagEncoder(config: NbtFormatConfig) : BaseTagEncoder(config) {
     override var root: Tag = EndTag.INSTANCE
@@ -42,8 +40,15 @@ class TagEncoder(config: NbtFormatConfig) : BaseTagEncoder(config) {
 open class TagClassEncoder(config: NbtFormatConfig, level: Int, onEnd: (Tag) -> Unit = {}) : BaseTagEncoder(config, level, onEnd) {
     override var root = CompoundTag()
     override fun addTag(name: String?, tag: Tag) {
-        //println("Class encoding '$name', $tag")
         root.put(name, tag)
+    }
+
+    override fun endEncode(descriptor: SerialDescriptor) {
+        if (encodePolymorphic) {
+            encodePolymorphic = false
+            addTag(config.classDiscriminator, StringTag.of(descriptor.serialName))
+        }
+        super.endEncode(descriptor)
     }
 }
 

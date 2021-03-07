@@ -8,6 +8,7 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import net.minecraft.nbt.ByteTag
@@ -25,7 +26,7 @@ val serMod = SerializersModule {
 @ExperimentalSerializationApi
 val NbtFormatTest = NbtFormat {
     serializersModule = serMod
-    writePolymorphic = false
+    writePolymorphic = true
 }
 
 val JsonTest = Json {
@@ -38,33 +39,24 @@ abstract class Vehicle(val typed: String)
 @Serializable
 data class Car(val wheels: Int) : Vehicle("Automobile") {
     override fun toString(): String {
-        return "Car[w $wheels t $typed]"
+        return "Car[wheels=$wheels, typed=$typed]"
     }
 }
 
 @InternalSerializationApi
 fun main(args: Array<String>) {
-    val car = Car(4)
+    val car: Vehicle = Car(4)
 
-    val carNbt = CompoundTag().apply {
-        putInt("wheels", 4)
-        putString("typed", "doot")
-    }
+    val asJson = JsonTest.encodeToJsonElement(car)
+    println("As Json: $asJson")
 
-    val paired = 33 to 77
+    val asNbt = NbtFormatTest.encodeToTag(car)
+    println("As Nbt: $asNbt")
 
-    val pairNbt = NbtFormatTest.encodeToTag(paired)
-    println("Paired: $pairNbt")
+    val asObj = NbtFormatTest.decodeFromTag<Vehicle>(asNbt)
+    println("As Obj: $asObj")
 
-    val test = CompoundTag().apply {
-        put("doot", ListTag().apply {
-            add(IntTag.of(5555))
-        })
-    }
 
-    val newCar = NbtFormatTest.decodeFromTag<Map<String, List<Int>>>(test)
-
-    println("Result: $newCar")
 
     /*
     // {"type":"io.ejekta.kambrikx.testing.Car","typed":"Automobile","wheels":4}

@@ -33,11 +33,6 @@ abstract class BaseTagEncoder(
             StructureKind.CLASS -> TagClassEncoder(config, level + 1) { addTag(currentTagOrNull, it) }
             StructureKind.MAP -> TagMapEncoder(config, level + 1) { addTag(currentTagOrNull, it) }
             else -> throw Exception("Could not begin ! Was a: ${descriptor.kind}")
-        }.apply {
-            if (encodePolymorphic) {
-                encodePolymorphic = false
-                addTag(config.classDiscriminator, StringTag.of(descriptor.serialName))
-            }
         }
     }
 
