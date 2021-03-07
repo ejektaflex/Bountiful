@@ -17,22 +17,23 @@ abstract class BaseTagDecoder(
 
     abstract val root: Tag
 
+    private fun currentTag(): Tag = currentTagOrNull?.let { readTag(it) } ?: root
+
     abstract fun readTag(name: String): Tag
 
     @ExperimentalSerializationApi
     override fun beginStructure(descriptor: SerialDescriptor): CompositeDecoder {
         config.logInfo(level, "Parse: ${descriptor.kind}")
         return when (descriptor.kind) {
-            StructureKind.CLASS -> TagClassDecoder(config, level + 1, root as CompoundTag)
-            StructureKind.LIST -> TagListDecoder(config, level + 1, root as ListTag)
-            StructureKind.MAP -> TagMapDecoder(config, level + 1, root as CompoundTag)
+            StructureKind.CLASS -> TagClassDecoder(config, level + 1, currentTag())
+            StructureKind.LIST -> TagListDecoder(config, level + 1, currentTag())
+            StructureKind.MAP -> TagMapDecoder(config, level + 1, currentTag())
             else -> throw Exception("Cannot decode a ${descriptor.kind} yet with beginStructure!")
         }
     }
 
     override fun decodeTaggedInt(tag: String): Int = (readTag(tag) as IntTag).int
     override fun decodeTaggedString(tag: String): String {
-        println("Decoding tag str $tag")
         return (readTag(tag) as StringTag).asString()
     }
     override fun decodeTaggedBoolean(tag: String): Boolean = (readTag(tag) as ByteTag).byte > 0

@@ -51,12 +51,14 @@ fun main(args: Array<String>) {
         putString("typed", "doot")
     }
 
-    val test = CompoundTag().apply {
-        putInt("doot", 5)
+    val test = ListTag().apply {
+        add(CompoundTag().apply {
+            putInt("Hello", 5)
+        })
     }
 
     val newCar = NbtFormatTest.decodeFromTag(
-        MapSerializer(String.serializer(), Int.serializer()),
+        ListSerializer(MapSerializer(String.serializer(), Int.serializer())),
         test
     )
 

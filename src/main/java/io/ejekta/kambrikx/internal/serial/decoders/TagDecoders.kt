@@ -41,19 +41,22 @@ open class TagDecoder(
 open class TagClassDecoder(
     config: NbtFormatConfig,
     level: Int,
-    final override var root: CompoundTag
+    override var root: Tag
 ) : BaseTagDecoder(config, level) {
     private var position = 0
 
+    private val tagCompound: CompoundTag
+        get() = root as CompoundTag
+
     override fun readTag(name: String): Tag {
-        return root.get(name)!!
+        return tagCompound.get(name)!!
     }
 
     @ExperimentalSerializationApi
     override fun decodeElementIndex(descriptor: SerialDescriptor): Int {
         while (position < descriptor.elementsCount) {
             val name = descriptor.getTag(position++)
-            if (name in root) {
+            if (name in tagCompound) {
                 return position - 1
             }
         }
@@ -67,13 +70,16 @@ open class TagClassDecoder(
 open class TagListDecoder(
     config: NbtFormatConfig,
     level: Int,
-    final override var root: ListTag
+    override var root: Tag
 ) : BaseTagDecoder(config, level) {
 
-    private val size = root.size
+    private val tagList: ListTag
+        get() = root as ListTag
+
+    private val size = tagList.size
     private var currentIndex = -1
 
-    override fun readTag(name: String) = root[name.toInt()]!!
+    override fun readTag(name: String) = tagList[name.toInt()]!!
 
     override fun elementName(desc: SerialDescriptor, index: Int): String = index.toString()
 
@@ -96,14 +102,18 @@ open class TagListDecoder(
 open class TagMapDecoder(
     config: NbtFormatConfig,
     level: Int,
-    final override var root: CompoundTag
+    override var root: Tag
 ) : BaseTagDecoder(config, level) {
 
-    private val keys = root.keys.toList()
+    private val tagCompound: CompoundTag
+        get() = root as CompoundTag
+
+    private val keys = tagCompound.keys.toList()
     private val size: Int = keys.size * 2
     private var position = -1
 
-    override fun readTag(name: String): Tag = if (position % 2 == 0) StringTag.of(name) else root.get(name)!!
+    override fun readTag(name: String): Tag = if (position % 2 == 0) StringTag.of(name) else tagCompound.get(name)!!
+
 
     override fun elementName(desc: SerialDescriptor, index: Int): String = keys[index / 2]
 
