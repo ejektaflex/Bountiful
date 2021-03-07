@@ -19,7 +19,7 @@ abstract class BaseTagEncoder(
     abstract val root: Tag
     abstract fun addTag(name: String?, tag: Tag)
 
-    var encodePolymorphic: Boolean = config.writePolymorphic
+    var encodePolymorphic: Boolean = false
 
     @ExperimentalSerializationApi
     override val serializersModule: SerializersModule = config.serializersModule
@@ -30,7 +30,12 @@ abstract class BaseTagEncoder(
         config.logInfo(level, "Parse: ${descriptor.kind}")
         return when (descriptor.kind) {
             StructureKind.LIST -> TagListEncoder(config, level + 1) { addTag(currentTagOrNull, it) }
-            StructureKind.CLASS -> TagClassEncoder(config, level + 1) { addTag(currentTagOrNull, it) }
+            StructureKind.CLASS -> TagClassEncoder(config, level + 1) { addTag(currentTagOrNull, it) }.also {
+                if (encodePolymorphic) {
+                    encodePolymorphic = false
+                    it.addTag(config.classDiscriminator, StringTag.of(descriptor.serialName))
+                }
+            }
             StructureKind.MAP -> TagMapEncoder(config, level + 1) { addTag(currentTagOrNull, it) }
             else -> throw Exception("Could not begin ! Was a: ${descriptor.kind}")
         }
@@ -62,6 +67,7 @@ abstract class BaseTagEncoder(
         if (value is Any) {
             val open = serializer.descriptor.kind is PolymorphicKind.OPEN
             val serial = if (open) {
+                encodePolymorphic = true
                 getPolymorphicSerializer(serializer, value)
             } else {
                 serializer

@@ -42,14 +42,6 @@ open class TagClassEncoder(config: NbtFormatConfig, level: Int, onEnd: (Tag) -> 
     override fun addTag(name: String?, tag: Tag) {
         root.put(name, tag)
     }
-
-    override fun endEncode(descriptor: SerialDescriptor) {
-        if (encodePolymorphic) {
-            encodePolymorphic = false
-            addTag(config.classDiscriminator, StringTag.of(descriptor.serialName))
-        }
-        super.endEncode(descriptor)
-    }
 }
 
 @InternalSerializationApi

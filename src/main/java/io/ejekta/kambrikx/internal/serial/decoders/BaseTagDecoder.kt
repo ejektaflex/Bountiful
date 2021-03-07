@@ -30,7 +30,7 @@ abstract class BaseTagDecoder(
 
     @ExperimentalSerializationApi
     override fun beginStructure(descriptor: SerialDescriptor): CompositeDecoder {
-        config.logInfo(level, "Parse: ${descriptor.kind}")
+        config.logInfo(level, "Parse: ${descriptor.kind} with tag ${currentTag()}")
         return when (descriptor.kind) {
             StructureKind.CLASS -> TagClassDecoder(config, level + 1, currentTag())
             StructureKind.LIST -> TagListDecoder(config, level + 1, currentTag())
