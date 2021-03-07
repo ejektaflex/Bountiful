@@ -4,10 +4,16 @@ package io.ejekta.kambrikx.testing
 
 import io.ejekta.kambrikx.api.serial.nbt.NbtFormat
 import kotlinx.serialization.*
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
+import net.minecraft.nbt.ByteTag
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.IntTag
+import net.minecraft.nbt.ListTag
 
 val serMod = SerializersModule {
     polymorphic(Vehicle::class) {
@@ -45,7 +51,14 @@ fun main(args: Array<String>) {
         putString("typed", "doot")
     }
 
-    val newCar = NbtFormatTest.decodeFromTag(Car.serializer(), carNbt)
+    val test = CompoundTag().apply {
+        putInt("doot", 5)
+    }
+
+    val newCar = NbtFormatTest.decodeFromTag(
+        MapSerializer(String.serializer(), Int.serializer()),
+        test
+    )
 
     println("Result: $newCar")
 
