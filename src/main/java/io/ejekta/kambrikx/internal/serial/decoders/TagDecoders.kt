@@ -24,7 +24,6 @@ open class TagDecoder(
     level: Int,
     final override var root: Tag
 ) : BaseTagDecoder(config, level) {
-    private var position = 0
 
     override fun readTag(name: String): Tag {
         return EndTag.INSTANCE
@@ -34,7 +33,6 @@ open class TagDecoder(
     override fun decodeElementIndex(descriptor: SerialDescriptor): Int {
         return CompositeDecoder.DECODE_DONE
     }
-
 }
 
 @InternalSerializationApi
@@ -62,7 +60,6 @@ open class TagClassDecoder(
         }
         return CompositeDecoder.DECODE_DONE
     }
-
 }
 
 @InternalSerializationApi
@@ -91,10 +88,8 @@ open class TagListDecoder(
         return CompositeDecoder.DECODE_DONE
     }
 
-    override fun endStructure(descriptor: SerialDescriptor) {
-        // do nothing, maps do not have strict keys, so strict mode check is omitted
-    }
-
+    // do nothing, maps do not have strict keys, so strict mode check is omitted
+    override fun endStructure(descriptor: SerialDescriptor) { }
 }
 
 @InternalSerializationApi
@@ -114,7 +109,6 @@ open class TagMapDecoder(
 
     override fun readTag(name: String): Tag = if (position % 2 == 0) StringTag.of(name) else tagCompound.get(name)!!
 
-
     override fun elementName(desc: SerialDescriptor, index: Int): String = keys[index / 2]
 
     override fun decodeElementIndex(descriptor: SerialDescriptor): Int {
@@ -125,8 +119,16 @@ open class TagMapDecoder(
         return CompositeDecoder.DECODE_DONE
     }
 
-    override fun endStructure(descriptor: SerialDescriptor) {
-        // As per KSX: do nothing, maps do not have strict keys, so strict mode check is omitted
-    }
+    // As per KSX: do nothing, maps do not have strict keys, so strict mode check is omitted
+    override fun endStructure(descriptor: SerialDescriptor) {  }
+}
 
+@InternalSerializationApi
+@ExperimentalSerializationApi
+open class TaglessDecoder(
+    config: NbtFormatConfig,
+    level: Int,
+    override var root: Tag
+) : BaseTagDecoder(config, level) { // May need to push a tag in init {} but doesn't seem so, so far
+    override fun decodeElementIndex(descriptor: SerialDescriptor): Int = CompositeDecoder.DECODE_DONE
 }

@@ -3,6 +3,7 @@ package io.ejekta.kambrikx.internal.serial.decoders
 import io.ejekta.kambrikx.api.serial.nbt.NbtFormatConfig
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.encoding.CompositeDecoder
@@ -19,7 +20,9 @@ abstract class BaseTagDecoder(
 
     private fun currentTag(): Tag = currentTagOrNull?.let { readTag(it) } ?: root
 
-    abstract fun readTag(name: String): Tag
+    open fun readTag(name: String): Tag {
+        return root
+    }
 
     @ExperimentalSerializationApi
     override fun beginStructure(descriptor: SerialDescriptor): CompositeDecoder {

@@ -3,6 +3,7 @@ package io.ejekta.kambrikx.api.serial.nbt
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrikx.internal.serial.decoders.TagDecoder
 import io.ejekta.kambrikx.internal.serial.decoders.TagMapDecoder
+import io.ejekta.kambrikx.internal.serial.decoders.TaglessDecoder
 import io.ejekta.kambrikx.internal.serial.encoders.TagEncoder
 import io.ejekta.kambrikx.internal.serial.encoders.TaglessEncoder
 import kotlinx.serialization.*
@@ -10,7 +11,9 @@ import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.plus
+import net.minecraft.nbt.AbstractNumberTag
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
 
 class NbtFormatConfig {
@@ -58,10 +61,16 @@ open class NbtFormat internal constructor(val config: NbtFormatConfig) : SerialF
     @ExperimentalSerializationApi
     inline fun <reified T> encodeToTag(obj: T) = encodeToTag(EmptySerializersModule.serializer(), obj)
 
-    fun <T> decodeFromTag(deserializer: DeserializationStrategy<T>, obj: Tag): T {
-        val decoder = TagDecoder(config, 0, obj)
+    fun <T> decodeFromTag(deserializer: DeserializationStrategy<T>, tag: Tag): T {
+        println("Decoding: ${tag::class.simpleName}")
+        val decoder = when (tag) {
+            is CompoundTag, is ListTag -> TagDecoder(config, 0, tag)
+            else -> TaglessDecoder(config, 0, tag)
+        }
         return decoder.decodeSerializableValue(deserializer)
     }
+
+    inline fun <reified T> decodeFromTag(tag: Tag) = decodeFromTag<T>(EmptySerializersModule.serializer(), tag)
 
 }
 
