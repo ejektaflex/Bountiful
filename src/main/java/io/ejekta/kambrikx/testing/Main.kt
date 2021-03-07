@@ -2,15 +2,12 @@
 
 package io.ejekta.kambrikx.testing
 
-import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrikx.api.serial.nbt.NbtFormat
 import kotlinx.serialization.*
-import kotlinx.serialization.builtins.IntArraySerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import net.minecraft.nbt.CompoundTag
-import kotlin.math.log
 
 val serMod = SerializersModule {
     polymorphic(Vehicle::class) {
@@ -18,6 +15,7 @@ val serMod = SerializersModule {
     }
 }
 
+@InternalSerializationApi
 @ExperimentalSerializationApi
 val NbtFormatTest = NbtFormat {
     serializersModule = serMod
@@ -32,21 +30,35 @@ val JsonTest = Json {
 abstract class Vehicle(val typed: String)
 
 @Serializable
-class Car(val wheels: Int) : Vehicle("Automobile")
+data class Car(val wheels: Int) : Vehicle("Automobile") {
+    override fun toString(): String {
+        return "Car[w $wheels t $typed]"
+    }
+}
 
 @InternalSerializationApi
 fun main(args: Array<String>) {
-    val car: Vehicle = Car(4)
+    val car = Car(4)
 
-    val logger = Kambrik.Logging.createLogger("doot")
+    val carNbt = CompoundTag().apply {
+        putInt("wheels", 4)
+        putString("typed", "doot")
+    }
 
+    val newCar = NbtFormatTest.decodeFromTag(Car.serializer(), carNbt)
 
-    val test = 0L
+    println("Result: $newCar")
+
+    /*
+    // {"type":"io.ejekta.kambrikx.testing.Car","typed":"Automobile","wheels":4}
+    val test = car
     println("AsJson: ${JsonTest.encodeToString(test)}")
-
     val asNbt = NbtFormatTest.encodeToTag(test)
-
     println("Result: $asNbt") // => Result: {tirePressure:[28.1d,32.0d,31.5d,34.6d],gas:100.0d,type:"Truck"}
+    */
+
+
+
 }
 
 
