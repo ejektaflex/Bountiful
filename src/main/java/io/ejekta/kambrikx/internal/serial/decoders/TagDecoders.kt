@@ -112,6 +112,7 @@ open class TagMapDecoder(
     override fun elementName(desc: SerialDescriptor, index: Int): String = keys[index / 2]
 
     override fun decodeElementIndex(descriptor: SerialDescriptor): Int {
+
         while (position < size - 1) {
             position++
             return position
@@ -130,5 +131,6 @@ open class TaglessDecoder(
     level: Int,
     override var root: Tag
 ) : BaseTagDecoder(config, level) { // May need to push a tag in init {} but doesn't seem so, so far
-    override fun decodeElementIndex(descriptor: SerialDescriptor): Int = CompositeDecoder.DECODE_DONE
+    init { pushTag("PRIMITIVE") }
+    override fun decodeElementIndex(descriptor: SerialDescriptor): Int = 0
 }

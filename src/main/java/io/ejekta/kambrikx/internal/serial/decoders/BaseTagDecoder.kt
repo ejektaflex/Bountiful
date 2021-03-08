@@ -30,11 +30,12 @@ abstract class BaseTagDecoder(
 
     @ExperimentalSerializationApi
     override fun beginStructure(descriptor: SerialDescriptor): CompositeDecoder {
-        config.logInfo(level, "Parse: ${descriptor.kind} with tag ${currentTag()}")
+        config.logInfo(level, "Parse: ${descriptor.kind} with tag ${currentTag()} (am: ${this::class.simpleName})")
         return when (descriptor.kind) {
+            is PolymorphicKind -> TagMapDecoder(config, level + 1, currentTag())
             StructureKind.CLASS -> TagClassDecoder(config, level + 1, currentTag())
             StructureKind.LIST -> TagListDecoder(config, level + 1, currentTag())
-            StructureKind.MAP, is PolymorphicKind -> TagMapDecoder(config, level + 1, currentTag())
+            StructureKind.MAP -> TagMapDecoder(config, level + 1, currentTag())
             else -> throw Exception("Cannot decode a ${descriptor.kind} yet with beginStructure!")
         }
     }
@@ -43,20 +44,24 @@ abstract class BaseTagDecoder(
     @ExperimentalSerializationApi
     private fun <T: Any> getPolymorphicDeserializer(ser: DeserializationStrategy<T>): DeserializationStrategy<out T> {
         val abs = ser as AbstractPolymorphicSerializer<T>
-        val typed = (root as CompoundTag).getString(config.classDiscriminator)
+        val typed = (currentTag() as CompoundTag).getString(config.classDiscriminator)
+        println("Got real polymorphic tag: $typed")
         return abs.findPolymorphicSerializer(this, typed)
     }
 
     @Suppress("UNCHECKED_CAST")
     @ExperimentalSerializationApi
     override fun <T> decodeSerializableValue(deserializer: DeserializationStrategy<T>): T {
-        val serial = if (deserializer.descriptor.kind is PolymorphicKind.OPEN) {
-            getPolymorphicDeserializer(deserializer as DeserializationStrategy<Any>)
-        } else {
-            deserializer
-        } as DeserializationStrategy<T>
 
-        return super.decodeSerializableValue(serial)
+        if (deserializer !is AbstractPolymorphicSerializer<*>) {
+            return deserializer.deserialize(this)
+        }
+
+        println("Retrieving actual ser from ${currentTag()}")
+
+        val actualSerializer = getPolymorphicDeserializer(deserializer as DeserializationStrategy<Any>) as DeserializationStrategy<T>
+
+        return TagMapDecoder(config, level, currentTag()).decodeSerializableValue(actualSerializer)
     }
 
     override fun decodeTaggedInt(tag: String): Int = (readTag(tag) as IntTag).int
