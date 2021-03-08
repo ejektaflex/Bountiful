@@ -4,9 +4,7 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.Format
 import io.ejekta.bountiful.util.GameTime
-import io.ejekta.kambrikx.api.serial.nbt.NbtFormat
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.InternalSerializationApi
+import io.ejekta.kambrikx.api.nbt.ItemData
 import kotlinx.serialization.Serializable
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.player.PlayerEntity
@@ -14,7 +12,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Formatting
-import net.minecraft.util.Identifier
 import net.minecraft.world.World
 import kotlin.math.max
 

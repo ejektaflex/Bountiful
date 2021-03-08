@@ -11,7 +11,7 @@ enum class BountyRarity(val color: Formatting, val weight: Int, val repTier: Int
     EPIC(Formatting.LIGHT_PURPLE, 128, 25),
     LEGENDARY(Formatting.GOLD, 16, 30);
 
-    fun weightAdjustedFor(currRarity: BountyRarity): Double {
+    private fun weightAdjustedFor(currRarity: BountyRarity): Double {
         return weight.toDouble() / (rarityWeightScaling.pow(max(currRarity.ordinal - ordinal, 0)))
     }
 

@@ -24,25 +24,3 @@ object StringTagSer : KSerializer<StringTag> {
     }
     override fun deserialize(decoder: Decoder): StringTag = StringTag.of(decoder.decodeString())
 }
-
-@Serializer(forClass = CompoundTag::class)
-object CompoundTagSer : KSerializer<CompoundTag> {
-    override val descriptor: SerialDescriptor = mapSerialDescriptor<String, Tag>()
-    override fun serialize(encoder: Encoder, value: CompoundTag) = encoder.doCollection(descriptor, value.size) {
-        var ind = 0
-        for ((key, tag) in value) {
-            val next = ind++
-
-            println("About to try to serialize '$key' with value $tag")
-
-            when (tag) {
-                is StringTag -> encodeSerializableElement(descriptor, next, StringTagSer, tag)
-            }
-
-
-        }
-    }
-    override fun deserialize(decoder: Decoder): CompoundTag {
-        return CompoundTag().apply { putString("no", "u") }
-    }
-}

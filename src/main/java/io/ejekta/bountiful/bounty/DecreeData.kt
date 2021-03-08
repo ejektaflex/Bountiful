@@ -1,8 +1,7 @@
 package io.ejekta.bountiful.bounty
 
 import io.ejekta.bountiful.Bountiful
-import io.ejekta.bountiful.config.Format
-import kotlinx.serialization.InternalSerializationApi
+import io.ejekta.kambrikx.api.nbt.ItemData
 import kotlinx.serialization.Serializable
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
@@ -10,12 +9,12 @@ import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import net.minecraft.world.World
 
+@Suppress("RemoveRedundantQualifierName")
 @Serializable
 data class DecreeData(val ids: MutableList<String> = mutableListOf()) {
 
     fun tooltipInfo(world: World): List<Text> {
-        val lines = mutableListOf<Text>()
-        lines += when (ids.isNotEmpty()) {
+        return mutableListOf<Text>() + when (ids.isNotEmpty()) {
             true -> {
                 ids.map {
                     TranslatableText("${Bountiful.ID}.decree.$it.name").formatted(Formatting.GOLD)
@@ -25,7 +24,6 @@ data class DecreeData(val ids: MutableList<String> = mutableListOf()) {
                 listOf(TranslatableText("bountiful.decree.notset"))
             }
         }
-        return lines
     }
 
 

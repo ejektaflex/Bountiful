@@ -10,8 +10,7 @@ import io.ejekta.bountiful.content.DecreeItem
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.mixin.SimpleInventoryAccessor
 import io.ejekta.bountiful.util.readOnlyCopy
-import io.ejekta.kambrikx.ext.toLenientJson
-import io.ejekta.kambrikx.ext.toLenientTag
+import io.ejekta.kambrikx.api.serial.nbt.NbtFormat
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
@@ -199,8 +198,8 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
             (decrees as SimpleInventoryAccessor).stacks
         )
 
-        val doneMap = tag.getCompound("completed").toLenientJson()
-        finishMap = Format.Normal.decodeFromJsonElement(finishSerializer, doneMap).toMutableMap()
+        val doneMap = tag.getCompound("completed")
+        finishMap = NbtFormat.decodeFromTag(finishSerializer, doneMap).toMutableMap()
 
         val bountyList = tag.getList("bounty_inv", 10) ?: return
         bountyList.forEach { tagged ->
@@ -217,9 +216,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
     override fun toTag(tag: CompoundTag?): CompoundTag? {
         super.toTag(tag)
 
-        // TODO Switch all instances of old format encoding to new encoding!
-
-        val doneMap = Format.Normal.encodeToJsonElement(finishSerializer, finishMap).toLenientTag() as CompoundTag
+        val doneMap = NbtFormat.encodeToTag(finishSerializer, finishMap)
 
         tag?.put("completed", doneMap)
 

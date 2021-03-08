@@ -1,4 +1,4 @@
-package io.ejekta.bountiful.bounty
+package io.ejekta.kambrikx.api.nbt
 
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrikx.api.serial.nbt.NbtFormat
