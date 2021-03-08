@@ -46,7 +46,7 @@ open class NbtFormat internal constructor(val config: NbtFormatConfig) : SerialF
     fun <T> encodeToTag(serializer: SerializationStrategy<T>, obj: T): Tag {
         return when (serializer.descriptor.kind) {
             is PrimitiveKind -> {
-                val enc = TaglessEncoder(config, 0)
+                val enc = TaglessEncoder(config)
                 enc.encodeSerializableValue(serializer, obj)
                 enc.root
             }

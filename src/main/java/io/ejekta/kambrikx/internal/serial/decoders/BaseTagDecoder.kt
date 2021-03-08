@@ -45,7 +45,9 @@ abstract class BaseTagDecoder(
     private fun <T: Any> getPolymorphicDeserializer(ser: DeserializationStrategy<T>): DeserializationStrategy<out T> {
         val abs = ser as AbstractPolymorphicSerializer<T>
         val typed = (currentTag() as CompoundTag).getString(config.classDiscriminator)
-        println("Got real polymorphic tag: $typed")
+        if (typed == "") {
+            throw SerializationException("Tried to get the polymorphic serializer in ${currentTag()} but failed!")
+        }
         return abs.findPolymorphicSerializer(this, typed)
     }
 
@@ -56,8 +58,6 @@ abstract class BaseTagDecoder(
         if (deserializer !is AbstractPolymorphicSerializer<*>) {
             return deserializer.deserialize(this)
         }
-
-        println("Retrieving actual ser from ${currentTag()}")
 
         val actualSerializer = getPolymorphicDeserializer(deserializer as DeserializationStrategy<Any>) as DeserializationStrategy<T>
 

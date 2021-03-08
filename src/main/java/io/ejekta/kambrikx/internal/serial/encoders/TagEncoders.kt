@@ -22,17 +22,7 @@ class TagEncoder(config: NbtFormatConfig) : BaseTagEncoder(config) {
         root = tag
     }
 
-    @ExperimentalSerializationApi
-    override fun beginStructure(descriptor: SerialDescriptor): CompositeEncoder {
-        super.beginStructure(descriptor)
-        val ending: (Tag) -> Unit = { root = it }
-        return when (descriptor.kind) {
-            StructureKind.LIST -> TagListEncoder(config, 1, ending)
-            StructureKind.CLASS -> TagClassEncoder(config, 1, ending)
-            StructureKind.MAP -> TagMapEncoder(config, 1, ending)
-            else -> super.beginStructure(descriptor)
-        }
-    }
+    override val propogate: Tag.() -> Unit = { root = this }
 }
 
 @InternalSerializationApi
@@ -76,7 +66,7 @@ class TagMapEncoder(config: NbtFormatConfig, level: Int, onEnd: (Tag) -> Unit = 
 
 @InternalSerializationApi
 @ExperimentalSerializationApi
-open class TaglessEncoder(config: NbtFormatConfig, level: Int, onEnd: (Tag) -> Unit = {}) : AbstractEncoder() {
+open class TaglessEncoder(config: NbtFormatConfig) : AbstractEncoder() {
     override val serializersModule = config.serializersModule
     lateinit var root: Tag
     override fun encodeInt(value: Int) { root = IntTag.of(value) }

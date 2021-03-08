@@ -55,19 +55,23 @@ data class Person(val name: String, val money: Money)
 @InternalSerializationApi
 fun main(args: Array<String>) {
 
-    val test: Pair<String, Vehicle> = "Hello" to Car(5)
+    val test: Vehicle = Car(5)
     //val test = Person("Bob", Wallet(100.0))
 
     val asJson = JsonTest.encodeToJsonElement(test)
     println("As Json: $asJson")
 
-    val asJsonObj = JsonTest.decodeFromJsonElement<Person>(asJson)
+    val asJsonObj = JsonTest.decodeFromJsonElement<
+            Vehicle
+    >(asJson)
     println("As Test Again: $asJsonObj")
 
     val asNbt = NbtFormatTest.encodeToTag(test)
     println("As Nbt: $asNbt")
 
-    val asObj = NbtFormatTest.decodeFromTag<Person>(asNbt)
+    val asObj = NbtFormatTest.decodeFromTag<
+            Vehicle
+    >(asNbt)
     println("As Obj: $asObj")
 
 

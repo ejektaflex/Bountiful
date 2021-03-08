@@ -13,11 +13,15 @@ import net.minecraft.nbt.*
 abstract class BaseTagEncoder(
     @JvmField protected val config: NbtFormatConfig,
     private var level: Int = 0,
-    open val onEnd: Tag.() -> Unit = {},
+    open val onEnd: (Tag) -> Unit = {},
 ) : NamedValueEncoder() {
 
     abstract val root: Tag
     abstract fun addTag(name: String?, tag: Tag)
+
+    open val propogate: Tag.() -> Unit = {
+        addTag(currentTagOrNull, this)
+    }
 
     var encodePolymorphic: Boolean = false
 
@@ -29,14 +33,14 @@ abstract class BaseTagEncoder(
         super.beginStructure(descriptor)
         config.logInfo(level, "Parse: ${descriptor.kind}")
         return when (descriptor.kind) {
-            StructureKind.LIST -> TagListEncoder(config, level + 1) { addTag(currentTagOrNull, it) }
-            StructureKind.CLASS -> TagClassEncoder(config, level + 1) { addTag(currentTagOrNull, it) }.also {
+            StructureKind.LIST -> TagListEncoder(config, level + 1, propogate)
+            StructureKind.CLASS -> TagClassEncoder(config, level + 1, propogate).also {
                 if (encodePolymorphic) {
                     encodePolymorphic = false
                     it.addTag(config.classDiscriminator, StringTag.of(descriptor.serialName))
                 }
             }
-            StructureKind.MAP -> TagMapEncoder(config, level + 1) { addTag(currentTagOrNull, it) }
+            StructureKind.MAP -> TagMapEncoder(config, level + 1, propogate)
             else -> throw Exception("Could not begin ! Was a: ${descriptor.kind}")
         }
     }
@@ -51,7 +55,7 @@ abstract class BaseTagEncoder(
     @ExperimentalSerializationApi
     override fun endEncode(descriptor: SerialDescriptor) {
         super.endEncode(descriptor)
-        root.onEnd()
+        onEnd(root)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -76,7 +80,7 @@ abstract class BaseTagEncoder(
             config.logInfo(level, "Kind: ${serial.descriptor.kind::class.simpleName} (Value: ${value!!::class.simpleName}, Open: $open)")
             super.encodeSerializableValue(serial, value)
         } else {
-            throw Exception("Trying to encode $value, which is not a subtype of 'Any'! D:")
+            throw SerializationException("Trying to encode $value, which is not a subtype of 'Any'! D:")
         }
     }
 
