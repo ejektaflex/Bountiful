@@ -32,7 +32,7 @@ data class DecreeData(val ids: MutableList<String> = mutableListOf()) {
     companion object : ItemData<DecreeData>() {
         override val identifier: Identifier = Bountiful.id("decree_data")
         override val ser = DecreeData.serializer()
-        override val creator: () -> DecreeData = { DecreeData() }
+        override val default = { DecreeData() }
     }
 
 }

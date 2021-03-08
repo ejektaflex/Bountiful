@@ -83,12 +83,10 @@ class BountyData {
         return lines
     }
 
-    @ExperimentalSerializationApi
-    @OptIn(InternalSerializationApi::class)
     companion object : ItemData<BountyData>() {
         override val identifier = Bountiful.id("bounty_data")
         override val ser = BountyData.serializer()
-        override val creator: () -> BountyData = { BountyData() }
+        override val default: () -> BountyData = { BountyData() }
     }
 
 }
