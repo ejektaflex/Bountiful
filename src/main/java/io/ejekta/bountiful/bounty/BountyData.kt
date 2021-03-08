@@ -1,8 +1,12 @@
 package io.ejekta.bountiful.bounty
 
+import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.Format
 import io.ejekta.bountiful.util.GameTime
+import io.ejekta.kambrikx.api.serial.nbt.NbtFormat
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.player.PlayerEntity
@@ -10,6 +14,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Formatting
+import net.minecraft.util.Identifier
 import net.minecraft.world.World
 import kotlin.math.max
 
@@ -30,8 +35,6 @@ class BountyData {
             false -> 1L
         }
     }
-
-    fun save() = Format.NBT.encodeToJsonElement(serializer(), this)
 
     fun tryCashIn(player: PlayerEntity, stack: ItemStack): Boolean {
 
@@ -80,7 +83,10 @@ class BountyData {
         return lines
     }
 
+    @ExperimentalSerializationApi
+    @OptIn(InternalSerializationApi::class)
     companion object : ItemData<BountyData>() {
+        override val identifier = Bountiful.id("bounty_data")
         override val ser = BountyData.serializer()
         override val creator: () -> BountyData = { BountyData() }
     }

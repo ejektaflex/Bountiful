@@ -18,6 +18,7 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
 import net.minecraft.nbt.*
 
+@ExperimentalSerializationApi
 @InternalSerializationApi
 open class TagDecoder(
     config: NbtFormatConfig,
@@ -29,12 +30,12 @@ open class TagDecoder(
         return EndTag.INSTANCE
     }
 
-    @ExperimentalSerializationApi
     override fun decodeElementIndex(descriptor: SerialDescriptor): Int {
         return CompositeDecoder.DECODE_DONE
     }
 }
 
+@ExperimentalSerializationApi
 @InternalSerializationApi
 open class TagClassDecoder(
     config: NbtFormatConfig,
@@ -50,7 +51,6 @@ open class TagClassDecoder(
         return tagCompound.get(name)!!
     }
 
-    @ExperimentalSerializationApi
     override fun decodeElementIndex(descriptor: SerialDescriptor): Int {
         while (position < descriptor.elementsCount) {
             val name = descriptor.getTag(position++)
@@ -63,7 +63,7 @@ open class TagClassDecoder(
 }
 
 @InternalSerializationApi
-@ExperimentalSerializationApi
+@OptIn(ExperimentalSerializationApi::class)
 open class TagListDecoder(
     config: NbtFormatConfig,
     level: Int,
@@ -93,7 +93,7 @@ open class TagListDecoder(
 }
 
 @InternalSerializationApi
-@ExperimentalSerializationApi
+@OptIn(ExperimentalSerializationApi::class)
 open class TagMapDecoder(
     config: NbtFormatConfig,
     level: Int,
@@ -125,7 +125,7 @@ open class TagMapDecoder(
 }
 
 @InternalSerializationApi
-@ExperimentalSerializationApi
+@OptIn(ExperimentalSerializationApi::class)
 open class TaglessDecoder(
     config: NbtFormatConfig,
     level: Int,

@@ -3,15 +3,12 @@
 package io.ejekta.kambrikx.testing
 
 import io.ejekta.kambrikx.api.serial.nbt.NbtFormat
-import kotlinx.serialization.*
-import kotlinx.serialization.builtins.PairSerializer
-import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromJsonElement
-import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
-import net.minecraft.nbt.CompoundTag
 
 val serMod = SerializersModule {
     polymorphic(Vehicle::class) {
@@ -48,6 +45,7 @@ interface Money
 @Serializable
 data class Wallet(val amount: Double) : Money
 
+
 @Serializable
 data class Person(val name: String, val money: Money)
 
@@ -55,24 +53,15 @@ data class Person(val name: String, val money: Money)
 @InternalSerializationApi
 fun main(args: Array<String>) {
 
-    val test: Vehicle = Car(5)
-    //val test = Person("Bob", Wallet(100.0))
+    @Serializable
+    data class SlingshotData(val timesUsed: Int)
+    val data = SlingshotData(0)
 
-    val asJson = JsonTest.encodeToJsonElement(test)
-    println("As Json: $asJson")
+    val asNbt = NbtFormatTest.encodeToTag(data)
+    println("As Nbt: $asNbt") // => {timesUsed:0}
 
-    val asJsonObj = JsonTest.decodeFromJsonElement<
-            Vehicle
-    >(asJson)
-    println("As Test Again: $asJsonObj")
-
-    val asNbt = NbtFormatTest.encodeToTag(test)
-    println("As Nbt: $asNbt")
-
-    val asObj = NbtFormatTest.decodeFromTag<
-            Vehicle
-    >(asNbt)
-    println("As Obj: $asObj")
+    val asObj = NbtFormatTest.decodeFromTag<SlingshotData>(asNbt)
+    println("As Obj: $asObj") // => SlingshotData(timesUsed=0)
 
 
 

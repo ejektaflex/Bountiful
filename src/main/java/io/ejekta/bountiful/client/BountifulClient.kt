@@ -5,6 +5,7 @@ import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.mixin.ModelPredicateProviderRegistrar
+import kotlinx.serialization.InternalSerializationApi
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry
@@ -17,6 +18,7 @@ class BountifulClient : ClientModInitializer {
 
     private val mc = MinecraftClient.getInstance()
 
+    @InternalSerializationApi
     override fun onInitializeClient() {
         println("Init client for Bountiful")
 

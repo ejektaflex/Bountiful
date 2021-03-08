@@ -217,6 +217,8 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
     override fun toTag(tag: CompoundTag?): CompoundTag? {
         super.toTag(tag)
 
+        // TODO Switch all instances of old format encoding to new encoding!
+
         val doneMap = Format.Normal.encodeToJsonElement(finishSerializer, finishMap).toLenientTag() as CompoundTag
 
         tag?.put("completed", doneMap)

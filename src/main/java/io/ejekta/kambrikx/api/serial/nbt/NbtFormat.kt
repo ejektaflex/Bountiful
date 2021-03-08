@@ -16,6 +16,8 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
 
+@InternalSerializationApi
+@OptIn(ExperimentalSerializationApi::class)
 class NbtFormatConfig {
 
     private val nbtEncodingMarker = Kambrik.Logging.createMarker("NBT-SERIAL")
@@ -28,21 +30,19 @@ class NbtFormatConfig {
 
     var classDiscriminator: String = "type"
 
-    @ExperimentalSerializationApi
     var serializersModule: SerializersModule = EmptySerializersModule
 
     var writePolymorphic = true
 }
 
-@InternalSerializationApi
-@ExperimentalSerializationApi
+@OptIn(InternalSerializationApi::class)
 open class NbtFormat internal constructor(val config: NbtFormatConfig) : SerialFormat {
 
+    @OptIn(ExperimentalSerializationApi::class)
     override val serializersModule = EmptySerializersModule + config.serializersModule
 
     companion object Default : NbtFormat(NbtFormatConfig())
 
-    @InternalSerializationApi
     fun <T> encodeToTag(serializer: SerializationStrategy<T>, obj: T): Tag {
         return when (serializer.descriptor.kind) {
             is PrimitiveKind -> {
@@ -58,9 +58,10 @@ open class NbtFormat internal constructor(val config: NbtFormatConfig) : SerialF
         }
     }
 
-    @ExperimentalSerializationApi
+    @OptIn(ExperimentalSerializationApi::class)
     inline fun <reified T> encodeToTag(obj: T) = encodeToTag(EmptySerializersModule.serializer(), obj)
 
+    @OptIn(ExperimentalSerializationApi::class)
     fun <T> decodeFromTag(deserializer: DeserializationStrategy<T>, tag: Tag): T {
         println("Decoding: ${tag::class.simpleName}")
         val decoder = when (tag) {
@@ -70,12 +71,12 @@ open class NbtFormat internal constructor(val config: NbtFormatConfig) : SerialF
         return decoder.decodeSerializableValue(deserializer)
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     inline fun <reified T> decodeFromTag(tag: Tag) = decodeFromTag<T>(EmptySerializersModule.serializer(), tag)
 
 }
 
-@InternalSerializationApi
-@ExperimentalSerializationApi
+@OptIn(InternalSerializationApi::class)
 fun NbtFormat(config: NbtFormatConfig.() -> Unit): NbtFormat {
     return NbtFormat(NbtFormatConfig().apply(config))
 }

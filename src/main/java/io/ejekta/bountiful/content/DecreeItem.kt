@@ -1,6 +1,7 @@
 package io.ejekta.bountiful.content
 
 import io.ejekta.bountiful.bounty.DecreeData
+import kotlinx.serialization.InternalSerializationApi
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.Item
@@ -24,6 +25,7 @@ class DecreeItem : Item(
         return TranslatableText(translationKey).formatted(Formatting.DARK_PURPLE)
     }
 
+    @InternalSerializationApi
     override fun appendTooltip(
         stack: ItemStack?,
         world: World?,
