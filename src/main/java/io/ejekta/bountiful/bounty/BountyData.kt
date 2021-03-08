@@ -45,9 +45,7 @@ class BountyData {
         }
 
         return if (objs.all { it }) {
-            rewards.forEach {
-                it().giveReward(this, it, player)
-            }
+            rewards.forEach { it().giveReward(this, it, player) }
             stack.decrement(stack.maxCount)
             true
         } else {

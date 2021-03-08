@@ -1,5 +1,6 @@
 package io.ejekta.kambrikx.internal.serial.decoders
 
+import io.ejekta.kambrikx.api.serial.nbt.NbtFormat
 import io.ejekta.kambrikx.api.serial.nbt.NbtFormatConfig
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.PolymorphicKind
@@ -73,4 +74,17 @@ abstract class BaseTagDecoder(
     override fun decodeTaggedFloat(tag: String): Float = (readTag(tag) as FloatTag).float
     override fun decodeTaggedLong(tag: String): Long = (readTag(tag) as LongTag).long
     override fun decodeTaggedShort(tag: String): Short = (readTag(tag) as ShortTag).short
+
+    @OptIn(ExperimentalSerializationApi::class)
+    override fun decodeTaggedEnum(tag: String, enumDescriptor: SerialDescriptor): Int {
+        return enumDescriptor.getElementIndex((readTag(tag) as StringTag).asString())
+    }
+
+    override fun decodeTaggedNull(tag: String): Nothing? = null
+
+    override fun decodeTaggedNotNullMark(tag: String): Boolean {
+        val read = readTag(tag)
+        println("Reading?: ${read::class.simpleName}")
+        return read != config.nullTag
+    }
 }

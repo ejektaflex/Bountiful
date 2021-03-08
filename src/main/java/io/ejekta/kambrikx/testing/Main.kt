@@ -54,8 +54,8 @@ data class Person(val name: String, val money: Money)
 fun main(args: Array<String>) {
 
     @Serializable
-    data class SlingshotData(val timesUsed: Int)
-    val data = SlingshotData(0)
+    data class SlingshotData(val timesUsed: Int?, val charges: Int)
+    val data = SlingshotData(null, 100)
 
     val asNbt = NbtFormatTest.encodeToTag(data)
     println("As Nbt: $asNbt") // => {timesUsed:0}

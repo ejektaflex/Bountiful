@@ -1,5 +1,6 @@
 package io.ejekta.kambrikx.internal.serial.encoders
 
+import io.ejekta.kambrikx.api.serial.nbt.NbtFormat
 import io.ejekta.kambrikx.api.serial.nbt.NbtFormatConfig
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.*
@@ -93,5 +94,15 @@ abstract class BaseTagEncoder(
     override fun encodeTaggedFloat(tag: String, value: Float) { addTag(tag, FloatTag.of(value)) }
     override fun encodeTaggedLong(tag: String, value: Long) { addTag(tag, LongTag.of(value)) }
     override fun encodeTaggedShort(tag: String, value: Short) { addTag(tag, ShortTag.of(value)) }
+
+    @OptIn(ExperimentalSerializationApi::class)
+    override fun encodeTaggedEnum(tag: String, enumDescriptor: SerialDescriptor, ordinal: Int) {
+        val element = enumDescriptor.getElementName(ordinal)
+        addTag(tag, StringTag.of(element))
+    }
+
+    override fun encodeTaggedNull(tag: String) {
+        addTag(tag, config.nullTag)
+    }
 
 }

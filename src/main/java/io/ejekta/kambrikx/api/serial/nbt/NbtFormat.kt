@@ -11,10 +11,7 @@ import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.plus
-import net.minecraft.nbt.AbstractNumberTag
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag
-import net.minecraft.nbt.Tag
+import net.minecraft.nbt.*
 
 @InternalSerializationApi
 @OptIn(ExperimentalSerializationApi::class)
@@ -33,6 +30,8 @@ class NbtFormatConfig {
     var serializersModule: SerializersModule = EmptySerializersModule
 
     var writePolymorphic = true
+
+    var nullTag: Tag = StringTag.of("_serial_null")
 }
 
 @OptIn(InternalSerializationApi::class)

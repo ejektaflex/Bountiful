@@ -34,7 +34,7 @@ class Bountiful : ModInitializer {
         ServerLifecycleEvents.SERVER_STARTING.register(ServerLifecycleEvents.ServerStarting { server ->
             listOf("plains", "savanna", "snowy", "taiga", "desert").forEach { villageType ->
 
-                LOGGER.error("Registering Bounty Board Jigsaw Piece for Village Type: $villageType")
+                LOGGER.info("Registering Bounty Board Jigsaw Piece for Village Type: $villageType")
 
                 Kambrik.Structure.addToStructurePool(
                     server,
