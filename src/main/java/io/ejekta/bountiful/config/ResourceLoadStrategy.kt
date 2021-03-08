@@ -17,7 +17,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
 
     private fun decode(fileText: String, newId: String): T? {
         return try {
-            Format.Normal.decodeFromString(decoder, fileText).apply {
+            JsonFormats.Hand.decodeFromString(decoder, fileText).apply {
                 id = newId
             }
         } catch (e: Exception) {

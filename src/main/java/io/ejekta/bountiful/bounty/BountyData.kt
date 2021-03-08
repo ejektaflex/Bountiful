@@ -2,7 +2,7 @@ package io.ejekta.bountiful.bounty
 
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.config.BountifulIO
-import io.ejekta.bountiful.config.Format
+import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.util.GameTime
 import io.ejekta.kambrikx.api.nbt.ItemData
 import kotlinx.serialization.Serializable
@@ -56,7 +56,7 @@ class BountyData {
     }
 
     override fun toString(): String {
-        return Format.DataPack.encodeToString(ser, this)
+        return JsonFormats.DataPack.encodeToString(ser, this)
     }
 
     // ### Formatting ### //

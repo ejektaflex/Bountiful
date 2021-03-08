@@ -7,6 +7,9 @@ import net.minecraft.structure.pool.StructurePoolElement
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 
+/**
+ * Accessed via [Kambrik.Structure][io.ejekta.kambrik.Kambrik.Structure]
+ */
 class KambrikStructureApi internal constructor() {
 
     // Meant to be called from inside of a ServerLifecycleEvents.SERVER_STARTING event

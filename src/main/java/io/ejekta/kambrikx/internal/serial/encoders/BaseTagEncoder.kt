@@ -42,6 +42,7 @@ abstract class BaseTagEncoder(
                 }
             }
             StructureKind.MAP -> TagMapEncoder(config, level + 1, propogate)
+            is PrimitiveKind -> TaglessEncoder(config)
             else -> throw Exception("Could not begin ! Was a: ${descriptor.kind}")
         }
     }
@@ -68,14 +69,14 @@ abstract class BaseTagEncoder(
 
     @ExperimentalSerializationApi
     override fun <T> encodeSerializableValue(serializer: SerializationStrategy<T>, value: T) {
-        //println("Desc kind: ${serializer.descriptor.kind}")
         if (value is Any) {
             val open = serializer.descriptor.kind is PolymorphicKind.OPEN
-            val serial = if (open) {
-                encodePolymorphic = true
-                getPolymorphicSerializer(serializer, value)
-            } else {
-                serializer
+            val serial = when (serializer.descriptor.kind) {
+                is PolymorphicKind.OPEN -> {
+                    encodePolymorphic = true
+                    getPolymorphicSerializer(serializer, value)
+                }
+                else -> serializer
             }
             @Suppress("UNNECESSARY_NOT_NULL_ASSERTION")
             config.logInfo(level, "Kind: ${serial.descriptor.kind::class.simpleName} (Value: ${value!!::class.simpleName}, Open: $open)")

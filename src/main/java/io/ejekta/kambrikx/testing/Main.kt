@@ -3,20 +3,35 @@
 package io.ejekta.kambrikx.testing
 
 import io.ejekta.kambrikx.api.serial.nbt.NbtFormat
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
+import io.ejekta.kambrikx.api.serial.serializers.StringTagSerializer
+import kotlinx.serialization.*
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
+import net.minecraft.nbt.StringTag
+import net.minecraft.nbt.Tag
 
 val serMod = SerializersModule {
     polymorphic(Vehicle::class) {
         subclass(Car::class, Car.serializer())
     }
+
+    //include(NbtFormat.BuiltInSerializers)
+
+
     polymorphic(Money::class) {
         subclass(Wallet::class, Wallet.serializer())
     }
+
+    //*
+    polymorphic(Tag::class) {
+        subclass(StringTag::class, StringTagSerializer)
+    }
+
+     //*/
+
+    contextual(StringTag::class, StringTagSerializer)
+
 }
 
 @InternalSerializationApi
@@ -24,10 +39,6 @@ val serMod = SerializersModule {
 val NbtFormatTest = NbtFormat {
     serializersModule = serMod
     writePolymorphic = true
-}
-
-val JsonTest = Json {
-    serializersModule = serMod
 }
 
 @Serializable
@@ -54,8 +65,8 @@ data class Person(val name: String, val money: Money)
 fun main(args: Array<String>) {
 
     @Serializable
-    data class SlingshotData(val timesUsed: Int?, val charges: Int)
-    val data = SlingshotData(null, 100)
+    data class SlingshotData(@Contextual val tag: StringTag)
+    val data = SlingshotData(StringTag.of("Hello!"))
 
     val asNbt = NbtFormatTest.encodeToTag(data)
     println("As Nbt: $asNbt") // => {timesUsed:0}

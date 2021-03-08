@@ -17,7 +17,7 @@ object Kambrik {
 
     val Logging = KambrikLoggingApi()
 
-    val Markers = KambrikLoggingMarkers()
+    internal val Markers = KambrikLoggingMarkers()
 
     internal val Logger = LogManager.getLogger("Kambrik")
 

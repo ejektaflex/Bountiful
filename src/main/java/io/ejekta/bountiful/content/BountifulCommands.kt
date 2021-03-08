@@ -67,7 +67,7 @@ object BountifulCommands : CommandRegistrationCallback {
             nbtData = if (player.mainHandStack == ItemStack.EMPTY) null else held.tag
         }
 
-        val saved = newPoolEntry.save(Format.Hand)
+        val saved = newPoolEntry.save(JsonFormats.Hand)
 
         println(saved)
         player.sendMessage(LiteralText(saved), MessageType.CHAT, player.uuid)

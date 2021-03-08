@@ -5,6 +5,7 @@ import io.ejekta.kambrikx.api.serial.nbt.NbtFormatConfig
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.PolymorphicKind
 import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.SerialKind
 import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.encoding.CompositeDecoder
 import kotlinx.serialization.internal.AbstractPolymorphicSerializer
@@ -43,7 +44,7 @@ abstract class BaseTagDecoder(
 
     @Suppress("UNCHECKED_CAST")
     @ExperimentalSerializationApi
-    private fun <T: Any> getPolymorphicDeserializer(ser: DeserializationStrategy<T>): DeserializationStrategy<out T> {
+    private fun <T : Any> getPolymorphicDeserializer(ser: DeserializationStrategy<T>): DeserializationStrategy<out T> {
         val abs = ser as AbstractPolymorphicSerializer<T>
         val typed = (currentTag() as CompoundTag).getString(config.classDiscriminator)
         if (typed == "") {
@@ -52,13 +53,24 @@ abstract class BaseTagDecoder(
         return abs.findPolymorphicSerializer(this, typed)
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
+    fun <T : Any> getContextualDeserialized(ser: ContextualSerializer<T>): T {
+        return ser.deserialize(this)
+    }
+
     @Suppress("UNCHECKED_CAST")
     @ExperimentalSerializationApi
     override fun <T> decodeSerializableValue(deserializer: DeserializationStrategy<T>): T {
 
+        println("About to try to decode $currentTagOrNull, ${currentTag()} (${currentTag()::class.simpleName}) with ${deserializer::class.qualifiedName}")
+        println("It is: ${deserializer.descriptor}")
+        println("It kind: ${deserializer.descriptor.kind}")
+
         if (deserializer !is AbstractPolymorphicSerializer<*>) {
             return deserializer.deserialize(this)
         }
+
+        println("Before Polymorphic is: $deserializer")
 
         val actualSerializer = getPolymorphicDeserializer(deserializer as DeserializationStrategy<Any>) as DeserializationStrategy<T>
 

@@ -1,6 +1,7 @@
 package io.ejekta.kambrikx.api.serial.nbt
 
 import io.ejekta.kambrik.Kambrik
+import io.ejekta.kambrikx.api.serial.serializers.StringTagSerializer
 import io.ejekta.kambrikx.internal.serial.decoders.TagDecoder
 import io.ejekta.kambrikx.internal.serial.decoders.TagMapDecoder
 import io.ejekta.kambrikx.internal.serial.decoders.TaglessDecoder
@@ -40,7 +41,11 @@ open class NbtFormat internal constructor(val config: NbtFormatConfig) : SerialF
     @OptIn(ExperimentalSerializationApi::class)
     override val serializersModule = EmptySerializersModule + config.serializersModule
 
-    companion object Default : NbtFormat(NbtFormatConfig())
+    companion object Default : NbtFormat(NbtFormatConfig()) {
+        val BuiltInSerializers = SerializersModule {
+            contextual(StringTag::class, StringTagSerializer)
+        }
+    }
 
     fun <T> encodeToTag(serializer: SerializationStrategy<T>, obj: T): Tag {
         return when (serializer.descriptor.kind) {

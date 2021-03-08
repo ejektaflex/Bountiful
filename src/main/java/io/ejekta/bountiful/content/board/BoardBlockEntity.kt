@@ -3,7 +3,6 @@ package io.ejekta.bountiful.content.board
 import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.data.Decree
-import io.ejekta.bountiful.config.Format
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyCreator
 import io.ejekta.bountiful.content.DecreeItem

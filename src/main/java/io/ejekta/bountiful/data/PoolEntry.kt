@@ -3,7 +3,7 @@ package io.ejekta.bountiful.data
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.BountyType
-import io.ejekta.bountiful.config.Format
+import io.ejekta.bountiful.config.JsonFormats
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import net.minecraft.nbt.StringNbtReader
@@ -35,7 +35,7 @@ class PoolEntry private constructor() {
             nbt = value?.asString()
         }
 
-    fun save(format: Json = Format.DataPack) = format.encodeToString(serializer(), this)
+    fun save(format: Json = JsonFormats.DataPack) = format.encodeToString(serializer(), this)
 
     fun toEntry(worth: Double? = null): BountyDataEntry {
         val amt = amountAt(worth)

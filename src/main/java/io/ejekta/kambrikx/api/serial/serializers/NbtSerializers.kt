@@ -17,10 +17,8 @@ import net.minecraft.nbt.Tag
 
 
 @Serializer(forClass = StringTag::class)
-object StringTagSer : KSerializer<StringTag> {
+object StringTagSerializer : KSerializer<StringTag> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("StringTaggy", PrimitiveKind.STRING)
-    override fun serialize(encoder: Encoder, value: StringTag) = encoder.doStructure(descriptor) {
-        println("Serializing string tag: $value")
-    }
+    override fun serialize(encoder: Encoder, value: StringTag) = encoder.encodeString(value.asString())
     override fun deserialize(decoder: Decoder): StringTag = StringTag.of(decoder.decodeString())
 }

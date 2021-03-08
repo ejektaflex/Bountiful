@@ -77,6 +77,16 @@ class BountyCreator private constructor(private val decrees: Set<Decree>, privat
         return toReturn
     }
 
+    private fun getAllPossibleObjectives(rewardPools: List<PoolEntry>): List<PoolEntry> {
+        return getObjectivesFor(decrees).filter {
+            it.content !in data.rewards.map { rew -> rew.content }
+        }.filter { entry ->
+            // obj entry can not be in any reward forbidlist
+            // no rew entry can be in this obj entry's forbidlist either
+            !entry.forbidsAny(rewardPools) && !rewardPools.any { it.forbids(entry) }
+        }
+    }
+
     private fun genObjectives(worth: Double, rewardPools: List<PoolEntry>): List<BountyDataEntry> {
         // -30 = 150% / 1.5x needed, 30 = 50% / 0.5x needed
         // 1 - (rep / 60.0)
@@ -85,13 +95,7 @@ class BountyCreator private constructor(private val decrees: Set<Decree>, privat
         val numObjectives = (1..2).random()
         val toReturn = mutableListOf<BountyDataEntry>()
 
-        val objs = getObjectivesFor(decrees).filter {
-            it.content !in data.rewards.map { rew -> rew.content }
-        }.filter { entry ->
-            // obj entry can not be in any reward forbidlist
-            // no rew entry can be in this obj entry's forbidlist either
-            !entry.forbidsAny(rewardPools) && !rewardPools.any { it.forbids(entry) }
-        }
+        val objs = getAllPossibleObjectives(rewardPools)
 
         val worthGroups = randomSplit(worthNeeded, numObjectives).toMutableList()
 

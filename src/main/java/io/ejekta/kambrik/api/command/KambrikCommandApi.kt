@@ -5,14 +5,13 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
 
+/**
+ * Accessed via [Kambrik.Command][io.ejekta.kambrik.Kambrik.Command]
+ */
 class KambrikCommandApi internal constructor() {
 
     fun hasBasicCreativePermission(c: ServerCommandSource): Boolean {
-        if (c.hasPermissionLevel(2) ||
-            (c.entity is PlayerEntity && c.player.isCreative)) {
-            return true
-        }
-        return false
+        return c.hasPermissionLevel(2) || (c.entity is PlayerEntity && c.player.isCreative)
     }
 
     // Meant to be called from inside of a CommandRegistrationCallback event
