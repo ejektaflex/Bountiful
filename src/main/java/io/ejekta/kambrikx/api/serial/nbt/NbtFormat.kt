@@ -1,9 +1,9 @@
 package io.ejekta.kambrikx.api.serial.nbt
 
 import io.ejekta.kambrik.Kambrik
-import io.ejekta.kambrikx.api.serial.serializers.StringTagSerializer
+import io.ejekta.kambrikx.api.serial.serializers.BlockPosSerializer
+import io.ejekta.kambrikx.api.serial.serializers.TagSerializer
 import io.ejekta.kambrikx.internal.serial.decoders.TagDecoder
-import io.ejekta.kambrikx.internal.serial.decoders.TagMapDecoder
 import io.ejekta.kambrikx.internal.serial.decoders.TaglessDecoder
 import io.ejekta.kambrikx.internal.serial.encoders.TagEncoder
 import io.ejekta.kambrikx.internal.serial.encoders.TaglessEncoder
@@ -13,6 +13,7 @@ import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.plus
 import net.minecraft.nbt.*
+import net.minecraft.util.math.BlockPos
 
 @InternalSerializationApi
 @OptIn(ExperimentalSerializationApi::class)
@@ -38,12 +39,40 @@ class NbtFormatConfig {
 @OptIn(InternalSerializationApi::class)
 open class NbtFormat internal constructor(val config: NbtFormatConfig) : SerialFormat {
 
+    constructor(configFunc: NbtFormatConfig.() -> Unit) : this(NbtFormatConfig().apply(configFunc))
+
     @OptIn(ExperimentalSerializationApi::class)
     override val serializersModule = EmptySerializersModule + config.serializersModule
 
     companion object Default : NbtFormat(NbtFormatConfig()) {
+        @Suppress("UNCHECKED_CAST")
         val BuiltInSerializers = SerializersModule {
-            contextual(StringTag::class, StringTagSerializer)
+
+            // Polymorphic
+
+
+            // Contextual
+
+            // Tags
+            contextual(Tag::class, TagSerializer)
+            contextual(IntTag::class, TagSerializer())
+            contextual(StringTag::class, TagSerializer())
+            contextual(DoubleTag::class, TagSerializer())
+            contextual(ByteTag::class, TagSerializer())
+            contextual(FloatTag::class, TagSerializer())
+            contextual(LongTag::class, TagSerializer())
+            contextual(ShortTag::class, TagSerializer())
+
+            // Complex Tags
+            contextual(LongArrayTag::class, TagSerializer())
+            contextual(IntArrayTag::class, TagSerializer())
+            contextual(ListTag::class, TagSerializer())
+
+            // Built in data classes
+            contextual(BlockPos::class, BlockPosSerializer)
+        }
+        val ReferenceSerializers = SerializersModule {
+
         }
     }
 
@@ -78,11 +107,6 @@ open class NbtFormat internal constructor(val config: NbtFormatConfig) : SerialF
     @OptIn(ExperimentalSerializationApi::class)
     inline fun <reified T> decodeFromTag(tag: Tag) = decodeFromTag<T>(EmptySerializersModule.serializer(), tag)
 
-}
-
-@OptIn(InternalSerializationApi::class)
-fun NbtFormat(config: NbtFormatConfig.() -> Unit): NbtFormat {
-    return NbtFormat(NbtFormatConfig().apply(config))
 }
 
 

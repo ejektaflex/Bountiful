@@ -3,10 +3,7 @@ package io.ejekta.kambrikx.internal.serial.decoders
 import io.ejekta.kambrikx.api.serial.nbt.NbtFormat
 import io.ejekta.kambrikx.api.serial.nbt.NbtFormatConfig
 import kotlinx.serialization.*
-import kotlinx.serialization.descriptors.PolymorphicKind
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.SerialKind
-import kotlinx.serialization.descriptors.StructureKind
+import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.CompositeDecoder
 import kotlinx.serialization.internal.AbstractPolymorphicSerializer
 import kotlinx.serialization.internal.NamedValueDecoder
@@ -62,15 +59,9 @@ abstract class BaseTagDecoder(
     @ExperimentalSerializationApi
     override fun <T> decodeSerializableValue(deserializer: DeserializationStrategy<T>): T {
 
-        println("About to try to decode $currentTagOrNull, ${currentTag()} (${currentTag()::class.simpleName}) with ${deserializer::class.qualifiedName}")
-        println("It is: ${deserializer.descriptor}")
-        println("It kind: ${deserializer.descriptor.kind}")
-
         if (deserializer !is AbstractPolymorphicSerializer<*>) {
             return deserializer.deserialize(this)
         }
-
-        println("Before Polymorphic is: $deserializer")
 
         val actualSerializer = getPolymorphicDeserializer(deserializer as DeserializationStrategy<Any>) as DeserializationStrategy<T>
 

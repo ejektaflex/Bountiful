@@ -16,7 +16,7 @@ class KambrikArgBuilder<A : ArgumentBuilder<ServerCommandSource, *>>(val arg: A)
 
     private val subArgs = mutableListOf<KambrikArgBuilder<*>>()
 
-    fun finalize(): A {
+    internal fun finalize(): A {
         for (subArg in subArgs) {
             arg.then(subArg.arg)
         }

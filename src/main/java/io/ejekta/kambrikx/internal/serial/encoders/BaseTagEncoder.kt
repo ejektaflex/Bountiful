@@ -42,7 +42,6 @@ abstract class BaseTagEncoder(
                 }
             }
             StructureKind.MAP -> TagMapEncoder(config, level + 1, propogate)
-            is PrimitiveKind -> TaglessEncoder(config)
             else -> throw Exception("Could not begin ! Was a: ${descriptor.kind}")
         }
     }
