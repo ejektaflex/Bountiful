@@ -10,7 +10,7 @@ import io.ejekta.bountiful.config.*
 import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.api.command.*
-import io.ejekta.kambrik.ext.id
+import io.ejekta.kambrik.ext.identifier
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
@@ -63,7 +63,7 @@ object BountifulCommands : CommandRegistrationCallback {
         val held = player.mainHandStack
 
         val newPoolEntry = PoolEntry.create().apply {
-            content = held.id.toString()
+            content = held.identifier.toString()
             nbtData = if (player.mainHandStack == ItemStack.EMPTY) null else held.tag
         }
 
@@ -91,7 +91,7 @@ object BountifulCommands : CommandRegistrationCallback {
         val held = player.mainHandStack
 
         val newPoolEntry = PoolEntry.create().apply {
-            content = held.id.toString()
+            content = held.identifier.toString()
             nbtData = held.tag
         }
 

@@ -2,6 +2,8 @@ package io.ejekta.kambrikx.api.serial.nbt
 
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrikx.api.serial.serializers.BlockPosSerializer
+import io.ejekta.kambrikx.api.serial.serializers.BoxSerializer
+import io.ejekta.kambrikx.api.serial.serializers.ItemRefSerializer
 import io.ejekta.kambrikx.api.serial.serializers.TagSerializer
 import io.ejekta.kambrikx.internal.serial.decoders.TagDecoder
 import io.ejekta.kambrikx.internal.serial.decoders.TaglessDecoder
@@ -12,23 +14,30 @@ import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.plus
+import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.*
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Box
 
-@InternalSerializationApi
-@OptIn(ExperimentalSerializationApi::class)
+@OptIn(InternalSerializationApi::class)
 class NbtFormatConfig {
 
     private val nbtEncodingMarker = Kambrik.Logging.createMarker("NBT-SERIAL")
 
     private val logger = Kambrik.Logger
 
+    var showDebug = false
+
     internal fun logInfo(level: Int, msg: String) {
-        logger.info(nbtEncodingMarker, "\t".repeat(level) + msg)
+        if (showDebug) {
+            logger.info(nbtEncodingMarker, "\t".repeat(level) + msg)
+        }
     }
 
     var classDiscriminator: String = "type"
 
+    @ExperimentalSerializationApi
     var serializersModule: SerializersModule = EmptySerializersModule
 
     var writePolymorphic = true
@@ -70,12 +79,16 @@ open class NbtFormat internal constructor(val config: NbtFormatConfig) : SerialF
 
             // Built in data classes
             contextual(BlockPos::class, BlockPosSerializer)
+            contextual(Box::class, BoxSerializer)
         }
-        val ReferenceSerializers = SerializersModule {
 
+        val ReferenceSerializers = SerializersModule {
+            contextual(Item::class, ItemRefSerializer)
         }
+
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     fun <T> encodeToTag(serializer: SerializationStrategy<T>, obj: T): Tag {
         return when (serializer.descriptor.kind) {
             is PrimitiveKind -> {

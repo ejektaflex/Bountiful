@@ -2,7 +2,7 @@ package io.ejekta.bountiful.bounty.logic
 
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
-import io.ejekta.kambrik.ext.id
+import io.ejekta.kambrik.ext.identifier
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
@@ -28,7 +28,7 @@ object ItemLogic : IEntryLogic {
         val selected = mutableMapOf<ItemStack, Int>()
         var needed = entry.amount
         for (stack in player.inventory.main) {
-            if (stack.id.toString() == entry.content) {
+            if (stack.identifier.toString() == entry.content) {
                 val num = selected.getOrPut(stack) { 0 }
 
                 val weNeed = min(needed, stack.count)

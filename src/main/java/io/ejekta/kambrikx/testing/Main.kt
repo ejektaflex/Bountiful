@@ -1,17 +1,15 @@
 @file:Suppress("EXPERIMENTAL_API_USAGE")
-
 package io.ejekta.kambrikx.testing
 
-import io.ejekta.kambrik.ext.toTag
+import io.ejekta.kambrik.ext.unwrapToTag
+import io.ejekta.kambrik.ext.wrapToPacketByteBuf
 import io.ejekta.kambrikx.api.serial.nbt.NbtFormat
-import io.ejekta.kambrikx.api.serial.serializers.BlockPosSerializer
-import io.ejekta.kambrikx.api.serial.serializers.TagSerializer
-import kotlinx.serialization.*
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
-import kotlinx.serialization.modules.subclass
-import net.minecraft.client.realms.util.JsonUtils
-import net.minecraft.nbt.*
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.util.math.BlockPos
 
 val serMod = SerializersModule {
@@ -25,11 +23,10 @@ val serMod = SerializersModule {
     }
 
     include(NbtFormat.BuiltInSerializers)
+    //include(NbtFormat.ReferenceSerializers)
 
 }
 
-@InternalSerializationApi
-@ExperimentalSerializationApi
 val NbtFormatTest = NbtFormat {
     serializersModule = serMod
     writePolymorphic = true
@@ -55,21 +52,17 @@ data class Wallet(val amount: Double) : Money
 data class Person(val name: String, val money: Money)
 
 
-@InternalSerializationApi
 fun main(args: Array<String>) {
 
     @Serializable
-    data class SlingshotData(val name: String, @Contextual val tag: ListTag)
-    val data = SlingshotData("Bob", ListTag().apply {
-        add(LongArrayTag(longArrayOf(4L, 6L, 8L)))
-    })
+    data class SlingshotData(val name: String,  val pos: @Contextual BlockPos)
+    val data = SlingshotData("Bob", BlockPos(1, 2, 3))
 
     val asNbt = NbtFormatTest.encodeToTag(data)
     println("As Nbt: $asNbt") // => {name:"Bob",tag:'{hello:"there"}'}
 
     val asObj = NbtFormatTest.decodeFromTag<SlingshotData>(asNbt)
     println("As Obj: $asObj") // => SlingshotData(name=Bob, tag={hello:"there"})
-
 
 
     /*
