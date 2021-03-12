@@ -2,11 +2,8 @@
 package io.ejekta.bountiful
 
 import io.ejekta.bountiful.config.BountifulIO
-import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrikx.api.serial.serializers.IdentitySer
-import io.ejekta.kambrikx.api.serial.serializers.ItemRefSerializer
-import io.ejekta.kambrikx.testing.NbtFormatTest
 import kotlinx.serialization.UseSerializers
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
@@ -21,9 +18,6 @@ class Bountiful : ModInitializer {
         const val ID = "bountiful"
         fun id(str: String) = Identifier(ID, str)
         val LOGGER = Kambrik.Logging.createLogger(ID)
-        val Markers = object {
-            val BountyCreation = Kambrik.Logging.createMarker("BountyCreation")
-        }
     }
 
     init {
@@ -45,13 +39,6 @@ class Bountiful : ModInitializer {
                     Identifier("minecraft:village/$villageType/houses"),
                     10_000
                 )
-
-                val itemToSer = BountifulContent.BOARD_ITEM
-                val converted = NbtFormatTest.encodeToTag(ItemRefSerializer, itemToSer)
-                println("Converted: $converted")
-
-                val back = NbtFormatTest.decodeFromTag(ItemRefSerializer, converted)
-                println("Back: $back")
 
             }
         })
