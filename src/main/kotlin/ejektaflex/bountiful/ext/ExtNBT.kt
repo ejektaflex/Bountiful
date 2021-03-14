@@ -31,7 +31,7 @@ fun CompoundNBT.setUnsortedListOfNbt(key: String, items: Set<CompoundNBT>) {
 }
 
 fun CompoundNBT.getUnsortedList(key: String): Set<CompoundNBT> {
-    val listTag = get(key) as CompoundNBT
+    val listTag = get(key) as? CompoundNBT ?: return setOf()
     return listTag.keySet().map { index ->
         listTag.get(index) as CompoundNBT
     }.toSet()

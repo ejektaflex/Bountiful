@@ -8,6 +8,7 @@ import ejektaflex.bountiful.data.structure.DecreeList
 import ejektaflex.bountiful.ext.*
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.item.Item
+import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundNBT
 import net.minecraft.util.text.ITextComponent
@@ -24,7 +25,7 @@ import net.minecraftforge.api.distmarker.OnlyIn
  * @constructor Creates a new Decree item.
  */
 class ItemDecree : Item(
-        Properties().maxStackSize(1).group(BountifulContent.BountifulGroup)
+        Properties().maxStackSize(1).group(ItemGroup.MISC)
 ) {
 
     /**

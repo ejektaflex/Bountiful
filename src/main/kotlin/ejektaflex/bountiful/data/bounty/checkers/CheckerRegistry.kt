@@ -24,9 +24,9 @@ object CheckerRegistry : ValueRegistry<KClass<out CheckHandler<*>>>() {
             inst
         }
 
-        println("Checkers: $checkers")
+        //println("Checkers: $checkers")
         val passesAll = checkers.all { it.isComplete }
-        println("Passes all checks?: $passesAll")
+        //println("Passes all checks?: $passesAll")
 
         if (passesAll) {
             checkers.forEach {

@@ -1,22 +1,31 @@
 package ejektaflex.bountiful.gui
 
 import com.mojang.blaze3d.matrix.MatrixStack
+import com.mojang.blaze3d.systems.RenderSystem
 import ejektaflex.bountiful.BountifulMod
 import net.minecraft.client.gui.screen.inventory.ContainerScreen
 import net.minecraft.client.resources.I18n
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.ITextComponent
+import net.minecraft.util.text.TranslationTextComponent
 
 class BoardScreen(container: BoardContainer, inv: PlayerInventory, name: ITextComponent) : ContainerScreen<BoardContainer>(container, inv, name) {
 
     override fun drawGuiContainerForegroundLayer(matrixStack: MatrixStack, mouseX: Int, mouseY: Int) {
         // 'Bounty Board'
         val name = I18n.format("block.bountiful.bountyboard")
-        font.drawString(matrixStack, name, xSize / 2 - font.getStringWidth(name) - 12f, 6f, 0x170e0b)
+
+        font.func_243246_a(
+            matrixStack,
+            TranslationTextComponent("block.bountiful.bountyboard"),
+            xSize / 2 - font.getStringWidth(name) - 12f,
+            6f,
+            0xEADAB5
+        )
 
         // 'Inventory'
-        font.drawString(matrixStack, playerInventory.displayName.unformattedComponentText, 8f, ySize - 93f, 0x170e0b)
+        font.func_243246_a(matrixStack, playerInventory.displayName, 8f, ySize - 93f, 0xEADAB5)
         super.drawGuiContainerForegroundLayer(matrixStack, mouseX, mouseY)
     }
 

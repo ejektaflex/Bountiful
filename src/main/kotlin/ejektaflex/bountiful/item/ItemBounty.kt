@@ -17,6 +17,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
+import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Rarity
 import net.minecraft.util.ActionResult
@@ -33,7 +34,7 @@ import java.util.*
 
 
 class ItemBounty : Item(
-        Properties().maxStackSize(1).group(BountifulContent.BountifulGroup)
+        Properties().maxStackSize(1).group(ItemGroup.MISC)
 ), IForgeRegistryEntry<Item> {
 
     /**

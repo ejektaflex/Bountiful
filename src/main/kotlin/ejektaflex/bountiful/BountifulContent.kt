@@ -36,17 +36,13 @@ object BountifulContent {
     }
 
     val BOUNTYBOARDITEM by ItemRegistry.registerObject("bountyboard") {
-        BlockItem(BOUNTYBOARD, Item.Properties().group(BountifulGroup))
+        BlockItem(BOUNTYBOARD, Item.Properties().group(ItemGroup.MISC))
     }
 
     val DECREE by ItemRegistry.registerObject("decree", ::ItemDecree)
 
     val BOARDCONTAINER: ContainerType<BoardContainer> by ContainerRegistry.registerObject("bountyboard") {
         IForgeContainerType.create(::BoardContainer)
-    }
-
-    object BountifulGroup : ItemGroup(BountifulMod.MODID) {
-        override fun createIcon() = ItemStack(DECREE)
     }
 
 }

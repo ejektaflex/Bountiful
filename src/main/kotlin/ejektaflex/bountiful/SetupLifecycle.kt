@@ -23,6 +23,7 @@ import net.minecraftforge.event.AnvilUpdateEvent
 import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.event.entity.living.LivingDeathEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
+import net.minecraftforge.fml.ModList
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent
 import thedarkcolour.kotlinforforge.forge.FORGE_BUS
@@ -56,6 +57,20 @@ object SetupLifecycle {
                         BountifulConfig.SERVER.villageGenRate.get()
                     )
                 }
+
+                if (ModList.get().isLoaded("repurposed_structures")) {
+                    BountifulMod.logger.info("Registering Bounty Board Jigsaw Piece for Repurposed Structures")
+                    listOf("badlands", "birch", "crimson", "dark_forest", "giant_taiga", "jungle", "mountains",
+                    "oak", "swamp", "warped").forEach { villageType ->
+                        JigsawHelper.registerJigsaw(
+                            event.server,
+                            ResourceLocation("bountiful:village/common/bounty_gazebo"),
+                            ResourceLocation("repurposed_structures:village/$villageType/houses"),
+                            BountifulConfig.SERVER.villageGenRate.get()
+                        )
+                    }
+                }
+
             }
         }
 
