@@ -54,6 +54,7 @@ object SetupLifecycle {
                         event.server,
                         ResourceLocation("bountiful:village/common/bounty_gazebo"),
                         ResourceLocation("minecraft:village/$villageType/houses"),
+                        ResourceLocation("bountiful:$villageType"),
                         BountifulConfig.SERVER.villageGenRate.get()
                     )
                 }
@@ -66,6 +67,7 @@ object SetupLifecycle {
                             event.server,
                             ResourceLocation("bountiful:village/common/bounty_gazebo"),
                             ResourceLocation("repurposed_structures:village/$villageType/houses"),
+                            ResourceLocation("bountiful:$villageType"),
                             BountifulConfig.SERVER.villageGenRate.get()
                         )
                     }
