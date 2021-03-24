@@ -65,17 +65,18 @@ class BountyData {
         return GameTime.formatTimeExpirable(timeLeft(world) / 20)
     }
 
+    @OptIn(ExperimentalStdlibApi::class)
     fun tooltipInfo(world: World): List<Text> {
-        val lines = mutableListOf<Text>()
-        lines += TranslatableText("bountiful.tooltip.required").formatted(Formatting.GOLD).append(":")
-        lines += objectives.map {
-            it.formatted(this, MinecraftClient.getInstance().player!!, true)
+        return buildList {
+            add(TranslatableText("bountiful.tooltip.required").formatted(Formatting.GOLD).append(":"))
+            addAll(objectives.map {
+                it.formatted(this@BountyData, MinecraftClient.getInstance().player!!, true)
+            })
+            add(TranslatableText("bountiful.tooltip.rewards").formatted(Formatting.GOLD).append(":"))
+            addAll(rewards.map {
+                it.formatted(this@BountyData, MinecraftClient.getInstance().player!!, false)
+            })
         }
-        lines += TranslatableText("bountiful.tooltip.rewards").formatted(Formatting.GOLD).append(":")
-        lines += rewards.map {
-            it.formatted(this, MinecraftClient.getInstance().player!!, false)
-        }
-        return lines
     }
 
     companion object : ItemData<BountyData>() {

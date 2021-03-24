@@ -41,9 +41,7 @@ repositories {
 	}
 }
 
-minecraft {
-
-}
+minecraft { }
 
 dependencies {
 	//to change the versions see the gradle.properties file
@@ -52,7 +50,7 @@ dependencies {
 	modImplementation("net.fabricmc:fabric-loader:${loaderVersion}")
 
 	// Kambrik API
-	modImplementation("io.ejekta:kambrik:0.2.1-SNAPSHOT")
+	modImplementation("io.ejekta:kambrik:0.2.1-SNAPSHOT+")
 
 	modApi("me.shedaniel.cloth:config-2:4.8.3") {
 		exclude(group = "net.fabricmc.fabric-api")
