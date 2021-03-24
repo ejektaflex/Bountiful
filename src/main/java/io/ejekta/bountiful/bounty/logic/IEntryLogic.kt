@@ -12,11 +12,11 @@ interface IEntryLogic {
 
     fun format(entry: BountyDataEntry, isObj: Boolean, progress: Pair<Int, Int>): Text
 
-    fun getProgress(data: BountyData, entry: BountyDataEntry, player: PlayerEntity): Pair<Int, Int>
+    fun getProgress(entry: BountyDataEntry, player: PlayerEntity): Pair<Int, Int>
 
-    fun finishObjective(data: BountyData, entry: BountyDataEntry, player: PlayerEntity): Boolean
+    fun finishObjective(entry: BountyDataEntry, player: PlayerEntity): Boolean
 
-    fun giveReward(data: BountyData, entry: BountyDataEntry, player: PlayerEntity): Boolean
+    fun giveReward(entry: BountyDataEntry, player: PlayerEntity): Boolean
 
     // ### Helpers ###
 

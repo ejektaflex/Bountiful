@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.bounty
 
+import io.ejekta.bountiful.bounty.logic.IEntryLogic
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.entity.player.PlayerEntity
@@ -19,7 +20,8 @@ data class BountyDataEntry(
     var name: String? = null,
     var isMystery: Boolean = false,
     var rarity: BountyRarity = BountyRarity.COMMON
-) {
+) : IEntryLogic by type.logic { // TODO find out if this will error along with serialization?
+    // TODO perhaps make it into `type.logicFor(this)` but this might be just the companion object
 
     @Transient
     var worth = Double.MIN_VALUE
@@ -42,7 +44,7 @@ data class BountyDataEntry(
                 LiteralText("x$amount").formatted(Formatting.WHITE)
             )
             false -> {
-                val progress = type.logic.getProgress(data, this, player)
+                val progress = type.logic.getProgress(this, player)
                 type.logic.format(this, isObj, progress)
             }
         }

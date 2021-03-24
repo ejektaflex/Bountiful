@@ -33,6 +33,18 @@ class BountyData {
         }
     }
 
+    private fun hasFinishedObjectives(player: PlayerEntity): Boolean {
+        return objectives.all {
+            it().finishObjective(it, player)
+        }
+    }
+
+    private fun rewardPlayer(player: PlayerEntity) {
+        for (reward in rewards) {
+            reward().giveReward(reward, player)
+        }
+    }
+
     fun tryCashIn(player: PlayerEntity, stack: ItemStack): Boolean {
 
         if (timeLeft(player.world) <= 0) {
@@ -40,12 +52,8 @@ class BountyData {
             return false
         }
 
-        val objs = objectives.map {
-            it().finishObjective(this, it, player)
-        }
-
-        return if (objs.all { it }) {
-            rewards.forEach { it().giveReward(this, it, player) }
+        return if (hasFinishedObjectives(player)) {
+            rewardPlayer(player)
             stack.decrement(stack.maxCount)
             true
         } else {

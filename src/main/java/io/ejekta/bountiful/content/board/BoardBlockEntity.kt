@@ -198,7 +198,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
         )
 
         val doneMap = tag.getCompound("completed")
-        finishMap = NbtFormat.decodeFromTag(finishSerializer, doneMap).toMutableMap()
+        finishMap = NbtFormat.Default.decodeFromTag(finishSerializer, doneMap).toMutableMap()
 
         val bountyList = tag.getList("bounty_inv", 10) ?: return
         bountyList.forEach { tagged ->
@@ -215,7 +215,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
     override fun toTag(tag: CompoundTag?): CompoundTag? {
         super.toTag(tag)
 
-        val doneMap = NbtFormat.encodeToTag(finishSerializer, finishMap)
+        val doneMap = NbtFormat.Default.encodeToTag(finishSerializer, finishMap)
 
         tag?.put("completed", doneMap)
 
