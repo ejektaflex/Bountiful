@@ -5,8 +5,8 @@ import io.ejekta.bountiful.bounty.logic.*
 enum class BountyType(
     val isObj: Boolean = true,
     val isReward: Boolean = false,
-    val logic: IEntryLogic
+    val logic: (entry: BountyDataEntry) -> IEntryLogic
 ) {
-    NULL(isObj = false, isReward = true, NullLogic), // whatevs
-    ITEM(isObj = true, isReward = true, ItemLogic)
+    NULL(isObj = false, isReward = true, { NullLogic }), // whatevs
+    ITEM(isObj = true, isReward = true, ::ItemLogic)
 }

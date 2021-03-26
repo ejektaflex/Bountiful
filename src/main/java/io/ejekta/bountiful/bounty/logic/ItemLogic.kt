@@ -13,9 +13,9 @@ import net.minecraft.util.registry.Registry
 import kotlin.math.min
 
 
-object ItemLogic : IEntryLogic {
+class ItemLogic(override val entry: BountyDataEntry) : IEntryLogic {
 
-    private fun getNeeded(entry: BountyDataEntry, player: PlayerEntity): Map<ItemStack, Int> {
+    private fun getCurrentStacks(player: PlayerEntity): Map<ItemStack, Int> {
         val selected = mutableMapOf<ItemStack, Int>()
         var needed = entry.amount
         for (stack in player.inventory.main) {
@@ -34,21 +34,21 @@ object ItemLogic : IEntryLogic {
         return selected
     }
 
-    override fun format(entry: BountyDataEntry, isObj: Boolean, progress: Pair<Int, Int>): Text {
+    override fun format(isObj: Boolean, progress: Progress): Text {
         val item = Registry.ITEM.get(Identifier(entry.content))
         return when (isObj) {
-            true -> item.name.colored(progress).append(progress.needed.colored(Formatting.WHITE))
-            false -> progress.giving.append(item.name.colored(entry.rarity.color))
+            true -> item.name.copy().formatted(progress.color).append(progress.neededText.colored(Formatting.WHITE))
+            false -> progress.givingText.append(item.name.colored(entry.rarity.color))
         }
     }
 
-    override fun getProgress(entry: BountyDataEntry, player: PlayerEntity): Pair<Int, Int> {
-        val needed = getNeeded(entry, player)
-        return needed.values.sum() to entry.amount
+    override fun getProgress(player: PlayerEntity): Progress {
+        val needed = getCurrentStacks(player)
+        return Progress(needed.values.sum(), entry.amount)
     }
 
-    override fun finishObjective(entry: BountyDataEntry, player: PlayerEntity): Boolean {
-        val needed = getNeeded(entry, player)
+    override fun finishObjective(player: PlayerEntity): Boolean {
+        val needed = getCurrentStacks(player)
         return if (needed.values.sum() >= entry.amount) { // completed
             needed.forEach { (stack, toShrink) ->
                 stack.decrement(toShrink)
@@ -59,7 +59,7 @@ object ItemLogic : IEntryLogic {
         }
     }
 
-    override fun giveReward(entry: BountyDataEntry, player: PlayerEntity): Boolean {
+    override fun giveReward(player: PlayerEntity): Boolean {
         val item = Registry.ITEM[Identifier(entry.content)]
         val toGive = (0 until entry.amount).chunked(item.maxCount).map { it.size }
 

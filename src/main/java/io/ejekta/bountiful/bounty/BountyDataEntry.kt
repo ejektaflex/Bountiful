@@ -20,8 +20,10 @@ data class BountyDataEntry(
     var name: String? = null,
     var isMystery: Boolean = false,
     var rarity: BountyRarity = BountyRarity.COMMON
-) : IEntryLogic by type.logic { // TODO find out if this will error along with serialization?
-    // TODO perhaps make it into `type.logicFor(this)` but this might be just the companion object
+) {
+
+    val logic: IEntryLogic
+        get() = type.logic(this)
 
     @Transient
     var worth = Double.MIN_VALUE
@@ -36,16 +38,14 @@ data class BountyDataEntry(
         return "BDE[type=$type, content=$content, amount=$amount, isNbtNull=${nbt == null}, name=$name, mystery=$isMystery]"
     }
 
-    operator fun invoke() = type.logic
-
     fun formatted(data: BountyData, player: PlayerEntity, isObj: Boolean): Text {
         return when (isMystery) {
             true -> LiteralText("???").formatted(Formatting.BOLD).append(
                 LiteralText("x$amount").formatted(Formatting.WHITE)
             )
             false -> {
-                val progress = type.logic.getProgress(this, player)
-                type.logic.format(this, isObj, progress)
+                val progress = logic.getProgress(player)
+                logic.format(isObj, progress)
             }
         }
 

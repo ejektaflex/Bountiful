@@ -35,13 +35,13 @@ class BountyData {
 
     private fun hasFinishedObjectives(player: PlayerEntity): Boolean {
         return objectives.all {
-            it().finishObjective(it, player)
+            it.logic.finishObjective(player)
         }
     }
 
     private fun rewardPlayer(player: PlayerEntity) {
         for (reward in rewards) {
-            reward().giveReward(reward, player)
+            reward.logic.giveReward(player)
         }
     }
 

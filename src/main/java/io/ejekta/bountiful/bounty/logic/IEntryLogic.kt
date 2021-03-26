@@ -1,6 +1,5 @@
 package io.ejekta.bountiful.bounty.logic
 
-import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.LiteralText
@@ -10,13 +9,15 @@ import net.minecraft.util.Formatting
 
 interface IEntryLogic {
 
-    fun format(entry: BountyDataEntry, isObj: Boolean, progress: Pair<Int, Int>): Text
+    val entry: BountyDataEntry
 
-    fun getProgress(entry: BountyDataEntry, player: PlayerEntity): Pair<Int, Int>
+    fun format(isObj: Boolean, progress: Progress): Text
 
-    fun finishObjective(entry: BountyDataEntry, player: PlayerEntity): Boolean
+    fun getProgress(player: PlayerEntity): Progress
 
-    fun giveReward(entry: BountyDataEntry, player: PlayerEntity): Boolean
+    fun finishObjective(player: PlayerEntity): Boolean
+
+    fun giveReward(player: PlayerEntity): Boolean
 
     // ### Helpers ###
 
