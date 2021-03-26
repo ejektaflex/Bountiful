@@ -33,7 +33,11 @@
                 "max": 1
             },
             "unitWorth": 2700,
-            "nbt": "{Damage:0}"
+            "nbt": "{Damage:0}",
+            "forbids": {
+                "type": "ITEM",
+                "content": "minecraft:iron_ingot"
+            }
         },
 
         {

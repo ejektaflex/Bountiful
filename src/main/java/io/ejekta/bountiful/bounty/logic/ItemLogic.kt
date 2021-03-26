@@ -34,7 +34,8 @@ class ItemLogic(override val entry: BountyDataEntry) : IEntryLogic {
         return selected
     }
 
-    override fun format(isObj: Boolean, progress: Progress): Text {
+    override fun format(isObj: Boolean, player: PlayerEntity): Text {
+        val progress = getProgress(player)
         val item = Registry.ITEM.get(Identifier(entry.content))
         return when (isObj) {
             true -> item.name.copy().formatted(progress.color).append(progress.neededText.colored(Formatting.WHITE))
@@ -47,7 +48,7 @@ class ItemLogic(override val entry: BountyDataEntry) : IEntryLogic {
         return Progress(needed.values.sum(), entry.amount)
     }
 
-    override fun finishObjective(player: PlayerEntity): Boolean {
+    override fun tryFinishObjective(player: PlayerEntity): Boolean {
         val needed = getCurrentStacks(player)
         return if (needed.values.sum() >= entry.amount) { // completed
             needed.forEach { (stack, toShrink) ->

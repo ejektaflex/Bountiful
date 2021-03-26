@@ -14,8 +14,8 @@ data class Decree(
     ) : IMerge<Decree> {
 
     val objectivePools: List<Pool>
-        get() = objectives.map { id ->
-            BountifulContent.Pools.first { it.id == id }
+        get() = objectives.mapNotNull { id ->
+            BountifulContent.Pools.find { it.id == id }
         }
 
     val allPoolIds: Set<String>
@@ -25,8 +25,8 @@ data class Decree(
         get() = TranslatableText("bountiful.decree.$id.name")
 
     val rewardPools: List<Pool>
-        get() = rewards.map { id ->
-            BountifulContent.Pools.first { it.id == id }
+        get() = rewards.mapNotNull { id ->
+            BountifulContent.Pools.find { it.id == id }
         }
 
     override fun merge(other: Decree) {

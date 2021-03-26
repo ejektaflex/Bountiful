@@ -8,5 +8,6 @@ enum class BountyType(
     val logic: (entry: BountyDataEntry) -> IEntryLogic
 ) {
     NULL(isObj = false, isReward = true, { NullLogic }), // whatevs
-    ITEM(isObj = true, isReward = true, ::ItemLogic)
+    ITEM(isObj = true, isReward = true, ::ItemLogic),
+    ENTITY(isObj = true, isReward = false, ::EntityLogic)
 }

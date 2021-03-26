@@ -14,7 +14,7 @@ object NullLogic : IEntryLogic {
         return Exception("Cannot interact with a null logic object!")
     }
 
-    override fun format(isObj: Boolean, progress: Progress): Text {
+    override fun format(isObj: Boolean, player: PlayerEntity): Text {
         throw logicUsageError()
     }
 
@@ -22,7 +22,7 @@ object NullLogic : IEntryLogic {
         throw logicUsageError()
     }
 
-    override fun finishObjective(player: PlayerEntity): Boolean {
+    override fun tryFinishObjective(player: PlayerEntity): Boolean {
         throw logicUsageError()
     }
 

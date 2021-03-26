@@ -10,7 +10,11 @@
                 "max": 1
             },
             "unitWorth": 4000,
-            "nbt": "{Damage:0}"
+            "nbt": "{Damage:0}",
+            "forbids": {
+                "type": "ITEM",
+                "content": "minecraft:iron_ingot"
+            }
         },
 
         {
@@ -21,7 +25,11 @@
                 "max": 1
             },
             "unitWorth": 6400,
-            "nbt": "{Damage:0}"
+            "nbt": "{Damage:0}",
+            "forbids": {
+                "type": "ITEM",
+                "content": "minecraft:iron_ingot"
+            }
         },
 
         {
@@ -32,7 +40,11 @@
                 "max": 1
             },
             "unitWorth": 5600,
-            "nbt": "{Damage:0}"
+            "nbt": "{Damage:0}",
+            "forbids": {
+                "type": "ITEM",
+                "content": "minecraft:iron_ingot"
+            }
         },
 
         {
@@ -43,7 +55,11 @@
                 "max": 1
             },
             "unitWorth": 3200,
-            "nbt": "{Damage:0}"
+            "nbt": "{Damage:0}",
+            "forbids": {
+                "type": "ITEM",
+                "content": "minecraft:iron_ingot"
+            }
         },
 
         {
@@ -66,7 +82,11 @@
                 "max": 1
             },
             "unitWorth": 4200,
-            "nbt": "{Damage:0}"
+            "nbt": "{Damage:0}",
+            "forbids": {
+                "type": "ITEM",
+                "content": "minecraft:iron_ingot"
+            }
         },
 
         {
@@ -78,7 +98,11 @@
                 "max": 1
             },
             "unitWorth": 2400,
-            "nbt": "{Damage:0}"
+            "nbt": "{Damage:0}",
+            "forbids": {
+                "type": "ITEM",
+                "content": "minecraft:iron_ingot"
+            }
         },
 
         {
@@ -90,7 +114,11 @@
                 "max": 1
             },
             "unitWorth": 1000,
-            "nbt": "{Damage:0}"
+            "nbt": "{Damage:0}",
+            "forbids": {
+                "type": "ITEM",
+                "content": "minecraft:iron_ingot"
+            }
         },
 
         {
@@ -112,7 +140,11 @@
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 5000
+            "unitWorth": 5000,
+            "forbids": {
+                "type": "ITEM",
+                "content": "minecraft:iron_ingot"
+            }
         },
 
         {

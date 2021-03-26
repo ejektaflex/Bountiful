@@ -35,7 +35,7 @@ class BountyData {
 
     private fun hasFinishedObjectives(player: PlayerEntity): Boolean {
         return objectives.all {
-            it.logic.finishObjective(player)
+            it.logic.tryFinishObjective(player)
         }
     }
 

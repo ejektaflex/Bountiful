@@ -1,9 +1,11 @@
 package io.ejekta.bountiful.bounty
 
 import io.ejekta.bountiful.bounty.logic.IEntryLogic
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.StringNbtReader
 import net.minecraft.nbt.Tag
 import net.minecraft.text.LiteralText
@@ -19,7 +21,8 @@ data class BountyDataEntry(
     var nbt: String? = null,
     var name: String? = null,
     var isMystery: Boolean = false,
-    var rarity: BountyRarity = BountyRarity.COMMON
+    var rarity: BountyRarity = BountyRarity.COMMON,
+    var extra: Int = Int.MIN_VALUE // Used to track extra data, e.g. current progress if needed
 ) {
 
     val logic: IEntryLogic
@@ -43,10 +46,7 @@ data class BountyDataEntry(
             true -> LiteralText("???").formatted(Formatting.BOLD).append(
                 LiteralText("x$amount").formatted(Formatting.WHITE)
             )
-            false -> {
-                val progress = logic.getProgress(player)
-                logic.format(isObj, progress)
-            }
+            false -> logic.format(isObj, player)
         }
 
     }

@@ -28,7 +28,11 @@
 				"min": 1,
 				"max": 16
 			},
-			"unitWorth": 400
+			"unitWorth": 400,
+			"forbids": {
+				"type": "ITEM",
+				"content": "minecraft:iron_ingot"
+			}
 		},
 
 		{
@@ -38,7 +42,11 @@
 				"min": 4,
 				"max": 24
 			},
-			"unitWorth": 150
+			"unitWorth": 150,
+			"forbids": {
+				"type": "ITEM",
+				"content": "minecraft:iron_ingot"
+			}
 		},
 
 		{

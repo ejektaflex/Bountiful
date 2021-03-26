@@ -1,7 +1,6 @@
 {
 	"content": [
 
-
 		{
 			"type": "ITEM",
 			"content": "minecraft:stone_shovel",
@@ -33,7 +32,11 @@
 				"max": 1
 			},
 			"unitWorth": 1800,
-			"nbt": "{Damage:0}"
+			"nbt": "{Damage:0}",
+			"forbids": {
+				"type": "ITEM",
+				"content": "minecraft:iron_ingot"
+			}
 		},
 
 		{
@@ -45,10 +48,12 @@
 				"max": 1
 			},
 			"unitWorth": 600,
-			"nbt": "{Damage:0}"
+			"nbt": "{Damage:0}",
+			"forbids": {
+				"type": "ITEM",
+				"content": "minecraft:iron_ingot"
+			}
 		}
-
-
 
 	]
 

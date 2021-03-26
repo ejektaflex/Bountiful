@@ -23,7 +23,7 @@ class PoolEntry private constructor() {
     var weightMult = 1.0
     var timeMult = 1.0
     var repRequired = 0.0
-    val forbid: MutableList<ForbiddenContent> = mutableListOf()
+    private val forbids: MutableList<ForbiddenContent> = mutableListOf()
 
     var mystery: Boolean = false
 
@@ -44,7 +44,7 @@ class PoolEntry private constructor() {
         }
     }
 
-    fun amountAt(worth: Double? = null): Int {
+    private fun amountAt(worth: Double? = null): Int {
         var toGive = if (worth != null) {
             max(1, ceil(worth.toDouble() / unitWorth).toInt())
         } else {
@@ -56,7 +56,7 @@ class PoolEntry private constructor() {
         return toGive
     }
 
-    val worthRange: Pair<Double, Double>
+    private val worthRange: Pair<Double, Double>
         get() = (amount.min * unitWorth) to (amount.max * unitWorth)
 
     fun worthDistanceFrom(value: Double): Int {
@@ -69,7 +69,7 @@ class PoolEntry private constructor() {
     }
 
     fun forbids(entry: PoolEntry): Boolean {
-        return forbid.any { it.type == entry.type && it.content == entry.content }
+        return forbids.any { it.type == entry.type && it.content == entry.content }
     }
 
     fun forbidsAny(entries: List<PoolEntry>): Boolean {

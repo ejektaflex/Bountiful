@@ -11,11 +11,11 @@ interface IEntryLogic {
 
     val entry: BountyDataEntry
 
-    fun format(isObj: Boolean, progress: Progress): Text
+    fun format(isObj: Boolean, player: PlayerEntity): Text
 
     fun getProgress(player: PlayerEntity): Progress
 
-    fun finishObjective(player: PlayerEntity): Boolean
+    fun tryFinishObjective(player: PlayerEntity): Boolean
 
     fun giveReward(player: PlayerEntity): Boolean
 

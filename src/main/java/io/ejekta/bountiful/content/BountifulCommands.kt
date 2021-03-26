@@ -139,7 +139,7 @@ object BountifulCommands : CommandRegistrationCallback {
     private fun gen() = playerCommand { player ->
         try {
             val rep = getInt("rep")
-            val bd = BountyCreator.create(BountifulContent.Decrees.toSet(), rep)
+            val bd = BountyCreator.create(BountifulContent.Decrees.toSet(), rep, player.world.time)
             player.giveItemStack(BountyItem.create(bd))
         } catch (e: Exception) {
             e.printStackTrace()
