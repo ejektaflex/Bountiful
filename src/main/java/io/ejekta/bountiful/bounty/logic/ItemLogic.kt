@@ -8,6 +8,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.text.LiteralText
+import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
@@ -20,7 +21,7 @@ class ItemLogic(override val entry: BountyDataEntry) : IEntryLogic {
     val item: Item
         get() = Registry.ITEM.get(Identifier(entry.content))
 
-    override fun verifyValidity(player: PlayerEntity): Text? {
+    override fun verifyValidity(player: PlayerEntity): MutableText? {
         val id = item.identifier
         if (id != Identifier(entry.content)) {
             return LiteralText("* '$id' is not a valid item!")

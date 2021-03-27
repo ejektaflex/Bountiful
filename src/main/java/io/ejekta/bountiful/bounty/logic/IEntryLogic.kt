@@ -19,7 +19,7 @@ interface IEntryLogic {
 
     fun giveReward(player: PlayerEntity): Boolean
 
-    fun verifyValidity(player: PlayerEntity): Text?
+    fun verifyValidity(player: PlayerEntity): MutableText?
 
     // ### Helpers ###
 

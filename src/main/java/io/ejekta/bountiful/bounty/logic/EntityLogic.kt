@@ -7,6 +7,7 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.text.LiteralText
+import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
@@ -18,10 +19,10 @@ class EntityLogic(override val entry: BountyDataEntry) : IEntryLogic {
     val entityType: EntityType<*>
         get() = Registry.ENTITY_TYPE.get(Identifier(entry.content))
 
-    override fun verifyValidity(player: PlayerEntity): Text? {
+    override fun verifyValidity(player: PlayerEntity): MutableText? {
         val id = entityType.identifier
         if (id != Identifier(entry.content)) {
-            return LiteralText("This is  not valid!")
+            return LiteralText("* '$id' is not a valid entity!")
         }
         return null
     }

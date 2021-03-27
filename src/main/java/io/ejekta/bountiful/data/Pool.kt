@@ -21,6 +21,8 @@ data class Pool(
         }
     }
 
+    operator fun iterator() = content.iterator()
+
     val usedInDecrees: List<Decree>
         get() = BountifulContent.Decrees.filter { this.id in it.allPoolIds }
 

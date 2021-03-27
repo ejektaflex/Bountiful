@@ -19,6 +19,7 @@ import net.minecraft.network.MessageType
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.text.*
+import net.minecraft.util.Formatting
 import java.io.File
 
 
@@ -46,7 +47,6 @@ object BountifulCommands : CommandRegistrationCallback {
             }
 
             "gen" { intArg("rep", -30..30) runs gen() }
-            "weights" { intArg("rep", -30..30) runs weights() }
 
             "decree" {
                 stringArg("decType") runs playerCommand { player ->
@@ -56,8 +56,12 @@ object BountifulCommands : CommandRegistrationCallback {
                     1
                 }
             }
+
+            "verify" runs verify()
+
             "debug" {
-                "deduce" runs deduce()
+                "held" runs debugHeld()
+                "weights" { intArg("rep", -30..30) runs weights() }
             }
         }
     }
@@ -165,14 +169,44 @@ object BountifulCommands : CommandRegistrationCallback {
         1
     }
 
-    private fun deduce() = playerCommand { player ->
+    private fun debugHeld() = playerCommand { player ->
 
         val held = player.mainHandStack
 
         if (held.item is BountyItem) {
             if (!BountyData[held].verifyValidity(player)) {
-                player.sendMessage(LiteralText("Please report this to the modpack author (or the mod author, if this is not part of a modpack)"), false)
+                player.sendMessage(
+                    LiteralText("Please report this to the modpack author (or the mod author, if this is not part of a modpack)")
+                        .formatted(Formatting.RED),
+                    false
+                )
             }
+        }
+
+        1
+    }
+
+    private fun verify() = playerCommand { player ->
+
+        val dummy = BountyData()
+
+        for (pool in BountifulContent.Pools) {
+            for (poolEntry in pool) {
+                val data = poolEntry.toEntry()
+                data.let {
+                    when {
+                        it.type.isObj -> dummy.objectives.add(it)
+                        it.type.isReward -> dummy.rewards.add(it)
+                        else -> throw Exception("Pool Data was neither an entry nor a reward!: ${poolEntry.type.name}, ${poolEntry.content}")
+                    }
+                }
+            }
+        }
+
+        val result = dummy.verifyValidity(player)
+
+        if (!result) {
+            player.sendMessage(LiteralText("Some items are invalid. See above for details").formatted(Formatting.RED), false)
         }
 
         1

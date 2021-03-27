@@ -64,8 +64,8 @@ class BountyData {
     }
 
     fun verifyValidity(player: PlayerEntity): Boolean {
-        val objs = objectives.mapNotNull { it.logic.verifyValidity(player) }
-        val rews = rewards.mapNotNull { it.logic.verifyValidity(player) }
+        val objs = objectives.mapNotNull { it.logic.verifyValidity(player)?.formatted(Formatting.RED) }
+        val rews = rewards.mapNotNull { it.logic.verifyValidity(player)?.formatted(Formatting.RED) }
         val combined = objs + rews
         combined.forEach { text ->
             player.sendMessage(text, false)

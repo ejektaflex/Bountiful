@@ -3,6 +3,7 @@ package io.ejekta.bountiful.bounty.logic
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.BountyType
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 
 object NullLogic : IEntryLogic {
@@ -14,7 +15,7 @@ object NullLogic : IEntryLogic {
         return Exception("Cannot interact with a null logic object!")
     }
 
-    override fun verifyValidity(player: PlayerEntity): Text {
+    override fun verifyValidity(player: PlayerEntity): MutableText {
         throw logicUsageError()
     }
 
