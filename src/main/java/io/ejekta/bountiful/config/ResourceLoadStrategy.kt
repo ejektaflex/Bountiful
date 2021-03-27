@@ -21,7 +21,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
                 id = newId
             }
         } catch (e: Exception) {
-            println("Could not decode file with ${this::class.simpleName}, given id $newId in folder $folderName")
+            println("Could not decode file with ${this::class.simpleName}, given id '$newId' in folder '$folderName' on path '$configPath")
             e.printStackTrace()
             null
         }
@@ -49,6 +49,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
         destination.clear()
     }
 
+    // Loads resources from internal data / datapacks
     fun loadResources(manager: ResourceManager) {
         getResources(manager).groupBy {
             it.fileName()

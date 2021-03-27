@@ -39,6 +39,17 @@
     "bountiful.mixins.json"
   ],
 
+  "custom": {
+    "kambrik": {
+      "loglevels": {
+        "bountiful": "info"
+      },
+      "markers": {
+        "kambrik:rendering": "info"
+      }
+    }
+  },
+
   "depends": {
     "fabricloader": ">=0.8.2",
     "fabric": "*",

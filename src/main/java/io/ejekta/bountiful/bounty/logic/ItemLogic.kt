@@ -24,7 +24,7 @@ class ItemLogic(override val entry: BountyDataEntry) : IEntryLogic {
     override fun verifyValidity(player: PlayerEntity): MutableText? {
         val id = item.identifier
         if (id != Identifier(entry.content)) {
-            return LiteralText("* '$id' is not a valid item!")
+            return LiteralText("* '${entry.content}' is not a valid item!")
         }
         return null
     }

@@ -60,7 +60,7 @@ object BountifulCommands : CommandRegistrationCallback {
             "verify" runs verify()
 
             "debug" {
-                "held" runs debugHeld()
+                "bounty" runs debugBounty()
                 "weights" { intArg("rep", -30..30) runs weights() }
             }
         }
@@ -169,7 +169,7 @@ object BountifulCommands : CommandRegistrationCallback {
         1
     }
 
-    private fun debugHeld() = playerCommand { player ->
+    private fun debugBounty() = playerCommand { player ->
 
         val held = player.mainHandStack
 
@@ -177,7 +177,7 @@ object BountifulCommands : CommandRegistrationCallback {
             if (!BountyData[held].verifyValidity(player)) {
                 player.sendMessage(
                     LiteralText("Please report this to the modpack author (or the mod author, if this is not part of a modpack)")
-                        .formatted(Formatting.RED),
+                        .formatted(Formatting.DARK_RED).formatted(Formatting.BOLD),
                     false
                 )
             }
@@ -188,25 +188,35 @@ object BountifulCommands : CommandRegistrationCallback {
 
     private fun verify() = playerCommand { player ->
 
-        val dummy = BountyData()
+        var errors = false
 
         for (pool in BountifulContent.Pools) {
             for (poolEntry in pool) {
+                val dummy = BountyData()
                 val data = poolEntry.toEntry()
                 data.let {
                     when {
                         it.type.isObj -> dummy.objectives.add(it)
                         it.type.isReward -> dummy.rewards.add(it)
-                        else -> throw Exception("Pool Data was neither an entry nor a reward!: ${poolEntry.type.name}, ${poolEntry.content}")
+                        else -> throw Exception("Pool Data was neither an entry nor a reward!: '${poolEntry.type.name}', '${poolEntry.content}'")
                     }
+                }
+
+                if (!dummy.verifyValidity(player)) {
+                    player.sendMessage(LiteralText("    - Source Pool: '${pool.id}'").formatted(Formatting.RED).formatted(Formatting.ITALIC), false)
+                    errors = true
                 }
             }
         }
 
-        val result = dummy.verifyValidity(player)
 
-        if (!result) {
-            player.sendMessage(LiteralText("Some items are invalid. See above for details").formatted(Formatting.RED), false)
+        if (errors) {
+            player.sendMessage(
+                LiteralText("Some items are invalid. See above for details")
+                    .formatted(Formatting.DARK_RED)
+                    .formatted(Formatting.BOLD),
+                false
+            )
         }
 
         1

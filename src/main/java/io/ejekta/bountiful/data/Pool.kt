@@ -18,6 +18,7 @@ data class Pool(
         val overallMult = content.size
         content.takeIf { it.isNotEmpty() }?.forEach {
             it.weightMult /= overallMult
+            it.sources.add(id)
         }
     }
 

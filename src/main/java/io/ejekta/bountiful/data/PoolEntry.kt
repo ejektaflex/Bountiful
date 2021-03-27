@@ -5,6 +5,7 @@ import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.BountyType
 import io.ejekta.bountiful.config.JsonFormats
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
 import net.minecraft.nbt.StringNbtReader
 import net.minecraft.nbt.Tag
@@ -24,6 +25,8 @@ class PoolEntry private constructor() {
     var timeMult = 1.0
     var repRequired = 0.0
     private val forbids: MutableList<ForbiddenContent> = mutableListOf()
+
+    @Transient val sources: MutableSet<String> = mutableSetOf()
 
     var mystery: Boolean = false
 
