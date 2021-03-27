@@ -233,7 +233,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
         tag?.put("decree_inv", decreeList)
         tag?.put("bounty_inv", bountyList)
 
-        println("Saved tag $tag")
+        //println("Saved tag $tag")
         return tag
     }
 

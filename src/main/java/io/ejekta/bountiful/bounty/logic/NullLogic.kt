@@ -14,6 +14,10 @@ object NullLogic : IEntryLogic {
         return Exception("Cannot interact with a null logic object!")
     }
 
+    override fun verifyValidity(player: PlayerEntity): Text {
+        throw logicUsageError()
+    }
+
     override fun format(isObj: Boolean, player: PlayerEntity): Text {
         throw logicUsageError()
     }

@@ -56,6 +56,9 @@ object BountifulCommands : CommandRegistrationCallback {
                     1
                 }
             }
+            "debug" {
+                "deduce" runs deduce()
+            }
         }
     }
 
@@ -159,8 +162,22 @@ object BountifulCommands : CommandRegistrationCallback {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        1
+    }
+
+    private fun deduce() = playerCommand { player ->
+
+        val held = player.mainHandStack
+
+        if (held.item is BountyItem) {
+            if (!BountyData[held].verifyValidity(player)) {
+                player.sendMessage(LiteralText("Please report this to the modpack author (or the mod author, if this is not part of a modpack)"), false)
+            }
+        }
 
         1
     }
+
+
 
 }

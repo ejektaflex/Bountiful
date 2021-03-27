@@ -4,8 +4,10 @@ import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.kambrik.ext.identifier
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
@@ -14,6 +16,17 @@ import kotlin.math.min
 
 
 class ItemLogic(override val entry: BountyDataEntry) : IEntryLogic {
+
+    val item: Item
+        get() = Registry.ITEM.get(Identifier(entry.content))
+
+    override fun verifyValidity(player: PlayerEntity): Text? {
+        val id = item.identifier
+        if (id != Identifier(entry.content)) {
+            return LiteralText("* '$id' is not a valid item!")
+        }
+        return null
+    }
 
     private fun getCurrentStacks(player: PlayerEntity): Map<ItemStack, Int> {
         val selected = mutableMapOf<ItemStack, Int>()
@@ -36,7 +49,6 @@ class ItemLogic(override val entry: BountyDataEntry) : IEntryLogic {
 
     override fun format(isObj: Boolean, player: PlayerEntity): Text {
         val progress = getProgress(player)
-        val item = Registry.ITEM.get(Identifier(entry.content))
         return when (isObj) {
             true -> item.name.copy().formatted(progress.color).append(progress.neededText.colored(Formatting.WHITE))
             false -> progress.givingText.append(item.name.colored(entry.rarity.color))
@@ -61,7 +73,6 @@ class ItemLogic(override val entry: BountyDataEntry) : IEntryLogic {
     }
 
     override fun giveReward(player: PlayerEntity): Boolean {
-        val item = Registry.ITEM[Identifier(entry.content)]
         val toGive = (0 until entry.amount).chunked(item.maxCount).map { it.size }
 
         for (amtToGive in toGive) {

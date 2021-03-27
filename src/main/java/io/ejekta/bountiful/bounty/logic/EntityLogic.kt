@@ -1,7 +1,12 @@
 package io.ejekta.bountiful.bounty.logic
 
 import io.ejekta.bountiful.bounty.BountyDataEntry
+import io.ejekta.kambrik.ext.identifier
+import net.minecraft.entity.EntityType
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.Item
+import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
@@ -10,12 +15,22 @@ import net.minecraft.util.registry.Registry
 
 class EntityLogic(override val entry: BountyDataEntry) : IEntryLogic {
 
+    val entityType: EntityType<*>
+        get() = Registry.ENTITY_TYPE.get(Identifier(entry.content))
+
+    override fun verifyValidity(player: PlayerEntity): Text? {
+        val id = entityType.identifier
+        if (id != Identifier(entry.content)) {
+            return LiteralText("This is  not valid!")
+        }
+        return null
+    }
+
     override fun format(isObj: Boolean, player: PlayerEntity): Text {
         val progress = getProgress(player)
-        val entity = Registry.ENTITY_TYPE.get(Identifier(entry.content))
         return when (isObj) {
-            true -> entity.name.copy().formatted(progress.color).append(progress.neededText.colored(Formatting.WHITE))
-            false -> progress.givingText.append(entity.name.colored(entry.rarity.color))
+            true -> entityType.name.copy().formatted(progress.color).append(progress.neededText.colored(Formatting.WHITE))
+            false -> progress.givingText.append(entityType.name.colored(entry.rarity.color))
         }
     }
 
@@ -24,7 +39,7 @@ class EntityLogic(override val entry: BountyDataEntry) : IEntryLogic {
     }
 
     override fun tryFinishObjective(player: PlayerEntity): Boolean {
-        return false
+        return entry.extra >= entry.amount
     }
 
     override fun giveReward(player: PlayerEntity): Boolean {

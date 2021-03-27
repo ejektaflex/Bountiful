@@ -19,6 +19,8 @@ interface IEntryLogic {
 
     fun giveReward(player: PlayerEntity): Boolean
 
+    fun verifyValidity(player: PlayerEntity): Text?
+
     // ### Helpers ###
 
     val Pair<Int, Int>.isDone: Boolean
@@ -40,6 +42,5 @@ interface IEntryLogic {
 
     val Pair<Int, Int>.giving
         get() = LiteralText("${second}x ")
-
 
 }

@@ -63,6 +63,16 @@ class BountyData {
 
     }
 
+    fun verifyValidity(player: PlayerEntity): Boolean {
+        val objs = objectives.mapNotNull { it.logic.verifyValidity(player) }
+        val rews = rewards.mapNotNull { it.logic.verifyValidity(player) }
+        val combined = objs + rews
+        combined.forEach { text ->
+            player.sendMessage(text, false)
+        }
+        return combined.isEmpty()
+    }
+
     override fun toString(): String {
         return JsonFormats.DataPack.encodeToString(ser, this)
     }
