@@ -1,14 +1,21 @@
 @file:UseSerializers(IdentitySer::class)
 package io.ejekta.bountiful
 
+import io.ejekta.bountiful.bounty.BountyData
+import io.ejekta.bountiful.bounty.BountyType
+import io.ejekta.bountiful.bounty.logic.EntityLogic
 import io.ejekta.bountiful.config.BountifulIO
+import io.ejekta.bountiful.content.BountyItem
 import io.ejekta.kambrik.Kambrik
+import io.ejekta.kambrik.ext.identifier
 import io.ejekta.kambrikx.api.serial.serializers.IdentitySer
 import kotlinx.serialization.UseSerializers
 import net.fabricmc.api.ModInitializer
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.resource.ResourceType
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 
 
@@ -42,6 +49,16 @@ class Bountiful : ModInitializer {
 
             }
         })
+
+        ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(ServerEntityCombatEvents.AfterKilledOtherEntity { world, entity, killedEntity ->
+            if (entity is ServerPlayerEntity) {
+                val playersInAction = world.getPlayers { it.distanceTo(entity) < 12f } + world.getPlayers { it.distanceTo(killedEntity) < 12f } + entity
+                playersInAction.toSet().forEach {
+                    EntityLogic.incrementEntityBounties(it, killedEntity)
+                }
+            }
+        })
+
 
     }
 

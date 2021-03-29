@@ -22,7 +22,7 @@ data class BountyDataEntry(
     var name: String? = null,
     var isMystery: Boolean = false,
     var rarity: BountyRarity = BountyRarity.COMMON,
-    var extra: Int = Int.MIN_VALUE // Used to track extra data, e.g. current progress if needed
+    var extra: Int = 0 // Used to track extra data, e.g. current progress if needed
 ) {
 
     val logic: IEntryLogic

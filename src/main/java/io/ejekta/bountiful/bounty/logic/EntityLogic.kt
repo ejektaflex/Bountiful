@@ -1,11 +1,15 @@
 package io.ejekta.bountiful.bounty.logic
 
+import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
+import io.ejekta.bountiful.bounty.BountyType
+import io.ejekta.bountiful.content.BountyItem
 import io.ejekta.kambrik.ext.identifier
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.LiteralText
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
@@ -45,6 +49,30 @@ class EntityLogic(override val entry: BountyDataEntry) : IEntryLogic {
 
     override fun giveReward(player: PlayerEntity): Boolean {
         return false
+    }
+
+    companion object {
+
+        fun incrementEntityBounties(playerEntity: ServerPlayerEntity, killedEntity: LivingEntity) {
+            playerEntity.inventory.main.filter {
+                it.item is BountyItem
+            }.forEach { stack ->
+                BountyData.editIf(stack) {
+                    var didWork = false
+                    val entityObjectives = objectives.filter { it.type == BountyType.ENTITY }
+                    if (entityObjectives.isEmpty()) return@editIf false
+                    for (obj in entityObjectives) {
+                        println("Comparing ${obj.content} to ${killedEntity.type.identifier}")
+                        if (obj.content == killedEntity.type.identifier.toString()) {
+                            obj.extra = (obj.extra + 1).coerceAtMost(obj.amount)
+                            didWork = true
+                        }
+                    }
+                    return@editIf didWork
+                }
+            }
+        }
+
     }
 
 }

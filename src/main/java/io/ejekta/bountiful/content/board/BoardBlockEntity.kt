@@ -207,8 +207,6 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
             val entry = bountiesToLoadTo(uuid)
             Inventories.fromTag(userTag, (entry as SimpleInventoryAccessor).stacks)
         }
-
-        println("Loaded tag $tag")
     }
 
     @Suppress("CAST_NEVER_SUCCEEDS")

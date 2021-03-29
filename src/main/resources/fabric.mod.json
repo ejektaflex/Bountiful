@@ -41,11 +41,8 @@
 
   "custom": {
     "kambrik": {
-      "loglevels": {
-        "bountiful": "info"
-      },
       "markers": {
-        "kambrik:rendering": "info"
+
       }
     }
   },
