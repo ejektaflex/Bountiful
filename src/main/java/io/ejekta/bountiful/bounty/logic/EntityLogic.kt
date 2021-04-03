@@ -20,7 +20,7 @@ import net.minecraft.util.registry.Registry
 
 class EntityLogic(override val entry: BountyDataEntry) : IEntryLogic {
 
-    val entityType: EntityType<*>
+    private val entityType: EntityType<*>
         get() = Registry.ENTITY_TYPE.get(Identifier(entry.content))
 
     override fun verifyValidity(player: PlayerEntity): MutableText? {
@@ -62,7 +62,6 @@ class EntityLogic(override val entry: BountyDataEntry) : IEntryLogic {
                     val entityObjectives = objectives.filter { it.type == BountyType.ENTITY }
                     if (entityObjectives.isEmpty()) return@editIf false
                     for (obj in entityObjectives) {
-                        println("Comparing ${obj.content} to ${killedEntity.type.identifier}")
                         if (obj.content == killedEntity.type.identifier.toString()) {
                             obj.extra = (obj.extra + 1).coerceAtMost(obj.amount)
                             didWork = true
