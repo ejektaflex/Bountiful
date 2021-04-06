@@ -30,6 +30,10 @@ class BoardScreenHandler @JvmOverloads constructor(
         return inventory.canPlayerUse(player)
     }
 
+    override fun close(player: PlayerEntity?) {
+        inventory.onClose(player)
+    }
+
     // Shift + Player Inv Slot
     override fun transferSlot(player: PlayerEntity, invSlot: Int): ItemStack {
         var newStack = ItemStack.EMPTY

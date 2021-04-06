@@ -36,26 +36,40 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
     //override val content = DefaultedList.ofSize(900, ItemStack.EMPTY)
 
     val decrees = SimpleInventory(3)
+    val bounties = BountyInventory()
 
-    private val bountyMap = mutableMapOf<UUID, BountyInventory>()
+    val bountyMasks = mutableMapOf<String, MutableSet<Int>>()
+
+    fun isOnBoardFor(player: PlayerEntity, slot: Int): Boolean {
+        return slot in bountyMasks.getOrDefault(player.uuidAsString, setOf())
+    }
+
+    private fun maskFor(player: PlayerEntity): MutableSet<Int> {
+        return bountyMasks.getOrPut(player.uuidAsString) { mutableSetOf() }
+    }
+
+    fun putOnBoardFor(player: PlayerEntity, slot: Int) {
+        maskFor(player).add(slot)
+    }
+
+    //private val bountyMap = mutableMapOf<UUID, BountyInventory>()
 
     private var finishMap = mutableMapOf<String, Int>()
     private val finishSerializer = MapSerializer(String.serializer(), Int.serializer())
 
-    private fun getOnlinePlayerInventories(): List<BountyInventory> {
-        val online = world?.players?.map { it.uuid } ?: return listOf()
-        return online.mapNotNull { bountyMap[it] }
+    private fun getOnlinePlayerMasks(): List<MutableSet<Int>> {
+        return world?.players?.mapNotNull { maskFor(it) } ?: listOf()
     }
 
-    val invs = getOnlinePlayerInventories()
+    val invs = getOnlinePlayerMasks()
 
-    val level: Int
+    private val level: Int
         get() {
             val total = finishMap.values.sum()
             return totalLevel(total)
         }
 
-    fun setDecree() {
+    private fun setDecree() {
         if (world is ServerWorld && decrees.isEmpty) {
             val slot = (0..2).random()
             val stack = DecreeItem.create()
@@ -66,7 +80,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
         }
     }
 
-    fun xpNeeded(done: Int, start: Int = 0): Int {
+    private fun xpNeeded(done: Int, start: Int = 0): Int {
         val units = start + 1
         val unitTotal = units * 5
         return if (done >= unitTotal) {
@@ -76,7 +90,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
         }
     }
 
-    fun totalLevel(done: Int, per: Int = 2): Int {
+    private fun totalLevel(done: Int, per: Int = 2): Int {
         val unit = per * 5
         return if (done > unit) {
             5 + totalLevel(done - unit, per + 1)
@@ -85,26 +99,13 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
         }
     }
 
-    private fun bountiesToSyncWith(player: PlayerEntity): BountyInventory? {
-        return getOnlinePlayerInventories().maxByOrNull { it.numBounties }?.cloned(player.inventory.main)
-    }
-
     fun updateCompletedBounties(player: PlayerEntity) {
         val old = finishMap.getOrPut(player.uuidAsString) { 0 }
         finishMap[player.uuidAsString] = old + 1
     }
 
-    // only used for getting the profile to load bounties into
-    private fun bountiesToLoadTo(uuid: UUID): BountyInventory {
-        return bountyMap.getOrPut(uuid) {
-            BountyInventory()
-        }
-    }
-
     private fun getBounties(player: PlayerEntity): BountyInventory {
-        return bountyMap.getOrPut(player.uuid) {
-            bountiesToSyncWith(player) ?: BountyInventory()
-        }
+        return bounties.cloned(maskFor(player))
     }
 
     private fun getEntireInventory(player: PlayerEntity): BoardInventory {
@@ -132,20 +133,10 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
 
         val commonBounty = BountyCreator.create(getBoardDecrees(), level, ourWorld.time)
 
-        for (player in ourWorld.players.toMutableList()) {
-            val inv = getBounties(player)
-            inv.addBounty(slotToAddTo, commonBounty)
-            slotsToRemove.forEach { i -> inv.removeStack(i) }
-        }
-
-        if (ourWorld.players.isNotEmpty()) {
-            // Cull offline players
-            bountyMap.keys.toMutableList().forEach { uuid ->
-                if ( uuid !in ourWorld.players.map { it.uuid }) {
-                    bountyMap.remove(uuid)
-                }
-            }
-        }
+        // Add to board
+        bounties.addBounty(slotToAddTo, commonBounty)
+        // Remove from board
+        slotsToRemove.forEach { i -> bounties.removeStack(i) }
 
     }
 
@@ -200,6 +191,8 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
         val doneMap = tag.getCompound("completed")
         finishMap = NbtFormat.Default.decodeFromTag(finishSerializer, doneMap).toMutableMap()
 
+        // TODO implement player mask loading
+        /*
         val bountyList = tag.getList("bounty_inv", 10) ?: return
         bountyList.forEach { tagged ->
             val userTag = tagged as CompoundTag
@@ -207,6 +200,8 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
             val entry = bountiesToLoadTo(uuid)
             Inventories.fromTag(userTag, (entry as SimpleInventoryAccessor).stacks)
         }
+
+         */
     }
 
     @Suppress("CAST_NEVER_SUCCEEDS")
@@ -220,6 +215,11 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
         val decreeList = CompoundTag()
         Inventories.toTag(decreeList, decrees.readOnlyCopy)
 
+        val bountyList = CompoundTag()
+        Inventories.toTag(bountyList, bounties.readOnlyCopy)
+
+        // TODO implement player mask saving
+        /*
         val bountyList = ListTag()
         bountyMap.forEach { (uuid, inv) ->
             val userTag = CompoundTag()
@@ -228,6 +228,8 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
             //userTag.putInt("reputation", inv.level)
             bountyList.add(userTag)
         }
+
+         */
         tag?.put("decree_inv", decreeList)
         tag?.put("bounty_inv", bountyList)
 

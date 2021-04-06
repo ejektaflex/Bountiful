@@ -16,8 +16,4 @@ class BoardInventory(
 
     override fun canPlayerUse(player: PlayerEntity) = true
 
-    companion object {
-        val decreeSlots = 21 until 24
-    }
-
 }
