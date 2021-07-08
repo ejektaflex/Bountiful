@@ -1,5 +1,6 @@
 package ejektaflex.bountiful.logic
 
+import ejektaflex.bountiful.Bountiful
 import ejektaflex.bountiful.api.ext.registryName
 import ejektaflex.bountiful.api.ext.sendTranslation
 import ejektaflex.bountiful.api.logic.picked.PickedEntryEntity
@@ -8,6 +9,8 @@ import ejektaflex.bountiful.data.BountyData
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList
 import net.minecraftforge.items.ItemHandlerHelper
 import kotlin.math.min
@@ -15,10 +18,74 @@ import kotlin.math.min
 object BountyChecker {
 
     /**
-     * Simply checks whether the two stacks are the same item and have the same NBT data.
+     * If requireExactNbt is true, simply checks whether the two stacks are the same item and have the same NBT data.
+     * Otherwise checks whether the two stacks are the same item and that the stack includes all bounty NBT tags.
      */
-    private fun validStackCheck(stack: ItemStack, other: ItemStack): Boolean {
-        return stack.isItemEqualIgnoreDurability(other) && ItemStack.areItemStackTagsEqual(stack, other)
+    private fun validStackCheck(stack: ItemStack, bountystack: ItemStack): Boolean {
+        if (Bountiful.config.requireExactNbt)
+            return stack.isItemEqualIgnoreDurability(bountystack) && ItemStack.areItemStackTagsEqual(stack, bountystack)
+        else
+            return stack.isItemEqualIgnoreDurability(bountystack) && compareStackTags(stack, bountystack)
+    }
+
+    private fun compareStackTags(stack: ItemStack, bountystack: ItemStack): Boolean {
+        //Require stack to have all tags present in bountystack
+        val bountyCompound = bountystack.getTagCompound()
+        if (bountyCompound == null || bountyCompound.isEmpty()) {
+            //No tags required
+            return true
+        }
+
+        return checkNestedCompound(bountyCompound, stack.getTagCompound())
+    }
+    
+    private fun checkNestedCompound(bountyCompound: NBTTagCompound, stackCompound: NBTTagCompound?): Boolean {
+        //Check if the stack has the required compound
+        if (stackCompound == null)
+            return false;
+
+        //Compare all tags from the bounty compound
+        for (key in bountyCompound.getKeySet()) {
+            val a = bountyCompound.getTag(key)
+            val b = stackCompound.getTag(key)
+
+            //continue on match, return false otherwise
+
+            if (a != null) {
+                //nbtCompound tag exists and is not null
+
+                if (a is NBTTagCompound && b is NBTTagCompound) {
+                    //New tag compound that needs checking for a mismatch
+                    if(checkNestedCompound(a, b)) {
+                        continue
+                    }
+                    else {
+                        return false
+                    }
+                }
+                else if(a.equals(b)) {
+                    continue;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                //nbtCompound tag exists but is null (somehow)
+
+                if(b == null) {
+                    //Matching null
+                    continue
+                }
+                else {
+                    //stackCompound's tag of the same thing is not null
+                    return false
+                }
+            }
+        }
+
+        //If this was reached, it's a match
+        return true;
     }
 
     fun hasItems(player: EntityPlayer, inv: NonNullList<ItemStack>, data: BountyData): List<ItemStack>? {

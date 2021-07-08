@@ -25,5 +25,9 @@ interface IBountifulConfig {
     val boardDrops: Boolean
     val xpBonuses: List<Int>
     val compatGameStages: Boolean
+    val boardRequiresVillagers: Boolean
+    val boardRequiredVillagerMax: Int
+    val villageGenerationWeight: Double
+    val requireExactNbt: Boolean
     fun load()
 }

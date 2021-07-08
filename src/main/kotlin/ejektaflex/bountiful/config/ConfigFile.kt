@@ -50,7 +50,14 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private set
     override var compatGameStages: Boolean = true
         private set
-
+    override var boardRequiresVillagers: Boolean = false
+        private set
+    override var boardRequiredVillagerMax: Int = 5
+        private set
+    override var villageGenerationWeight: Double = 0.73
+        private set
+    override var requireExactNbt: Boolean = true
+        private set
 
 
 
@@ -192,6 +199,34 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 "Board Drops on Break",
                 true,
                 "Whether or not bounty boards will drop when broken (Default: true)."
+        ).boolean
+        
+        villageGenerationWeight = config.get(
+                CATEGORY_BOARD,
+                "Village Generation Chance",
+                0.73,
+                "Chance for a village to spawn with a bounty board"
+        ).double
+        
+        boardRequiresVillagers = config.get(
+                CATEGORY_BOARD,
+                "Villagers Supply Bounties",
+                false,
+                "Whether a bounty board needs villagers nearby or not."
+        ).boolean
+        
+        boardRequiredVillagerMax = config.get(
+                CATEGORY_BOARD,
+                "Villager Supply Max",
+                5,
+                "Maximum amount of villagers nearby that influence bounty board supply."
+        ).int.clampTo(1..1000)
+        
+        requireExactNbt = config.get(
+                CATEGORY_BOUNTY,
+                "Require Exact Nbt",
+                true,
+                "If true, the item's nbt tags must be equal to the bounty. If false, the item must match only the bounty's included tags"
         ).boolean
 
         xpBonuses = config.get(

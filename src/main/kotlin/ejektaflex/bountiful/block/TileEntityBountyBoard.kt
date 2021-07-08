@@ -10,6 +10,7 @@ import ejektaflex.bountiful.logic.BountyHolder
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.items.CapabilityItemHandler
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.items.ItemStackHandler
@@ -93,6 +94,10 @@ class TileEntityBountyBoard : TileEntity(), ITileEntityBountyBoard {
                 markDirty()
             }
         }
+    }
+    
+    override fun getBoardBlockPos(): BlockPos {
+        return this.getPos()
     }
 
     override fun hasCapability(capability: Capability<*>, facing: EnumFacing?): Boolean {

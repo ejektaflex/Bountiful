@@ -17,7 +17,7 @@ class VillageBoardCreationHandler : VillagerRegistry.IVillageCreationHandler {
     override fun getComponentClass() = VillageBoardComponent::class.java
 
     override fun getVillagePieceWeight(random: Random, size: Int): StructureVillagePieces.PieceWeight {
-        return if (random.nextFloat() <= 0.73f && Bountiful.config.villageGeneration) {
+        return if (random.nextFloat() <= Bountiful.config.villageGenerationWeight.toFloat() && Bountiful.config.villageGeneration) {
             StructureVillagePieces.PieceWeight(VillageBoardComponent::class.java, 3, 1)
         } else {
             StructureVillagePieces.PieceWeight(VillageBoardComponent::class.java, 0, 0)

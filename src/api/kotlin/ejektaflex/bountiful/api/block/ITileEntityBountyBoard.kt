@@ -1,6 +1,7 @@
 package ejektaflex.bountiful.api.block
 
 import ejektaflex.bountiful.api.logic.IBountyHolder
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.ITickable
 
 interface ITileEntityBountyBoard : ITickable {
@@ -17,4 +18,9 @@ interface ITileEntityBountyBoard : ITickable {
      * Sends a redstone pulse through the bounty board block
      */
     fun sendRedstonePulse()
+    
+    /**
+     * The BlockPos of the bounty board block
+     */
+    fun getBoardBlockPos(): BlockPos
 }

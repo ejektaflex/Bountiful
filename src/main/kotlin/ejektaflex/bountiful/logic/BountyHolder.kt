@@ -9,8 +9,10 @@ import ejektaflex.bountiful.api.ext.slotRange
 import ejektaflex.bountiful.api.logic.IBountyHolder
 import ejektaflex.bountiful.data.BountyData
 import ejektaflex.bountiful.item.ItemBounty
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.world.World
 import net.minecraftforge.common.util.INBTSerializable
 import net.minecraftforge.items.ItemStackHandler
@@ -68,8 +70,25 @@ open class BountyHolder(override val handler: ItemStackHandler) : IBountyHolder,
                 handler[slotPicked] = ItemStack.EMPTY
             }
 
-            addSingleBounty(world, te)
-            return true
+            if(Bountiful.config.boardRequiresVillagers) {
+                val pos = te?.getBoardBlockPos()
+                if(pos != null) { 
+                    val villageBox = AxisAlignedBB(pos.add(-60,-30,-60), pos.add(60,30,60))
+                    val result = world.getEntitiesWithinAABB(EntityVillager::class.java, villageBox).size.toDouble()
+                    val chance = result / (Bountiful.config.boardRequiredVillagerMax.toDouble())
+                    if(chance > world.rand.nextDouble()) {
+                        addSingleBounty(world, te)
+                        return true
+                    }
+                    else {
+                        return false
+                    }
+                }
+            }
+            else {
+                addSingleBounty(world, te)
+                return true
+            }
         }
         return false
     }
