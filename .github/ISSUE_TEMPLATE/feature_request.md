@@ -1,0 +1,35 @@
+name: Feature Request
+description: Suggest new functionality, new content or balancing changes
+title: "[Bug]: "
+labels: [suggestion]
+assignees:
+  - Ejektaflex
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: textarea
+    id: what-want
+    attributes:
+      label: Feature Description
+      description: What you want added to Bountiful (A clear and concise description of what you want to have added/improved):
+      placeholder: Tell us what you'd like!
+      value: "Jetpacks!"
+    validations:
+      required: true
+  - type: input
+    id: better
+    attributes:
+      label: Feature Benefits
+      description: Tell us how this would make Bountiful better
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
