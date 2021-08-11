@@ -14,7 +14,6 @@ body:
       label: What happened?
       description: Also tell us, what did you expect to happen?
       placeholder: Tell us what you see!
-      value: "A bug happened!"
     validations:
       required: true
   - type: textarea
@@ -22,8 +21,7 @@ body:
     attributes:
       label: How can we reproduce it?
       description: "If this can be reproduced, how could we recreate the same error?"
-      placeholder: "Tell us what you see!"
-      value: ""
+      placeholder: "Tell us how we can do it!"
     validations:
       required: false
   - type: input
