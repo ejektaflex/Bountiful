@@ -1,3 +1,4 @@
+---
 name: Feature Request
 description: Suggest new functionality, new content or balancing changes
 title: "[Bug]: "
@@ -33,3 +34,4 @@ body:
       options:
         - label: I agree to follow this project's Code of Conduct
           required: true
+---
