@@ -7,12 +7,12 @@ assignees:
 body:
   - type: markdown
     attributes:
-      value: Thanks for taking the time to fill out this bug report!
+      value: "Thanks for taking the time to fill out this bug report!"
   - type: textarea
     id: what-want
     attributes:
       label: Feature Description
-      description: What you want added to Bountiful (A clear and concise description of what you want to have added/improved):
+      description: "What you want added to Bountiful (A clear and concise description of what you want to have added/improved):"
       placeholder: Tell us what you'd like!
       value: "Jetpacks!"
     validations:

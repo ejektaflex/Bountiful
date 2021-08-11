@@ -7,7 +7,7 @@ assignees:
 body:
   - type: markdown
     attributes:
-      value: Thanks for taking the time to fill out this bug report!
+      value: "Thanks for taking the time to fill out this bug report!"
   - type: textarea
     id: what-happened
     attributes:
@@ -21,8 +21,8 @@ body:
     id: how-to-repro
     attributes:
       label: How can we reproduce it?
-      description: If this can be reproduced, how could we recreate the same error?
-      placeholder: Tell us what you see!
+      description: "If this can be reproduced, how could we recreate the same error?"
+      placeholder: "Tell us what you see!"
       value: ""
     validations:
       required: false
