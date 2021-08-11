@@ -28,18 +28,18 @@ body:
     id: mod-version
     attributes:
       label: Mod Version
-      description: What version of our Bountiful are you running?
+      description: What version of Bountiful are you running?
     validations:
       required: true
   - type: input
     id: forge-version
     attributes:
       label: Forge Version
-      description: What version of our Forge are you running?
+      description: What version of Forge are you running?
     validations:
       required: true
   - type: textarea
     id: logs
     attributes:
       label: Relevant log output
-      description: Please copy and paste any relevant log output, or drag in your log file. This will be automatically formatted into code, so no need for backticks.
+      description: Please copy and paste any relevant log output, or (preferably) drag in your log file(s).
