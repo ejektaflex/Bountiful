@@ -26,7 +26,7 @@ import java.io.File
 object BountifulCommands : CommandRegistrationCallback {
 
     override fun register(dispatcher: CommandDispatcher<ServerCommandSource>, dedicated: Boolean) {
-        Kambrik.Command.addCommand("bo", dispatcher) {
+        dispatcher.addCommand("bo") {
             requires(Kambrik.Command::hasBasicCreativePermission)
 
             "hand" runs hand()
@@ -42,14 +42,14 @@ object BountifulCommands : CommandRegistrationCallback {
                     }
                 }
 
-                "addhand" { stringArg("poolName", items = pools) runs addHandToPool() }
-                "create" { stringArg("poolName", items = pools) runs addPool() }
+                "addhand" { argString("poolName", items = pools) runs addHandToPool() }
+                "create" { argString("poolName", items = pools) runs addPool() }
             }
 
-            "gen" { intArg("rep", -30..30) runs gen() }
+            "gen" { argInt("rep", -30..30) runs gen() }
 
             "decree" {
-                stringArg("decType") runs playerCommand { player ->
+                argString("decType") runs playerCommand { player ->
                     val decId = getString("decType")
                     val stack = DecreeItem.create(decId)
                     player.giveItemStack(stack)
@@ -61,7 +61,7 @@ object BountifulCommands : CommandRegistrationCallback {
 
             "debug" {
                 "bounty" runs debugBounty()
-                "weights" { intArg("rep", -30..30) runs weights() }
+                "weights" { argInt("rep", -30..30) runs weights() }
             }
         }
     }
@@ -71,17 +71,21 @@ object BountifulCommands : CommandRegistrationCallback {
 
         val newPoolEntry = PoolEntry.create().apply {
             content = held.identifier.toString()
-            nbtData = if (player.mainHandStack == ItemStack.EMPTY) null else held.tag
+            nbt = if (player.mainHandStack == ItemStack.EMPTY) null else held.nbt
         }
 
-        val saved = newPoolEntry.save(JsonFormats.Hand)
+        try {
+            val saved = newPoolEntry.save(JsonFormats.Hand)
 
-        println(saved)
-        player.sendMessage(LiteralText(saved), MessageType.CHAT, player.uuid)
+            println(saved)
+            player.sendMessage(LiteralText(saved), MessageType.CHAT, player.uuid)
 
-        val packet = PacketByteBuf(Unpooled.buffer())
-        packet.writeString(saved)
-        ServerPlayNetworking.send(player, Bountiful.id("copydata"), packet)
+            val packet = PacketByteBuf(Unpooled.buffer())
+            packet.writeString(saved)
+            ServerPlayNetworking.send(player, Bountiful.id("copydata"), packet)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
         1
     }
@@ -99,7 +103,7 @@ object BountifulCommands : CommandRegistrationCallback {
 
         val newPoolEntry = PoolEntry.create().apply {
             content = held.identifier.toString()
-            nbtData = held.tag
+            nbt = held.nbt
         }
 
         if (poolName.trim() != "") {

@@ -4,11 +4,12 @@ import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.BountyType
 import io.ejekta.bountiful.config.JsonFormats
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.StringNbtReader
-import net.minecraft.nbt.Tag
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.max
@@ -30,13 +31,7 @@ class PoolEntry private constructor() {
 
     var mystery: Boolean = false
 
-    var nbt: String? = null
-
-    var nbtData: Tag?
-        get() = nbt?.let { StringNbtReader.parse(it) }
-        set(value) {
-            nbt = value?.asString()
-        }
+    var nbt: @Contextual NbtCompound? = null
 
     fun save(format: Json = JsonFormats.DataPack) = format.encodeToString(serializer(), this)
 

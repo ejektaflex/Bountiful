@@ -7,6 +7,8 @@ import io.ejekta.kambrik.templating.block.entity.IBlockEntityDropSaved
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
+import net.minecraft.block.entity.BlockEntityTicker
+import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ActionResult
@@ -27,6 +29,20 @@ class BoardBlock : BlockWithEntity(
 
     override fun getItemToSaveTo(world: World?, pos: BlockPos?, state: BlockState?, player: PlayerEntity?): ItemStack {
         return ItemStack(BountifulContent.BOARD)
+    }
+
+    override fun <T : BlockEntity> getTicker(
+        world: World?,
+        state: BlockState?,
+        type: BlockEntityType<T>
+    ): BlockEntityTicker<T>? {
+        //return super.getTicker(world, state, type)
+        //return world.isClient ? null : checkType(type, BlockEntityType.BREWING_STAND, BrewingStandBlockEntity::tick);
+        return if (world?.isClient == true) {
+            null
+        } else {
+            checkType(type, BountifulContent.BOARD_ENTITY, BoardBlockEntity::tick)
+        }
     }
 
     override fun onBreak(world: World?, pos: BlockPos?, state: BlockState?, player: PlayerEntity?) {
@@ -75,7 +91,7 @@ class BoardBlock : BlockWithEntity(
         return ActionResult.FAIL
     }
 
-    override fun createBlockEntity(world: BlockView?): BlockEntity {
+    override fun createBlockEntity(pos: BlockPos?, state: BlockState?): BlockEntity {
         return BoardBlockEntity()
     }
 

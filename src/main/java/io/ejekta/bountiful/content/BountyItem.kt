@@ -14,6 +14,7 @@ import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Formatting
 import net.minecraft.world.World
+import java.util.*
 
 class BountyItem : Item(
     FabricItemSettings()
@@ -25,7 +26,11 @@ class BountyItem : Item(
     override fun getName(stack: ItemStack?): Text {
         return if (stack != null && clientWorld() != null) {
             val data = BountyData[stack]
-            var text = TranslatableText(data.rarity.name.toLowerCase().capitalize() + " Bounty ").formatted(data.rarity.color)
+            var text = TranslatableText(data.rarity.name.lowercase()
+                // Capitalizing
+                .replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+                } + " Bounty ").formatted(data.rarity.color)
             if (data.rarity == BountyRarity.LEGENDARY) {
                 text = text.formatted(Formatting.BOLD)
             }

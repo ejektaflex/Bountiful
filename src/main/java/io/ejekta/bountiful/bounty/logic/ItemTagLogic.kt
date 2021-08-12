@@ -7,12 +7,13 @@ import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.tag.ItemTags
 import net.minecraft.tag.Tag
 import net.minecraft.text.LiteralText
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
+import net.minecraft.text.TranslatableText
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
@@ -41,7 +42,7 @@ class ItemTagLogic(override val entry: BountyDataEntry) : IEntryLogic {
 
     override fun format(isObj: Boolean, player: PlayerEntity): Text {
         val progress = getProgress(player)
-        val title = LiteralText(entry.name ?: entry.content)
+        val title = if (entry.translation != null) TranslatableText(entry.translation) else LiteralText(entry.name ?: entry.content)
         return when (isObj) {
             true -> title.copy().formatted(progress.color).append(progress.neededText.colored(Formatting.WHITE))
             false -> progress.givingText.append(title.colored(entry.rarity.color))
@@ -67,7 +68,7 @@ class ItemTagLogic(override val entry: BountyDataEntry) : IEntryLogic {
 
         for (amtToGive in toGive) {
             val stack = ItemStack(item, amtToGive).apply {
-                tag = entry.nbtData as CompoundTag?
+                tag = entry.nbtData as NbtCompound?
             }
             // Try give directly to player, otherwise drop at feet
             if (!player.giveItemStack(stack)) {

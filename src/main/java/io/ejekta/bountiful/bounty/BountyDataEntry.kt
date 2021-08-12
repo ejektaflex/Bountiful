@@ -5,9 +5,8 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.StringNbtReader
-import net.minecraft.nbt.Tag
 import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
@@ -18,8 +17,9 @@ data class BountyDataEntry(
     val type: BountyType,
     val content: String,
     val amount: Int,
-    var nbt: String? = null,
+    var nbt: @Contextual NbtCompound? = null,
     var name: String? = null,
+    var translation: String? = null,
     var isMystery: Boolean = false,
     var rarity: BountyRarity = BountyRarity.COMMON,
     var extra: Int = 0 // Used to track extra data, e.g. current progress if needed
@@ -30,12 +30,6 @@ data class BountyDataEntry(
 
     @Transient
     var worth = Double.MIN_VALUE
-
-    var nbtData: Tag?
-        get() = nbt?.let { StringNbtReader.parse(it) }
-        set(value) {
-            nbt = value?.asString()
-        }
 
     override fun toString(): String {
         return "BDE[type=$type, content=$content, amount=$amount, isNbtNull=${nbt == null}, name=$name, mystery=$isMystery]"

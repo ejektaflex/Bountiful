@@ -2,14 +2,14 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
 	//id 'com.github.johnrengelman.shadow' version '6.1.0'
-	kotlin("jvm") version "1.4.30"
-	kotlin("plugin.serialization") version "1.4.30"
-	id("fabric-loom") version "0.6-SNAPSHOT"
+	kotlin("jvm") version "1.5.21"
+	kotlin("plugin.serialization") version "1.5.21"
+	id("fabric-loom") version "0.8-SNAPSHOT"
 }
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_1_8
-	targetCompatibility = JavaVersion.VERSION_1_8
+	sourceCompatibility = JavaVersion.VERSION_16
+	targetCompatibility = JavaVersion.VERSION_16
 }
 
 val modId: String by project
@@ -33,9 +33,6 @@ repositories {
 	mavenCentral()
 	jcenter()
 	maven(url = "https://kotlin.bintray.com/kotlinx")
-	maven(url = "http://maven.fabricmc.net/") {
-		name = "Fabric"
-	}
 	maven(url = "https://maven.terraformersmc.com/") {
 		name = "Mod Menu"
 	}
@@ -50,7 +47,7 @@ dependencies {
 	modImplementation("net.fabricmc:fabric-loader:${loaderVersion}")
 
 	// Kambrik API
-	modImplementation("io.ejekta:kambrik:0.2.1-SNAPSHOT+")
+	modImplementation("io.ejekta:kambrik:0.4-SNAPSHOT+")
 
 	modApi("me.shedaniel.cloth:config-2:4.8.3") {
 		exclude(group = "net.fabricmc.fabric-api")
@@ -58,12 +55,12 @@ dependencies {
 
 	implementation("com.google.code.findbugs:jsr305:3.0.2")
 
-	modApi("com.terraformersmc:modmenu:1.16.6") {
+	modApi("com.terraformersmc:modmenu:2.0.4") {
 		exclude(module = "fabric-api")
 		exclude(module = "config-2")
 	}
 
-	modImplementation(group = "net.fabricmc", name = "fabric-language-kotlin", version = "1.4.30+build.2")
+	modImplementation(group = "net.fabricmc", name = "fabric-language-kotlin", version = "1.6.3+kotlin.1.5.21")
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${fabricVersion}")
@@ -85,6 +82,6 @@ tasks.getByName<ProcessResources>("processResources") {
 
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
-		jvmTarget = "1.8"
+		jvmTarget = "16"
 	}
 }

@@ -21,7 +21,8 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory, title: Te
     }
 
     override fun drawBackground(matrices: MatrixStack, delta: Float, mouseX: Int, mouseY: Int) {
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f)
+        //RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f)
+        // TODO possibly find replacement for fixing drawbackground if it bugs out
         client!!.textureManager.bindTexture(TEXTURE)
         val x = (width - backgroundWidth) / 2
         val y = (height - backgroundHeight) / 2

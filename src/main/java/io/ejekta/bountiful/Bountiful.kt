@@ -1,13 +1,10 @@
 @file:UseSerializers(IdentitySer::class)
 package io.ejekta.bountiful
 
-import io.ejekta.bountiful.bounty.BountyData
-import io.ejekta.bountiful.bounty.BountyType
 import io.ejekta.bountiful.bounty.logic.EntityLogic
 import io.ejekta.bountiful.config.BountifulIO
-import io.ejekta.bountiful.content.BountyItem
+import io.ejekta.bountiful.data.packets.ClientUpdateBountySlot
 import io.ejekta.kambrik.Kambrik
-import io.ejekta.kambrik.ext.identifier
 import io.ejekta.kambrikx.api.serial.serializers.IdentitySer
 import kotlinx.serialization.UseSerializers
 import net.fabricmc.api.ModInitializer
@@ -29,6 +26,7 @@ class Bountiful : ModInitializer {
 
     init {
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(BountifulIO)
+        ClientUpdateBountySlot.Handler.register()
     }
 
     override fun onInitialize() {

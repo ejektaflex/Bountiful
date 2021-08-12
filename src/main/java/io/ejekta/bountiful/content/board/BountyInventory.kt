@@ -33,7 +33,7 @@ class BountyInventory : SimpleInventory(SIZE) {
         for (i in 0 until size()) {
             val stack = getStack(i)
             // do not sync over any stacks the player had in their inventory
-            if (!blacklist.any { it.item is BountyItem && ItemStack.areTagsEqual(it, stack) }) {
+            if (!blacklist.any { it.item is BountyItem && ItemStack.areNbtEqual(it, stack) }) {
                 newInv.setStack(i, stack.copy())
             }
         }

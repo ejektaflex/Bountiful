@@ -23,7 +23,7 @@ class BountifulClient : ClientModInitializer {
         ModelPredicateProviderRegistrar.registerInvoker(
             BountifulContent.BOUNTY_ITEM,
             Bountiful.id("rarity")
-        ) { itemStack: ItemStack, _: ClientWorld?, _: LivingEntity? ->
+        ) { itemStack: ItemStack, _: ClientWorld?, _: LivingEntity?, _: Int ->
             val rarity = BountyData[itemStack].rarity
             rarity.ordinal.toFloat() / 10f
         }
@@ -31,7 +31,7 @@ class BountifulClient : ClientModInitializer {
         ModelPredicateProviderRegistrar.registerInvoker(
             BountifulContent.DECREE_ITEM,
             Bountiful.id("status")
-        ) { itemStack: ItemStack, _: ClientWorld?, _: LivingEntity? ->
+        ) { itemStack: ItemStack, _: ClientWorld?, _: LivingEntity?, _: Int ->
             val data = DecreeData[itemStack]
             if (data.ids.isNotEmpty()) 1f else 0f
         }

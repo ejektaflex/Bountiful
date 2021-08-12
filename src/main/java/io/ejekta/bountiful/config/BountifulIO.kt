@@ -43,10 +43,10 @@ object BountifulIO : SimpleSynchronousResourceReloadListener {
         ResourceLoadStrategy("Decree Loader", "bounty_decrees", decreeConfigs, Decree.serializer(), BountifulContent.Decrees)
     )
 
-    override fun apply(resourceManager: ResourceManager) {
+    override fun reload(manager: ResourceManager) {
         contentLoaders.forEach {
             it.clearDestination()
-            it.loadResources(resourceManager)
+            it.loadResources(manager)
             it.loadFiles()
         }
     }

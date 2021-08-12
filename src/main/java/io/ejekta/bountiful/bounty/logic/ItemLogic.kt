@@ -7,10 +7,10 @@ import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.text.LiteralText
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
+import net.minecraft.text.TranslatableText
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
@@ -21,6 +21,11 @@ class ItemLogic(override val entry: BountyDataEntry) : IEntryLogic {
 
     private val item: Item
         get() = Registry.ITEM.get(Identifier(entry.content))
+
+    private val itemName: MutableText
+        get() = ItemStack(item).apply {
+            entry.nbt?.let { this.nbt = it }
+        }.name.copy()
 
     override fun verifyValidity(player: PlayerEntity): MutableText? {
         val id = item.identifier
@@ -39,8 +44,8 @@ class ItemLogic(override val entry: BountyDataEntry) : IEntryLogic {
     override fun format(isObj: Boolean, player: PlayerEntity): Text {
         val progress = getProgress(player)
         return when (isObj) {
-            true -> item.name.copy().formatted(progress.color).append(progress.neededText.colored(Formatting.WHITE))
-            false -> progress.givingText.append(item.name.colored(entry.rarity.color))
+            true -> itemName.formatted(progress.color).append(progress.neededText.colored(Formatting.WHITE))
+            false -> progress.givingText.append(itemName.colored(entry.rarity.color))
         }
     }
 
@@ -62,7 +67,7 @@ class ItemLogic(override val entry: BountyDataEntry) : IEntryLogic {
 
         for (amtToGive in toGive) {
             val stack = ItemStack(item, amtToGive).apply {
-                tag = entry.nbtData as CompoundTag?
+                nbt = entry.nbt
             }
             // Try give directly to player, otherwise drop at feet
             if (!player.giveItemStack(stack)) {

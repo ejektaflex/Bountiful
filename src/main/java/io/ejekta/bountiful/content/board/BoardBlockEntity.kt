@@ -19,19 +19,19 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SimpleInventory
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
-import net.minecraft.util.Tickable
+import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
 import java.util.*
 
 
-class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, ExtendedScreenHandlerFactory {
+class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(BountifulContent.BOARD_ENTITY, pos, state), ExtendedScreenHandlerFactory {
 
     //override val content = DefaultedList.ofSize(900, ItemStack.EMPTY)
 
@@ -140,29 +140,6 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
 
     }
 
-    override fun tick() {
-        val ourWorld = world ?: return
-        if (ourWorld.isClient) return
-
-        if ((ourWorld.time + 13L) % (20L * BountifulIO.configData.boardUpdateFrequency) == 0L) {
-            // Change bounty population
-            randomlyAddBounty()
-
-            // Set unset decrees
-            (decrees as SimpleInventoryAccessor).stacks.forEach { stack ->
-                DecreeData.edit(stack) {
-                    if (ids.isEmpty() && BountifulContent.Decrees.isNotEmpty()) {
-                        ids.add(BountifulContent.Decrees.random().id)
-                    }
-                }
-            }
-
-        }
-
-
-
-    }
-
     override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity?): ScreenHandler {
         //We provide *this* to the screenHandler as our class Implements Inventory
         //Only the Server has the Inventory at the start, this will be synced to the client in the ScreenHandler
@@ -179,11 +156,10 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
     }
 
     @Suppress("CAST_NEVER_SUCCEEDS")
-    override fun fromTag(state: BlockState?, tag: CompoundTag?) {
-        super.fromTag(state, tag)
+    override fun fromTag(state: BlockState?, tag: NbtCompound?) {
 
         val decreeList = tag?.getCompound("decree_inv") ?: return
-        Inventories.fromTag(
+        Inventories.readNbt(
             decreeList,
             (decrees as SimpleInventoryAccessor).stacks
         )
@@ -195,7 +171,7 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
         /*
         val bountyList = tag.getList("bounty_inv", 10) ?: return
         bountyList.forEach { tagged ->
-            val userTag = tagged as CompoundTag
+            val userTag = tagged as NbtCompound
             val uuid = userTag.getUuid("uuid")
             val entry = bountiesToLoadTo(uuid)
             Inventories.fromTag(userTag, (entry as SimpleInventoryAccessor).stacks)
@@ -205,24 +181,24 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
     }
 
     @Suppress("CAST_NEVER_SUCCEEDS")
-    override fun toTag(tag: CompoundTag?): CompoundTag? {
-        super.toTag(tag)
+    override fun writeNbt(tag: NbtCompound?): NbtCompound? {
+        super.writeNbt(tag)
 
         val doneMap = NbtFormat.Default.encodeToTag(finishSerializer, finishMap)
 
         tag?.put("completed", doneMap)
 
-        val decreeList = CompoundTag()
-        Inventories.toTag(decreeList, decrees.readOnlyCopy)
+        val decreeList = NbtCompound()
+        Inventories.writeNbt(decreeList, decrees.readOnlyCopy)
 
-        val bountyList = CompoundTag()
-        Inventories.toTag(bountyList, bounties.readOnlyCopy)
+        val bountyList = NbtCompound()
+        Inventories.writeNbt(bountyList, bounties.readOnlyCopy)
 
         // TODO implement player mask saving
         /*
         val bountyList = ListTag()
         bountyMap.forEach { (uuid, inv) ->
-            val userTag = CompoundTag()
+            val userTag = NbtCompound()
             userTag.putUuid("uuid", uuid)
             Inventories.toTag(userTag, (inv as SimpleInventoryAccessor).stacks)
             //userTag.putInt("reputation", inv.level)
@@ -235,6 +211,31 @@ class BoardBlockEntity : BlockEntity(BountifulContent.BOARD_ENTITY), Tickable, E
 
         //println("Saved tag $tag")
         return tag
+    }
+
+    companion object {
+
+        @JvmStatic
+        fun tick(world: World, pos: BlockPos, state: BlockState, entity: BoardBlockEntity) {
+            val ourWorld = world ?: return
+            if (ourWorld.isClient) return
+
+            if ((ourWorld.time + 13L) % (20L * BountifulIO.configData.boardUpdateFrequency) == 0L) {
+                // Change bounty population
+                entity.randomlyAddBounty()
+
+                // Set unset decrees
+                (entity.decrees as SimpleInventoryAccessor).stacks.forEach { stack ->
+                    DecreeData.edit(stack) {
+                        if (ids.isEmpty() && BountifulContent.Decrees.isNotEmpty()) {
+                            ids.add(BountifulContent.Decrees.random().id)
+                        }
+                    }
+                }
+
+            }
+        }
+
     }
 
 }
