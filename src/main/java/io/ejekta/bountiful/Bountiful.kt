@@ -26,7 +26,6 @@ class Bountiful : ModInitializer {
 
     init {
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(BountifulIO)
-        ClientUpdateBountySlot.Handler.register()
     }
 
     override fun onInitialize() {
@@ -47,6 +46,11 @@ class Bountiful : ModInitializer {
 
             }
         })
+
+        Kambrik.Message.registerClientMessage(
+            ClientUpdateBountySlot.serializer(),
+            Identifier("kambrik", "bounty_slot_update")
+        )
 
         ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(ServerEntityCombatEvents.AfterKilledOtherEntity { world, entity, killedEntity ->
             if (entity is ServerPlayerEntity) {

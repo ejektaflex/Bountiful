@@ -91,8 +91,8 @@ class BoardBlock : BlockWithEntity(
         return ActionResult.FAIL
     }
 
-    override fun createBlockEntity(pos: BlockPos?, state: BlockState?): BlockEntity {
-        return BoardBlockEntity()
+    override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {
+        return BoardBlockEntity(pos, state)
     }
 
     companion object {

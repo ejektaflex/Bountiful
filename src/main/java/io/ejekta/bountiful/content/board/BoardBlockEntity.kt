@@ -156,15 +156,15 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     @Suppress("CAST_NEVER_SUCCEEDS")
-    override fun fromTag(state: BlockState?, tag: NbtCompound?) {
+    override fun readNbt(nbt: NbtCompound) {
 
-        val decreeList = tag?.getCompound("decree_inv") ?: return
+        val decreeList = nbt?.getCompound("decree_inv") ?: return
         Inventories.readNbt(
             decreeList,
             (decrees as SimpleInventoryAccessor).stacks
         )
 
-        val doneMap = tag.getCompound("completed")
+        val doneMap = nbt.getCompound("completed")
         finishMap = NbtFormat.Default.decodeFromTag(finishSerializer, doneMap).toMutableMap()
 
         // TODO implement player mask loading
