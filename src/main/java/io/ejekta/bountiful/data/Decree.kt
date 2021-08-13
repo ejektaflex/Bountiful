@@ -10,7 +10,8 @@ data class Decree(
     override var id: String = "DEFAULT_DECREE",
     val objectives: MutableSet<String>,
     val rewards: MutableSet<String>,
-    override val requires: MutableList<String> = mutableListOf()
+    override val requires: MutableList<String> = mutableListOf(),
+    override val replace: Boolean = false
     ) : IMerge<Decree> {
 
     val objectivePools: List<Pool>
@@ -28,11 +29,6 @@ data class Decree(
         get() = rewards.mapNotNull { id ->
             BountifulContent.Pools.find { it.id == id }
         }
-
-    override fun merge(other: Decree) {
-        objectives.addAll(other.objectives)
-        rewards.addAll(other.rewards)
-    }
 
     override fun merged(other: Decree): Decree {
         return Decree(

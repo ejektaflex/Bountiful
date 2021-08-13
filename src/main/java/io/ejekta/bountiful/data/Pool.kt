@@ -7,9 +7,9 @@ import kotlinx.serialization.Transient
 @Serializable
 data class Pool(
     @Transient override var id: String = "DEFAULT_POOL",
-    val replace: Boolean = false,
+    override val replace: Boolean = false,
     override val requires: MutableList<String> = mutableListOf(),
-    val content: MutableList<PoolEntry> = mutableListOf()
+    val content: MutableList<PoolEntry> = mutableListOf(),
 ) : IMerge<Pool> {
 
     fun setup(newId: String) {
@@ -27,21 +27,8 @@ data class Pool(
     val usedInDecrees: List<Decree>
         get() = BountifulContent.Decrees.filter { this.id in it.allPoolIds }
 
-    override fun merge(other: Pool) {
-        when (other.replace) {
-            true -> {
-                content.clear()
-                content.addAll(other.content)
-            }
-            false -> content.addAll(other.content)
-        }
-    }
-
     override fun merged(other: Pool): Pool {
-        return when (other.replace) {
-            true -> Pool(id, content = other.content)
-            else -> Pool(id, content = (content + other.content).toMutableList())
-        }
+        return other.copy(id = id, content = (this.content + other.content).toMutableList())
     }
 
 }

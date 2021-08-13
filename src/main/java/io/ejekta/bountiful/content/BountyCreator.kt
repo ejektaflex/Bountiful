@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.content
 
+import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.config.BountifulIO
@@ -19,6 +20,12 @@ class BountyCreator private constructor(private val decrees: Set<Decree>, privat
 
         // Gen reward entries and max rarity
         val rewardEntries = genRewardEntries()
+
+        if (rewardEntries.isEmpty()) {
+            Bountiful.LOGGER.error("Rewards are empty, can only generate an empty reward")
+            return data
+        }
+
         data.rarity = rewardEntries.maxOf { it.rarity }
 
         // Gen rewards and total worth

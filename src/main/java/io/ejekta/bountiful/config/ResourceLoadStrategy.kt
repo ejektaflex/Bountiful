@@ -27,12 +27,62 @@ class ResourceLoadStrategy<T : IMerge<T>>(
         }
     }
 
+    fun test(manager: ResourceManager) {
+        val resourceMap = getResources(manager).groupBy {
+            it.fileName()
+        }
+
+        for ((itemId, resources) in resourceMap) {
+            println("Querying $strategyName: $itemId, $resources")
+
+            val fileName = resources.first().fileName() + ".json"
+            val matchingFile = File(configPath.toFile(), fileName)
+
+            var configData: T? = null
+
+            // Dig through config folder to see if we have a config first
+            if (matchingFile.exists()) {
+                configData = loadFile(matchingFile)
+
+                if (configData != null) {
+                    // Add config data to registry
+                    destination.add(configData)
+                    // If config data replaces resource data, don't even load resource data
+                    if (configData.replace) {
+                        println("Config REPLACES so we are done here")
+                        continue
+                    }
+                }
+
+            }
+
+            val items = resources.mapNotNull {
+                loadResource(it, manager)
+            }.filter {
+                it.canLoad
+            }.takeIf {
+                it.isNotEmpty()
+            }
+
+            items?.reduce {
+                    a, b -> a.merged(b)
+            }?.also {
+                // Merge with config if possible. Else just add resource data
+                if (configData != null) {
+                    val mergedWithConfig = it.merged(configData)
+                    destination.add(mergedWithConfig)
+                } else {
+                    destination.add(it)
+                }
+            }
+
+        }
+    }
+
     private fun getResources(manager: ResourceManager): List<Identifier> {
         return manager.findResources(folderName) {
             it.endsWith(".json")
-        }.map {
-            it
-        }
+        }.toList()
     }
 
     private fun loadFile(file: File): T? {
@@ -47,44 +97,6 @@ class ResourceLoadStrategy<T : IMerge<T>>(
 
     fun clearDestination() {
         destination.clear()
-    }
-
-    // Loads resources from internal data / datapacks
-    fun loadResources(manager: ResourceManager) {
-        getResources(manager).groupBy {
-            it.fileName()
-        }.forEach { (itemId, resources) ->
-            println("Loading $strategyName: $itemId")
-
-            val items = resources.mapNotNull {
-                loadResource(it, manager)
-            }.filter {
-                it.canLoad
-            }.takeIf {
-                it.isNotEmpty()
-            }
-
-            items?.reduce {
-                    a, b -> a.merged(b)
-            }?.also {
-                destination.add(it)
-            }
-        }
-    }
-
-    // Loads config files from ./config/bountiful/${folderName}
-    fun loadFiles() {
-        configPath.toFile().listFiles()?.forEach { file ->
-            println("Found decree config file: $file")
-            val item = loadFile(file)
-            if (item != null) {
-                val existing = destination.find { it.id == item.id }
-                existing?.let {
-                    println("Merging in config from ${file.path}..")
-                    it.merge(item)
-                }
-            }
-        }
     }
 
     companion object {
