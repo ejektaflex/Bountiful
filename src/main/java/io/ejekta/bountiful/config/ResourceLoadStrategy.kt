@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.config
 
+import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.data.IMerge
 import kotlinx.serialization.DeserializationStrategy
 import net.minecraft.resource.ResourceManager
@@ -27,9 +28,16 @@ class ResourceLoadStrategy<T : IMerge<T>>(
         }
     }
 
+    val loadedLocations = mutableSetOf<String>()
+
     private fun getConfigFile(id: Identifier): File {
         val fileName = id.fileName() + ".json"
         return File(configPath.toFile(), fileName)
+    }
+
+    fun completeLoadOf(data: T) {
+        destination.add(data)
+        loadedLocations += data.id
     }
 
     fun loadData(manager: ResourceManager) {
@@ -52,7 +60,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
                 if (configData != null) {
                     // If config data replaces resource data, don't even load resource data
                     if (configData.replace) {
-                        destination.add(configData)
+                        completeLoadOf(configData)
                         println("Config REPLACES so we are done here")
                         continue
                     }
@@ -74,13 +82,15 @@ class ResourceLoadStrategy<T : IMerge<T>>(
                 // Merge with config if possible. Else just add resource data
                 if (configData != null) {
                     val mergedWithConfig = it.merged(configData)
-                    destination.add(mergedWithConfig)
+                    completeLoadOf(mergedWithConfig)
                 } else {
-                    destination.add(it)
+                    completeLoadOf(it)
                 }
             }
 
         }
+
+        loadUnloadedFiles()
     }
 
     private fun getResources(manager: ResourceManager): List<Identifier> {
@@ -100,7 +110,25 @@ class ResourceLoadStrategy<T : IMerge<T>>(
         return decode(id, resourceContent, id.fileName())
     }
 
+    private fun loadUnloadedFiles() {
+        println("Trying to load unloaded files from: $configPath")
+        configPath.toFile().listFiles()?.forEach { file ->
+            println("FILE: $file")
+            if (file.nameWithoutExtension !in loadedLocations && file.extension == "json") {
+                println("Found still unloaded config file: $file")
+                val fileId = Bountiful.id(configPath.toString().replace('\\', '/') + "/" + file.nameWithoutExtension)
+                println("Gonna try loading from: $fileId")
+                val item = loadFile(fileId)
+                println("File data is: $item")
+                item?.let {
+                    completeLoadOf(it)
+                }
+            }
+        }
+    }
+
     fun clearDestination() {
+        loadedLocations.clear()
         destination.clear()
     }
 
