@@ -46,7 +46,7 @@ object BountifulIO : SimpleSynchronousResourceReloadListener {
     override fun reload(manager: ResourceManager) {
         contentLoaders.forEach {
             it.clearDestination()
-            it.test(manager)
+            it.loadData(manager)
             //it.loadResources(manager)
             //it.loadFiles()
         }

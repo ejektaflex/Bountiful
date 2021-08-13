@@ -62,6 +62,7 @@ object BountifulCommands : CommandRegistrationCallback {
             "debug" {
                 "bounty" runs debugBounty()
                 "weights" { argInt("rep", -30..30) runs weights() }
+                "dump" runs dumpData()
             }
         }
     }
@@ -184,6 +185,28 @@ object BountifulCommands : CommandRegistrationCallback {
                         .formatted(Formatting.DARK_RED).formatted(Formatting.BOLD),
                     false
                 )
+            }
+        }
+
+        1
+    }
+
+    private fun dumpData() = playerCommand { player ->
+
+        for (decree in BountifulContent.Decrees.sortedBy { it.id }) {
+            Bountiful.LOGGER.info("Decree: ${decree.id}")
+            for (obj in decree.objectives.sortedBy { it }) {
+                Bountiful.LOGGER.info("    * [OBJ] $obj")
+            }
+            for (rew in decree.rewards.sortedBy { it }) {
+                Bountiful.LOGGER.info("    * [REW] $rew")
+            }
+        }
+
+        for (pool in BountifulContent.Pools.sortedBy { it.id }) {
+            Bountiful.LOGGER.info("Pool: ${pool.id}")
+            for (item in pool.content.sortedBy { it.content }) {
+                Bountiful.LOGGER.info("    * [${item.type}] ${item.content}")
             }
         }
 
