@@ -48,20 +48,6 @@ class Bountiful : ModInitializer {
             }
         })
 
-        Kambrik.Message.apply {
-            registerClientMessage(
-                ClientUpdateBountySlot.serializer(),
-                id("update_bounty_slot")
-            )
-
-            registerServerMessage(
-                ServerMaskBountySlot.serializer(),
-                id("board_mask_update")
-            )
-        }
-
-
-
         ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(ServerEntityCombatEvents.AfterKilledOtherEntity { world, entity, killedEntity ->
             if (entity is ServerPlayerEntity) {
                 val playersInAction = world.getPlayers { it.distanceTo(entity) < 12f } + world.getPlayers { it.distanceTo(killedEntity) < 12f } + entity

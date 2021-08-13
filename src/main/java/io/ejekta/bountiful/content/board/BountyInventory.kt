@@ -4,7 +4,6 @@ import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyItem
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
-import io.ejekta.bountiful.data.messages.ClientUpdateBountySlot
 import io.ejekta.bountiful.util.readOnlyCopy
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup
 import net.minecraft.entity.player.PlayerEntity

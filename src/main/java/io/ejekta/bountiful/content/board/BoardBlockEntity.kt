@@ -136,6 +136,10 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         // Remove from board
         slotsToRemove.forEach { i ->
             bounties.removeBounty(this, i)
+            // Clear taken mask because it's no longer on the board
+            takenMask.forEach { uuid, mask ->
+                mask.removeIf { it == i }
+            }
         }
 
     }

@@ -13,10 +13,8 @@ class BoardBountySlot(val inv: BoardInventory, index: Int, x: Int, y: Int) : Slo
     override fun onTakeItem(player: PlayerEntity, stack: ItemStack) {
         if (player is ServerPlayerEntity) {
             val board = player.world.getBlockEntity(inv.pos) as? BoardBlockEntity
-            board?.removeFromMask(player, index)
+            board?.addToMask(player, index)
         }
         super.onTakeItem(player, stack)
     }
-
-
 }
