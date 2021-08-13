@@ -2,16 +2,18 @@ package io.ejekta.bountiful.content.board
 
 import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.config.BountifulIO
-import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyCreator
 import io.ejekta.bountiful.content.DecreeItem
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
+import io.ejekta.bountiful.data.Decree
+import io.ejekta.bountiful.data.packets.ClientUpdateBountySlot
 import io.ejekta.bountiful.mixin.SimpleInventoryAccessor
 import io.ejekta.bountiful.util.readOnlyCopy
 import io.ejekta.kambrikx.api.serial.nbt.NbtFormat
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
@@ -21,6 +23,7 @@ import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
@@ -131,12 +134,20 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             (BountyInventory.bountySlots - slotToAddTo).random()
         }
 
+
         val commonBounty = BountyCreator.create(getBoardDecrees(), level, ourWorld.time)
 
         // Add to board
-        bounties.addBounty(slotToAddTo, commonBounty)
+        bounties.addBounty(this, slotToAddTo, commonBounty)
+
+
         // Remove from board
-        slotsToRemove.forEach { i -> bounties.removeStack(i) }
+        slotsToRemove.forEach { i ->
+            bounties.removeStack(i)
+            ClientUpdateBountySlot(i, null).sendToClients(
+                PlayerLookup.tracking(this)
+            )
+        }
 
     }
 

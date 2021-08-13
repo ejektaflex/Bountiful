@@ -7,21 +7,23 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NbtCompound
 
 @Serializable
-data class ClientUpdateBountySlot(val stacks: Map<Int, @Contextual ItemStack>) : ClientMsg() {
+data class ClientUpdateBountySlot(val slotNum: Int, val nbt: @Contextual NbtCompound? = null) : ClientMsg() {
 
     override fun onClientReceived(ctx: MsgContext) {
 
-        println("Got client update for bounty slot!")
+        println("Got client update for bounty slot! It's on slot $slotNum")
 
         val gui = MinecraftClient.getInstance().currentScreen
 
         if ( gui is BoardScreen ) {
             val handler = gui.screenHandler as? BoardScreenHandler ?: return
-            for ((slotNum, stack) in stacks) {
-                // TODO figure out what revision is
-                handler.setStackInSlot(slotNum, 1, stack)
+            if (nbt != null) {
+                handler.setStackInSlot(slotNum, 1, ItemStack.fromNbt(nbt))
+            } else {
+                handler.setStackInSlot(slotNum, 1, ItemStack.EMPTY)
             }
         }
 

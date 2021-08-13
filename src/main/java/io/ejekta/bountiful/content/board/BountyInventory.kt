@@ -3,16 +3,28 @@ package io.ejekta.bountiful.content.board
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyItem
+import io.ejekta.bountiful.data.packets.ClientUpdateBountySlot
 import io.ejekta.bountiful.util.readOnlyCopy
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NbtCompound
+import net.minecraft.server.MinecraftServer
+import net.minecraft.world.World
 
 class BountyInventory : SimpleInventory(SIZE) {
 
-    fun addBounty(slot: Int, data: BountyData? = null) {
+    fun addBounty(entity: BoardBlockEntity, slot: Int, data: BountyData? = null) {
         if (slot !in bountySlots) return
-        setStack(slot, BountyItem.create(data))
+        val item = BountyItem.create(data)
+
+        println("Should update slot")
+        ClientUpdateBountySlot(slot, item.writeNbt(NbtCompound())).sendToClients(
+            PlayerLookup.tracking(entity)
+        )
+
+        setStack(slot, item)
     }
 
     override fun onOpen(player: PlayerEntity?) {
@@ -59,6 +71,6 @@ class BountyInventory : SimpleInventory(SIZE) {
 
     companion object {
         const val SIZE = 21
-        val bountySlots = 0 until 21
+        val bountySlots = 0 until SIZE
     }
 }

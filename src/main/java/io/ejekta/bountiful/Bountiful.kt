@@ -47,6 +47,7 @@ class Bountiful : ModInitializer {
             }
         })
 
+        println("Adding client update reg")
         Kambrik.Message.registerClientMessage(
             ClientUpdateBountySlot.serializer(),
             Identifier("kambrik", "bounty_slot_update")
