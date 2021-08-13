@@ -3,8 +3,6 @@ package io.ejekta.bountiful
 
 import io.ejekta.bountiful.bounty.logic.EntityLogic
 import io.ejekta.bountiful.config.BountifulIO
-import io.ejekta.bountiful.data.messages.ClientUpdateBountySlot
-import io.ejekta.bountiful.data.messages.ServerMaskBountySlot
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrikx.api.serial.serializers.IdentitySer
 import kotlinx.serialization.UseSerializers

@@ -31,8 +31,8 @@ version = modVersion
 repositories {
 	mavenLocal()
 	mavenCentral()
-	jcenter()
 	maven(url = "https://kotlin.bintray.com/kotlinx")
+	maven(url = "https://maven.shedaniel.me/")
 	maven(url = "https://maven.terraformersmc.com/") {
 		name = "Mod Menu"
 	}
@@ -49,7 +49,7 @@ dependencies {
 	// Kambrik API
 	modImplementation("io.ejekta:kambrik:0.4-SNAPSHOT+")
 
-	modApi("me.shedaniel.cloth:config-2:4.8.3") {
+	modApi("me.shedaniel.cloth:cloth-config-fabric:5.0.38") {
 		exclude(group = "net.fabricmc.fabric-api")
 	}
 

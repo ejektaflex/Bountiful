@@ -12,6 +12,9 @@ class BountifulConfigData {
     var boardUpdateFrequency: Int = 45
     var flatBonusTimePerBounty: Int = 0
     var shouldBountiesHaveTimersAndExpire = true
+    var dataPackExclusions = mutableListOf(
+        "bounty_pools/bountiful/cleric.json"
+    )
 
 
     fun buildScreen(): Screen {
@@ -21,6 +24,27 @@ class BountifulConfigData {
             .setSavingRunnable(::onSave)
 
         val creator = builder.entryBuilder()
+
+        val general = builder.getOrCreateCategory(LiteralText("General"))
+
+        general.addEntry(
+            creator.startStrList(
+                LiteralText("Excluded data paths"),
+                dataPackExclusions
+            ).setDefaultValue {
+                listOf(
+                    "bounty_pools/bountiful/example_pool",
+                    "bounty_pools/*/another_example",
+                    "bounty_decrees/other/*"
+                )
+            }.setTooltip(
+                LiteralText("A list of data paths that should be excluded from loading")
+            ).setSaveConsumer {
+                dataPackExclusions = it
+            }.setAddButtonTooltip(LiteralText("Adds a new exclusion rule. "))
+                .build()
+        )
+
 
         val board = builder.getOrCreateCategory(LiteralText("General - Board"))
 

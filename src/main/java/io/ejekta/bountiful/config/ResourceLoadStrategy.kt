@@ -96,6 +96,18 @@ class ResourceLoadStrategy<T : IMerge<T>>(
     private fun getResources(manager: ResourceManager): List<Identifier> {
         return manager.findResources(folderName) {
             it.endsWith(".json")
+        }.filter {
+            val str = it.path.substringBefore(".json")
+            val idreg = "([A-Za-z_/]+)"
+            val regexes = !BountifulIO.configData.dataPackExclusions.map { exc ->
+                Regex(
+                    exc.replace(Regex("[*]"), idreg)
+                )
+            }.any { regex ->
+                regex.matches(str)
+            }
+
+            regexes
         }.toList()
     }
 
@@ -115,11 +127,8 @@ class ResourceLoadStrategy<T : IMerge<T>>(
         configPath.toFile().listFiles()?.forEach { file ->
             println("FILE: $file")
             if (file.nameWithoutExtension !in loadedLocations && file.extension == "json") {
-                println("Found still unloaded config file: $file")
                 val fileId = Bountiful.id(configPath.toString().replace('\\', '/') + "/" + file.nameWithoutExtension)
-                println("Gonna try loading from: $fileId")
                 val item = loadFile(fileId)
-                println("File data is: $item")
                 item?.let {
                     completeLoadOf(it)
                 }
