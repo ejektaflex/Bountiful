@@ -135,13 +135,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
         // Remove from board
         slotsToRemove.forEach { i ->
-            bounties.removeStack(i)
-            ClientUpdateBountySlot(i, null).sendToClients(
-                PlayerLookup.tracking(this)
-            )
-            takenMask.forEach { (uuid, taken) ->
-                taken.removeIf { it == i }
-            }
+            bounties.removeBounty(this, i)
         }
 
     }

@@ -17,7 +17,7 @@ import net.minecraft.util.math.BlockPos
 class BoardScreenHandler @JvmOverloads constructor(
     syncId: Int,
     playerInventory: PlayerInventory,
-    val inventory: Inventory
+    val inventory: BoardInventory
 ) : ScreenHandler(BountifulContent.BOARD_SCREEN_HANDLER, syncId) {
 
 
