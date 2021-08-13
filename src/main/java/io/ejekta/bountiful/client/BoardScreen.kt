@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
+import io.ejekta.kambrikx.ext.client.drawSimpleCenteredImage
 import net.minecraft.client.gui.screen.ingame.GrindstoneScreen
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.render.GameRenderer
@@ -23,13 +24,7 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory, title: Te
     }
 
     override fun drawBackground(matrices: MatrixStack, delta: Float, mouseX: Int, mouseY: Int) {
-        RenderSystem.setShader { GameRenderer.getPositionTexShader() }
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
-        RenderSystem.setShaderTexture(0, TEXTURE)
-        //client!!.textureManager.bindTexture(TEXTURE)
-        val x = (width - backgroundWidth) / 2
-        val y = (height - backgroundHeight) / 2
-        drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight)
+        drawSimpleCenteredImage(matrices, TEXTURE, backgroundWidth, backgroundHeight)
     }
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
