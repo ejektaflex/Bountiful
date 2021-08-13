@@ -4,7 +4,9 @@ import com.mojang.blaze3d.systems.RenderSystem
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
+import net.minecraft.client.gui.screen.ingame.GrindstoneScreen
 import net.minecraft.client.gui.screen.ingame.HandledScreen
+import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.screen.ScreenHandler
@@ -21,9 +23,10 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory, title: Te
     }
 
     override fun drawBackground(matrices: MatrixStack, delta: Float, mouseX: Int, mouseY: Int) {
-        //RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f)
-        // TODO possibly find replacement for fixing drawbackground if it bugs out
-        client!!.textureManager.bindTexture(TEXTURE)
+        RenderSystem.setShader { GameRenderer.getPositionTexShader() }
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
+        RenderSystem.setShaderTexture(0, TEXTURE)
+        //client!!.textureManager.bindTexture(TEXTURE)
         val x = (width - backgroundWidth) / 2
         val y = (height - backgroundHeight) / 2
         drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight)
