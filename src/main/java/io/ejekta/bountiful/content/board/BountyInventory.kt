@@ -1,44 +1,37 @@
 package io.ejekta.bountiful.content.board
 
 import io.ejekta.bountiful.bounty.BountyData
-import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyItem
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
-import io.ejekta.bountiful.util.readOnlyCopy
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.SimpleInventory
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NbtCompound
 
 class BountyInventory : SimpleInventory(SIZE) {
+
+    private fun modifyTrackedGuiInvs(entity: BoardBlockEntity, func: (inv: BoardInventory) -> Unit) {
+        PlayerLookup.tracking(entity).forEach { player ->
+            val handler = player.currentScreenHandler as? BoardScreenHandler
+            handler?.let {
+                val boardInv = it.inventory
+                func(boardInv)
+            }
+        }
+    }
 
     fun addBounty(entity: BoardBlockEntity, slot: Int, data: BountyData? = null) {
         if (slot !in bountySlots) return
         val item = BountyItem.create(data)
 
-        // Update the GUI board inventories of all tracking players as well
-        PlayerLookup.tracking(entity).forEach { player ->
-            val handler = player.currentScreenHandler as? BoardScreenHandler
-            handler?.let {
-                println("Got curr handler of player")
-                val boardInv = it.inventory
-                boardInv.setStack(slot, item)
-            }
+        modifyTrackedGuiInvs(entity) {
+            it.setStack(slot, item)
         }
 
         setStack(slot, item)
     }
 
     fun removeBounty(entity: BoardBlockEntity, slot: Int) {
-
-        PlayerLookup.tracking(entity).forEach { player ->
-            val handler = player.currentScreenHandler as? BoardScreenHandler
-            handler?.let {
-                println("Got curr handler of player")
-                val boardInv = it.inventory
-                boardInv.removeStack(slot)
-            }
+        modifyTrackedGuiInvs(entity) {
+            it.removeStack(slot)
         }
 
         removeStack(slot)

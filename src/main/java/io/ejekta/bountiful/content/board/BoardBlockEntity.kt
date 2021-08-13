@@ -7,13 +7,11 @@ import io.ejekta.bountiful.content.BountyCreator
 import io.ejekta.bountiful.content.DecreeItem
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.data.Decree
-import io.ejekta.bountiful.data.messages.ClientUpdateBountySlot
 import io.ejekta.bountiful.mixin.SimpleInventoryAccessor
 import io.ejekta.bountiful.util.readOnlyCopy
 import io.ejekta.kambrikx.api.serial.nbt.NbtFormat
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
@@ -34,28 +32,13 @@ import net.minecraft.world.World
 
 class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(BountifulContent.BOARD_ENTITY, pos, state), ExtendedScreenHandlerFactory {
 
-    //override val content = DefaultedList.ofSize(900, ItemStack.EMPTY)
+    private val decrees = SimpleInventory(3)
+    private val bounties = BountyInventory()
 
-    val decrees = SimpleInventory(3)
-    val bounties = BountyInventory()
+    private val takenMask = mutableMapOf<String, MutableSet<Int>>()
 
-    val takenMask = mutableMapOf<String, MutableSet<Int>>()
-
-    fun isOnBoardFor(player: PlayerEntity, slot: Int): Boolean {
-        return slot !in takenMask.getOrDefault(player.uuidAsString, setOf())
-    }
-
-    private fun maskFor(player: PlayerEntity): MutableSet<Int> {
+    fun maskFor(player: PlayerEntity): MutableSet<Int> {
         return takenMask.getOrPut(player.uuidAsString) { mutableSetOf() }
-    }
-
-    fun addToMask(player: PlayerEntity, slot: Int) {
-        maskFor(player).add(slot)
-    }
-
-    fun removeFromMask(player: PlayerEntity, slot: Int) {
-        println("Removing from mask")
-        maskFor(player).removeIf { it == slot }
     }
 
     private var finishMap = mutableMapOf<String, Int>()
@@ -75,16 +58,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
                 slot,
                 stack
             )
-        }
-    }
-
-    private fun xpNeeded(done: Int, start: Int = 0): Int {
-        val units = start + 1
-        val unitTotal = units * 5
-        return if (done >= unitTotal) {
-            xpNeeded(done - unitTotal, units)
-        } else {
-            units
         }
     }
 
@@ -131,7 +104,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
         // Add to board
         bounties.addBounty(this, slotToAddTo, commonBounty)
-
 
         // Remove from board
         slotsToRemove.forEach { i ->
