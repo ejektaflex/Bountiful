@@ -39,30 +39,27 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     val decrees = SimpleInventory(3)
     val bounties = BountyInventory()
 
-    val bountyMasks = mutableMapOf<String, MutableSet<Int>>()
+    val takenMask = mutableMapOf<String, MutableSet<Int>>()
 
     fun isOnBoardFor(player: PlayerEntity, slot: Int): Boolean {
-        return slot in bountyMasks.getOrDefault(player.uuidAsString, setOf())
+        return slot !in takenMask.getOrDefault(player.uuidAsString, setOf())
     }
 
     private fun maskFor(player: PlayerEntity): MutableSet<Int> {
-        return bountyMasks.getOrPut(player.uuidAsString) { mutableSetOf() }
+        return takenMask.getOrPut(player.uuidAsString) { mutableSetOf() }
     }
 
-    fun putOnBoardFor(player: PlayerEntity, slot: Int) {
+    fun addToMask(player: PlayerEntity, slot: Int) {
         maskFor(player).add(slot)
     }
 
-    //private val bountyMap = mutableMapOf<UUID, BountyInventory>()
+    fun removeFromMask(player: PlayerEntity, slot: Int) {
+        println("Removing from mask")
+        maskFor(player).removeIf { it == slot }
+    }
 
     private var finishMap = mutableMapOf<String, Int>()
     private val finishSerializer = MapSerializer(String.serializer(), Int.serializer())
-
-    private fun getOnlinePlayerMasks(): List<MutableSet<Int>> {
-        return world?.players?.mapNotNull { maskFor(it) } ?: listOf()
-    }
-
-    val invs = getOnlinePlayerMasks()
 
     private val level: Int
         get() {
@@ -101,16 +98,13 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     fun updateCompletedBounties(player: PlayerEntity) {
-        val old = finishMap.getOrPut(player.uuidAsString) { 0 }
-        finishMap[player.uuidAsString] = old + 1
+        finishMap[player.uuidAsString] = finishMap.getOrPut(player.uuidAsString) {
+            0
+        } + 1
     }
 
-    private fun getBounties(player: PlayerEntity): BountyInventory {
-        return bounties.cloned(maskFor(player))
-    }
-
-    private fun getEntireInventory(player: PlayerEntity): BoardInventory {
-        return BoardInventory(getBounties(player), decrees)
+    private fun getMaskedInventory(player: PlayerEntity): BoardInventory {
+        return BoardInventory(pos, bounties.cloned(maskFor(player)), decrees)
     }
 
     private fun getBoardDecrees(): Set<Decree> {
@@ -127,11 +121,11 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         }
 
         val slotToAddTo = BountyInventory.bountySlots.random()
-        //println("Going to add to slow: $slotToAddTo")
+
+        // ~42% to remove none, ~28% to remove 1, ~28% to remove 2
         val slotsToRemove = (0 until listOf(0, 0, 0, 1, 1, 2, 2).random()).map {
             (BountyInventory.bountySlots - slotToAddTo).random()
         }
-
 
         val commonBounty = BountyCreator.create(getBoardDecrees(), level, ourWorld.time)
 
@@ -145,14 +139,17 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             ClientUpdateBountySlot(i, null).sendToClients(
                 PlayerLookup.tracking(this)
             )
+            takenMask.forEach { (uuid, taken) ->
+                taken.removeIf { it == i }
+            }
         }
 
     }
 
-    override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity?): ScreenHandler {
+    override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
         //We provide *this* to the screenHandler as our class Implements Inventory
         //Only the Server has the Inventory at the start, this will be synced to the client in the ScreenHandler
-        return BoardScreenHandler(syncId, playerInventory, getEntireInventory(player!!))
+        return BoardScreenHandler(syncId, playerInventory, getMaskedInventory(player))
     }
 
     override fun getDisplayName(): Text {

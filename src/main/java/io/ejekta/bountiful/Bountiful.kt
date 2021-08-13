@@ -4,6 +4,7 @@ package io.ejekta.bountiful
 import io.ejekta.bountiful.bounty.logic.EntityLogic
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.data.messages.ClientUpdateBountySlot
+import io.ejekta.bountiful.data.messages.ServerMaskBountySlot
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrikx.api.serial.serializers.IdentitySer
 import kotlinx.serialization.UseSerializers
@@ -47,10 +48,19 @@ class Bountiful : ModInitializer {
             }
         })
 
-        Kambrik.Message.registerClientMessage(
-            ClientUpdateBountySlot.serializer(),
-            Identifier("kambrik", "bounty_slot_update")
-        )
+        Kambrik.Message.apply {
+            registerClientMessage(
+                ClientUpdateBountySlot.serializer(),
+                id("update_bounty_slot")
+            )
+
+            registerServerMessage(
+                ServerMaskBountySlot.serializer(),
+                id("board_mask_update")
+            )
+        }
+
+
 
         ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(ServerEntityCombatEvents.AfterKilledOtherEntity { world, entity, killedEntity ->
             if (entity is ServerPlayerEntity) {

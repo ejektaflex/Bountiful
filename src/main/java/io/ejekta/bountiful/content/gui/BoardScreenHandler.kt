@@ -2,6 +2,7 @@ package io.ejekta.bountiful.content.gui
 
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.board.BoardBlock
+import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.board.BoardInventory
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
@@ -10,19 +11,21 @@ import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
+import net.minecraft.util.math.BlockPos
 
 
 class BoardScreenHandler @JvmOverloads constructor(
     syncId: Int,
     playerInventory: PlayerInventory,
-    inventory: Inventory = BoardInventory()
+    val inventory: Inventory
 ) : ScreenHandler(BountifulContent.BOARD_SCREEN_HANDLER, syncId) {
 
-    private val inventory: Inventory
 
     var level = 0
 
-    constructor(syncId: Int, playerInventory: PlayerInventory, buf: PacketByteBuf) : this(syncId, playerInventory, BoardInventory()) {
+    constructor(syncId: Int, playerInventory: PlayerInventory, buf: PacketByteBuf) : this(syncId, playerInventory,
+        BoardInventory(BlockPos.ORIGIN)
+    ) {
         level = buf.readInt()
     }
 
@@ -64,7 +67,7 @@ class BoardScreenHandler @JvmOverloads constructor(
     //sync this empty inventory with the inventory on the server.
     init {
         checkSize(inventory, BoardBlock.BOUNTY_SIZE)
-        this.inventory = inventory
+        //this.inventory = inventory
         //some inventories do custom logic when a player opens it.
         inventory.onOpen(playerInventory.player)
 
