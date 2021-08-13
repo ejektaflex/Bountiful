@@ -1,4 +1,4 @@
-package io.ejekta.bountiful.data.packets
+package io.ejekta.bountiful.data.messages
 
 import io.ejekta.bountiful.client.BoardScreen
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
@@ -13,8 +13,6 @@ import net.minecraft.nbt.NbtCompound
 data class ClientUpdateBountySlot(val slotNum: Int, val nbt: @Contextual NbtCompound? = null) : ClientMsg() {
 
     override fun onClientReceived(ctx: MsgContext) {
-
-        println("Got client update for bounty slot! It's on slot $slotNum")
 
         val gui = MinecraftClient.getInstance().currentScreen
 

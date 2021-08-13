@@ -3,15 +3,13 @@ package io.ejekta.bountiful.content.board
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyItem
-import io.ejekta.bountiful.data.packets.ClientUpdateBountySlot
+import io.ejekta.bountiful.data.messages.ClientUpdateBountySlot
 import io.ejekta.bountiful.util.readOnlyCopy
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
-import net.minecraft.server.MinecraftServer
-import net.minecraft.world.World
 
 class BountyInventory : SimpleInventory(SIZE) {
 
@@ -19,22 +17,12 @@ class BountyInventory : SimpleInventory(SIZE) {
         if (slot !in bountySlots) return
         val item = BountyItem.create(data)
 
-        println("Should update slot")
+        //println("Should update slot")
         ClientUpdateBountySlot(slot, item.writeNbt(NbtCompound())).sendToClients(
             PlayerLookup.tracking(entity)
         )
 
         setStack(slot, item)
-    }
-
-    override fun onOpen(player: PlayerEntity?) {
-        println("Inv opened")
-        super.onOpen(player)
-    }
-
-    override fun onClose(player: PlayerEntity?) {
-        println("Inv closed")
-        super.onClose(player)
     }
 
     val numBounties: Int

@@ -77,11 +77,15 @@ class BoardScreenHandler @JvmOverloads constructor(
         val adjustX = 0
         val adjustY = 0
 
+        // Bounties
         for (j in 0 until bRows) {
             for (k in 0 until bCols) {
                 addSlot(BoardBountySlot(inventory, k + j * bCols, 8 + k * bountySlotSize + adjustX, 18 + j * bountySlotSize + adjustY))
             }
+        }
 
+        // Decrees
+        for (j in 0 until bRows) {
             addSlot(BoardDecreeSlot(boardInv, inventory.size() - 3 + j, 19 + 7 * 18, 18 + j * 18))
         }
 

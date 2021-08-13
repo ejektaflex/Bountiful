@@ -7,7 +7,7 @@ import io.ejekta.bountiful.content.BountyCreator
 import io.ejekta.bountiful.content.DecreeItem
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.data.Decree
-import io.ejekta.bountiful.data.packets.ClientUpdateBountySlot
+import io.ejekta.bountiful.data.messages.ClientUpdateBountySlot
 import io.ejekta.bountiful.mixin.SimpleInventoryAccessor
 import io.ejekta.bountiful.util.readOnlyCopy
 import io.ejekta.kambrikx.api.serial.nbt.NbtFormat
@@ -23,7 +23,6 @@ import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.PacketByteBuf
-import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
@@ -31,7 +30,6 @@ import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import java.util.*
 
 
 class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(BountifulContent.BOARD_ENTITY, pos, state), ExtendedScreenHandlerFactory {

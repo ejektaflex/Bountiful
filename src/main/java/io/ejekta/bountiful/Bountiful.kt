@@ -3,7 +3,7 @@ package io.ejekta.bountiful
 
 import io.ejekta.bountiful.bounty.logic.EntityLogic
 import io.ejekta.bountiful.config.BountifulIO
-import io.ejekta.bountiful.data.packets.ClientUpdateBountySlot
+import io.ejekta.bountiful.data.messages.ClientUpdateBountySlot
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrikx.api.serial.serializers.IdentitySer
 import kotlinx.serialization.UseSerializers
@@ -47,7 +47,6 @@ class Bountiful : ModInitializer {
             }
         })
 
-        println("Adding client update reg")
         Kambrik.Message.registerClientMessage(
             ClientUpdateBountySlot.serializer(),
             Identifier("kambrik", "bounty_slot_update")
