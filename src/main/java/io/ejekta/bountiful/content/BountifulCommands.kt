@@ -13,6 +13,7 @@ import io.ejekta.kambrik.api.command.*
 import io.ejekta.kambrik.ext.identifier
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.item.ItemStack
 import net.minecraft.network.MessageType
@@ -26,48 +27,101 @@ import java.io.File
 object BountifulCommands : CommandRegistrationCallback {
 
     override fun register(dispatcher: CommandDispatcher<ServerCommandSource>, dedicated: Boolean) {
+
+        println("Adding serverside commands..")
+
         dispatcher.addCommand("bo") {
             requires(Kambrik.Command::hasBasicCreativePermission)
 
-            "hand" runs hand()
-            "complete" runs complete()
+            //"hand" runs hand()
+
+            "hand" {
+                executes {
+                    println("NO!")
+                    hand().run(it)
+                }
+            }
+
+//            "hand" {
+//                //"complete" runs complete()
+//
+//                executes {
+//                    println("UMM!")
+//                    hand()
+//                    1
+//                }
+//            }
+
+            "gen" {
+                "decree" {
+                    argString("decType") runs playerCommand { player ->
+                        val decId = getString("decType")
+                        val stack = DecreeItem.create(decId)
+                        player.giveItemStack(stack)
+                        1
+                    }
+                }
+
+                "bounty" {
+                    argInt("rep", -30..30) runs genBounty()
+                }
+            }
+
+
+
+            // /bo pool [poolName] add hand
+            // /bo pool [poolName] add tag [#tag]
+            // /bo pool [poolName]
 
             "pool" {
 
                 val pools = suggestionListTooltipped {
                     BountifulContent.Pools.map { pool ->
-                        pool.id to LiteralText("Used In: ").append(pool.usedInDecrees.map { it.translation }.reduce { acc, decree ->
-                            acc.append(", ").append(decree)
-                        })
+                        var trans = pool.usedInDecrees.map { it.translation }
+                        val translation = if (trans.isEmpty()) {
+                            LiteralText("None")
+                        } else {
+                            trans.reduce { acc, decree ->
+                                acc.append(", ").append(decree)
+                            }
+                        }
+                        pool.id to translation
                     }
                 }
 
-                "addhand" { argString("poolName", items = pools) runs addHandToPool() }
-                "create" { argString("poolName", items = pools) runs addPool() }
+                argString("poolName", items = pools) {
+                    "add" {
+                        "hand" runs addHandToPool()
+                    }
+                }
+
+
+
             }
 
-            "gen" { argInt("rep", -30..30) runs gen() }
 
-            "decree" {
-                argString("decType") runs playerCommand { player ->
-                    val decId = getString("decType")
-                    val stack = DecreeItem.create(decId)
-                    player.giveItemStack(stack)
-                    1
+
+
+
+            "util" {
+                "debug" {
+                    "weights" { argInt("rep", -30..30) runs weights() }
+                    "dump" runs dumpData()
+                }
+
+                "verify" {
+                    "pools" runs verifyPools()
+                    "hand" runs verifyBounty()
                 }
             }
 
-            "verify" runs verify()
-
-            "debug" {
-                "bounty" runs debugBounty()
-                "weights" { argInt("rep", -30..30) runs weights() }
-                "dump" runs dumpData()
-            }
         }
     }
 
     private fun hand() = playerCommand { player ->
+
+        println("hand")
+
         val held = player.mainHandStack
 
         val newPoolEntry = PoolEntry.create().apply {
@@ -81,7 +135,7 @@ object BountifulCommands : CommandRegistrationCallback {
             println(saved)
             player.sendMessage(LiteralText(saved), MessageType.CHAT, player.uuid)
 
-            val packet = PacketByteBuf(Unpooled.buffer())
+            val packet = PacketByteBufs.create()
             packet.writeString(saved)
             ServerPlayNetworking.send(player, Bountiful.id("copydata"), packet)
         } catch (e: Exception) {
@@ -110,24 +164,12 @@ object BountifulCommands : CommandRegistrationCallback {
         if (poolName.trim() != "") {
 
             val file = BountifulIO.getPoolFile(poolName).apply {
+                ensureExistence()
                 edit { content.add(newPoolEntry) }
             }
 
+            player.sendMessage(LiteralText("Item added."), MessageType.CHAT, player.uuid)
             player.sendMessage(LiteralText("Edit §6'config/bountiful/bounty_pools/$poolName.json'§r to edit details.").fileOpenerText(file.getOrCreateFile()), MessageType.CHAT, player.uuid)
-        } else {
-            player.sendMessage(LiteralText("Invalid pool name!"), MessageType.CHAT, player.uuid)
-        }
-
-        1
-    }
-
-    private fun addPool() = playerCommand { player ->
-        val poolName = getString("poolName")
-
-        if (poolName.trim() != "") {
-            BountifulIO.getPoolFile(poolName).ensureExistence()
-            player.sendMessage(LiteralText("Pool '$poolName' created (if it did not exist)"), MessageType.CHAT, player.uuid)
-            player.sendMessage(LiteralText("Use '/reload' to see changes."), MessageType.CHAT, player.uuid)
         } else {
             player.sendMessage(LiteralText("Invalid pool name!"), MessageType.CHAT, player.uuid)
         }
@@ -148,7 +190,7 @@ object BountifulCommands : CommandRegistrationCallback {
         1
     }
 
-    private fun gen() = playerCommand { player ->
+    private fun genBounty() = playerCommand { player ->
         try {
             val rep = getInt("rep")
             val bd = BountyCreator.create(BountifulContent.Decrees.toSet(), rep, player.world.time)
@@ -174,7 +216,7 @@ object BountifulCommands : CommandRegistrationCallback {
         1
     }
 
-    private fun debugBounty() = playerCommand { player ->
+    private fun verifyBounty() = playerCommand { player ->
 
         val held = player.mainHandStack
 
@@ -213,7 +255,7 @@ object BountifulCommands : CommandRegistrationCallback {
         1
     }
 
-    private fun verify() = playerCommand { player ->
+    private fun verifyPools() = playerCommand { player ->
 
         var errors = false
 
@@ -242,6 +284,12 @@ object BountifulCommands : CommandRegistrationCallback {
                 LiteralText("Some items are invalid. See above for details")
                     .formatted(Formatting.DARK_RED)
                     .formatted(Formatting.BOLD),
+                false
+            )
+        } else {
+            player.sendMessage(
+                LiteralText("All Pool data has been verified successfully.")
+                    .formatted(Formatting.GOLD),
                 false
             )
         }

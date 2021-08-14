@@ -82,7 +82,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
     private fun getBoardDecrees(): Set<Decree> {
         return BountifulContent.getDecrees(
-            decrees.readOnlyCopy.map { DecreeData[it].ids }.flatten().toSet()
+            decrees.readOnlyCopy.filter { it.item is DecreeItem }.map { DecreeData[it].ids }.flatten().toSet()
         )
     }
 
@@ -100,7 +100,11 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             (BountyInventory.bountySlots - slotToAddTo).random()
         }
 
-        val commonBounty = BountyCreator.create(getBoardDecrees(), level, ourWorld.time)
+        val commonBounty = BountyCreator.create(
+            getBoardDecrees(),
+            level,
+            ourWorld.time
+        )
 
         // Add to board
         bounties.addBounty(this, slotToAddTo, commonBounty)

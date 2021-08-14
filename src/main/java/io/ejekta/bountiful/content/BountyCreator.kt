@@ -112,6 +112,7 @@ class BountyCreator private constructor(private val decrees: Set<Decree>, privat
             val alreadyPicked = toReturn.map { it.content }
             val unpicked = objs.filter { it.content !in alreadyPicked }
 
+
             if (unpicked.isEmpty()) {
                 //println("Ran out of objectives to pick from! Already picked: $alreadyPicked")
                 break

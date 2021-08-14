@@ -2,6 +2,7 @@ package io.ejekta.bountiful.config
 
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.data.IMerge
+import io.ejekta.bountiful.data.Pool
 import kotlinx.serialization.DeserializationStrategy
 import net.minecraft.resource.ResourceManager
 import net.minecraft.util.Identifier
@@ -20,6 +21,11 @@ class ResourceLoadStrategy<T : IMerge<T>>(
         return try {
             JsonFormats.Hand.decodeFromString(decoder, fileText).apply {
                 id = newId
+
+                // Set up pool, if it's a pool
+                if (this is Pool) {
+                    setup(newId)
+                }
             }
         } catch (e: Exception) {
             println("Could not decode file with ${this::class.simpleName}, given id '$newId' in folder '$folderName' on id $identifier")
