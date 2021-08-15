@@ -1,7 +1,7 @@
 package io.ejekta.bountiful.bounty
 
 import io.ejekta.bountiful.Bountiful
-import io.ejekta.kambrikx.api.nbt.ItemData
+import io.ejekta.kambrik.api.serial.ItemDataJson
 import kotlinx.serialization.Serializable
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
@@ -27,7 +27,7 @@ data class DecreeData(val ids: MutableList<String> = mutableListOf()) {
     }
 
 
-    companion object : ItemData<DecreeData>() {
+    companion object : ItemDataJson<DecreeData>() {
         override val identifier: Identifier = Bountiful.id("decree_data")
         override val ser = DecreeData.serializer()
         override val default = { DecreeData() }

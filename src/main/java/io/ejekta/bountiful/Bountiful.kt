@@ -4,7 +4,7 @@ package io.ejekta.bountiful
 import io.ejekta.bountiful.bounty.logic.EntityLogic
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.kambrik.Kambrik
-import io.ejekta.kambrikx.api.serial.serializers.IdentitySer
+import io.ejekta.kambrik.api.serial.serializers.IdentitySer
 import kotlinx.serialization.UseSerializers
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents

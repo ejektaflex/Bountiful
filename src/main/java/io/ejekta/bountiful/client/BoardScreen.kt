@@ -1,13 +1,10 @@
 package io.ejekta.bountiful.client
 
-import com.mojang.blaze3d.systems.RenderSystem
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
-import io.ejekta.kambrikx.ext.client.drawSimpleCenteredImage
-import net.minecraft.client.gui.screen.ingame.GrindstoneScreen
+import io.ejekta.kambrik.ext.client.drawSimpleCenteredImage
 import net.minecraft.client.gui.screen.ingame.HandledScreen
-import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.screen.ScreenHandler

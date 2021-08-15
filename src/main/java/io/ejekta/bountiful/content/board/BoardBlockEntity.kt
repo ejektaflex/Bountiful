@@ -2,6 +2,7 @@ package io.ejekta.bountiful.content.board
 
 import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.config.BountifulIO
+import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyCreator
 import io.ejekta.bountiful.content.DecreeItem
@@ -9,8 +10,12 @@ import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.mixin.SimpleInventoryAccessor
 import io.ejekta.bountiful.util.readOnlyCopy
-import io.ejekta.kambrikx.api.serial.nbt.NbtFormat
+import io.ejekta.kambrik.ext.ksx.decodeFromStringTag
+import io.ejekta.kambrik.ext.ksx.encodeToStringTag
+import io.ejekta.kambrik.internal.KambrikExperimental
+import io.ejekta.kambrikx.api.serial.NbtFormat
 import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.SetSerializer
 import kotlinx.serialization.builtins.serializer
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.block.BlockState
@@ -20,6 +25,7 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.nbt.NbtString
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
@@ -35,7 +41,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     private val decrees = SimpleInventory(3)
     private val bounties = BountyInventory()
 
-    private val takenMask = mutableMapOf<String, MutableSet<Int>>()
+    private var takenMask = mutableMapOf<String, MutableSet<Int>>()
+    private val takenSerializer = MapSerializer(String.serializer(), SetSerializer(Int.serializer()))
 
     fun maskFor(player: PlayerEntity): MutableSet<Int> {
         return takenMask.getOrPut(player.uuidAsString) { mutableSetOf() }
@@ -143,34 +150,39 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     override fun readNbt(nbt: NbtCompound) {
 
         val decreeList = nbt?.getCompound("decree_inv") ?: return
+        val bountyList = nbt?.getCompound("bounty_inv") ?: return
+
         Inventories.readNbt(
             decreeList,
             (decrees as SimpleInventoryAccessor).stacks
         )
 
-        val doneMap = nbt.getCompound("completed")
-        finishMap = NbtFormat.Default.decodeFromTag(finishSerializer, doneMap).toMutableMap()
+        Inventories.readNbt(
+            bountyList,
+            (bounties as SimpleInventoryAccessor).stacks
+        )
 
-        // TODO implement player mask loading
-        /*
-        val bountyList = tag.getList("bounty_inv", 10) ?: return
-        bountyList.forEach { tagged ->
-            val userTag = tagged as NbtCompound
-            val uuid = userTag.getUuid("uuid")
-            val entry = bountiesToLoadTo(uuid)
-            Inventories.fromTag(userTag, (entry as SimpleInventoryAccessor).stacks)
-        }
+        val doneMap = nbt.get("completed")
+        finishMap = JsonFormats.Hand.decodeFromStringTag(finishSerializer, doneMap as NbtString).toMutableMap()
 
-         */
+        val takenData = nbt.get("taken")
+        takenMask = JsonFormats.Hand.decodeFromStringTag(takenSerializer, takenData as NbtString).map {
+            it.key to it.value.toMutableSet()
+        }.toMap().toMutableMap()
+
     }
 
     @Suppress("CAST_NEVER_SUCCEEDS")
     override fun writeNbt(tag: NbtCompound?): NbtCompound? {
         super.writeNbt(tag)
 
-        val doneMap = NbtFormat.Default.encodeToTag(finishSerializer, finishMap)
-
+        val doneMap = JsonFormats.Hand.encodeToStringTag(finishSerializer, finishMap)
         tag?.put("completed", doneMap)
+
+        tag?.put(
+            "taken",
+            JsonFormats.Hand.encodeToStringTag(takenSerializer, takenMask)
+        )
 
         val decreeList = NbtCompound()
         Inventories.writeNbt(decreeList, decrees.readOnlyCopy)
@@ -178,18 +190,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         val bountyList = NbtCompound()
         Inventories.writeNbt(bountyList, bounties.readOnlyCopy)
 
-        // TODO implement player mask saving
-        /*
-        val bountyList = ListTag()
-        bountyMap.forEach { (uuid, inv) ->
-            val userTag = NbtCompound()
-            userTag.putUuid("uuid", uuid)
-            Inventories.toTag(userTag, (inv as SimpleInventoryAccessor).stacks)
-            //userTag.putInt("reputation", inv.level)
-            bountyList.add(userTag)
-        }
-
-         */
         tag?.put("decree_inv", decreeList)
         tag?.put("bounty_inv", bountyList)
 

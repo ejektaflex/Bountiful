@@ -1,16 +1,16 @@
 package io.ejekta.bountiful.config
 
-import io.ejekta.kambrikx.api.serial.nbt.NbtFormat
+import io.ejekta.kambrik.Kambrik
 import kotlinx.serialization.json.Json
 
 object JsonFormats {
     val DataPack = Json {
-        serializersModule = NbtFormat.BuiltInSerializers
+        serializersModule = Kambrik.Serial.DefaultSerializers
         encodeDefaults = true
         prettyPrint = true
     }
     val Hand = Json {
-        serializersModule = NbtFormat.BuiltInSerializers
+        serializersModule = Kambrik.Serial.DefaultSerializers
         prettyPrint = true
     }
 }

@@ -4,7 +4,7 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.util.GameTime
-import io.ejekta.kambrikx.api.nbt.ItemData
+import io.ejekta.kambrik.api.serial.ItemDataJson
 import kotlinx.serialization.Serializable
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.player.PlayerEntity
@@ -97,7 +97,7 @@ class BountyData {
         }
     }
 
-    companion object : ItemData<BountyData>() {
+    companion object : ItemDataJson<BountyData>() {
         override val identifier = Bountiful.id("bounty_data")
         override val ser = BountyData.serializer()
         override val default: () -> BountyData = { BountyData() }
