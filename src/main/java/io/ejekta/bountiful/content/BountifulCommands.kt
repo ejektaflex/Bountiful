@@ -33,24 +33,10 @@ object BountifulCommands : CommandRegistrationCallback {
         dispatcher.addCommand("bo") {
             requires(Kambrik.Command::hasBasicCreativePermission)
 
-            //"hand" runs hand()
-
             "hand" {
-                executes {
-                    println("NO!")
-                    hand().run(it)
-                }
+                this runs hand()
+                "complete" runs complete()
             }
-
-//            "hand" {
-//                //"complete" runs complete()
-//
-//                executes {
-//                    println("UMM!")
-//                    hand()
-//                    1
-//                }
-//            }
 
             "gen" {
                 "decree" {
@@ -92,6 +78,13 @@ object BountifulCommands : CommandRegistrationCallback {
                 argString("poolName", items = pools) {
                     "add" {
                         "hand" runs addHandToPool()
+
+                        "tag" {
+
+
+
+                        }
+
                     }
                 }
 

@@ -82,7 +82,11 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
     private fun getBoardDecrees(): Set<Decree> {
         return BountifulContent.getDecrees(
-            decrees.readOnlyCopy.filter { it.item is DecreeItem }.map { DecreeData[it].ids }.flatten().toSet()
+            decrees.readOnlyCopy.filter {
+                it.item is DecreeItem && it.count > 0
+            }.map {
+                DecreeData[it].ids
+            }.flatten().toSet()
         )
     }
 

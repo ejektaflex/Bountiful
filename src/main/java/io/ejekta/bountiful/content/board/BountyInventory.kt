@@ -23,7 +23,7 @@ class BountyInventory : SimpleInventory(SIZE) {
         val item = BountyItem.create(data)
 
         modifyTrackedGuiInvs(entity) {
-            it.setStack(slot, item)
+            it.setStack(slot, item.copy())
         }
 
         setStack(slot, item)
