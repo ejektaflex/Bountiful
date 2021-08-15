@@ -209,7 +209,9 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
                 entity.randomlyAddBounty()
 
                 // Set unset decrees
-                (entity.decrees as SimpleInventoryAccessor).stacks.forEach { stack ->
+                (entity.decrees as SimpleInventoryAccessor).stacks.filter {
+                    it.item is DecreeItem // must be a decree and not null
+                }.forEach { stack ->
                     DecreeData.edit(stack) {
                         if (ids.isEmpty() && BountifulContent.Decrees.isNotEmpty()) {
                             ids.add(BountifulContent.Decrees.random().id)

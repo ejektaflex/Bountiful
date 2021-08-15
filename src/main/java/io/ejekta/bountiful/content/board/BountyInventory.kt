@@ -23,7 +23,7 @@ class BountyInventory : SimpleInventory(SIZE) {
         val item = BountyItem.create(data)
 
         modifyTrackedGuiInvs(entity) {
-            it.setStack(slot, item.copy())
+            it.setStack(slot, item.copy()) // All connected players get copies, so that taken bounties are instanced
         }
 
         setStack(slot, item)
@@ -48,7 +48,7 @@ class BountyInventory : SimpleInventory(SIZE) {
     }
 
     companion object {
-        const val SIZE = 21
+        const val SIZE = 21 // Number of bounty board slots
         val bountySlots = 0 until SIZE
     }
 }
