@@ -125,7 +125,7 @@ object BountyCreator : IBountyCreator {
                 if (minMaxRange != null) {
                     if(!Bountiful.config.tryMaxRewardQuantity) {
                         if(minMaxRange.min < minMaxRange.max && minMaxRange.min >= 0) {
-                            val newRange = ItemRange(minMaxRange.min, world.rand.nextInt(minMaxRange.max - minMaxRange.min))
+                            val newRange = ItemRange(minMaxRange.min, minMaxRange.min + world.rand.nextInt(minMaxRange.max - minMaxRange.min))
                             it.clampTo(newRange.toIntRange())
                         }
                         else {
