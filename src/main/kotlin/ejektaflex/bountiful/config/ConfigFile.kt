@@ -58,8 +58,8 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private set
     override var requireExactNbt: Boolean = true
         private set
-
-
+    override var tryMaxRewardQuantity: Boolean = true
+        private set
 
     private var bountyAmountMax = 2
     private var bountyAmountMin = 1
@@ -200,33 +200,40 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 true,
                 "Whether or not bounty boards will drop when broken (Default: true)."
         ).boolean
-        
+
         villageGenerationWeight = config.get(
                 CATEGORY_BOARD,
                 "Village Generation Chance",
                 0.73,
                 "Chance for a village to spawn with a bounty board"
         ).double
-        
+
         boardRequiresVillagers = config.get(
                 CATEGORY_BOARD,
                 "Villagers Supply Bounties",
                 false,
                 "Whether a bounty board needs villagers nearby or not."
         ).boolean
-        
+
         boardRequiredVillagerMax = config.get(
                 CATEGORY_BOARD,
                 "Villager Supply Max",
                 5,
                 "Maximum amount of villagers nearby that influence bounty board supply."
         ).int.clampTo(1..1000)
-        
+ 
         requireExactNbt = config.get(
                 CATEGORY_BOUNTY,
                 "Require Exact Nbt",
                 true,
                 "If true, the item's nbt tags must be equal to the bounty. If false, the item must match only the bounty's included tags"
+        ).boolean
+
+        tryMaxRewardQuantity = config.get(
+                CATEGORY_BOUNTY,
+                "Try Rewarding Max Quantity",
+                true,
+                "If true, rewards will always try to give as many of their item as possible up to their maximum quantity. If false, a random number between the min and max quantity is picked and attempted instead."
         ).boolean
 
         xpBonuses = config.get(

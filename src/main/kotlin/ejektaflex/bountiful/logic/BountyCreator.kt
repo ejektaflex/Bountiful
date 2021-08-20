@@ -6,6 +6,7 @@ import ejektaflex.bountiful.api.enum.EnumBountyRarity
 import ejektaflex.bountiful.api.ext.clampTo
 import ejektaflex.bountiful.api.ext.weightedRandom
 import ejektaflex.bountiful.api.logic.IBountyCreator
+import ejektaflex.bountiful.api.logic.ItemRange
 import ejektaflex.bountiful.logic.error.BountyCreationException
 import ejektaflex.bountiful.api.logic.pickable.PickableEntry
 import ejektaflex.bountiful.api.logic.picked.PickedEntry
@@ -122,7 +123,18 @@ object BountyCreator : IBountyCreator {
             val numCanGive = maxNumCouldGive.let {
                 val minMaxRange = reward.genericPick.range
                 if (minMaxRange != null) {
-                    it.clampTo(minMaxRange.toIntRange())
+                    if(!Bountiful.config.tryMaxRewardQuantity) {
+                        if(minMaxRange.min < minMaxRange.max && minMaxRange.min >= 0) {
+                            val newRange = ItemRange(minMaxRange.min, world.rand.nextInt(minMaxRange.max - minMaxRange.min))
+                            it.clampTo(newRange.toIntRange())
+                        }
+                        else {
+                            it.clampTo(minMaxRange.toIntRange())
+                        }
+                    }
+                    else {
+                        it.clampTo(minMaxRange.toIntRange())
+                    }
                 } else {
                     it
                 }

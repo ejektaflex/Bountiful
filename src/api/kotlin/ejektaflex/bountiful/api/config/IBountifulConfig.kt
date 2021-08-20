@@ -29,5 +29,6 @@ interface IBountifulConfig {
     val boardRequiredVillagerMax: Int
     val villageGenerationWeight: Double
     val requireExactNbt: Boolean
+    val tryMaxRewardQuantity: Boolean
     fun load()
 }
