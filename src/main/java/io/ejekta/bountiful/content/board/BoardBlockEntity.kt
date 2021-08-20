@@ -163,12 +163,17 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         )
 
         val doneMap = nbt.get("completed")
-        finishMap = JsonFormats.Hand.decodeFromStringTag(finishSerializer, doneMap as NbtString).toMutableMap()
+        //println("Done map is: $doneMap")
+        if (doneMap != null) {
+            finishMap = JsonFormats.Hand.decodeFromStringTag(finishSerializer, doneMap as NbtString).toMutableMap()
+        }
 
         val takenData = nbt.get("taken")
-        takenMask = JsonFormats.Hand.decodeFromStringTag(takenSerializer, takenData as NbtString).map {
-            it.key to it.value.toMutableSet()
-        }.toMap().toMutableMap()
+        if (takenData != null) {
+            takenMask = JsonFormats.Hand.decodeFromStringTag(takenSerializer, takenData as NbtString).map {
+                it.key to it.value.toMutableSet()
+            }.toMap().toMutableMap()
+        }
 
     }
 
