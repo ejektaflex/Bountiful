@@ -5,10 +5,14 @@ import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.util.GameTime
 import io.ejekta.kambrik.api.serial.ItemDataJson
+import io.ejekta.kambrik.ext.math.toVec3i
 import kotlinx.serialization.Serializable
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.sound.SoundCategory
+import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Formatting
@@ -40,6 +44,19 @@ class BountyData {
     }
 
     private fun rewardPlayer(player: PlayerEntity) {
+        if (player is ServerPlayerEntity) {
+            println("Playing sound")
+            player.serverWorld.playSound(
+                player,
+                player.blockPos,
+                SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP,
+                SoundCategory.PLAYERS,
+                1f, 1f
+            )
+        } else {
+            println("Can't play sound, dummy!")
+        }
+
         for (reward in rewards) {
             reward.logic.giveReward(player)
         }

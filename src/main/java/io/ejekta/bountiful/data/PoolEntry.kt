@@ -47,10 +47,7 @@ class PoolEntry private constructor() {
             max(1, ceil(worth.toDouble() / unitWorth).toInt())
         } else {
             amount.pick()
-        }
-        // Clamp amount into amount range
-        toGive = min(toGive, amount.max)
-        toGive = max(toGive, amount.min)
+        }.coerceIn(amount.min..amount.max) // Clamp amount into amount range
         return toGive
     }
 

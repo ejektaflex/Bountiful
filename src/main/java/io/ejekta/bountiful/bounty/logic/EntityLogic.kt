@@ -34,8 +34,12 @@ class EntityLogic(override val entry: BountyDataEntry) : IEntryLogic {
     override fun format(isObj: Boolean, player: PlayerEntity): Text {
         val progress = getProgress(player)
         return when (isObj) {
-            true -> entityType.name.copy().formatted(progress.color).append(progress.neededText.colored(Formatting.WHITE))
-            false -> progress.givingText.append(entityType.name.colored(entry.rarity.color))
+            true -> LiteralText("Kill ").append(
+                entityType.name.copy()
+            ).formatted(progress.color).append(
+                progress.neededText.colored(Formatting.WHITE)
+            )
+            false -> error("Cannot have an entity (${entry.content}) as a reward.")
         }
     }
 

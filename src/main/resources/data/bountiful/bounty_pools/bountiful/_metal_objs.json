@@ -13,10 +13,42 @@
 
 		{
 			"type": "ITEM",
+			"content": "minecraft:raw_iron",
+			"amount": {
+				"min": 3,
+				"max": 32
+			},
+			"unitWorth": 450
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:raw_copper",
+			"rarity": "UNCOMMON",
+			"amount": {
+				"min": 3,
+				"max": 18
+			},
+			"unitWorth": 500
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:raw_gold",
+			"rarity": "UNCOMMON",
+			"amount": {
+				"min": 3,
+				"max": 16
+			},
+			"unitWorth": 350
+		},
+
+		{
+			"type": "ITEM",
 			"content": "minecraft:iron_ingot",
 			"amount": {
 				"min": 3,
-				"max": 28
+				"max": 24
 			},
 			"unitWorth": 500
 		},
