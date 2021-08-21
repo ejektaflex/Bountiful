@@ -211,7 +211,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             val ourWorld = world ?: return
             if (ourWorld.isClient) return
 
-            // Set unset decrees every second
+            // Set unset decrees every 20 ticks
             if (ourWorld.time % 20L == 0L) {
                 (entity.decrees as SimpleInventoryAccessor).stacks.filter {
                     it.item is DecreeItem // must be a decree and not null
@@ -231,15 +231,17 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             }
 
 
-            // Remove expired bounties
-            for (i in 0 until entity.bounties.size()) {
-                var stack = entity.bounties.getStack(i)
-                if (stack.item !is BountyItem) {
-                    continue
-                }
-                val data = BountyData[stack]
-                if (data.timeLeft(world) <= 0) {
-                    entity.bounties.removeBounty(entity, i)
+            // Remove expired bounties every 100 ticks
+            if (ourWorld.time % 100L == 4L) {
+                for (i in 0 until entity.bounties.size()) {
+                    var stack = entity.bounties.getStack(i)
+                    if (stack.item !is BountyItem) {
+                        continue
+                    }
+                    val data = BountyData[stack]
+                    if (data.timeLeft(world) <= 0) {
+                        entity.bounties.removeBounty(entity, i)
+                    }
                 }
             }
 

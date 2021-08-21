@@ -35,7 +35,7 @@ class ItemLogic(override val entry: BountyDataEntry) : IEntryLogic {
         return null
     }
 
-    private fun getCurrentStacks(player: PlayerEntity): Map<ItemStack, Int>? {
+    private fun getCurrentStacks(player: PlayerEntity): Map<ItemStack, Int> {
         return player.inventory.main.collect(entry.amount) {
             identifier.toString() == entry.content
         }
@@ -54,12 +54,14 @@ class ItemLogic(override val entry: BountyDataEntry) : IEntryLogic {
     }
 
     override fun tryFinishObjective(player: PlayerEntity): Boolean {
-        return getCurrentStacks(player)?.let {
-            it.forEach { (stack, toShrink) ->
+        val currStacks = getCurrentStacks(player)
+        if (currStacks.values.sum() >= entry.amount) {
+            currStacks.forEach { (stack, toShrink) ->
                 stack.decrement(toShrink)
             }
-            true
-        } ?: false
+            return true
+        }
+        return false
     }
 
     override fun giveReward(player: PlayerEntity): Boolean {
