@@ -1,10 +1,12 @@
 package io.ejekta.bountiful.content.board
 
+import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyCreator
+import io.ejekta.bountiful.content.BountyItem
 import io.ejekta.bountiful.content.DecreeItem
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.data.Decree
@@ -83,10 +85,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         } + 1
     }
 
-    private fun getMaskedInventory(player: PlayerEntity): BoardInventory {
-        return BoardInventory(pos, bounties.cloned(maskFor(player)), decrees)
-    }
-
     private fun getBoardDecrees(): Set<Decree> {
         return BountifulContent.getDecrees(
             decrees.readOnlyCopy.filter {
@@ -129,6 +127,10 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             }
         }
 
+    }
+
+    private fun getMaskedInventory(player: PlayerEntity): BoardInventory {
+        return BoardInventory(pos, bounties.cloned(maskFor(player)), decrees)
     }
 
     override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
@@ -209,11 +211,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             val ourWorld = world ?: return
             if (ourWorld.isClient) return
 
-            if ((ourWorld.time + 13L) % (20L * BountifulIO.configData.boardUpdateFrequency) == 0L) {
-                // Change bounty population
-                entity.randomlyAddBounty()
-
-                // Set unset decrees
+            // Set unset decrees every second
+            if (ourWorld.time % 20L == 0L) {
                 (entity.decrees as SimpleInventoryAccessor).stacks.filter {
                     it.item is DecreeItem // must be a decree and not null
                 }.forEach { stack ->
@@ -223,8 +222,27 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
                         }
                     }
                 }
-
             }
+
+            // Add & remove bounties according to update frequency
+            if ((ourWorld.time + 13L) % (20L * BountifulIO.configData.boardUpdateFrequency) == 0L) {
+                // Change bounty population
+                entity.randomlyAddBounty()
+            }
+
+
+            // Remove expired bounties
+            for (i in 0 until entity.bounties.size()) {
+                var stack = entity.bounties.getStack(i)
+                if (stack.item !is BountyItem) {
+                    continue
+                }
+                val data = BountyData[stack]
+                if (data.timeLeft(world) <= 0) {
+                    entity.bounties.removeBounty(entity, i)
+                }
+            }
+
         }
 
     }

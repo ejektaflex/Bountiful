@@ -30,7 +30,7 @@ class BountyData {
     val objectives = mutableListOf<BountyDataEntry>()
     val rewards = mutableListOf<BountyDataEntry>()
 
-    private fun timeLeft(world: World): Long {
+    fun timeLeft(world: World): Long {
         return when (BountifulIO.configData.shouldBountiesHaveTimersAndExpire) {
             true -> max(timeStarted - world.time + timeToComplete, 0L)
             false -> 1L
