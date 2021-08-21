@@ -44,18 +44,17 @@ class BountyData {
     }
 
     private fun rewardPlayer(player: PlayerEntity) {
-        if (player is ServerPlayerEntity) {
-            println("Playing sound")
-            player.serverWorld.playSound(
-                player,
-                player.blockPos,
-                SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP,
-                SoundCategory.PLAYERS,
-                1f, 1f
-            )
-        } else {
-            println("Can't play sound, dummy!")
-        }
+        // Play XP pickup sound
+        player.playSound(
+            SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP,
+            SoundCategory.MASTER,
+            1f, 1f
+        )
+
+        // Give XP to player
+        player.addExperience(rewards.sumOf {
+            it.rarity.ordinal + 1
+        })
 
         for (reward in rewards) {
             reward.logic.giveReward(player)
