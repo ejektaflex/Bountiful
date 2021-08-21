@@ -2,6 +2,7 @@ package io.ejekta.bountiful.content
 
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
+import com.mojang.brigadier.arguments.ArgumentType
 import com.mojang.brigadier.arguments.IntegerArgumentType.getInteger
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
@@ -15,9 +16,11 @@ import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.minecraft.command.argument.NumberRangeArgumentType
 import net.minecraft.item.ItemStack
 import net.minecraft.network.MessageType
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.predicate.NumberRange
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.text.*
 import net.minecraft.util.Formatting
@@ -32,6 +35,26 @@ object BountifulCommands : CommandRegistrationCallback {
 
         dispatcher.addCommand("bo") {
             requires(Kambrik.Command::hasBasicCreativePermission)
+
+            val pools = suggestionListTooltipped {
+                BountifulContent.Pools.map { pool ->
+                    var trans = pool.usedInDecrees.map { it.translation }
+                    val translation = if (trans.isEmpty()) {
+                        LiteralText("None")
+                    } else {
+                        trans.reduce { acc, decree ->
+                            acc.append(", ").append(decree)
+                        }
+                    }
+                    pool.id to translation
+                }
+            }
+
+            val decrees = suggestionListTooltipped {
+                BountifulContent.Decrees.map { decree ->
+                    decree.id to decree.translation
+                }
+            }
 
             "hand" {
                 this runs hand()
@@ -61,23 +84,30 @@ object BountifulCommands : CommandRegistrationCallback {
 
             "pool" {
 
-                val pools = suggestionListTooltipped {
-                    BountifulContent.Pools.map { pool ->
-                        var trans = pool.usedInDecrees.map { it.translation }
-                        val translation = if (trans.isEmpty()) {
-                            LiteralText("None")
-                        } else {
-                            trans.reduce { acc, decree ->
-                                acc.append(", ").append(decree)
-                            }
-                        }
-                        pool.id to translation
-                    }
-                }
+
 
                 argString("poolName", items = pools) {
                     "add" {
-                        "hand" runs addHandToPool()
+                        "hand" {
+                            this runs addHandToPool()
+
+                            argIntRange("amount") {
+                                argInt("unit_worth") runs playerCommand { player ->
+                                    val amt = NumberRangeArgumentType.IntRangeArgumentType.getRangeArgument(this, "amount")
+                                    if (amt.min == null || amt.max == null) {
+                                        player.sendMessage(LiteralText("Amount Range must have a minimum and maximum value!"), false)
+                                        return@playerCommand 0
+                                    }
+
+                                    val worth = getInt("unit_worth")
+
+                                    addHandToPool(amt.min!!..amt.max!!, worth).run(this)
+
+                                    1
+                                }
+                            }
+
+                        }
 
                         "tag" {
 
@@ -145,13 +175,19 @@ object BountifulCommands : CommandRegistrationCallback {
         }
     }
 
-    private fun addHandToPool() = playerCommand { player ->
+    private fun addHandToPool(inAmount: IntRange? = null, inUnitWorth: Int? = null) = playerCommand { player ->
         val poolName = getString("poolName")
         val held = player.mainHandStack
 
         val newPoolEntry = PoolEntry.create().apply {
             content = held.identifier.toString()
             nbt = held.nbt
+            if (inAmount != null) {
+                amount = PoolEntry.EntryRange(inAmount.first, inAmount.last)
+            }
+            if (inUnitWorth != null) {
+                unitWorth = inUnitWorth.toDouble()
+            }
         }
 
         if (poolName.trim() != "") {
