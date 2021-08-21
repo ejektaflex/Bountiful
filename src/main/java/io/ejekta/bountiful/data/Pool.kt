@@ -7,6 +7,7 @@ import kotlinx.serialization.Transient
 @Serializable
 data class Pool(
     @Transient override var id: String = "DEFAULT_POOL",
+    val weightMult: Double = 1.0,
     override val replace: Boolean = false,
     override val requires: MutableList<String> = mutableListOf(),
     val content: MutableList<PoolEntry> = mutableListOf(),
@@ -18,6 +19,7 @@ data class Pool(
         val overallMult = content.size
         content.takeIf { it.isNotEmpty() }?.forEach {
             it.weightMult /= overallMult
+            it.weightMult *= this.weightMult
             it.sources.add(id)
         }
     }
