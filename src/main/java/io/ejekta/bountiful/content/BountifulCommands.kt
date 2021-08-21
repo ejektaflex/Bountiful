@@ -63,7 +63,7 @@ object BountifulCommands : CommandRegistrationCallback {
 
             "gen" {
                 "decree" {
-                    argString("decType") runs playerCommand { player ->
+                    argString("decType", items = decrees) runs playerCommand { player ->
                         val decId = getString("decType")
                         val stack = DecreeItem.create(decId)
                         player.giveItemStack(stack)
@@ -83,8 +83,6 @@ object BountifulCommands : CommandRegistrationCallback {
             // /bo pool [poolName]
 
             "pool" {
-
-
 
                 argString("poolName", items = pools) {
                     "add" {
@@ -117,8 +115,6 @@ object BountifulCommands : CommandRegistrationCallback {
 
                     }
                 }
-
-
 
             }
 
