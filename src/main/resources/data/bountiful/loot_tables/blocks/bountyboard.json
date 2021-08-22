@@ -12,7 +12,7 @@
 							"source": "block_entity",
 							"ops": [
 								{
-									"source": "Data",
+									"source": "BlockEntityTag.Data",
 									"target": "Data",
 									"op": "replace"
 								}

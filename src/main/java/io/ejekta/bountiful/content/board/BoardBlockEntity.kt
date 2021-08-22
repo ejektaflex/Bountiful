@@ -96,7 +96,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
     private fun modifyTrackedGuiInvs(func: (inv: BoardInventory) -> Unit) {
         val players = PlayerLookup.tracking(this)
-        println("PLAYERS: ${players.size}")
         players.forEach { player ->
             val handler = player.currentScreenHandler as? BoardScreenHandler
             // The handler has to refer to the same Board position as the Entity

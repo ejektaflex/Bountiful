@@ -12,6 +12,7 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.loot.context.LootContext
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
@@ -48,14 +49,10 @@ class BoardBlock : BlockWithEntity(
     }
 
     override fun onBreak(world: World?, pos: BlockPos?, state: BlockState?, player: PlayerEntity?) {
-        super<BlockWithEntity>.onBreak(world, pos, state, player)
         if (pos == null) return
         val be = world?.getBlockEntity(pos) ?: return
         val stack = getItemToSaveTo(world, pos, state, player).apply {
-            if (nbt == null) {
-                nbt = NbtCompound()
-            }
-
+            nbt = NbtCompound()
             nbt!!.put("BlockEntityTag", be.writeNbt(NbtCompound()))
         }
         val entity = ItemEntity(
@@ -68,6 +65,11 @@ class BoardBlock : BlockWithEntity(
             setToDefaultPickupDelay()
         }
         world.spawnEntity(entity)
+    }
+
+    override fun getDroppedStacks(state: BlockState?, builder: LootContext.Builder?): MutableList<ItemStack> {
+        //return super.getDroppedStacks(state, builder)
+        return mutableListOf()
     }
 
     override fun onUse(
