@@ -9,8 +9,10 @@ import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
@@ -47,7 +49,25 @@ class BoardBlock : BlockWithEntity(
 
     override fun onBreak(world: World?, pos: BlockPos?, state: BlockState?, player: PlayerEntity?) {
         super<BlockWithEntity>.onBreak(world, pos, state, player)
-        super<IBlockEntityDropSaved>.onBreak(world, pos, state, player)
+        if (pos == null) return
+        val be = world?.getBlockEntity(pos) ?: return
+        val stack = getItemToSaveTo(world, pos, state, player).apply {
+            if (nbt == null) {
+                nbt = NbtCompound()
+            }
+
+            nbt!!.put("BlockEntityTag", be.writeNbt(NbtCompound()))
+        }
+        val entity = ItemEntity(
+            world,
+            player?.pos?.x ?: pos.x.toDouble(),
+            player?.pos?.y ?: pos.y.toDouble(),
+            player?.pos?.z ?: pos.z.toDouble(),
+            stack
+        ).apply {
+            setToDefaultPickupDelay()
+        }
+        world.spawnEntity(entity)
     }
 
     override fun onUse(

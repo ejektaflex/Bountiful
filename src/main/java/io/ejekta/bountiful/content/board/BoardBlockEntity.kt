@@ -14,11 +14,10 @@ import io.ejekta.bountiful.mixin.SimpleInventoryAccessor
 import io.ejekta.bountiful.util.readOnlyCopy
 import io.ejekta.kambrik.ext.ksx.decodeFromStringTag
 import io.ejekta.kambrik.ext.ksx.encodeToStringTag
-import io.ejekta.kambrik.internal.KambrikExperimental
-import io.ejekta.kambrikx.api.serial.NbtFormat
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.SetSerializer
 import kotlinx.serialization.builtins.serializer
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
@@ -95,7 +94,41 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         )
     }
 
-    private fun randomlyAddBounty() {
+    private fun modifyTrackedGuiInvs(func: (inv: BoardInventory) -> Unit) {
+        val players = PlayerLookup.tracking(this)
+        println("PLAYERS: ${players.size}")
+        players.forEach { player ->
+            val handler = player.currentScreenHandler as? BoardScreenHandler
+            // The handler has to refer to the same Board position as the Entity
+            if (handler?.inventory?.pos == pos) {
+                handler?.let {
+                    val boardInv = it.inventory
+                    func(boardInv)
+                }
+            }
+        }
+    }
+
+    private fun addBounty(slot: Int, data: BountyData) {
+        if (slot !in BountyInventory.bountySlots) return
+        val item = BountyItem.create(data)
+
+        modifyTrackedGuiInvs {
+            it.setStack(slot, item.copy()) // All connected players get copies, so that taken bounties are instanced
+        }
+
+        bounties.setStack(slot, item)
+    }
+
+    fun removeBounty(slot: Int) {
+        modifyTrackedGuiInvs {
+            it.removeStack(slot)
+        }
+
+        bounties.removeStack(slot)
+    }
+
+    private fun randomlyUpdateBoard() {
         val ourWorld = world ?: return
 
         if (decrees.isEmpty) {
@@ -116,11 +149,11 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         )
 
         // Add to board
-        bounties.addBounty(this, slotToAddTo, commonBounty)
+        addBounty(slotToAddTo, commonBounty)
 
         // Remove from board
         slotsToRemove.forEach { i ->
-            bounties.removeBounty(this, i)
+            removeBounty(i)
             // Clear taken mask because it's no longer on the board
             takenMask.forEach { (uuid, mask) ->
                 mask.removeIf { it == i }
@@ -149,10 +182,12 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     @Suppress("CAST_NEVER_SUCCEEDS")
-    override fun readNbt(nbt: NbtCompound) {
+    override fun readNbt(tag: NbtCompound) {
 
-        val decreeList = nbt?.getCompound("decree_inv") ?: return
-        val bountyList = nbt?.getCompound("bounty_inv") ?: return
+        val base = tag.getCompound("Data")
+
+        val decreeList = base?.getCompound("decree_inv") ?: return
+        val bountyList = base?.getCompound("bounty_inv") ?: return
 
         Inventories.readNbt(
             decreeList,
@@ -164,13 +199,13 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             (bounties as SimpleInventoryAccessor).stacks
         )
 
-        val doneMap = nbt.get("completed")
+        val doneMap = base.get("completed")
         //println("Done map is: $doneMap")
         if (doneMap != null) {
             finishMap = JsonFormats.Hand.decodeFromStringTag(finishSerializer, doneMap as NbtString).toMutableMap()
         }
 
-        val takenData = nbt.get("taken")
+        val takenData = base.get("taken")
         if (takenData != null) {
             takenMask = JsonFormats.Hand.decodeFromStringTag(takenSerializer, takenData as NbtString).map {
                 it.key to it.value.toMutableSet()
@@ -183,10 +218,12 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     override fun writeNbt(tag: NbtCompound?): NbtCompound? {
         super.writeNbt(tag)
 
-        val doneMap = JsonFormats.Hand.encodeToStringTag(finishSerializer, finishMap)
-        tag?.put("completed", doneMap)
+        val base = NbtCompound()
 
-        tag?.put(
+        val doneMap = JsonFormats.Hand.encodeToStringTag(finishSerializer, finishMap)
+        base.put("completed", doneMap)
+
+        base.put(
             "taken",
             JsonFormats.Hand.encodeToStringTag(takenSerializer, takenMask)
         )
@@ -197,8 +234,10 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         val bountyList = NbtCompound()
         Inventories.writeNbt(bountyList, bounties.readOnlyCopy)
 
-        tag?.put("decree_inv", decreeList)
-        tag?.put("bounty_inv", bountyList)
+        base.put("decree_inv", decreeList)
+        base.put("bounty_inv", bountyList)
+
+        tag?.put("Data", base)
 
         //println("Saved tag $tag")
         return tag
@@ -208,11 +247,10 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
         @JvmStatic
         fun tick(world: World, pos: BlockPos, state: BlockState, entity: BoardBlockEntity) {
-            val ourWorld = world ?: return
-            if (ourWorld.isClient) return
+            if (world.isClient) return
 
             // Set unset decrees every 20 ticks
-            if (ourWorld.time % 20L == 0L) {
+            if (world.time % 20L == 0L) {
                 (entity.decrees as SimpleInventoryAccessor).stacks.filter {
                     it.item is DecreeItem // must be a decree and not null
                 }.forEach { stack ->
@@ -225,14 +263,14 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             }
 
             // Add & remove bounties according to update frequency
-            if ((ourWorld.time + 13L) % (20L * BountifulIO.configData.boardUpdateFrequency) == 0L) {
+            if ((world.time + 13L) % (20L * BountifulIO.configData.boardUpdateFrequency) == 0L) {
                 // Change bounty population
-                entity.randomlyAddBounty()
+                entity.randomlyUpdateBoard()
             }
 
 
             // Remove expired bounties every 100 ticks
-            if (ourWorld.time % 100L == 4L) {
+            if (world.time % 100L == 4L) {
                 for (i in 0 until entity.bounties.size()) {
                     var stack = entity.bounties.getStack(i)
                     if (stack.item !is BountyItem) {
@@ -240,7 +278,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
                     }
                     val data = BountyData[stack]
                     if (data.timeLeft(world) <= 0) {
-                        entity.bounties.removeBounty(entity, i)
+                        entity.removeBounty(i)
                     }
                 }
             }

@@ -56,11 +56,15 @@ object BountifulCommands : CommandRegistrationCallback {
                 }
             }
 
+            // /bo hand
+            // /bo hand complete
             "hand" {
                 this runs hand()
                 "complete" runs complete()
             }
 
+            // /bo gen decree (decType)
+            // /bo gen bounty (rep_level)
             "gen" {
                 "decree" {
                     argString("decType", items = decrees) runs playerCommand { player ->
@@ -81,7 +85,6 @@ object BountifulCommands : CommandRegistrationCallback {
             // /bo pool [poolName] add hand
             // /bo pool [poolName] add tag [#tag]
             // /bo pool [poolName]
-
             "pool" {
 
                 argString("poolName", items = pools) {
@@ -107,20 +110,10 @@ object BountifulCommands : CommandRegistrationCallback {
 
                         }
 
-                        "tag" {
-
-
-
-                        }
-
                     }
                 }
 
             }
-
-
-
-
 
             "util" {
                 "debug" {
