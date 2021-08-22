@@ -3,37 +3,29 @@ package io.ejekta.bountiful.content.board
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyItem
-import io.ejekta.kambrik.templating.block.entity.IBlockEntityDropSaved
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
-import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.loot.context.LootContext
 import net.minecraft.loot.context.LootContextParameters
-import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import java.util.function.Consumer
 
 
 class BoardBlock : BlockWithEntity(
     FabricBlockSettings.of(Material.WOOD).hardness(5f).resistance(3600000f)
-), BlockEntityProvider, IBlockEntityDropSaved {
+), BlockEntityProvider {
 
     override fun getRenderType(state: BlockState?): BlockRenderType {
         return BlockRenderType.MODEL
-    }
-
-    override fun getItemToSaveTo(world: World?, pos: BlockPos?, state: BlockState?, player: PlayerEntity?): ItemStack {
-        return ItemStack(BountifulContent.BOARD)
     }
 
     override fun <T : BlockEntity> getTicker(
@@ -48,26 +40,6 @@ class BoardBlock : BlockWithEntity(
         } else {
             checkType(type, BountifulContent.BOARD_ENTITY, BoardBlockEntity::tick)
         }
-    }
-
-    override fun onBreak(world: World?, pos: BlockPos?, state: BlockState?, player: PlayerEntity?) {
-        return // for now
-        if (pos == null) return
-        val be = world?.getBlockEntity(pos) ?: return
-        val stack = getItemToSaveTo(world, pos, state, player).apply {
-            nbt = NbtCompound()
-            nbt!!.put("BlockEntityTag", be.writeNbt(NbtCompound()))
-        }
-        val entity = ItemEntity(
-            world,
-            player?.pos?.x ?: pos.x.toDouble(),
-            player?.pos?.y ?: pos.y.toDouble(),
-            player?.pos?.z ?: pos.z.toDouble(),
-            stack
-        ).apply {
-            setToDefaultPickupDelay()
-        }
-        world.spawnEntity(entity)
     }
 
     override fun getDroppedStacks(state: BlockState?, builder: LootContext.Builder?): MutableList<ItemStack> {
@@ -93,14 +65,12 @@ class BoardBlock : BlockWithEntity(
         if (world != null && pos != null && itemStack != null && !world.isClient) {
             val blockEntity = world.getBlockEntity(pos, BountifulContent.BOARD_ENTITY)
             blockEntity.ifPresent {
-                println("BE does exist!")
                 val itemNbt = itemStack.nbt ?: return@ifPresent
                 if (itemNbt.contains("BlockEntityTag")) {
                     val tag = itemNbt.getCompound("BlockEntityTag")
                     it.readNbt(tag)
                     it.markDirty()
                 }
-                println("NBT: $itemNbt")
             }
         }
     }
