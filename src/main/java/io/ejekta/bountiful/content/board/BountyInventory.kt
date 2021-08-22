@@ -18,6 +18,10 @@ class BountyInventory : SimpleInventory(SIZE) {
         return newInv
     }
 
+    fun clone(): BountyInventory {
+        return cloned(setOf())
+    }
+
     companion object {
         const val SIZE = 21 // Number of bounty board slots
         val bountySlots = 0 until SIZE

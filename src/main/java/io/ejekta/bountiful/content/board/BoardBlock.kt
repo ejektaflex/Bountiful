@@ -10,16 +10,18 @@ import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.ItemEntity
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.loot.context.LootContext
+import net.minecraft.loot.context.LootContextParameters
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
-import net.minecraft.world.BlockView
 import net.minecraft.world.World
+import java.util.function.Consumer
 
 
 class BoardBlock : BlockWithEntity(
@@ -49,6 +51,7 @@ class BoardBlock : BlockWithEntity(
     }
 
     override fun onBreak(world: World?, pos: BlockPos?, state: BlockState?, player: PlayerEntity?) {
+        return // for now
         if (pos == null) return
         val be = world?.getBlockEntity(pos) ?: return
         val stack = getItemToSaveTo(world, pos, state, player).apply {
@@ -68,8 +71,38 @@ class BoardBlock : BlockWithEntity(
     }
 
     override fun getDroppedStacks(state: BlockState?, builder: LootContext.Builder?): MutableList<ItemStack> {
-        //return super.getDroppedStacks(state, builder)
+        val blockEntity = builder?.getNullable(LootContextParameters.BLOCK_ENTITY)
+        if (blockEntity?.type == BountifulContent.BOARD_ENTITY) {
+            return super.getDroppedStacks(state, builder).map {
+                it.apply {
+                    blockEntity!!.writeNbt(orCreateNbt.getCompound("BlockEntityTag"))
+                }
+            }.toMutableList()
+        }
         return mutableListOf()
+    }
+
+    override fun onPlaced(
+        world: World?,
+        pos: BlockPos?,
+        state: BlockState?,
+        placer: LivingEntity?,
+        itemStack: ItemStack?
+    ) {
+        super.onPlaced(world, pos, state, placer, itemStack)
+        if (world != null && pos != null && itemStack != null && !world.isClient) {
+            val blockEntity = world.getBlockEntity(pos, BountifulContent.BOARD_ENTITY)
+            blockEntity.ifPresent {
+                println("BE does exist!")
+                val itemNbt = itemStack.nbt ?: return@ifPresent
+                if (itemNbt.contains("BlockEntityTag")) {
+                    val tag = itemNbt.getCompound("BlockEntityTag")
+                    it.readNbt(tag)
+                    it.markDirty()
+                }
+                println("NBT: $itemNbt")
+            }
+        }
     }
 
     override fun onUse(

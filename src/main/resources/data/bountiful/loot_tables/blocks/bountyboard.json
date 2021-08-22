@@ -8,13 +8,11 @@
 					"type": "minecraft:item",
 					"functions": [
 						{
-							"function": "minecraft:copy_nbt",
-							"source": "block_entity",
-							"ops": [
+							"function": "minecraft:set_contents",
+							"entries": [
 								{
-									"source": "BlockEntityTag.Data",
-									"target": "Data",
-									"op": "replace"
+									"type": "minecraft:dynamic",
+									"name": "minecraft:contents"
 								}
 							]
 						}

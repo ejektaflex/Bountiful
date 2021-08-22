@@ -161,6 +161,10 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
     }
 
+    fun fullInventoryCopy(): BoardInventory {
+        return BoardInventory(pos, bounties.clone(), decrees)
+    }
+
     private fun getMaskedInventory(player: PlayerEntity): BoardInventory {
         return BoardInventory(pos, bounties.cloned(maskFor(player)), decrees)
     }
@@ -181,9 +185,9 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     @Suppress("CAST_NEVER_SUCCEEDS")
-    override fun readNbt(tag: NbtCompound) {
+    override fun readNbt(base: NbtCompound) {
 
-        val base = tag.getCompound("Data")
+
 
         val decreeList = base?.getCompound("decree_inv") ?: return
         val bountyList = base?.getCompound("bounty_inv") ?: return
@@ -214,10 +218,9 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     @Suppress("CAST_NEVER_SUCCEEDS")
-    override fun writeNbt(tag: NbtCompound?): NbtCompound? {
-        super.writeNbt(tag)
+    override fun writeNbt(base: NbtCompound): NbtCompound? {
+        super.writeNbt(base)
 
-        val base = NbtCompound()
 
         val doneMap = JsonFormats.Hand.encodeToStringTag(finishSerializer, finishMap)
         base.put("completed", doneMap)
@@ -236,10 +239,10 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         base.put("decree_inv", decreeList)
         base.put("bounty_inv", bountyList)
 
-        tag?.put("Data", base)
+        //tag?.put("Data", base)
 
         //println("Saved tag $tag")
-        return tag
+        return base
     }
 
     companion object {
