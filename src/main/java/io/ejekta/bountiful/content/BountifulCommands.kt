@@ -8,6 +8,7 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.config.*
+import io.ejekta.bountiful.content.messages.ClipboardCopy
 import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.api.command.*
@@ -143,13 +144,8 @@ object BountifulCommands : CommandRegistrationCallback {
 
         try {
             val saved = newPoolEntry.save(JsonFormats.Hand)
-
-            println(saved)
             player.sendMessage(LiteralText(saved), MessageType.CHAT, player.uuid)
-
-            val packet = PacketByteBufs.create()
-            packet.writeString(saved)
-            ServerPlayNetworking.send(player, Bountiful.id("copydata"), packet)
+            ClipboardCopy(saved).sendToClient(player)
         } catch (e: Exception) {
             e.printStackTrace()
         }

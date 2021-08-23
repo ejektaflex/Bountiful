@@ -4,7 +4,9 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.content.BountifulContent
+import io.ejekta.bountiful.content.messages.ClipboardCopy
 import io.ejekta.bountiful.mixin.ModelPredicateProviderRegistrar
+import io.ejekta.kambrik.Kambrik
 import kotlinx.serialization.InternalSerializationApi
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
@@ -13,6 +15,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.util.Identifier
 
 class BountifulClient : ClientModInitializer {
 
@@ -36,14 +39,10 @@ class BountifulClient : ClientModInitializer {
             if (data.ids.isNotEmpty()) 1f else 0f
         }
 
-        ClientPlayNetworking.registerGlobalReceiver(
-            Bountiful.id("copydata")
-        ) { minecraftClient, _, packetByteBuf, _ ->
-            val str = packetByteBuf.readString()
-            minecraftClient.execute {
-                minecraftClient.keyboard.clipboard = str
-            }
-        }
+        Kambrik.Message.registerClientMessage(
+            ClipboardCopy.serializer(),
+            Bountiful.id("clipboard_copy")
+        )
 
         ScreenRegistry.register(BountifulContent.BOARD_SCREEN_HANDLER, ::BoardScreen)
 
