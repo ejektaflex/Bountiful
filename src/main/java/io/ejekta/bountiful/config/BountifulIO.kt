@@ -5,9 +5,9 @@ import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.data.Pool
 import io.ejekta.kambrik.Kambrik
-import io.ejekta.kambrik.api.file.KambrikConfigFile
-import io.ejekta.kambrik.api.file.KambrikParseFailMode
 import io.ejekta.kambrik.ext.ensured
+import io.ejekta.kambrikx.file.KambrikConfigFile
+import io.ejekta.kambrikx.file.KambrikParseFailMode
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
 import net.minecraft.resource.ResourceManager
 

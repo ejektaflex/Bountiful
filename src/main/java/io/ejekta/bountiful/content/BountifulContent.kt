@@ -6,7 +6,7 @@ import io.ejekta.bountiful.data.Pool
 import io.ejekta.bountiful.content.board.BoardBlock
 import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
-import io.ejekta.kambrik.feature.registration.KambrikAutoRegistrar
+import io.ejekta.kambrik.registration.KambrikAutoRegistrar
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item

@@ -2,26 +2,20 @@ package io.ejekta.bountiful.content
 
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
-import com.mojang.brigadier.arguments.ArgumentType
 import com.mojang.brigadier.arguments.IntegerArgumentType.getInteger
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyRarity
-import io.ejekta.bountiful.config.*
+import io.ejekta.bountiful.config.BountifulIO
+import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.messages.ClipboardCopy
 import io.ejekta.bountiful.data.PoolEntry
-import io.ejekta.kambrik.Kambrik
-import io.ejekta.kambrik.api.command.*
+import io.ejekta.kambrik.command.*
 import io.ejekta.kambrik.ext.identifier
-import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.command.argument.NumberRangeArgumentType
 import net.minecraft.item.ItemStack
 import net.minecraft.network.MessageType
-import net.minecraft.network.PacketByteBuf
-import net.minecraft.predicate.NumberRange
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.text.*
 import net.minecraft.util.Formatting
@@ -35,7 +29,7 @@ object BountifulCommands : CommandRegistrationCallback {
         println("Adding serverside commands..")
 
         dispatcher.addCommand("bo") {
-            requires(Kambrik.Command::hasBasicCreativePermission)
+            requiresCreativeOrOp(2)
 
             val pools = suggestionListTooltipped {
                 BountifulContent.Pools.map { pool ->

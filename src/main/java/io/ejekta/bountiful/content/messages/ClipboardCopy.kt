@@ -1,6 +1,6 @@
 package io.ejekta.bountiful.content.messages
 
-import io.ejekta.kambrik.api.message.ClientMsg
+import io.ejekta.kambrik.message.ClientMsg
 import kotlinx.serialization.Serializable
 
 @Serializable

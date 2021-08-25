@@ -1,7 +1,7 @@
 package io.ejekta.bountiful.bounty
 
 import io.ejekta.bountiful.Bountiful
-import io.ejekta.kambrik.api.serial.ItemDataJson
+import io.ejekta.kambrik.serial.ItemDataJson
 import kotlinx.serialization.Serializable
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
