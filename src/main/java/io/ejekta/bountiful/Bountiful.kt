@@ -40,7 +40,7 @@ class Bountiful : ModInitializer {
                     server,
                     Identifier("bountiful:village/common/bounty_gazebo"),
                     Identifier("minecraft:village/$villageType/houses"),
-                    10_000
+                    5
                 )
 
             }

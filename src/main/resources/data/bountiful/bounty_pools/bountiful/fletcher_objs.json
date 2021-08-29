@@ -34,6 +34,7 @@
 
         {
             "type": "ITEM",
+            "rarity": "UNCOMMON",
             "content": "minecraft:target",
             "amount": {
                 "min": 1,

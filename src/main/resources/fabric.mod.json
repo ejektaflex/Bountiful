@@ -44,13 +44,19 @@
       "markers": {
 
       }
+    },
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/TCsRjJ6vwZ"
+      }
     }
   },
 
   "depends": {
     "fabricloader": ">=0.11.6",
     "fabric": "*",
-    "minecraft": "1.17.1"
+    "minecraft": "1.17.1",
+    "kambrik": ">=1.0.0"
   },
   "suggests": {
     "flamingo": "*"

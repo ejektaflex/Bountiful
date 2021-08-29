@@ -15,12 +15,18 @@ object BountifulIO : SimpleSynchronousResourceReloadListener {
 
     var configData = BountifulConfigData()
 
-    private val rootFolder = Kambrik.File.getBaseFolder(Bountiful.ID)
+    private val rootFolder = Kambrik.File.getConfigFolderRelativePath(Bountiful.ID)
 
     private val poolConfigs = rootFolder.ensured("bounty_pools")
     private val decreeConfigs = rootFolder.ensured("bounty_decrees")
 
-    private val configFile = KambrikConfigFile(rootFolder, "bountiful.json", JsonFormats.DataPack, KambrikParseFailMode.LEAVE, BountifulConfigData.serializer()) { BountifulConfigData() }
+    private val configFile = KambrikConfigFile(
+        rootFolder,
+        "bountiful.json",
+        JsonFormats.DataPack,
+        KambrikParseFailMode.LEAVE,
+        BountifulConfigData.serializer()
+    ) { BountifulConfigData() }
 
     fun getPoolFile(poolName: String): KambrikConfigFile<Pool> {
         return KambrikConfigFile(
@@ -47,8 +53,6 @@ object BountifulIO : SimpleSynchronousResourceReloadListener {
         contentLoaders.forEach {
             it.clearDestination()
             it.loadData(manager)
-            //it.loadResources(manager)
-            //it.loadFiles()
         }
     }
 

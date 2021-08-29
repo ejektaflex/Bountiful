@@ -47,7 +47,7 @@ dependencies {
 	modImplementation("net.fabricmc:fabric-loader:${loaderVersion}")
 
 	// Kambrik API
-	modImplementation("io.ejekta:kambrik:0.5-SNAPSHOT+")
+	modImplementation("io.ejekta:kambrik:1.1.0")
 
 	modApi("me.shedaniel.cloth:cloth-config-fabric:5.0.38") {
 		exclude(group = "net.fabricmc.fabric-api")
@@ -55,7 +55,7 @@ dependencies {
 
 	implementation("com.google.code.findbugs:jsr305:3.0.2")
 
-	modApi("com.terraformersmc:modmenu:2.0.4") {
+	modApi("com.terraformersmc:modmenu:2.0.6") {
 		exclude(module = "fabric-api")
 		exclude(module = "config-2")
 	}

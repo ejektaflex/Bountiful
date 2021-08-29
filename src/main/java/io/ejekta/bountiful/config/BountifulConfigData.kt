@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.config
 
+import io.ejekta.kambrik.text.textLiteral
 import kotlinx.serialization.Serializable
 import me.shedaniel.clothconfig2.api.ConfigBuilder
 import net.minecraft.client.MinecraftClient
@@ -13,8 +14,9 @@ class BountifulConfigData {
     var flatBonusTimePerBounty: Int = 0
     var shouldBountiesHaveTimersAndExpire = true
     var dataPackExclusions = mutableListOf(
-        "bounty_pools/bountiful/cleric.json"
+        "bounty_pools/bountiful/something_here"
     )
+    var boardGenerationFrequency: Int = 4
 
 
     fun buildScreen(): Screen {
@@ -45,14 +47,29 @@ class BountifulConfigData {
                 .build()
         )
 
+        general.addEntry(
+            creator.startIntSlider(
+                textLiteral("Board generation frequency in villages"),
+                boardGenerationFrequency,
+                0, 32
+            ).setDefaultValue(4)
+                .setTooltip(
+                    textLiteral("How often bounty boards generate in villages")
+                )
+                .setSaveConsumer {
+                    boardGenerationFrequency = it
+                }
+                .requireRestart()
+                .build()
+        )
+
 
         val board = builder.getOrCreateCategory(LiteralText("General - Board"))
 
         board.addEntry(
-            creator.startIntSlider(
-                LiteralText("Board Update Frequency"),
-                boardUpdateFrequency,
-                1, 600
+            creator.startIntField(
+                textLiteral("Board Update Frequency"),
+                boardUpdateFrequency
             ).setDefaultValue(45).setTooltip(
                 LiteralText("How often (in seconds) new bounties are added/removed")
             ).setSaveConsumer {
@@ -65,7 +82,7 @@ class BountifulConfigData {
                 LiteralText("Bonus Time"),
                 flatBonusTimePerBounty,
                 0, 6000
-            ).setDefaultValue(45).setTooltip(
+            ).setDefaultValue(0).setTooltip(
                 LiteralText("How much bonus time is given to bounties")
             ).setSaveConsumer {
                 flatBonusTimePerBounty = it

@@ -3,6 +3,7 @@ package io.ejekta.bountiful.config
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.data.IMerge
 import io.ejekta.bountiful.data.Pool
+import io.ejekta.kambrik.Kambrik
 import kotlinx.serialization.DeserializationStrategy
 import net.minecraft.resource.ResourceManager
 import net.minecraft.util.Identifier
@@ -41,7 +42,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
         return File(configPath.toFile(), fileName)
     }
 
-    fun completeLoadOf(data: T) {
+    private fun completeLoadOf(data: T) {
         destination.add(data)
         loadedLocations += data.id
     }
@@ -52,7 +53,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
         }
 
         for ((itemId, resources) in resourceMap) {
-            println("Querying $strategyName: $itemId, $resources")
+            Bountiful.LOGGER.debug("Querying $strategyName: $itemId, $resources")
 
             val referenceId = resources.first()
             val matchingFile = getConfigFile(referenceId)
@@ -67,7 +68,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
                     // If config data replaces resource data, don't even load resource data
                     if (configData.replace) {
                         completeLoadOf(configData)
-                        println("Config REPLACES so we are done here")
+                        Bountiful.LOGGER.debug("Config REPLACES so we are done here")
                         continue
                     }
                 }
@@ -129,11 +130,11 @@ class ResourceLoadStrategy<T : IMerge<T>>(
     }
 
     private fun loadUnloadedFiles() {
-        println("Trying to load unloaded files from: $configPath")
+        Bountiful.LOGGER.debug("Trying to load unloaded files from: $configPath")
         configPath.toFile().listFiles()?.forEach { file ->
-            println("FILE: $file")
             if (file.nameWithoutExtension !in loadedLocations && file.extension == "json") {
-                val fileId = Bountiful.id(configPath.toString().replace('\\', '/') + "/" + file.nameWithoutExtension)
+                val resourceName = configPath.toString().replace('\\', '/') + "/" + file.nameWithoutExtension
+                val fileId = Bountiful.id(resourceName)
                 val item = loadFile(fileId)
                 item?.let {
                     completeLoadOf(it)
