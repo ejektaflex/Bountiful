@@ -3,22 +3,31 @@ package io.ejekta.bountiful.content
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.IntegerArgumentType.getInteger
+import com.mojang.brigadier.context.CommandContext
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyRarity
+import io.ejekta.bountiful.bounty.BountyType
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.messages.ClipboardCopy
 import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.kambrik.command.*
 import io.ejekta.kambrik.ext.identifier
+import io.ejekta.kambrik.text.sendMessage
+import io.ejekta.kambrik.text.textLiteral
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
+import net.minecraft.command.argument.IdentifierArgumentType.getIdentifier
 import net.minecraft.command.argument.NumberRangeArgumentType
+import net.minecraft.entity.EntityType
 import net.minecraft.item.ItemStack
 import net.minecraft.network.MessageType
 import net.minecraft.server.command.ServerCommandSource
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.*
 import net.minecraft.util.Formatting
+import net.minecraft.util.Identifier
+import net.minecraft.util.registry.Registry
 import java.io.File
 
 
@@ -77,29 +86,36 @@ object BountifulCommands : CommandRegistrationCallback {
 
 
 
-            // /bo pool [poolName] add hand
-            // /bo pool [poolName] add tag [#tag]
             // /bo pool [poolName]
+            // /bo pool [poolName] add hand
+            // /bo pool [poolName] add hand (minAmt)..(maxAmt) (unitWorth)
+            // /bo pool [poolName] add tag [#tag] (not yet implemented)
+            // /bo pool [poolName] add entity
+            // /bo pool [poolName] add entity (minAmt)..(maxAmt) (unitWorth)
             "pool" {
 
                 argString("poolName", items = pools) {
                     "add" {
                         "hand" {
                             this runs addHandToPool()
-
                             argIntRange("amount") {
-                                argInt("unit_worth") runs playerCommand { player ->
-                                    val amt = NumberRangeArgumentType.IntRangeArgumentType.getRangeArgument(this, "amount")
-                                    if (amt.min == null || amt.max == null) {
-                                        player.sendMessage(LiteralText("Amount Range must have a minimum and maximum value!"), false)
-                                        return@playerCommand 0
-                                    }
+                                argInt("unit_worth") runs addToPoolCommand { inAmount, inWorth ->
+                                    addHandToPool(inAmount, inWorth).run(this)
+                                }
+                            }
+                        }
 
-                                    val worth = getInt("unit_worth")
-
-                                    addHandToPool(amt.min!!..amt.max!!, worth).run(this)
-
+                        "entity" {
+                            val entityTypes = suggestionList { Registry.ENTITY_TYPE.ids.toList() }
+                            argIdentifier("entity_identifier", items = entityTypes) {
+                                this runs {
+                                    addEntityToPool(null, null, getIdentifier(it, "entity_identifier")).run(it)
                                     1
+                                }
+                                argIntRange("amount") {
+                                    argInt("unit_worth") runs addToPoolCommand { inAmount, inWorth ->
+                                        addEntityToPool(inAmount, inWorth, getIdentifier(this, "entity_identifier")).run(this)
+                                    }
                                 }
                             }
 
@@ -126,9 +142,6 @@ object BountifulCommands : CommandRegistrationCallback {
     }
 
     private fun hand() = playerCommand { player ->
-
-        println("hand")
-
         val held = player.mainHandStack
 
         val newPoolEntry = PoolEntry.create().apply {
@@ -138,7 +151,7 @@ object BountifulCommands : CommandRegistrationCallback {
 
         try {
             val saved = newPoolEntry.save(JsonFormats.Hand)
-            player.sendMessage(LiteralText(saved), MessageType.CHAT, player.uuid)
+            player.sendMessage { +saved }
             ClipboardCopy(saved).sendToClient(player)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -147,39 +160,79 @@ object BountifulCommands : CommandRegistrationCallback {
         1
     }
 
-    private fun MutableText.fileOpenerText(file: File): Text {
-        return styled {
-            it.withClickEvent(ClickEvent(ClickEvent.Action.OPEN_FILE, file.absolutePath))
-                .withHoverEvent(HoverEvent(HoverEvent.Action.SHOW_TEXT, LiteralText("Click to open file '${file.name}'")))
+    private fun addToPoolCommand(func: CommandContext<ServerCommandSource>.(inAmount: IntRange, inWorth: Int) -> Unit) = playerCommand { player ->
+        val amt = NumberRangeArgumentType.IntRangeArgumentType.getRangeArgument(this, "amount")
+        if (amt.min == null || amt.max == null) {
+            player.sendMessage { +"Amount Range must have a minimum and maximum value!" }
+            return@playerCommand 0
         }
+
+        val worth = getInt("unit_worth")
+
+        func(amt.min!!..amt.max!!, worth)
+        1
     }
 
-    private fun addHandToPool(inAmount: IntRange? = null, inUnitWorth: Int? = null) = playerCommand { player ->
-        val poolName = getString("poolName")
-        val held = player.mainHandStack
+    private fun addToPool(
+        player: ServerPlayerEntity,
+        inAmount: IntRange? = null,
+        inUnitWorth: Int? = null,
+        poolName: String,
+        poolFunc: PoolEntry.() -> Unit
+    ) {
 
         val newPoolEntry = PoolEntry.create().apply {
-            content = held.identifier.toString()
-            nbt = held.nbt
             if (inAmount != null) {
                 amount = PoolEntry.EntryRange(inAmount.first, inAmount.last)
             }
             if (inUnitWorth != null) {
                 unitWorth = inUnitWorth.toDouble()
             }
-        }
+        }.apply(poolFunc)
 
         if (poolName.trim() != "") {
 
             val file = BountifulIO.getPoolFile(poolName).apply {
                 ensureExistence()
                 edit { content.add(newPoolEntry) }
-            }
+            }.getOrCreateFile()
 
-            player.sendMessage(LiteralText("Item added."), MessageType.CHAT, player.uuid)
-            player.sendMessage(LiteralText("Edit §6'config/bountiful/bounty_pools/$poolName.json'§r to edit details.").fileOpenerText(file.getOrCreateFile()), MessageType.CHAT, player.uuid)
+            player.sendMessage { +"Content added." }
+            player.sendMessage {
+                +"Edit §6'config/bountiful/bounty_pools/$poolName.json'§r to edit details." {
+                    clickEvent = ClickEvent(ClickEvent.Action.OPEN_FILE, file.absolutePath)
+                    onHoverShowText { +"Click to open file '${file.name}'" }
+                }
+            }
         } else {
-            player.sendMessage(LiteralText("Invalid pool name!"), MessageType.CHAT, player.uuid)
+            player.sendMessage { +"Invalid pool name!" }
+        }
+
+    }
+
+    private fun addHandToPool(inAmount: IntRange? = null, inUnitWorth: Int? = null) = playerCommand { player ->
+        val poolName = getString("poolName")
+        val held = player.mainHandStack
+
+        addToPool(player, inAmount, inUnitWorth, poolName) {
+            content = held.identifier.toString()
+            nbt = held.nbt
+        }
+
+        1
+    }
+
+    private fun addEntityToPool(inAmount: IntRange? = null, inUnitWorth: Int? = null, entityId: Identifier) = playerCommand { player ->
+        try {
+            val poolName = getString("poolName")
+
+
+            addToPool(player, inAmount, inUnitWorth, poolName) {
+                type = BountyType.ENTITY
+                content = entityId.toString()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
 
         1

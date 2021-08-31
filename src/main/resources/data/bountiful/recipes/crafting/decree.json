@@ -1,7 +1,9 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"pattern": [
-		"PS ", "SGS", "DSP"
+		"PS ",
+		"SGS",
+		"DSP"
 	],
 	"key": {
 		"P": {"item": "minecraft:paper"},

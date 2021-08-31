@@ -16,7 +16,7 @@ class BountifulConfigData {
     var dataPackExclusions = mutableListOf(
         "bounty_pools/bountiful/something_here"
     )
-    var boardGenerationFrequency: Int = 4
+    var boardGenerationFrequency: Int = 2
 
 
     fun buildScreen(): Screen {
@@ -52,7 +52,7 @@ class BountifulConfigData {
                 textLiteral("Board generation frequency in villages"),
                 boardGenerationFrequency,
                 0, 32
-            ).setDefaultValue(4)
+            ).setDefaultValue(2)
                 .setTooltip(
                     textLiteral("How often bounty boards generate in villages")
                 )
