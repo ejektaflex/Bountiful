@@ -12,6 +12,7 @@ import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.messages.ClipboardCopy
 import io.ejekta.bountiful.data.PoolEntry
+import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.command.*
 import io.ejekta.kambrik.ext.identifier
 import io.ejekta.kambrik.text.sendMessage
@@ -22,6 +23,7 @@ import net.minecraft.command.argument.NumberRangeArgumentType
 import net.minecraft.entity.EntityType
 import net.minecraft.item.ItemStack
 import net.minecraft.network.MessageType
+import net.minecraft.predicate.NumberRange
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.*
@@ -35,7 +37,7 @@ object BountifulCommands : CommandRegistrationCallback {
 
     override fun register(dispatcher: CommandDispatcher<ServerCommandSource>, dedicated: Boolean) {
 
-        println("Adding serverside commands..")
+        Bountiful.LOGGER.info("Adding serverside commands..")
 
         dispatcher.addCommand("bo") {
             requiresCreativeOrOp(2)
@@ -63,7 +65,7 @@ object BountifulCommands : CommandRegistrationCallback {
             // /bo hand
             // /bo hand complete
             "hand" {
-                this runs hand()
+                this runs { hand().run(this) }
                 "complete" runs complete()
             }
 
@@ -71,50 +73,52 @@ object BountifulCommands : CommandRegistrationCallback {
             // /bo gen bounty (rep_level)
             "gen" {
                 "decree" {
-                    argString("decType", items = decrees) runs playerCommand { player ->
-                        val decId = getString("decType")
-                        val stack = DecreeItem.create(decId)
-                        player.giveItemStack(stack)
-                        1
+                    argString("decType", items = decrees) runs { decType ->
+                        val stack = DecreeItem.create(decType())
+                        source.player.giveItemStack(stack)
                     }
                 }
 
                 "bounty" {
-                    argInt("rep", -30..30) runs genBounty()
+                    argInt("rep", -30..30) runs { rep ->
+                        genBounty(rep()).run(this)
+                    }
                 }
             }
-
 
 
             // /bo pool [poolName]
             // /bo pool [poolName] add hand
             // /bo pool [poolName] add hand (minAmt)..(maxAmt) (unitWorth)
             // /bo pool [poolName] add tag [#tag] (not yet implemented)
-            // /bo pool [poolName] add entity
-            // /bo pool [poolName] add entity (minAmt)..(maxAmt) (unitWorth)
+            // /bo pool [poolName] add entity [entity_id]
+            // /bo pool [poolName] add entity [entity_id] (minAmt)..(maxAmt) (unitWorth)
             "pool" {
 
-                argString("poolName", items = pools) {
+                argString("poolName", items = pools) { poolName ->
                     "add" {
                         "hand" {
-                            this runs addHandToPool()
-                            argIntRange("amount") {
-                                argInt("unit_worth") runs addToPoolCommand { inAmount, inWorth ->
-                                    addHandToPool(inAmount, inWorth).run(this)
+                            this runs { addHandToPool(poolName = poolName()).run(this) }
+                            argIntRange("amount") { amount ->
+                                argInt("unit_worth") runs { worth ->
+                                    addToPoolCommand(amount(), worth()) { amtRange, worthAmt ->
+                                        addHandToPool(amtRange, worthAmt, poolName()).run(this)
+                                    }.run(this)
                                 }
                             }
                         }
 
                         "entity" {
                             val entityTypes = suggestionList { Registry.ENTITY_TYPE.ids.toList() }
-                            argIdentifier("entity_identifier", items = entityTypes) {
+                            argIdentifier("entity_identifier", items = entityTypes) { eId ->
                                 this runs {
-                                    addEntityToPool(null, null, getIdentifier(it, "entity_identifier")).run(it)
-                                    1
+                                    addEntityToPool(null, null, eId(), poolName()).run(this)
                                 }
-                                argIntRange("amount") {
-                                    argInt("unit_worth") runs addToPoolCommand { inAmount, inWorth ->
-                                        addEntityToPool(inAmount, inWorth, getIdentifier(this, "entity_identifier")).run(this)
+                                argIntRange("amount") { amount ->
+                                    argInt("unit_worth") runs { worth ->
+                                        addToPoolCommand(amount(), worth()) { amtRange, worthAmt ->
+                                            addEntityToPool(amtRange, worthAmt, eId(), poolName()).run(this)
+                                        }.run(this)
                                     }
                                 }
                             }
@@ -141,36 +145,34 @@ object BountifulCommands : CommandRegistrationCallback {
         }
     }
 
-    private fun hand() = playerCommand { player ->
-        val held = player.mainHandStack
+    private fun hand() = kambrikCommand<ServerCommandSource> {
+        val held = source.player.mainHandStack
 
         val newPoolEntry = PoolEntry.create().apply {
             content = held.identifier.toString()
-            nbt = if (player.mainHandStack == ItemStack.EMPTY) null else held.nbt
+            nbt = if (source.player.mainHandStack == ItemStack.EMPTY) null else held.nbt
         }
 
         try {
             val saved = newPoolEntry.save(JsonFormats.Hand)
-            player.sendMessage { +saved }
-            ClipboardCopy(saved).sendToClient(player)
+            source.player.sendMessage { +saved }
+            ClipboardCopy(saved).sendToClient(source.player)
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
-        1
     }
 
-    private fun addToPoolCommand(func: CommandContext<ServerCommandSource>.(inAmount: IntRange, inWorth: Int) -> Unit) = playerCommand { player ->
-        val amt = NumberRangeArgumentType.IntRangeArgumentType.getRangeArgument(this, "amount")
+    private fun addToPoolCommand(
+        amt: NumberRange.IntRange,
+        inWorth: Int,
+        func: (amount: IntRange, worth: Int) -> Unit = { a, w -> }
+    ) = kambrikCommand<ServerCommandSource> {
         if (amt.min == null || amt.max == null) {
-            player.sendMessage { +"Amount Range must have a minimum and maximum value!" }
-            return@playerCommand 0
+            source.player.sendMessage { +"Amount Range must have a minimum and maximum value!" }
+            return@kambrikCommand
         }
 
-        val worth = getInt("unit_worth")
-
-        func(amt.min!!..amt.max!!, worth)
-        1
+        func(amt.min!!..amt.max!!, inWorth)
     }
 
     private fun addToPool(
@@ -180,7 +182,6 @@ object BountifulCommands : CommandRegistrationCallback {
         poolName: String,
         poolFunc: PoolEntry.() -> Unit
     ) {
-
         val newPoolEntry = PoolEntry.create().apply {
             if (inAmount != null) {
                 amount = PoolEntry.EntryRange(inAmount.first, inAmount.last)
@@ -210,57 +211,48 @@ object BountifulCommands : CommandRegistrationCallback {
 
     }
 
-    private fun addHandToPool(inAmount: IntRange? = null, inUnitWorth: Int? = null) = playerCommand { player ->
-        val poolName = getString("poolName")
-        val held = player.mainHandStack
+    private fun addHandToPool(inAmount: IntRange? = null, inUnitWorth: Int? = null, poolName: String) = kambrikCommand<ServerCommandSource> {
+        val held = source.player.mainHandStack
 
-        addToPool(player, inAmount, inUnitWorth, poolName) {
+        addToPool(source.player, inAmount, inUnitWorth, poolName) {
             content = held.identifier.toString()
             nbt = held.nbt
         }
-
-        1
     }
 
-    private fun addEntityToPool(inAmount: IntRange? = null, inUnitWorth: Int? = null, entityId: Identifier) = playerCommand { player ->
+    private fun addEntityToPool(
+        inAmount: IntRange? = null,
+        inUnitWorth: Int? = null,
+        entityId: Identifier,
+        poolName: String
+    ) = kambrikCommand<ServerCommandSource> {
         try {
-            val poolName = getString("poolName")
-
-
-            addToPool(player, inAmount, inUnitWorth, poolName) {
+            addToPool(source.player, inAmount, inUnitWorth, poolName) {
                 type = BountyType.ENTITY
                 content = entityId.toString()
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
-        1
     }
 
-    private fun complete() = playerCommand { player ->
-        val held = player.mainHandStack
+    private fun complete() = kambrikCommand<ServerCommandSource> {
+        val held = source.player.mainHandStack
         val data = BountyData[held]
-
         try {
-            data.tryCashIn(player, held)
+            data.tryCashIn(source.player, held)
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
-        1
     }
 
-    private fun genBounty() = playerCommand { player ->
+    private fun genBounty(rep: Int) = kambrikCommand<ServerCommandSource> {
         try {
-            val rep = getInt("rep")
-            val bd = BountyCreator.create(BountifulContent.Decrees.toSet(), rep, player.world.time)
-            player.giveItemStack(BountyItem.create(bd))
+            val bd = BountyCreator.create(BountifulContent.Decrees.toSet(), rep, source.player.world.time)
+            source.player.giveItemStack(BountyItem.create(bd))
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
-        1
     }
 
     private fun weights() = Command<ServerCommandSource> { ctx ->
@@ -277,25 +269,18 @@ object BountifulCommands : CommandRegistrationCallback {
         1
     }
 
-    private fun verifyBounty() = playerCommand { player ->
-
-        val held = player.mainHandStack
-
+    private fun verifyBounty() = kambrikCommand<ServerCommandSource> {
+        val held = source.player.mainHandStack
         if (held.item is BountyItem) {
-            if (!BountyData[held].verifyValidity(player)) {
-                player.sendMessage(
-                    LiteralText("Please report this to the modpack author (or the mod author, if this is not part of a modpack)")
-                        .formatted(Formatting.DARK_RED).formatted(Formatting.BOLD),
-                    false
-                )
+            if (!BountyData[held].verifyValidity(source.player)) {
+                source.player.sendMessage("Please report this to the modpack author (or the mod author, if this is not part of a modpack)") {
+                    format(Formatting.DARK_RED, Formatting.BOLD)
+                }
             }
         }
-
-        1
     }
 
-    private fun dumpData() = playerCommand { player ->
-
+    private fun dumpData() = kambrikCommand<ServerCommandSource> {
         for (decree in BountifulContent.Decrees.sortedBy { it.id }) {
             Bountiful.LOGGER.info("Decree: ${decree.id}")
             for (obj in decree.objectives.sortedBy { it }) {
@@ -312,12 +297,9 @@ object BountifulCommands : CommandRegistrationCallback {
                 Bountiful.LOGGER.info("    * [${item.type}] ${item.content}")
             }
         }
-
-        1
     }
 
-    private fun verifyPools() = playerCommand { player ->
-
+    private fun verifyPools() = kambrikCommand<ServerCommandSource> {
         var errors = false
 
         for (pool in BountifulContent.Pools) {
@@ -332,32 +314,24 @@ object BountifulCommands : CommandRegistrationCallback {
                     }
                 }
 
-                if (!dummy.verifyValidity(player)) {
-                    player.sendMessage(LiteralText("    - Source Pool: '${pool.id}'").formatted(Formatting.RED).formatted(Formatting.ITALIC), false)
+                if (!dummy.verifyValidity(source.player)) {
+                    source.player.sendMessage("    - Source Pool: '${pool.id}'") {
+                        format(Formatting.RED, Formatting.ITALIC)
+                    }
                     errors = true
                 }
             }
         }
 
-
         if (errors) {
-            player.sendMessage(
-                LiteralText("Some items are invalid. See above for details")
-                    .formatted(Formatting.DARK_RED)
-                    .formatted(Formatting.BOLD),
-                false
-            )
+            source.player.sendMessage("Some items are invalid. See above for details") {
+                format(Formatting.DARK_RED, Formatting.BOLD)
+            }
         } else {
-            player.sendMessage(
-                LiteralText("All Pool data has been verified successfully.")
-                    .formatted(Formatting.GOLD),
-                false
-            )
+            source.player.sendMessage("All Pool data has been verified successfully.") {
+                format(Formatting.BOLD)
+            }
         }
-
-        1
     }
-
-
 
 }

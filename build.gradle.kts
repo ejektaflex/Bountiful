@@ -47,7 +47,7 @@ dependencies {
 	modImplementation("net.fabricmc:fabric-loader:${loaderVersion}")
 
 	// Kambrik API
-	modImplementation("io.ejekta:kambrik:1.1.1+")
+	modImplementation("io.ejekta:kambrik:2.0.+")
 
 	modApi("me.shedaniel.cloth:cloth-config-fabric:5.0.38") {
 		exclude(group = "net.fabricmc.fabric-api")
