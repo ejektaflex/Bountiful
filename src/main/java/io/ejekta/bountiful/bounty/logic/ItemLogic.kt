@@ -22,10 +22,13 @@ class ItemLogic(override val entry: BountyDataEntry) : IEntryLogic {
     private val item: Item
         get() = Registry.ITEM.get(Identifier(entry.content))
 
-    private val itemName: MutableText
+    val itemStack: ItemStack
         get() = ItemStack(item).apply {
             entry.nbt?.let { this.nbt = it }
-        }.name.copy()
+        }
+
+    private val itemName: MutableText
+        get() = itemStack.name.copy()
 
     override fun verifyValidity(player: PlayerEntity): MutableText? {
         val id = item.identifier
