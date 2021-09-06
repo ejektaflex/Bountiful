@@ -18,6 +18,7 @@ import io.ejekta.kambrik.ext.identifier
 import io.ejekta.kambrik.text.sendMessage
 import io.ejekta.kambrik.text.textLiteral
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
+import net.minecraft.command.CommandSource
 import net.minecraft.command.argument.IdentifierArgumentType.getIdentifier
 import net.minecraft.command.argument.NumberRangeArgumentType
 import net.minecraft.entity.EntityType
@@ -65,7 +66,7 @@ object BountifulCommands : CommandRegistrationCallback {
             // /bo hand
             // /bo hand complete
             "hand" {
-                this runs { hand().run(this) }
+                this runs hand()
                 "complete" runs complete()
             }
 
@@ -91,8 +92,8 @@ object BountifulCommands : CommandRegistrationCallback {
             // /bo pool [poolName] add hand
             // /bo pool [poolName] add hand (minAmt)..(maxAmt) (unitWorth)
             // /bo pool [poolName] add tag [#tag] (not yet implemented)
-            // /bo pool [poolName] add entity [entity_id]
-            // /bo pool [poolName] add entity [entity_id] (minAmt)..(maxAmt) (unitWorth)
+            // /bo pool [poolName] add entity (entity_id)
+            // /bo pool [poolName] add entity (entity_id) (minAmt)..(maxAmt) (unitWorth)
             "pool" {
 
                 argString("poolName", items = pools) { poolName ->
@@ -132,7 +133,11 @@ object BountifulCommands : CommandRegistrationCallback {
 
             "util" {
                 "debug" {
-                    "weights" { argInt("rep", -30..30) runs weights() }
+                    "weights" {
+                        argInt("rep", -30..30) runs { rep ->
+                            weights(rep()).run(this)
+                        }
+                    }
                     "dump" runs dumpData()
                 }
 
@@ -155,7 +160,7 @@ object BountifulCommands : CommandRegistrationCallback {
 
         try {
             val saved = newPoolEntry.save(JsonFormats.Hand)
-            source.player.sendMessage { +saved }
+            source.player.sendMessage(saved)
             ClipboardCopy(saved).sendToClient(source.player)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -168,7 +173,7 @@ object BountifulCommands : CommandRegistrationCallback {
         func: (amount: IntRange, worth: Int) -> Unit = { a, w -> }
     ) = kambrikCommand<ServerCommandSource> {
         if (amt.min == null || amt.max == null) {
-            source.player.sendMessage { +"Amount Range must have a minimum and maximum value!" }
+            source.player.sendMessage("Amount Range must have a minimum and maximum value!")
             return@kambrikCommand
         }
 
@@ -198,15 +203,13 @@ object BountifulCommands : CommandRegistrationCallback {
                 edit { content.add(newPoolEntry) }
             }.getOrCreateFile()
 
-            player.sendMessage { +"Content added." }
-            player.sendMessage {
-                +"Edit §6'config/bountiful/bounty_pools/$poolName.json'§r to edit details." {
-                    clickEvent = ClickEvent(ClickEvent.Action.OPEN_FILE, file.absolutePath)
-                    onHoverShowText { +"Click to open file '${file.name}'" }
-                }
+            player.sendMessage("Content added.")
+            player.sendMessage("Edit §6'config/bountiful/bounty_pools/$poolName.json'§r to edit details.") {
+                clickEvent = ClickEvent(ClickEvent.Action.OPEN_FILE, file.absolutePath)
+                onHoverShowText { +"Click to open file '${file.name}'" }
             }
         } else {
-            player.sendMessage { +"Invalid pool name!" }
+            player.sendMessage("Invalid pool name!")
         }
 
     }
@@ -255,9 +258,8 @@ object BountifulCommands : CommandRegistrationCallback {
         }
     }
 
-    private fun weights() = Command<ServerCommandSource> { ctx ->
+    private fun weights(rep: Int) = kambrikCommand<ServerCommandSource> {
         try {
-            val rep = getInteger(ctx, "rep")
 
             println("RARITY WEIGHTS:")
             BountyRarity.values().forEach { rarity ->
@@ -315,22 +317,16 @@ object BountifulCommands : CommandRegistrationCallback {
                 }
 
                 if (!dummy.verifyValidity(source.player)) {
-                    source.player.sendMessage("    - Source Pool: '${pool.id}'") {
-                        format(Formatting.RED, Formatting.ITALIC)
-                    }
+                    source.player.sendMessage("    - Source Pool: '${pool.id}'", Formatting.RED, Formatting.ITALIC)
                     errors = true
                 }
             }
         }
 
         if (errors) {
-            source.player.sendMessage("Some items are invalid. See above for details") {
-                format(Formatting.DARK_RED, Formatting.BOLD)
-            }
+            source.player.sendMessage("Some items are invalid. See above for details", Formatting.DARK_RED, Formatting.BOLD)
         } else {
-            source.player.sendMessage("All Pool data has been verified successfully.") {
-                format(Formatting.BOLD)
-            }
+            source.player.sendMessage("All Pool data has been verified successfully.", Formatting.BOLD)
         }
     }
 

@@ -52,11 +52,9 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     private var finishMap = mutableMapOf<String, Int>()
     private val finishSerializer = MapSerializer(String.serializer(), Int.serializer())
 
-    private val level: Int
-        get() {
-            val total = finishMap.values.sum()
-            return totalLevel(total)
-        }
+    // Calculated level, progress to next, point of next level
+    private val levelData: Triple<Int, Int, Int>
+        get() = levelProgress(finishMap.values.sum())
 
     private fun setDecree() {
         if (world is ServerWorld && decrees.isEmpty) {
@@ -66,15 +64,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
                 slot,
                 stack
             )
-        }
-    }
-
-    private fun totalLevel(done: Int, per: Int = 2): Int {
-        val unit = per * 5
-        return if (done > unit) {
-            5 + totalLevel(done - unit, per + 1)
-        } else {
-            done / per
         }
     }
 
@@ -143,7 +132,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
         val commonBounty = BountyCreator.create(
             getBoardDecrees(),
-            level,
+            levelData.first,
             ourWorld.time
         )
 
@@ -182,7 +171,9 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
     override fun writeScreenOpeningData(serverPlayerEntity: ServerPlayerEntity, packetByteBuf: PacketByteBuf) {
         setDecree()
-        packetByteBuf.writeInt(level)
+        packetByteBuf.apply {
+            writeInt(finishMap.values.sum())
+        }
     }
 
     @Suppress("CAST_NEVER_SUCCEEDS")
@@ -247,6 +238,21 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     companion object {
+
+        fun levelProgress(done: Int, per: Int = 2): Triple<Int, Int, Int> {
+            var doneAcc = done
+            var perAcc = per
+            var levels = 0
+
+            while (doneAcc >= perAcc * 5) {
+                levels += 5
+                doneAcc -= perAcc * 5
+                perAcc += 1
+            }
+
+            levels += doneAcc / perAcc
+            return Triple(levels, doneAcc % perAcc, perAcc)
+        }
 
         @JvmStatic
         fun tick(world: World, pos: BlockPos, state: BlockState, entity: BoardBlockEntity) {

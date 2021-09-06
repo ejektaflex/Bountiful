@@ -21,12 +21,12 @@ class BoardScreenHandler @JvmOverloads constructor(
 ) : ScreenHandler(BountifulContent.BOARD_SCREEN_HANDLER, syncId) {
 
 
-    var level = 0
+    var totalDone = 0
 
     constructor(syncId: Int, playerInventory: PlayerInventory, buf: PacketByteBuf) : this(syncId, playerInventory,
         BoardInventory(BlockPos.ORIGIN)
     ) {
-        level = buf.readInt()
+        totalDone = buf.readInt()
     }
 
     override fun canUse(player: PlayerEntity): Boolean {
