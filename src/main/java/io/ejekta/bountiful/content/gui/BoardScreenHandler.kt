@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.content.gui
 
+import io.ejekta.bountiful.KambrikScreenHandler
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.board.BoardBlock
 import io.ejekta.bountiful.content.board.BoardBlockEntity
@@ -17,9 +18,8 @@ import net.minecraft.util.math.BlockPos
 class BoardScreenHandler @JvmOverloads constructor(
     syncId: Int,
     playerInventory: PlayerInventory,
-    val inventory: BoardInventory
-) : ScreenHandler(BountifulContent.BOARD_SCREEN_HANDLER, syncId) {
-
+    override var inventory: BoardInventory
+) : KambrikScreenHandler<BoardScreenHandler, BoardInventory>(BountifulContent.BOARD_SCREEN_HANDLER, syncId) {
 
     var totalDone = 0
 
@@ -83,35 +83,18 @@ class BoardScreenHandler @JvmOverloads constructor(
         // Bounties
         for (j in 0 until bRows) {
             for (k in 0 until bCols) {
-                addSlot(BoardBountySlot(inventory, k + j * bCols, 8 + k * bountySlotSize + adjustX, 18 + j * bountySlotSize + adjustY))
+                addSlot(BoardBountySlot(inventory as BoardInventory, k + j * bCols, 8 + k * bountySlotSize + adjustX + 1000, 18 + j * bountySlotSize + adjustY))
             }
         }
 
         // Decrees
         for (j in 0 until bRows) {
-            addSlot(BoardDecreeSlot(boardInv, inventory.size() - 3 + j, 19 + 7 * 18, 18 + j * 18))
+            addSlot(BoardDecreeSlot(boardInv, inventory.size() - 3 + j, 19 + 7 * 18 + 1000, 18 + j * 18))
         }
-
-        //This will place the slot in the correct locations for a 3x3 Grid. The slots exist on both server and client!
-        //This will not render the background of the slots however, this is the Screens job
 
         //The player inventory
-        var m = 0
-        var l = 0
-        while (m < 3) {
-            l = 0
-            while (l < 9) {
-                addSlot(Slot(playerInventory, l + m * 9 + 9, 8 + l * 18 + adjustX, 84 + m * 18 + adjustY))
-                ++l
-            }
-            ++m
-        }
-        //The player Hotbar
-        m = 0
-        while (m < 9) {
-            addSlot(Slot(playerInventory, m, 8 + m * 18 + adjustX, 142 + adjustY))
-            ++m
-        }
+        makePlayerDefaultGrid(playerInventory, 180, 64)
+
     }
 }
 

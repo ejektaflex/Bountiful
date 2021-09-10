@@ -3,6 +3,7 @@ package io.ejekta.bountiful.client
 import com.mojang.blaze3d.systems.RenderSystem
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
+import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.BountyType
 import io.ejekta.bountiful.bounty.logic.ItemLogic
 import io.ejekta.bountiful.content.board.BoardBlockEntity
@@ -31,12 +32,12 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory, title: Te
         get() = handler as BoardScreenHandler
 
     init {
-        backgroundWidth = 199
-        backgroundHeight = 180
+        backgroundWidth = 348
+        backgroundHeight = 146
     }
 
     override fun drawBackground(matrices: MatrixStack, delta: Float, mouseX: Int, mouseY: Int) {
-        drawSimpleCenteredImage(matrices, TEXTURE, backgroundWidth, backgroundHeight)
+        drawSimpleCenteredImage(matrices, TEXTURE, backgroundWidth, backgroundHeight, 512, 256)
     }
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
@@ -48,7 +49,8 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory, title: Te
 
     override fun drawForeground(matrices: MatrixStack?, mouseX: Int, mouseY: Int) {
 
-        textRenderer.draw(matrices, title, titleX.toFloat() - 29, titleY.toFloat() + 1, 0xEADAB5)
+        // TODO draw this centered!
+        textRenderer.draw(matrices, title, titleX.toFloat() - 88, titleY.toFloat() + 1, 0xEADAB5)
 
         /*
         val lvl = (screenHandler as? BoardScreenHandler)?.level ?: 0
@@ -70,68 +72,90 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory, title: Te
         RenderSystem.setShaderTexture(0, WANDER)
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
 
+        val barX = 210
+        val barY = 56
+
         // Bar itself
-        drawTexture(matrices, x + 136, y + 16, zOffset, 0.0f, 186.0f, 102, 5, 256, 512)
+        drawTexture(matrices, x + barX, y + barY, zOffset, 0.0f, 186.0f, 102, 5, 256, 512)
 
         val levelData = BoardBlockEntity.levelProgress(boardHandler.totalDone)
 
         val percentDone = (levelData.second.toDouble() / levelData.third * 100).toInt()
 
         // Filling bar
-        drawTexture(matrices, x + 136, y + 16, zOffset, 0.0f, 191.0f, percentDone + 1, 5, 256, 512)
+        drawTexture(matrices, x + barX, y + barY, zOffset, 0.0f, 191.0f, percentDone + 1, 5, 256, 512)
 
         DrawableHelper.drawCenteredText(matrices, textRenderer, textLiteral(levelData.first.toString()) {
             color(0xabff7a)
-        }, 340, 50, 0xFFFFFF)
+        }, x + barX - 10, y + barY - 2, 0xFFFFFF)
 
 
 
     }
 
-    inner class WidgetButtonBounty(var dataIndex: Int, inX: Int, inY: Int, press: PressAction) : ButtonWidget(inX, inY, 180, 20, LiteralText.EMPTY, press) {
-        fun getBountyData(): BountyData {
+    inner class WidgetButtonBounty(var dataIndex: Int, inX: Int, inY: Int, press: PressAction) : ButtonWidget(inX, inY, 160, 20, LiteralText.EMPTY, press) {
+        private fun getBountyData(): BountyData {
             return BountyData[boardHandler.inventory.getStack(dataIndex)]
         }
 
+        // We need to do custom text here, in case objective requires higher than stack size
+        fun renderStackText(text: Text, rx: Int, ry: Int) {
+            val matrixStack = MatrixStack()
+            matrixStack.translate(0.0, 0.0, (this.zOffset + 200.0f).toDouble())
+
+            val chars = text.asString().length
+
+            // Only apply scaling on amounts higher than 2
+            val charScaling = (chars - 1).coerceAtLeast(1)
+
+            if (charScaling > 1) {
+                matrixStack.scale(.5f, .5f, 1f)
+                matrixStack.translate(rx.toDouble(), ry.toDouble(), 0.0)
+            }
+
+            val immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().buffer)
+
+            textRenderer.draw(
+                text,
+                (rx + (17 * charScaling) - textRenderer.getWidth(text)).toFloat(),
+                (ry + 9 * charScaling).toFloat(),
+                16777215,
+                true,
+                matrixStack.peek().model,
+                immediate,
+                false,
+                0,
+                LightmapTextureManager.MAX_LIGHT_COORDINATE
+            )
+            immediate.draw()
+        }
+
+        private fun renderEntry(entry: BountyDataEntry, rx: Int, ry: Int) {
+            when (entry.type) {
+                BountyType.ITEM -> {
+                    val stack = ItemLogic(entry).itemStack.apply {
+                        count = entry.amount
+                    }
+                    itemRenderer.renderInGui(stack, rx, ry)
+                    renderStackText(textLiteral(entry.amount.toString()), rx, ry)
+                }
+            }
+        }
 
         override fun renderButton(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
             super.renderButton(matrices, mouseX, mouseY, delta)
             val data = getBountyData()
 
+            val ry = y + 1
 
             data.objectives.forEachIndexed { index, obj ->
-                when (obj.type) {
-                    BountyType.ITEM -> {
-                        val stack = ItemLogic(obj).itemStack.apply {
-                            count = obj.amount
-                        }
+                val rx = x + 3 + (20 * index)
+                renderEntry(obj, rx, ry)
+            }
 
-                        val rx = x + 3 + (20 * index)
-                        val ry = y + 1
-
-                        itemRenderer.renderInGui(stack, rx, ry)
-
-                        val matrixStack = MatrixStack()
-                        val string = obj.amount.toString()
-                        matrixStack.translate(0.0, 0.0, (this.zOffset + 200.0f).toDouble())
-                        val immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().buffer)
-                        textRenderer.draw(
-                            string,
-                            (rx + 19 - 2 - textRenderer.getWidth(string)).toFloat(),
-                            (ry + 6 + 3).toFloat(),
-                            16777215,
-                            true,
-                            matrixStack.peek().model,
-                            immediate,
-                            false,
-                            0,
-                            LightmapTextureManager.MAX_LIGHT_COORDINATE
-                        )
-                        immediate.draw()
-
-                        //itemRenderer.renderGuiItemOverlay(textRenderer, stack, x + (20 * index), y + 1)
-                    }
-                }
+            data.rewards.forEachIndexed { index, rew ->
+                val rx = (x + width - 20 - (20 * index))
+                renderEntry(rew, rx, ry)
             }
 
         }
@@ -148,9 +172,9 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory, title: Te
 
         // TODO take up to a certain amount, depending on scroll
 
-        for (i in 0 until 7) {
+        for (i in 0 until 6) {
             addDrawableChild(
-                WidgetButtonBounty(i, 50, 20 * i) {
+                WidgetButtonBounty(i, 87, 20 * i + 89) {
                     println("Pressed it!")
                 }
             )
@@ -159,7 +183,7 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory, title: Te
     }
 
     companion object {
-        private val TEXTURE = Bountiful.id("textures/gui/container/bounty_board.png")
+        private val TEXTURE = Bountiful.id("textures/gui/container/new_board.png")
         private val WANDER = Identifier("textures/gui/container/villager2.png")
     }
 }
