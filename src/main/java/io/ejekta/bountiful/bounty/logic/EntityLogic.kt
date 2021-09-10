@@ -31,7 +31,7 @@ class EntityLogic(override val entry: BountyDataEntry) : IEntryLogic {
         return null
     }
 
-    override fun format(isObj: Boolean, player: PlayerEntity): Text {
+    override fun textSummary(isObj: Boolean, player: PlayerEntity): Text {
         val progress = getProgress(player)
         return when (isObj) {
             true -> LiteralText("Kill ").append(
@@ -41,6 +41,10 @@ class EntityLogic(override val entry: BountyDataEntry) : IEntryLogic {
             )
             false -> error("Cannot have an entity (${entry.content}) as a reward.")
         }
+    }
+
+    override fun textBoard(player: PlayerEntity): List<Text> {
+        return listOf(entityType.name)
     }
 
     override fun getProgress(player: PlayerEntity): Progress {

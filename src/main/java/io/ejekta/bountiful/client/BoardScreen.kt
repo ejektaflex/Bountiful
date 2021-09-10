@@ -10,6 +10,7 @@ import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.kambrik.ext.client.drawSimpleCenteredImage
 import io.ejekta.kambrik.text.textLiteral
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawableHelper
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.gui.widget.ButtonWidget
@@ -93,9 +94,30 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory, title: Te
 
     }
 
-    inner class WidgetButtonBounty(var dataIndex: Int, inX: Int, inY: Int, press: PressAction) : ButtonWidget(inX, inY, 160, 20, LiteralText.EMPTY, press) {
+    inner class WidgetButtonBounty(var dataIndex: Int, inX: Int, inY: Int, press: PressAction) : ButtonWidget(
+        inX,
+        inY,
+        160,
+        20,
+        LiteralText.EMPTY,
+        press
+    ) {
         private fun getBountyData(): BountyData {
             return BountyData[boardHandler.inventory.getStack(dataIndex)]
+        }
+
+        override fun renderTooltip(matrices: MatrixStack?, mouseX: Int, mouseY: Int) {
+            if (hovered) {
+                /*
+                this@BoardScreen.renderTooltip(
+                    matrices,
+                    getBountyData().tooltipInfo(MinecraftClient.getInstance().world!!),
+                    mouseX,
+                    mouseY
+                )
+
+                 */
+            }
         }
 
         // We need to do custom text here, in case objective requires higher than stack size
@@ -130,38 +152,51 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory, title: Te
             immediate.draw()
         }
 
-        private fun renderEntry(entry: BountyDataEntry, rx: Int, ry: Int) {
+        private fun renderEntry(entry: BountyDataEntry, rx: Int, ry: Int, color: Int = 0xFFFFFF) {
             when (entry.type) {
                 BountyType.ITEM -> {
                     val stack = ItemLogic(entry).itemStack.apply {
                         count = entry.amount
                     }
                     itemRenderer.renderInGui(stack, rx, ry)
-                    renderStackText(textLiteral(entry.amount.toString()), rx, ry)
+                    renderStackText(textLiteral(entry.amount.toString()) {
+                        color(color)
+                    }, rx, ry)
                 }
             }
         }
 
-        override fun renderButton(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+        private fun renderDataTooltip(matrices: MatrixStack, data: BountyDataEntry, rx: Int, ry: Int, mouseX: Int, mouseY: Int, iconSize: Int) {
+            if (mouseX in rx+1 until rx+iconSize && mouseY in ry+1 until ry+iconSize) {
+                this@BoardScreen.renderTooltip(
+                    matrices,
+                    data.textBoard(MinecraftClient.getInstance().player!!),
+                    mouseX,
+                    mouseY
+                )
+            }
+        }
+
+        override fun renderButton(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
             super.renderButton(matrices, mouseX, mouseY, delta)
+            //println(isHovered)
             val data = getBountyData()
 
             val ry = y + 1
+            val iconSize = 20
 
             data.objectives.forEachIndexed { index, obj ->
-                val rx = x + 3 + (20 * index)
+                val rx = x + 3 + (iconSize * index)
                 renderEntry(obj, rx, ry)
+                renderDataTooltip(matrices, obj, rx, ry, mouseX, mouseY, iconSize)
             }
 
             data.rewards.forEachIndexed { index, rew ->
-                val rx = (x + width - 20 - (20 * index))
-                renderEntry(rew, rx, ry)
+                val rx = (x + width - iconSize - (iconSize * index))
+                renderEntry(rew, rx, ry, rew.rarity.color.colorValue!!)
+                renderDataTooltip(matrices, rew, rx, ry, mouseX, mouseY, iconSize)
             }
 
-        }
-
-        init {
-            println("Hai!")
         }
 
     }
@@ -174,7 +209,7 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory, title: Te
 
         for (i in 0 until 6) {
             addDrawableChild(
-                WidgetButtonBounty(i, 87, 20 * i + 89) {
+                WidgetButtonBounty(i, x + 5, 20 * i + y + 18) {
                     println("Pressed it!")
                 }
             )

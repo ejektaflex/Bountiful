@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.bounty.logic
 
+import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.kambrik.ext.collect
 import io.ejekta.kambrik.ext.identifier
@@ -40,13 +41,17 @@ class ItemTagLogic(override val entry: BountyDataEntry) : IEntryLogic {
         }
     }
 
-    override fun format(isObj: Boolean, player: PlayerEntity): Text {
+    override fun textSummary(isObj: Boolean, player: PlayerEntity): Text {
         val progress = getProgress(player)
         val title = if (entry.translation != null) TranslatableText(entry.translation) else LiteralText(entry.name ?: entry.content)
         return when (isObj) {
             true -> title.copy().formatted(progress.color).append(progress.neededText.colored(Formatting.WHITE))
             false -> progress.givingText.append(title.colored(entry.rarity.color))
         }
+    }
+
+    override fun textBoard(player: PlayerEntity): List<Text> {
+        return listOf()
     }
 
     override fun getProgress(player: PlayerEntity): Progress {

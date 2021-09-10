@@ -6,7 +6,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
-import net.minecraft.nbt.StringNbtReader
 import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
@@ -35,12 +34,16 @@ data class BountyDataEntry(
         return "BDE[type=$type, content=$content, amount=$amount, isNbtNull=${nbt == null}, name=$name, mystery=$isMystery]"
     }
 
-    fun formatted(data: BountyData, player: PlayerEntity, isObj: Boolean): Text {
+    fun textBoard(player: PlayerEntity): List<Text> {
+        return logic.textBoard(player)
+    }
+
+    fun textSummary(data: BountyData, player: PlayerEntity, isObj: Boolean): Text {
         return when (isMystery) {
             true -> LiteralText("???").formatted(Formatting.BOLD).append(
                 LiteralText("x$amount").formatted(Formatting.WHITE)
             )
-            false -> logic.format(isObj, player)
+            false -> logic.textSummary(isObj, player)
         }
 
     }

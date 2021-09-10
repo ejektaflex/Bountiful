@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.bounty.logic
 
+import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.BountyType
 import net.minecraft.entity.player.PlayerEntity
@@ -19,7 +20,11 @@ object NullLogic : IEntryLogic {
         throw logicUsageError()
     }
 
-    override fun format(isObj: Boolean, player: PlayerEntity): Text {
+    override fun textSummary(isObj: Boolean, player: PlayerEntity): Text {
+        throw logicUsageError()
+    }
+
+    override fun textBoard(player: PlayerEntity): List<Text> {
         throw logicUsageError()
     }
 

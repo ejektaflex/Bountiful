@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.bounty.logic
 
+import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.LiteralText
@@ -11,7 +12,9 @@ interface IEntryLogic {
 
     val entry: BountyDataEntry
 
-    fun format(isObj: Boolean, player: PlayerEntity): Text
+    fun textSummary(isObj: Boolean, player: PlayerEntity): Text
+
+    fun textBoard(player: PlayerEntity): List<Text>
 
     fun getProgress(player: PlayerEntity): Progress
 
@@ -20,6 +23,7 @@ interface IEntryLogic {
     fun giveReward(player: PlayerEntity): Boolean
 
     fun verifyValidity(player: PlayerEntity): MutableText?
+
 
     // ### Helpers ###
 
@@ -36,6 +40,7 @@ interface IEntryLogic {
     fun Text.colored(formatting: Formatting): MutableText {
         return copy().formatted(formatting)
     }
+
 
     val Pair<Int, Int>.needed
         get() = LiteralText(" ($first/$second)")

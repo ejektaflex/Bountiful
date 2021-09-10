@@ -102,11 +102,11 @@ class BountyData {
         return buildList {
             add(TranslatableText("bountiful.tooltip.required").formatted(Formatting.GOLD).append(":"))
             addAll(objectives.map {
-                it.formatted(this@BountyData, MinecraftClient.getInstance().player!!, true)
+                it.textSummary(this@BountyData, MinecraftClient.getInstance().player!!, true)
             })
             add(TranslatableText("bountiful.tooltip.rewards").formatted(Formatting.GOLD).append(":"))
             addAll(rewards.map {
-                it.formatted(this@BountyData, MinecraftClient.getInstance().player!!, false)
+                it.textSummary(this@BountyData, MinecraftClient.getInstance().player!!, false)
             })
         }
     }

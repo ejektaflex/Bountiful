@@ -1,8 +1,10 @@
 package io.ejekta.bountiful.bounty.logic
 
+import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.kambrik.ext.collect
 import io.ejekta.kambrik.ext.identifier
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
@@ -44,12 +46,16 @@ class ItemLogic(override val entry: BountyDataEntry) : IEntryLogic {
         }
     }
 
-    override fun format(isObj: Boolean, player: PlayerEntity): Text {
+    override fun textSummary(isObj: Boolean, player: PlayerEntity): Text {
         val progress = getProgress(player)
         return when (isObj) {
             true -> itemName.formatted(progress.color).append(progress.neededText.colored(Formatting.WHITE))
             false -> progress.givingText.append(itemName.colored(entry.rarity.color))
         }
+    }
+
+    override fun textBoard(player: PlayerEntity): List<Text> {
+        return itemStack.getTooltip(player) { false }
     }
 
     override fun getProgress(player: PlayerEntity): Progress {
