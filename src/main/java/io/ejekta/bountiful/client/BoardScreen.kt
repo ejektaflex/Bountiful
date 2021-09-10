@@ -9,6 +9,8 @@ import io.ejekta.bountiful.bounty.logic.ItemLogic
 import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.kambrik.ext.client.drawSimpleCenteredImage
+import io.ejekta.kambrik.gui.KambrikSpriteGrid
+import io.ejekta.kambrik.gui.toolkit.kambrikGui
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawableHelper
@@ -44,7 +46,20 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory, title: Te
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         renderBackground(matrices)
         super.render(matrices, mouseX, mouseY, delta)
-        drawLevelInfo(matrices, x, y)
+
+        val levelData = BoardBlockEntity.levelProgress(boardHandler.totalDone)
+        val percentDone = (levelData.second.toDouble() / levelData.third * 100).toInt()
+
+
+        kambrikGui(this, matrices, { x to y }) {
+            offset(210, 56) {
+                sprite(BAR_BG)
+                sprite(BAR_FG, w = percentDone + 1)
+                textCentered(textLiteral(levelData.first.toString()) { color(0xabff7a) }, -10, -2)
+            }
+        }
+
+        //drawLevelInfo(matrices, x, y)
         drawMouseoverTooltip(matrices, mouseX, mouseY)
     }
 
@@ -65,33 +80,6 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory, title: Te
          */
 
         //super.drawForeground(matrices, mouseX, mouseY)
-    }
-
-    private fun drawLevelInfo(matrices: MatrixStack, x: Int, y: Int) {
-
-        RenderSystem.setShader(GameRenderer::getPositionTexShader)
-        RenderSystem.setShaderTexture(0, WANDER)
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
-
-        val barX = 210
-        val barY = 56
-
-        // Bar itself
-        drawTexture(matrices, x + barX, y + barY, zOffset, 0.0f, 186.0f, 102, 5, 256, 512)
-
-        val levelData = BoardBlockEntity.levelProgress(boardHandler.totalDone)
-
-        val percentDone = (levelData.second.toDouble() / levelData.third * 100).toInt()
-
-        // Filling bar
-        drawTexture(matrices, x + barX, y + barY, zOffset, 0.0f, 191.0f, percentDone + 1, 5, 256, 512)
-
-        DrawableHelper.drawCenteredText(matrices, textRenderer, textLiteral(levelData.first.toString()) {
-            color(0xabff7a)
-        }, x + barX - 10, y + barY - 2, 0xFFFFFF)
-
-
-
     }
 
     inner class WidgetButtonBounty(var dataIndex: Int, inX: Int, inY: Int, press: PressAction) : ButtonWidget(
@@ -218,8 +206,14 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory, title: Te
     }
 
     companion object {
+
         private val TEXTURE = Bountiful.id("textures/gui/container/new_board.png")
         private val WANDER = Identifier("textures/gui/container/villager2.png")
+
+        val WANDER_SHEET = KambrikSpriteGrid(WANDER, texWidth = 512, texHeight = 256)
+        val BAR_BG = WANDER_SHEET.KambrikSprite(0f, 186f, 102, 5)
+        val BAR_FG = WANDER_SHEET.KambrikSprite(0f, 191f, 102, 5)
+
     }
 }
 

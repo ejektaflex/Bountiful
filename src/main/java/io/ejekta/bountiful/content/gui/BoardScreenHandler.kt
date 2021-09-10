@@ -1,16 +1,13 @@
 package io.ejekta.bountiful.content.gui
 
-import io.ejekta.bountiful.KambrikScreenHandler
+import io.ejekta.kambrik.KambrikScreenHandler
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.board.BoardBlock
-import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.board.BoardInventory
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
-import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
 import net.minecraft.util.math.BlockPos
 
