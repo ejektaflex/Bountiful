@@ -1,6 +1,6 @@
 package io.ejekta.kambrik
 
-import io.ejekta.kambrik.gui.toolkit.KambrikGuiDSL
+import io.ejekta.kambrik.gui.toolkit.KambrikGuiDsl
 import io.ejekta.kambrik.gui.toolkit.kambrikGui
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.math.MatrixStack
@@ -14,7 +14,7 @@ open class KambrikHandledScreen<SH : ScreenHandler>(
     title: Text
 ) : HandledScreen<SH>(handler, inventory, title) {
 
-    fun kambrikGui(matrices: MatrixStack, func: KambrikGuiDSL.() -> Unit) = kambrikGui(
+    fun kambrikGui(matrices: MatrixStack, func: KambrikGuiDsl.() -> Unit) = kambrikGui(
         this,
         matrices,
         { x to y },

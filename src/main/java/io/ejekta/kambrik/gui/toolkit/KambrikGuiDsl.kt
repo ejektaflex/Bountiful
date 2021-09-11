@@ -1,21 +1,17 @@
 package io.ejekta.kambrik.gui.toolkit
 
-import com.mojang.blaze3d.systems.RenderSystem
-import io.ejekta.bountiful.client.BoardScreen
 import io.ejekta.kambrik.ext.fapi.textRenderer
 import io.ejekta.kambrik.gui.KambrikSpriteGrid
 import io.ejekta.kambrik.text.KambrikTextBuilder
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.gui.DrawableHelper
-import net.minecraft.client.render.GameRenderer
-import net.minecraft.text.BaseText
 import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 
-data class KambrikGuiDSL(val ctx: KambrikGuiContext) {
+data class KambrikGuiDsl(val ctx: KambrikGuiContext) {
 
-    fun offset(x: Int, y: Int, func: KambrikGuiDSL.() -> Unit) {
-        KambrikGuiDSL(ctx + (x to y)).apply(func)
+    fun offset(x: Int, y: Int, func: KambrikGuiDsl.() -> Unit) {
+        KambrikGuiDsl(ctx + (x to y)).apply(func)
     }
 
     fun textCentered(x: Int, y: Int, text: Text) {

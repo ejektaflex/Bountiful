@@ -132,7 +132,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
         val commonBounty = BountyCreator.create(
             getBoardDecrees(),
-            levelData.first,
+            levelData.first.coerceIn(-30..30),
             ourWorld.time
         )
 

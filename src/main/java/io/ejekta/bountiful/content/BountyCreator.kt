@@ -155,7 +155,7 @@ class BountyCreator private constructor(private val decrees: Set<Decree>, privat
     companion object {
 
         fun create(decrees: Set<Decree>, rep: Int, startTime: Long = 0L): BountyData {
-            return BountyCreator(decrees, rep, startTime).create()
+            return BountyCreator(decrees, rep.coerceIn(-30..30), startTime).create()
         }
 
         private fun getObjectivePoolsFor(decrees: Set<Decree>): Set<Pool> {

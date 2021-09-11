@@ -51,13 +51,12 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
                 sprite(BAR_BG)
                 sprite(BAR_FG, w = percentDone + 1)
                 textCentered(-10, -2) {
-                    +textLiteral(levelData.first.toString()) {
-                        color(0xabff7a)
-                    }
+                    color(0xabff7a)
+                    +levelData.first.toString()
                 }
             }
         }
-        
+
         drawMouseoverTooltip(matrices, mouseX, mouseY)
     }
 
