@@ -10,6 +10,7 @@ import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.kambrik.KambrikHandledScreen
 import io.ejekta.kambrik.ext.client.drawSimpleCenteredImage
 import io.ejekta.kambrik.gui.KambrikSpriteGrid
+import io.ejekta.kambrik.gui.toolkit.KGui
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.widget.ButtonWidget
@@ -39,34 +40,37 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         drawSimpleCenteredImage(matrices, TEXTURE, backgroundWidth, backgroundHeight, 512, 256)
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        renderBackground(matrices)
-        super.render(matrices, mouseX, mouseY, delta)
 
+    val bgBui = kambrikGui {
         val levelData = BoardBlockEntity.levelProgress(boardHandler.totalDone)
         val percentDone = (levelData.second.toDouble() / levelData.third * 100).toInt()
 
-        kambrikGui(matrices) {
-            offset(210, 56) {
-                sprite(BAR_BG)
-                sprite(BAR_FG, w = percentDone + 1)
-                textCentered(-10, -2) {
-                    color(0xabff7a)
-                    +levelData.first.toString()
-                }
+        offset(210, 56) {
+            sprite(BAR_BG)
+            sprite(BAR_FG, w = percentDone + 1)
+            textCentered(-10, -2) {
+                color(0xabff7a)
+                +levelData.first.toString()
             }
         }
+    }
 
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+        renderBackground(matrices)
+        super.render(matrices, mouseX, mouseY, delta)
+        bgBui(matrices, mouseX, mouseY, delta)
         drawMouseoverTooltip(matrices, mouseX, mouseY)
     }
 
-    override fun drawForeground(matrices: MatrixStack, mouseX: Int, mouseY: Int) {
-        kambrikGui(matrices) {
-            textCentered(-88, 1) {
-                color = 0xEADAB5
-                +title
-            }
+    val titleGui = kambrikGui {
+        textCentered(-88, 1) {
+            color = 0xEADAB5
+            +title
         }
+    }
+
+    override fun drawForeground(matrices: MatrixStack, mouseX: Int, mouseY: Int) {
+        titleGui(matrices, mouseX, mouseY)
     }
 
     inner class WidgetButtonBounty(var dataIndex: Int, inX: Int, inY: Int, press: PressAction) : ButtonWidget(

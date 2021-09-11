@@ -1,5 +1,6 @@
 package io.ejekta.kambrik
 
+import io.ejekta.kambrik.gui.toolkit.KGui
 import io.ejekta.kambrik.gui.toolkit.KambrikGuiDsl
 import io.ejekta.kambrik.gui.toolkit.kambrikGui
 import net.minecraft.client.gui.screen.ingame.HandledScreen
@@ -14,12 +15,9 @@ open class KambrikHandledScreen<SH : ScreenHandler>(
     title: Text
 ) : HandledScreen<SH>(handler, inventory, title) {
 
-    fun kambrikGui(matrices: MatrixStack, func: KambrikGuiDsl.() -> Unit) = kambrikGui(
-        this,
-        matrices,
-        { x to y },
-        func
-    )
+    fun kambrikGui(func: KambrikGuiDsl.() -> Unit) = KGui(
+        this, { x to y }
+    ) { apply(func) }
 
     override fun drawBackground(matrices: MatrixStack, delta: Float, mouseX: Int, mouseY: Int) {
         // Pass
