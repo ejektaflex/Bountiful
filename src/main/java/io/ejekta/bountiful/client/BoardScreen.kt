@@ -1,6 +1,5 @@
 package io.ejekta.bountiful.client
 
-import com.mojang.blaze3d.systems.RenderSystem
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
@@ -8,15 +7,12 @@ import io.ejekta.bountiful.bounty.BountyType
 import io.ejekta.bountiful.bounty.logic.ItemLogic
 import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
+import io.ejekta.kambrik.KambrikHandledScreen
 import io.ejekta.kambrik.ext.client.drawSimpleCenteredImage
 import io.ejekta.kambrik.gui.KambrikSpriteGrid
-import io.ejekta.kambrik.gui.toolkit.kambrikGui
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gui.DrawableHelper
-import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.gui.widget.ButtonWidget
-import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.render.LightmapTextureManager
 import net.minecraft.client.render.Tessellator
 import net.minecraft.client.render.VertexConsumerProvider
@@ -28,8 +24,8 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
 
-class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory, title: Text) :
-    HandledScreen<ScreenHandler?>(handler, inventory, title) {
+class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Text) :
+    KambrikHandledScreen<ScreenHandler>(handler, inventory, title) {
 
     val boardHandler: BoardScreenHandler
         get() = handler as BoardScreenHandler
@@ -50,36 +46,28 @@ class BoardScreen(handler: ScreenHandler?, inventory: PlayerInventory, title: Te
         val levelData = BoardBlockEntity.levelProgress(boardHandler.totalDone)
         val percentDone = (levelData.second.toDouble() / levelData.third * 100).toInt()
 
-
-        kambrikGui(this, matrices, { x to y }) {
+        kambrikGui(matrices) {
             offset(210, 56) {
                 sprite(BAR_BG)
                 sprite(BAR_FG, w = percentDone + 1)
-                textCentered(textLiteral(levelData.first.toString()) { color(0xabff7a) }, -10, -2)
+                textCentered(-10, -2) {
+                    +textLiteral(levelData.first.toString()) {
+                        color(0xabff7a)
+                    }
+                }
             }
         }
-
-        //drawLevelInfo(matrices, x, y)
+        
         drawMouseoverTooltip(matrices, mouseX, mouseY)
     }
 
-    override fun drawForeground(matrices: MatrixStack?, mouseX: Int, mouseY: Int) {
-
-        // TODO draw this centered!
-        textRenderer.draw(matrices, title, titleX.toFloat() - 88, titleY.toFloat() + 1, 0xEADAB5)
-
-        /*
-        val lvl = (screenHandler as? BoardScreenHandler)?.level ?: 0
-
-        textRenderer.draw(
-            matrices, LiteralText("Reputation: ")
-                .append(LiteralText("$lvl").formatted(BountyRarity.forReputation(lvl).color)),
-            playerInventoryTitleX.toFloat(), playerInventoryTitleY.toFloat() + 1, 0xEADAB5
-        )
-
-         */
-
-        //super.drawForeground(matrices, mouseX, mouseY)
+    override fun drawForeground(matrices: MatrixStack, mouseX: Int, mouseY: Int) {
+        kambrikGui(matrices) {
+            textCentered(-88, 1) {
+                color = 0xEADAB5
+                +title
+            }
+        }
     }
 
     inner class WidgetButtonBounty(var dataIndex: Int, inX: Int, inY: Int, press: PressAction) : ButtonWidget(

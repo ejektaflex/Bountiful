@@ -9,6 +9,7 @@ import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.gui.DrawableHelper
 import net.minecraft.client.render.GameRenderer
 import net.minecraft.text.BaseText
+import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 
 data class KambrikGuiDSL(val ctx: KambrikGuiContext) {
@@ -17,12 +18,12 @@ data class KambrikGuiDSL(val ctx: KambrikGuiContext) {
         KambrikGuiDSL(ctx + (x to y)).apply(func)
     }
 
-    fun textCentered(text: Text, x: Int = 0, y: Int = 0) {
+    fun textCentered(x: Int, y: Int, text: Text) {
         DrawableHelper.drawCenteredText(ctx.matrices, ctx.screen.textRenderer, text, ctx.absX(x), ctx.absY(y), 0xFFFFFF)
     }
 
-    fun <T : BaseText> textCentered(x: Int = 0, y: Int = 0, textDsl: KambrikTextBuilder<T>.() -> Unit) {
-        //DrawableHelper.drawCenteredText(ctx.matrices, ctx.screen.textRenderer, textLiteral(""), x, y, 0xFFFFFF)
+    fun textCentered(x: Int = 0, y: Int = 0, textDsl: KambrikTextBuilder<LiteralText>.() -> Unit) {
+        DrawableHelper.drawCenteredText(ctx.matrices, ctx.screen.textRenderer, textLiteral("", textDsl), x, y, 0xFFFFFF)
     }
 
     fun sprite(sprite: KambrikSpriteGrid.KambrikSprite, x: Int = 0, y: Int = 0, w: Int = sprite.width, h: Int = sprite.height) {
