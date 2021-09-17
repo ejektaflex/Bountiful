@@ -10,7 +10,7 @@ import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.kambrik.KambrikHandledScreen
 import io.ejekta.kambrik.ext.client.drawSimpleCenteredImage
 import io.ejekta.kambrik.gui.KambrikSpriteGrid
-import io.ejekta.kambrik.gui.toolkit.KGui
+import io.ejekta.kambrik.gui.toolkit.widgets.KambrikButton
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.widget.ButtonWidget
@@ -40,11 +40,15 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         drawSimpleCenteredImage(matrices, TEXTURE, backgroundWidth, backgroundHeight, 512, 256)
     }
 
+    val button = KambrikButton().apply {
+        addDrawableChild(this)
+    }
 
-    val bgBui = kambrikGui {
+    val bgGui = kambrikGui {
         val levelData = BoardBlockEntity.levelProgress(boardHandler.totalDone)
         val percentDone = (levelData.second.toDouble() / levelData.third * 100).toInt()
 
+        // Reputation Bar (background, foreground, label)
         offset(210, 56) {
             sprite(BAR_BG)
             sprite(BAR_FG, w = percentDone + 1)
@@ -52,25 +56,36 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
                 color(0xabff7a)
                 +levelData.first.toString()
             }
+
+            // Test rect
+            rect(30, 30, 50, 50, 0xabff7a) {
+                textCentered(25, 0) {
+                    color(0xFF0000)
+                    +levelData.first.toString()
+                }
+            }
+
+            widget(button)
+
         }
+
+        // GUI Title
+        textCentered(titleX - 53, titleY + 1) {
+            color = 0xEADAB5
+            +title
+        }
+
     }
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         renderBackground(matrices)
         super.render(matrices, mouseX, mouseY, delta)
-        bgBui(matrices, mouseX, mouseY, delta)
+        bgGui.draw(matrices, mouseX, mouseY, delta)
         drawMouseoverTooltip(matrices, mouseX, mouseY)
     }
 
-    val titleGui = kambrikGui {
-        textCentered(-88, 1) {
-            color = 0xEADAB5
-            +title
-        }
-    }
-
-    override fun drawForeground(matrices: MatrixStack, mouseX: Int, mouseY: Int) {
-        titleGui(matrices, mouseX, mouseY)
+    override fun drawForeground(matrices: MatrixStack?, mouseX: Int, mouseY: Int) {
+        // Pass here
     }
 
     inner class WidgetButtonBounty(var dataIndex: Int, inX: Int, inY: Int, press: PressAction) : ButtonWidget(
@@ -83,20 +98,6 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
     ) {
         private fun getBountyData(): BountyData {
             return BountyData[boardHandler.inventory.getStack(dataIndex)]
-        }
-
-        override fun renderTooltip(matrices: MatrixStack?, mouseX: Int, mouseY: Int) {
-            if (hovered) {
-                /*
-                this@BoardScreen.renderTooltip(
-                    matrices,
-                    getBountyData().tooltipInfo(MinecraftClient.getInstance().world!!),
-                    mouseX,
-                    mouseY
-                )
-
-                 */
-            }
         }
 
         // We need to do custom text here, in case objective requires higher than stack size
@@ -194,6 +195,9 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
             )
         }
 
+
+        //addDrawableChild()
+
     }
 
     companion object {
@@ -201,9 +205,9 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         private val TEXTURE = Bountiful.id("textures/gui/container/new_board.png")
         private val WANDER = Identifier("textures/gui/container/villager2.png")
 
-        val WANDER_SHEET = KambrikSpriteGrid(WANDER, texWidth = 512, texHeight = 256)
-        val BAR_BG = WANDER_SHEET.KambrikSprite(0f, 186f, 102, 5)
-        val BAR_FG = WANDER_SHEET.KambrikSprite(0f, 191f, 102, 5)
+        private val WANDER_SHEET = KambrikSpriteGrid(WANDER, texWidth = 512, texHeight = 256)
+        private val BAR_BG = WANDER_SHEET.Sprite(0f, 186f, 102, 5)
+        private val BAR_FG = WANDER_SHEET.Sprite(0f, 191f, 102, 5)
 
     }
 }

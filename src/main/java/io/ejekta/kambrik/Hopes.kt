@@ -21,21 +21,9 @@ object Hopes {
             BAR_FG.draw(w = percentDone + 1)
         }
 
-
-        button(25, 30, 15, 20) {
-
-            onPress {
-
-            }
-
-            onHover {
-
-            }
-
+        spriteArea(25, 30) {
+            // Creates an area the size of the background sprite and draws the sprite
         }
-
-
-
 
     }
 

@@ -10,7 +10,7 @@ import net.minecraft.util.Identifier
 
 open class KambrikSpriteGrid(val location: Identifier, val texWidth: Int, val texHeight: Int) {
 
-    inner class KambrikSprite(
+    inner class Sprite(
         val u: Float = 0f,
         val v: Float = 0f,
         val width: Int,

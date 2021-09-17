@@ -1,8 +1,9 @@
 package io.ejekta.kambrik
 
+import com.mojang.blaze3d.systems.RenderSystem
 import io.ejekta.kambrik.gui.toolkit.KGui
+import io.ejekta.kambrik.gui.toolkit.KWidget
 import io.ejekta.kambrik.gui.toolkit.KambrikGuiDsl
-import io.ejekta.kambrik.gui.toolkit.kambrikGui
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
@@ -15,9 +16,18 @@ open class KambrikHandledScreen<SH : ScreenHandler>(
     title: Text
 ) : HandledScreen<SH>(handler, inventory, title) {
 
-    fun kambrikGui(func: KambrikGuiDsl.() -> Unit) = KGui(
+    fun addWidget(widget: KWidget) {
+        addDrawableChild(widget)
+    }
+
+    fun kambrikGui(clearOnDraw: Boolean = false, func: KambrikGuiDsl.() -> Unit) = KGui(
         this, { x to y }
-    ) { apply(func) }
+    ) {
+        if (clearOnDraw) {
+            RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
+        }
+        apply(func)
+    }
 
     override fun drawBackground(matrices: MatrixStack, delta: Float, mouseX: Int, mouseY: Int) {
         // Pass
