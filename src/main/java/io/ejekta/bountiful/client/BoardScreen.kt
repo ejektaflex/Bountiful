@@ -6,10 +6,13 @@ import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.content.gui.widgets.BountyLongButton
 import io.ejekta.kambrik.KambrikHandledScreen
 import io.ejekta.kambrik.gui.KSpriteGrid
+import io.ejekta.kambrik.gui.widgets.KVanillaScrollbar
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.item.ItemStack
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
+import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 
 
@@ -30,6 +33,8 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
     private val buttons = (0 until 6).map {
         BountyLongButton(this, it)
     }
+
+    private val slider = KVanillaScrollbar(120, SLIDER)
 
     val fgGui = kambrikGui {
         val levelData = BoardBlockEntity.levelProgress(boardHandler.totalDone)
@@ -54,6 +59,14 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         // Draw bounty buttons
         buttons.forEachIndexed { index, button ->
             widget(button, 5, 18 + index * 20)
+        }
+
+        // Scroll bar
+        widget(slider, 166, 18)
+        // Percent through scroll bar
+        text(200, 18) {
+            format(Formatting.GOLD)
+            +"%.2f".format(slider.percent).toDouble().toString()
         }
     }
 
@@ -80,6 +93,7 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         private val WANDER_SHEET = KSpriteGrid(WANDER, texWidth = 512, texHeight = 256)
         private val BAR_BG = WANDER_SHEET.Sprite(0f, 186f, 102, 5)
         private val BAR_FG = WANDER_SHEET.Sprite(0f, 191f, 102, 5)
+        private val SLIDER = WANDER_SHEET.Sprite(0f, 199f, 6, 26)
     }
 }
 

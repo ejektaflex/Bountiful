@@ -4,6 +4,7 @@ import io.ejekta.kambrik.ext.fapi.itemRenderer
 import io.ejekta.kambrik.ext.fapi.textRenderer
 import io.ejekta.kambrik.text.KambrikTextBuilder
 import io.ejekta.kambrik.text.textLiteral
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawableHelper
 import net.minecraft.client.render.LightmapTextureManager
 import net.minecraft.client.render.Tessellator
@@ -59,6 +60,18 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
 
     fun itemStackOverlay(stack: ItemStack, x: Int = 0, y: Int = 0) {
         ctx.screen.itemRenderer.renderGuiItemOverlay(ctx.screen.textRenderer, stack, x, y)
+    }
+
+    fun itemStack(stack: ItemStack, x: Int = 0, y: Int = 0) {
+        itemStackIcon(stack, x, y)
+        itemStackOverlay(stack, x, y)
+    }
+
+    fun itemStackWithTooltip(stack: ItemStack, x: Int, y: Int) {
+        itemStack(stack, x, y)
+        onHoverArea(x, y, 18, 18) {
+            tooltip(ctx.screen.getTooltipFromItem(stack))
+        }
     }
 
     fun onHoverArea(x: Int = 0, y: Int = 0, w: Int = 0, h: Int = 0, func: KGuiDsl.() -> Unit) {

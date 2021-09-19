@@ -11,6 +11,10 @@ open class KWidget(
         // No-op
     }
 
+    open fun onRelease(relX: Int, relY: Int, button: Int) {
+        // No-op
+    }
+
     open fun onHover(relX: Int, relY: Int) {
         // No-op
     }
