@@ -7,7 +7,7 @@ import io.ejekta.kambrik.gui.KWidget
 import net.minecraft.client.gui.screen.Screen
 import kotlin.math.roundToInt
 
-abstract class KVanillaScrollbar(
+abstract class KScrollbar(
     protected val knobSprite: KSpriteGrid.Sprite,
     protected val bgColor: Int? = null
 ) : KWidget() {
@@ -18,17 +18,8 @@ abstract class KVanillaScrollbar(
     protected val moveRange
         get() = 0 .. scrollbarSize - knobSize
     protected var dragStart = 0
-    protected var isMoving = false
 
     override fun canDrag() = true
-
-    override fun onDragStart(relX: Int, relY: Int) {
-        isMoving = true
-    }
-
-    override fun onDragEnd(relX: Int, relY: Int) {
-        isMoving = false
-    }
 
     /**
      * A number representing how far down the scrollbar has been scrolled

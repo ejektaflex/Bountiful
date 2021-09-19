@@ -3,31 +3,31 @@ package io.ejekta.kambrik.gui.widgets
 import io.ejekta.kambrik.gui.KGuiDsl
 import io.ejekta.kambrik.gui.KSpriteGrid
 
-class KVanillaScrollbarVertical(
-    scrollHeight: Int,
+class KScrollbarHorizontal(
+    scrollWidth: Int,
     knobSprite: KSpriteGrid.Sprite,
     backgroundColor: Int? = null
-) : KVanillaScrollbar(knobSprite, backgroundColor) {
-    override val height = scrollHeight
-    override val width = knobSprite.width
+) : KScrollbar(knobSprite, backgroundColor) {
+    override val height = knobSprite.height
+    override val width = scrollWidth
 
     override val scrollbarSize: Int
-        get() = height
+        get() = width
 
     override val knobSize: Int
-        get() = knobSprite.height
+        get() = knobSprite.width
 
     override fun onDraw(dsl: KGuiDsl) = dsl {
         super.onDraw(this)
-        val relY = dsl.mouseY - dsl.ctx.absY()
-        val newPos = knobPos(relY)
+        val relX = dsl.mouseX - dsl.ctx.absX()
+        val newPos = knobPos(relX)
 
-        if (isMoving) {
-            sprite(knobSprite, y = newPos)
+        if (isDragged) {
+            sprite(knobSprite, x = newPos)
             percent = newPos.toDouble() / moveRange.last
             dragStart = newPos
         } else {
-            sprite(knobSprite, y = dragStart)
+            sprite(knobSprite, x = dragStart)
         }
     }
 }
