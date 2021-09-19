@@ -7,6 +7,7 @@ import io.ejekta.bountiful.content.gui.widgets.BountyLongButton
 import io.ejekta.kambrik.KambrikHandledScreen
 import io.ejekta.kambrik.gui.KSpriteGrid
 import io.ejekta.kambrik.gui.widgets.KVanillaScrollbar
+import io.ejekta.kambrik.gui.widgets.KVanillaScrollbarVertical
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack
@@ -34,7 +35,7 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         BountyLongButton(this, it)
     }
 
-    private val slider = KVanillaScrollbar(120, SLIDER)
+    private val slider = KVanillaScrollbarVertical(120, SLIDER, 0x0)
 
     val fgGui = kambrikGui {
         val levelData = BoardBlockEntity.levelProgress(boardHandler.totalDone)

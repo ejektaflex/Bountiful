@@ -7,26 +7,24 @@ import io.ejekta.kambrik.gui.KWidget
 import net.minecraft.client.gui.screen.Screen
 import kotlin.math.roundToInt
 
-class KVanillaScrollbar(
-    override val height: Int,
-    private val knobSprite: KSpriteGrid.Sprite,
-) : KWidget(knobSprite.width, height) {
+abstract class KVanillaScrollbar(
+    protected val knobSprite: KSpriteGrid.Sprite,
+    protected val bgColor: Int? = null
+) : KWidget() {
 
-    init {
-        if (knobSprite.height > height) {
-            throw Exception("Scrollbar knob height cannot be taller than the scrollbar itself! (${knobSprite.height} > $height)")
-        }
-    }
+    abstract val scrollbarSize: Int
+    abstract val knobSize: Int
 
-    private val moveRange = 0 .. height - knobSprite.height
-    private var dragStart = 0
-    private var isMoving = false
+    protected val moveRange
+        get() = 0 .. scrollbarSize - knobSize
+    protected var dragStart = 0
+    protected var isMoving = false
 
     /**
      * A number representing how far down the scrollbar has been scrolled
      */
     var percent: Double = 0.0
-        private set
+        protected set
 
     /**
      * Returns a range of indices from a total list of numbers.
@@ -43,8 +41,8 @@ class KVanillaScrollbar(
         }
     }
 
-    private fun knobPos(relY: Int): Int {
-        return (relY - (knobSprite.height / 2)).coerceIn(moveRange)
+    protected fun knobPos(relPos: Int): Int {
+        return (relPos - (knobSize / 2)).coerceIn(moveRange)
     }
 
     override fun onClick(relX: Int, relY: Int, button: Int) {
@@ -56,15 +54,9 @@ class KVanillaScrollbar(
     }
 
     override fun onDraw(dsl: KGuiDsl) = dsl {
-        val relY = dsl.mouseY - dsl.ctx.absY()
-        val newPos = knobPos(relY)
-
-        if (isMoving) {
-            sprite(knobSprite, y = newPos)
-            percent = newPos.toDouble() / moveRange.last
-            dragStart = newPos
-        } else {
-            sprite(knobSprite, y = dragStart)
+        bgColor?.let {
+            rect(0, 0, width, height, color = it)
         }
     }
+
 }
