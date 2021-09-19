@@ -15,6 +15,7 @@ class KGui(
     fun draw(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float? = null) {
         screen.boundsStack.clear()
         val dsl = KGuiDsl(this, matrices, mouseX, mouseY, delta).apply(func)
+        dsl.doLateDeferral()
     }
 
     fun absX(relX: Int = 0) = x + coordFunc().first + relX

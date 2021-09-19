@@ -5,6 +5,7 @@ import io.ejekta.kambrik.ext.fapi.textRenderer
 import io.ejekta.kambrik.gui.KSpriteGrid
 import io.ejekta.kambrik.text.KambrikTextBuilder
 import io.ejekta.kambrik.text.textLiteral
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawableHelper
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
@@ -13,7 +14,18 @@ import net.minecraft.text.Text
 
 data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, val mouseY: Int, val delta: Float?) {
 
+    private val frameDeferred = mutableListOf<KGuiDsl.() -> Unit>()
+
     operator fun invoke(func: KGuiDsl.() -> Unit) = apply(func)
+
+    private fun defer(func: KGuiDsl.() -> Unit) {
+        frameDeferred.add(func)
+    }
+
+    fun doLateDeferral() {
+        frameDeferred.forEach { func -> apply(func) }
+        frameDeferred.clear()
+    }
 
     fun offset(x: Int, y: Int, func: KGuiDsl.() -> Unit) {
         ctx.x += x
@@ -48,9 +60,24 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
     }
 
     fun onHoverArea(x: Int = 0, y: Int = 0, w: Int = 0, h: Int = 0, func: KGuiDsl.() -> Unit) {
-        if (KRect.isInside(mouseX, mouseY, x, y, w, h)) {
+        if (KRect.isInside(mouseX, mouseY, ctx.absX(x), ctx.absY(y), w, h)) {
             apply(func)
         }
+    }
+
+    fun tooltip(texts: List<Text>) {
+        defer {
+            ctx.screen.renderTooltip(
+                matrices,
+                texts,
+                mouseX,
+                mouseY
+            )
+        }
+    }
+
+    fun tooltip(func: KambrikTextBuilder<LiteralText>.() -> Unit) {
+        tooltip(listOf(textLiteral("", func)))
     }
 
     fun textCentered(x: Int = 0, y: Int = 0, textDsl: KambrikTextBuilder<LiteralText>.() -> Unit) {

@@ -44,8 +44,6 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         bgGui.draw(matrices, mouseX, mouseY, delta)
     }
 
-    //val button = KVanillaButton(395)
-
     val buttons = (0 until 6).map {
         BountyLongButton(this, it)
     }
@@ -96,120 +94,9 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
     override fun drawForeground(matrices: MatrixStack?, mouseX: Int, mouseY: Int) { /* Pass here */ }
 
 
-
-
-    inner class WidgetButtonBounty(var dataIndex: Int, inX: Int, inY: Int, press: PressAction) : ButtonWidget(
-        inX,
-        inY,
-        160,
-        20,
-        LiteralText.EMPTY,
-        press
-    ) {
-        private fun getBountyData(): BountyData {
-            return BountyData[boardHandler.inventory.getStack(dataIndex)]
-        }
-
-        // We need to do custom text here, in case objective requires higher than stack size
-        fun renderStackText(text: Text, rx: Int, ry: Int) {
-            val matrixStack = MatrixStack()
-            matrixStack.translate(0.0, 0.0, (this.zOffset + 200.0f).toDouble())
-
-            val chars = text.asString().length
-
-            // Only apply scaling on amounts higher than 2
-            val charScaling = (chars - 1).coerceAtLeast(1)
-
-            if (charScaling > 1) {
-                matrixStack.scale(.5f, .5f, 1f)
-                matrixStack.translate(rx.toDouble(), ry.toDouble(), 0.0)
-            }
-
-            val immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().buffer)
-
-            textRenderer.draw(
-                text,
-                (rx + (17 * charScaling) - textRenderer.getWidth(text)).toFloat(),
-                (ry + 9 * charScaling).toFloat(),
-                16777215,
-                true,
-                matrixStack.peek().model,
-                immediate,
-                false,
-                0,
-                LightmapTextureManager.MAX_LIGHT_COORDINATE
-            )
-            immediate.draw()
-        }
-
-        private fun renderEntry(entry: BountyDataEntry, rx: Int, ry: Int, color: Int = 0xFFFFFF) {
-            when (entry.type) {
-                BountyType.ITEM -> {
-                    val stack = ItemLogic(entry).itemStack.apply {
-                        count = entry.amount
-                    }
-                    itemRenderer.renderInGui(stack, rx, ry)
-                    renderStackText(textLiteral(entry.amount.toString()) {
-                        color(color)
-                    }, rx, ry)
-                }
-            }
-        }
-
-        private fun renderDataTooltip(matrices: MatrixStack, data: BountyDataEntry, rx: Int, ry: Int, mouseX: Int, mouseY: Int, iconSize: Int) {
-            if (mouseX in rx+1 until rx+iconSize && mouseY in ry+1 until ry+iconSize) {
-                this@BoardScreen.renderTooltip(
-                    matrices,
-                    data.textBoard(MinecraftClient.getInstance().player!!),
-                    mouseX,
-                    mouseY
-                )
-            }
-        }
-
-        override fun renderButton(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-            super.renderButton(matrices, mouseX, mouseY, delta)
-            //println(isHovered)
-            val data = getBountyData()
-
-            val ry = y + 1
-            val iconSize = 20
-
-            data.objectives.forEachIndexed { index, obj ->
-                val rx = x + 3 + (iconSize * index)
-                renderEntry(obj, rx, ry)
-                renderDataTooltip(matrices, obj, rx, ry, mouseX, mouseY, iconSize)
-            }
-
-            data.rewards.forEachIndexed { index, rew ->
-                val rx = (x + width - iconSize - (iconSize * index))
-                renderEntry(rew, rx, ry, rew.rarity.color.colorValue!!)
-                renderDataTooltip(matrices, rew, rx, ry, mouseX, mouseY, iconSize)
-            }
-
-        }
-
-    }
-
     override fun init() {
         super.init()
         titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2
-
-        // TODO take up to a certain amount, depending on scroll
-
-        /*
-        for (i in 0 until 6) {
-            addDrawableChild(
-                WidgetButtonBounty(i, x + 5, 20 * i + y + 18) {
-                    println("Pressed it!")
-                }
-            )
-        }
-         */
-
-
-        //addDrawableChild()
-
     }
 
     companion object {

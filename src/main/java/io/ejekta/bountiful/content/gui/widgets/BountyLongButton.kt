@@ -8,6 +8,7 @@ import io.ejekta.bountiful.client.BoardScreen
 import io.ejekta.kambrik.gui.KSpriteGrid
 import io.ejekta.kambrik.gui.toolkit.KGuiDsl
 import io.ejekta.kambrik.gui.toolkit.KWidget
+import net.minecraft.client.MinecraftClient
 import net.minecraft.util.Identifier
 
 class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(160) {
@@ -25,7 +26,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(
                 dsl {
                     itemStackIcon(stack, x, y)
                     onHoverArea(x, y, 18, 18) {
-
+                        tooltip(entry.textBoard(MinecraftClient.getInstance().player!!))
                     }
                 }
             }
