@@ -6,10 +6,10 @@ import net.minecraft.client.util.math.MatrixStack
 
 class KGui(
     val screen: KambrikHandledScreen<*>,
-    val coordFunc: () -> Pair<Int, Int>,
+    private val coordFunc: () -> Pair<Int, Int>,
     var x: Int = 0,
     var y: Int = 0,
-    val func: KGuiDsl.() -> Unit = {}
+    private val func: KGuiDsl.() -> Unit = {}
 ) {
 
     fun draw(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float? = null) {

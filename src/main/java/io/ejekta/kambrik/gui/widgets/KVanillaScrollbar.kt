@@ -16,52 +16,34 @@ class KVanillaScrollbar(
     }
 
     private val moveRange = 0 .. height - knobSprite.height
-
-    private var knobLocation = 0
-
-    private val knobSizeRange: IntRange
-        get() = knobLocation until knobLocation + knobSprite.height
+    private var dragStart = 0
+    private var isMoving = false
 
     var percent: Double = 0.0
         private set
 
-    var isMoving = false
+    private fun knobPos(relY: Int): Int {
+        return (relY - (knobSprite.height / 2)).coerceIn(moveRange)
+    }
 
     override fun onClick(relX: Int, relY: Int, button: Int) {
-        println("Click!")
-        if (relY in knobSizeRange) {
-            // do nothing
-        } else {
-            knobLocation = (relY - (knobSprite.height / 2)).coerceIn(moveRange)
-        }
         isMoving = true
-        //startLocation = relY
-    }
-
-    override fun onHover(relX: Int, relY: Int) {
-        //println("Hover")
-    }
-
-    override fun onMouseMoved(relX: Int, relY: Int) {
-        //println("Mouse moved")
     }
 
     override fun onRelease(relX: Int, relY: Int, button: Int) {
         isMoving = false
-        knobLocation = relY
-        //startLocation = relY
+        dragStart = knobPos(relY)
     }
 
     override fun onDraw(dsl: KGuiDsl) = dsl {
-        val currLocation = dsl.mouseY - dsl.ctx.absY()
-        val newPos = (currLocation - knobLocation).coerceIn(moveRange)
-        percent = newPos.toDouble() / moveRange.last
+        val relY = dsl.mouseY - dsl.ctx.absY()
+        val newPos = knobPos(relY)
 
         if (isMoving) {
             sprite(knobSprite, y = newPos)
+            percent = newPos.toDouble() / moveRange.last
         } else {
-            sprite(knobSprite, y = knobLocation)
+            sprite(knobSprite, y = dragStart)
         }
     }
-
 }
