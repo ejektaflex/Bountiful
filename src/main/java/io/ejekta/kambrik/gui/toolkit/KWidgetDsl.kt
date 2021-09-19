@@ -4,12 +4,12 @@ import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.ParentElement
 
 open class KWidgetDsl(
-    var drawFunc: KambrikGuiDsl.() -> Unit = {},
+    var drawFunc: KGuiDsl.() -> Unit = {},
     open val width: Int,
     open val height: Int,
 ) : ParentElement {
 
-    fun onDraw(func: KambrikGuiDsl.() -> Unit) {
+    fun onDraw(func: KGuiDsl.() -> Unit) {
         drawFunc = func
     }
 

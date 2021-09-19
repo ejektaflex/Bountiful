@@ -1,60 +1,29 @@
 package io.ejekta.kambrik.gui.toolkit
 
-import net.minecraft.client.gui.Drawable
-import net.minecraft.client.gui.Element
-import net.minecraft.client.gui.ParentElement
-import net.minecraft.client.gui.Selectable
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
-import net.minecraft.client.util.math.MatrixStack
-
 open class KWidget(
-    open val width: Int,
-    open val height: Int,
-) : ParentElement, Drawable, Selectable {
+    open val width: Int = 0,
+    open val height: Int = 0,
+) {
 
-    open fun onDraw(dsl: KambrikGuiDsl) {
-        //
+    open fun onClick(relX: Int, relY: Int, button: Int) {
+        // No-op
     }
 
-    fun isHovered(dsl: KambrikGuiDsl): Boolean {
-        return dsl.run {
-            mouseX >= ctx.absX() && mouseX <= ctx.absX(width)
-                    && mouseY >= ctx.absY() && mouseY <= ctx.absY(height)
+    open fun onHover(relX: Int, relY: Int) {
+        // No-op
+    }
+
+    open fun onMouseMoved(relX: Int, relY: Int) {
+        // No-op
+    }
+
+    open fun onDraw(dsl: KGuiDsl): KGuiDsl {
+        /* No-op
+        return dsl {
+            ...
         }
-    }
-
-    private val children = mutableListOf<KWidget>()
-
-    override fun children(): MutableList<out Element> {
-        return children
-    }
-
-    override fun isDragging(): Boolean {
-        return false
-    }
-
-    override fun setDragging(dragging: Boolean) {
-        //
-    }
-
-    override fun getFocused(): Element? {
-        return null
-    }
-
-    override fun setFocused(focused: Element?) {
-        //
-    }
-
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
-        // We defer drawing to the KGui calls
-    }
-
-    override fun appendNarrations(builder: NarrationMessageBuilder?) {
-        // Implementable by subclasses
-    }
-
-    override fun getType(): Selectable.SelectionType {
-        return Selectable.SelectionType.HOVERED
+         */
+        return dsl
     }
 
 }

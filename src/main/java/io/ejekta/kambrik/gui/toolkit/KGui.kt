@@ -1,19 +1,20 @@
 package io.ejekta.kambrik.gui.toolkit
 
-import net.minecraft.client.gui.screen.Screen
+import io.ejekta.kambrik.KambrikHandledScreen
 import net.minecraft.client.util.math.MatrixStack
 
 
 class KGui(
-    val screen: Screen,
+    val screen: KambrikHandledScreen<*>,
     val coordFunc: () -> Pair<Int, Int>,
     var x: Int = 0,
     var y: Int = 0,
-    val func: KambrikGuiDsl.() -> Unit = {}
+    val func: KGuiDsl.() -> Unit = {}
 ) {
 
     fun draw(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float? = null) {
-        KambrikGuiDsl(this, matrices, mouseX, mouseY, delta).apply(func)
+        screen.boundsStack.clear()
+        val dsl = KGuiDsl(this, matrices, mouseX, mouseY, delta).apply(func)
     }
 
     fun absX(relX: Int = 0) = x + coordFunc().first + relX
