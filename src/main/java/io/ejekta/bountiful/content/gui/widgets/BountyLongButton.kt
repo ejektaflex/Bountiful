@@ -6,8 +6,8 @@ import io.ejekta.bountiful.bounty.BountyType
 import io.ejekta.bountiful.bounty.logic.ItemLogic
 import io.ejekta.bountiful.client.BoardScreen
 import io.ejekta.kambrik.gui.KSpriteGrid
-import io.ejekta.kambrik.gui.toolkit.KGuiDsl
-import io.ejekta.kambrik.gui.toolkit.KWidget
+import io.ejekta.kambrik.gui.KGuiDsl
+import io.ejekta.kambrik.gui.KWidget
 import net.minecraft.client.MinecraftClient
 import net.minecraft.util.Identifier
 
@@ -23,12 +23,13 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(
                 val stack = ItemLogic(entry).itemStack.apply {
                     count = entry.amount
                 }
-                dsl {
-                    itemStackIcon(stack, x, y)
-                    onHoverArea(x, y, 18, 18) {
-                        tooltip(entry.textBoard(MinecraftClient.getInstance().player!!))
-                    }
-                }
+                dsl { itemStackIcon(stack, x, y) }
+            }
+        }
+        // Entry tooltip
+        dsl {
+            onHoverArea(x, y, 18, 18) {
+                tooltip(entry.textBoard(MinecraftClient.getInstance().player!!))
             }
         }
     }

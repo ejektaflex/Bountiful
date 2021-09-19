@@ -1,8 +1,8 @@
-package io.ejekta.kambrik.gui.toolkit.widgets
+package io.ejekta.kambrik.gui.widgets
 
 import io.ejekta.kambrik.gui.KSpriteGrid
-import io.ejekta.kambrik.gui.toolkit.KWidget
-import io.ejekta.kambrik.gui.toolkit.KGuiDsl
+import io.ejekta.kambrik.gui.KWidget
+import io.ejekta.kambrik.gui.KGuiDsl
 import net.minecraft.util.Identifier
 
 

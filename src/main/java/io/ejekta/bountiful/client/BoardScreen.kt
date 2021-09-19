@@ -1,27 +1,14 @@
 package io.ejekta.bountiful.client
 
 import io.ejekta.bountiful.Bountiful
-import io.ejekta.bountiful.bounty.BountyData
-import io.ejekta.bountiful.bounty.BountyDataEntry
-import io.ejekta.bountiful.bounty.BountyType
-import io.ejekta.bountiful.bounty.logic.ItemLogic
 import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.content.gui.widgets.BountyLongButton
 import io.ejekta.kambrik.KambrikHandledScreen
-import io.ejekta.kambrik.ext.client.drawSimpleCenteredImage
 import io.ejekta.kambrik.gui.KSpriteGrid
-import io.ejekta.kambrik.gui.toolkit.widgets.KVanillaButton
-import io.ejekta.kambrik.text.textLiteral
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gui.widget.ButtonWidget
-import net.minecraft.client.render.LightmapTextureManager
-import net.minecraft.client.render.Tessellator
-import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.screen.ScreenHandler
-import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
@@ -40,9 +27,6 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         sprite(BOARD_BG)
     }
 
-    override fun drawBackground(matrices: MatrixStack, delta: Float, mouseX: Int, mouseY: Int) {
-        bgGui.draw(matrices, mouseX, mouseY, delta)
-    }
 
     val buttons = (0 until 6).map {
         BountyLongButton(this, it)
@@ -77,22 +61,20 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
             +title
         }
 
-        // Draw bounty objective buttons
+        // Draw bounty buttons
         buttons.forEachIndexed { index, button ->
             widget(button, 5, 18 + index * 20)
         }
 
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        renderBackground(matrices)
-        super.render(matrices, mouseX, mouseY, delta)
-        fgGui.draw(matrices, mouseX, mouseY, delta)
-        drawMouseoverTooltip(matrices, mouseX, mouseY)
+    override fun onDrawBackground(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+        bgGui.draw(matrices, mouseX, mouseY, delta)
     }
 
-    override fun drawForeground(matrices: MatrixStack?, mouseX: Int, mouseY: Int) { /* Pass here */ }
-
+    override fun onDrawForeground(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+        fgGui.draw(matrices, mouseX, mouseY, delta)
+    }
 
     override fun init() {
         super.init()
@@ -100,7 +82,6 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
     }
 
     companion object {
-
         private val TEXTURE = Bountiful.id("textures/gui/container/new_board.png")
         private val WANDER = Identifier("textures/gui/container/villager2.png")
 
@@ -110,7 +91,6 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         private val WANDER_SHEET = KSpriteGrid(WANDER, texWidth = 512, texHeight = 256)
         private val BAR_BG = WANDER_SHEET.Sprite(0f, 186f, 102, 5)
         private val BAR_FG = WANDER_SHEET.Sprite(0f, 191f, 102, 5)
-
     }
 }
 

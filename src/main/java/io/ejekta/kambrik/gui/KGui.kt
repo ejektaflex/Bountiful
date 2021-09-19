@@ -1,4 +1,4 @@
-package io.ejekta.kambrik.gui.toolkit
+package io.ejekta.kambrik.gui
 
 import io.ejekta.kambrik.KambrikHandledScreen
 import net.minecraft.client.util.math.MatrixStack
@@ -14,8 +14,7 @@ class KGui(
 
     fun draw(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float? = null) {
         screen.boundsStack.clear()
-        val dsl = KGuiDsl(this, matrices, mouseX, mouseY, delta).apply(func)
-        dsl.doLateDeferral()
+        val dsl = KGuiDsl(this, matrices, mouseX, mouseY, delta).draw(func)
     }
 
     fun absX(relX: Int = 0) = x + coordFunc().first + relX

@@ -1,8 +1,8 @@
-package io.ejekta.kambrik.gui.toolkit
+package io.ejekta.kambrik.gui
 
 data class KRect(val x: Int, val y: Int, val w: Int, val h: Int) {
     fun isInside(ix: Int, iy: Int): Boolean {
-        return Companion.isInside(ix, iy, x, y, w, h)
+        return isInside(ix, iy, x, y, w, h)
     }
 
     companion object {

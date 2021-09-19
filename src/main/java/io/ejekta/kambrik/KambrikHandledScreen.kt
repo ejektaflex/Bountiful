@@ -2,21 +2,24 @@ package io.ejekta.kambrik
 
 import com.mojang.blaze3d.systems.RenderSystem
 import io.ejekta.kambrik.gui.KSpriteGrid
-import io.ejekta.kambrik.gui.toolkit.KGui
-import io.ejekta.kambrik.gui.toolkit.KRect
-import io.ejekta.kambrik.gui.toolkit.KWidget
-import io.ejekta.kambrik.gui.toolkit.KGuiDsl
+import io.ejekta.kambrik.gui.KGui
+import io.ejekta.kambrik.gui.KRect
+import io.ejekta.kambrik.gui.KWidget
+import io.ejekta.kambrik.gui.KGuiDsl
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
 
-open class KambrikHandledScreen<SH : ScreenHandler>(
+abstract class KambrikHandledScreen<SH : ScreenHandler>(
     handler: SH,
     inventory: PlayerInventory,
     title: Text
 ) : HandledScreen<SH>(handler, inventory, title) {
+
+    abstract fun onDrawBackground(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float)
+    abstract fun onDrawForeground(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float)
 
     val boundsStack = mutableListOf<Pair<KWidget, KRect>>()
 
@@ -37,6 +40,18 @@ open class KambrikHandledScreen<SH : ScreenHandler>(
                 func(bounds.first, bounds.second, mouseX.toInt(), mouseY.toInt())
             }
         }
+    }
+
+    override fun drawForeground(matrices: MatrixStack?, mouseX: Int, mouseY: Int) { /* Pass here */ }
+    override fun drawBackground(matrices: MatrixStack, delta: Float, mouseX: Int, mouseY: Int) {
+        onDrawBackground(matrices, mouseX, mouseY, delta)
+    }
+
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+        renderBackground(matrices)
+        super.render(matrices, mouseX, mouseY, delta)
+        onDrawForeground(matrices, mouseX, mouseY, delta)
+        drawMouseoverTooltip(matrices, mouseX, mouseY)
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
@@ -62,8 +77,5 @@ open class KambrikHandledScreen<SH : ScreenHandler>(
         apply(func)
     }
 
-    override fun drawBackground(matrices: MatrixStack, delta: Float, mouseX: Int, mouseY: Int) {
-        // Pass
-    }
 
 }

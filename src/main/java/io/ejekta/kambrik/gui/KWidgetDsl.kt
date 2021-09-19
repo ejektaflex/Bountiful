@@ -1,5 +1,6 @@
-package io.ejekta.kambrik.gui.toolkit
+package io.ejekta.kambrik.gui
 
+import io.ejekta.kambrik.gui.KGuiDsl
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.ParentElement
 

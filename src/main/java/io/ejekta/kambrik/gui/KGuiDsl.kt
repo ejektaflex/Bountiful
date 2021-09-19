@@ -1,11 +1,9 @@
-package io.ejekta.kambrik.gui.toolkit
+package io.ejekta.kambrik.gui
 
 import io.ejekta.kambrik.ext.fapi.itemRenderer
 import io.ejekta.kambrik.ext.fapi.textRenderer
-import io.ejekta.kambrik.gui.KSpriteGrid
 import io.ejekta.kambrik.text.KambrikTextBuilder
 import io.ejekta.kambrik.text.textLiteral
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawableHelper
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
@@ -14,17 +12,23 @@ import net.minecraft.text.Text
 
 data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, val mouseY: Int, val delta: Float?) {
 
-    private val frameDeferred = mutableListOf<KGuiDsl.() -> Unit>()
+    private val frameDeferredTasks = mutableListOf<KGuiDsl.() -> Unit>()
 
     operator fun invoke(func: KGuiDsl.() -> Unit) = apply(func)
 
-    private fun defer(func: KGuiDsl.() -> Unit) {
-        frameDeferred.add(func)
+    fun draw(func: KGuiDsl.() -> Unit): KGuiDsl {
+        apply(func)
+        doLateDeferral()
+        return this
     }
 
-    fun doLateDeferral() {
-        frameDeferred.forEach { func -> apply(func) }
-        frameDeferred.clear()
+    private fun defer(func: KGuiDsl.() -> Unit) {
+        frameDeferredTasks.add(func)
+    }
+
+    private fun doLateDeferral() {
+        frameDeferredTasks.forEach { func -> apply(func) }
+        frameDeferredTasks.clear()
     }
 
     fun offset(x: Int, y: Int, func: KGuiDsl.() -> Unit) {
@@ -42,17 +46,6 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
             DrawableHelper.fill(matrices, sx, sy, sx + w, sy + h, color)
             apply(func)
         }
-    }
-
-    fun textCentered(x: Int, y: Int, text: Text) {
-        DrawableHelper.drawCenteredText(
-            matrices,
-            ctx.screen.textRenderer,
-            text,
-            ctx.absX(x),
-            ctx.absY(y),
-            0xFFFFFF
-        )
     }
 
     fun itemStackIcon(stack: ItemStack, x: Int = 0, y: Int = 0) {
@@ -80,15 +73,34 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
         tooltip(listOf(textLiteral("", func)))
     }
 
-    fun textCentered(x: Int = 0, y: Int = 0, textDsl: KambrikTextBuilder<LiteralText>.() -> Unit) {
-        DrawableHelper.drawCenteredText(
+    fun text(x: Int, y: Int, text: Text) {
+        DrawableHelper.drawTextWithShadow(
             matrices,
             ctx.screen.textRenderer,
-            textLiteral("", textDsl),
+            text,
             ctx.absX(x),
             ctx.absY(y),
             0xFFFFFF
         )
+    }
+
+    fun text(x: Int = 0, y: Int = 0, textDsl: KambrikTextBuilder<LiteralText>.() -> Unit) {
+        text(x, y, textLiteral("", textDsl))
+    }
+
+    fun textCentered(x: Int, y: Int, text: Text) {
+        DrawableHelper.drawCenteredText(
+            matrices,
+            ctx.screen.textRenderer,
+            text,
+            ctx.absX(x),
+            ctx.absY(y),
+            0xFFFFFF
+        )
+    }
+
+    fun textCentered(x: Int = 0, y: Int = 0, textDsl: KambrikTextBuilder<LiteralText>.() -> Unit) {
+        textCentered(x, y, textLiteral("", textDsl))
     }
 
     fun sprite(sprite: KSpriteGrid.Sprite, x: Int = 0, y: Int = 0, w: Int = sprite.width, h: Int = sprite.height) {

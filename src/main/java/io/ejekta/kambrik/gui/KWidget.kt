@@ -1,4 +1,6 @@
-package io.ejekta.kambrik.gui.toolkit
+package io.ejekta.kambrik.gui
+
+import io.ejekta.kambrik.gui.KGuiDsl
 
 open class KWidget(
     open val width: Int = 0,
