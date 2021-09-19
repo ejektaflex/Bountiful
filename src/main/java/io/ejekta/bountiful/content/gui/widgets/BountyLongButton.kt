@@ -5,19 +5,22 @@ import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.BountyType
 import io.ejekta.bountiful.bounty.logic.ItemLogic
 import io.ejekta.bountiful.client.BoardScreen
+import io.ejekta.kambrik.ext.fapi.itemRenderer
+import io.ejekta.kambrik.ext.fapi.textRenderer
 import io.ejekta.kambrik.gui.KSpriteGrid
 import io.ejekta.kambrik.gui.KGuiDsl
 import io.ejekta.kambrik.gui.KWidget
+import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.MinecraftClient
 import net.minecraft.util.Identifier
 
-class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(160) {
+class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(160, 20) {
 
     private fun getBountyData(): BountyData {
         return BountyData[parent.boardHandler.inventory.getStack(bountyIndex)]
     }
 
-    private fun renderEntry(dsl: KGuiDsl, entry: BountyDataEntry, x: Int, y: Int) {
+    private fun renderEntry(dsl: KGuiDsl, entry: BountyDataEntry, x: Int, y: Int, isReward: Boolean = false) {
         when (entry.type) {
             BountyType.ITEM -> {
                 val stack = ItemLogic(entry).itemStack.apply {
@@ -25,6 +28,17 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(
                 }
                 dsl { itemStackIcon(stack, x, y) }
             }
+        }
+        // Render amount
+        dsl {
+            val textToShow = textLiteral(entry.amount.toString()) {
+                color = if (isReward) {
+                    entry.rarity.color.colorValue!!
+                } else {
+                    0xFFFFFF
+                }
+            }
+            textImmediate(x + 17 - ctx.screen.textRenderer.getWidth(textToShow.string) * 2, y + 9, textToShow)
         }
         // Entry tooltip
         dsl {
@@ -39,7 +53,15 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(
         sprite(DEFAULT, w = DEFAULT.width - 42)
         sprite(CAP, DEFAULT.width - 42)
 
+        rect(0, 0, width, height, 0xb86f50, 0x48)
+
+
         val data = getBountyData()
+
+        if (data.objectives.isEmpty()) {
+            rect(0, 0, width, height, 0x00, 0x88)
+        }
+
         // Render objectives
         for (i in data.objectives.indices) {
             renderEntry(this, data.objectives[i],  i * 20 + 1, 1)

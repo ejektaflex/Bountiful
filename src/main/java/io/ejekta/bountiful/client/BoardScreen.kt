@@ -23,12 +23,11 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         sizeToSprite(BOARD_BG)
     }
 
-    val bgGui = kambrikGui {
+    private val bgGui = kambrikGui {
         sprite(BOARD_BG)
     }
 
-
-    val buttons = (0 until 6).map {
+    private val buttons = (0 until 6).map {
         BountyLongButton(this, it)
     }
 
@@ -44,15 +43,6 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
                 color(0xabff7a)
                 +levelData.first.toString()
             }
-
-            // Test colored rect
-            rect(30, 30, 50, 50, 0xabff7a) {
-                textCentered(25, 0) {
-                    color(0xFF0000)
-                    +levelData.first.toString()
-                }
-            }
-
         }
 
         // GUI Title
@@ -65,7 +55,6 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         buttons.forEachIndexed { index, button ->
             widget(button, 5, 18 + index * 20)
         }
-
     }
 
     override fun onDrawBackground(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {

@@ -5,6 +5,9 @@ import io.ejekta.kambrik.ext.fapi.textRenderer
 import io.ejekta.kambrik.text.KambrikTextBuilder
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.gui.DrawableHelper
+import net.minecraft.client.render.LightmapTextureManager
+import net.minecraft.client.render.Tessellator
+import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
 import net.minecraft.text.LiteralText
@@ -39,17 +42,23 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
         ctx.y -= y
     }
 
-    fun rect(x: Int, y: Int, w: Int, h: Int, color: Int = 0xFFFFFF, func: KGuiDsl.() -> Unit = {}) {
+    // println(0x91 shl 24) // == 0x91000000
+
+    fun rect(x: Int, y: Int, w: Int, h: Int, color: Int = 0xFFFFFF, alpha: Int = 0xFF, func: KGuiDsl.() -> Unit = {}) {
         offset(x, y) {
-            val sx = ctx.absX(x)
-            val sy = ctx.absY(y)
-            DrawableHelper.fill(matrices, sx, sy, sx + w, sy + h, color)
+            val sx = ctx.absX()
+            val sy = ctx.absY()
+            DrawableHelper.fill(matrices, sx, sy, sx + w, sy + h, (alpha shl 24) + color)
             apply(func)
         }
     }
 
     fun itemStackIcon(stack: ItemStack, x: Int = 0, y: Int = 0) {
         ctx.screen.itemRenderer.renderInGui(stack, ctx.absX(x), ctx.absY(y))
+    }
+
+    fun itemStackOverlay(stack: ItemStack, x: Int = 0, y: Int = 0) {
+        ctx.screen.itemRenderer.renderGuiItemOverlay(ctx.screen.textRenderer, stack, x, y)
     }
 
     fun onHoverArea(x: Int = 0, y: Int = 0, w: Int = 0, h: Int = 0, func: KGuiDsl.() -> Unit) {
@@ -101,6 +110,26 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
 
     fun textCentered(x: Int = 0, y: Int = 0, textDsl: KambrikTextBuilder<LiteralText>.() -> Unit) {
         textCentered(x, y, textLiteral("", textDsl))
+    }
+
+    fun textImmediate(x: Int, y: Int, text: Text) {
+        val matrixStack = MatrixStack()
+        matrixStack.translate(0.0, 0.0, (ctx.screen.zOffset + 200.0f).toDouble())
+        val immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().buffer)
+
+        ctx.screen.textRenderer.draw(
+            text,
+            (ctx.absX(x) + ctx.screen.textRenderer.getWidth(text)).toFloat(),
+            ctx.absY(y).toFloat(),
+            16777215,
+            true,
+            matrixStack.peek().model,
+            immediate,
+            false,
+            0,
+            LightmapTextureManager.MAX_LIGHT_COORDINATE
+        )
+        immediate.draw()
     }
 
     fun sprite(sprite: KSpriteGrid.Sprite, x: Int = 0, y: Int = 0, w: Int = sprite.width, h: Int = sprite.height) {
