@@ -66,6 +66,7 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         // Percent through scroll bar
         text(200, 18) {
             format(Formatting.GOLD)
+            +"${slider.getIndices(10, 6)} - "
             +"%.2f".format(slider.percent).toDouble().toString()
         }
     }
