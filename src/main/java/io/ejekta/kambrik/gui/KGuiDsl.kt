@@ -165,9 +165,9 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
             if (boundsRect.isInside(mouseX, mouseY)) {
                 // Run hover event
                 kWidget.onHover(mouseX - boundsRect.x, mouseY - boundsRect.y)
-                // Add to stack for later event handling
-                ctx.screen.boundsStack.add(0, kWidget to boundsRect)
             }
+            // Add to stack for later event handling
+            ctx.screen.boundsStack.add(0, kWidget to boundsRect)
         }
     }
 

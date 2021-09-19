@@ -56,12 +56,20 @@ abstract class KambrikHandledScreen<SH : ScreenHandler>(
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         cycleDrawnWidgets(mouseX, mouseY) { widget, rect, mX, mY ->
+            if (widget.canDrag() && !widget.isDragged) {
+                widget.startDragging(mX - rect.x, mY - rect.y)
+            }
             widget.onClick(mX - rect.x, mY - rect.y, button)
         }
         return super.mouseClicked(mouseX, mouseY, button)
     }
 
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        cycleDrawnWidgets { widget, rect ->
+            if (widget.canDrag() && widget.isDragged) {
+                widget.stopDragging(mouseX.toInt() - rect.x, mouseY.toInt() - rect.y)
+            }
+        }
         cycleDrawnWidgets(mouseX, mouseY) { widget, rect, mX, mY ->
             widget.onRelease(mX - rect.x, mY - rect.y, button)
         }

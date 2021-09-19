@@ -20,6 +20,16 @@ abstract class KVanillaScrollbar(
     protected var dragStart = 0
     protected var isMoving = false
 
+    override fun canDrag() = true
+
+    override fun onDragStart(relX: Int, relY: Int) {
+        isMoving = true
+    }
+
+    override fun onDragEnd(relX: Int, relY: Int) {
+        isMoving = false
+    }
+
     /**
      * A number representing how far down the scrollbar has been scrolled
      */
@@ -43,14 +53,6 @@ abstract class KVanillaScrollbar(
 
     protected fun knobPos(relPos: Int): Int {
         return (relPos - (knobSize / 2)).coerceIn(moveRange)
-    }
-
-    override fun onClick(relX: Int, relY: Int, button: Int) {
-        isMoving = true
-    }
-
-    override fun onRelease(relX: Int, relY: Int, button: Int) {
-        isMoving = false
     }
 
     override fun onDraw(dsl: KGuiDsl) = dsl {
