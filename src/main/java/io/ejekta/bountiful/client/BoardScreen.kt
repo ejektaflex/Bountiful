@@ -32,9 +32,12 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
 
     private val buttons = (0 until 21).map { BountyLongButton(this, it) }
 
+    private val validButtons: List<BountyLongButton>
+        get() = buttons.filter { it.getBountyData().objectives.isNotEmpty() }
+
     private val scroller = KScrollbarVertical(120, SLIDER, 0x0)
 
-    private val buttonList = KListWidget(buttons, 160, 20, 6, scroller) {
+    private val buttonList = KListWidget({ validButtons }, 160, 20, 6, scroller) {
         widget(it)
     }
 

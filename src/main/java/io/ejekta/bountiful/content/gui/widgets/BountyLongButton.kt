@@ -16,7 +16,7 @@ import net.minecraft.util.Identifier
 
 class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(160, 20) {
 
-    private fun getBountyData(): BountyData {
+    fun getBountyData(): BountyData {
         return BountyData[parent.boardHandler.inventory.getStack(bountyIndex)]
     }
 
@@ -55,12 +55,11 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(
 
         rect(0, 0, width, height, 0xb86f50, 0x48)
 
+        onHoverArea(0, 0, width, height) {
+            rect(0, 0, width, height, 0xFFFFFF, 0x33)
+        }
 
         val data = getBountyData()
-
-        if (data.objectives.isEmpty()) {
-            rect(0, 0, width, height, 0x00, 0x88)
-        }
 
         // Render objectives
         for (i in data.objectives.indices) {
@@ -68,7 +67,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(
         }
         // Render rewards
         for (i in data.rewards.indices) {
-            renderEntry(this, data.rewards[i], width - (20 * (i + 1)), 1)
+            renderEntry(this, data.rewards[i], width - (20 * (i + 1)), 1, isReward = true)
         }
     }
 
