@@ -6,13 +6,17 @@ import io.ejekta.kambrik.text.KambrikTextBuilder
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawableHelper
+import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.client.render.LightmapTextureManager
 import net.minecraft.client.render.Tessellator
 import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.entity.EntityType
+import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
+import kotlin.math.max
 
 data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, val mouseY: Int, val delta: Float?) {
 
@@ -154,6 +158,26 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
             w,
             h
         )
+    }
+
+    fun livingEntity(entity: LivingEntity, x: Int = 0, y: Int = 0, size: Double = 20.0) {
+        val dims = entity.getDimensions(entity.pose)
+        val maxDim = (1 / max(dims.height, dims.width) * 1 * size).toInt().coerceAtLeast(1)
+        InventoryScreen.drawEntity(
+            ctx.absX(x),
+            ctx.absY(y),
+            maxDim,
+            ctx.absX(x) - mouseX.toFloat(),
+            ctx.absY(y) - mouseY.toFloat(),
+            entity
+        )
+    }
+
+    fun livingEntity(entityType: EntityType<out LivingEntity>, x: Int = 0, y: Int = 0, size: Double = 20.0) {
+        val entity = ctx.entityRenderCache.getOrPut(entityType) {
+            entityType.create(MinecraftClient.getInstance().world) as LivingEntity
+        }
+        livingEntity(entity, x, y, size)
     }
 
     fun widget(kWidget: KWidget, relX: Int = 0, relY: Int = 0) {

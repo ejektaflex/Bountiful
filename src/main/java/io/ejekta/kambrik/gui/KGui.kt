@@ -2,6 +2,8 @@ package io.ejekta.kambrik.gui
 
 import io.ejekta.kambrik.KambrikHandledScreen
 import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.entity.EntityType
+import net.minecraft.entity.LivingEntity
 
 
 class KGui(
@@ -11,6 +13,8 @@ class KGui(
     var y: Int = 0,
     private val func: KGuiDsl.() -> Unit = {}
 ) {
+
+    val entityRenderCache = mutableMapOf<EntityType<*>, LivingEntity>()
 
     fun draw(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float? = null) {
         screen.boundsStack.clear()

@@ -3,15 +3,17 @@ package io.ejekta.bountiful.content.gui.widgets
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.BountyType
+import io.ejekta.bountiful.bounty.logic.EntityLogic
 import io.ejekta.bountiful.bounty.logic.ItemLogic
 import io.ejekta.bountiful.client.BoardScreen
-import io.ejekta.kambrik.ext.fapi.itemRenderer
 import io.ejekta.kambrik.ext.fapi.textRenderer
 import io.ejekta.kambrik.gui.KSpriteGrid
 import io.ejekta.kambrik.gui.KGuiDsl
 import io.ejekta.kambrik.gui.KWidget
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.MinecraftClient
+import net.minecraft.entity.EntityType
+import net.minecraft.entity.LivingEntity
 import net.minecraft.util.Identifier
 
 class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(160, 20) {
@@ -27,6 +29,17 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(
                     count = entry.amount
                 }
                 dsl { itemStackIcon(stack, x, y) }
+            }
+            BountyType.ENTITY -> {
+                val entityType = EntityLogic(entry).entityType
+                dsl {
+                    livingEntity(entityType as? EntityType<out LivingEntity>
+                        ?: throw Exception("Bounty cannot have ${entry.content} as entity objective, it is not a LivingEntity!"),
+                        x + 7,
+                        y + 15,
+                        size = 15.0
+                    )
+                }
             }
         }
         // Render amount

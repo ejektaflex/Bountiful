@@ -8,12 +8,16 @@ import io.ejekta.kambrik.KambrikHandledScreen
 import io.ejekta.kambrik.gui.KSpriteGrid
 import io.ejekta.kambrik.gui.widgets.KListWidget
 import io.ejekta.kambrik.gui.widgets.KScrollbarVertical
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.entity.EntityType
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
+import net.minecraft.util.registry.Registry
 
 
 class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Text) :
@@ -71,6 +75,7 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
             +"${scroller.getIndices(10, 6)} - "
             +"%.2f".format(scroller.percent)
         }
+
     }
 
     override fun onDrawBackground(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {

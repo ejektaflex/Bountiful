@@ -20,7 +20,7 @@ import net.minecraft.util.registry.Registry
 
 class EntityLogic(override val entry: BountyDataEntry) : IEntryLogic {
 
-    private val entityType: EntityType<*>
+    val entityType: EntityType<*>
         get() = Registry.ENTITY_TYPE.get(Identifier(entry.content))
 
     override fun verifyValidity(player: PlayerEntity): MutableText? {
