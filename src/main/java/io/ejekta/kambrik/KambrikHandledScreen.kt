@@ -55,11 +55,20 @@ abstract class KambrikHandledScreen<SH : ScreenHandler>(
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        cycleDrawnWidgets(mouseX, mouseY) { widget, rect, mX, mY ->
-            if (widget.canDrag() && !widget.isDragged) {
-                widget.startDragging(mX - rect.x, mY - rect.y)
+        for (bounds in boundsStack) {
+            val widget = bounds.first
+            val rect = bounds.second
+            if (bounds.second.isInside(mouseX.toInt(), mouseY.toInt())) {
+                if (widget.canDrag() && !widget.isDragged) {
+                    widget.startDragging(mouseX.toInt() - rect.x, mouseY.toInt() - rect.y)
+                }
+
+                widget.onClick(mouseX.toInt() - rect.x, mouseY.toInt() - rect.y, button)
+
+                if (!widget.canClickThrough()) {
+                    break // If we cannot continue down the bounds stack because there's no clickthrough, return
+                }
             }
-            widget.onClick(mX - rect.x, mY - rect.y, button)
         }
         return super.mouseClicked(mouseX, mouseY, button)
     }

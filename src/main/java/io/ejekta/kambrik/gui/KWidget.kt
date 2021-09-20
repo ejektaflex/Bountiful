@@ -9,9 +9,16 @@ open class KWidget(
         private set
 
     /**
-     * Whether this widget is allowed to receive drag events
+     * Whether this widget is allowed to receive drag events.
      */
     open fun canDrag(): Boolean {
+        return false
+    }
+
+    /**
+     * Whether widgets behind this widget can be clicked on.
+     */
+    open fun canClickThrough(): Boolean {
         return false
     }
 

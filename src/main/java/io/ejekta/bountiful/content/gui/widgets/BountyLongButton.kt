@@ -14,7 +14,10 @@ import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.SpawnGroup
 import net.minecraft.util.Identifier
+import kotlin.reflect.full.declaredMembers
+import kotlin.reflect.full.starProjectedType
 
 class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(160, 20) {
 
@@ -32,6 +35,11 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(
             }
             BountyType.ENTITY -> {
                 val entityType = EntityLogic(entry).entityType
+
+                if (entityType.spawnGroup != SpawnGroup.CREATURE && entityType.spawnGroup != SpawnGroup.MONSTER) {
+                    return
+                }
+
                 dsl {
                     livingEntity(entityType as? EntityType<out LivingEntity>
                         ?: throw Exception("Bounty cannot have ${entry.content} as entity objective, it is not a LivingEntity!"),
