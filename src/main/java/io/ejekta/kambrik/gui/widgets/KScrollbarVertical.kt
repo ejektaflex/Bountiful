@@ -24,7 +24,6 @@ class KScrollbarVertical(
 
         if (isDragged) {
             sprite(knobSprite, y = newPos)
-            percent = newPos.toDouble() / moveRange.last
             dragStart = newPos
         } else {
             sprite(knobSprite, y = dragStart)

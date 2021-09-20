@@ -24,7 +24,6 @@ class KScrollbarHorizontal(
 
         if (isDragged) {
             sprite(knobSprite, x = newPos)
-            percent = newPos.toDouble() / moveRange.last
             dragStart = newPos
         } else {
             sprite(knobSprite, x = dragStart)

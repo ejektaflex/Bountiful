@@ -69,6 +69,10 @@ open class KWidget(
         // No-op
     }
 
+    open fun onMouseScrolled(relX: Int, relY: Int, amount: Double) {
+        // No-op
+    }
+
     /**
      * A callback that allows the widget to draw to the screen.
      */

@@ -6,6 +6,7 @@ import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.content.gui.widgets.BountyLongButton
 import io.ejekta.kambrik.KambrikHandledScreen
 import io.ejekta.kambrik.gui.KSpriteGrid
+import io.ejekta.kambrik.gui.widgets.KListWidget
 import io.ejekta.kambrik.gui.widgets.KScrollbarVertical
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
@@ -29,11 +30,13 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         sprite(BOARD_BG)
     }
 
-    private val buttons = (0 until 6).map {
-        BountyLongButton(this, it)
-    }
+    private val buttons = (0 until 21).map { BountyLongButton(this, it) }
 
-    private val slider = KScrollbarVertical(120, SLIDER, 0x0)
+    private val scroller = KScrollbarVertical(120, SLIDER, 0x0)
+
+    private val buttonList = KListWidget(buttons, 160, 20, 6, scroller) {
+        widget(it)
+    }
 
     val fgGui = kambrikGui {
         val levelData = BoardBlockEntity.levelProgress(boardHandler.totalDone)
@@ -55,18 +58,15 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
             +title
         }
 
-        // Draw bounty buttons
-        buttons.forEachIndexed { index, button ->
-            widget(button, 5, 18 + index * 20)
-        }
+        widget(buttonList, 5, 18)
 
         // Scroll bar
-        widget(slider, 166, 18)
-        // Percent through scroll bar
+        widget(scroller, 166, 18)
+        // (debug) Percent through scroll bar, as well as indices of selection
         text(200, 18) {
             format(Formatting.GOLD)
-            +"${slider.getIndices(10, 6)} - "
-            +"%.2f".format(slider.percent).toDouble().toString()
+            +"${scroller.getIndices(10, 6)} - "
+            +"%.2f".format(scroller.percent)
         }
     }
 

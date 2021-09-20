@@ -10,7 +10,7 @@ import kotlin.math.roundToInt
 abstract class KScrollbar(
     protected val knobSprite: KSpriteGrid.Sprite,
     protected val bgColor: Int? = null
-) : KWidget() {
+) : KWidget(), KWidgetIndexSelector {
 
     abstract val scrollbarSize: Int
     abstract val knobSize: Int
@@ -24,15 +24,15 @@ abstract class KScrollbar(
     /**
      * A number representing how far down the scrollbar has been scrolled
      */
-    var percent: Double = 0.0
-        protected set
+    val percent: Double
+        get() = dragStart.toDouble() / moveRange.last
 
     /**
      * Returns a range of indices from a total list of numbers.
      * Used to figure out which slice of a list we should display
      * based on the scrollbar's current position
      */
-    fun getIndices(total: Int, pick: Int): IntRange {
+    override fun getIndices(total: Int, pick: Int): IntRange {
         return if (total <= pick) {
             0 until total
         } else {
@@ -40,6 +40,10 @@ abstract class KScrollbar(
             val start = (percent * latestStart).roundToInt()
             start until start + pick
         }
+    }
+
+    fun scroll(pct: Double) {
+        dragStart = (dragStart + ((moveRange.last - moveRange.first) * pct).toInt()).coerceIn(moveRange)
     }
 
     protected fun knobPos(relPos: Int): Int {

@@ -83,6 +83,13 @@ abstract class KambrikHandledScreen<SH : ScreenHandler>(
         super.mouseMoved(mouseX, mouseY)
     }
 
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
+        cycleDrawnWidgets(mouseX, mouseY) { widget, rect, mX, mY ->
+            widget.onMouseScrolled(mX - rect.x, mY - rect.y, amount)
+        }
+        return super.mouseScrolled(mouseX, mouseY, amount)
+    }
+
     fun kambrikGui(clearOnDraw: Boolean = false, func: KGuiDsl.() -> Unit) = KGui(
         this, { x to y }
     ) {
