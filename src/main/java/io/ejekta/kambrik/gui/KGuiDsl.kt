@@ -47,8 +47,6 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
         ctx.y -= y
     }
 
-    // println(0x91 shl 24) // == 0x91000000
-
     fun rect(x: Int, y: Int, w: Int, h: Int, color: Int = 0xFFFFFF, alpha: Int = 0xFF, func: KGuiDsl.() -> Unit = {}) {
         offset(x, y) {
             val sx = ctx.absX()
@@ -56,6 +54,14 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
             DrawableHelper.fill(matrices, sx, sy, sx + w, sy + h, (alpha shl 24) + color)
             apply(func)
         }
+    }
+
+    fun rect(w: Int = 0, h: Int = 0, color: Int = 0xFFFFFF, alpha: Int = 0xFF, func: KGuiDsl.() -> Unit = {}) {
+        rect(0, 0, w, h, color, alpha, func)
+    }
+
+    fun rect(widget: KWidget, x: Int = 0, y: Int = 0, color: Int = 0xFFFFFF, alpha: Int = 0xFF, func: KGuiDsl.() -> Unit = {}) {
+        rect(x, y, widget.width, widget.height)
     }
 
     fun itemStackIcon(stack: ItemStack, x: Int = 0, y: Int = 0) {
@@ -84,6 +90,18 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
         }
     }
 
+    fun onHoverArea(w: Int = 0, h: Int = 0, func: KGuiDsl.() -> Unit) {
+        onHoverArea(0, 0, w, h, func)
+    }
+
+    fun onHoverArea(widget: KWidget, x: Int = 0, y: Int = 0, func: KGuiDsl.() -> Unit) {
+        onHoverArea(x, y, widget.width, widget.height, func)
+    }
+
+    fun onClickArea(x: Int = 0, y: Int = 0, w: Int = 0, h: Int = 0, func: () -> Unit) {
+
+    }
+
     fun tooltip(texts: List<Text>) {
         defer {
             ctx.screen.renderTooltip(
@@ -100,18 +118,19 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
     }
 
     fun text(x: Int, y: Int, text: Text) {
-        DrawableHelper.drawTextWithShadow(
-            matrices,
-            ctx.screen.textRenderer,
-            text,
-            ctx.absX(x),
-            ctx.absY(y),
-            0xFFFFFF
-        )
+        ctx.screen.textRenderer.drawWithShadow(matrices, text, ctx.absX(x).toFloat(), ctx.absY(y).toFloat(), 0xFFFFFF)
     }
 
     fun text(x: Int = 0, y: Int = 0, textDsl: KambrikTextBuilder<LiteralText>.() -> Unit) {
         text(x, y, textLiteral("", textDsl))
+    }
+
+    fun textNoShadow(x: Int, y: Int, text: Text) {
+        ctx.screen.textRenderer.draw(matrices, text, ctx.absX(x).toFloat(), ctx.absY(y).toFloat(), 0xFFFFFF)
+    }
+
+    fun textNoShadow(x: Int = 0, y: Int = 0, textDsl: KambrikTextBuilder<LiteralText>.() -> Unit) {
+        textNoShadow(x, y, textLiteral("", textDsl))
     }
 
     fun textCentered(x: Int, y: Int, text: Text) {
@@ -191,7 +210,7 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
                 kWidget.onHover(mouseX - boundsRect.x, mouseY - boundsRect.y)
             }
             // Add to stack for later event handling
-            ctx.screen.boundsStack.add(0, kWidget to boundsRect)
+            ctx.logic.boundsStack.add(0, kWidget to boundsRect)
         }
     }
 

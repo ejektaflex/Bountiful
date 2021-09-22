@@ -33,6 +33,9 @@ class PoolEntry private constructor() {
 
     var nbt: @Contextual NbtCompound? = null
 
+    val worthSteps: List<Double>
+        get() = (amount.min..amount.max).map { it * unitWorth }
+
     fun save(format: Json = JsonFormats.DataPack) = format.encodeToString(serializer(), this)
 
     fun toEntry(worth: Double? = null): BountyDataEntry {

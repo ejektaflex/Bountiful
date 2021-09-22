@@ -16,30 +16,14 @@ abstract class KambrikHandledScreen<SH : ScreenHandler>(
     handler: SH,
     inventory: PlayerInventory,
     title: Text
-) : HandledScreen<SH>(handler, inventory, title) {
+) : HandledScreen<SH>(handler, inventory, title), KambrikScreenCommon {
 
-    abstract fun onDrawBackground(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float)
-    abstract fun onDrawForeground(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float)
-
-    val boundsStack = mutableListOf<Pair<KWidget, KRect>>()
+    override val boundsStack = mutableListOf<Pair<KWidget, KRect>>()
+    override val areaClickStack = mutableListOf<Pair<() -> Unit, KRect>>()
 
     fun sizeToSprite(sprite: KSpriteGrid.Sprite) {
         backgroundWidth = sprite.width
         backgroundHeight = sprite.height
-    }
-
-    private fun cycleDrawnWidgets(func: (widget: KWidget, rect: KRect) -> Unit) {
-        for (bounds in boundsStack) {
-            func(bounds.first, bounds.second)
-        }
-    }
-
-    private fun cycleDrawnWidgets(mouseX: Double, mouseY: Double, func: (widget: KWidget, rect: KRect, mX: Int, mY: Int) -> Unit) {
-        for (bounds in boundsStack) {
-            if (bounds.second.isInside(mouseX.toInt(), mouseY.toInt())) {
-                func(bounds.first, bounds.second, mouseX.toInt(), mouseY.toInt())
-            }
-        }
     }
 
     override fun drawForeground(matrices: MatrixStack?, mouseX: Int, mouseY: Int) { /* Pass here */ }
@@ -55,48 +39,23 @@ abstract class KambrikHandledScreen<SH : ScreenHandler>(
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        for (bounds in boundsStack) {
-            val widget = bounds.first
-            val rect = bounds.second
-            if (bounds.second.isInside(mouseX.toInt(), mouseY.toInt())) {
-                if (widget.canDrag() && !widget.isDragged) {
-                    widget.startDragging(mouseX.toInt() - rect.x, mouseY.toInt() - rect.y)
-                }
-
-                widget.onClick(mouseX.toInt() - rect.x, mouseY.toInt() - rect.y, button)
-
-                if (!widget.canClickThrough()) {
-                    break // If we cannot continue down the bounds stack because there's no clickthrough, return
-                }
-            }
-        }
-        return super.mouseClicked(mouseX, mouseY, button)
+        super<KambrikScreenCommon>.mouseClicked(mouseX, mouseY, button)
+        return super<HandledScreen>.mouseClicked(mouseX, mouseY, button)
     }
 
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        cycleDrawnWidgets { widget, rect ->
-            if (widget.canDrag() && widget.isDragged) {
-                widget.stopDragging(mouseX.toInt() - rect.x, mouseY.toInt() - rect.y)
-            }
-        }
-        cycleDrawnWidgets(mouseX, mouseY) { widget, rect, mX, mY ->
-            widget.onRelease(mX - rect.x, mY - rect.y, button)
-        }
-        return super.mouseReleased(mouseX, mouseY, button)
+        super<KambrikScreenCommon>.mouseReleased(mouseX, mouseY, button)
+        return super<HandledScreen>.mouseReleased(mouseX, mouseY, button)
     }
 
     override fun mouseMoved(mouseX: Double, mouseY: Double) {
-        cycleDrawnWidgets(mouseX, mouseY) { widget, rect, mX, mY ->
-            widget.onMouseMoved(mX - rect.x, mY - rect.y)
-        }
-        super.mouseMoved(mouseX, mouseY)
+        super<KambrikScreenCommon>.mouseMoved(mouseX, mouseY)
+        super<HandledScreen>.mouseMoved(mouseX, mouseY)
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
-        cycleDrawnWidgets(mouseX, mouseY) { widget, rect, mX, mY ->
-            widget.onMouseScrolled(mX - rect.x, mY - rect.y, amount)
-        }
-        return super.mouseScrolled(mouseX, mouseY, amount)
+        super<KambrikScreenCommon>.mouseScrolled(mouseX, mouseY, amount)
+        return super<HandledScreen>.mouseScrolled(mouseX, mouseY, amount)
     }
 
     fun kambrikGui(clearOnDraw: Boolean = false, func: KGuiDsl.() -> Unit) = KGui(

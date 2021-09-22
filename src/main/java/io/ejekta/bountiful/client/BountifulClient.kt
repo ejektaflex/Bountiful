@@ -7,6 +7,8 @@ import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.messages.ClipboardCopy
 import io.ejekta.bountiful.mixin.ModelPredicateProviderRegistrar
 import io.ejekta.kambrik.Kambrik
+import io.ejekta.kambrik.gui.screens.DecreeAnalyzerScreen
+import io.ejekta.kambrik.gui.screens.RegistryPickerScreen
 import kotlinx.serialization.InternalSerializationApi
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
@@ -16,6 +18,8 @@ import net.minecraft.client.world.ClientWorld
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Identifier
+import net.minecraft.util.registry.Registry
+import org.lwjgl.glfw.GLFW
 
 class BountifulClient : ClientModInitializer {
 
@@ -45,6 +49,24 @@ class BountifulClient : ClientModInitializer {
         )
 
         ScreenRegistry.register(BountifulContent.BOARD_SCREEN_HANDLER, ::BoardScreen)
+
+        Kambrik.Input.registerKeyboardBinding(GLFW.GLFW_KEY_U, "Registry Picker", "Kambrik Misc") {
+            onDown {
+                println("Opening screen!")
+                MinecraftClient.getInstance().setScreen(
+                    RegistryPickerScreen(Registry.BLOCK_ENTITY_TYPE)
+                )
+            }
+        }
+
+        Kambrik.Input.registerKeyboardBinding(GLFW.GLFW_KEY_Y, "Decree Analyzer", "Kambrik Misc") {
+            onDown {
+                println("Opening screen!")
+                MinecraftClient.getInstance().setScreen(
+                    DecreeAnalyzerScreen(BountifulContent.Decrees.random())
+                )
+            }
+        }
 
     }
 
