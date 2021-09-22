@@ -39,7 +39,7 @@ open class KListWidget<T>(
     }
 
     fun select(items: List<T>) {
-        if (!Screen.hasControlDown()) {
+        if (!Screen.hasControlDown() || !canMultiSelect()) {
             internalSelected.clear()
         }
         if (canMultiSelect()) {
@@ -89,7 +89,6 @@ open class KListWidget<T>(
             itemListIndex?.let {
                 val item = allItems[it]
                 select(item)
-                println("Setting last from $lastSelectedIndex to $itemListIndex")
                 lastSelectedIndex = itemListIndex
             }
         }

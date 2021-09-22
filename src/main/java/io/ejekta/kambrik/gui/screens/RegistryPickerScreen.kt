@@ -14,6 +14,30 @@ import net.minecraft.util.registry.Registry
 
 class RegistryPickerScreen<T>(val reg: Registry<T>) : KambrikScreen(textLiteral("Picker")) {
 
+    private val okButton = KSimpleWidget(50, 11).create {
+        onClickFunc = { relX, relY, button ->
+            println("OK! I have these: ${listWidget.selected}")
+            onClose()
+        }
+        onDrawFunc = {
+            area(60, 11) {
+                rect(color = if (isHovered) 0xFF4444 else 0xFF8888)
+                textCentered(2, textLiteral("Submit"))
+            }
+        }
+    }
+
+    val testButton = KSimpleWidget(w = 60, h = 20).create {
+        onDrawFunc = {
+            area(this@create) {
+                rect(0xFFFFFF)
+                onHover {
+                    rect(0x00, 0x33)
+                }
+            }
+        }
+    }
+
     private val scrollBar = KScrollbarVertical(84, SLIDER, 0xCCCCCC)
 
     private val listWidget = object : KListWidget<Identifier>(
@@ -22,15 +46,16 @@ class RegistryPickerScreen<T>(val reg: Registry<T>) : KambrikScreen(textLiteral(
         12,
         7,
         onDrawItemFunc = { listWidget, item, selected ->
-            rect(listWidget.itemWidth, listWidget.itemHeight, color = 0xFFFFFF) {
+            area(listWidget.itemWidth, listWidget.itemHeight) {
+                rect(0xFFFFFF)
                 textNoShadow(2, 2) {
                     +textLiteral(item.toString()) {
                         format(if (selected) Formatting.GOLD else Formatting.BLACK)
                     }
                 }
-            }
-            onHoverArea(listWidget.itemWidth, listWidget.itemHeight) { // Highlight on hover
-                rect(listWidget.itemWidth, listWidget.itemHeight, color = 0x00, alpha = 0x33)
+                onHover {
+                    rect(0x00, 0x33)
+                }
             }
         }
     ) {
@@ -40,8 +65,7 @@ class RegistryPickerScreen<T>(val reg: Registry<T>) : KambrikScreen(textLiteral(
     }
 
     private val backgroundGui = kambrikGui {
-        offset(width / 2 - BG.width / 2, height / 2 - BG.height / 2) { // centered
-            sprite(BG)
+        spriteCentered(BG) {
             textCentered(BG.width / 2, 8) {
                 +textLiteral("Registry Picker")
             }
@@ -52,6 +76,9 @@ class RegistryPickerScreen<T>(val reg: Registry<T>) : KambrikScreen(textLiteral(
                 text(2, 2, textLiteral("Print ${listWidget.selected.size} IDs") {
                     color = 0xFFFFFF
                 })
+                offset(120, 0) {
+                    widget(okButton)
+                }
             }
         }
     }
@@ -66,7 +93,7 @@ class RegistryPickerScreen<T>(val reg: Registry<T>) : KambrikScreen(textLiteral(
     companion object {
         private val SHEET = KSpriteGrid(Bountiful.id("textures/gui/container/registry_picker.png"), 256, 256)
         private val BG = SHEET.Sprite(0f, 0f, 192, 120)
-        
+
         private val WANDER_SHEET = KSpriteGrid(Identifier("textures/gui/container/villager2.png"), texWidth = 512, texHeight = 256)
         private val SLIDER = WANDER_SHEET.Sprite(0f, 199f, 6, 26)
     }

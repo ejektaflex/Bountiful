@@ -47,7 +47,7 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
         ctx.y -= y
     }
 
-    fun rect(x: Int, y: Int, w: Int, h: Int, color: Int = 0xFFFFFF, alpha: Int = 0xFF, func: KGuiDsl.() -> Unit = {}) {
+    fun rect(x: Int, y: Int, w: Int, h: Int, color: Int, alpha: Int = 0xFF, func: KGuiDsl.() -> Unit = {}) {
         offset(x, y) {
             val sx = ctx.absX()
             val sy = ctx.absY()
@@ -56,12 +56,15 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
         }
     }
 
-    fun rect(w: Int = 0, h: Int = 0, color: Int = 0xFFFFFF, alpha: Int = 0xFF, func: KGuiDsl.() -> Unit = {}) {
+    fun rect(w: Int, h: Int, color: Int, alpha: Int = 0xFF, func: KGuiDsl.() -> Unit = {}) {
         rect(0, 0, w, h, color, alpha, func)
     }
 
-    fun rect(widget: KWidget, x: Int = 0, y: Int = 0, color: Int = 0xFFFFFF, alpha: Int = 0xFF, func: KGuiDsl.() -> Unit = {}) {
-        rect(x, y, widget.width, widget.height)
+    fun spriteCentered(sprite: KSpriteGrid.Sprite, func: KGuiDsl.() -> Unit) {
+        offset(ctx.screen.width / 2 - sprite.width / 2, ctx.screen.height / 2 - sprite.height / 2) {
+            sprite(sprite)
+            apply(func)
+        }
     }
 
     fun itemStackIcon(stack: ItemStack, x: Int = 0, y: Int = 0) {
@@ -79,23 +82,23 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
 
     fun itemStackWithTooltip(stack: ItemStack, x: Int, y: Int) {
         itemStack(stack, x, y)
-        onHoverArea(x, y, 18, 18) {
+        areaOnHover(x, y, 18, 18) {
             tooltip(ctx.screen.getTooltipFromItem(stack))
         }
     }
 
-    fun onHoverArea(x: Int = 0, y: Int = 0, w: Int = 0, h: Int = 0, func: KGuiDsl.() -> Unit) {
+    fun areaOnHover(x: Int = 0, y: Int = 0, w: Int = 0, h: Int = 0, func: KGuiDsl.() -> Unit) {
         if (KRect.isInside(mouseX, mouseY, ctx.absX(x), ctx.absY(y), w, h)) {
             apply(func)
         }
     }
 
-    fun onHoverArea(w: Int = 0, h: Int = 0, func: KGuiDsl.() -> Unit) {
-        onHoverArea(0, 0, w, h, func)
+    fun areaOnHover(w: Int = 0, h: Int = 0, func: KGuiDsl.() -> Unit) {
+        areaOnHover(0, 0, w, h, func)
     }
 
-    fun onHoverArea(widget: KWidget, x: Int = 0, y: Int = 0, func: KGuiDsl.() -> Unit) {
-        onHoverArea(x, y, widget.width, widget.height, func)
+    fun areaOnHover(widget: KWidget, x: Int = 0, y: Int = 0, func: KGuiDsl.() -> Unit) {
+        areaOnHover(x, y, widget.width, widget.height, func)
     }
 
     fun onClickArea(x: Int = 0, y: Int = 0, w: Int = 0, h: Int = 0, func: () -> Unit) {
@@ -222,5 +225,37 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
         return mouseX >= ctx.absX(startX) && mouseX <= ctx.absX(startX + w)
                 && mouseY >= ctx.absY(startY) && mouseY <= ctx.absY(startY + h)
     }
+
+    fun area(w: Int, h: Int, func: AreaDsl.() -> Unit) {
+        AreaDsl(w, h).apply(func)
+    }
+
+    fun area(relX: Int, relY: Int, w: Int, h: Int, func: AreaDsl.() -> Unit) {
+        offset(relX, relY) {
+            area(w, h, func)
+        }
+    }
+
+    fun area(widget: KWidget, func: AreaDsl.() -> Unit) {
+        AreaDsl(widget.width, widget.height).apply(func)
+    }
+
+    inner class AreaDsl(val w: Int, val h: Int) {
+        fun rect(color: Int, alpha: Int = 0xFF, func: KGuiDsl.() -> Unit = {}) {
+            rect(w, h, color, alpha, func)
+        }
+
+        fun onHover(func: KGuiDsl.() -> Unit) {
+            areaOnHover(w, h, func)
+        }
+
+        val isHovered: Boolean
+            get() = isHovered(w, h)
+
+        fun textCentered(y: Int, text: Text) {
+            textCentered(w / 2, y, text)
+        }
+    }
+
 
 }

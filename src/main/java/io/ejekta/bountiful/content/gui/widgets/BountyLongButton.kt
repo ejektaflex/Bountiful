@@ -16,8 +16,6 @@ import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.SpawnGroup
 import net.minecraft.util.Identifier
-import kotlin.reflect.full.declaredMembers
-import kotlin.reflect.full.starProjectedType
 
 class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(160, 20) {
 
@@ -63,7 +61,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(
         }
         // Entry tooltip
         dsl {
-            onHoverArea(x, y, 18, 18) {
+            areaOnHover(x, y, 18, 18) {
                 tooltip(entry.textBoard(MinecraftClient.getInstance().player!!))
             }
         }
@@ -74,10 +72,11 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(
         sprite(DEFAULT, w = DEFAULT.width - 42)
         sprite(CAP, DEFAULT.width - 42)
 
-        rect(0, 0, width, height, 0xb86f50, 0x48)
-
-        onHoverArea(0, 0, width, height) {
-            rect(0, 0, width, height, 0xFFFFFF, 0x33)
+        area(width, height) {
+            rect(0xb86f50, 0x48)
+            onHover {
+                rect(0xFFFFFF, 0x33)
+            }
         }
 
         val data = getBountyData()

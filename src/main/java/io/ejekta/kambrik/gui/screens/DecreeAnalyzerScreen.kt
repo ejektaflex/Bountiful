@@ -4,19 +4,14 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.kambrik.KambrikScreen
 import io.ejekta.kambrik.gui.KSpriteGrid
-import io.ejekta.kambrik.gui.widgets.KListWidget
-import io.ejekta.kambrik.gui.widgets.KScrollbarVertical
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
 
 class DecreeAnalyzerScreen(val decree: Decree) : KambrikScreen(textLiteral("Picker")) {
 
     private val backgroundGui = kambrikGui {
-        offset(width / 2 - BG.width / 2, height / 2 - BG.height / 2) { // centered
-            sprite(BG)
+        spriteCentered(BG) {
             textCentered(BG.width / 2, 8) {
                 +textLiteral("Decree Analyzer (${decree.id})")
             }

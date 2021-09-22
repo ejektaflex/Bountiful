@@ -42,7 +42,7 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
     private val scroller = KScrollbarVertical(120, SLIDER, 0x0)
 
     private val buttonList = KListWidget({ validButtons }, 160, 20, 6) { listWidget, item, selected ->
-        widget(listWidget)
+        widget(item)
     }
 
     val fgGui = kambrikGui {

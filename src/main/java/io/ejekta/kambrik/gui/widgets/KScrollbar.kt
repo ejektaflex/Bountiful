@@ -1,10 +1,8 @@
 package io.ejekta.kambrik.gui.widgets
 
-import io.ejekta.kambrik.ext.fapi.client
 import io.ejekta.kambrik.gui.KGuiDsl
 import io.ejekta.kambrik.gui.KSpriteGrid
 import io.ejekta.kambrik.gui.KWidget
-import net.minecraft.client.gui.screen.Screen
 import kotlin.math.roundToInt
 
 abstract class KScrollbar(
@@ -52,7 +50,7 @@ abstract class KScrollbar(
 
     override fun onDraw(dsl: KGuiDsl) = dsl {
         bgColor?.let {
-            rect(0, 0, width, height, color = it)
+            rect(width, height, color = it)
         }
     }
 
