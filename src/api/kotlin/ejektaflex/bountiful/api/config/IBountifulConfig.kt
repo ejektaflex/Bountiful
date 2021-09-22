@@ -27,6 +27,7 @@ interface IBountifulConfig {
     val compatGameStages: Boolean
     val boardRequiresVillagers: Boolean
     val boardRequiredVillagerMax: Int
+    val boardVillagerDistance: Int
     val villageGenerationWeight: Double
     val requireExactNbt: Boolean
     val tryMaxRewardQuantity: Boolean

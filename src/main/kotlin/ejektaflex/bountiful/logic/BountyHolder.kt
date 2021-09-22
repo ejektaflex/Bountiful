@@ -72,8 +72,9 @@ open class BountyHolder(override val handler: ItemStackHandler) : IBountyHolder,
 
             if(Bountiful.config.boardRequiresVillagers) {
                 val pos = te?.getBoardBlockPos()
+                val distance = Bountiful.config.boardVillagerDistance
                 if(pos != null) { 
-                    val villageBox = AxisAlignedBB(pos.add(-60,-30,-60), pos.add(60,30,60))
+                    val villageBox = AxisAlignedBB(pos.add(-distance,-distance,-distance), pos.add(distance,distance,distance))
                     val result = world.getEntitiesWithinAABB(EntityVillager::class.java, villageBox).size.toDouble()
                     val chance = result / (Bountiful.config.boardRequiredVillagerMax.toDouble())
                     if(chance > world.rand.nextDouble()) {

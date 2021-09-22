@@ -54,6 +54,8 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
         private set
     override var boardRequiredVillagerMax: Int = 5
         private set
+    override var boardVillagerDistance: Int = 60
+        private set
     override var villageGenerationWeight: Double = 0.73
         private set
     override var requireExactNbt: Boolean = true
@@ -220,6 +222,13 @@ data class ConfigFile(val folder: File) : KConfig(folder, "bountiful.cfg"), IBou
                 "Villager Supply Max",
                 5,
                 "Maximum amount of villagers nearby that influence bounty board supply."
+        ).int.clampTo(1..1000)
+
+        boardVillagerDistance = config.get(
+                CATEGORY_BOARD,
+                "Villager Distance",
+                60,
+                "Distance from the board to look for nearby villagers, in blocks."
         ).int.clampTo(1..1000)
  
         requireExactNbt = config.get(
