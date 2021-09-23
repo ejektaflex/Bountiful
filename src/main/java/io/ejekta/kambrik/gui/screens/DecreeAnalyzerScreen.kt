@@ -4,14 +4,45 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.kambrik.KambrikScreen
 import io.ejekta.kambrik.gui.KSpriteGrid
+import io.ejekta.kambrik.gui.widgets.KListWidget
+import io.ejekta.kambrik.gui.widgets.KScrollbarHorizontal
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 
 class DecreeAnalyzerScreen(val decree: Decree) : KambrikScreen(textLiteral("Picker")) {
 
+    val someNeatList = listOf("a", "b", "c", "d", "e", "f", "g", "h")
+
+    val scroller = KScrollbarHorizontal(100, SLIDER, 0x333333)
+
+    val tabWidget = object : KListWidget<String>({ someNeatList }, 10, 11, 4,
+        Orientation.HORIZONTAL, { listWidget, item, selected ->
+            area(listWidget.itemWidth, listWidget.itemHeight) {
+                rect(if (selected) 0x0 else 0x88FF88)
+                textNoShadow(2, 2, textLiteral(item) {
+                    format(if (selected) Formatting.RED else Formatting.BLACK)
+                })
+                onHover {
+                    rect(0x00, 0x33)
+                }
+            }
+        }
+    ) {
+        override fun canMultiSelect() = false
+    }.apply {
+        attachScrollbar(scroller)
+    }
+
     private val backgroundGui = kambrikGui {
         spriteCentered(BG) {
+            offset(10, 75) {
+                widget(tabWidget)
+                offset(0, 11) {
+                    widget(scroller)
+                }
+            }
             textCentered(BG.width / 2, 8) {
                 +textLiteral("Decree Analyzer (${decree.id})")
             }
@@ -24,6 +55,8 @@ class DecreeAnalyzerScreen(val decree: Decree) : KambrikScreen(textLiteral("Pick
                 }
             }
         }
+
+
     }
 
     override fun onDrawBackground(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {

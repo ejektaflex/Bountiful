@@ -27,17 +27,6 @@ class RegistryPickerScreen<T>(val reg: Registry<T>) : KambrikScreen(textLiteral(
         }
     }
 
-    val testButton = KSimpleWidget(w = 60, h = 20).create {
-        onDrawFunc = {
-            area(this@create) {
-                rect(0xFFFFFF)
-                onHover {
-                    rect(0x00, 0x33)
-                }
-            }
-        }
-    }
-
     private val scrollBar = KScrollbarVertical(84, SLIDER, 0xCCCCCC)
 
     private val listWidget = object : KListWidget<Identifier>(

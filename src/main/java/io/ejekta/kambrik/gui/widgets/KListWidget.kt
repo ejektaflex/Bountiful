@@ -11,6 +11,7 @@ open class KListWidget<T>(
     val itemWidth: Int,
     val itemHeight: Int,
     private val rows: Int,
+    val orientation: Orientation = Orientation.HORIZONTAL,
     val onDrawItemFunc: KGuiDsl.(
         listWidget: KListWidget<T>,
         item: T,
@@ -18,6 +19,10 @@ open class KListWidget<T>(
     ) -> Unit = { _, _, _ -> }
 ) : KWidget() {
 
+    enum class Orientation {
+        HORIZONTAL,
+        VERTICAL
+    }
 
     private var scrollBar: KScrollbar? = null
 
@@ -53,10 +58,16 @@ open class KListWidget<T>(
     }
 
     override val height: Int
-        get() = items().size * itemHeight
+        get() = when (orientation) {
+            Orientation.HORIZONTAL -> itemHeight
+            Orientation.VERTICAL -> items().size * itemHeight
+        }
 
     override val width: Int
-        get() = itemWidth
+        get() = when (orientation) {
+            Orientation.HORIZONTAL -> items().size * itemWidth
+            Orientation.VERTICAL -> itemWidth
+        }
 
     val shownRange: IntRange
         get() = (scrollBar?.getIndices(items().size, rows) ?: (0 until rows))
@@ -65,7 +76,15 @@ open class KListWidget<T>(
         return dsl {
             val toIterate = items()
             shownRange.forEachIndexed { index, rowNumToShow ->
-                offset(0, index * itemHeight) {
+                val offX = when(orientation) {
+                    Orientation.HORIZONTAL -> index * itemWidth
+                    Orientation.VERTICAL -> 0
+                }
+                val offY = when(orientation) {
+                    Orientation.HORIZONTAL -> 0
+                    Orientation.VERTICAL -> index * itemHeight
+                }
+                offset(offX, offY) {
                     onDrawItem(this, toIterate[rowNumToShow])
                 }
             }
@@ -73,7 +92,11 @@ open class KListWidget<T>(
     }
 
     override fun onClick(relX: Int, relY: Int, button: Int) {
-        val itemRenderIndex = relY / itemHeight
+        println("Clicked on $relX $relY")
+        val itemRenderIndex = when (orientation) {
+            Orientation.HORIZONTAL -> relX / itemWidth
+            Orientation.VERTICAL -> relY / itemHeight
+        }
         val itemListIndex = shownRange.toList().getOrNull(itemRenderIndex)
 
         val allItems = items()
