@@ -61,7 +61,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(
         }
         // Entry tooltip
         dsl {
-            areaOnHover(x, y, 18, 18) {
+            onHover(x, y, 18, 18) {
                 tooltip(entry.textBoard(MinecraftClient.getInstance().player!!))
             }
         }
