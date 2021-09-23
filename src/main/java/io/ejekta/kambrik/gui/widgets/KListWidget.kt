@@ -10,8 +10,9 @@ open class KListWidget<T>(
     private val items: () -> List<T>,
     val itemWidth: Int,
     val itemHeight: Int,
-    private val rows: Int,
-    val orientation: Orientation = Orientation.HORIZONTAL,
+    private val shown: Int,
+    private val orientation: Orientation = Orientation.VERTICAL,
+    private val mode: Mode = Mode.MULTI,
     val onDrawItemFunc: KGuiDsl.(
         listWidget: KListWidget<T>,
         item: T,
@@ -22,6 +23,12 @@ open class KListWidget<T>(
     enum class Orientation {
         HORIZONTAL,
         VERTICAL
+    }
+
+    enum class Mode {
+        SINGLE,
+        MULTI,
+        TOGGLE
     }
 
     private var scrollBar: KScrollbar? = null
@@ -37,24 +44,39 @@ open class KListWidget<T>(
     val selected: List<T>
         get() = internalSelected.keys.toList()
 
-    open fun canMultiSelect(): Boolean = true
-
     fun select(vararg items: T) {
         select(items.toList())
     }
 
     fun select(items: List<T>) {
-        if (!Screen.hasControlDown() || !canMultiSelect()) {
+
+        if (!Screen.hasControlDown() && mode != Mode.TOGGLE) {
             internalSelected.clear()
         }
-        if (canMultiSelect()) {
-            for (item in items) {
-                internalSelected[item] = true
+
+        when (mode) {
+            Mode.SINGLE -> { // Select last item in list
+                if (items.isNotEmpty()) {
+                    internalSelected.clear()
+                    internalSelected[items.last()] = true
+                }
             }
-        } else if (items.isNotEmpty()) {
-            internalSelected.clear()
-            internalSelected[items.last()] = true
+            Mode.MULTI -> {
+                for (item in items) {
+                    internalSelected[item] = true
+                }
+            }
+            Mode.TOGGLE -> {
+                for (item in items.toSet()) {
+                    if (item in internalSelected) {
+                        internalSelected.remove(item)
+                    } else {
+                        internalSelected[item] = true
+                    }
+                }
+            }
         }
+
     }
 
     override val height: Int
@@ -70,7 +92,7 @@ open class KListWidget<T>(
         }
 
     val shownRange: IntRange
-        get() = (scrollBar?.getIndices(items().size, rows) ?: (0 until rows))
+        get() = (scrollBar?.getIndices(items().size, shown) ?: (0 until shown))
 
     override fun onDraw(dsl: KGuiDsl): KGuiDsl {
         return dsl {
@@ -102,7 +124,7 @@ open class KListWidget<T>(
         val allItems = items()
 
         // If holding shift. we can select multiple
-        if (Screen.hasShiftDown() && lastSelectedIndex != null && itemListIndex != null) {
+        if (Screen.hasShiftDown() && mode == Mode.MULTI && lastSelectedIndex != null && itemListIndex != null) {
             lastSelectedIndex?.let {
                 val selectedRange = min(it, itemListIndex)..max(it, itemListIndex)
                 val selectedItems = selectedRange.toList().mapNotNull { i -> allItems.getOrNull(i) }

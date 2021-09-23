@@ -13,24 +13,26 @@ import net.minecraft.util.Identifier
 
 class DecreeAnalyzerScreen(val decree: Decree) : KambrikScreen(textLiteral("Picker")) {
 
-    val someNeatList = listOf("a", "b", "c", "d", "e", "f", "g", "h")
+    val someNeatList = listOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p")
+    //val someNeatList = listOf("a", "b", "c")
 
     val scroller = KScrollbarHorizontal(100, SLIDER, 0x333333)
 
-    val tabWidget = object : KListWidget<String>({ someNeatList }, 10, 11, 4,
-        Orientation.HORIZONTAL, { listWidget, item, selected ->
-            area(listWidget.itemWidth, listWidget.itemHeight) {
-                rect(if (selected) 0x0 else 0x88FF88)
-                textNoShadow(2, 2, textLiteral(item) {
-                    format(if (selected) Formatting.RED else Formatting.BLACK)
-                })
-                onHover {
-                    rect(0x00, 0x33)
-                }
+    val tabWidget = KListWidget(
+        { someNeatList },
+        10, 11, 10,
+        KListWidget.Orientation.HORIZONTAL,
+        KListWidget.Mode.TOGGLE
+    ) { listWidget, item, selected ->
+        area(listWidget.itemWidth, listWidget.itemHeight) {
+            rect(if (selected) 0x0 else 0x88FF88)
+            textNoShadow(2, 2, textLiteral(item) {
+                format(if (selected) Formatting.RED else Formatting.BLACK)
+            })
+            onHover {
+                rect(0x00, 0x33)
             }
         }
-    ) {
-        override fun canMultiSelect() = false
     }.apply {
         attachScrollbar(scroller)
     }

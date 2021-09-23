@@ -97,16 +97,6 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
         onHover(0, 0, w, h, func)
     }
 
-    fun onHover(widget: KWidget, x: Int = 0, y: Int = 0, func: KGuiDsl.() -> Unit) {
-        onHover(x, y, widget.width, widget.height, func)
-    }
-
-    /*
-    fun onClickArea(x: Int = 0, y: Int = 0, w: Int = 0, h: Int = 0, func: () -> Unit) {
-
-    }
-     */
-
     fun tooltip(texts: List<Text>) {
         defer {
             ctx.screen.renderTooltip(
