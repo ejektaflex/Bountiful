@@ -7,8 +7,8 @@ data class KRect(val x: Int, val y: Int, val w: Int, val h: Int) {
 
     companion object {
         fun isInside(ix: Int, iy: Int, x: Int, y: Int, w: Int, h: Int): Boolean {
-            return ix >= x && ix <= x + w
-                    && iy >= y && iy <= y + h
+            return ix >= x && ix < x + w
+                    && iy >= y && iy < y + h
         }
     }
 }

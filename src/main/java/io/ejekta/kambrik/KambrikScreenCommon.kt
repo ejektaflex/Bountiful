@@ -1,12 +1,8 @@
 package io.ejekta.kambrik
 
-import io.ejekta.kambrik.gui.KGuiDsl
 import io.ejekta.kambrik.gui.KRect
-import io.ejekta.kambrik.gui.KSpriteGrid
 import io.ejekta.kambrik.gui.KWidget
-import io.ejekta.kambrik.gui.screens.DecreeAnalyzerScreen
 import net.minecraft.client.gui.Element
-import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.math.MatrixStack
 
 interface KambrikScreenCommon : Element {
@@ -21,7 +17,7 @@ interface KambrikScreenCommon : Element {
         }
     }
 
-    fun cycleDrawnWidgets(mouseX: Double, mouseY: Double, func: (widget: KWidget, rect: KRect, mX: Int, mY: Int) -> Unit) {
+    fun cycleDrawnWidgetsInBounds(mouseX: Double, mouseY: Double, func: (widget: KWidget, rect: KRect, mX: Int, mY: Int) -> Unit) {
         for (bounds in boundsStack) {
             if (bounds.second.isInside(mouseX.toInt(), mouseY.toInt())) {
                 func(bounds.first, bounds.second, mouseX.toInt(), mouseY.toInt())
@@ -34,6 +30,7 @@ interface KambrikScreenCommon : Element {
             val widget = bounds.first
             val rect = bounds.second
             if (bounds.second.isInside(mouseX.toInt(), mouseY.toInt())) {
+
                 if (widget.canDrag() && !widget.isDragged) {
                     widget.startDragging(mouseX.toInt() - rect.x, mouseY.toInt() - rect.y)
                 }
@@ -59,20 +56,25 @@ interface KambrikScreenCommon : Element {
                 widget.stopDragging(mouseX.toInt() - rect.x, mouseY.toInt() - rect.y)
             }
         }
-        cycleDrawnWidgets(mouseX, mouseY) { widget, rect, mX, mY ->
+        cycleDrawnWidgetsInBounds(mouseX, mouseY) { widget, rect, mX, mY ->
             widget.onRelease(mX - rect.x, mY - rect.y, button)
         }
         return true
     }
 
     override fun mouseMoved(mouseX: Double, mouseY: Double) {
-        cycleDrawnWidgets(mouseX, mouseY) { widget, rect, mX, mY ->
+        cycleDrawnWidgetsInBounds(mouseX, mouseY) { widget, rect, mX, mY ->
             widget.onMouseMoved(mX - rect.x, mY - rect.y)
+        }
+        cycleDrawnWidgets { widget, rect ->
+            if (widget.isDragged) {
+                widget.onDragging(mouseX.toInt() - rect.x, mouseY.toInt() - rect.y)
+            }
         }
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
-        cycleDrawnWidgets(mouseX, mouseY) { widget, rect, mX, mY ->
+        cycleDrawnWidgetsInBounds(mouseX, mouseY) { widget, rect, mX, mY ->
             widget.onMouseScrolled(mX - rect.x, mY - rect.y, amount)
         }
         return true

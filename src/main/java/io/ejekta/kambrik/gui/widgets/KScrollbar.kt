@@ -25,6 +25,14 @@ abstract class KScrollbar(
     val percent: Double
         get() = dragStart.toDouble() / moveRange.last
 
+    fun <T> getItem(items: List<T>): T? {
+        return getIndex(items)?.let { items.getOrNull(it) }
+    }
+
+    fun <T> getIndex(items: List<T>): Int? {
+        return if (items.isEmpty()) null else getIndices(items.size, 1).first
+    }
+
     /**
      * Returns a range of indices from a total list of numbers.
      * Used to figure out which slice of a list we should display

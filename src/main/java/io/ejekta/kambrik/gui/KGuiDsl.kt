@@ -60,13 +60,6 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
         rect(0, 0, w, h, color, alpha, func)
     }
 
-    fun spriteCentered(sprite: KSpriteGrid.Sprite, func: KGuiDsl.() -> Unit) {
-        offset(ctx.screen.width / 2 - sprite.width / 2, ctx.screen.height / 2 - sprite.height / 2) {
-            sprite(sprite)
-            apply(func)
-        }
-    }
-
     fun itemStackIcon(stack: ItemStack, x: Int = 0, y: Int = 0) {
         ctx.screen.itemRenderer.renderInGui(stack, ctx.absX(x), ctx.absY(y))
     }
@@ -174,6 +167,13 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
         )
     }
 
+    fun spriteCentered(sprite: KSpriteGrid.Sprite, func: KGuiDsl.() -> Unit) {
+        offset(ctx.screen.width / 2 - sprite.width / 2, ctx.screen.height / 2 - sprite.height / 2) {
+            sprite(sprite)
+            apply(func)
+        }
+    }
+
     fun livingEntity(entity: LivingEntity, x: Int = 0, y: Int = 0, size: Double = 20.0) {
         val dims = entity.getDimensions(entity.pose)
         val maxDim = (1 / max(dims.height, dims.width) * 1 * size).toInt().coerceAtLeast(1)
@@ -259,6 +259,13 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
 
         fun textCentered(y: Int, text: Text) {
             textCentered(w / 2, y, text)
+        }
+
+        fun widgetCentered(widget: KWidget, func: KGuiDsl.() -> Unit = {}) {
+            offset(w / 2 - widget.width / 2, h / 2 - widget.height / 2) {
+                widget(widget)
+                apply(func)
+            }
         }
 
     }

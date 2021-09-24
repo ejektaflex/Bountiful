@@ -40,8 +40,16 @@ open class KWidget(
     }
 
     /**
+     * A callback that fires while the widget is being dragged.
+     * Unlike onMouseMoved, this fires even when not hovering the widget.
+     */
+    open fun onDragging(relX: Int, relY: Int) {
+        // No-op
+    }
+
+    /**
      * A callback that fires when we stop dragging this widget.
-     * Note: Drag end does not always occur inside of the widget bounds!
+     * Note: Drag end does not always occur inside the widget bounds!
      */
     open fun onDragEnd(relX: Int, relY: Int) {
         // No-op

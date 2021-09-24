@@ -9,6 +9,7 @@ import io.ejekta.bountiful.mixin.ModelPredicateProviderRegistrar
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.gui.screens.DecreeAnalyzerScreen
 import io.ejekta.kambrik.gui.screens.RegistryPickerScreen
+import io.ejekta.kambrik.gui.screens.ToolkitScreen
 import kotlinx.serialization.InternalSerializationApi
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
@@ -64,6 +65,15 @@ class BountifulClient : ClientModInitializer {
                 println("Opening screen!")
                 MinecraftClient.getInstance().setScreen(
                     DecreeAnalyzerScreen(BountifulContent.Decrees.random())
+                )
+            }
+        }
+
+        Kambrik.Input.registerKeyboardBinding(GLFW.GLFW_KEY_G, "Toolkit", "Kambrik Misc") {
+            onDown {
+                println("Opening screen!")
+                MinecraftClient.getInstance().setScreen(
+                    ToolkitScreen()
                 )
             }
         }
