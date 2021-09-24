@@ -6,8 +6,10 @@ import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.kambrik.KambrikScreen
 import io.ejekta.kambrik.gui.KGuiDsl
 import io.ejekta.kambrik.gui.KSpriteGrid
+import io.ejekta.kambrik.gui.toolkit.TKElement
 import io.ejekta.kambrik.gui.toolkit.TKRect
 import io.ejekta.kambrik.gui.toolkit.TKRoot
+import io.ejekta.kambrik.gui.toolkit.`interface`.TreeElementDrawer
 import io.ejekta.kambrik.gui.widgets.KListWidget
 import io.ejekta.kambrik.gui.widgets.KScrollbarHorizontal
 import io.ejekta.kambrik.gui.widgets.KScrollbarVertical
@@ -19,7 +21,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
 import kotlin.math.sin
 
-class ToolkitScreen() : KambrikScreen(textLiteral("Picker")) {
+class ToolkitScreen : KambrikScreen(textLiteral("Picker")) {
 
     private val root = TKRoot()
 
@@ -29,6 +31,8 @@ class ToolkitScreen() : KambrikScreen(textLiteral("Picker")) {
         )
     }
 
+    val treeDrawer = TreeElementDrawer(root, w = 96)
+
     private fun KGuiDsl.makeTree(treeW: Int) {
          this {
             area(treeW, height) {
@@ -37,7 +41,10 @@ class ToolkitScreen() : KambrikScreen(textLiteral("Picker")) {
 
                 offset(0, 16) {
                     root.elements.forEachIndexed { index, element ->
-                        textNoShadow(2, index * 13, textLiteral(element::class.simpleName ?: "???"))
+                        treeDrawer.element = element
+                        offset(0, index * 13) {
+                            widget(treeDrawer)
+                        }
                     }
                 }
 
@@ -45,11 +52,40 @@ class ToolkitScreen() : KambrikScreen(textLiteral("Picker")) {
         }
     }
 
+    private fun drawInspectorData(dsl: KGuiDsl, area: KGuiDsl.AreaDsl, sel: TKElement) {
+        dsl {
+            when (sel) {
+                is TKRect -> {
+                    textNoShadow(2, 2, textLiteral("Color"))
+                    area(2, 11, area.w, 20) {
+                        rect(sel.color, sel.alpha)
+                    }
+                    textNoShadow(2, 34, textLiteral("Position:"))
+                    textNoShadow(2, 44, textLiteral("${sel.x}x${sel.y}"))
+                    textNoShadow(2, 64, textLiteral("Size:"))
+                    textNoShadow(2, 74, textLiteral("${sel.width}x${sel.height}"))
+
+                }
+            }
+        }
+
+    }
+
     private fun KGuiDsl.makeInspector(inspectorW: Int) {
         this {
             area(width - inspectorW, 0, inspectorW, height) {
                 rect(0x00)
                 textNoShadow(2, 2, textLiteral("Inspector"))
+                // Content
+                offset(0, 16) {
+                    val sel = root.selected
+
+                    sel?.let {
+                        drawInspectorData(this, this@area, it)
+                    }
+
+                }
+
             }
         }
     }

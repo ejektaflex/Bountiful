@@ -42,7 +42,7 @@ class TKRect(
     }
 
     override fun onDraw(dsl: KGuiDsl): KGuiDsl {
-        return dsl {
+        return super.onDraw(dsl).apply {
             area(w, h) {
                 rect(color, alpha)
             }
@@ -59,12 +59,9 @@ class TKRect(
     }
 
     override fun onDragging(relX: Int, relY: Int) {
-        println("Dragging")
         val diff = relX - dragPos.first to relY - dragPos.second
-        println(diff)
         x += diff.first
         y += diff.second
-        //dragPos = dragPos.first + diff.first to dragPos.second + diff.second
     }
 
 }

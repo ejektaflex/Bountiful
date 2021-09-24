@@ -218,6 +218,10 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
                 && mouseY >= ctx.absY(startY) && mouseY <= ctx.absY(startY + h)
     }
 
+    fun isHovered(widget: KWidget): Boolean {
+        return isHovered(widget.width, widget.height)
+    }
+
     fun area(w: Int, h: Int, func: AreaDsl.() -> Unit) {
         areaDsl.adjusted(w, h, func)
     }
