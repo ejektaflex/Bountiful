@@ -240,6 +240,8 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
 
     inner class AreaDsl(var w: Int, var h: Int) {
 
+        operator fun invoke(dsl: AreaDsl.() -> Unit) = apply(dsl)
+
         internal fun adjusted(newW: Int, newH: Int, func: AreaDsl.() -> Unit) {
             val oldW = w
             val oldH = h

@@ -54,17 +54,18 @@ class ToolkitScreen : KambrikScreen(textLiteral("Picker")) {
 
     private fun drawInspectorData(dsl: KGuiDsl, area: KGuiDsl.AreaDsl, sel: TKElement) {
         dsl {
-            when (sel) {
-                is TKRect -> {
-                    textNoShadow(2, 2, textLiteral("Color"))
-                    area(2, 11, area.w, 20) {
-                        rect(sel.color, sel.alpha)
+            area {
+                when (sel) {
+                    is TKRect -> {
+                        textNoShadow(2, 2, textLiteral("Color"))
+                        area(2, 11, area.w, 20) {
+                            rect(sel.color, sel.alpha)
+                        }
+                        textNoShadow(2, 34, textLiteral("Position:"))
+                        textNoShadow(2, 44, textLiteral("${sel.x}x${sel.y}"))
+                        textNoShadow(2, 64, textLiteral("Size:"))
+                        textNoShadow(2, 74, textLiteral("${sel.width}x${sel.height}"))
                     }
-                    textNoShadow(2, 34, textLiteral("Position:"))
-                    textNoShadow(2, 44, textLiteral("${sel.x}x${sel.y}"))
-                    textNoShadow(2, 64, textLiteral("Size:"))
-                    textNoShadow(2, 74, textLiteral("${sel.width}x${sel.height}"))
-
                 }
             }
         }

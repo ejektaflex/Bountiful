@@ -20,6 +20,7 @@ abstract class KambrikHandledScreen<SH : ScreenHandler>(
 
     override val boundsStack = mutableListOf<Pair<KWidget, KRect>>()
     override val areaClickStack = mutableListOf<Pair<() -> Unit, KRect>>()
+    override val modalStack = mutableListOf<KGuiDsl.() -> Unit>()
 
     fun sizeToSprite(sprite: KSpriteGrid.Sprite) {
         backgroundWidth = sprite.width

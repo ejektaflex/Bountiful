@@ -14,6 +14,7 @@ import net.minecraft.text.Text
 abstract class KambrikScreen(title: Text) : Screen(title), KambrikScreenCommon {
     override val boundsStack = mutableListOf<Pair<KWidget, KRect>>()
     override val areaClickStack = mutableListOf<Pair<() -> Unit, KRect>>()
+    override val modalStack = mutableListOf<KGuiDsl.() -> Unit>()
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         super<KambrikScreenCommon>.mouseClicked(mouseX, mouseY, button)

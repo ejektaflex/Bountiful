@@ -1,5 +1,6 @@
 package io.ejekta.kambrik
 
+import io.ejekta.kambrik.gui.KGuiDsl
 import io.ejekta.kambrik.gui.KRect
 import io.ejekta.kambrik.gui.KWidget
 import net.minecraft.client.gui.Element
@@ -8,6 +9,7 @@ import net.minecraft.client.util.math.MatrixStack
 interface KambrikScreenCommon : Element {
     val boundsStack: MutableList<Pair<KWidget, KRect>>
     val areaClickStack: MutableList<Pair<() -> Unit, KRect>>
+    val modalStack: MutableList<KGuiDsl.() -> Unit>
     fun onDrawBackground(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float)
     fun onDrawForeground(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float)
 

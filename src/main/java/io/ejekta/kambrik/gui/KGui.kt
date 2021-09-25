@@ -24,8 +24,11 @@ class KGui(
     fun draw(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float? = null) {
         logic.boundsStack.clear()
         logic.areaClickStack.clear()
-        val dsl = KGuiDsl(this, matrices, mouseX, mouseY, delta).draw(func)
+        val toDraw = logic.modalStack.lastOrNull() ?: func // Draw top of modal stack, or func if not exists
+        val dsl = KGuiDsl(this, matrices, mouseX, mouseY, delta).draw(toDraw)
     }
+
+    fun pushModal(dsl: KGuiDsl.() -> Unit) = logic.modalStack.add(dsl)
 
     fun absX(relX: Int = 0) = x + coordFunc().first + relX
 
