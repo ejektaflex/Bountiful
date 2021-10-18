@@ -61,7 +61,7 @@ object SetupLifecycle {
                 if (ModList.get().isLoaded("repurposed_structures")) {
                     BountifulMod.logger.info("Registering Bounty Board Jigsaw Piece for Repurposed Structures")
                     listOf("badlands", "birch", "crimson", "dark_forest", "giant_taiga", "jungle", "mountains",
-                    "oak", "swamp", "warped").forEach { villageType ->
+                    "mushroom", "oak", "swamp", "warped").forEach { villageType ->
                         JigsawHelper.registerJigsaw(
                             event.server,
                             ResourceLocation("bountiful:village/common/bounty_gazebo"),
