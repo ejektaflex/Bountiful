@@ -38,7 +38,7 @@ class RegistryPickerScreen<T>(val reg: Registry<T>) : KambrikScreen(textLiteral(
             area(listWidget.itemWidth, listWidget.itemHeight) {
                 rect(0xFFFFFF)
                 textNoShadow(2, 2) {
-                    +textLiteral(item.toString()) {
+                    addLiteral(item.toString()) {
                         format(if (selected) Formatting.GOLD else Formatting.BLACK)
                     }
                 }
@@ -56,7 +56,7 @@ class RegistryPickerScreen<T>(val reg: Registry<T>) : KambrikScreen(textLiteral(
     private val backgroundGui = kambrikGui {
         spriteCentered(BG) {
             textCentered(BG.width / 2, 8) {
-                +textLiteral("Registry Picker")
+                addLiteral("Registry Picker")
             }
             widget(listWidget, 6, 20)
             widget(scrollBar, 180, 20)

@@ -206,7 +206,7 @@ object BountifulCommands : CommandRegistrationCallback {
             player.sendMessage("Content added.")
             player.sendMessage("Edit §6'config/bountiful/bounty_pools/$poolName.json'§r to edit details.") {
                 clickEvent = ClickEvent(ClickEvent.Action.OPEN_FILE, file.absolutePath)
-                onHoverShowText { +"Click to open file '${file.name}'" }
+                onHoverShowText { addLiteral("Click to open file '${file.name}'") }
             }
         } else {
             player.sendMessage("Invalid pool name!")

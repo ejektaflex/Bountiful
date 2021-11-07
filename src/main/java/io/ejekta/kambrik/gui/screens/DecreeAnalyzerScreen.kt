@@ -92,7 +92,7 @@ class DecreeAnalyzerScreen(val decree: Decree) : KambrikScreen(textLiteral("Pick
 
             }
             textCentered(BG.width / 2, 8) {
-                +textLiteral("Decree Analyzer (${decree.id})")
+                addLiteral("Decree Analyzer (${decree.id})")
             }
         }
 

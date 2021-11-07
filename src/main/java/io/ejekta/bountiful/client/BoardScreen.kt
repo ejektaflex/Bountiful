@@ -57,14 +57,14 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
             sprite(BAR_FG, w = percentDone + 1)
             textCentered(-10, -2) {
                 color(0xabff7a)
-                +levelData.first.toString()
+                addLiteral(levelData.first.toString())
             }
         }
 
         // GUI Title
         textCentered(titleX - 53, titleY + 1) {
             color = 0xEADAB5
-            +title
+            add(title)
         }
 
         widget(buttonList, 5, 18)
@@ -74,8 +74,8 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         // (debug) Percent through scroll bar, as well as indices of selection
         text(200, 18) {
             format(Formatting.GOLD)
-            +"${scroller.getIndices(10, 6)} - "
-            +"%.2f".format(scroller.percent)
+            addLiteral("${scroller.getIndices(10, 6)} - ")
+            addLiteral("%.2f".format(scroller.percent))
         }
 
     }
