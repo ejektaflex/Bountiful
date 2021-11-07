@@ -5,15 +5,22 @@ open class KWidget(
     open val height: Int = 0,
 ) {
 
-    var isDragged = false
+    var isHovered: Boolean = false
         private set
 
-    /**
-     * Whether this widget is allowed to receive drag events.
-     */
-    open fun canDrag(): Boolean {
-        return false
-    }
+    open var dragPos = 0 to 0
+
+    private var lastMouseDraggedPos = 0 to 0
+
+    var isHeld = false
+        private set
+
+    var isPreSlop = false
+        private set
+
+    // Is true if the item is currently being dragged (past slop distance), false otherwise
+    var isDragging: Boolean = false
+        private set
 
     /**
      * Whether widgets behind this widget can be clicked on.
@@ -22,14 +29,12 @@ open class KWidget(
         return false
     }
 
-    fun startDragging(relX: Int, relY: Int) {
-        isDragged = true
-        onDragStart(relX, relY)
+    open fun canDragStart(): Boolean {
+        return true
     }
 
-    fun stopDragging(relX: Int, relY: Int) {
-        isDragged = false
-        onDragEnd(relX, relY)
+    open fun canDragStop(): Boolean {
+        return true
     }
 
     /**
@@ -58,14 +63,14 @@ open class KWidget(
     /**
      * A callback that fires when the widget is clicked on.
      */
-    open fun onClick(relX: Int, relY: Int, button: Int) {
+    open fun onClickDown(relX: Int, relY: Int, button: Int) {
         // No-op
     }
 
     /**
      * A callback that fires when the mouse is released over the widget.
      */
-    open fun onRelease(relX: Int, relY: Int, button: Int) {
+    open fun onClickUp(relX: Int, relY: Int, button: Int) {
         // No-op
     }
 
@@ -98,6 +103,27 @@ open class KWidget(
         }
          */
         return dsl
+    }
+
+
+    fun doDragStart(relX: Int, relY: Int) {
+        isDragging = true
+        onDragStart(relX, relY)
+    }
+
+    fun doDragStop(relX: Int, relY: Int) {
+        isDragging = false
+        onDragEnd(relX, relY)
+    }
+
+    fun doClickDown(relX: Int, relY: Int, button: Int) {
+        isHeld = true
+        onClickDown(relX, relY, button)
+    }
+
+    fun doClickUp(relX: Int, relY: Int, button: Int) {
+        isHeld = false
+        onClickUp(relX, relY, button)
     }
 
 }

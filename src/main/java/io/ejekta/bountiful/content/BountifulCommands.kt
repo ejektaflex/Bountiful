@@ -22,6 +22,7 @@ import net.minecraft.command.CommandSource
 import net.minecraft.command.argument.IdentifierArgumentType.getIdentifier
 import net.minecraft.command.argument.NumberRangeArgumentType
 import net.minecraft.entity.EntityType
+import net.minecraft.entity.MovementType
 import net.minecraft.item.ItemStack
 import net.minecraft.network.MessageType
 import net.minecraft.predicate.NumberRange
@@ -30,6 +31,7 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.*
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
+import net.minecraft.util.math.Vec3d
 import net.minecraft.util.registry.Registry
 import java.io.File
 

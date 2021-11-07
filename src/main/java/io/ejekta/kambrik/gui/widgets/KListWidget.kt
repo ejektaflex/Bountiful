@@ -113,7 +113,7 @@ open class KListWidget<T>(
         }
     }
 
-    override fun onClick(relX: Int, relY: Int, button: Int) {
+    override fun onClickDown(relX: Int, relY: Int, button: Int) {
         println("Clicked on $relX $relY")
         val itemRenderIndex = when (orientation) {
             Orientation.HORIZONTAL -> relX / itemWidth

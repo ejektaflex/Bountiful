@@ -17,7 +17,7 @@ abstract class TKElement(var x: Int, var y: Int, width: Int, height: Int) : KWid
         }
     }
 
-    override fun onClick(relX: Int, relY: Int, button: Int) {
+    override fun onClickDown(relX: Int, relY: Int, button: Int) {
         lastClickedButton = button
     }
 

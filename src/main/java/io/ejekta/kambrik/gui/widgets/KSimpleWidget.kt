@@ -17,6 +17,6 @@ class KSimpleWidget(w: Int, h: Int) : KWidget(w, h) {
 
     override fun onDraw(dsl: KGuiDsl) = dsl.apply(onDrawFunc)
 
-    override fun onClick(relX: Int, relY: Int, button: Int) = onClickFunc(relX, relY, button)
+    override fun onClickDown(relX: Int, relY: Int, button: Int) = onClickFunc(relX, relY, button)
 
 }

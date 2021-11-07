@@ -22,7 +22,7 @@ class KScrollbarHorizontal(
         val relX = dsl.mouseX - dsl.ctx.absX()
         val newPos = knobPos(relX)
 
-        if (isDragged) {
+        if (isDragging) {
             sprite(knobSprite, x = newPos)
             dragStart = newPos
         } else {

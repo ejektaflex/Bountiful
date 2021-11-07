@@ -17,7 +17,7 @@ abstract class KScrollbar(
         get() = 0 .. scrollbarSize - knobSize
     protected var dragStart = 0
 
-    override fun canDrag() = true
+    override fun canDragStart() = true
 
     /**
      * A number representing how far down the scrollbar has been scrolled

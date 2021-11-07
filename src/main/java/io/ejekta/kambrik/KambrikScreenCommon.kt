@@ -33,11 +33,11 @@ interface KambrikScreenCommon : Element {
             val rect = bounds.second
             if (bounds.second.isInside(mouseX.toInt(), mouseY.toInt())) {
 
-                if (widget.canDrag() && !widget.isDragged) {
-                    widget.startDragging(mouseX.toInt() - rect.x, mouseY.toInt() - rect.y)
+                if (widget.canDragStart() && !widget.isDragging) {
+                    widget.doDragStart(mouseX.toInt() - rect.x, mouseY.toInt() - rect.y)
                 }
 
-                widget.onClick(mouseX.toInt() - rect.x, mouseY.toInt() - rect.y, button)
+                widget.doClickDown(mouseX.toInt() - rect.x, mouseY.toInt() - rect.y, button)
 
                 if (!widget.canClickThrough()) {
                     break // If we cannot continue down the bounds stack because there's no clickthrough, return
@@ -54,12 +54,12 @@ interface KambrikScreenCommon : Element {
 
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
         cycleDrawnWidgets { widget, rect ->
-            if (widget.canDrag() && widget.isDragged) {
-                widget.stopDragging(mouseX.toInt() - rect.x, mouseY.toInt() - rect.y)
+            if (widget.canDragStop() && widget.isDragging) {
+                widget.doDragStop(mouseX.toInt() - rect.x, mouseY.toInt() - rect.y)
             }
         }
         cycleDrawnWidgetsInBounds(mouseX, mouseY) { widget, rect, mX, mY ->
-            widget.onRelease(mX - rect.x, mY - rect.y, button)
+            widget.doClickUp(mX - rect.x, mY - rect.y, button)
         }
         return true
     }
@@ -69,7 +69,7 @@ interface KambrikScreenCommon : Element {
             widget.onMouseMoved(mX - rect.x, mY - rect.y)
         }
         cycleDrawnWidgets { widget, rect ->
-            if (widget.isDragged) {
+            if (widget.isDragging) {
                 widget.onDragging(mouseX.toInt() - rect.x, mouseY.toInt() - rect.y)
             }
         }

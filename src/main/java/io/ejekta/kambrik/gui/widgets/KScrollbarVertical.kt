@@ -22,7 +22,7 @@ class KScrollbarVertical(
         val relY = dsl.mouseY - dsl.ctx.absY()
         val newPos = knobPos(relY)
 
-        if (isDragged) {
+        if (isDragging) {
             sprite(knobSprite, y = newPos)
             dragStart = newPos
         } else {

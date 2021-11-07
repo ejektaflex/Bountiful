@@ -18,11 +18,11 @@ class TKRect(
     override val height: Int
         get() = h
 
-    var dragPos = 0 to 0
+    override var dragPos = 0 to 0
     var sizePos = 0 to 0
 
     val resizeWidget = object : KWidget(5, 5) {
-        override fun canDrag() = true
+        override fun canDragStart() = true
         override fun onDragStart(relX: Int, relY: Int) {
             sizePos = relX to relY
         }
@@ -52,7 +52,7 @@ class TKRect(
         }
     }
 
-    override fun canDrag() = true
+    override fun canDragStart() = true
 
     override fun onDragStart(relX: Int, relY: Int) {
         dragPos = relX to relY
