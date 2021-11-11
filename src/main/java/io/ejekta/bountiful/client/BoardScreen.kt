@@ -18,6 +18,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
+import org.spongepowered.asm.util.Quantifier.SINGLE
 
 
 class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Text) :
@@ -41,8 +42,13 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
 
     private val scroller = KScrollbarVertical(120, SLIDER, 0x0)
 
-    private val buttonList = KListWidget({ validButtons }, 160, 20, 6) { listWidget, item, selected ->
-        widget(item)
+    private val buttonList = object : KListWidget<BountyLongButton>(
+        { validButtons }, 160, 20, 6, Orientation.VERTICAL, Mode.SINGLE,
+        { listWidget, item, selected ->
+            widget(item)
+        }
+    ) {
+        override fun canClickThrough() = true
     }.apply {
         attachScrollbar(scroller)
     }

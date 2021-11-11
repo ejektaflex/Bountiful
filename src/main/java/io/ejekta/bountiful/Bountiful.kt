@@ -3,6 +3,7 @@ package io.ejekta.bountiful
 
 import io.ejekta.bountiful.bounty.logic.EntityLogic
 import io.ejekta.bountiful.config.BountifulIO
+import io.ejekta.bountiful.content.messages.SelectBounty
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.serial.serializers.IdentitySer
 import kotlinx.serialization.UseSerializers
@@ -45,6 +46,8 @@ class Bountiful : ModInitializer {
 
             }
         })
+
+        Kambrik.Message.registerServerMessage(SelectBounty.serializer(), id("select_bounty"))
 
         ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(ServerEntityCombatEvents.AfterKilledOtherEntity { world, entity, killedEntity ->
             if (entity is ServerPlayerEntity) {

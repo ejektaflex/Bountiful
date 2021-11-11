@@ -25,6 +25,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SimpleInventory
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtString
 import net.minecraft.network.PacketByteBuf
@@ -137,6 +138,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         )
 
         // Add to board
+        removeBounty(slotToAddTo)
         addBounty(slotToAddTo, commonBounty)
 
         // Clear mask because slot was updated

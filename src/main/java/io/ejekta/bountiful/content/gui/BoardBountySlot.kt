@@ -8,7 +8,9 @@ import net.minecraft.screen.slot.Slot
 import net.minecraft.server.network.ServerPlayerEntity
 
 class BoardBountySlot(val inv: BoardInventory, index: Int, x: Int, y: Int) : Slot(inv, index, x, y) {
-    override fun canInsert(stack: ItemStack?) = false
+    override fun canInsert(stack: ItemStack?): Boolean {
+        return false
+    }
     override fun onTakeItem(player: PlayerEntity, stack: ItemStack) {
         if (player is ServerPlayerEntity) {
             val board = player.world.getBlockEntity(inv.pos) as? BoardBlockEntity

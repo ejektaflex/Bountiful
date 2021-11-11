@@ -16,7 +16,6 @@ class BountifulConfigData {
     var dataPackExclusions = mutableListOf(
         "bounty_pools/bountiful/something_here"
     )
-    var boardGenerationFrequency: Int = 2
 
 
     fun buildScreen(): Screen {
@@ -50,14 +49,14 @@ class BountifulConfigData {
         general.addEntry(
             creator.startIntSlider(
                 textLiteral("Board generation frequency in villages"),
-                boardGenerationFrequency,
+                boardUpdateFrequency,
                 0, 32
             ).setDefaultValue(2)
                 .setTooltip(
                     textLiteral("How often bounty boards generate in villages")
                 )
                 .setSaveConsumer {
-                    boardGenerationFrequency = it
+                    boardUpdateFrequency = it
                 }
                 .requireRestart()
                 .build()

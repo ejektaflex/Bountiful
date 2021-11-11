@@ -6,6 +6,7 @@ import io.ejekta.bountiful.bounty.BountyType
 import io.ejekta.bountiful.bounty.logic.EntityLogic
 import io.ejekta.bountiful.bounty.logic.ItemLogic
 import io.ejekta.bountiful.client.BoardScreen
+import io.ejekta.bountiful.content.messages.SelectBounty
 import io.ejekta.kambrik.ext.fapi.textRenderer
 import io.ejekta.kambrik.gui.KSpriteGrid
 import io.ejekta.kambrik.gui.KGuiDsl
@@ -15,6 +16,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.SpawnGroup
+import net.minecraft.item.ItemStack
 import net.minecraft.util.Identifier
 
 class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(160, 20) {
@@ -52,7 +54,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(
         dsl {
             val textToShow = textLiteral(entry.amount.toString()) {
                 color = if (isReward) {
-                    entry.rarity.color.colorValue!!
+                    entry.rarity.color.colorValue ?: 0xFFFFFF
                 } else {
                     0xFFFFFF
                 }
@@ -67,15 +69,25 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(
         }
     }
 
+    fun isSelected(): Boolean {
+        return ItemStack.areEqual(parent.boardHandler.inventory.getStack(-1), parent.boardHandler.inventory.getStack(bountyIndex))
+    }
+
     override fun onDraw(dsl: KGuiDsl): KGuiDsl = dsl {
         // Draw button background
         sprite(DEFAULT, w = DEFAULT.width - 42)
         sprite(CAP, DEFAULT.width - 42)
 
         area(width, height) {
-            rect(0xb86f50, 0x48)
+            if (isSelected()) {
+                rect(0x41261b, 0x96)
+            } else {
+                rect(0xb86f50, 0x48)
+            }
             onHover {
-                rect(0xFFFFFF, 0x33)
+                if (!isSelected()) {
+                    rect(0xFFFFFF, 0x33)
+                }
             }
         }
 
@@ -89,6 +101,11 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(
         for (i in data.rewards.indices) {
             renderEntry(this, data.rewards[i], width - (20 * (i + 1)), 1, isReward = true)
         }
+    }
+
+    override fun onClickDown(relX: Int, relY: Int, button: Int) {
+        parent.boardHandler.inventory.select(bountyIndex)
+        SelectBounty(bountyIndex).sendToServer()
     }
 
     companion object {

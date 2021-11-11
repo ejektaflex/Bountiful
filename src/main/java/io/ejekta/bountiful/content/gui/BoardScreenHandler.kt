@@ -7,6 +7,7 @@ import io.ejekta.bountiful.content.board.BoardInventory
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.slot.Slot
 import net.minecraft.util.math.BlockPos
@@ -34,29 +35,6 @@ class BoardScreenHandler @JvmOverloads constructor(
         inventory.onClose(player)
     }
 
-    // Shift + Player Inv Slot
-    override fun transferSlot(player: PlayerEntity, invSlot: Int): ItemStack {
-        var newStack = ItemStack.EMPTY
-        val slot: Slot? = slots[invSlot]
-        if (slot != null && slot.hasStack()) {
-            val originalStack: ItemStack = slot.stack
-            newStack = originalStack.copy()
-            if (invSlot < inventory.size()) {
-                if (!insertItem(originalStack, inventory.size(), slots.size, true)) {
-                    return ItemStack.EMPTY
-                }
-            } else if (!insertItem(originalStack, 0, inventory.size(), false)) {
-                return ItemStack.EMPTY
-            }
-            if (originalStack.isEmpty) {
-                slot.stack = ItemStack.EMPTY
-            } else {
-                slot.markDirty()
-            }
-        }
-        return newStack
-    }
-
     //This constructor gets called from the BlockEntity on the server without calling the other constructor first, the server knows the inventory of the container
     //and can therefore directly provide it as an argument. This inventory will then be synced to the client.
     //This constructor gets called on the client when the server wants it to open the screenHandler,
@@ -80,13 +58,18 @@ class BoardScreenHandler @JvmOverloads constructor(
         // Bounties
         for (j in 0 until bRows) {
             for (k in 0 until bCols) {
-                addSlot(BoardBountySlot(inventory as BoardInventory, k + j * bCols, 8 + k * bountySlotSize + adjustX + 1000, 18 + j * bountySlotSize + adjustY))
+                // Welcome to jank! TODO do this in a better way for client<->server sync
+                addSlot(BoardBountySlot(inventory, k + j * bCols, 8 + k * bountySlotSize + adjustX + 50000, 18 + j * bountySlotSize + adjustY))
             }
         }
 
+        // Active Slot
+        addSlot(BoardBountySlot(inventory, -1, 216, 31))
+
+
         // Decrees
-        for (j in 0 until bRows) {
-            addSlot(BoardDecreeSlot(boardInv, inventory.size() - 3 + j, 19 + 7 * 18 + 1000, 18 + j * 18))
+        for (j in 0 until 3) {
+            addSlot(BoardDecreeSlot(boardInv, inventory.size() - 3 + j, 270 + (j * 18), 31))
         }
 
         //The player inventory
