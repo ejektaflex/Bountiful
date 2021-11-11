@@ -11,6 +11,7 @@ import net.minecraft.text.LiteralText
 class BountifulConfigData {
 
     var boardUpdateFrequency: Int = 45
+    var boardGenFrequency: Int = 2
     var flatBonusTimePerBounty: Int = 0
     var shouldBountiesHaveTimersAndExpire = true
     var dataPackExclusions = mutableListOf(
@@ -49,14 +50,14 @@ class BountifulConfigData {
         general.addEntry(
             creator.startIntSlider(
                 textLiteral("Board generation frequency in villages"),
-                boardUpdateFrequency,
+                boardGenFrequency,
                 0, 32
-            ).setDefaultValue(2)
+            ).setDefaultValue(boardGenFrequency)
                 .setTooltip(
                     textLiteral("How often bounty boards generate in villages")
                 )
                 .setSaveConsumer {
-                    boardUpdateFrequency = it
+                    boardGenFrequency = it
                 }
                 .requireRestart()
                 .build()

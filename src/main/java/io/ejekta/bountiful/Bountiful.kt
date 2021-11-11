@@ -41,7 +41,7 @@ class Bountiful : ModInitializer {
                     server,
                     Identifier("bountiful:village/common/bounty_gazebo"),
                     Identifier("minecraft:village/$villageType/houses"),
-                    5
+                    BountifulIO.configData.boardGenFrequency
                 )
 
             }

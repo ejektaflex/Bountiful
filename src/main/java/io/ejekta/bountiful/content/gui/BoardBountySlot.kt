@@ -2,6 +2,7 @@ package io.ejekta.bountiful.content.gui
 
 import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.board.BoardInventory
+import io.ejekta.bountiful.util.readOnlyCopy
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.slot.Slot
@@ -13,8 +14,20 @@ class BoardBountySlot(val inv: BoardInventory, index: Int, x: Int, y: Int) : Slo
     }
     override fun onTakeItem(player: PlayerEntity, stack: ItemStack) {
         if (player is ServerPlayerEntity) {
-            val board = player.world.getBlockEntity(inv.pos) as? BoardBlockEntity
-            board?.maskFor(player)?.add(index)
+            val board = player.world.getBlockEntity(inv.pos) as? BoardBlockEntity ?: return
+            // Mask all matching bounties
+            val matchingMaskIndices = board.fullInventoryCopy().readOnlyCopy
+                .mapIndexed { indexI, itemStack ->
+                    if (ItemStack.areNbtEqual(stack, itemStack)) {
+                        indexI
+                    } else {
+                        null
+                    }
+                }.filterNotNull()
+            for (newIndex in matchingMaskIndices) {
+                println("Adding mask for: $newIndex")
+                board.maskFor(player)?.add(newIndex)
+            }
         }
         super.onTakeItem(player, stack)
     }

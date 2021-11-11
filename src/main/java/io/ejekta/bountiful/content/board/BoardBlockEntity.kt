@@ -151,6 +151,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             removeBounty(i)
         }
 
+        markDirty()
     }
 
     fun fullInventoryCopy(): BoardInventory {
@@ -180,11 +181,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
     @Suppress("CAST_NEVER_SUCCEEDS")
     override fun readNbt(base: NbtCompound) {
-
-
-
-        val decreeList = base?.getCompound("decree_inv") ?: return
-        val bountyList = base?.getCompound("bounty_inv") ?: return
+        val decreeList = base.getCompound("decree_inv") ?: return
+        val bountyList = base.getCompound("bounty_inv") ?: return
 
         Inventories.readNbt(
             decreeList,
@@ -208,7 +206,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
                 it.key to it.value.toMutableSet()
             }.toMap().toMutableMap()
         }
-
     }
 
     @Suppress("CAST_NEVER_SUCCEEDS")
@@ -233,9 +230,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         base.put("decree_inv", decreeList)
         base.put("bounty_inv", bountyList)
 
-        //tag?.put("Data", base)
-
-        //println("Saved tag $tag")
         return base
     }
 
