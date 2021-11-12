@@ -171,7 +171,14 @@
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 12000
+            "unitWorth": 12000,
+            "forbids": [
+                {
+                    "type": "ITEM",
+                    "content": "minecraft:diamond"
+                }
+            ],
+            "weightMult": 0.2
         },
 
         {
@@ -183,7 +190,14 @@
                 "max": 1
             },
             "unitWorth": 10000,
-            "nbt": "{Damage:0}"
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "ITEM",
+                    "content": "minecraft:diamond"
+                }
+            ],
+            "weightMult": 0.2
         },
 
         {
@@ -195,7 +209,14 @@
                 "max": 1
             },
             "unitWorth": 16000,
-            "nbt": "{Damage:0}"
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "ITEM",
+                    "content": "minecraft:diamond"
+                }
+            ],
+            "weightMult": 0.2
         },
 
         {
@@ -207,7 +228,14 @@
                 "max": 1
             },
             "unitWorth": 14000,
-            "nbt": "{Damage:0}"
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "ITEM",
+                    "content": "minecraft:diamond"
+                }
+            ],
+            "weightMult": 0.2
         },
 
         {
@@ -219,7 +247,14 @@
                 "max": 1
             },
             "unitWorth": 8000,
-            "nbt": "{Damage:0}"
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "ITEM",
+                    "content": "minecraft:diamond"
+                }
+            ],
+            "weightMult": 0.2
         },
 
         {
@@ -231,7 +266,14 @@
                 "max": 1
             },
             "unitWorth": 20000,
-            "nbt": "{Damage:0}"
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "ITEM",
+                    "content": "minecraft:netherite_ingot"
+                }
+            ],
+            "weightMult": 0.2
         },
 
         {
@@ -243,7 +285,14 @@
                 "max": 1
             },
             "unitWorth": 32000,
-            "nbt": "{Damage:0}"
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "ITEM",
+                    "content": "minecraft:netherite_ingot"
+                }
+            ],
+            "weightMult": 0.2
         },
 
         {
@@ -255,7 +304,14 @@
                 "max": 1
             },
             "unitWorth": 28000,
-            "nbt": "{Damage:0}"
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "ITEM",
+                    "content": "minecraft:netherite_ingot"
+                }
+            ],
+            "weightMult": 0.2
         },
 
         {
@@ -267,7 +323,14 @@
                 "max": 1
             },
             "unitWorth": 16000,
-            "nbt": "{Damage:0}"
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "ITEM",
+                    "content": "minecraft:netherite_ingot"
+                }
+            ],
+            "weightMult": 0.2
         }
 
 

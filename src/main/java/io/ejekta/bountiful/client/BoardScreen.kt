@@ -75,13 +75,14 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
 
         widget(buttonList, 5, 18)
 
-        // Scroll bar
-        widget(scroller, 166, 18)
-        // (debug) Percent through scroll bar, as well as indices of selection
-        text(200, 18) {
-            format(Formatting.GOLD)
-            addLiteral("${scroller.getIndices(10, 6)} - ")
-            addLiteral("%.2f".format(scroller.percent))
+        if (validButtons.isEmpty()) {
+            textCentered(85, 78) {
+                color = 0xEADAB5
+                addLiteral("It's Empty! Check back soon!")
+            }
+        } else {
+            // Scroll bar
+            widget(scroller, 166, 18)
         }
 
     }

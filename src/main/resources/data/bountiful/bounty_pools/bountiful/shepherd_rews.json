@@ -41,7 +41,7 @@
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 1500
+            "unitWorth": 1000
         },
 
         {
@@ -64,6 +64,83 @@
                 "max": 1
             },
             "unitWorth": 650
+        },
+
+        {
+            "type": "ITEM",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:light_gray_dye",
+            "amount": {
+                "min": 4,
+                "max": 8
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+            "rarity": "RARE",
+            "content": "minecraft:purple_dye",
+            "amount": {
+                "min": 4,
+                "max": 8
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+            "rarity": "RARE",
+            "content": "minecraft:magenta_dye",
+            "amount": {
+                "min": 4,
+                "max": 8
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+            "rarity": "RARE",
+            "content": "minecraft:blue_dye",
+            "amount": {
+                "min": 4,
+                "max": 8
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+            "rarity": "RARE",
+            "content": "minecraft:cyan_dye",
+            "amount": {
+                "min": 4,
+                "max": 8
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+            "rarity": "RARE",
+            "content": "minecraft:green_dye",
+            "amount": {
+                "min": 4,
+                "max": 8
+            },
+            "unitWorth": 80
+        },
+
+        {
+            "type": "ITEM",
+            "rarity": "RARE",
+            "content": "minecraft:brown_dye",
+            "amount": {
+                "min": 4,
+                "max": 8
+            },
+            "unitWorth": 80
         }
 
 
