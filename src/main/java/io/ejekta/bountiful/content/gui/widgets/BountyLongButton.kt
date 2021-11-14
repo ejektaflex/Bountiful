@@ -5,6 +5,7 @@ import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.BountyType
 import io.ejekta.bountiful.bounty.logic.EntityLogic
 import io.ejekta.bountiful.bounty.logic.ItemLogic
+import io.ejekta.bountiful.bounty.logic.ItemTagLogic
 import io.ejekta.bountiful.client.BoardScreen
 import io.ejekta.bountiful.content.messages.SelectBounty
 import io.ejekta.kambrik.ext.fapi.textRenderer
@@ -32,6 +33,13 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(
                     count = entry.amount
                 }
                 dsl { itemStackIcon(stack, x, y) }
+            }
+            BountyType.ITEM_TAG -> {
+                val world = MinecraftClient.getInstance().world ?: return
+                val frameTime = (world.time / 30L).toInt()
+                val options = ItemTagLogic(entry).getItems().map { ItemStack(it) }.takeUnless { it.isEmpty() } ?: return
+                val frame = frameTime % options.size
+                dsl { itemStack(options[frame], x, y) }
             }
             BountyType.ENTITY -> {
                 val entityType = EntityLogic(entry).entityType

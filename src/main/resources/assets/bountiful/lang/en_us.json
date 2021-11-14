@@ -4,6 +4,17 @@
 
 	"itemGroup.bountiful": "Bountiful",
 
+	"bountiful.item_tag.any_door": "Any Door",
+	"bountiful.item_tag.any_wool": "Any Wool",
+	"bountiful.item_tag.any_planks": "Any Planks",
+	"bountiful.item_tag.any_log": "Any Log",
+	"bountiful.item_tag.any_fence": "Any Fence",
+	"bountiful.item_tag.any_bed": "Any Bed",
+	"bountiful.item_tag.any_boat": "Any Boat",
+	"bountiful.item_tag.any_candle": "Any Candle",
+	"bountiful.item_tag.any_banner": "Any Banner",
+	"bountiful.item_tag.any_wool": "Any Wool",
+
 	"bountiful.decree": "Decree",
 	"bountiful.decrees": "Decrees",
 	"bountiful.decree.invalid": "Invalid Decree",

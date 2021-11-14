@@ -4,6 +4,8 @@ import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.kambrik.ext.collect
 import io.ejekta.kambrik.ext.identifier
+import io.ejekta.kambrik.text.textLiteral
+import io.ejekta.kambrik.text.textTranslate
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
@@ -25,7 +27,7 @@ class ItemTagLogic(override val entry: BountyDataEntry) : IEntryLogic {
 
     private fun getTag() = ItemTags.getTagGroup().getTag(Identifier(entry.content))
 
-    private fun getItems() = getTag()?.values() ?: listOf()
+    fun getItems() = getTag()?.values() ?: listOf()
 
     override fun verifyValidity(player: PlayerEntity): MutableText? {
         if (getTag() == null) {
@@ -51,7 +53,16 @@ class ItemTagLogic(override val entry: BountyDataEntry) : IEntryLogic {
     }
 
     override fun textBoard(player: PlayerEntity): List<Text> {
-        return listOf()
+        return listOf(
+            if (entry.translation != null) {
+                textTranslate(entry.translation!!)
+            } else {
+                textLiteral("Item Tag")
+            },
+            textLiteral(entry.content) {
+                format(Formatting.DARK_GRAY)
+            }
+        )
     }
 
     override fun getProgress(player: PlayerEntity): Progress {

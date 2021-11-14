@@ -20,6 +20,8 @@ class PoolEntry private constructor() {
     var type = BountyType.NULL
     var rarity = BountyRarity.COMMON
     var content = "Nope"
+    var name: String? = null
+    var translation: String? = null
     var amount = EntryRange(-1, -1)
     var unitWorth = -1000.0
     var weightMult = 1.0
@@ -40,7 +42,16 @@ class PoolEntry private constructor() {
 
     fun toEntry(worth: Double? = null): BountyDataEntry {
         val amt = amountAt(worth)
-        return BountyDataEntry(type, content, amountAt(worth), nbt, isMystery = false, rarity = rarity).apply {
+        return BountyDataEntry(
+            type,
+            content,
+            amountAt(worth),
+            nbt,
+            name,
+            translation,
+            isMystery = false,
+            rarity = rarity
+        ).apply {
             this.worth = amt * unitWorth
         }
     }

@@ -27,9 +27,19 @@
             "content": "minecraft:glass_pane",
             "amount": {
                 "min": 4,
-                "max": 16
+                "max": 48
             },
             "unitWorth": 100
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:glass",
+            "amount": {
+                "min": 4,
+                "max": 32
+            },
+            "unitWorth": 265
         },
 
         {
