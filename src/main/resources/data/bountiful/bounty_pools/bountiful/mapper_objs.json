@@ -23,6 +23,17 @@
         },
 
         {
+            "type": "ITEM_TAG",
+            "content": "minecraft:candles",
+            "translation": "bountiful.item_tag.any_candle",
+            "amount": {
+                "min": 2,
+                "max": 6
+            },
+            "unitWorth": 250
+        },
+
+        {
             "type": "ITEM",
             "content": "minecraft:glass_pane",
             "amount": {

@@ -53,6 +53,17 @@
         },
 
         {
+            "type": "ITEM_TAG",
+            "content": "minecraft:wool",
+            "translation": "bountiful.item_tag.any_wool",
+            "amount": {
+                "min": 3,
+                "max": 24
+            },
+            "unitWorth": 55
+        },
+
+        {
             "type": "ITEM",
             "content": "minecraft:white_banner",
             "amount": {
@@ -63,38 +74,30 @@
         },
 
         {
-            "type": "ITEM",
-            "content": "minecraft:lime_banner",
+            "type": "ITEM_TAG",
+            "content": "minecraft:banners",
+            "translation": "bountiful.item_tag.any_banner",
             "amount": {
-                "min": 4,
+                "min": 2,
                 "max": 16
             },
             "unitWorth": 350
         },
 
         {
-            "type": "ITEM",
-            "content": "minecraft:lime_banner",
+            "type": "ITEM_TAG",
+            "content": "minecraft:beds",
+            "translation": "bountiful.item_tag.any_bed",
             "amount": {
-                "min": 4,
-                "max": 16
+                "min": 1,
+                "max": 6
             },
-            "unitWorth": 350
+            "unitWorth": 500
         },
 
         {
             "type": "ITEM",
             "content": "minecraft:pink_banner",
-            "amount": {
-                "min": 4,
-                "max": 16
-            },
-            "unitWorth": 350
-        },
-
-        {
-            "type": "ITEM",
-            "content": "minecraft:light_blue_banner",
             "amount": {
                 "min": 4,
                 "max": 16

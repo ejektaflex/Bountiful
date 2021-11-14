@@ -13,6 +13,27 @@
         },
 
         {
+            "type": "ITEM_TAG",
+            "content": "minecraft:planks",
+            "translation": "bountiful.item_tag.any_planks",
+            "amount": {
+                "min": 6,
+                "max": 64
+            },
+            "unitWorth": 60
+        },
+        {
+            "type": "ITEM_TAG",
+            "content": "minecraft:logs",
+            "translation": "bountiful.item_tag.any_log",
+            "amount": {
+                "min": 2,
+                "max": 10
+            },
+            "unitWorth": 240
+        },
+
+        {
             "type": "ITEM",
             "content": "minecraft:gravel",
             "amount": {
