@@ -14,12 +14,28 @@
 
         {
             "type": "ITEM",
+            "content": "minecraft:magma_cream",
+            "amount": {
+                "min": 2,
+                "max": 6
+            },
+            "unitWorth": 450,
+            "forbids": [
+                {
+                    "type": "ITEM",
+                    "content": "minecraft:magma_cream"
+                }
+            ]
+        },
+
+        {
+            "type": "ITEM",
             "content": "minecraft:lapis_lazuli",
             "amount": {
                 "min": 1,
                 "max": 3
             },
-            "unitWorth": 800
+            "unitWorth": 750
         },
 
         {

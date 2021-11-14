@@ -34,6 +34,26 @@
 
         {
             "type": "ITEM",
+            "content": "minecraft:blaze_powder",
+            "amount": {
+                "min": 2,
+                "max": 4
+            },
+            "unitWorth": 400
+        },
+
+        {
+            "type": "ITEM",
+            "content": "minecraft:blaze_rod",
+            "amount": {
+                "min": 2,
+                "max": 4
+            },
+            "unitWorth": 800
+        },
+
+        {
+            "type": "ITEM",
             "content": "minecraft:potion",
             "amount": {
                 "min": 2,

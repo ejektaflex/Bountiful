@@ -29,7 +29,8 @@
                 "min": 2,
                 "max": 16
             },
-            "unitWorth": 65
+            "unitWorth": 65,
+            "weightMult": 1.5
         },
 
         {
@@ -39,40 +40,40 @@
                 "min": 1,
                 "max": 6
             },
-            "unitWorth": 200
+            "unitWorth": 250
         },
 
         {
             "type": "ITEM",
-            "rarity": "UNCOMMON",
             "content": "minecraft:salmon",
             "amount": {
                 "min": 3,
                 "max": 15
             },
-            "unitWorth": 75
+            "unitWorth": 75,
+            "weightMult": 1.5
         },
 
         {
             "type": "ITEM",
-            "rarity": "RARE",
             "content": "minecraft:tropical_fish",
             "amount": {
                 "min": 1,
                 "max": 6
             },
-            "unitWorth": 165
+            "unitWorth": 165,
+            "weightMult": 1.5
         },
 
         {
             "type": "ITEM",
-            "rarity": "EPIC",
             "content": "minecraft:pufferfish",
             "amount": {
                 "min": 1,
                 "max": 4
             },
-            "unitWorth": 250
+            "unitWorth": 250,
+            "weightMult": 1.5
         },
 
         {
@@ -83,7 +84,18 @@
                 "min": 1,
                 "max": 2
             },
-            "unitWorth": 1000.0
+            "unitWorth": 800.0
+        },
+
+        {
+            "type": "ITEM",
+            "rarity": "EPIC",
+            "content": "minecraft:nautilus_shell",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1100.0
         }
 
 
