@@ -12,9 +12,11 @@ class BoardBountySlot(val inv: BoardInventory, index: Int, x: Int, y: Int) : Slo
     override fun canInsert(stack: ItemStack?): Boolean {
         return false
     }
-    override fun onTakeItem(player: PlayerEntity, stack: ItemStack) {
+
+    override fun canTakeItems(player: PlayerEntity): Boolean {
+        println("Taking?")
         if (player is ServerPlayerEntity) {
-            val board = player.world.getBlockEntity(inv.pos) as? BoardBlockEntity ?: return
+            val board = player.world.getBlockEntity(inv.pos) as? BoardBlockEntity ?: return false
             // Mask all matching bounties
             val matchingMaskIndices = board.fullInventoryCopy().readOnlyCopy
                 .mapIndexed { indexI, itemStack ->
@@ -30,5 +32,7 @@ class BoardBountySlot(val inv: BoardInventory, index: Int, x: Int, y: Int) : Slo
             }
         }
         super.onTakeItem(player, stack)
+        return true
     }
+    
 }

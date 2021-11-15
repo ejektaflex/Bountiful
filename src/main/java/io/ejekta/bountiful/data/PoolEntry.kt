@@ -66,7 +66,6 @@ class PoolEntry private constructor() {
         val amt = amountAt(worth)
 
         val actualContent = if (type == BountyType.ITEM && content.startsWith("#")) {
-            println("Creating actual from: $content")
             val tagId = Identifier(content.substringAfter("#"))
             val tag = ItemTags.getTagGroup().getTag(tagId)
             if (tag == null) {
