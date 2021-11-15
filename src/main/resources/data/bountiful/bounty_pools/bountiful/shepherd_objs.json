@@ -14,42 +14,13 @@
 
         {
             "type": "ITEM",
-            "content": "minecraft:white_wool",
+            "content": "#minecraft:wool",
             "amount": {
                 "min": 4,
-                "max": 16
+                "max": 24
             },
-            "unitWorth": 55
-        },
-
-        {
-            "type": "ITEM",
-            "content": "minecraft:brown_wool",
-            "amount": {
-                "min": 4,
-                "max": 16
-            },
-            "unitWorth": 55
-        },
-
-        {
-            "type": "ITEM",
-            "content": "minecraft:black_wool",
-            "amount": {
-                "min": 4,
-                "max": 16
-            },
-            "unitWorth": 55
-        },
-
-        {
-            "type": "ITEM",
-            "content": "minecraft:gray_wool",
-            "amount": {
-                "min": 4,
-                "max": 12
-            },
-            "unitWorth": 55
+            "unitWorth": 70,
+            "weightMult": 6.0
         },
 
         {
@@ -60,17 +31,19 @@
                 "min": 3,
                 "max": 24
             },
-            "unitWorth": 55
+            "unitWorth": 55,
+            "weightMult": 4.0
         },
 
         {
             "type": "ITEM",
-            "content": "minecraft:white_banner",
+            "content": "#minecraft:banners",
             "amount": {
-                "min": 4,
-                "max": 16
+                "min": 2,
+                "max": 14
             },
-            "unitWorth": 300
+            "unitWorth": 400,
+            "weightMult": 4.0
         },
 
         {
@@ -81,7 +54,8 @@
                 "min": 2,
                 "max": 16
             },
-            "unitWorth": 350
+            "unitWorth": 350,
+            "weightMult": 4.0
         },
 
         {
@@ -93,16 +67,6 @@
                 "max": 6
             },
             "unitWorth": 500
-        },
-
-        {
-            "type": "ITEM",
-            "content": "minecraft:pink_banner",
-            "amount": {
-                "min": 4,
-                "max": 16
-            },
-            "unitWorth": 350
         },
 
         {

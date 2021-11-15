@@ -25,34 +25,48 @@
 
         {
             "type": "ITEM",
-            "content": "minecraft:blue_carpet",
+            "content": "#minecraft:wool",
+            "amount": {
+                "min": 4,
+                "max": 24
+            },
+            "unitWorth": 70,
+            "weightMult": 4.0
+        },
+
+        {
+            "type": "ITEM",
+            "content": "#minecraft:carpets",
             "amount": {
                 "min": 1,
                 "max": 6
             },
-            "unitWorth": 250
+            "unitWorth": 250,
+            "weightMult": 4.0
         },
 
         {
             "type": "ITEM",
             "rarity": "UNCOMMON",
-            "content": "minecraft:blue_bed",
+            "content": "#minecraft:beds",
             "amount": {
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 1000
+            "unitWorth": 1000,
+            "weightMult": 4.0
         },
 
         {
             "type": "ITEM",
             "rarity": "RARE",
-            "content": "minecraft:blue_banner",
+            "content": "#minecraft:banners",
             "amount": {
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 1000.0
+            "unitWorth": 1000.0,
+            "weightMult": 4.0
         },
 
         {

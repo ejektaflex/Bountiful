@@ -1,15 +1,21 @@
 package io.ejekta.bountiful.data
 
+import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.BountyType
+import io.ejekta.bountiful.bounty.logic.ItemTagLogic
 import io.ejekta.bountiful.config.JsonFormats
+import io.ejekta.kambrik.ext.identifier
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
+import net.minecraft.item.Item
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.StringNbtReader
+import net.minecraft.tag.ItemTags
+import net.minecraft.util.Identifier
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.max
@@ -40,11 +46,46 @@ class PoolEntry private constructor() {
 
     fun save(format: Json = JsonFormats.DataPack) = format.encodeToString(serializer(), this)
 
+    private fun getRelatedItems(): List<Item>? {
+        return when (type) {
+            BountyType.ITEM -> {
+                val tagId = Identifier(content.substringAfter("#"))
+                val tag = ItemTags.getTagGroup().getTag(tagId)
+                tag?.values()
+            }
+            BountyType.ITEM_TAG -> {
+                val tagId = Identifier(content)
+                val tag = ItemTags.getTagGroup().getTag(tagId)
+                tag?.values()
+            }
+            else -> null
+        }
+    }
+
     fun toEntry(worth: Double? = null): BountyDataEntry {
         val amt = amountAt(worth)
+
+        val actualContent = if (type == BountyType.ITEM && content.startsWith("#")) {
+            println("Creating actual from: $content")
+            val tagId = Identifier(content.substringAfter("#"))
+            val tag = ItemTags.getTagGroup().getTag(tagId)
+            if (tag == null) {
+                Bountiful.LOGGER.warn("A pool entry required a tag that does not exist: $content")
+                content
+            } else if (tag.values().isEmpty()){
+                Bountiful.LOGGER.warn("A pool entry tag has an empty list! $content")
+                content
+            } else {
+                val chosen = tag.values().random().identifier.toString()
+                chosen
+            }
+        } else {
+            content
+        }
+
         return BountyDataEntry(
             type,
-            content,
+            actualContent,
             amountAt(worth),
             nbt,
             name,
@@ -78,7 +119,13 @@ class PoolEntry private constructor() {
     }
 
     fun forbids(entry: PoolEntry): Boolean {
-        return forbids.any { it.type == entry.type && it.content == entry.content }
+        val related = getRelatedItems()
+        return forbids.any {
+            it.type == entry.type && it.content == entry.content
+        } || (related != null
+                    && related.isNotEmpty()
+                    && related.any { it.identifier.toString() == entry.content }
+                )
     }
 
     fun forbidsAny(entries: List<PoolEntry>): Boolean {

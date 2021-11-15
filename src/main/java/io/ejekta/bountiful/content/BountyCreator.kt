@@ -97,7 +97,7 @@ class BountyCreator private constructor(private val decrees: Set<Decree>, privat
     private fun genObjectives(worth: Double, rewardPools: List<PoolEntry>): List<BountyDataEntry> {
         // -30 = 150% / 1.5x needed, 30 = 50% / 0.5x needed
         // 1 - (rep / 60.0)
-        val objNeededMult = 1 - (rep / 60.0)
+        val objNeededMult = 1 - (rep / 75.0) // cap rep discount at 30/75, or 40%
         val worthNeeded = worth * objNeededMult
         val numObjectives = (1..2).random()
         val toReturn = mutableListOf<BountyDataEntry>()
