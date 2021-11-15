@@ -34,5 +34,5 @@ class BoardBountySlot(val inv: BoardInventory, index: Int, x: Int, y: Int) : Slo
         super.onTakeItem(player, stack)
         return true
     }
-    
+
 }

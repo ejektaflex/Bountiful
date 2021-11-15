@@ -1,6 +1,7 @@
 package io.ejekta.bountiful.client
 
 import io.ejekta.bountiful.Bountiful
+import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.content.gui.widgets.BountyLongButton
@@ -58,12 +59,25 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         val percentDone = (levelData.second.toDouble() / levelData.third * 100).toInt()
 
         // Reputation Bar (background, foreground, label)
-        offset(210, 56) {
+        offset(240, 56) {
             sprite(BAR_BG)
             sprite(BAR_FG, w = percentDone + 1)
-            textCentered(-10, -2) {
+            textCentered(94, -10) {
                 color(0xabff7a)
-                addLiteral(levelData.first.toString())
+                addLiteral(levelData.first.toString()) {
+                    format(BountyRarity.forReputation(levelData.first).color)
+                }
+            }
+            offset(85, -19) {
+                if (isHovered(18, 18)) {
+                    tooltip {
+                        addLiteral("Reputation ") {
+                            addLiteral("(${levelData.first})") {
+                                format(BountyRarity.forReputation(levelData.first).color)
+                            }
+                        }
+                    }
+                }
             }
         }
 
