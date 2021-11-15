@@ -147,7 +147,7 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
             ctx.absY(y).toFloat(),
             16777215,
             true,
-            matrixStack.peek().model,
+            matrixStack.peek().positionMatrix,
             immediate,
             false,
             0,

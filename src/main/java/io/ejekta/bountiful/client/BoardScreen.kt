@@ -124,7 +124,7 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         private val WANDER_SHEET = KSpriteGrid(WANDER, texWidth = 512, texHeight = 256)
         private val BAR_BG = WANDER_SHEET.Sprite(0f, 186f, 102, 5)
         private val BAR_FG = WANDER_SHEET.Sprite(0f, 191f, 102, 5)
-        private val SLIDER = WANDER_SHEET.Sprite(0f, 199f, 6, 26)
+        private val SLIDER = WANDER_SHEET.Sprite(0f, 199f, 6, 27)
     }
 }
 

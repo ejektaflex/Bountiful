@@ -53,6 +53,9 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     private var finishMap = mutableMapOf<String, Int>()
     private val finishSerializer = MapSerializer(String.serializer(), Int.serializer())
 
+    val isPristine: Boolean
+        get() = finishMap.keys.isEmpty() && takenMask.keys.isEmpty()
+
     // Calculated level, progress to next, point of next level
     private val levelData: Triple<Int, Int, Int>
         get() = levelProgress(finishMap.values.sum())
@@ -117,12 +120,26 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         bounties.removeStack(slot)
     }
 
+    fun tryPrepopulate() {
+        if (isPristine) {
+            if (decrees.isEmpty) {
+                println("Filling with decrees")
+                decrees.setStack((0..2).random(), DecreeItem.create())
+            }
+            for (i in 0..5) {
+                randomlyUpdateBoard()
+            }
+        }
+        markDirty()
+    }
+
     private fun randomlyUpdateBoard() {
         val ourWorld = world ?: return
-
         if (decrees.isEmpty) {
             return
         }
+
+        println("Rand $pos")
 
         val slotToAddTo = BountyInventory.bountySlots.random()
 
@@ -209,7 +226,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     @Suppress("CAST_NEVER_SUCCEEDS")
-    override fun writeNbt(base: NbtCompound): NbtCompound? {
+    override fun writeNbt(base: NbtCompound) {
         super.writeNbt(base)
 
 
@@ -229,8 +246,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
         base.put("decree_inv", decreeList)
         base.put("bounty_inv", bountyList)
-
-        return base
     }
 
     companion object {
@@ -253,6 +268,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         @JvmStatic
         fun tick(world: World, pos: BlockPos, state: BlockState, entity: BoardBlockEntity) {
             if (world.isClient) return
+
+            entity.tryPrepopulate()
 
             // Set unset decrees every 20 ticks
             if (world.time % 20L == 0L) {

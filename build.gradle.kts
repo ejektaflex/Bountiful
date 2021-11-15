@@ -2,9 +2,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
 	//id 'com.github.johnrengelman.shadow' version '6.1.0'
-	kotlin("jvm") version "1.5.21"
-	kotlin("plugin.serialization") version "1.5.21"
-	id("fabric-loom") version "0.8-SNAPSHOT"
+	kotlin("jvm") version "1.5.31"
+	kotlin("plugin.serialization") version "1.5.31"
+	id("fabric-loom") version "0.10-SNAPSHOT"
 }
 
 java {
@@ -47,9 +47,9 @@ dependencies {
 	modImplementation("net.fabricmc:fabric-loader:${loaderVersion}")
 
 	// Kambrik API
-	modImplementation("io.ejekta:kambrik:2.1.+")
+	modImplementation("io.ejekta:kambrik:3.+")
 
-	modApi("me.shedaniel.cloth:cloth-config-fabric:5.0.38") {
+	modApi("me.shedaniel.cloth:cloth-config-fabric:6.0.42") {
 		exclude(group = "net.fabricmc.fabric-api")
 	}
 
@@ -60,7 +60,7 @@ dependencies {
 		exclude(module = "config-2")
 	}
 
-	modImplementation(group = "net.fabricmc", name = "fabric-language-kotlin", version = "1.6.3+kotlin.1.5.21")
+	modImplementation(group = "net.fabricmc", name = "fabric-language-kotlin", version = "1.6.5+kotlin.1.5.31")
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${fabricVersion}")
