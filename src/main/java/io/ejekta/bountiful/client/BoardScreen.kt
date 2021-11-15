@@ -4,22 +4,16 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
-import io.ejekta.bountiful.content.gui.widgets.BountyLongButton
+import io.ejekta.bountiful.client.widgets.BountyLongButton
 import io.ejekta.kambrik.KambrikHandledScreen
 import io.ejekta.kambrik.gui.KSpriteGrid
 import io.ejekta.kambrik.gui.widgets.KListWidget
 import io.ejekta.kambrik.gui.widgets.KScrollbarVertical
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.entity.EntityType
-import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
-import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
-import org.spongepowered.asm.util.Quantifier.SINGLE
 
 
 class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Text) :

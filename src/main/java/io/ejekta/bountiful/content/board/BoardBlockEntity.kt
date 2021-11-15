@@ -25,7 +25,6 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SimpleInventory
-import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtString
 import net.minecraft.network.PacketByteBuf
@@ -120,7 +119,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         bounties.removeStack(slot)
     }
 
-    fun tryPrepopulate() {
+    fun tryInitalPopulation() {
         if (isPristine) {
             if (decrees.isEmpty) {
                 println("Filling with decrees")
@@ -269,7 +268,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         fun tick(world: World, pos: BlockPos, state: BlockState, entity: BoardBlockEntity) {
             if (world.isClient) return
 
-            entity.tryPrepopulate()
+            entity.tryInitalPopulation()
 
             // Set unset decrees every 20 ticks
             if (world.time % 20L == 0L) {

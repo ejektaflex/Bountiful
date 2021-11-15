@@ -1,4 +1,4 @@
-package io.ejekta.bountiful.content.gui.widgets
+package io.ejekta.bountiful.client.widgets
 
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
@@ -18,6 +18,7 @@ import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.SpawnGroup
 import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
 import net.minecraft.util.Identifier
 
 class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(160, 20) {
@@ -28,6 +29,9 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(
 
     private fun renderEntry(dsl: KGuiDsl, entry: BountyDataEntry, x: Int, y: Int, isReward: Boolean = false) {
         when (entry.type) {
+            BountyType.COMMAND -> {
+                dsl { itemStackIcon(ItemStack(Items.COMMAND_BLOCK), x, y) }
+            }
             BountyType.ITEM -> {
                 val stack = ItemLogic(entry).itemStack.apply {
                     count = entry.amount
