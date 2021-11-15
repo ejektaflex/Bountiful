@@ -109,13 +109,12 @@ class BountifulConfigData {
                 objectiveModifier,
                 -50, 100
             ).setDefaultValue(0).setTooltip(
-                LiteralText("Makes bounties this percent more/less expensive")
+                LiteralText("Makes new bounties this percent more/less expensive, objective-wise")
             ).setSaveConsumer {
                 objectiveModifier = it
             }.setTextGetter {
-                textLiteral("$it% Change") 
-            }
-                .build()
+                textLiteral("$it% Change")
+            }.build()
         )
 
         return builder.build()
