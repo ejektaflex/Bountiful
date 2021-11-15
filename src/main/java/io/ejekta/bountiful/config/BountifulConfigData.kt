@@ -17,6 +17,7 @@ class BountifulConfigData {
     var dataPackExclusions = mutableListOf(
         "bounty_pools/bountiful/something_here"
     )
+    var objectiveModifier = 0
 
 
     fun buildScreen(): Screen {
@@ -102,6 +103,20 @@ class BountifulConfigData {
             }.build()
         )
 
+        bounty.addEntry(
+            creator.startIntSlider(
+                LiteralText("Objective Requirement Multiplier"),
+                objectiveModifier,
+                -50, 100
+            ).setDefaultValue(0).setTooltip(
+                LiteralText("Makes bounties this percent more/less expensive")
+            ).setSaveConsumer {
+                objectiveModifier = it
+            }.setTextGetter {
+                textLiteral("$it% Change") 
+            }
+                .build()
+        )
 
         return builder.build()
     }

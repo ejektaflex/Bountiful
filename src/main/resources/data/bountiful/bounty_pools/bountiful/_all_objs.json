@@ -14,12 +14,25 @@
 		{
 			"type": "ITEM",
 			"rarity": "EPIC",
+			"content": "minecraft:iron_block",
+			"amount": {
+				"min": 1,
+				"max": 6
+			},
+			"unitWorth": 9000,
+			"weightMult": 0.1
+		},
+
+		{
+			"type": "ITEM",
+			"rarity": "EPIC",
 			"content": "minecraft:anvil",
 			"amount": {
 				"min": 1,
-				"max": 4
+				"max": 6
 			},
-			"unitWorth": 12500
+			"unitWorth": 24000,
+			"weightMult": 0.1
 		},
 
 		{

@@ -18,7 +18,25 @@
 				"min": 3,
 				"max": 32
 			},
-			"unitWorth": 850
+			"unitWorth": 850,
+			"forbids": [
+				{
+					"type": "ITEM",
+					"content": "minecraft:iron_helmet"
+				},
+				{
+					"type": "ITEM",
+					"content": "minecraft:iron_chestplate"
+				},
+				{
+					"type": "ITEM",
+					"content": "minecraft:iron_leggings"
+				},
+				{
+					"type": "ITEM",
+					"content": "minecraft:iron_boots"
+				}
+			]
 		},
 
 		{

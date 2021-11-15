@@ -39,7 +39,10 @@ class BountyCreator private constructor(private val decrees: Set<Decree>, privat
         }
 
         // Gen objectives
-        val objectives = genObjectives(totalRewardWorth, rewardEntries)
+        val objectives = genObjectives(
+            totalRewardWorth * (1 + (BountifulIO.configData.objectiveModifier * 0.01)),
+            rewardEntries
+        )
         data.objectives.addAll(objectives)
 
         data.timeStarted = startTime
