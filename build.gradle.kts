@@ -4,17 +4,18 @@ plugins {
 	kotlin("jvm") version "1.6.0"
 	kotlin("plugin.serialization") version "1.6.0"
 	id("fabric-loom") version "0.10-SNAPSHOT"
+	`idea`
 }
 
 object Versions {
-	const val Minecraft = "1.18-pre1"
+	const val Minecraft = "1.18-pre2"
 	object Jvm {
 		val Java = JavaVersion.VERSION_17
 		const val Kotlin = "1.6.0"
 		const val TargetKotlin = "17"
 	}
 	object Fabric {
-		const val Yarn = "1.18-pre1+build.8"
+		const val Yarn = "1.18-pre2+build.1"
 		const val Loader = "0.12.5"
 		const val Api = "0.42.4+1.18"
 	}
@@ -35,6 +36,8 @@ object Versions {
 java {
 	sourceCompatibility = Versions.Jvm.Java
 	targetCompatibility = Versions.Jvm.Java
+	withSourcesJar()
+	withJavadocJar()
 }
 
 project.group = Versions.Mod.Group

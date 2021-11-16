@@ -24,7 +24,6 @@ import org.lwjgl.glfw.GLFW
 
 class BountifulClient : ClientModInitializer {
 
-    @InternalSerializationApi
     override fun onInitializeClient() {
         println("Init client for Bountiful")
 

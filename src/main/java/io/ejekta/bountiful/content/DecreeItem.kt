@@ -25,7 +25,6 @@ class DecreeItem : Item(
         return TranslatableText(translationKey).formatted(Formatting.DARK_PURPLE)
     }
 
-    @InternalSerializationApi
     override fun appendTooltip(
         stack: ItemStack?,
         world: World?,

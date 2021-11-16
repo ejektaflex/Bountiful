@@ -12,5 +12,5 @@ enum class BountyType(
     ENTITY(isObj = true, isReward = false, ::EntityLogic),
     ITEM_TAG(isObj = true, isReward = false, ::ItemTagLogic),
     COMMAND(isObj = false, isReward = true, ::CommandLogic),
-    BIOME(isObj = true, isReward = false, ::BiomeLogic)
+    EXPLORE_BIOME(isObj = true, isReward = false, ::BiomeLogic)
 }
