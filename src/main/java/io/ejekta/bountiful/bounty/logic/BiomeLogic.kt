@@ -8,13 +8,9 @@ import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 
 
-class CommandLogic(override val entry: BountyDataEntry) : IEntryLogic {
+class BiomeLogic(override val entry: BountyDataEntry) : IEntryLogic {
 
-    override fun verifyValidity(player: PlayerEntity): MutableText? {
-        val server = player.server ?: return textLiteral("Server does not exist!") // oh my
-        val parsed = server.commandManager.dispatcher.parse(entry.content, player.commandSource)
-        return textLiteral("Cmd Err: ${parsed.reader.read}")
-    }
+    override fun verifyValidity(player: PlayerEntity): MutableText? = null
 
     override fun textSummary(isObj: Boolean, player: PlayerEntity): Text {
         return description
@@ -31,7 +27,7 @@ class CommandLogic(override val entry: BountyDataEntry) : IEntryLogic {
         return listOf(description)
     }
 
-    override fun getProgress(player: PlayerEntity) = Progress(0, 1)
+    override fun getProgress(player: PlayerEntity) = Progress(0, 0)
 
     override fun tryFinishObjective(player: PlayerEntity) = true
 

@@ -61,6 +61,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(
                     )
                 }
             }
+            else -> {}
         }
         // Render amount
         dsl {

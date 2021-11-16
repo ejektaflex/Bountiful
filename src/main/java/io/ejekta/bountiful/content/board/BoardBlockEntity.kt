@@ -122,7 +122,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     fun tryInitalPopulation() {
         if (isPristine) {
             if (decrees.isEmpty) {
-                println("Filling with decrees")
                 decrees.setStack((0..2).random(), DecreeItem.create())
             }
             for (i in 0..5) {
@@ -137,8 +136,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         if (decrees.isEmpty) {
             return
         }
-
-        println("Rand $pos")
 
         val slotToAddTo = BountyInventory.bountySlots.random()
 
