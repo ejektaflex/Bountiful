@@ -17,30 +17,33 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 
 
-class EntityLogic(override val entry: BountyDataEntry) : IEntryLogic {
+object EntityLogic : IEntryLogic {
 
-    val entityType: EntityType<*>
-        get() = Registry.ENTITY_TYPE.get(Identifier(entry.content))
+    fun getEntityType(entry: BountyDataEntry): EntityType<*> {
+        return Registry.ENTITY_TYPE.get(Identifier(entry.content))
+    }
 
-    var entityKills: Int
-        get() = entry.tracking.getInt(entityKillsKey)
-        set(value) {
-            entry.tracking.putInt(entityKillsKey, value)
-        }
+    fun getEntityKills(entry: BountyDataEntry): Int {
+        return entry.tracking.getInt(entityKillsKey)
+    }
 
-    override fun verifyValidity(player: PlayerEntity): MutableText? {
-        val id = entityType.identifier
+    fun setEntityKills(entry: BountyDataEntry, value: Int) {
+        entry.tracking.putInt(entityKillsKey, value)
+    }
+
+    override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText? {
+        val id = getEntityType(entry).identifier
         if (id != Identifier(entry.content)) {
             return LiteralText("* '${entry.content}' is not a valid entity!")
         }
         return null
     }
 
-    override fun textSummary(isObj: Boolean, player: PlayerEntity): Text {
-        val progress = getProgress(player)
+    override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): Text {
+        val progress = getProgress(entry, player)
         return when (isObj) {
             true -> LiteralText("Kill ").append(
-                entityType.name.copy()
+                getEntityType(entry).name.copy()
             ).formatted(progress.color).append(
                 progress.neededText.colored(Formatting.WHITE)
             )
@@ -48,48 +51,44 @@ class EntityLogic(override val entry: BountyDataEntry) : IEntryLogic {
         }
     }
 
-    override fun textBoard(player: PlayerEntity): List<Text> {
-        return listOf(entityType.name)
+    override fun textBoard(entry: BountyDataEntry, player: PlayerEntity): List<Text> {
+        return listOf(getEntityType(entry).name)
     }
 
-    override fun getProgress(player: PlayerEntity): Progress {
-        return Progress(entityKills, entry.amount)
+    override fun getProgress(entry: BountyDataEntry, player: PlayerEntity): Progress {
+        return Progress(getEntityKills(entry), entry.amount)
     }
 
-    override fun tryFinishObjective(player: PlayerEntity): Boolean {
-        return entityKills >= entry.amount
+    override fun tryFinishObjective(entry: BountyDataEntry, player: PlayerEntity): Boolean {
+        return getEntityKills(entry) >= entry.amount
     }
 
-    override fun giveReward(player: PlayerEntity): Boolean {
+    override fun giveReward(entry: BountyDataEntry, player: PlayerEntity): Boolean {
         return false
     }
 
-    companion object {
+    private const val entityKillsKey = "kills"
 
-        private const val entityKillsKey = "kills"
-
-        fun incrementEntityBounties(playerEntity: ServerPlayerEntity, killedEntity: LivingEntity) {
-            playerEntity.inventory.main.filter {
-                it.item is BountyItem
-            }.forEach { stack ->
-                BountyData.editIf(stack) {
-                    var didWork = false
-                    val entityObjectives = objectives.filter { it.type == BountyType.ENTITY }
-                    if (entityObjectives.isEmpty()) return@editIf false
-                    for (obj in entityObjectives) {
-                        if (obj.content == killedEntity.type.identifier.toString()) {
-                            obj.tracking.putInt(
-                                entityKillsKey,
-                                (obj.tracking.getInt(entityKillsKey) + 1).coerceAtMost(obj.amount)
-                            )
-                            didWork = true
-                        }
+    fun incrementEntityBounties(playerEntity: ServerPlayerEntity, killedEntity: LivingEntity) {
+        playerEntity.inventory.main.filter {
+            it.item is BountyItem
+        }.forEach { stack ->
+            BountyData.editIf(stack) {
+                var didWork = false
+                val entityObjectives = objectives.filter { it.type == BountyType.ENTITY }
+                if (entityObjectives.isEmpty()) return@editIf false
+                for (obj in entityObjectives) {
+                    if (obj.content == killedEntity.type.identifier.toString()) {
+                        obj.tracking.putInt(
+                            entityKillsKey,
+                            (obj.tracking.getInt(entityKillsKey) + 1).coerceAtMost(obj.amount)
+                        )
+                        didWork = true
                     }
-                    return@editIf didWork
                 }
+                return@editIf didWork
             }
         }
-
     }
 
 }
