@@ -37,7 +37,7 @@ class BountyData {
 
     private fun hasFinishedObjectives(player: PlayerEntity): Boolean {
         return objectives.all {
-            it.logic.tryFinishObjective(player)
+            it.tryFinishObjective(player)
         }
     }
 
@@ -55,7 +55,7 @@ class BountyData {
         })
 
         for (reward in rewards) {
-            reward.logic.giveReward(player)
+            reward.giveReward(player)
         }
     }
 
@@ -78,8 +78,8 @@ class BountyData {
     }
 
     fun verifyValidity(player: PlayerEntity): Boolean {
-        val objs = objectives.mapNotNull { it.logic.verifyValidity(player)?.formatted(Formatting.RED) }
-        val rews = rewards.mapNotNull { it.logic.verifyValidity(player)?.formatted(Formatting.RED) }
+        val objs = objectives.mapNotNull { it.verifyValidity(player)?.formatted(Formatting.RED) }
+        val rews = rewards.mapNotNull { it.verifyValidity(player)?.formatted(Formatting.RED) }
         val combined = objs + rews
         combined.forEach { text ->
             player.sendMessage(text, false)

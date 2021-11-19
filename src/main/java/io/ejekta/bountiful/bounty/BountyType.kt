@@ -8,9 +8,9 @@ enum class BountyType(
     val logic: (entry: BountyDataEntry) -> IEntryLogic
 ) {
     NULL(isObj = false, isReward = true, { NullLogic }), // whatevs
-    ITEM(isObj = true, isReward = true, ::ItemLogic),
-    ENTITY(isObj = true, isReward = false, ::EntityLogic),
-    ITEM_TAG(isObj = true, isReward = false, ::ItemTagLogic),
-    COMMAND(isObj = false, isReward = true, ::CommandLogic),
-    EXPLORE_BIOME(isObj = true, isReward = false, ::BiomeLogic)
+    ITEM(isObj = true, isReward = true, { ItemLogic }),
+    ENTITY(isObj = true, isReward = false, { EntityLogic }),
+    ITEM_TAG(isObj = true, isReward = false, { ItemTagLogic }),
+    COMMAND(isObj = false, isReward = true, { CommandLogic }),
+    EXPLORE_BIOME(isObj = true, isReward = false, { BiomeLogic })
 }

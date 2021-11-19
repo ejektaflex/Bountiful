@@ -19,51 +19,56 @@ import net.minecraft.util.registry.Registry
 import kotlin.math.min
 
 
-class ItemLogic(override val entry: BountyDataEntry) : IEntryLogic {
+object ItemLogic : IEntryLogic {
 
-    private val item: Item
-        get() = Registry.ITEM.get(Identifier(entry.content))
+    fun getItem(entry: BountyDataEntry): Item {
+        return Registry.ITEM.get(Identifier(entry.content))
+    }
 
-    val itemStack: ItemStack
-        get() = ItemStack(item).apply {
+    fun getItemStack(entry: BountyDataEntry): ItemStack {
+        val item = getItem(entry)
+        return ItemStack(item).apply {
             entry.nbt?.let { this.nbt = it }
         }
+    }
 
-    private val itemName: MutableText
-        get() = itemStack.name.copy()
+    fun getItemName(entry: BountyDataEntry): MutableText {
+        return getItem(entry).name.copy()
+    }
 
-    override fun verifyValidity(player: PlayerEntity): MutableText? {
-        val id = item.identifier
+    override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText? {
+        val id = getItem(entry).identifier
         if (id != Identifier(entry.content)) {
             return LiteralText("* '${entry.content}' is not a valid item!")
         }
         return null
     }
 
-    private fun getCurrentStacks(player: PlayerEntity): Map<ItemStack, Int> {
+    private fun getCurrentStacks(entry: BountyDataEntry, player: PlayerEntity): Map<ItemStack, Int> {
         return player.inventory.main.collect(entry.amount) {
             identifier.toString() == entry.content
         }
     }
 
-    override fun textSummary(isObj: Boolean, player: PlayerEntity): Text {
-        val progress = getProgress(player)
+    override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): Text {
+        val progress = getProgress(entry, player)
+        val itemName = getItemName(entry)
         return when (isObj) {
             true -> itemName.formatted(progress.color).append(progress.neededText.colored(Formatting.WHITE))
             false -> progress.givingText.append(itemName.colored(entry.rarity.color))
         }
     }
 
-    override fun textBoard(player: PlayerEntity): List<Text> {
-        return itemStack.getTooltip(player) { false }
+    override fun textBoard(entry: BountyDataEntry, player: PlayerEntity): List<Text> {
+        return getItemStack(entry).getTooltip(player) { false }
     }
 
-    override fun getProgress(player: PlayerEntity): Progress {
-        return Progress(getCurrentStacks(player)?.values?.sum() ?: 0, entry.amount)
+    override fun getProgress(entry: BountyDataEntry, player: PlayerEntity): Progress {
+        return Progress(getCurrentStacks(entry, player)?.values?.sum() ?: 0, entry.amount)
     }
 
-    override fun tryFinishObjective(player: PlayerEntity): Boolean {
-        val currStacks = getCurrentStacks(player)
+    override fun tryFinishObjective(entry: BountyDataEntry, player: PlayerEntity): Boolean {
+        val currStacks = getCurrentStacks(entry, player)
         if (currStacks.values.sum() >= entry.amount) {
             currStacks.forEach { (stack, toShrink) ->
                 stack.decrement(toShrink)
@@ -73,7 +78,8 @@ class ItemLogic(override val entry: BountyDataEntry) : IEntryLogic {
         return false
     }
 
-    override fun giveReward(player: PlayerEntity): Boolean {
+    override fun giveReward(entry: BountyDataEntry, player: PlayerEntity): Boolean {
+        val item = getItem(entry)
         val toGive = (0 until entry.amount).chunked(item.maxCount).map { it.size }
 
         for (amtToGive in toGive) {

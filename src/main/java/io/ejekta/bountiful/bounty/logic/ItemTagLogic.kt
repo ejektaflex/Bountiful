@@ -23,28 +23,28 @@ import net.minecraft.util.registry.Registry
 import kotlin.math.min
 
 
-class ItemTagLogic(override val entry: BountyDataEntry) : IEntryLogic {
+object ItemTagLogic : IEntryLogic {
 
-    private fun getTag() = ItemTags.getTagGroup().getTag(Identifier(entry.content))
+    private fun getTag(entry: BountyDataEntry) = ItemTags.getTagGroup().getTag(Identifier(entry.content))
 
-    fun getItems() = getTag()?.values() ?: listOf()
+    fun getItems(entry: BountyDataEntry) = getTag(entry)?.values() ?: listOf()
 
-    override fun verifyValidity(player: PlayerEntity): MutableText? {
-        if (getTag() == null) {
+    override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText? {
+        if (getTag(entry) == null) {
             return LiteralText("* '${entry.content}' is not a valid tag!")
         }
         return null
     }
 
-    private fun getCurrentStacks(player: PlayerEntity): Map<ItemStack, Int>? {
-        val validItems = getItems()
+    private fun getCurrentStacks(entry: BountyDataEntry, player: PlayerEntity): Map<ItemStack, Int>? {
+        val validItems = getItems(entry)
         return player.inventory.main.collect(entry.amount) {
             item in validItems
         }
     }
 
-    override fun textSummary(isObj: Boolean, player: PlayerEntity): Text {
-        val progress = getProgress(player)
+    override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): Text {
+        val progress = getProgress(entry, player)
         val title = if (entry.translation != null) TranslatableText(entry.translation) else LiteralText(entry.name ?: entry.content)
         return when (isObj) {
             true -> title.copy().formatted(progress.color).append(progress.neededText.colored(Formatting.WHITE))
@@ -52,7 +52,7 @@ class ItemTagLogic(override val entry: BountyDataEntry) : IEntryLogic {
         }
     }
 
-    override fun textBoard(player: PlayerEntity): List<Text> {
+    override fun textBoard(entry: BountyDataEntry, player: PlayerEntity): List<Text> {
         return listOf(
             if (entry.translation != null) {
                 textTranslate(entry.translation!!)
@@ -65,12 +65,12 @@ class ItemTagLogic(override val entry: BountyDataEntry) : IEntryLogic {
         )
     }
 
-    override fun getProgress(player: PlayerEntity): Progress {
-        return Progress(getCurrentStacks(player)?.values?.sum() ?: 0, entry.amount)
+    override fun getProgress(entry: BountyDataEntry, player: PlayerEntity): Progress {
+        return Progress(getCurrentStacks(entry, player)?.values?.sum() ?: 0, entry.amount)
     }
 
-    override fun tryFinishObjective(player: PlayerEntity): Boolean {
-        return getCurrentStacks(player)?.let {
+    override fun tryFinishObjective(entry: BountyDataEntry, player: PlayerEntity): Boolean {
+        return getCurrentStacks(entry, player)?.let {
             it.forEach { (stack, toShrink) ->
                 stack.decrement(toShrink)
             }
@@ -78,27 +78,6 @@ class ItemTagLogic(override val entry: BountyDataEntry) : IEntryLogic {
         } ?: false
     }
 
-    override fun giveReward(player: PlayerEntity): Boolean {
-        /*
-        val toGive = (0 until entry.amount).chunked(item.maxCount).map { it.size }
-
-        for (amtToGive in toGive) {
-            val stack = ItemStack(item, amtToGive).apply {
-                tag = entry.nbtData as NbtCompound?
-            }
-            // Try give directly to player, otherwise drop at feet
-            if (!player.giveItemStack(stack)) {
-                val stackEntity = ItemEntity(player.world, player.pos.x, player.pos.y, player.pos.z, stack).apply {
-                    setPickupDelay(0)
-                }
-                player.world.spawnEntity(stackEntity)
-            }
-        }
-
-        return true
-
-         */
-        return false
-    }
+    override fun giveReward(entry: BountyDataEntry, player: PlayerEntity) = false
 
 }

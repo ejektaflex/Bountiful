@@ -9,34 +9,31 @@ import net.minecraft.text.Text
 
 object NullLogic : IEntryLogic {
 
-    override val entry: BountyDataEntry
-        get() = BountyDataEntry.DUMMY
-
     private fun logicUsageError(): Exception {
         return Exception("Cannot interact with a null logic object!")
     }
 
-    override fun verifyValidity(player: PlayerEntity): MutableText {
+    override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText {
         throw logicUsageError()
     }
 
-    override fun textSummary(isObj: Boolean, player: PlayerEntity): Text {
+    override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): Text {
         throw logicUsageError()
     }
 
-    override fun textBoard(player: PlayerEntity): List<Text> {
+    override fun textBoard(entry: BountyDataEntry, player: PlayerEntity): List<Text> {
         throw logicUsageError()
     }
 
-    override fun getProgress(player: PlayerEntity): Progress {
+    override fun getProgress(entry: BountyDataEntry, player: PlayerEntity): Progress {
         throw logicUsageError()
     }
 
-    override fun tryFinishObjective(player: PlayerEntity): Boolean {
+    override fun tryFinishObjective(entry: BountyDataEntry, player: PlayerEntity): Boolean {
         throw logicUsageError()
     }
 
-    override fun giveReward(player: PlayerEntity): Boolean {
+    override fun giveReward(entry: BountyDataEntry, player: PlayerEntity): Boolean {
         throw logicUsageError()
     }
 

@@ -16,47 +16,36 @@ import net.minecraft.util.registry.Registry
 import net.minecraft.world.biome.Biome
 
 
-class BiomeLogic(override val entry: BountyDataEntry) : IEntryLogic {
+object BiomeLogic : IEntryLogic {
 
     val biomeRegistry: Registry<Biome>?
         get() = MinecraftClient.getInstance().world?.registryManager?.get(
             Registry.BIOME_KEY
         )
 
-    val biome: Biome?
-        get() = biomeRegistry?.get(Identifier(entry.content))
+    fun getBiome(entry: BountyDataEntry): Biome? {
+        return biomeRegistry?.get(Identifier(entry.content))
+    }
 
-    override fun verifyValidity(player: PlayerEntity): MutableText? = null
+    override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText? = null
 
-    override fun textSummary(isObj: Boolean, player: PlayerEntity): Text {
+    override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): Text {
         return textLiteral(entry.content)
     }
 
-    override fun setup(world: ServerWorld, pos: BlockPos) {
-        super.setup(world, pos)
+    override fun textBoard(entry: BountyDataEntry, player: PlayerEntity): List<Text> {
+        return listOf(getDescription(entry))
     }
 
-    private val description: Text
-        get() = entry.translation?.let {
-            textTranslate(it)
-        } ?: entry.name?.let {
-            textLiteral(it)
-        } ?: textLiteral(entry.content)
-
-    override fun textBoard(player: PlayerEntity): List<Text> {
-        return listOf(description)
-    }
-
-    override fun getProgress(player: PlayerEntity): Progress {
-
+    override fun getProgress(entry: BountyDataEntry, player: PlayerEntity): Progress {
         return Progress(
-            if (player.world.getBiome(player.blockPos) == biome) 1 else 0,
+            if (player.world.getBiome(player.blockPos) == getBiome(entry)) 1 else 0,
             1
         )
     }
 
-    override fun tryFinishObjective(player: PlayerEntity) = true
+    override fun tryFinishObjective(entry: BountyDataEntry, player: PlayerEntity) = true
 
-    override fun giveReward(player: PlayerEntity) = true
+    override fun giveReward(entry: BountyDataEntry, player: PlayerEntity) = true
 
 }

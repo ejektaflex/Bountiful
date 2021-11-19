@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.LiteralText
+import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.BlockPos
@@ -37,7 +38,7 @@ data class BountyDataEntry private constructor(
     }
 
     fun textBoard(player: PlayerEntity): List<Text> {
-        return logic.textBoard(player)
+        return logic.textBoard(this, player)
     }
 
     fun textSummary(data: BountyData, player: PlayerEntity, isObj: Boolean): Text {
@@ -45,10 +46,17 @@ data class BountyDataEntry private constructor(
             true -> LiteralText("???").formatted(Formatting.BOLD).append(
                 LiteralText("x$amount").formatted(Formatting.WHITE)
             )
-            false -> logic.textSummary(isObj, player)
+            false -> logic.textSummary(this, isObj, player)
         }
-
     }
+
+    fun giveReward(player: PlayerEntity) {
+        logic.giveReward(this, player)
+    }
+
+    fun tryFinishObjective(player: PlayerEntity) = logic.tryFinishObjective(this, player)
+
+    fun verifyValidity(player: PlayerEntity) = logic.verifyValidity(this, player)
 
     companion object {
 
@@ -72,7 +80,7 @@ data class BountyDataEntry private constructor(
                 type, content, amount, nbt, name, translation, isMystery, rarity, tracking
             ).apply {
                 this.worth = worth
-                type.logic(this).setup(world, pos)
+                type.logic(this).setup(this, world, pos)
             }
         }
 

@@ -36,7 +36,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(
                 dsl { itemStackIcon(ItemStack(Items.COMMAND_BLOCK), x, y) }
             }
             BountyType.ITEM -> {
-                val stack = ItemLogic(entry).itemStack.apply {
+                val stack = ItemLogic.getItemStack(entry).apply {
                     count = entry.amount
                 }
                 dsl { itemStackIcon(stack, x, y) }
@@ -44,12 +44,12 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(
             BountyType.ITEM_TAG -> {
                 val world = MinecraftClient.getInstance().world ?: return
                 val frameTime = (world.time / 30L).toInt()
-                val options = ItemTagLogic(entry).getItems().map { ItemStack(it) }.takeUnless { it.isEmpty() } ?: return
+                val options = ItemTagLogic.getItems(entry).map { ItemStack(it) }.takeUnless { it.isEmpty() } ?: return
                 val frame = frameTime % options.size
                 dsl { itemStack(options[frame], x, y) }
             }
             BountyType.ENTITY -> {
-                val entityType = EntityLogic(entry).entityType
+                val entityType = EntityLogic.getEntityType(entry)
 
                 if (entityType.spawnGroup != SpawnGroup.CREATURE && entityType.spawnGroup != SpawnGroup.MONSTER) {
                     return
