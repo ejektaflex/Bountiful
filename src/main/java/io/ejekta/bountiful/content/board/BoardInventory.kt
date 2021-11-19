@@ -21,6 +21,8 @@ class BoardInventory(
     var selectedIndex: Int? = null
         private set
 
+    fun selected(): ItemStack = getStack(selectedIndex ?: -1)
+
     fun select(index: Int) {
         selectedIndex = index
         setStack(-1, getStack(index))

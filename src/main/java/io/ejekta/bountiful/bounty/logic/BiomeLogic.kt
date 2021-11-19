@@ -5,9 +5,13 @@ import io.ejekta.kambrik.text.textLiteral
 import io.ejekta.kambrik.text.textTranslate
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.predicate.entity.LocationPredicate
+import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.registry.Registry
 import net.minecraft.world.biome.Biome
 
@@ -26,6 +30,10 @@ class BiomeLogic(override val entry: BountyDataEntry) : IEntryLogic {
 
     override fun textSummary(isObj: Boolean, player: PlayerEntity): Text {
         return textLiteral(entry.content)
+    }
+
+    override fun setup(world: ServerWorld, pos: BlockPos) {
+        super.setup(world, pos)
     }
 
     private val description: Text
@@ -49,13 +57,6 @@ class BiomeLogic(override val entry: BountyDataEntry) : IEntryLogic {
 
     override fun tryFinishObjective(player: PlayerEntity) = true
 
-    override fun giveReward(player: PlayerEntity): Boolean {
-        val server = player.server ?: return false
-        val replacedCmd = entry.content
-            .replace("%BOUNTY_AMOUNT%", entry.amount.toString())
-            .replace("%PLAYER_NAME%", player.entityName)
-            .replace("%PLAYER_POSITION%", "${player.pos.x} ${player.pos.y} ${player.pos.z}")
-        return server.commandManager.execute(server.commandSource, replacedCmd) > 0
-    }
+    override fun giveReward(player: PlayerEntity) = true
 
 }

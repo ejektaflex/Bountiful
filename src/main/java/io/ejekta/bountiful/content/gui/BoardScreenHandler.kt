@@ -52,28 +52,28 @@ class BoardScreenHandler @JvmOverloads constructor(
         val bCols = 7
 
         val bountySlotSize = 18
-        val adjustX = 0
+        val adjustX = 173
         val adjustY = 0
 
         // Bounties
         for (j in 0 until bRows) {
             for (k in 0 until bCols) {
                 // Welcome to jank! TODO do this in a better way for client<->server sync
-                addSlot(BoardBountySlot(inventory, k + j * bCols, 8 + k * bountySlotSize + adjustX + 50000, 18 + j * bountySlotSize + adjustY))
+                addSlot(BoardBountySlot(inventory, k + j * bCols, 8 + k * bountySlotSize + adjustX, 18 + j * bountySlotSize + adjustY))
             }
         }
 
         // Active Slot
-        addSlot(BoardBountySlot(inventory, -1, 216, 31))
+        addSlot(BoardBountySlot(inventory, -1, 216 + 500000, 31))
 
 
         // Decrees
         for (j in 0 until 3) {
-            addSlot(BoardDecreeSlot(boardInv, inventory.size() - 3 + j, 270 + (j * 18), 31))
+            addSlot(BoardDecreeSlot(boardInv, inventory.size() - 3 + j, 317, 18 + (j * 18)))
         }
 
         //The player inventory
-        makePlayerDefaultGrid(playerInventory, 180, 64)
+        makePlayerDefaultGrid(playerInventory, 181, 84)
 
     }
 }

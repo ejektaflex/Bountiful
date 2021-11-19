@@ -3,10 +3,13 @@ package io.ejekta.bountiful.bounty.logic
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.LiteralText
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
+import net.minecraft.util.math.BlockPos
 
 interface IEntryLogic {
 
@@ -24,6 +27,9 @@ interface IEntryLogic {
 
     fun verifyValidity(player: PlayerEntity): MutableText?
 
+    fun setup(world: ServerWorld, pos: BlockPos) {
+
+    }
 
     // ### Helpers ###
 

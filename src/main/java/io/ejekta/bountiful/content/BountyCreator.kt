@@ -9,9 +9,17 @@ import io.ejekta.bountiful.data.Pool
 import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.bountiful.util.randomSplit
 import io.ejekta.bountiful.util.weightedRandomDblBy
+import net.minecraft.server.world.ServerWorld
+import net.minecraft.util.math.BlockPos
 import kotlin.math.ceil
 
-class BountyCreator private constructor(private val decrees: Set<Decree>, private val rep: Int, private val startTime: Long = 0L) {
+class BountyCreator private constructor(
+    private val world: ServerWorld,
+    private val pos: BlockPos,
+    private val decrees: Set<Decree>,
+    private val rep: Int,
+    private val startTime: Long = 0L
+) {
 
     var data = BountyData()
 
@@ -53,7 +61,7 @@ class BountyCreator private constructor(private val decrees: Set<Decree>, privat
     }
 
     private fun genRewards(entries: List<PoolEntry>): List<BountyDataEntry> {
-        return entries.map { it.toEntry() }
+        return entries.map { it.toEntry(world, pos) }
     }
 
     private fun genRewardEntries(): List<PoolEntry> {
@@ -100,7 +108,7 @@ class BountyCreator private constructor(private val decrees: Set<Decree>, privat
     private fun genObjectives(worth: Double, rewardPools: List<PoolEntry>): List<BountyDataEntry> {
         // -30 = 150% / 1.5x needed, 30 = 50% / 0.5x needed
         // 1 - (rep / 60.0)
-        val objNeededMult = 1 - (rep / 75.0) // cap rep discount at 30/75, or 40%
+        val objNeededMult = getDiscount(rep)
         val worthNeeded = worth * objNeededMult
         val numObjectives = (1..2).random()
         val toReturn = mutableListOf<BountyDataEntry>()
@@ -122,7 +130,7 @@ class BountyCreator private constructor(private val decrees: Set<Decree>, privat
             }
 
             val picked = pickObjective(unpicked, w)
-            val entry = picked.toEntry(w)
+            val entry = picked.toEntry(world, pos, w)
 
             // Add time based on entry
             data.timeToComplete += (picked.timeMult * entry.worth).toLong() * 7
@@ -157,8 +165,13 @@ class BountyCreator private constructor(private val decrees: Set<Decree>, privat
 
     companion object {
 
-        fun create(decrees: Set<Decree>, rep: Int, startTime: Long = 0L): BountyData {
-            return BountyCreator(decrees, rep.coerceIn(-30..30), startTime).create()
+        // cap rep discount at 30/75, or 40%
+        fun getDiscount(rep: Int): Double {
+            return 1 - (rep / 75.0)
+        }
+
+        fun create(world: ServerWorld, pos: BlockPos, decrees: Set<Decree>, rep: Int, startTime: Long = 0L): BountyData {
+            return BountyCreator(world, pos, decrees, rep.coerceIn(-30..30), startTime).create()
         }
 
         private fun getObjectivePoolsFor(decrees: Set<Decree>): Set<Pool> {
