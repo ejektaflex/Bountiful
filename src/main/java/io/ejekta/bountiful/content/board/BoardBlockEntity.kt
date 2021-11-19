@@ -53,7 +53,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     private val finishSerializer = MapSerializer(String.serializer(), Int.serializer())
 
     val isPristine: Boolean
-        get() = finishMap.keys.isEmpty() && takenMask.keys.isEmpty()
+        get() = bounties.isEmpty && finishMap.keys.isEmpty() && takenMask.keys.isEmpty()
 
     // Calculated level, progress to next, point of next level
     private val levelData: Triple<Int, Int, Int>
@@ -133,7 +133,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     private fun randomlyUpdateBoard() {
-        val ourWorld = world ?: return
+        val ourWorld = world as? ServerWorld ?: return
         if (decrees.isEmpty) {
             return
         }
@@ -148,6 +148,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         }
 
         val commonBounty = BountyCreator.create(
+            ourWorld,
+            pos,
             getBoardDecrees(),
             levelData.first.coerceIn(-30..30),
             ourWorld.time

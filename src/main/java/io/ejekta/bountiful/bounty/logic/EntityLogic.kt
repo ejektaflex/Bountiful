@@ -8,7 +8,6 @@ import io.ejekta.kambrik.ext.identifier
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.Item
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.LiteralText
 import net.minecraft.text.MutableText
@@ -22,6 +21,12 @@ class EntityLogic(override val entry: BountyDataEntry) : IEntryLogic {
 
     val entityType: EntityType<*>
         get() = Registry.ENTITY_TYPE.get(Identifier(entry.content))
+
+    var entityKills: Int
+        get() = entry.tracking.getInt(entityKillsKey)
+        set(value) {
+            entry.tracking.putInt(entityKillsKey, value)
+        }
 
     override fun verifyValidity(player: PlayerEntity): MutableText? {
         val id = entityType.identifier
@@ -48,11 +53,11 @@ class EntityLogic(override val entry: BountyDataEntry) : IEntryLogic {
     }
 
     override fun getProgress(player: PlayerEntity): Progress {
-        return Progress(entry.extra, entry.amount)
+        return Progress(entityKills, entry.amount)
     }
 
     override fun tryFinishObjective(player: PlayerEntity): Boolean {
-        return entry.extra >= entry.amount
+        return entityKills >= entry.amount
     }
 
     override fun giveReward(player: PlayerEntity): Boolean {
@@ -60,6 +65,8 @@ class EntityLogic(override val entry: BountyDataEntry) : IEntryLogic {
     }
 
     companion object {
+
+        private const val entityKillsKey = "kills"
 
         fun incrementEntityBounties(playerEntity: ServerPlayerEntity, killedEntity: LivingEntity) {
             playerEntity.inventory.main.filter {
@@ -71,7 +78,10 @@ class EntityLogic(override val entry: BountyDataEntry) : IEntryLogic {
                     if (entityObjectives.isEmpty()) return@editIf false
                     for (obj in entityObjectives) {
                         if (obj.content == killedEntity.type.identifier.toString()) {
-                            obj.extra = (obj.extra + 1).coerceAtMost(obj.amount)
+                            obj.tracking.putInt(
+                                entityKillsKey,
+                                (obj.tracking.getInt(entityKillsKey) + 1).coerceAtMost(obj.amount)
+                            )
                             didWork = true
                         }
                     }

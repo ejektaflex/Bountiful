@@ -37,7 +37,7 @@
 
 		{
 			"type": "ENTITY",
-			"timeMult": 10.0,
+			"timeMult": 6.0,
 			"content": "minecraft:zombie",
 			"amount": {
 				"min": 1,
@@ -48,7 +48,7 @@
 
 		{
 			"type": "ENTITY",
-			"timeMult": 10.0,
+			"timeMult": 6.0,
 			"content": "minecraft:spider",
 			"amount": {
 				"min": 1,
@@ -59,7 +59,7 @@
 
 		{
 			"type": "ENTITY",
-			"timeMult": 10.0,
+			"timeMult": 7.0,
 			"content": "minecraft:creeper",
 			"amount": {
 				"min": 1,

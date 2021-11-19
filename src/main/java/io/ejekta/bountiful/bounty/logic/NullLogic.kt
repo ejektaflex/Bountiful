@@ -10,7 +10,7 @@ import net.minecraft.text.Text
 object NullLogic : IEntryLogic {
 
     override val entry: BountyDataEntry
-        get() = BountyDataEntry(BountyType.NULL, "NULL_ENTRY", 1)
+        get() = BountyDataEntry.DUMMY
 
     private fun logicUsageError(): Exception {
         return Exception("Cannot interact with a null logic object!")

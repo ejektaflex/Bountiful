@@ -14,8 +14,10 @@ import kotlinx.serialization.json.Json
 import net.minecraft.item.Item
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.StringNbtReader
+import net.minecraft.server.world.ServerWorld
 import net.minecraft.tag.ItemTags
 import net.minecraft.util.Identifier
+import net.minecraft.util.math.BlockPos
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.max
@@ -62,7 +64,7 @@ class PoolEntry private constructor() {
         }
     }
 
-    fun toEntry(worth: Double? = null): BountyDataEntry {
+    fun toEntry(world: ServerWorld, pos: BlockPos, worth: Double? = null): BountyDataEntry {
         val amt = amountAt(worth)
 
         val actualContent = if (type == BountyType.ITEM && content.startsWith("#")) {
@@ -82,18 +84,19 @@ class PoolEntry private constructor() {
             content
         }
 
-        return BountyDataEntry(
+        return BountyDataEntry.of(
+            world,
+            pos,
             type,
             actualContent,
             amountAt(worth),
+            amt * unitWorth,
             nbt,
             name,
             translation,
             isMystery = false,
             rarity = rarity
-        ).apply {
-            this.worth = amt * unitWorth
-        }
+        )
     }
 
     private fun amountAt(worth: Double? = null): Int {

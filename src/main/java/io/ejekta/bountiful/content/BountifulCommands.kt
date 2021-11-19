@@ -15,6 +15,7 @@ import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.command.*
 import io.ejekta.kambrik.ext.identifier
+import io.ejekta.kambrik.ext.math.toBlockPos
 import io.ejekta.kambrik.text.sendMessage
 import io.ejekta.kambrik.text.textLiteral
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
@@ -253,7 +254,13 @@ object BountifulCommands : CommandRegistrationCallback {
 
     private fun genBounty(rep: Int) = kambrikCommand<ServerCommandSource> {
         try {
-            val bd = BountyCreator.create(BountifulContent.Decrees.toSet(), rep, source.player.world.time)
+            val bd = BountyCreator.create(
+                source.world,
+                source.position.toBlockPos(),
+                BountifulContent.Decrees.toSet(),
+                rep,
+                source.player.world.time
+            )
             source.player.giveItemStack(BountyItem.create(bd))
         } catch (e: Exception) {
             e.printStackTrace()
@@ -309,7 +316,7 @@ object BountifulCommands : CommandRegistrationCallback {
         for (pool in BountifulContent.Pools) {
             for (poolEntry in pool) {
                 val dummy = BountyData()
-                val data = poolEntry.toEntry()
+                val data = poolEntry.toEntry(source.world, source.position.toBlockPos())
                 data.let {
                     when {
                         it.type.isObj -> dummy.objectives.add(it)

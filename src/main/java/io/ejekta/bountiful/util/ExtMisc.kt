@@ -5,7 +5,9 @@ import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.MinecraftClient
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.collection.DefaultedList
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import kotlin.random.Random
 
@@ -75,3 +77,32 @@ fun <T : Any> Map<T, Double>.weightedRandomDbl(): T {
     }
     return keys.last()
 }
+
+fun NbtCompound.putBlockPos(key: String, pos: BlockPos) {
+    val posNbt = NbtCompound().apply {
+        putInt("x", pos.x)
+        putInt("y", pos.y)
+        putInt("z", pos.z)
+    }
+    put(key, posNbt)
+}
+
+fun NbtCompound.getBlockPos(key: String): BlockPos {
+    val tag = getCompound(key)
+    return try {
+        BlockPos(
+            tag.getInt("x"),
+            tag.getInt("y"),
+            tag.getInt("z")
+        )
+    } catch (e: Exception) {
+        BlockPos.ORIGIN
+    }
+}
+
+
+
+
+
+
+
