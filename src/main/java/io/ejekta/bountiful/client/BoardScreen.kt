@@ -8,14 +8,17 @@ import io.ejekta.bountiful.client.widgets.BountyLongButton
 import io.ejekta.bountiful.content.BountyCreator
 import io.ejekta.kambrik.KambrikHandledScreen
 import io.ejekta.kambrik.gui.KSpriteGrid
+import io.ejekta.kambrik.gui.KWidget
 import io.ejekta.kambrik.gui.widgets.KListWidget
 import io.ejekta.kambrik.gui.widgets.KScrollbarVertical
+import io.ejekta.kambrik.gui.widgets.KSimpleWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
+import org.lwjgl.glfw.GLFW
 
 
 class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Text) :
@@ -24,12 +27,34 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
     val boardHandler: BoardScreenHandler
         get() = handler as BoardScreenHandler
 
+    var toggledOut: Boolean = true
+        set(value) {
+            field = value
+            sizeToSprite(bgSprite)
+            for (slot in handler.slots) {
+                //slot.y -= bgOffset
+            }
+        }
+
+    val bgSprite: KSpriteGrid.Sprite
+        get() = when(toggledOut) {
+            true -> BOARD_BG_BIG
+            false -> BOARD_BG_SMALL
+        }
+
+    val bgOffset: Int
+        get() = when(toggledOut) {
+            true -> 204
+            false -> 4
+        }
+
+
     init {
-        sizeToSprite(BOARD_BG)
+        sizeToSprite(bgSprite)
     }
 
     private val bgGui = kambrikGui {
-        sprite(BOARD_BG)
+        sprite(bgSprite)
     }
 
     private val buttons = (0 until 21).map { BountyLongButton(this, it) }
@@ -50,18 +75,39 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         attachScrollbar(scroller)
     }
 
+    /*
+    val toggleReactor = KSimpleWidget(10, 10).create {
+        onClickFunc = { _, _, button ->
+            println("Clicked! ${button} ${GLFW.GLFW_MOUSE_BUTTON_1}")
+            if (button == GLFW.GLFW_MOUSE_BUTTON_1) {
+                toggledOut = !toggledOut
+            }
+        }
+        onDrawFunc = {
+            area(this@create.width, this@create.height) {
+                rect(0xFF8888)
+            }
+        }
+    }
+
+     */
+
     val fgGui = kambrikGui {
         val levelData = BoardBlockEntity.levelProgress(boardHandler.totalDone)
         val percentDone = (levelData.second.toDouble() / levelData.third * 100).toInt()
 
+        //widget(toggleReactor)
+
         // Selection highlight on selected stack
-        if (!ItemStack.areEqual(boardHandler.inventory.selected(), ItemStack.EMPTY)) {
-            boardHandler.inventory.selectedIndex?.let {
-                offset(179 + ((it % 7) * 18), 16 + ((it / 7) * 18)) {
-                    sprite(BOARD_HIGHLIGHT)
-                    offset(2, 2) {
-                        area(16, 16) {
-                            rect(0x0, 0x88)
+        if (toggledOut) {
+            if (!ItemStack.areEqual(boardHandler.inventory.selected(), ItemStack.EMPTY)) {
+                boardHandler.inventory.selectedIndex?.let {
+                    offset(179 + ((it % 7) * 18), 16 + ((it / 7) * 18)) {
+                        sprite(BOARD_HIGHLIGHT)
+                        offset(2, 2) {
+                            area(16, 16) {
+                                rect(0x0, 0x88)
+                            }
                         }
                     }
                 }
@@ -69,7 +115,7 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         }
 
         // Reputation Bar (background, foreground, label)
-        offset(204, 75) {
+        offset(bgOffset, 75) {
             sprite(BAR_BG)
             sprite(BAR_FG, w = percentDone + 1)
             textCentered(-16, -2) {
@@ -106,16 +152,17 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
             add(title)
         }
 
-        widget(buttonList, 5, 18)
-
-        if (validButtons.isEmpty()) {
-            textCentered(85, 78) {
-                color = 0xEADAB5
-                addLiteral("It's Empty! Check back soon!")
+        // Button list and scroll bar
+        if (toggledOut) {
+            widget(buttonList, 5, 18)
+            if (validButtons.isEmpty()) {
+                textCentered(85, 78) {
+                    color = 0xEADAB5
+                    addLiteral("It's Empty! Check back soon!")
+                }
+            } else {
+                widget(scroller, 166, 18)
             }
-        } else {
-            // Scroll bar
-            widget(scroller, 166, 18)
         }
 
     }
@@ -137,9 +184,10 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         private val TEXTURE = Bountiful.id("textures/gui/container/new_new_board.png")
         private val WANDER = Identifier("textures/gui/container/villager2.png")
 
-        private val BOARD_SHEET = KSpriteGrid(TEXTURE, texWidth = 512, texHeight = 256)
-        private val BOARD_BG = BOARD_SHEET.Sprite(0f, 0f, 348, 165)
-        private val BOARD_HIGHLIGHT = BOARD_SHEET.Sprite(0f, 166f, 20, 20)
+        private val BOARD_SHEET = KSpriteGrid(TEXTURE, texWidth = 512, texHeight = 512)
+        private val BOARD_BG_BIG = BOARD_SHEET.Sprite(0f, 0f, 348, 165)
+        private val BOARD_BG_SMALL = BOARD_SHEET.Sprite(0f, 166f, 176, 165)
+        private val BOARD_HIGHLIGHT = BOARD_SHEET.Sprite(349f, 0f, 20, 20)
 
         private val WANDER_SHEET = KSpriteGrid(WANDER, texWidth = 512, texHeight = 256)
         private val BAR_BG = WANDER_SHEET.Sprite(0f, 186f, 102, 5)
