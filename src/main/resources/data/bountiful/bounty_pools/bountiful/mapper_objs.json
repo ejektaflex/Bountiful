@@ -23,6 +23,17 @@
         },
 
         {
+            "type": "ITEM",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:quartz",
+            "amount": {
+                "min": 2,
+                "max": 16
+            },
+            "unitWorth": 400
+        },
+
+        {
             "type": "ITEM_TAG",
             "content": "minecraft:candles",
             "translation": "bountiful.item_tag.any_candle",

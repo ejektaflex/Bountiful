@@ -33,6 +33,7 @@ object CommandLogic : IEntryLogic {
         val replacedCmd = entry.content
             .replace("%BOUNTY_AMOUNT%", entry.amount.toString())
             .replace("%PLAYER_NAME%", player.entityName)
+            .replace("%PLAYER_NAME_RANDOM", server.playerNames.random())
             .replace("%PLAYER_POSITION%", "${player.pos.x} ${player.pos.y} ${player.pos.z}")
         return server.commandManager.execute(server.commandSource, replacedCmd) > 0
     }
