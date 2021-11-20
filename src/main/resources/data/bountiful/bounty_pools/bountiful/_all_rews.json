@@ -33,8 +33,86 @@
 			},
 			"unitWorth": 800,
 			"weightMult": 0.2
-		}
+		},
 
+		{
+			"type": "ITEM",
+			"content": "minecraft:spyglass",
+			"rarity": "RARE",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 2500.0
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:totem_of_undying",
+			"rarity": "LEGENDARY",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 4000
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:arrow",
+			"amount": {
+				"min": 3,
+				"max": 9
+			},
+			"unitWorth": 100
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:glow_ink_sac",
+			"rarity": "EPIC",
+			"weightMult": 0.3,
+			"amount": {
+				"min": 1,
+				"max": 3
+			},
+			"unitWorth": 500
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:prismarine_crystals",
+			"rarity": "EPIC",
+			"weightMult": 0.15,
+			"amount": {
+				"min": 1,
+				"max": 6
+			},
+			"unitWorth": 2000
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:tnt_minecart",
+			"rarity": "EPIC",
+			"weightMult": 0.15,
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 6000
+		},
+
+		{
+			"type": "ITEM",
+			"content": "minecraft:axolotl_bucket",
+			"rarity": "LEGENDARY",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 4000
+		}
 
 
 	]

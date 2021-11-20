@@ -57,10 +57,13 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         // Selection highlight on selected stack
         if (!ItemStack.areEqual(boardHandler.inventory.selected(), ItemStack.EMPTY)) {
             boardHandler.inventory.selectedIndex?.let {
-                val row = it / 7
-                val col = it % 7
-                offset(179 + (col * 18), 16 + (row * 18)) {
+                offset(179 + ((it % 7) * 18), 16 + ((it / 7) * 18)) {
                     sprite(BOARD_HIGHLIGHT)
+                    offset(2, 2) {
+                        area(16, 16) {
+                            rect(0x0, 0x88)
+                        }
+                    }
                 }
             }
         }
