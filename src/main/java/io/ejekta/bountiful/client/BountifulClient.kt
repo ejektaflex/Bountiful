@@ -7,20 +7,11 @@ import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.messages.ClipboardCopy
 import io.ejekta.bountiful.mixin.ModelPredicateProviderRegistrar
 import io.ejekta.kambrik.Kambrik
-import io.ejekta.kambrik.gui.screens.DecreeAnalyzerScreen
-import io.ejekta.kambrik.gui.screens.RegistryPickerScreen
-import io.ejekta.kambrik.gui.screens.ToolkitScreen
-import kotlinx.serialization.InternalSerializationApi
 import net.fabricmc.api.ClientModInitializer
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
-import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
-import org.lwjgl.glfw.GLFW
 
 class BountifulClient : ClientModInitializer {
 

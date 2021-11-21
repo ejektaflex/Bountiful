@@ -8,17 +8,12 @@ import io.ejekta.bountiful.client.widgets.BountyLongButton
 import io.ejekta.bountiful.content.BountyCreator
 import io.ejekta.kambrik.KambrikHandledScreen
 import io.ejekta.kambrik.gui.KSpriteGrid
-import io.ejekta.kambrik.gui.KWidget
-import io.ejekta.kambrik.gui.widgets.KListWidget
-import io.ejekta.kambrik.gui.widgets.KScrollbarVertical
-import io.ejekta.kambrik.gui.widgets.KSimpleWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
-import org.lwjgl.glfw.GLFW
 
 
 class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Text) :
@@ -62,35 +57,6 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
     private val validButtons: List<BountyLongButton>
         get() = buttons.filter { it.getBountyData().objectives.isNotEmpty() }
 
-    private val scroller = KScrollbarVertical(140, SLIDER, 0x0)
-
-    private val buttonList = object : KListWidget<BountyLongButton>(
-        { validButtons }, 160, 20, 7, Orientation.VERTICAL, Mode.SINGLE,
-        { listWidget, item, selected ->
-            widget(item)
-        }
-    ) {
-        override fun canClickThrough() = true
-    }.apply {
-        attachScrollbar(scroller)
-    }
-
-    /*
-    val toggleReactor = KSimpleWidget(10, 10).create {
-        onClickFunc = { _, _, button ->
-            println("Clicked! ${button} ${GLFW.GLFW_MOUSE_BUTTON_1}")
-            if (button == GLFW.GLFW_MOUSE_BUTTON_1) {
-                toggledOut = !toggledOut
-            }
-        }
-        onDrawFunc = {
-            area(this@create.width, this@create.height) {
-                rect(0xFF8888)
-            }
-        }
-    }
-
-     */
 
     val fgGui = kambrikGui {
         val levelData = BoardBlockEntity.levelProgress(boardHandler.totalDone)
@@ -150,19 +116,6 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         textCentered(titleX - 53, titleY + 1) {
             color = 0xEADAB5
             add(title)
-        }
-
-        // Button list and scroll bar
-        if (toggledOut) {
-            widget(buttonList, 5, 18)
-            if (validButtons.isEmpty()) {
-                textCentered(85, 78) {
-                    color = 0xEADAB5
-                    addLiteral("It's Empty! Check back soon!")
-                }
-            } else {
-                widget(scroller, 166, 18)
-            }
         }
 
     }

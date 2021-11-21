@@ -11,7 +11,7 @@ import io.ejekta.bountiful.content.messages.SelectBounty
 import io.ejekta.kambrik.ext.fapi.textRenderer
 import io.ejekta.kambrik.gui.KSpriteGrid
 import io.ejekta.kambrik.gui.KGuiDsl
-import io.ejekta.kambrik.gui.KWidget
+import io.ejekta.kambrik.gui.reactor.MReactor
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.EntityType
@@ -21,7 +21,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.util.Identifier
 
-class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget(160, 20) {
+class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : MReactor(160, 20) {
 
     fun getBountyData(): BountyData {
         return BountyData[parent.boardHandler.inventory.getStack(bountyIndex)]
