@@ -50,33 +50,6 @@ class BountifulClient : ClientModInitializer {
 
         ScreenRegistry.register(BountifulContent.BOARD_SCREEN_HANDLER, ::BoardScreen)
 
-        Kambrik.Input.registerKeyboardBinding(GLFW.GLFW_KEY_U, "Registry Picker", "Kambrik Misc") {
-            onDown {
-                println("Opening screen!")
-                MinecraftClient.getInstance().setScreen(
-                    RegistryPickerScreen(Registry.BLOCK_ENTITY_TYPE)
-                )
-            }
-        }
-
-        Kambrik.Input.registerKeyboardBinding(GLFW.GLFW_KEY_Y, "Decree Analyzer", "Kambrik Misc") {
-            onDown {
-                println("Opening screen!")
-                MinecraftClient.getInstance().setScreen(
-                    DecreeAnalyzerScreen(BountifulContent.Decrees.random())
-                )
-            }
-        }
-
-        Kambrik.Input.registerKeyboardBinding(GLFW.GLFW_KEY_G, "Toolkit", "Kambrik Misc") {
-            onDown {
-                println("Opening screen!")
-                MinecraftClient.getInstance().setScreen(
-                    ToolkitScreen()
-                )
-            }
-        }
-
     }
 
 }
