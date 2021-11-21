@@ -2,24 +2,24 @@ package io.ejekta.kambrik
 
 import io.ejekta.kambrik.gui.KGuiDsl
 import io.ejekta.kambrik.gui.KRect
-import io.ejekta.kambrik.gui.KWidget
+import io.ejekta.kambrik.gui.reactor.MReactor
 import net.minecraft.client.gui.Element
 import net.minecraft.client.util.math.MatrixStack
 
 interface KambrikScreenCommon : Element {
-    val boundsStack: MutableList<Pair<KWidget, KRect>>
+    val boundsStack: MutableList<Pair<MReactor, KRect>>
     val areaClickStack: MutableList<Pair<() -> Unit, KRect>>
     val modalStack: MutableList<KGuiDsl.() -> Unit>
     fun onDrawBackground(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float)
     fun onDrawForeground(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float)
 
-    fun cycleDrawnWidgets(func: (widget: KWidget, rect: KRect) -> Unit) {
+    fun cycleDrawnWidgets(func: (widget: MReactor, rect: KRect) -> Unit) {
         for (bounds in boundsStack) {
             func(bounds.first, bounds.second)
         }
     }
 
-    fun cycleDrawnWidgetsInBounds(mouseX: Double, mouseY: Double, func: (widget: KWidget, rect: KRect, mX: Int, mY: Int) -> Unit) {
+    fun cycleDrawnWidgetsInBounds(mouseX: Double, mouseY: Double, func: (widget: MReactor, rect: KRect, mX: Int, mY: Int) -> Unit) {
         for (bounds in boundsStack) {
             if (bounds.second.isInside(mouseX.toInt(), mouseY.toInt())) {
                 func(bounds.first, bounds.second, mouseX.toInt(), mouseY.toInt())

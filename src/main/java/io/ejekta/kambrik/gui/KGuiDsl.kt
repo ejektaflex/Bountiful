@@ -2,6 +2,8 @@ package io.ejekta.kambrik.gui
 
 import io.ejekta.kambrik.ext.fapi.itemRenderer
 import io.ejekta.kambrik.ext.fapi.textRenderer
+import io.ejekta.kambrik.gui.reactor.EventReactor
+import io.ejekta.kambrik.gui.reactor.MReactor
 import io.ejekta.kambrik.text.KambrikTextBuilder
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.MinecraftClient
@@ -156,21 +158,23 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
         immediate.draw()
     }
 
-    fun sprite(sprite: KSpriteGrid.Sprite, x: Int = 0, y: Int = 0, w: Int = sprite.width, h: Int = sprite.height) {
+    fun sprite(sprite: KSpriteGrid.Sprite, w: Int = sprite.width, h: Int = sprite.height, func: (AreaDsl.() -> Unit)? = null) {
         sprite.draw(
             ctx.screen,
             matrices,
-            ctx.absX(x),
-            ctx.absY(y),
+            ctx.absX(),
+            ctx.absY(),
             w,
             h
         )
+        func?.let {
+            area(w, h, it)
+        }
     }
 
-    fun spriteCentered(sprite: KSpriteGrid.Sprite, func: KGuiDsl.() -> Unit) {
+    fun spriteCenteredInScreen(sprite: KSpriteGrid.Sprite, func: AreaDsl.() -> Unit) {
         offset(ctx.screen.width / 2 - sprite.width / 2, ctx.screen.height / 2 - sprite.height / 2) {
             sprite(sprite)
-            apply(func)
         }
     }
 
@@ -197,15 +201,6 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
     fun widget(kWidget: KWidget, relX: Int = 0, relY: Int = 0) {
         offset(relX, relY) {
             kWidget.onDraw(this)
-            val boundsRect = KRect(
-                ctx.absX(), ctx.absY(), kWidget.width, kWidget.height
-            )
-            if (boundsRect.isInside(mouseX, mouseY)) {
-                // Run hover event
-                kWidget.onHover(mouseX - boundsRect.x, mouseY - boundsRect.y)
-            }
-            // Add to stack for later event handling
-            ctx.logic.boundsStack.add(0, kWidget to boundsRect)
         }
     }
 
@@ -216,10 +211,6 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
     fun isHovered(startX: Int, startY: Int, w: Int, h: Int): Boolean {
         return mouseX >= ctx.absX(startX) && mouseX <= ctx.absX(startX + w)
                 && mouseY >= ctx.absY(startY) && mouseY <= ctx.absY(startY + h)
-    }
-
-    fun isHovered(widget: KWidget): Boolean {
-        return isHovered(widget.width, widget.height)
     }
 
     fun area(w: Int, h: Int, func: AreaDsl.() -> Unit) {
@@ -240,7 +231,13 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
 
     inner class AreaDsl(var w: Int, var h: Int) {
 
+        val dsl: KGuiDsl
+            get() = this@KGuiDsl
+
         operator fun invoke(dsl: AreaDsl.() -> Unit) = apply(dsl)
+
+        val isHovered: Boolean
+            get() = isHovered(w, h)
 
         internal fun adjusted(newW: Int, newH: Int, func: AreaDsl.() -> Unit) {
             val oldW = w
@@ -252,6 +249,16 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
             h = oldH
         }
 
+        fun reactWith(mReactor: MReactor) {
+            val boundsRect = KRect(ctx.absX(), ctx.absY(), w, h)
+            // Run hover event if hovering
+            if (boundsRect.isInside(mouseX, mouseY)) {
+                mReactor.onHover(mouseX - boundsRect.x, mouseY - boundsRect.y)
+            }
+            // Add to stack for later event handling
+            ctx.logic.boundsStack.add(0, mReactor to boundsRect)
+        }
+
         fun rect(color: Int, alpha: Int = 0xFF, func: KGuiDsl.() -> Unit = {}) {
             rect(w, h, color, alpha, func)
         }
@@ -259,9 +266,6 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
         fun onHover(func: KGuiDsl.() -> Unit) {
             onHover(w, h, func)
         }
-
-        val isHovered: Boolean
-            get() = isHovered(w, h)
 
         fun textCentered(y: Int, text: Text) {
             textCentered(w / 2, y, text)
