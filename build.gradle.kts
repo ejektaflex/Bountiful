@@ -7,9 +7,29 @@ plugins {
 	id("fabric-loom") version "0.10-SNAPSHOT"
 }
 
-java {
-	sourceCompatibility = JavaVersion.VERSION_16
-	targetCompatibility = JavaVersion.VERSION_16
+object Versions {
+	const val Minecraft = "1.18-pre2"
+	object Jvm {
+		val Java = JavaVersion.VERSION_17
+		const val Kotlin = "1.6.0"
+		const val TargetKotlin = "17"
+	}
+	object Fabric {
+		const val Yarn = "1.18-pre2+build.1"
+		const val Loader = "0.12.5"
+		const val Api = "0.42.4+1.18"
+	}
+	object Mod {
+		const val Group = "io.ejekta"
+		const val ID = "bountiful"
+		const val Version = "2.0.1"
+	}
+	object Env {
+		const val Kambrik = "3.+"
+		const val FLK = "1.6.5+kotlin.1.5.31"
+		const val ClothConfig = "6.0.42"
+		const val ModMenu = "2.0.6"
+	}
 }
 
 val modId: String by project
