@@ -11,7 +11,8 @@ import io.ejekta.bountiful.content.messages.SelectBounty
 import io.ejekta.kambrik.ext.fapi.textRenderer
 import io.ejekta.kambrik.gui.KSpriteGrid
 import io.ejekta.kambrik.gui.KGuiDsl
-import io.ejekta.kambrik.gui.reactor.MReactor
+import io.ejekta.kambrik.gui.KWidget
+import io.ejekta.kambrik.gui.reactor.MouseReactor
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.EntityType
@@ -21,10 +22,20 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.util.Identifier
 
-class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : MReactor(160, 20) {
+class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget {
+
+    override val width: Int = 160
+    override val height: Int = 20
 
     fun getBountyData(): BountyData {
         return BountyData[parent.boardHandler.inventory.getStack(bountyIndex)]
+    }
+
+    val reactor = MouseReactor().apply {
+        onClickDown = { relX, relY, button ->
+            parent.boardHandler.inventory.select(bountyIndex)
+            SelectBounty(bountyIndex).sendToServer()
+        }
     }
 
     private fun renderEntry(dsl: KGuiDsl, entry: BountyDataEntry, x: Int, y: Int, isReward: Boolean = false) {
@@ -85,39 +96,37 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : MReactor
         return ItemStack.areEqual(parent.boardHandler.inventory.getStack(-1), parent.boardHandler.inventory.getStack(bountyIndex))
     }
 
-    override fun onDraw(dsl: KGuiDsl): KGuiDsl = dsl {
-        // Draw button background
-        sprite(DEFAULT, w = DEFAULT.width - 42)
-        sprite(CAP, DEFAULT.width - 42)
+    override fun onDraw(area: KGuiDsl.AreaDsl) {
+        area.reactWith(reactor)
+        area.dsl {
+            // Draw button background
+            sprite(DEFAULT, w = DEFAULT.width - 42)
+            sprite(CAP, DEFAULT.width - 42)
 
-        area(width, height) {
-            if (isSelected()) {
-                rect(0x41261b, 0x96)
-            } else {
-                rect(0xb86f50, 0x48)
-            }
-            onHover {
-                if (!isSelected()) {
-                    rect(0xFFFFFF, 0x33)
+            area(width, height) {
+                if (isSelected()) {
+                    rect(0x41261b, 0x96)
+                } else {
+                    rect(0xb86f50, 0x48)
+                }
+                onHover {
+                    if (!isSelected()) {
+                        rect(0xFFFFFF, 0x33)
+                    }
                 }
             }
-        }
 
-        val data = getBountyData()
+            val data = getBountyData()
 
-        // Render objectives
-        for (i in data.objectives.indices) {
-            renderEntry(this, data.objectives[i],  i * 20 + 1, 1)
+            // Render objectives
+            for (i in data.objectives.indices) {
+                renderEntry(this, data.objectives[i], i * 20 + 1, 1)
+            }
+            // Render rewards
+            for (i in data.rewards.indices) {
+                renderEntry(this, data.rewards[i], width - (20 * (i + 1)), 1, isReward = true)
+            }
         }
-        // Render rewards
-        for (i in data.rewards.indices) {
-            renderEntry(this, data.rewards[i], width - (20 * (i + 1)), 1, isReward = true)
-        }
-    }
-
-    override fun onClickDown(relX: Int, relY: Int, button: Int) {
-        parent.boardHandler.inventory.select(bountyIndex)
-        SelectBounty(bountyIndex).sendToServer()
     }
 
     companion object {

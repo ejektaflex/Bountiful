@@ -2,24 +2,24 @@ package io.ejekta.kambrik
 
 import io.ejekta.kambrik.gui.KGuiDsl
 import io.ejekta.kambrik.gui.KRect
-import io.ejekta.kambrik.gui.reactor.MReactor
+import io.ejekta.kambrik.gui.reactor.MouseReactor
 import net.minecraft.client.gui.Element
 import net.minecraft.client.util.math.MatrixStack
 
 interface KambrikScreenCommon : Element {
-    val boundsStack: MutableList<Pair<MReactor, KRect>>
+    val boundsStack: MutableList<Pair<MouseReactor, KRect>>
     val areaClickStack: MutableList<Pair<() -> Unit, KRect>>
     val modalStack: MutableList<KGuiDsl.() -> Unit>
     fun onDrawBackground(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float)
     fun onDrawForeground(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float)
 
-    fun cycleDrawnWidgets(func: (widget: MReactor, rect: KRect) -> Unit) {
+    fun cycleDrawnWidgets(func: (widget: MouseReactor, rect: KRect) -> Unit) {
         for (bounds in boundsStack) {
             func(bounds.first, bounds.second)
         }
     }
 
-    fun cycleDrawnWidgetsInBounds(mouseX: Double, mouseY: Double, func: (widget: MReactor, rect: KRect, mX: Int, mY: Int) -> Unit) {
+    fun cycleDrawnWidgetsInBounds(mouseX: Double, mouseY: Double, func: (widget: MouseReactor, rect: KRect, mX: Int, mY: Int) -> Unit) {
         for (bounds in boundsStack) {
             if (bounds.second.isInside(mouseX.toInt(), mouseY.toInt())) {
                 func(bounds.first, bounds.second, mouseX.toInt(), mouseY.toInt())
@@ -39,7 +39,7 @@ interface KambrikScreenCommon : Element {
 
                 widget.doClickDown(mouseX.toInt() - rect.x, mouseY.toInt() - rect.y, button)
 
-                if (!widget.canClickThrough()) {
+                if (!widget.canPassThrough()) {
                     break // If we cannot continue down the bounds stack because there's no clickthrough, return
                 }
             }

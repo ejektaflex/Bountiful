@@ -1,11 +1,13 @@
 package io.ejekta.kambrik.gui.reactor
 
-open class MReactor(
+open class MouseReactor(
     defaultCanPass: Boolean = false,
 ) : EventReactor(defaultCanPass) {
 
     var isHovered: Boolean = false
         private set
+
+    operator fun invoke(func: MouseReactor.() -> Unit) = apply(func)
 
     open var dragPos = 0 to 0
 
@@ -21,25 +23,14 @@ open class MReactor(
     var isDragging: Boolean = false
         private set
 
-    /**
-     * Whether widgets behind this widget can be clicked on.
-     */
-    open fun canClickThrough(): Boolean {
-        return false
-    }
+    var canDragStart: () -> Boolean = { true }
 
-    open fun canDragStart(): Boolean {
-        return true
-    }
-
-    open fun canDragStop(): Boolean {
-        return true
-    }
+    var canDragStop: () -> Boolean = { true }
 
     /**
      * A callback that fires when we start dragging this widget.
      */
-    open fun onDragStart(relX: Int, relY: Int) {
+    var onDragStart: (relX: Int, relY: Int) -> Unit = { _, _ ->
         // No-op
     }
 
@@ -47,7 +38,7 @@ open class MReactor(
      * A callback that fires while the widget is being dragged.
      * Unlike onMouseMoved, this fires even when not hovering the widget.
      */
-    open fun onDragging(relX: Int, relY: Int) {
+    var onDragging: (relX: Int, relY: Int) -> Unit = { _, _, ->
         // No-op
     }
 
@@ -55,21 +46,21 @@ open class MReactor(
      * A callback that fires when we stop dragging this widget.
      * Note: Drag end does not always occur inside the widget bounds!
      */
-    open fun onDragEnd(relX: Int, relY: Int) {
+    var onDragEnd: (relX: Int, relY: Int) -> Unit = { _, _ ->
         // No-op
     }
 
     /**
      * A callback that fires when the widget is clicked on.
      */
-    open fun onClickDown(relX: Int, relY: Int, button: Int) {
+    var onClickDown: (relX: Int, relY: Int, button: Int) -> Unit = { _, _, _ ->
         // No-op
     }
 
     /**
      * A callback that fires when the mouse is released over the widget.
      */
-    open fun onClickUp(relX: Int, relY: Int, button: Int) {
+    var onClickUp: (relX: Int, relY: Int, button: Int) -> Unit = { _, _, _ ->
         // No-op
     }
 
@@ -77,18 +68,18 @@ open class MReactor(
      * A callback that fires when the mouse is hovering over the widget.
      * Note: To draw while hovering, use `isHovered` inside the onDraw GUI DSL instead.
      */
-    open fun onHover(relX: Int, relY: Int) {
+    var onHover: (relX: Int, relY: Int) -> Unit = { _, _ ->
         // No-op
     }
 
     /**
      * A callback that fires when the mouse moves while hovering the widget.
      */
-    open fun onMouseMoved(relX: Int, relY: Int) {
+    var onMouseMoved: (relX: Int, relY: Int) -> Unit = { _, _ ->
         // No-op
     }
 
-    open fun onMouseScrolled(relX: Int, relY: Int, amount: Double) {
+    var onMouseScrolled: (relX: Int, relY: Int, amount: Double) -> Unit = { _, _, _ ->
         // No-op
     }
 
