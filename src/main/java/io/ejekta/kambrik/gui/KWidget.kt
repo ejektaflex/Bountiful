@@ -6,15 +6,22 @@ interface KWidget {
 
     val height: Int
 
+    fun doDraw(dsl: KGuiDsl) {
+        dsl {
+            area(width, height) {
+                onDraw(this)
+            }
+        }
+    }
+
     /**
      * A callback that allows the widget to draw to the screen.
      */
-    fun onDraw(dsl: KGuiDsl): KGuiDsl {
+    fun onDraw(area: KGuiDsl.AreaDsl) {
         /* No-op
         return dsl {
             ...
         }
          */
-        return dsl
     }
 }

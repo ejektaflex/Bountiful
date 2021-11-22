@@ -8,6 +8,8 @@ import io.ejekta.bountiful.client.widgets.BountyLongButton
 import io.ejekta.bountiful.content.BountyCreator
 import io.ejekta.kambrik.KambrikHandledScreen
 import io.ejekta.kambrik.gui.KSpriteGrid
+import io.ejekta.kambrik.gui.widgets.KListWidget
+import io.ejekta.kambrik.gui.widgets.KScrollbarVertical
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack
@@ -57,12 +59,21 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
     private val validButtons: List<BountyLongButton>
         get() = buttons.filter { it.getBountyData().objectives.isNotEmpty() }
 
+    private val scroller = KScrollbarVertical(140, SLIDER, 0x0)
+
+    private val buttonList = KListWidget(
+        { validButtons }, 160, 20, 7, KListWidget.Orientation.VERTICAL, KListWidget.Mode.SINGLE,
+        { listWidget, item, selected ->
+            widget(item)
+        }
+    ).apply {
+        reactor.canPassThrough = { true }
+        attachScrollbar(scroller)
+    }
 
     val fgGui = kambrikGui {
         val levelData = BoardBlockEntity.levelProgress(boardHandler.totalDone)
         val percentDone = (levelData.second.toDouble() / levelData.third * 100).toInt()
-
-        //widget(toggleReactor)
 
         // Selection highlight on selected stack
         if (toggledOut) {
@@ -116,6 +127,19 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         textCentered(titleX - 53, titleY + 1) {
             color = 0xEADAB5
             add(title)
+        }
+
+        // Button list and scroll bar
+        if (toggledOut) {
+            widget(buttonList, 5, 18)
+            if (validButtons.isEmpty()) {
+                textCentered(85, 78) {
+                    color = 0xEADAB5
+                    addLiteral("It's Empty! Check back soon!")
+                }
+            } else {
+                widget(scroller, 166, 18)
+            }
         }
 
     }

@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem
 import io.ejekta.kambrik.gui.KSpriteGrid
 import io.ejekta.kambrik.gui.KGui
 import io.ejekta.kambrik.gui.KRect
-import io.ejekta.kambrik.gui.reactor.MReactor
+import io.ejekta.kambrik.gui.reactor.MouseReactor
 import io.ejekta.kambrik.gui.KGuiDsl
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.math.MatrixStack
@@ -18,7 +18,7 @@ abstract class KambrikHandledScreen<SH : ScreenHandler>(
     title: Text
 ) : HandledScreen<SH>(handler, inventory, title), KambrikScreenCommon {
 
-    override val boundsStack = mutableListOf<Pair<MReactor, KRect>>()
+    override val boundsStack = mutableListOf<Pair<MouseReactor, KRect>>()
     override val areaClickStack = mutableListOf<Pair<() -> Unit, KRect>>()
     override val modalStack = mutableListOf<KGuiDsl.() -> Unit>()
 
