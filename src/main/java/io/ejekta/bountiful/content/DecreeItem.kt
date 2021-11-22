@@ -45,8 +45,8 @@ class DecreeItem : Item(
             return ItemStack(BountifulContent.DECREE_ITEM).apply {
                 DecreeData[this] = data ?: DecreeData(
                     mutableListOf(
-                        BountifulContent.Decrees.randomOrNull()?.id ?: null
-                    ).filterNotNull().toMutableList()
+                        BountifulContent.Decrees.random().id
+                    )
                 )
             }
         }

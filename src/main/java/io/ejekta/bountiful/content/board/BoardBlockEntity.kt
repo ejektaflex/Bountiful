@@ -138,8 +138,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             return
         }
 
-        println("Rand $pos")
-
         val slotToAddTo = BountyInventory.bountySlots.random()
 
         // ~42% to remove none, ~28% to remove 1, ~28% to remove 2
@@ -227,7 +225,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     @Suppress("CAST_NEVER_SUCCEEDS")
-    override fun writeNbt(base: NbtCompound) {
+    override fun writeNbt(base: NbtCompound): NbtCompound? {
         super.writeNbt(base)
 
 
@@ -247,6 +245,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
         base.put("decree_inv", decreeList)
         base.put("bounty_inv", bountyList)
+
+        return base
     }
 
     companion object {
