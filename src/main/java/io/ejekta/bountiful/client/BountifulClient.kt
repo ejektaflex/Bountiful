@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack
 
 class BountifulClient : ClientModInitializer {
 
-    @InternalSerializationApi
     override fun onInitializeClient() {
         println("Init client for Bountiful")
 

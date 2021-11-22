@@ -17,7 +17,7 @@ object Versions {
 	object Fabric {
 		const val Yarn = "1.17.1+build.64"
 		const val Loader = "0.12.5"
-		const val Api = "0.42.4+1.18"
+		const val Api = "0.42.1+1.17"
 	}
 	object Mod {
 		const val Group = "io.ejekta"
