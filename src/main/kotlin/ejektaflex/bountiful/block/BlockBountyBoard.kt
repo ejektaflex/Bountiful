@@ -26,6 +26,13 @@ class BlockBountyBoard : BlockTileEntity<TileEntityBountyBoard>(Material.WOOD, "
             -1f
         }
         setHardness(hardToSet)
+        
+        val resistToSet = if (Bountiful.config.bountyBoardBreakable) {
+            0f
+        } else {
+            6000000f
+        }
+        setResistance(resistToSet)
     }
 
     override val tileEntityClass: Class<TileEntityBountyBoard>
