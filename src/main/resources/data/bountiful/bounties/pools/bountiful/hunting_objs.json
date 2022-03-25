@@ -68,7 +68,7 @@
     },
     {
       "type": "entity",
-      "content": "minecraft:zombie_pigman",
+      "content": "minecraft:zombified_piglin",
       "amountRange": {
         "min": 1,
         "max": 4
