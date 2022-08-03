@@ -7,7 +7,6 @@ import io.ejekta.kambrik.text.textTranslate
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
-import net.minecraft.text.LiteralText
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
@@ -57,9 +56,9 @@ sealed interface IEntryLogic {
 
 
     val Pair<Int, Int>.needed
-        get() = LiteralText(" ($first/$second)")
+        get() = Text.literal(" ($first/$second)")
 
     val Pair<Int, Int>.giving
-        get() = LiteralText("${second}x ")
+        get() = Text.literal("${second}x ")
 
 }

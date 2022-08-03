@@ -12,11 +12,8 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.tag.ItemTags
-import net.minecraft.tag.Tag
-import net.minecraft.text.LiteralText
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
-import net.minecraft.text.TranslatableText
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
@@ -31,7 +28,7 @@ object ItemTagLogic : IEntryLogic {
 
     override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText? {
         if (getTag(entry) == null) {
-            return LiteralText("* '${entry.content}' is not a valid tag!")
+            return Text.literal("* '${entry.content}' is not a valid tag!")
         }
         return null
     }
@@ -45,7 +42,7 @@ object ItemTagLogic : IEntryLogic {
 
     override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): Text {
         val progress = getProgress(entry, player)
-        val title = if (entry.translation != null) TranslatableText(entry.translation) else LiteralText(entry.name ?: entry.content)
+        val title = if (entry.translation != null) Text.translatable(entry.translation) else Text.literal(entry.name ?: entry.content)
         return when (isObj) {
             true -> title.copy().formatted(progress.color).append(progress.neededText.colored(Formatting.WHITE))
             false -> progress.givingText.append(title.colored(entry.rarity.color))

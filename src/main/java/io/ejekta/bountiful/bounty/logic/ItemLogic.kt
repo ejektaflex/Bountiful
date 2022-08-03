@@ -9,10 +9,8 @@ import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.text.LiteralText
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
-import net.minecraft.text.TranslatableText
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
@@ -39,7 +37,7 @@ object ItemLogic : IEntryLogic {
     override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText? {
         val id = getItem(entry).identifier
         if (id != Identifier(entry.content)) {
-            return LiteralText("* '${entry.content}' is not a valid item!")
+            return Text.literal("* '${entry.content}' is not a valid item!")
         }
         return null
     }
@@ -64,7 +62,7 @@ object ItemLogic : IEntryLogic {
     }
 
     override fun getProgress(entry: BountyDataEntry, player: PlayerEntity): Progress {
-        return Progress(getCurrentStacks(entry, player)?.values?.sum() ?: 0, entry.amount)
+        return Progress(getCurrentStacks(entry, player).values.sum() ?: 0, entry.amount)
     }
 
     override fun tryFinishObjective(entry: BountyDataEntry, player: PlayerEntity): Boolean {

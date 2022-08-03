@@ -184,7 +184,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     override fun getDisplayName(): Text {
-        return TranslatableText(cachedState.block.translationKey)
+        return Text.translatable(cachedState.block.translationKey)
     }
 
     override fun writeScreenOpeningData(serverPlayerEntity: ServerPlayerEntity, packetByteBuf: PacketByteBuf) {

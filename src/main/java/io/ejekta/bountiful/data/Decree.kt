@@ -23,7 +23,7 @@ data class Decree(
         get() = objectives + rewards
 
     val translation: MutableText
-        get() = TranslatableText("bountiful.decree.$id.name")
+        get() = Text.translatable("bountiful.decree.$id.name")
 
     val rewardPools: List<Pool>
         get() = rewards.mapNotNull { id ->

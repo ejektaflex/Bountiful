@@ -35,7 +35,7 @@ object CommandLogic : IEntryLogic {
             .replace("%PLAYER_NAME%", player.entityName)
             .replace("%PLAYER_NAME_RANDOM", server.playerNames.random())
             .replace("%PLAYER_POSITION%", "${player.pos.x} ${player.pos.y} ${player.pos.z}")
-        return server.commandManager.execute(server.commandSource, replacedCmd) > 0
+        return server.commandManager.executeWithPrefix(server.commandSource, replacedCmd) > 0
     }
 
 }

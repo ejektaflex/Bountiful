@@ -1,7 +1,7 @@
 package io.ejekta.bountiful.bounty.logic
 
-import net.minecraft.text.LiteralText
 import net.minecraft.text.MutableText
+import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import java.math.RoundingMode
 
@@ -21,9 +21,9 @@ data class Progress(val current: Double, val goal: Double, private val precision
         get() = toBigDecimal().setScale(precision, RoundingMode.DOWN).toString()
 
     val neededText: MutableText
-        get() = LiteralText(" (${current.preciseDown}/${goal.preciseDown})")
+        get() = Text.literal(" (${current.preciseDown}/${goal.preciseDown})")
 
     val givingText: MutableText
-        get() = LiteralText("${goal.preciseUp}x ")
+        get() = Text.literal("${goal.preciseUp}x ")
 
 }

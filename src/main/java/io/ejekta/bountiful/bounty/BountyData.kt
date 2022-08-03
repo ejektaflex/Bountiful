@@ -12,7 +12,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
-import net.minecraft.text.TranslatableText
 import net.minecraft.util.Formatting
 import net.minecraft.world.World
 import kotlin.math.max
@@ -62,7 +61,7 @@ class BountyData {
     fun tryCashIn(player: PlayerEntity, stack: ItemStack): Boolean {
 
         if (timeLeft(player.world) <= 0) {
-            player.sendMessage(TranslatableText("bountiful.bounty.expired"), false)
+            player.sendMessage(Text.translatable("bountiful.bounty.expired"))
             return false
         }
 
@@ -71,7 +70,7 @@ class BountyData {
             stack.decrement(stack.maxCount)
             true
         } else {
-            player.sendMessage(TranslatableText("bountiful.tooltip.requirements"), false)
+            player.sendMessage(Text.translatable("bountiful.tooltip.requirements"), false)
             false
         }
 
@@ -100,11 +99,11 @@ class BountyData {
     @OptIn(ExperimentalStdlibApi::class)
     fun tooltipInfo(world: World): List<Text> {
         return buildList {
-            add(TranslatableText("bountiful.tooltip.required").formatted(Formatting.GOLD).append(":"))
+            add(Text.translatable("bountiful.tooltip.required").formatted(Formatting.GOLD).append(":"))
             addAll(objectives.map {
                 it.textSummary(this@BountyData, MinecraftClient.getInstance().player!!, true)
             })
-            add(TranslatableText("bountiful.tooltip.rewards").formatted(Formatting.GOLD).append(":"))
+            add(Text.translatable("bountiful.tooltip.rewards").formatted(Formatting.GOLD).append(":"))
             addAll(rewards.map {
                 it.textSummary(this@BountyData, MinecraftClient.getInstance().player!!, false)
             })

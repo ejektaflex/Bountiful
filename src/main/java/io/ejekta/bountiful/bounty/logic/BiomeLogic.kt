@@ -39,7 +39,7 @@ object BiomeLogic : IEntryLogic {
 
     override fun getProgress(entry: BountyDataEntry, player: PlayerEntity): Progress {
         return Progress(
-            if (player.world.getBiome(player.blockPos) == getBiome(entry)) 1 else 0,
+            if (player.world.getBiome(player.blockPos).value() == getBiome(entry)) 1 else 0,
             1
         )
     }

@@ -26,7 +26,7 @@ class BountyItem : Item(
     override fun getName(stack: ItemStack?): Text {
         return if (stack != null && clientWorld() != null) {
             val data = BountyData[stack]
-            var text = TranslatableText(data.rarity.name.lowercase()
+            var text = Text.translatable(data.rarity.name.lowercase()
                 // Capitalizing
                 .replaceFirstChar {
                     if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
@@ -36,15 +36,15 @@ class BountyItem : Item(
             }
             if (BountifulIO.configData.shouldBountiesHaveTimersAndExpire) {
                 text = text.append(
-                    LiteralText("(")
+                    Text.literal("(")
                         .append(data.formattedTimeLeft(clientWorld()!!))
-                        .append(LiteralText(")"))
+                        .append(Text.literal(")"))
                         .formatted(Formatting.WHITE)
                 )
             }
             return text
         } else {
-            LiteralText("No Bounty Stack Given")
+            Text.literal("No Bounty Stack Given")
         }
     }
 

@@ -5,7 +5,6 @@ import kotlinx.serialization.Serializable
 import me.shedaniel.clothconfig2.api.ConfigBuilder
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
-import net.minecraft.text.LiteralText
 
 @Serializable
 class BountifulConfigData {
@@ -23,16 +22,16 @@ class BountifulConfigData {
     fun buildScreen(): Screen {
         val builder = ConfigBuilder.create()
             .setParentScreen(MinecraftClient.getInstance().currentScreen)
-            .setTitle(LiteralText("Bountiful"))
+            .setTitle(Text.literal("Bountiful"))
             .setSavingRunnable(::onSave)
 
         val creator = builder.entryBuilder()
 
-        val general = builder.getOrCreateCategory(LiteralText("General"))
+        val general = builder.getOrCreateCategory(Text.literal("General"))
 
         general.addEntry(
             creator.startStrList(
-                LiteralText("Excluded data paths"),
+                Text.literal("Excluded data paths"),
                 dataPackExclusions
             ).setDefaultValue {
                 listOf(
@@ -41,10 +40,10 @@ class BountifulConfigData {
                     "bounty_decrees/other/*"
                 )
             }.setTooltip(
-                LiteralText("A list of data paths that should be excluded from loading")
+                Text.literal("A list of data paths that should be excluded from loading")
             ).setSaveConsumer {
                 dataPackExclusions = it
-            }.setAddButtonTooltip(LiteralText("Adds a new exclusion rule. "))
+            }.setAddButtonTooltip(Text.literal("Adds a new exclusion rule. "))
                 .build()
         )
 
@@ -65,14 +64,14 @@ class BountifulConfigData {
         )
 
 
-        val board = builder.getOrCreateCategory(LiteralText("General - Board"))
+        val board = builder.getOrCreateCategory(Text.literal("General - Board"))
 
         board.addEntry(
             creator.startIntField(
                 textLiteral("Board Update Frequency"),
                 boardUpdateFrequency
             ).setDefaultValue(45).setTooltip(
-                LiteralText("How often (in seconds) new bounties are added/removed")
+                Text.literal("How often (in seconds) new bounties are added/removed")
             ).setSaveConsumer {
                 boardUpdateFrequency = it
             }.build()
@@ -80,24 +79,24 @@ class BountifulConfigData {
 
         board.addEntry(
             creator.startIntSlider(
-                LiteralText("Bonus Time"),
+                Text.literal("Bonus Time"),
                 flatBonusTimePerBounty,
                 0, 6000
             ).setDefaultValue(0).setTooltip(
-                LiteralText("How much bonus time is given to bounties")
+                Text.literal("How much bonus time is given to bounties")
             ).setSaveConsumer {
                 flatBonusTimePerBounty = it
             }.build()
         )
 
-        val bounty = builder.getOrCreateCategory(LiteralText("General - Bounty"))
+        val bounty = builder.getOrCreateCategory(Text.literal("General - Bounty"))
 
         bounty.addEntry(
             creator.startBooleanToggle(
-                LiteralText("Expiry Timers"),
+                Text.literal("Expiry Timers"),
                 shouldBountiesHaveTimersAndExpire
             ).setDefaultValue(true).setTooltip(
-                LiteralText("Whether bounties should have a timer and expire")
+                Text.literal("Whether bounties should have a timer and expire")
             ).setSaveConsumer {
                 shouldBountiesHaveTimersAndExpire = it
             }.build()
@@ -105,11 +104,11 @@ class BountifulConfigData {
 
         bounty.addEntry(
             creator.startIntSlider(
-                LiteralText("Objective Requirement Multiplier"),
+                Text.literal("Objective Requirement Multiplier"),
                 objectiveModifier,
                 -50, 100
             ).setDefaultValue(0).setTooltip(
-                LiteralText("Makes new bounties this percent more/less expensive, objective-wise")
+                Text.literal("Makes new bounties this percent more/less expensive, objective-wise")
             ).setSaveConsumer {
                 objectiveModifier = it
             }.setTextGetter {

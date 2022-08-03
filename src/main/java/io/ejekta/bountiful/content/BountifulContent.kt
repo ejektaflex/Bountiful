@@ -14,7 +14,7 @@ import net.minecraft.item.ItemGroup
 
 object BountifulContent : KambrikAutoRegistrar {
 
-    override fun manualRegister() {
+    override fun beforeRegistration() {
         CommandRegistrationCallback.EVENT.register(BountifulCommands)
     }
 

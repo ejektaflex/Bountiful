@@ -50,7 +50,7 @@ object BountifulCommands : CommandRegistrationCallback {
                 BountifulContent.Pools.map { pool ->
                     var trans = pool.usedInDecrees.map { it.translation }
                     val translation = if (trans.isEmpty()) {
-                        LiteralText("None")
+                        Text.literal("None")
                     } else {
                         trans.reduce { acc, decree ->
                             acc.append(", ").append(decree)

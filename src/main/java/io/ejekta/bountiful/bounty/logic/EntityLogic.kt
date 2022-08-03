@@ -9,7 +9,6 @@ import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.LiteralText
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
@@ -34,7 +33,7 @@ object EntityLogic : IEntryLogic {
     override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText? {
         val id = getEntityType(entry).identifier
         if (id != Identifier(entry.content)) {
-            return LiteralText("* '${entry.content}' is not a valid entity!")
+            return Text.literal("* '${entry.content}' is not a valid entity!")
         }
         return null
     }
@@ -42,7 +41,7 @@ object EntityLogic : IEntryLogic {
     override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): Text {
         val progress = getProgress(entry, player)
         return when (isObj) {
-            true -> LiteralText("Kill ").append(
+            true -> Text.literal("Kill ").append(
                 getEntityType(entry).name.copy()
             ).formatted(progress.color).append(
                 progress.neededText.colored(Formatting.WHITE)

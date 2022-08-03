@@ -4,7 +4,6 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.kambrik.serial.ItemDataJson
 import kotlinx.serialization.Serializable
 import net.minecraft.text.Text
-import net.minecraft.text.TranslatableText
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import net.minecraft.world.World
@@ -17,11 +16,11 @@ data class DecreeData(val ids: MutableList<String> = mutableListOf()) {
         return mutableListOf<Text>() + when (ids.isNotEmpty()) {
             true -> {
                 ids.map {
-                    TranslatableText("${Bountiful.ID}.decree.$it.name").formatted(Formatting.GOLD)
+                    Text.translatable("${Bountiful.ID}.decree.$it.name").formatted(Formatting.GOLD)
                 }
             }
             false -> {
-                listOf(TranslatableText("bountiful.decree.notset"))
+                listOf(Text.translatable("bountiful.decree.notset"))
             }
         }
     }

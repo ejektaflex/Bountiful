@@ -3,32 +3,32 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	kotlin("jvm") version "1.6.0"
 	kotlin("plugin.serialization") version "1.6.0"
-	id("fabric-loom") version "0.10-SNAPSHOT"
+	id("fabric-loom") version "0.12-SNAPSHOT"
 	`idea`
 }
 
 object Versions {
-	const val Minecraft = "1.18-pre5"
+	const val Minecraft = "1.19.1"
 	object Jvm {
 		val Java = JavaVersion.VERSION_17
-		const val Kotlin = "1.6.0"
+		const val Kotlin = "1.7.10"
 		const val TargetKotlin = "17"
 	}
 	object Fabric {
-		const val Yarn = "1.18-pre5+build.4"
-		const val Loader = "0.12.5"
-		const val Api = "0.42.8+1.18"
+		const val Yarn = "1.19.1+build.5"
+		const val Loader = "0.14.8"
+		const val Api = "0.58.5+1.19.1"
 	}
 	object Mod {
 		const val Group = "io.ejekta"
 		const val ID = "bountiful"
-		const val Version = "2.0.1"
+		const val Version = "3.0.0"
 	}
 	object Env {
-		const val Kambrik = "3.+"
-		const val FLK = "1.6.5+kotlin.1.5.31"
-		const val ClothConfig = "6.0.42"
-		const val ModMenu = "2.0.6"
+		const val Kambrik = "4.0-1.19.1-SNAPSHOT+"
+		const val FLK = "1.8.2+kotlin.1.7.10"
+		const val ClothConfig = "8.0.75"
+		const val ModMenu = "4.0.5"
 	}
 }
 
@@ -46,7 +46,7 @@ version = Versions.Mod.Version
 repositories {
 	mavenLocal()
 	mavenCentral()
-	maven(url = "https://kotlin.bintray.com/kotlinx")
+	//maven(url = "https://kotlin.bintray.com/kotlinx")
 	maven(url = "https://maven.shedaniel.me/")
 	maven(url = "https://maven.terraformersmc.com/") {
 		name = "Mod Menu"

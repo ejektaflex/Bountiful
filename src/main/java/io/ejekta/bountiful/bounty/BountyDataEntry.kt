@@ -7,8 +7,6 @@ import kotlinx.serialization.Transient
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.world.ServerWorld
-import net.minecraft.text.LiteralText
-import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.BlockPos
@@ -43,8 +41,8 @@ data class BountyDataEntry private constructor(
 
     fun textSummary(data: BountyData, player: PlayerEntity, isObj: Boolean): Text {
         return when (isMystery) {
-            true -> LiteralText("???").formatted(Formatting.BOLD).append(
-                LiteralText("x$amount").formatted(Formatting.WHITE)
+            true -> Text.literal("???").formatted(Formatting.BOLD).append(
+                Text.literal("x$amount").formatted(Formatting.WHITE)
             )
             false -> logic.textSummary(this, isObj, player)
         }
