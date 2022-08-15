@@ -55,7 +55,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
             BountyType.ITEM_TAG -> {
                 val world = MinecraftClient.getInstance().world ?: return
                 val frameTime = (world.time / 30L).toInt()
-                val options = ItemTagLogic.getItems(entry).map { ItemStack(it) }.takeUnless { it.isEmpty() } ?: return
+                val options = ItemTagLogic.getItems(world, entry).map { ItemStack(it) }.takeUnless { it.isEmpty() } ?: return
                 val frame = frameTime % options.size
                 dsl { itemStack(options[frame], x, y) }
             }

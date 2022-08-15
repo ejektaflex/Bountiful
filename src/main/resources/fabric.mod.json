@@ -55,8 +55,8 @@
   "depends": {
     "fabricloader": ">=0.11.6",
     "fabric": "*",
-    "minecraft": "~1.18-0",
-    "kambrik": "^3.0.0-0"
+    "minecraft": "~1.19-0",
+    "kambrik": "^4.0.0-0"
   },
   "suggests": {
     "flamingo": "*"

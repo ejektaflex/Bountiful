@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.mixin;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.structure.pool.StructurePool;
 import net.minecraft.structure.pool.StructurePoolElement;
 import org.spongepowered.asm.mixin.Mixin;
@@ -10,5 +11,5 @@ import java.util.List;
 @Mixin(StructurePool.class)
 public interface StructurePoolAccessor {
     @Accessor("elements")
-    List<StructurePoolElement> bo_getStructureElements();
+    ObjectArrayList<StructurePoolElement> bo_getStructureElements();
 }

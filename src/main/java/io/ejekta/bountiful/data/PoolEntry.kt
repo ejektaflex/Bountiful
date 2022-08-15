@@ -6,6 +6,8 @@ import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.BountyType
 import io.ejekta.bountiful.bounty.logic.ItemTagLogic
 import io.ejekta.bountiful.config.JsonFormats
+import io.ejekta.bountiful.util.getTagItemKey
+import io.ejekta.bountiful.util.getTagItems
 import io.ejekta.kambrik.ext.identifier
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
@@ -48,17 +50,15 @@ class PoolEntry private constructor() {
 
     fun save(format: Json = JsonFormats.DataPack) = format.encodeToString(serializer(), this)
 
-    private fun getRelatedItems(): List<Item>? {
+    private fun getRelatedItems(world: ServerWorld): List<Item>? {
         return when (type) {
             BountyType.ITEM -> {
                 val tagId = Identifier(content.substringAfter("#"))
-                val tag = ItemTags.getTagGroup().getTag(tagId)
-                tag?.values()
+                getTagItems(world, getTagItemKey(tagId))
             }
             BountyType.ITEM_TAG -> {
                 val tagId = Identifier(content)
-                val tag = ItemTags.getTagGroup().getTag(tagId)
-                tag?.values()
+                getTagItems(world, getTagItemKey(tagId))
             }
             else -> null
         }
@@ -69,15 +69,12 @@ class PoolEntry private constructor() {
 
         val actualContent = if (type == BountyType.ITEM && content.startsWith("#")) {
             val tagId = Identifier(content.substringAfter("#"))
-            val tag = ItemTags.getTagGroup().getTag(tagId)
-            if (tag == null) {
-                Bountiful.LOGGER.warn("A pool entry required a tag that does not exist: $content")
-                content
-            } else if (tag.values().isEmpty()){
+            val tags = getTagItems(world, getTagItemKey(tagId))
+            if (tags.isEmpty()){
                 Bountiful.LOGGER.warn("A pool entry tag has an empty list! $content")
                 content
             } else {
-                val chosen = tag.values().random().identifier.toString()
+                val chosen = tags.random().identifier.toString()
                 chosen
             }
         } else {
@@ -120,8 +117,8 @@ class PoolEntry private constructor() {
         }
     }
 
-    fun forbids(entry: PoolEntry): Boolean {
-        val related = getRelatedItems()
+    fun forbids(world: ServerWorld, entry: PoolEntry): Boolean {
+        val related = getRelatedItems(world)
         return forbids.any {
             it.type == entry.type && it.content == entry.content
         } || (related != null
@@ -130,8 +127,8 @@ class PoolEntry private constructor() {
                 )
     }
 
-    fun forbidsAny(entries: List<PoolEntry>): Boolean {
-        return entries.any { forbids(it) }
+    fun forbidsAny(world: ServerWorld, entries: List<PoolEntry>): Boolean {
+        return entries.any { forbids(world, it) }
     }
 
     @Serializable

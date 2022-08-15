@@ -101,7 +101,7 @@ class BountyCreator private constructor(
         }.filter { entry ->
             // obj entry can not be in any reward forbidlist
             // no rew entry can be in this obj entry's forbidlist either
-            !entry.forbidsAny(rewardPools) && !rewardPools.any { it.forbids(entry) }
+            !entry.forbidsAny(world, rewardPools) && !rewardPools.any { it.forbids(world, entry) }
         }
     }
 

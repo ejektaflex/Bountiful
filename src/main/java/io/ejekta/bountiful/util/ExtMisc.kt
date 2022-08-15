@@ -4,10 +4,14 @@ import net.fabricmc.api.EnvType
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.MinecraftClient
 import net.minecraft.inventory.Inventory
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.tag.TagKey
+import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 import kotlin.random.Random
 
@@ -99,6 +103,22 @@ fun NbtCompound.getBlockPos(key: String): BlockPos {
         BlockPos.ORIGIN
     }
 }
+
+fun getTagItemKey(id: Identifier) = TagKey.of(Registry.ITEM_KEY, id)
+
+fun getTagItems(world: World, tagKey: TagKey<Item>): List<Item> {
+    val itemReg = Registry.ITEM
+    //val itemReg = world.registryManager.getManaged(Registry.ITEM_KEY)
+    val doot = itemReg.streamTagsAndEntries().filter {
+        tagKey == it.first
+    }.map {
+        it.second.toList().map { re ->
+            re.value()
+        }
+    }.toList().flatten()
+    return doot
+}
+
 
 
 

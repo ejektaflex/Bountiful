@@ -1,42 +1,48 @@
 package io.ejekta.bountiful.bounty.logic
 
-import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
+import io.ejekta.bountiful.util.getTagItems
 import io.ejekta.kambrik.ext.collect
-import io.ejekta.kambrik.ext.identifier
 import io.ejekta.kambrik.text.textLiteral
 import io.ejekta.kambrik.text.textTranslate
-import net.minecraft.entity.ItemEntity
+import net.fabricmc.fabric.api.tag.convention.v1.TagUtil
+import net.fabricmc.fabric.mixin.resource.conditions.TagManagerLoaderMixin
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NbtCompound
 import net.minecraft.tag.ItemTags
+import net.minecraft.tag.TagKey
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
-import kotlin.math.min
+import net.minecraft.world.World
 
 
 object ItemTagLogic : IEntryLogic {
 
-    private fun getTag(entry: BountyDataEntry) = ItemTags.getTagGroup().getTag(Identifier(entry.content))
+    private fun getTag(entry: BountyDataEntry) = TagKey.of(Registry.ITEM_KEY, Identifier(entry.content))
 
-    fun getItems(entry: BountyDataEntry) = getTag(entry)?.values() ?: listOf()
+
+    fun getItems(world: World, entry: BountyDataEntry): List<Item> {
+        return getTagItems(world, getTag(entry))
+    }
+
+    fun entryAppliesToStack(entry: BountyDataEntry, stack: ItemStack): Boolean {
+        return stack.isIn(TagKey.of(Registry.ITEM_KEY, Identifier(entry.content)))
+    }
 
     override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText? {
-        if (getTag(entry) == null) {
-            return Text.literal("* '${entry.content}' is not a valid tag!")
-        }
+//        if (getTag(entry) == null) {
+//            return Text.literal("* '${entry.content}' is not a valid tag!")
+//        }
         return null
     }
 
     private fun getCurrentStacks(entry: BountyDataEntry, player: PlayerEntity): Map<ItemStack, Int>? {
-        val validItems = getItems(entry)
         return player.inventory.main.collect(entry.amount) {
-            item in validItems
+            entryAppliesToStack(entry, this)
         }
     }
 

@@ -8,16 +8,16 @@ plugins {
 }
 
 object Versions {
-	const val Minecraft = "1.19.1"
+	const val Minecraft = "1.19.2"
 	object Jvm {
 		val Java = JavaVersion.VERSION_17
 		const val Kotlin = "1.7.10"
 		const val TargetKotlin = "17"
 	}
 	object Fabric {
-		const val Yarn = "1.19.1+build.5"
-		const val Loader = "0.14.8"
-		const val Api = "0.58.5+1.19.1"
+		const val Yarn = "1.19.2+build.4"
+		const val Loader = "0.14.9"
+		const val Api = "0.60.0+1.19.2"
 	}
 	object Mod {
 		const val Group = "io.ejekta"
