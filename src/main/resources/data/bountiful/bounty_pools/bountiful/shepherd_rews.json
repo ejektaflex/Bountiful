@@ -36,7 +36,7 @@
 
         {
             "type": "ITEM",
-            "content": "#minecraft:carpets",
+            "content": "#minecraft:wool_carpets",
             "amount": {
                 "min": 1,
                 "max": 6

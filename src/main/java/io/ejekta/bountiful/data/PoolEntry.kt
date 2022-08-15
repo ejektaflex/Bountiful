@@ -72,7 +72,7 @@ class PoolEntry private constructor() {
             val tags = getTagItems(world, getTagItemKey(tagId))
             if (tags.isEmpty()){
                 Bountiful.LOGGER.warn("A pool entry tag has an empty list! $content")
-                content
+                "minecraft:air"
             } else {
                 val chosen = tags.random().identifier.toString()
                 chosen
