@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 import me.shedaniel.clothconfig2.api.ConfigBuilder
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
+import net.minecraft.text.Text
 
 @Serializable
 class BountifulConfigData {

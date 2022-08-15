@@ -102,9 +102,9 @@ class ResourceLoadStrategy<T : IMerge<T>>(
 
     private fun getResources(manager: ResourceManager): List<Identifier> {
         return manager.findResources(folderName) {
-            it.endsWith(".json")
+            it.toString().endsWith(".json")
         }.filter {
-            val str = it.path.substringBefore(".json")
+            val str = it.key.path.substringBefore(".json")
             val idreg = "([A-Za-z_/]+)"
             val regexes = !BountifulIO.configData.dataPackExclusions.map { exc ->
                 Regex(
@@ -115,7 +115,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
             }
 
             regexes
-        }.toList()
+        }.keys.toList()
     }
 
     private fun loadFile(id: Identifier): T? {
@@ -150,7 +150,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
 
     companion object {
         private fun ResourceManager.read(id: Identifier): String {
-            return getResource(id).inputStream.reader().readText()
+            return getResource(id).get().inputStream.reader().readText()
         }
 
         private fun Identifier.fileName(): String {

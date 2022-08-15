@@ -14,19 +14,21 @@ import io.ejekta.bountiful.content.messages.ClipboardCopy
 import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.command.*
+import io.ejekta.kambrik.command.types.PlayerCommand
 import io.ejekta.kambrik.ext.identifier
 import io.ejekta.kambrik.ext.math.toBlockPos
 import io.ejekta.kambrik.text.sendMessage
 import io.ejekta.kambrik.text.textLiteral
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
+import net.minecraft.command.CommandRegistryAccess
 import net.minecraft.command.CommandSource
 import net.minecraft.command.argument.IdentifierArgumentType.getIdentifier
 import net.minecraft.command.argument.NumberRangeArgumentType
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.MovementType
 import net.minecraft.item.ItemStack
-import net.minecraft.network.MessageType
 import net.minecraft.predicate.NumberRange
+import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.*
@@ -39,8 +41,11 @@ import java.io.File
 
 object BountifulCommands : CommandRegistrationCallback {
 
-    override fun register(dispatcher: CommandDispatcher<ServerCommandSource>, dedicated: Boolean) {
-
+    override fun register(
+        dispatcher: CommandDispatcher<ServerCommandSource>,
+        registryAccess: CommandRegistryAccess,
+        environment: CommandManager.RegistrationEnvironment?
+    ) {
         Bountiful.LOGGER.info("Adding serverside commands..")
 
         dispatcher.addCommand("bo") {
@@ -79,7 +84,7 @@ object BountifulCommands : CommandRegistrationCallback {
                 "decree" {
                     argString("decType", items = decrees) runs { decType ->
                         val stack = DecreeItem.create(decType())
-                        source.player.giveItemStack(stack)
+                        source.player?.giveItemStack(stack)
                     }
                 }
 
@@ -153,21 +158,25 @@ object BountifulCommands : CommandRegistrationCallback {
         }
     }
 
-    private fun hand() = kambrikCommand<ServerCommandSource> {
-        val held = source.player.mainHandStack
+    private fun hand() = PlayerCommand {
+        val held = it.mainHandStack
 
         val newPoolEntry = PoolEntry.create().apply {
             content = held.identifier.toString()
-            nbt = if (source.player.mainHandStack == ItemStack.EMPTY) null else held.nbt
+            nbt = if (it.mainHandStack == ItemStack.EMPTY) null else held.nbt
         }
 
         try {
             val saved = newPoolEntry.save(JsonFormats.Hand)
-            source.player.sendMessage(saved)
-            ClipboardCopy(saved).sendToClient(source.player)
+            it.let {
+                it.sendMessage(saved)
+                ClipboardCopy(saved).sendToClient(it)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
+
+        1
     }
 
     private fun addToPoolCommand(
@@ -176,7 +185,7 @@ object BountifulCommands : CommandRegistrationCallback {
         func: (amount: IntRange, worth: Int) -> Unit = { a, w -> }
     ) = kambrikCommand<ServerCommandSource> {
         if (amt.min == null || amt.max == null) {
-            source.player.sendMessage("Amount Range must have a minimum and maximum value!")
+            source.sendError(Text.literal("Amount Range must have a minimum and maximum value!"))
             return@kambrikCommand
         }
 
@@ -217,13 +226,14 @@ object BountifulCommands : CommandRegistrationCallback {
 
     }
 
-    private fun addHandToPool(inAmount: IntRange? = null, inUnitWorth: Int? = null, poolName: String) = kambrikCommand<ServerCommandSource> {
-        val held = source.player.mainHandStack
+    private fun addHandToPool(inAmount: IntRange? = null, inUnitWorth: Int? = null, poolName: String) = PlayerCommand {
+        val held = it.mainHandStack
 
-        addToPool(source.player, inAmount, inUnitWorth, poolName) {
+        addToPool(it, inAmount, inUnitWorth, poolName) {
             content = held.identifier.toString()
             nbt = held.nbt
         }
+        1
     }
 
     private fun addEntityToPool(
@@ -233,7 +243,7 @@ object BountifulCommands : CommandRegistrationCallback {
         poolName: String
     ) = kambrikCommand<ServerCommandSource> {
         try {
-            addToPool(source.player, inAmount, inUnitWorth, poolName) {
+            addToPool(source.player!!, inAmount, inUnitWorth, poolName) {
                 type = BountyType.ENTITY
                 content = entityId.toString()
             }
@@ -242,29 +252,31 @@ object BountifulCommands : CommandRegistrationCallback {
         }
     }
 
-    private fun complete() = kambrikCommand<ServerCommandSource> {
-        val held = source.player.mainHandStack
+    private fun complete() = PlayerCommand {
+        val held = it.mainHandStack
         val data = BountyData[held]
         try {
-            data.tryCashIn(source.player, held)
+            data.tryCashIn(it, held)
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        1
     }
 
-    private fun genBounty(rep: Int) = kambrikCommand<ServerCommandSource> {
+    private fun genBounty(rep: Int) = PlayerCommand {
         try {
             val bd = BountyCreator.create(
                 source.world,
                 source.position.toBlockPos(),
                 BountifulContent.Decrees.toSet(),
                 rep,
-                source.player.world.time
+                it.world.time
             )
-            source.player.giveItemStack(BountyItem.create(bd))
+            it.giveItemStack(BountyItem.create(bd))
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        1
     }
 
     private fun weights(rep: Int) = kambrikCommand<ServerCommandSource> {
@@ -280,15 +292,14 @@ object BountifulCommands : CommandRegistrationCallback {
         1
     }
 
-    private fun verifyBounty() = kambrikCommand<ServerCommandSource> {
-        val held = source.player.mainHandStack
+    private fun verifyBounty() = PlayerCommand {
+        val held = it.mainHandStack
         if (held.item is BountyItem) {
-            if (!BountyData[held].verifyValidity(source.player)) {
-                source.player.sendMessage("Please report this to the modpack author (or the mod author, if this is not part of a modpack)") {
-                    format(Formatting.DARK_RED, Formatting.BOLD)
-                }
+            if (!BountyData[held].verifyValidity(it)) {
+                source.sendError(Text.literal("Please report this to the modpack author (or the mod author, if this is not part of a modpack)"))
             }
         }
+        1
     }
 
     private fun dumpData() = kambrikCommand<ServerCommandSource> {
@@ -310,33 +321,36 @@ object BountifulCommands : CommandRegistrationCallback {
         }
     }
 
-    private fun verifyPools() = kambrikCommand<ServerCommandSource> {
+    private fun verifyPools() = PlayerCommand {
         var errors = false
 
         for (pool in BountifulContent.Pools) {
             for (poolEntry in pool) {
                 val dummy = BountyData()
                 val data = poolEntry.toEntry(source.world, source.position.toBlockPos())
-                data.let {
+                data.let { bde ->
                     when {
-                        it.type.isObj -> dummy.objectives.add(it)
-                        it.type.isReward -> dummy.rewards.add(it)
+                        bde.type.isObj -> dummy.objectives.add(bde)
+                        bde.type.isReward -> dummy.rewards.add(bde)
                         else -> throw Exception("Pool Data was neither an entry nor a reward!: '${poolEntry.type.name}', '${poolEntry.content}'")
                     }
                 }
 
-                if (!dummy.verifyValidity(source.player)) {
-                    source.player.sendMessage("    - Source Pool: '${pool.id}'", Formatting.RED, Formatting.ITALIC)
+                if (!dummy.verifyValidity(it)) {
+                    it.sendMessage("    - Source Pool: '${pool.id}'", Formatting.RED, Formatting.ITALIC)
                     errors = true
                 }
             }
         }
 
         if (errors) {
-            source.player.sendMessage("Some items are invalid. See above for details", Formatting.DARK_RED, Formatting.BOLD)
+            it.sendMessage("Some items are invalid. See above for details", Formatting.DARK_RED, Formatting.BOLD)
+            return@PlayerCommand 0
         } else {
-            source.player.sendMessage("All Pool data has been verified successfully.", Formatting.BOLD)
+            it.sendMessage("All Pool data has been verified successfully.", Formatting.BOLD)
+            return@PlayerCommand 1
         }
+
     }
 
 }
