@@ -26,7 +26,6 @@ class BoardBlock : BlockWithEntity(
         .of(Material.WOOD)
         .hardness(3f)
         .resistance(3600000f)
-        .breakByHand(true)
 ), BlockEntityProvider {
 
     override fun getRenderType(state: BlockState?): BlockRenderType {

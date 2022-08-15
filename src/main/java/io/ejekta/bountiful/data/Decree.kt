@@ -3,7 +3,7 @@ package io.ejekta.bountiful.data
 import io.ejekta.bountiful.content.BountifulContent
 import kotlinx.serialization.Serializable
 import net.minecraft.text.MutableText
-import net.minecraft.text.TranslatableText
+import net.minecraft.text.Text
 
 @Serializable
 data class Decree(
