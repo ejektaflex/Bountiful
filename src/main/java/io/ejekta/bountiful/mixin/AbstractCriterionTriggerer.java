@@ -1,9 +1,8 @@
 package io.ejekta.bountiful.mixin;
 
-import io.ejekta.bountiful.advancement.AdvancementHelper;
+import io.ejekta.bountiful.advancement.CriterionHelper;
 import net.minecraft.advancement.criterion.AbstractCriterion;
 import net.minecraft.advancement.criterion.AbstractCriterionConditions;
-import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,6 +17,6 @@ public class AbstractCriterionTriggerer<T extends AbstractCriterionConditions> {
         at = @At("HEAD")
     )
     private void injected(ServerPlayerEntity player, Predicate<T> predicate, CallbackInfo ci) {
-        AdvancementHelper.INSTANCE.handle(player, (AbstractCriterion<T>)(Object)this, predicate);
+        CriterionHelper.INSTANCE.handle(player, (AbstractCriterion<T>)(Object)this, predicate);
     }
 }
