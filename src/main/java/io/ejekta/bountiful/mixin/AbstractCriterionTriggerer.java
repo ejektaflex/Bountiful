@@ -18,7 +18,6 @@ public class AbstractCriterionTriggerer<T extends AbstractCriterionConditions> {
         at = @At("HEAD")
     )
     private void injected(ServerPlayerEntity player, Predicate<T> predicate, CallbackInfo ci) {
-
-        AdvancementHelper.INSTANCE.handle(player, (AbstractCriterion<T>)(Object)this);
+        AdvancementHelper.INSTANCE.handle(player, (AbstractCriterion<T>)(Object)this, predicate);
     }
 }
