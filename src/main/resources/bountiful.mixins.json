@@ -4,7 +4,6 @@
 	"package": "io.ejekta.bountiful.mixin",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
-		"AbstractCriterionTriggerer",
 		"MutableListTag",
 		"MutableNbtCompound",
 		"SimpleInventoryAccessor",

@@ -96,8 +96,7 @@ class BountyData {
         return GameTime.formatTimeExpirable(timeLeft(world) / 20)
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
-    fun tooltipInfo(world: World): List<Text> {
+    fun tooltipInfo(): List<Text> {
         return buildList {
             add(Text.translatable("bountiful.tooltip.required").formatted(Formatting.GOLD).append(":"))
             addAll(objectives.map {

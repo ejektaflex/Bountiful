@@ -4,6 +4,7 @@ package io.ejekta.bountiful
 import io.ejekta.bountiful.bounty.logic.EntityLogic
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.messages.SelectBounty
+import io.ejekta.bountiful.util.iterateBountyData
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.serial.serializers.IdentitySer
 import kotlinx.serialization.UseSerializers
@@ -11,6 +12,8 @@ import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
+import net.minecraft.advancement.criterion.EnterBlockCriterion
+import net.minecraft.advancement.criterion.TickCriterion
 import net.minecraft.resource.ResourceType
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
@@ -58,6 +61,33 @@ class Bountiful : ModInitializer {
             }
         })
 
+        Kambrik.Criterion.subscribe{ player, criterion, predicate ->
+            if (criterion !is TickCriterion && criterion !is EnterBlockCriterion) {
+                player.iterateBountyData {
+                    val triggerObjs = objectives.filter { it.criteria != null }.takeIf { it.isNotEmpty() }
+                        ?: return@iterateBountyData false
+
+                    for (obj in triggerObjs) {
+                        val trigger = obj.criteria!!
+                        println("Handling bounty trigger objective")
+
+                        val result = Kambrik.Criterion.testAgainst(
+                            criterion,
+                            Kambrik.Criterion.createCriterionConditionsFromJson(trigger.criterion) ?: continue,
+                            predicate
+                        )
+
+                        println("RESULT: $result")
+
+                        if (result) {
+                            println("Do something I guess")
+                        }
+                    }
+
+                    return@iterateBountyData false
+                }
+            }
+        }
 
     }
 
