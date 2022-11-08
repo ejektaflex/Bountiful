@@ -1,5 +1,10 @@
 package io.ejekta.bountiful.util
 
+import io.ejekta.bountiful.bounty.BountyData
+import io.ejekta.bountiful.bounty.BountyType
+import io.ejekta.bountiful.bounty.logic.EntityLogic
+import io.ejekta.bountiful.content.BountyItem
+import io.ejekta.kambrik.ext.identifier
 import net.fabricmc.api.EnvType
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.MinecraftClient
@@ -7,6 +12,7 @@ import net.minecraft.inventory.Inventory
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.tag.TagKey
 import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
@@ -119,7 +125,17 @@ fun getTagItems(world: World, tagKey: TagKey<Item>): List<Item> {
     return doot
 }
 
+fun ServerPlayerEntity.iterateBountyStacks(func: ItemStack.() -> Unit) {
+    inventory.main.filter {
+        it.item is BountyItem
+    }.forEach(func)
+}
 
+fun ServerPlayerEntity.iterateBountyData(func: BountyData.() -> Boolean) {
+    iterateBountyStacks {
+        BountyData.editIf(this, func)
+    }
+}
 
 
 

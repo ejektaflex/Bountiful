@@ -1,7 +1,7 @@
 package io.ejekta.bountiful.advancement
 
 import io.ejekta.bountiful.Bountiful
-import kotlinx.serialization.json.Json
+import io.ejekta.bountiful.util.iterateBountyData
 import kotlinx.serialization.json.JsonObject
 import net.minecraft.advancement.AdvancementCriterion
 import net.minecraft.advancement.criterion.AbstractCriterion
@@ -41,30 +41,54 @@ object CriterionHelper {
 
     fun <T: AbstractCriterionConditions> handle(player: ServerPlayerEntity, criterion: AbstractCriterion<T>, predicate: Predicate<T>) {
 
+        1+1
+
         if (criterion !is TickCriterion && criterion !is EnterBlockCriterion) {
-            println("Player ${player.uuid} handling criterion ${criterion.id}, ${criterion::class.simpleName}")
-            val critLongString = """
-                {
-                  "conditions": {
-                    "items": [
-                      {
-                        "items": [
-                          "minecraft:lava_bucket"
-                        ]
-                      }
-                    ]
-                  },
-                  "trigger": "minecraft:inventory_changed"
+            player.iterateBountyData {
+                val triggerObjs = objectives.filter { it.criteria != null }.takeIf { it.isNotEmpty() }
+                    ?: return@iterateBountyData false
+
+                for (obj in triggerObjs) {
+                    val trigger = obj.criteria!!
+                    println("Handling bounty trigger objective")
+
+                    val result = test(criterion, trigger.criterion, predicate)
+
+                    println("RESULT: $result")
+
+                    if (result) {
+                        println("Do something I guess")
+                    }
                 }
-            """.trimIndent()
 
-            val jsonObj = Json.decodeFromString(JsonObject.serializer(), critLongString)
-
-            println(
-                "Pew: ${test(criterion, jsonObj, predicate)}"
-            )
-
+                return@iterateBountyData false
+            }
         }
+
+//        if (criterion !is TickCriterion && criterion !is EnterBlockCriterion) {
+//            println("Player ${player.uuid} handling criterion ${criterion.id}, ${criterion::class.simpleName}")
+//            val critLongString = """
+//                {
+//                  "conditions": {
+//                    "items": [
+//                      {
+//                        "items": [
+//                          "minecraft:lava_bucket"
+//                        ]
+//                      }
+//                    ]
+//                  },
+//                  "trigger": "minecraft:inventory_changed"
+//                }
+//            """.trimIndent()
+//
+//            val jsonObj = Json.decodeFromString(JsonObject.serializer(), critLongString)
+//
+//            println(
+//                "Pew: ${test(criterion, jsonObj, predicate)}"
+//            )
+//
+//        }
     }
 
 }

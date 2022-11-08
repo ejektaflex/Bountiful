@@ -22,7 +22,8 @@ data class BountyDataEntry private constructor(
     var translation: String? = null,
     var isMystery: Boolean = false,
     var rarity: BountyRarity = BountyRarity.COMMON,
-    var tracking: @Contextual NbtCompound = NbtCompound() // Used to track extra data, e.g. current progress if needed
+    var tracking: @Contextual NbtCompound = NbtCompound(), // Used to track extra data, e.g. current progress if needed
+    var criteria: CriteriaData? = null
 ) {
 
     val logic: IEntryLogic
@@ -72,10 +73,11 @@ data class BountyDataEntry private constructor(
             translation: String? = null,
             isMystery: Boolean = false,
             rarity: BountyRarity = BountyRarity.COMMON,
-            tracking: NbtCompound = NbtCompound()
+            tracking: NbtCompound = NbtCompound(),
+            criteriaData: CriteriaData? = null
         ): BountyDataEntry {
             return BountyDataEntry(
-                type, content, amount, nbt, name, translation, isMystery, rarity, tracking
+                type, content, amount, nbt, name, translation, isMystery, rarity, tracking, criteriaData
             ).apply {
                 this.worth = worth
                 type.logic(this).setup(this, world, pos)

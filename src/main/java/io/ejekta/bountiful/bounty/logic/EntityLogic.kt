@@ -4,6 +4,8 @@ import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.BountyType
 import io.ejekta.bountiful.content.BountyItem
+import io.ejekta.bountiful.util.iterateBountyData
+import io.ejekta.bountiful.util.iterateBountyStacks
 import io.ejekta.kambrik.ext.identifier
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
@@ -69,24 +71,20 @@ object EntityLogic : IEntryLogic {
     private const val entityKillsKey = "kills"
 
     fun incrementEntityBounties(playerEntity: ServerPlayerEntity, killedEntity: LivingEntity) {
-        playerEntity.inventory.main.filter {
-            it.item is BountyItem
-        }.forEach { stack ->
-            BountyData.editIf(stack) {
-                var didWork = false
-                val entityObjectives = objectives.filter { it.type == BountyType.ENTITY }
-                if (entityObjectives.isEmpty()) return@editIf false
-                for (obj in entityObjectives) {
-                    if (obj.content == killedEntity.type.identifier.toString()) {
-                        obj.tracking.putInt(
-                            entityKillsKey,
-                            (obj.tracking.getInt(entityKillsKey) + 1).coerceAtMost(obj.amount)
-                        )
-                        didWork = true
-                    }
+        playerEntity.iterateBountyData {
+            var didWork = false
+            val entityObjectives = objectives.filter { it.type == BountyType.ENTITY }
+            if (entityObjectives.isEmpty()) return@iterateBountyData false
+            for (obj in entityObjectives) {
+                if (obj.content == killedEntity.type.identifier.toString()) {
+                    obj.tracking.putInt(
+                        entityKillsKey,
+                        (obj.tracking.getInt(entityKillsKey) + 1).coerceAtMost(obj.amount)
+                    )
+                    didWork = true
                 }
-                return@editIf didWork
             }
+            return@iterateBountyData didWork
         }
     }
 
