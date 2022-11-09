@@ -1,9 +1,7 @@
 package io.ejekta.bountiful.bounty.types.builtin
 
 import io.ejekta.bountiful.bounty.BountyDataEntry
-import io.ejekta.bountiful.bounty.BountyTypeOldEnum
-import io.ejekta.bountiful.bounty.types.IBountyType
-import io.ejekta.bountiful.bounty.types.Progress
+import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.util.iterateBountyData
 import io.ejekta.kambrik.ext.identifier
 import net.minecraft.entity.EntityType
@@ -17,19 +15,9 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 
 
-class BountyTypeEntity : IBountyType {
+class BountyTypeEntity : IBountyObjective {
 
-    fun getEntityType(entry: BountyDataEntry): EntityType<*> {
-        return Registry.ENTITY_TYPE.get(Identifier(entry.content))
-    }
-
-    fun getEntityKills(entry: BountyDataEntry): Int {
-        return entry.tracking.getInt(entityKillsKey)
-    }
-
-    fun setEntityKills(entry: BountyDataEntry, value: Int) {
-        entry.tracking.putInt(entityKillsKey, value)
-    }
+    override val id: Identifier = Identifier("entity")
 
     override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText? {
         val id = getEntityType(entry).identifier
@@ -55,35 +43,25 @@ class BountyTypeEntity : IBountyType {
         return listOf(getEntityType(entry).name)
     }
 
-    override fun getProgress(entry: BountyDataEntry, player: PlayerEntity): Progress {
-        return Progress(getEntityKills(entry), entry.amount)
-    }
-
-    override fun tryFinishObjective(entry: BountyDataEntry, player: PlayerEntity): Boolean {
-        return getEntityKills(entry) >= entry.amount
-    }
-
-    override fun giveReward(entry: BountyDataEntry, player: PlayerEntity): Boolean {
-        return false
-    }
-
-    private const val entityKillsKey = "kills"
-
     fun incrementEntityBounties(playerEntity: ServerPlayerEntity, killedEntity: LivingEntity) {
         playerEntity.iterateBountyData {
             var didWork = false
-            val entityObjectives = objectives.filter { it.type == BountyTypeOldEnum.ENTITY }
+            val entityObjectives = objectives.filter { it.logicId == this@BountyTypeEntity.id }
             if (entityObjectives.isEmpty()) return@iterateBountyData false
             for (obj in entityObjectives) {
                 if (obj.content == killedEntity.type.identifier.toString()) {
-                    obj.tracking.putInt(
-                        entityKillsKey,
-                        (obj.tracking.getInt(entityKillsKey) + 1).coerceAtMost(obj.amount)
-                    )
+                    obj.current += 1
                     didWork = true
                 }
             }
             return@iterateBountyData didWork
+        }
+    }
+
+
+    companion object {
+        fun getEntityType(entry: BountyDataEntry): EntityType<*> {
+            return Registry.ENTITY_TYPE.get(Identifier(entry.content))
         }
     }
 

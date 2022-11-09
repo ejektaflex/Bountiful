@@ -1,6 +1,7 @@
 package io.ejekta.bountiful.bounty.types.builtin
 
 import io.ejekta.bountiful.bounty.BountyDataEntry
+import io.ejekta.bountiful.bounty.types.IBountyReward
 import io.ejekta.bountiful.bounty.types.IBountyType
 import io.ejekta.bountiful.bounty.types.Progress
 import io.ejekta.kambrik.text.textLiteral
@@ -9,7 +10,7 @@ import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 
 
-object BountyTypeCommand : IBountyType {
+class BountyTypeCommand : IBountyReward {
 
     override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText {
         val server = player.server ?: return textLiteral("Server does not exist!") // oh my
@@ -24,10 +25,6 @@ object BountyTypeCommand : IBountyType {
     override fun textBoard(entry: BountyDataEntry, player: PlayerEntity): List<Text> {
         return listOf(getDescription(entry))
     }
-
-    override fun getProgress(entry: BountyDataEntry, player: PlayerEntity) = Progress(0, 1)
-
-    override fun tryFinishObjective(entry: BountyDataEntry, player: PlayerEntity) = true
 
     override fun giveReward(entry: BountyDataEntry, player: PlayerEntity): Boolean {
         val server = player.server ?: return false

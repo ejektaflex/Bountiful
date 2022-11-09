@@ -3,8 +3,8 @@ package io.ejekta.bountiful.data
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.BountyRarity
-import io.ejekta.bountiful.bounty.BountyTypeOldEnum
 import io.ejekta.bountiful.bounty.CriteriaData
+import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.util.getTagItemKey
 import io.ejekta.bountiful.util.getTagItems
@@ -25,10 +25,11 @@ import kotlin.math.min
 
 @Serializable
 class PoolEntry private constructor() {
-    var type = BountyTypeOldEnum.NULL
+    var type: @Contextual Identifier = BountyTypeRegistry.NULL.id
     var rarity = BountyRarity.COMMON
     var content = "Nope"
     var name: String? = null
+    var icon: @Contextual Identifier? = null // TODO allow custom icons, this works well for criterion
     var translation: String? = null
     var amount = EntryRange(-1, -1)
     var unitWorth = -1000.0
@@ -52,11 +53,11 @@ class PoolEntry private constructor() {
 
     private fun getRelatedItems(world: ServerWorld): List<Item>? {
         return when (type) {
-            BountyTypeOldEnum.ITEM -> {
+            BountyTypeRegistry.ITEM.id -> {
                 val tagId = Identifier(content.substringAfter("#"))
                 getTagItems(world, getTagItemKey(tagId))
             }
-            BountyTypeOldEnum.ITEM_TAG -> {
+            BountyTypeRegistry.ITEM_TAG.id -> {
                 val tagId = Identifier(content)
                 getTagItems(world, getTagItemKey(tagId))
             }
@@ -67,7 +68,7 @@ class PoolEntry private constructor() {
     fun toEntry(world: ServerWorld, pos: BlockPos, worth: Double? = null): BountyDataEntry {
         val amt = amountAt(worth)
 
-        val actualContent = if (type == BountyTypeOldEnum.ITEM && content.startsWith("#")) {
+        val actualContent = if (type == BountyTypeRegistry.ITEM.id && content.startsWith("#")) {
             val tagId = Identifier(content.substringAfter("#"))
             val tags = getTagItems(world, getTagItemKey(tagId))
             if (tags.isEmpty()){
@@ -139,13 +140,13 @@ class PoolEntry private constructor() {
     }
 
     @Serializable
-    class ForbiddenContent(val type: BountyTypeOldEnum, val content: String)
+    class ForbiddenContent(val type: @Contextual Identifier, val content: String)
 
     companion object {
 
         // With encodeDefaults = false, we need a separate constructor
         fun create() = PoolEntry().apply {
-            type = BountyTypeOldEnum.ITEM
+            type = BountyTypeRegistry.ITEM.id
             amount = EntryRange(1, 1)
             content = "NO_CONTENT"
             unitWorth = 100.0

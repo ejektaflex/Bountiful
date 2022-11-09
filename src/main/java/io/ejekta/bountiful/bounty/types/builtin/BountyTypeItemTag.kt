@@ -1,6 +1,7 @@
 package io.ejekta.bountiful.bounty.types.builtin
 
 import io.ejekta.bountiful.bounty.BountyDataEntry
+import io.ejekta.bountiful.bounty.types.IBountyExchangeable
 import io.ejekta.bountiful.bounty.types.IBountyType
 import io.ejekta.bountiful.bounty.types.Progress
 import io.ejekta.bountiful.util.getTagItems
@@ -19,14 +20,9 @@ import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 
 
-class BountyTypeItemTag : IBountyType {
+class BountyTypeItemTag : IBountyExchangeable {
 
-    private fun getTag(entry: BountyDataEntry) = TagKey.of(Registry.ITEM_KEY, Identifier(entry.content))
-
-
-    fun getItems(world: World, entry: BountyDataEntry): List<Item> {
-        return getTagItems(world, getTag(entry))
-    }
+    override val id: Identifier = Identifier("item_tag")
 
     fun entryAppliesToStack(entry: BountyDataEntry, stack: ItemStack): Boolean {
         return stack.isIn(TagKey.of(Registry.ITEM_KEY, Identifier(entry.content)))
@@ -81,5 +77,14 @@ class BountyTypeItemTag : IBountyType {
     }
 
     override fun giveReward(entry: BountyDataEntry, player: PlayerEntity) = false
+
+    companion object {
+        private fun getTag(entry: BountyDataEntry) = TagKey.of(Registry.ITEM_KEY, Identifier(entry.content))
+
+
+        fun getItems(world: World, entry: BountyDataEntry): List<Item> {
+            return getTagItems(world, getTag(entry))
+        }
+    }
 
 }

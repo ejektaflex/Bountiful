@@ -28,7 +28,7 @@ data class BountyDataEntry private constructor(
     var rarity: BountyRarity = BountyRarity.COMMON,
     var tracking: JsonObject = JsonObject(emptyMap()), // Used to track extra data, e.g. current progress if needed
     var criteria: CriteriaData? = null,
-    val current: Int = 0 // Current progress
+    var current: Int = 0 // Current progress
 ) {
 
     val logic: IBountyType

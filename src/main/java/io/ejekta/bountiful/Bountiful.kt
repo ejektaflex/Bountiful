@@ -1,6 +1,7 @@
 @file:UseSerializers(IdentitySer::class)
 package io.ejekta.bountiful
 
+import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.builtin.BountyTypeEntity
 import io.ejekta.bountiful.bounty.types.IBountyType
 import io.ejekta.bountiful.config.BountifulIO
@@ -60,7 +61,7 @@ class Bountiful : ModInitializer {
             if (entity is ServerPlayerEntity) {
                 val playersInAction = world.getPlayers { it.distanceTo(entity) < 12f } + world.getPlayers { it.distanceTo(killedEntity) < 12f } + entity
                 playersInAction.toSet().forEach {
-                    BountyTypeEntity.incrementEntityBounties(it, killedEntity)
+                    BountyTypeRegistry.ENTITY.incrementEntityBounties(it, killedEntity)
                 }
             }
         })

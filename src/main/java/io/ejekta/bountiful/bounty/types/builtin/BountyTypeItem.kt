@@ -18,20 +18,7 @@ import net.minecraft.util.registry.Registry
 
 class BountyTypeItem : IBountyExchangeable {
 
-    fun getItem(entry: BountyDataEntry): Item {
-        return Registry.ITEM.get(Identifier(entry.content))
-    }
-
-    fun getItemStack(entry: BountyDataEntry): ItemStack {
-        val item = getItem(entry)
-        return ItemStack(item).apply {
-            entry.nbt?.let { this.nbt = it }
-        }
-    }
-
-    fun getItemName(entry: BountyDataEntry): MutableText {
-        return getItem(entry).name.copy()
-    }
+    override val id: Identifier = Identifier("item")
 
     override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText? {
         val id = getItem(entry).identifier
@@ -93,6 +80,23 @@ class BountyTypeItem : IBountyExchangeable {
         }
 
         return true
+    }
+
+    companion object {
+        fun getItem(entry: BountyDataEntry): Item {
+            return Registry.ITEM.get(Identifier(entry.content))
+        }
+
+        fun getItemStack(entry: BountyDataEntry): ItemStack {
+            val item = getItem(entry)
+            return ItemStack(item).apply {
+                entry.nbt?.let { this.nbt = it }
+            }
+        }
+
+        fun getItemName(entry: BountyDataEntry): MutableText {
+            return getItem(entry).name.copy()
+        }
     }
 
 }

@@ -2,7 +2,7 @@ package io.ejekta.bountiful.client.widgets
 
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
-import io.ejekta.bountiful.bounty.BountyTypeOldEnum
+import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.builtin.BountyTypeEntity
 import io.ejekta.bountiful.bounty.types.builtin.BountyTypeItem
 import io.ejekta.bountiful.bounty.types.builtin.BountyTypeItemTag
@@ -39,27 +39,24 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
     }
 
     private fun renderEntry(dsl: KGuiDsl, entry: BountyDataEntry, x: Int, y: Int, isReward: Boolean = false) {
-        when (entry.type) {
-            BountyTypeOldEnum.EXPLORE_BIOME -> {
-                dsl { itemStackIcon(ItemStack(Items.FILLED_MAP), x, y) }
-            }
-            BountyTypeOldEnum.COMMAND -> {
+        when (entry.logicId) {
+            BountyTypeRegistry.COMMAND.id -> {
                 dsl { itemStackIcon(ItemStack(Items.COMMAND_BLOCK), x, y) }
             }
-            BountyTypeOldEnum.ITEM -> {
+            BountyTypeRegistry.ITEM.id -> {
                 val stack = BountyTypeItem.getItemStack(entry).apply {
                     count = entry.amount
                 }
                 dsl { itemStackIcon(stack, x, y) }
             }
-            BountyTypeOldEnum.ITEM_TAG -> {
+            BountyTypeRegistry.ITEM_TAG.id -> {
                 val world = MinecraftClient.getInstance().world ?: return
                 val frameTime = (world.time / 30L).toInt()
                 val options = BountyTypeItemTag.getItems(world, entry).map { ItemStack(it) }.takeUnless { it.isEmpty() } ?: return
                 val frame = frameTime % options.size
                 dsl { itemStack(options[frame], x, y) }
             }
-            BountyTypeOldEnum.ENTITY -> {
+            BountyTypeRegistry.ENTITY.id -> {
                 val entityType = BountyTypeEntity.getEntityType(entry)
 
                 if (entityType.spawnGroup != SpawnGroup.CREATURE && entityType.spawnGroup != SpawnGroup.MONSTER) {
