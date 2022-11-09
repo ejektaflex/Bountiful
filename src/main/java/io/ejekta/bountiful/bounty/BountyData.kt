@@ -1,6 +1,8 @@
 package io.ejekta.bountiful.bounty
 
 import io.ejekta.bountiful.Bountiful
+import io.ejekta.bountiful.bounty.types.IBountyObjective
+import io.ejekta.bountiful.bounty.types.IBountyReward
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.util.GameTime
@@ -26,7 +28,7 @@ class BountyData {
 
     private fun hasFinishedObjectives(player: PlayerEntity): Boolean {
         return objectives.all {
-            it.tryFinishObjective(player)
+            (it.logic as IBountyObjective).tryFinishObjective(it, player)
         }
     }
 
@@ -44,7 +46,7 @@ class BountyData {
         })
 
         for (reward in rewards) {
-            reward.giveReward(player)
+            (reward.logic as IBountyReward).giveReward(reward, player)
         }
     }
 
