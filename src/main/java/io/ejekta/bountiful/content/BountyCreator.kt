@@ -4,6 +4,8 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.BountyDataEntry
+import io.ejekta.bountiful.bounty.types.IBountyObjective
+import io.ejekta.bountiful.bounty.types.IBountyReward
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.data.Pool
@@ -196,11 +198,11 @@ class BountyCreator private constructor(
         }
 
         private fun getRewardsFor(decrees: Set<Decree>): Set<PoolEntry> {
-            return getRewardPoolsFor(decrees).map { it.content }.flatten().filter { it.type.isReward }.toSet()
+            return getRewardPoolsFor(decrees).map { it.content }.flatten().filter { it.typeLogic is IBountyReward }.toSet()
         }
 
         private fun getObjectivesFor(decrees: Set<Decree>): Set<PoolEntry> {
-            return getObjectivePoolsFor(decrees).map { it.content }.flatten().filter { it.type.isObj }.toSet()
+            return getObjectivePoolsFor(decrees).map { it.content }.flatten().filter { it.typeLogic is IBountyObjective }.toSet()
         }
 
         private fun getObjectivesWithinVariance(objs: List<PoolEntry>, worth: Double, variance: Double): List<PoolEntry> {

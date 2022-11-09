@@ -5,6 +5,7 @@ import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.CriteriaData
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
+import io.ejekta.bountiful.bounty.types.IBountyType
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.util.getTagItemKey
 import io.ejekta.bountiful.util.getTagItems
@@ -39,6 +40,9 @@ class PoolEntry private constructor() {
     private val forbids: MutableList<ForbiddenContent> = mutableListOf()
 
     @Transient val sources: MutableSet<String> = mutableSetOf()
+
+    val typeLogic: IBountyType
+        get() = BountyTypeRegistry[type] ?: BountyTypeRegistry.NULL
 
     val criteria: CriteriaData? = null
 

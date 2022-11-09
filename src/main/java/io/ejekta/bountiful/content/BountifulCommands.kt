@@ -5,6 +5,8 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
+import io.ejekta.bountiful.bounty.types.IBountyObjective
+import io.ejekta.bountiful.bounty.types.IBountyReward
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.messages.ClipboardCopy
@@ -318,9 +320,9 @@ object BountifulCommands : CommandRegistrationCallback {
                 val data = poolEntry.toEntry(source.world, source.position.toBlockPos())
                 data.let { bde ->
                     when {
-                        bde.type.isObj -> dummy.objectives.add(bde)
-                        bde.type.isReward -> dummy.rewards.add(bde)
-                        else -> throw Exception("Pool Data was neither an entry nor a reward!: '${poolEntry.type.name}', '${poolEntry.content}'")
+                        bde.logic is IBountyObjective -> dummy.objectives.add(bde)
+                        bde.logic is IBountyReward -> dummy.objectives.add(bde)
+                        else -> throw Exception("Pool Data was neither an entry nor a reward!: '${poolEntry.type}', '${poolEntry.content}'")
                     }
                 }
 

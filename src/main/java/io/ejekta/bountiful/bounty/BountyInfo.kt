@@ -13,6 +13,7 @@ import net.minecraft.nbt.NbtCompound
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
+import net.minecraft.util.Identifier
 import net.minecraft.world.World
 import kotlin.math.max
 
@@ -22,7 +23,7 @@ class BountyInfo(
     var rarity: BountyRarity = BountyRarity.COMMON,
     var timeStarted: Long = -1L,
     var timeToComplete: Long = -1L,
-    var objectiveFlags: List<Int> = emptyList()
+    var objectiveFlags: Set<@Contextual Identifier> = emptySet()
 ) {
 
     fun timeLeft(world: World): Long {
@@ -52,7 +53,7 @@ class BountyInfo(
     }
 
     fun update(data: BountyData) {
-        objectiveFlags = data.objectives.map { it.type.ordinal }
+        objectiveFlags = data.objectives.map { it.logicId }.toSet()
         // TODO tooltip!
         tooltip = newTooltipInfo(data)
     }
@@ -69,9 +70,7 @@ class BountyInfo(
 
         private fun fromBountyData(data: BountyData): BountyInfo {
             return BountyInfo().apply {
-                objectiveFlags = data.objectives.map { it.type.ordinal }
-                // TODO tooltip!
-                tooltip = newTooltipInfo(data)
+                update(data)
             }
         }
     }

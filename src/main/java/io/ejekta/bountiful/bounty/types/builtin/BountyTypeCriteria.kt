@@ -7,9 +7,12 @@ import io.ejekta.bountiful.bounty.types.Progress
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
+import net.minecraft.util.Identifier
 
 
 class BountyTypeCriteria : IBountyObjective {
+
+    override val id: Identifier = Identifier("criteria")
 
     override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText? {
         return null

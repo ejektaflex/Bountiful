@@ -8,9 +8,12 @@ import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
+import net.minecraft.util.Identifier
 
 
 class BountyTypeCommand : IBountyReward {
+
+    override val id: Identifier = Identifier("command")
 
     override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText {
         val server = player.server ?: return textLiteral("Server does not exist!") // oh my

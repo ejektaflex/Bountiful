@@ -1,13 +1,17 @@
 package io.ejekta.bountiful.bounty.types.builtin
 
 import io.ejekta.bountiful.bounty.BountyDataEntry
+import io.ejekta.bountiful.bounty.types.IBountyExchangeable
 import io.ejekta.bountiful.bounty.types.IBountyType
 import io.ejekta.bountiful.bounty.types.Progress
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
+import net.minecraft.util.Identifier
 
-class BountyTypeNull : IBountyType {
+class BountyTypeNull : IBountyExchangeable {
+
+    override val id: Identifier = Identifier("null")
 
     private fun logicUsageError(): Exception {
         return Exception("Cannot interact with a null logic object!")
