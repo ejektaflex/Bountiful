@@ -52,6 +52,7 @@ class Bountiful : ModInitializer {
 
         Kambrik.Message.registerServerMessage(SelectBounty.serializer(), id("select_bounty"))
 
+        // Increment entity bounties for all players within 12 blocks of the player and all players within 12 blocks of the mob
         ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(ServerEntityCombatEvents.AfterKilledOtherEntity { world, entity, killedEntity ->
             if (entity is ServerPlayerEntity) {
                 val playersInAction = world.getPlayers { it.distanceTo(entity) < 12f } + world.getPlayers { it.distanceTo(killedEntity) < 12f } + entity
@@ -61,7 +62,8 @@ class Bountiful : ModInitializer {
             }
         })
 
-        Kambrik.Criterion.subscribe{ player, criterion, predicate ->
+        // Update Criterion bounties
+        Kambrik.Criterion.subscribe { player, criterion, predicate ->
             if (criterion !is TickCriterion && criterion !is EnterBlockCriterion) {
                 player.iterateBountyData {
                     val triggerObjs = objectives.filter { it.criteria != null }.takeIf { it.isNotEmpty() }

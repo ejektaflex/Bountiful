@@ -23,7 +23,8 @@ data class BountyDataEntry private constructor(
     var isMystery: Boolean = false,
     var rarity: BountyRarity = BountyRarity.COMMON,
     var tracking: @Contextual NbtCompound = NbtCompound(), // Used to track extra data, e.g. current progress if needed
-    var criteria: CriteriaData? = null
+    var criteria: CriteriaData? = null,
+    val current: Int = 0
 ) {
 
     val logic: IEntryLogic

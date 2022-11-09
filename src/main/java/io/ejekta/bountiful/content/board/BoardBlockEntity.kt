@@ -118,6 +118,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         bounties.removeStack(slot)
     }
 
+    // If the bounty board has never been used before (pristine), populate it
     fun tryInitalPopulation() {
         if (isPristine) {
             if (decrees.isEmpty) {
