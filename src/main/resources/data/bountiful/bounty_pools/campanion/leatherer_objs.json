@@ -4,7 +4,7 @@
 	"content": [
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "campanion:day_pack",
             "amount": {
                 "min": 1,
@@ -14,7 +14,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "UNCOMMON",
             "content": "campanion:tanned_leather_pouch",
             "amount": {

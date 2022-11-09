@@ -1,10 +1,10 @@
-package io.ejekta.bountiful.bounty.logic
+package io.ejekta.bountiful.bounty.types.builtin
 
-import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
+import io.ejekta.bountiful.bounty.types.IBountyExchangeable
+import io.ejekta.bountiful.bounty.types.Progress
 import io.ejekta.kambrik.ext.collect
 import io.ejekta.kambrik.ext.identifier
-import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
@@ -14,10 +14,9 @@ import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
-import kotlin.math.min
 
 
-object ItemLogic : IEntryLogic {
+class BountyTypeItem : IBountyExchangeable {
 
     fun getItem(entry: BountyDataEntry): Item {
         return Registry.ITEM.get(Identifier(entry.content))

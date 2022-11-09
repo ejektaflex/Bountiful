@@ -4,7 +4,7 @@ import com.mojang.brigadier.CommandDispatcher
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyRarity
-import io.ejekta.bountiful.bounty.BountyType
+import io.ejekta.bountiful.bounty.BountyTypeOldEnum
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.messages.ClipboardCopy
@@ -232,7 +232,7 @@ object BountifulCommands : CommandRegistrationCallback {
     ) = kambrikCommand<ServerCommandSource> {
         try {
             addToPool(source.player!!, inAmount, inUnitWorth, poolName) {
-                type = BountyType.ENTITY
+                type = BountyTypeOldEnum.ENTITY
                 content = entityId.toString()
             }
         } catch (e: Exception) {

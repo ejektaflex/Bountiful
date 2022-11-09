@@ -80,19 +80,6 @@ class BountyData {
         return JsonFormats.DataPack.encodeToString(ser, this)
     }
 
-    fun tooltipInfo(): List<MutableText> {
-        return buildList {
-            add(Text.translatable("bountiful.tooltip.required").formatted(Formatting.GOLD).append(":"))
-            addAll(objectives.map {
-                it.textSummary(this@BountyData, MinecraftClient.getInstance().player!!, true)
-            })
-            add(Text.translatable("bountiful.tooltip.rewards").formatted(Formatting.GOLD).append(":"))
-            addAll(rewards.map {
-                it.textSummary(this@BountyData, MinecraftClient.getInstance().player!!, false)
-            })
-        }
-    }
-
     companion object : ItemDataJson<BountyData>() {
         override val identifier = Bountiful.id("bounty_data")
         override val ser = BountyData.serializer()

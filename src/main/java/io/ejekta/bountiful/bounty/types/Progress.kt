@@ -1,4 +1,4 @@
-package io.ejekta.bountiful.bounty.logic
+package io.ejekta.bountiful.bounty.types
 
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text

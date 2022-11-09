@@ -3,7 +3,7 @@
 	"content": [
 
 		{
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:string",
             "amount": {
                 "min": 4,
@@ -13,7 +13,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:coal",
             "amount": {
                 "min": 3,
@@ -23,7 +23,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:cod",
             "amount": {
                 "min": 2,
@@ -34,7 +34,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:barrel",
             "amount": {
                 "min": 1,
@@ -44,7 +44,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:salmon",
             "amount": {
                 "min": 3,
@@ -55,7 +55,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:tropical_fish",
             "amount": {
                 "min": 1,
@@ -66,7 +66,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:pufferfish",
             "amount": {
                 "min": 1,
@@ -77,7 +77,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:oak_boat",
             "amount": {
@@ -88,7 +88,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:nautilus_shell",
             "amount": {
@@ -100,7 +100,7 @@
 
     ,
         {
-            "type": "ITEM_TAG",
+            "type": "item_tag",
             "content": "minecraft:boats",
             "translation": "bountiful.item_tag.any_boat",
             "amount": {

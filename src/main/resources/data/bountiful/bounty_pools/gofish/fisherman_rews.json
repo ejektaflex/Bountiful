@@ -4,7 +4,7 @@
 	"content": [
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "RARE",
 			"content": "gofish:blaze_rod",
 			"amount": {
@@ -16,7 +16,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "RARE",
 			"content": "gofish:skeletal_rod",
 			"amount": {
@@ -29,7 +29,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "EPIC",
 			"content": "gofish:diamond_reinforced_rod",
 			"amount": {
@@ -42,7 +42,7 @@
 
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "LEGENDARY",
 			"content": "gofish:celestial_rod",
 			"amount": {

@@ -3,7 +3,7 @@
 	"content": [
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:leather_chestplate",
             "amount": {
                 "min": 1,
@@ -13,14 +13,14 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:leather"
                 }
             ]
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:leather_leggings",
             "amount": {
                 "min": 1,
@@ -30,14 +30,14 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:leather"
                 }
             ]
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:leather_helmet",
             "amount": {
                 "min": 1,
@@ -47,14 +47,14 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:leather"
                 }
             ]
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:leather_boots",
             "amount": {
                 "min": 1,
@@ -64,14 +64,14 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:leather"
                 }
             ]
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:leather_horse_armor",
             "amount": {
@@ -82,7 +82,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:saddle",
             "amount": {

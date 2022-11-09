@@ -3,7 +3,7 @@
 	"content": [
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:chicken",
 			"amount": {
 				"min": 2,
@@ -13,7 +13,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:egg",
 			"amount": {
 				"min": 4,
@@ -23,7 +23,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:porkchop",
 			"amount": {
 				"min": 2,
@@ -33,7 +33,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:rabbit",
 			"amount": {
 				"min": 1,
@@ -43,7 +43,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:coal",
 			"amount": {
 				"min": 6,
@@ -53,7 +53,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:smoker",
 			"amount": {
@@ -64,7 +64,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:mutton",
 			"amount": {
@@ -75,7 +75,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:beef",
 			"amount": {
@@ -86,7 +86,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "RARE",
 			"content": "minecraft:dried_kelp_block",
 			"amount": {
@@ -97,7 +97,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "EPIC",
 			"content": "minecraft:sweet_berries",
 			"amount": {

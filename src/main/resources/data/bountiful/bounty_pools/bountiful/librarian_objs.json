@@ -3,7 +3,7 @@
 	"content": [
 
 		{
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:paper",
             "amount": {
                 "min": 4,
@@ -13,7 +13,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:bookshelf",
             "amount": {
                 "min": 1,
@@ -23,7 +23,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:sugar_cane",
             "amount": {
                 "min": 4,
@@ -33,7 +33,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:book",
             "amount": {
                 "min": 1,
@@ -43,7 +43,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:lectern",
             "amount": {
                 "min": 1,
@@ -53,7 +53,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:ink_sac",
             "amount": {
@@ -64,7 +64,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:writable_book",
             "amount": {

@@ -3,7 +3,7 @@
 	"content": [
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:arrow",
             "amount": {
                 "min": 8,
@@ -13,7 +13,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:bow",
             "amount": {
                 "min": 1,
@@ -24,7 +24,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:crossbow",
             "amount": {
@@ -36,7 +36,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:bow",
             "amount": {
@@ -48,7 +48,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:enchanted_book",
             "amount": {
@@ -60,7 +60,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:tipped_arrow",
             "amount": {
@@ -72,7 +72,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:tipped_arrow",
             "amount": {
                 "min": 2,
@@ -83,7 +83,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "RARE",
             "content": "minecraft:spectral_arrow",
             "amount": {
@@ -94,7 +94,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:bow",
             "amount": {

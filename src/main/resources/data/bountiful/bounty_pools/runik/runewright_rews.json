@@ -4,7 +4,7 @@
 	"content": [
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "runik:rune_actis",
 			"amount": {
@@ -16,7 +16,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "runik:rune_mira",
 			"amount": {
@@ -29,7 +29,7 @@
 
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "runik:rune_thol",
 			"amount": {
@@ -41,7 +41,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "runik:rune_vesna",
 			"amount": {
@@ -53,7 +53,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "runik:rune_dega",
 			"amount": {
@@ -65,7 +65,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "runik:rune_fargis",
 			"amount": {
@@ -77,7 +77,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "runik:rune_kando",
 			"amount": {
@@ -89,7 +89,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "runik:rune_kasso",
 			"amount": {
@@ -101,7 +101,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "runik:rune_dram",
 			"amount": {
@@ -113,7 +113,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "runik:rune_grisa",
 			"amount": {
@@ -125,7 +125,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "runik:rune_igas",
 			"amount": {
@@ -137,7 +137,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "runik:rune_loten",
 			"amount": {
@@ -149,7 +149,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "runik:rune_goran",
 			"amount": {
@@ -161,7 +161,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "runik:rune_itma",
 			"amount": {
@@ -173,7 +173,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "runik:rune_vana",
 			"amount": {
@@ -185,7 +185,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "runik:rune_zaag",
 			"amount": {
@@ -197,7 +197,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "runik:rune_runa",
 			"amount": {
@@ -209,7 +209,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "runik:rune_wagi",
 			"amount": {
@@ -221,7 +221,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "RARE",
 			"content": "runik:mana_equalizer",
 			"amount": {
@@ -233,7 +233,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "EPIC",
 			"content": "runik:mana_equalizer_pristine",
 			"amount": {
@@ -245,7 +245,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "RARE",
 			"content": "runik:mana_pocketwatch_broken",
 			"amount": {
@@ -257,7 +257,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "EPIC",
 			"content": "runik:mana_pocketwatch",
 			"amount": {
@@ -269,7 +269,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "RARE",
 			"content": "runik:living_twig",
 			"amount": {
@@ -281,7 +281,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "EPIC",
 			"content": "runik:res_branch",
 			"amount": {
@@ -293,7 +293,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "RARE",
 			"content": "runik:manastrength_charm",
 			"amount": {
@@ -305,7 +305,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "RARE",
 			"content": "runik:manablood_catalyzer",
 			"amount": {
@@ -317,7 +317,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "RARE",
 			"content": "runik:manasense_catalyzer",
 			"amount": {
@@ -329,7 +329,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "runik:manaflask_sm",
 			"amount": {
@@ -341,7 +341,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "RARE",
 			"content": "runik:manaflask_md",
 			"amount": {
@@ -353,7 +353,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "EPIC",
 			"content": "runik:manaflask_lg",
 			"amount": {

@@ -4,7 +4,7 @@
 	"content": [
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "croptopia:pineapple",
 			"amount": {
 				"min": 4,
@@ -14,7 +14,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "#croptopia:nuts",
 			"amount": {
 				"min": 4,
@@ -24,7 +24,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "#croptopia:peppers",
 			"amount": {
 				"min": 4,
@@ -34,7 +34,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "#croptopia:sauces",
 			"amount": {
 				"min": 4,
@@ -44,7 +44,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "#croptopia:flourable",
 			"amount": {
 				"min": 4,
@@ -54,7 +54,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "croptopia:burrito",
 			"amount": {
 				"min": 2,
@@ -63,7 +63,7 @@
 			"unitWorth": 250.0
 		},
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "croptopia:chili_relleno",
 			"amount": {
 				"min": 2,
@@ -72,7 +72,7 @@
 			"unitWorth": 275.0
 		},
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "croptopia:trifle",
 			"amount": {
 				"min": 1,
@@ -81,7 +81,7 @@
 			"unitWorth": 400.0
 		},
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "croptopia:supreme_pizza",
 			"amount": {
 				"min": 1,
@@ -90,7 +90,7 @@
 			"unitWorth": 350.0
 		},
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "croptopia:figgy_pudding",
 			"amount": {
 				"min": 2,
@@ -99,7 +99,7 @@
 			"unitWorth": 400.0
 		},
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "croptopia:fruit_salad",
 			"amount": {
 				"min": 2,

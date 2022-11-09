@@ -3,7 +3,7 @@
 	"content": [
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:lava_bucket",
             "amount": {
                 "min": 1,
@@ -13,7 +13,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:leather_helmet",
             "amount": {
                 "min": 1,
@@ -24,7 +24,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:leather_chestplate",
             "amount": {
                 "min": 1,
@@ -35,7 +35,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:leather_leggings",
             "amount": {
                 "min": 1,
@@ -46,7 +46,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:leather_boots",
             "amount": {
                 "min": 1,
@@ -57,7 +57,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:blast_furnace",
             "amount": {
                 "min": 1,
@@ -67,7 +67,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:lava_bucket",
             "amount": {
                 "min": 1,

@@ -2,7 +2,7 @@
 	"content": [
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:stone_shovel",
 			"amount": {
 				"min": 1,
@@ -13,7 +13,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:stone_hoe",
 			"amount": {
 				"min": 1,
@@ -24,7 +24,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:iron_hoe",
 			"amount": {
@@ -35,14 +35,14 @@
 			"nbt": "{Damage:0}",
 			"forbids": [
 				{
-					"type": "ITEM",
+					"type": "item",
 					"content": "minecraft:iron_ingot"
 				}
 			]
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:iron_shovel",
 			"amount": {
@@ -53,7 +53,7 @@
 			"nbt": "{Damage:0}",
 			"forbids": [
 				{
-					"type": "ITEM",
+					"type": "item",
 					"content": "minecraft:iron_ingot"
 				}
 			]

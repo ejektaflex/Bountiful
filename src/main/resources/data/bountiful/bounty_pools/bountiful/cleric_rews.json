@@ -3,7 +3,7 @@
 	"content": [
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:redstone",
             "amount": {
                 "min": 1,
@@ -13,7 +13,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:magma_cream",
             "amount": {
                 "min": 2,
@@ -22,14 +22,14 @@
             "unitWorth": 450,
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:magma_cream"
                 }
             ]
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:lapis_lazuli",
             "amount": {
                 "min": 1,
@@ -39,7 +39,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:potion",
             "amount": {
                 "min": 1,
@@ -50,7 +50,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:potion",
             "amount": {
                 "min": 1,
@@ -61,7 +61,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:enchanted_book",
             "amount": {
                 "min": 1,
@@ -72,7 +72,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:glowstone",
             "amount": {
@@ -83,7 +83,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:ghast_tear",
             "amount": {
@@ -94,7 +94,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:ender_pearl",
             "amount": {
@@ -105,7 +105,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "RARE",
             "content": "minecraft:potion",
             "amount": {
@@ -117,7 +117,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:experience_bottle",
             "amount": {
@@ -128,7 +128,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "LEGENDARY",
             "content": "minecraft:ender_pearl",
             "amount": {
@@ -139,7 +139,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "LEGENDARY",
             "content": "minecraft:enchanted_book",
             "amount": {

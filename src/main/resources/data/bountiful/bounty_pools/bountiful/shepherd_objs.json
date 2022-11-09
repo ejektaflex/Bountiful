@@ -3,7 +3,7 @@
 	"content": [
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:loom",
             "amount": {
                 "min": 1,
@@ -13,7 +13,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "#minecraft:wool",
             "amount": {
                 "min": 4,
@@ -24,7 +24,7 @@
         },
 
         {
-            "type": "ITEM_TAG",
+            "type": "item_tag",
             "content": "minecraft:wool",
             "translation": "bountiful.item_tag.any_wool",
             "amount": {
@@ -36,7 +36,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "#minecraft:banners",
             "amount": {
                 "min": 2,
@@ -47,7 +47,7 @@
         },
 
         {
-            "type": "ITEM_TAG",
+            "type": "item_tag",
             "content": "minecraft:banners",
             "translation": "bountiful.item_tag.any_banner",
             "amount": {
@@ -59,7 +59,7 @@
         },
 
         {
-            "type": "ITEM_TAG",
+            "type": "item_tag",
             "content": "minecraft:beds",
             "translation": "bountiful.item_tag.any_bed",
             "amount": {
@@ -70,7 +70,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:gray_dye",
             "amount": {
                 "min": 4,
@@ -80,7 +80,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:black_dye",
             "amount": {
                 "min": 4,
@@ -90,7 +90,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:light_blue_dye",
             "amount": {
                 "min": 4,
@@ -100,7 +100,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:lime_dye",
             "amount": {
                 "min": 4,
@@ -110,7 +110,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:yellow_dye",
             "amount": {
@@ -121,7 +121,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:orange_dye",
             "amount": {
@@ -132,7 +132,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:red_dye",
             "amount": {
@@ -143,7 +143,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:pink_dye",
             "amount": {

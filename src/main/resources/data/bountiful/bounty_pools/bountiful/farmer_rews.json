@@ -4,7 +4,7 @@
 
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:bread",
 			"amount": {
 				"min": 2,
@@ -14,7 +14,7 @@
 		},
 		
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:pumpkin_pie",
 			"amount": {
 				"min": 1,
@@ -24,7 +24,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:apple",
 			"amount": {
 				"min": 1,
@@ -35,7 +35,7 @@
 
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:cookie",
 			"amount": {
@@ -47,7 +47,7 @@
 
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "RARE",
 			"content": "minecraft:suspicious_stew",
 			"amount": {
@@ -58,7 +58,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "RARE",
 			"content": "minecraft:cake",
 			"amount": {
@@ -69,7 +69,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "RARE",
 			"content": "minecraft:honey_bottle",
 			"amount": {
@@ -80,7 +80,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "EPIC",
 			"content": "minecraft:golden_carrot",
 			"amount": {
@@ -91,7 +91,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "EPIC",
 			"content": "minecraft:glistering_melon_slice",
 			"amount": {
@@ -102,7 +102,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "LEGENDARY",
 			"content": "minecraft:golden_apple",
 			"amount": {

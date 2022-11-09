@@ -1,7 +1,8 @@
 @file:UseSerializers(IdentitySer::class)
 package io.ejekta.bountiful
 
-import io.ejekta.bountiful.bounty.logic.EntityLogic
+import io.ejekta.bountiful.bounty.types.builtin.BountyTypeEntity
+import io.ejekta.bountiful.bounty.types.IBountyType
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.messages.SelectBounty
 import io.ejekta.bountiful.util.iterateBountyData
@@ -17,6 +18,7 @@ import net.minecraft.advancement.criterion.TickCriterion
 import net.minecraft.resource.ResourceType
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
+import net.minecraft.util.registry.RegistryKey
 
 
 class Bountiful : ModInitializer {
@@ -25,6 +27,7 @@ class Bountiful : ModInitializer {
         const val ID = "bountiful"
         fun id(str: String) = Identifier(ID, str)
         val LOGGER = Kambrik.Logging.createLogger(ID)
+        val BOUNTY_LOGIC_REGISTRY_KEY = RegistryKey.ofRegistry<IBountyType>(Bountiful.id("logic_registry"))
     }
 
     init {
@@ -57,7 +60,7 @@ class Bountiful : ModInitializer {
             if (entity is ServerPlayerEntity) {
                 val playersInAction = world.getPlayers { it.distanceTo(entity) < 12f } + world.getPlayers { it.distanceTo(killedEntity) < 12f } + entity
                 playersInAction.toSet().forEach {
-                    EntityLogic.incrementEntityBounties(it, killedEntity)
+                    BountyTypeEntity.incrementEntityBounties(it, killedEntity)
                 }
             }
         })

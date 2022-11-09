@@ -3,7 +3,7 @@
 	"content": [
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:paper",
             "amount": {
                 "min": 12,
@@ -13,7 +13,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:campfire",
             "amount": {
                 "min": 1,
@@ -23,7 +23,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:quartz",
             "amount": {
@@ -34,7 +34,7 @@
         },
 
         {
-            "type": "ITEM_TAG",
+            "type": "item_tag",
             "content": "minecraft:candles",
             "translation": "bountiful.item_tag.any_candle",
             "amount": {
@@ -45,7 +45,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:glass_pane",
             "amount": {
                 "min": 4,
@@ -55,7 +55,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:glass",
             "amount": {
                 "min": 4,
@@ -65,7 +65,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:cartography_table",
             "amount": {
@@ -76,7 +76,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:compass",
             "amount": {

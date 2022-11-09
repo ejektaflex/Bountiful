@@ -1,16 +1,15 @@
-package io.ejekta.bountiful.bounty.logic
+package io.ejekta.bountiful.bounty.types.builtin
 
 import io.ejekta.bountiful.bounty.BountyDataEntry
+import io.ejekta.bountiful.bounty.types.IBountyType
+import io.ejekta.bountiful.bounty.types.Progress
 import io.ejekta.bountiful.util.getTagItems
 import io.ejekta.kambrik.ext.collect
 import io.ejekta.kambrik.text.textLiteral
 import io.ejekta.kambrik.text.textTranslate
-import net.fabricmc.fabric.api.tag.convention.v1.TagUtil
-import net.fabricmc.fabric.mixin.resource.conditions.TagManagerLoaderMixin
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.tag.ItemTags
 import net.minecraft.tag.TagKey
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
@@ -20,7 +19,7 @@ import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 
 
-object ItemTagLogic : IEntryLogic {
+class BountyTypeItemTag : IBountyType {
 
     private fun getTag(entry: BountyDataEntry) = TagKey.of(Registry.ITEM_KEY, Identifier(entry.content))
 

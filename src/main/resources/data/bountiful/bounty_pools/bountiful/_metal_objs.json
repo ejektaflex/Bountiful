@@ -2,7 +2,7 @@
 	"content": [
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:coal",
 			"amount": {
 				"min": 3,
@@ -12,7 +12,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:raw_iron",
 			"amount": {
 				"min": 3,
@@ -21,30 +21,30 @@
 			"unitWorth": 900,
 			"forbids": [
 				{
-					"type": "ITEM",
+					"type": "item",
 					"content": "minecraft:iron_ingot"
 				},
 				{
-					"type": "ITEM",
+					"type": "item",
 					"content": "minecraft:iron_helmet"
 				},
 				{
-					"type": "ITEM",
+					"type": "item",
 					"content": "minecraft:iron_chestplate"
 				},
 				{
-					"type": "ITEM",
+					"type": "item",
 					"content": "minecraft:iron_leggings"
 				},
 				{
-					"type": "ITEM",
+					"type": "item",
 					"content": "minecraft:iron_boots"
 				}
 			]
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:raw_copper",
 			"amount": {
 				"min": 3,
@@ -53,14 +53,14 @@
 			"unitWorth": 700,
 			"forbids": [
 				{
-					"type": "ITEM",
+					"type": "item",
 					"content": "minecraft:copper_ingot"
 				}
 			]
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:copper_ingot",
 			"amount": {
 				"min": 3,
@@ -70,7 +70,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:raw_gold",
 			"rarity": "UNCOMMON",
 			"amount": {
@@ -81,7 +81,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:gold_ingot",
 			"rarity": "UNCOMMON",
 			"amount": {
@@ -92,7 +92,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:iron_ingot",
 			"amount": {
 				"min": 3,
@@ -102,7 +102,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:diamond",
 			"amount": {
 				"min": 1,
@@ -113,7 +113,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:chain",
 			"amount": {
 				"min": 1,
@@ -122,14 +122,14 @@
 			"unitWorth": 1100,
 			"forbids": [
 				{
-					"type": "ITEM",
+					"type": "item",
 					"content": "minecraft:iron_ingot"
 				}
 			]
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:iron_bars",
 			"amount": {
 				"min": 4,
@@ -138,14 +138,14 @@
 			"unitWorth": 375,
 			"forbids": [
 				{
-					"type": "ITEM",
+					"type": "item",
 					"content": "minecraft:iron_ingot"
 				}
 			]
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "LEGENDARY",
 			"content": "minecraft:netherite_ingot",
 			"amount": {

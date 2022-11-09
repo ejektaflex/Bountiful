@@ -3,7 +3,7 @@
 	"content": [
 
 		{
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:bookshelf",
             "amount": {
                 "min": 1,
@@ -13,7 +13,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:lantern",
             "amount": {
                 "min": 1,
@@ -23,7 +23,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:enchanted_book",
             "amount": {
                 "min": 1,
@@ -35,7 +35,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:enchanted_book",
             "amount": {
                 "min": 1,
@@ -47,7 +47,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:enchanted_book",
             "amount": {
                 "min": 1,
@@ -59,7 +59,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:enchanted_book",
             "amount": {
                 "min": 1,
@@ -71,7 +71,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:enchanted_book",
             "amount": {
                 "min": 1,
@@ -83,7 +83,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:enchanted_book",
             "amount": {
                 "min": 1,
@@ -95,7 +95,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:enchanted_book",
             "amount": {
@@ -108,7 +108,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:glass",
             "amount": {
@@ -119,7 +119,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:tinted_glass",
             "amount": {
@@ -130,7 +130,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:clock",
             "amount": {
@@ -141,7 +141,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:compass",
             "amount": {
@@ -152,7 +152,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:name_tag",
             "amount": {
@@ -163,7 +163,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "LEGENDARY",
             "content": "minecraft:name_tag",
             "amount": {

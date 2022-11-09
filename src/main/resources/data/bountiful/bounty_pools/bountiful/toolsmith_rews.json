@@ -3,7 +3,7 @@
 	"content": [
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:stone_axe",
             "amount": {
                 "min": 1,
@@ -14,7 +14,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:stone_pickaxe",
             "amount": {
                 "min": 1,
@@ -25,7 +25,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:stone_hoe",
             "amount": {
                 "min": 1,
@@ -36,7 +36,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:iron_pickaxe",
             "amount": {
@@ -47,14 +47,14 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:iron_ingot"
                 }
             ]
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:iron_hoe",
             "amount": {
@@ -65,14 +65,14 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:iron_ingot"
                 }
             ]
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "RARE",
             "content": "minecraft:golden_axe",
             "amount": {
@@ -83,14 +83,14 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:gold_ingot"
                 }
             ]
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "RARE",
             "content": "minecraft:golden_pickaxe",
             "amount": {
@@ -101,14 +101,14 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:gold_ingot"
                 }
             ]
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "RARE",
             "content": "minecraft:golden_hoe",
             "amount": {
@@ -119,14 +119,14 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:gold_ingot"
                 }
             ]
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:diamond_pickaxe",
             "amount": {
@@ -137,7 +137,7 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:diamond"
                 }
             ],
@@ -145,7 +145,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:diamond_axe",
             "amount": {
@@ -156,7 +156,7 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:diamond"
                 }
             ],
@@ -164,7 +164,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:diamond_hoe",
             "amount": {
@@ -175,7 +175,7 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:diamond"
                 }
             ],
@@ -183,7 +183,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:bell",
             "amount": {

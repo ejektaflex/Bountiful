@@ -4,7 +4,7 @@
 	"content": [
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "LEGENDARY",
             "content": "charm:raid_horn",
             "amount": {

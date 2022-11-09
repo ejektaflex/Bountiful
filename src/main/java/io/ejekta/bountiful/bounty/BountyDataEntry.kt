@@ -1,21 +1,24 @@
 package io.ejekta.bountiful.bounty
 
-import io.ejekta.bountiful.bounty.logic.IEntryLogic
+import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
+import io.ejekta.bountiful.bounty.types.IBountyType
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kotlinx.serialization.json.JsonObject
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
+import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 
 // Tracks the status of a given bounty
 @Serializable
 data class BountyDataEntry private constructor(
-    val type: BountyType,
+    val logicId: @Contextual Identifier,
     val content: String,
     val amount: Int,
     var nbt: @Contextual NbtCompound? = null,
@@ -23,19 +26,19 @@ data class BountyDataEntry private constructor(
     var translation: String? = null,
     var isMystery: Boolean = false,
     var rarity: BountyRarity = BountyRarity.COMMON,
-    var tracking: @Contextual NbtCompound = NbtCompound(), // Used to track extra data, e.g. current progress if needed
+    var tracking: JsonObject = JsonObject(emptyMap()), // Used to track extra data, e.g. current progress if needed
     var criteria: CriteriaData? = null,
-    val current: Int = 0
+    val current: Int = 0 // Current progress
 ) {
 
-    val logic: IEntryLogic
-        get() = type.logic(this)
+    val logic: IBountyType
+        get() = BountyTypeRegistry[logicId]!!
 
     @Transient
     var worth = Double.MIN_VALUE
 
     override fun toString(): String {
-        return "BDE[type=$type, content=$content, amount=$amount, isNbtNull=${nbt == null}, name=$name, mystery=$isMystery]"
+        return "BDE[type=$logic, content=$content, amount=$amount, isNbtNull=${nbt == null}, name=$name, mystery=$isMystery]"
     }
 
     fun textBoard(player: PlayerEntity): List<Text> {
@@ -51,22 +54,20 @@ data class BountyDataEntry private constructor(
         }
     }
 
-    fun giveReward(player: PlayerEntity) {
-        logic.giveReward(this, player)
-    }
+//    fun giveReward(player: PlayerEntity) {
+//        logic.giveReward(this, player)
+//    }
 
-    fun tryFinishObjective(player: PlayerEntity) = logic.tryFinishObjective(this, player)
+//    fun tryFinishObjective(player: PlayerEntity) = logic.tryFinishObjective(this, player)
 
     fun verifyValidity(player: PlayerEntity) = logic.verifyValidity(this, player)
 
     companion object {
 
-        val DUMMY = BountyDataEntry(BountyType.NULL, "NULL_ENTRY", 1)
-
         fun of(
             world: ServerWorld,
             pos: BlockPos,
-            type: BountyType,
+            type: Identifier,
             content: String,
             amount: Int,
             worth: Double,
@@ -75,14 +76,14 @@ data class BountyDataEntry private constructor(
             translation: String? = null,
             isMystery: Boolean = false,
             rarity: BountyRarity = BountyRarity.COMMON,
-            tracking: NbtCompound = NbtCompound(),
+            tracking: JsonObject = JsonObject(emptyMap()),
             criteriaData: CriteriaData? = null
         ): BountyDataEntry {
             return BountyDataEntry(
                 type, content, amount, nbt, name, translation, isMystery, rarity, tracking, criteriaData
             ).apply {
                 this.worth = worth
-                type.logic(this).setup(this, world, pos)
+                logic.setup(this, world, pos)
             }
         }
 

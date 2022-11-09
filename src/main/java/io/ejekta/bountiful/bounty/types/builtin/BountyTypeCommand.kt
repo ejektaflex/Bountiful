@@ -1,14 +1,15 @@
-package io.ejekta.bountiful.bounty.logic
+package io.ejekta.bountiful.bounty.types.builtin
 
 import io.ejekta.bountiful.bounty.BountyDataEntry
+import io.ejekta.bountiful.bounty.types.IBountyType
+import io.ejekta.bountiful.bounty.types.Progress
 import io.ejekta.kambrik.text.textLiteral
-import io.ejekta.kambrik.text.textTranslate
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 
 
-object CommandLogic : IEntryLogic {
+object BountyTypeCommand : IBountyType {
 
     override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText {
         val server = player.server ?: return textLiteral("Server does not exist!") // oh my

@@ -3,7 +3,7 @@
 	"content": [
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:shears",
             "amount": {
                 "min": 1,
@@ -14,7 +14,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:lapis_block",
             "amount": {
                 "min": 1,
@@ -24,7 +24,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "#minecraft:wool",
             "amount": {
                 "min": 4,
@@ -35,7 +35,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "#minecraft:wool_carpets",
             "amount": {
                 "min": 1,
@@ -46,7 +46,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "UNCOMMON",
             "content": "#minecraft:beds",
             "amount": {
@@ -58,7 +58,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "RARE",
             "content": "#minecraft:banners",
             "amount": {
@@ -70,7 +70,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:painting",
             "amount": {
@@ -81,7 +81,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:light_gray_dye",
             "amount": {
@@ -92,7 +92,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "RARE",
             "content": "minecraft:purple_dye",
             "amount": {
@@ -103,7 +103,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "RARE",
             "content": "minecraft:magenta_dye",
             "amount": {
@@ -114,7 +114,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "RARE",
             "content": "minecraft:blue_dye",
             "amount": {
@@ -125,7 +125,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "RARE",
             "content": "minecraft:cyan_dye",
             "amount": {
@@ -136,7 +136,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "RARE",
             "content": "minecraft:green_dye",
             "amount": {
@@ -147,7 +147,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "RARE",
             "content": "minecraft:brown_dye",
             "amount": {

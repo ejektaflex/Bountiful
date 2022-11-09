@@ -1,11 +1,10 @@
-package io.ejekta.bountiful.bounty.logic
+package io.ejekta.bountiful.bounty.types.builtin
 
-import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
-import io.ejekta.bountiful.bounty.BountyType
-import io.ejekta.bountiful.content.BountyItem
+import io.ejekta.bountiful.bounty.BountyTypeOldEnum
+import io.ejekta.bountiful.bounty.types.IBountyType
+import io.ejekta.bountiful.bounty.types.Progress
 import io.ejekta.bountiful.util.iterateBountyData
-import io.ejekta.bountiful.util.iterateBountyStacks
 import io.ejekta.kambrik.ext.identifier
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
@@ -18,7 +17,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 
 
-object EntityLogic : IEntryLogic {
+class BountyTypeEntity : IBountyType {
 
     fun getEntityType(entry: BountyDataEntry): EntityType<*> {
         return Registry.ENTITY_TYPE.get(Identifier(entry.content))
@@ -73,7 +72,7 @@ object EntityLogic : IEntryLogic {
     fun incrementEntityBounties(playerEntity: ServerPlayerEntity, killedEntity: LivingEntity) {
         playerEntity.iterateBountyData {
             var didWork = false
-            val entityObjectives = objectives.filter { it.type == BountyType.ENTITY }
+            val entityObjectives = objectives.filter { it.type == BountyTypeOldEnum.ENTITY }
             if (entityObjectives.isEmpty()) return@iterateBountyData false
             for (obj in entityObjectives) {
                 if (obj.content == killedEntity.type.identifier.toString()) {

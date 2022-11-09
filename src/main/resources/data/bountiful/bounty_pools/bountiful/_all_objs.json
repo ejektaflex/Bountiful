@@ -2,7 +2,7 @@
 	"content": [
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:emerald",
 			"amount": {
 				"min": 1,
@@ -12,7 +12,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "EPIC",
 			"content": "minecraft:iron_block",
 			"amount": {
@@ -24,7 +24,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "EPIC",
 			"content": "minecraft:anvil",
 			"amount": {
@@ -36,7 +36,7 @@
 		},
 
 		{
-			"type": "ENTITY",
+			"type": "entity",
 			"timeMult": 6.0,
 			"content": "minecraft:zombie",
 			"amount": {
@@ -47,7 +47,7 @@
 		},
 
 		{
-			"type": "ENTITY",
+			"type": "entity",
 			"timeMult": 6.0,
 			"content": "minecraft:spider",
 			"amount": {
@@ -58,7 +58,7 @@
 		},
 
 		{
-			"type": "ENTITY",
+			"type": "entity",
 			"timeMult": 7.0,
 			"content": "minecraft:creeper",
 			"amount": {

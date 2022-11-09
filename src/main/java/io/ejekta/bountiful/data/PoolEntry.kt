@@ -3,9 +3,8 @@ package io.ejekta.bountiful.data
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.BountyRarity
-import io.ejekta.bountiful.bounty.BountyType
+import io.ejekta.bountiful.bounty.BountyTypeOldEnum
 import io.ejekta.bountiful.bounty.CriteriaData
-import io.ejekta.bountiful.bounty.logic.ItemTagLogic
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.util.getTagItemKey
 import io.ejekta.bountiful.util.getTagItems
@@ -16,9 +15,7 @@ import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
 import net.minecraft.item.Item
 import net.minecraft.nbt.NbtCompound
-import net.minecraft.nbt.StringNbtReader
 import net.minecraft.server.world.ServerWorld
-import net.minecraft.tag.ItemTags
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import kotlin.math.abs
@@ -28,7 +25,7 @@ import kotlin.math.min
 
 @Serializable
 class PoolEntry private constructor() {
-    var type = BountyType.NULL
+    var type = BountyTypeOldEnum.NULL
     var rarity = BountyRarity.COMMON
     var content = "Nope"
     var name: String? = null
@@ -55,11 +52,11 @@ class PoolEntry private constructor() {
 
     private fun getRelatedItems(world: ServerWorld): List<Item>? {
         return when (type) {
-            BountyType.ITEM -> {
+            BountyTypeOldEnum.ITEM -> {
                 val tagId = Identifier(content.substringAfter("#"))
                 getTagItems(world, getTagItemKey(tagId))
             }
-            BountyType.ITEM_TAG -> {
+            BountyTypeOldEnum.ITEM_TAG -> {
                 val tagId = Identifier(content)
                 getTagItems(world, getTagItemKey(tagId))
             }
@@ -70,7 +67,7 @@ class PoolEntry private constructor() {
     fun toEntry(world: ServerWorld, pos: BlockPos, worth: Double? = null): BountyDataEntry {
         val amt = amountAt(worth)
 
-        val actualContent = if (type == BountyType.ITEM && content.startsWith("#")) {
+        val actualContent = if (type == BountyTypeOldEnum.ITEM && content.startsWith("#")) {
             val tagId = Identifier(content.substringAfter("#"))
             val tags = getTagItems(world, getTagItemKey(tagId))
             if (tags.isEmpty()){
@@ -142,13 +139,13 @@ class PoolEntry private constructor() {
     }
 
     @Serializable
-    class ForbiddenContent(val type: BountyType, val content: String)
+    class ForbiddenContent(val type: BountyTypeOldEnum, val content: String)
 
     companion object {
 
         // With encodeDefaults = false, we need a separate constructor
         fun create() = PoolEntry().apply {
-            type = BountyType.ITEM
+            type = BountyTypeOldEnum.ITEM
             amount = EntryRange(1, 1)
             content = "NO_CONTENT"
             unitWorth = 100.0

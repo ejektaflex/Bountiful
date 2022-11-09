@@ -2,10 +2,10 @@ package io.ejekta.bountiful.client.widgets
 
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
-import io.ejekta.bountiful.bounty.BountyType
-import io.ejekta.bountiful.bounty.logic.EntityLogic
-import io.ejekta.bountiful.bounty.logic.ItemLogic
-import io.ejekta.bountiful.bounty.logic.ItemTagLogic
+import io.ejekta.bountiful.bounty.BountyTypeOldEnum
+import io.ejekta.bountiful.bounty.types.builtin.BountyTypeEntity
+import io.ejekta.bountiful.bounty.types.builtin.BountyTypeItem
+import io.ejekta.bountiful.bounty.types.builtin.BountyTypeItemTag
 import io.ejekta.bountiful.client.BoardScreen
 import io.ejekta.bountiful.content.messages.SelectBounty
 import io.ejekta.kambrik.ext.fapi.textRenderer
@@ -40,27 +40,27 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
 
     private fun renderEntry(dsl: KGuiDsl, entry: BountyDataEntry, x: Int, y: Int, isReward: Boolean = false) {
         when (entry.type) {
-            BountyType.EXPLORE_BIOME -> {
+            BountyTypeOldEnum.EXPLORE_BIOME -> {
                 dsl { itemStackIcon(ItemStack(Items.FILLED_MAP), x, y) }
             }
-            BountyType.COMMAND -> {
+            BountyTypeOldEnum.COMMAND -> {
                 dsl { itemStackIcon(ItemStack(Items.COMMAND_BLOCK), x, y) }
             }
-            BountyType.ITEM -> {
-                val stack = ItemLogic.getItemStack(entry).apply {
+            BountyTypeOldEnum.ITEM -> {
+                val stack = BountyTypeItem.getItemStack(entry).apply {
                     count = entry.amount
                 }
                 dsl { itemStackIcon(stack, x, y) }
             }
-            BountyType.ITEM_TAG -> {
+            BountyTypeOldEnum.ITEM_TAG -> {
                 val world = MinecraftClient.getInstance().world ?: return
                 val frameTime = (world.time / 30L).toInt()
-                val options = ItemTagLogic.getItems(world, entry).map { ItemStack(it) }.takeUnless { it.isEmpty() } ?: return
+                val options = BountyTypeItemTag.getItems(world, entry).map { ItemStack(it) }.takeUnless { it.isEmpty() } ?: return
                 val frame = frameTime % options.size
                 dsl { itemStack(options[frame], x, y) }
             }
-            BountyType.ENTITY -> {
-                val entityType = EntityLogic.getEntityType(entry)
+            BountyTypeOldEnum.ENTITY -> {
+                val entityType = BountyTypeEntity.getEntityType(entry)
 
                 if (entityType.spawnGroup != SpawnGroup.CREATURE && entityType.spawnGroup != SpawnGroup.MONSTER) {
                     return

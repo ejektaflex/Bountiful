@@ -1,33 +1,25 @@
-package io.ejekta.bountiful.bounty.logic
+package io.ejekta.bountiful.bounty.types
 
-import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.kambrik.text.textLiteral
 import io.ejekta.kambrik.text.textTranslate
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.BlockPos
 
-sealed interface IEntryLogic {
+interface IBountyType {
 
     fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): MutableText
 
     fun textBoard(entry: BountyDataEntry, player: PlayerEntity): List<Text>
 
-    fun getProgress(entry: BountyDataEntry, player: PlayerEntity): Progress
-
-    fun tryFinishObjective(entry: BountyDataEntry, player: PlayerEntity): Boolean
-
-    fun giveReward(entry: BountyDataEntry, player: PlayerEntity): Boolean
-
     fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText?
 
     fun setup(entry: BountyDataEntry, world: ServerWorld, pos: BlockPos) {
-
+        // Default no-op
     }
 
     fun getDescription(entry: BountyDataEntry): MutableText {

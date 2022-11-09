@@ -3,7 +3,7 @@
 	"content": [
 
 		{
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:iron_helmet",
             "amount": {
                 "min": 1,
@@ -13,14 +13,14 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:iron_ingot"
                 }
             ]
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:iron_chestplate",
             "amount": {
                 "min": 1,
@@ -30,14 +30,14 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:iron_ingot"
                 }
             ]
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:iron_leggings",
             "amount": {
                 "min": 1,
@@ -47,14 +47,14 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:iron_ingot"
                 }
             ]
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:iron_boots",
             "amount": {
                 "min": 1,
@@ -64,14 +64,14 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:iron_ingot"
                 }
             ]
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:bell",
             "amount": {
@@ -82,7 +82,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:chainmail_leggings",
             "amount": {
@@ -93,14 +93,14 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:iron_ingot"
                 }
             ]
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:chainmail_boots",
             "amount": {
@@ -111,14 +111,14 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:iron_ingot"
                 }
             ]
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:golden_helmet",
             "rarity": "RARE",
             "amount": {
@@ -130,7 +130,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:golden_chestplate",
             "rarity": "RARE",
             "amount": {
@@ -142,7 +142,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:golden_leggings",
             "rarity": "RARE",
             "amount": {
@@ -154,7 +154,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:golden_boots",
             "rarity": "RARE",
             "amount": {
@@ -166,7 +166,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:shield",
             "amount": {
@@ -177,14 +177,14 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:iron_ingot"
                 }
             ]
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:golden_horse_armor",
             "amount": {
@@ -195,7 +195,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:iron_horse_armor",
             "amount": {
@@ -205,14 +205,14 @@
             "unitWorth": 5000,
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:iron_ingot"
                 }
             ]
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:diamond_horse_armor",
             "amount": {
@@ -222,7 +222,7 @@
             "unitWorth": 24000,
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:diamond"
                 }
             ],
@@ -230,7 +230,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:diamond_helmet",
             "amount": {
@@ -241,7 +241,7 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:diamond"
                 }
             ],
@@ -249,7 +249,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:diamond_chestplate",
             "amount": {
@@ -260,7 +260,7 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:diamond"
                 }
             ],
@@ -268,7 +268,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:diamond_leggings",
             "amount": {
@@ -279,7 +279,7 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:diamond"
                 }
             ],
@@ -287,7 +287,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:diamond_boots",
             "amount": {
@@ -298,7 +298,7 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:diamond"
                 }
             ],
@@ -306,7 +306,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "LEGENDARY",
             "content": "minecraft:netherite_helmet",
             "amount": {
@@ -317,7 +317,7 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:netherite_ingot"
                 }
             ],
@@ -325,7 +325,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "LEGENDARY",
             "content": "minecraft:netherite_chestplate",
             "amount": {
@@ -336,7 +336,7 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:netherite_ingot"
                 }
             ],
@@ -344,7 +344,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "LEGENDARY",
             "content": "minecraft:netherite_leggings",
             "amount": {
@@ -355,7 +355,7 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:netherite_ingot"
                 }
             ],
@@ -363,7 +363,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "LEGENDARY",
             "content": "minecraft:netherite_boots",
             "amount": {
@@ -374,7 +374,7 @@
             "nbt": "{Damage:0}",
             "forbids": [
                 {
-                    "type": "ITEM",
+                    "type": "item",
                     "content": "minecraft:netherite_ingot"
                 }
             ],

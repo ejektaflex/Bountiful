@@ -3,7 +3,7 @@
 	"content": [
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:leather",
             "amount": {
                 "min": 2,
@@ -14,7 +14,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:flint",
             "amount": {
                 "min": 16,
@@ -24,7 +24,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:rabbit_hide",
             "amount": {
@@ -35,7 +35,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:scute",
             "amount": {
@@ -46,7 +46,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:cauldron",
             "amount": {
                 "min": 1,

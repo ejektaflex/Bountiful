@@ -3,7 +3,7 @@
 	"content": [
 
 		{
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:cod_bucket",
             "amount": {
                 "min": 1,
@@ -13,7 +13,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:cooked_cod",
             "amount": {
                 "min": 3,
@@ -23,7 +23,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:campfire",
             "amount": {
                 "min": 1,
@@ -33,7 +33,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:cooked_salmon",
             "amount": {
                 "min": 1,
@@ -43,7 +43,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:enchanted_book",
             "amount": {
@@ -55,7 +55,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:enchanted_book",
             "amount": {
@@ -67,7 +67,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:enchanted_book",
             "amount": {
@@ -79,7 +79,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:bamboo",
             "amount": {
@@ -90,7 +90,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:nautilus_shell",
             "amount": {
@@ -101,7 +101,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "LEGENDARY",
             "content": "minecraft:heart_of_the_sea",
             "amount": {

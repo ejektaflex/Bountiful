@@ -3,7 +3,7 @@
 	"content": [
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:stick",
             "amount": {
                 "min": 8,
@@ -13,7 +13,7 @@
         },
 
         {
-            "type": "ITEM_TAG",
+            "type": "item_tag",
             "content": "minecraft:planks",
             "translation": "bountiful.item_tag.any_planks",
             "amount": {
@@ -23,7 +23,7 @@
             "unitWorth": 60
         },
         {
-            "type": "ITEM_TAG",
+            "type": "item_tag",
             "content": "minecraft:logs",
             "translation": "bountiful.item_tag.any_log",
             "amount": {
@@ -34,7 +34,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:gravel",
             "amount": {
                 "min": 16,
@@ -44,7 +44,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:flint",
             "amount": {
                 "min": 16,
@@ -54,7 +54,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:target",
             "amount": {
@@ -65,7 +65,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
             "content": "minecraft:fletching_table",
             "amount": {
                 "min": 1,
@@ -75,7 +75,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:string",
             "amount": {
@@ -86,7 +86,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:feather",
             "amount": {
@@ -97,7 +97,7 @@
         },
 
         {
-            "type": "ITEM",
+            "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:tripwire_hook",
             "amount": {

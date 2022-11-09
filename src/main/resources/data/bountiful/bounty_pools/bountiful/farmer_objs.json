@@ -3,7 +3,7 @@
 	"content": [
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:bone_meal",
 			"amount": {
 				"min": 4,
@@ -13,7 +13,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:bone_meal",
 			"amount": {
 				"min": 4,
@@ -23,7 +23,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:oak_sapling",
 			"amount": {
 				"min": 3,
@@ -33,7 +33,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:sugar",
 			"amount": {
 				"min": 3,
@@ -43,7 +43,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:melon_seeds",
 			"amount": {
 				"min": 1,
@@ -53,7 +53,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:wheat",
 			"amount": {
 				"min": 4,
@@ -63,7 +63,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:beetroot",
 			"amount": {
 				"min": 4,
@@ -73,7 +73,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:carrot",
 			"amount": {
 				"min": 4,
@@ -84,7 +84,7 @@
 
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:potato",
 			"amount": {
 				"min": 16,
@@ -94,7 +94,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:nether_wart",
 			"rarity": "RARE",
 			"amount": {
@@ -105,7 +105,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:pumpkin",
 			"amount": {
 				"min": 2,
@@ -115,7 +115,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:composter",
 			"amount": {
@@ -126,7 +126,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:melon",
 			"amount": {
@@ -137,7 +137,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:melon_slice",
 			"amount": {
@@ -148,7 +148,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:baked_potato",
 			"amount": {
@@ -159,7 +159,7 @@
 		},
 		
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:beetroot_soup",
 			"amount": {
@@ -170,7 +170,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "RARE",
 			"content": "minecraft:mushroom_stew",
 			"amount": {

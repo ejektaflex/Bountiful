@@ -3,7 +3,7 @@
 	"content": [
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:rabbit_stew",
 			"amount": {
 				"min": 1,
@@ -13,7 +13,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:cooked_porkchop",
 			"amount": {
 				"min": 2,
@@ -23,7 +23,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:cooked_chicken",
 			"amount": {
 				"min": 2,
@@ -33,7 +33,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"content": "minecraft:leather",
 			"amount": {
 				"min": 2,
@@ -43,7 +43,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:cooked_beef",
 			"amount": {
@@ -54,7 +54,7 @@
 		},
 
 		{
-			"type": "ITEM",
+			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:cooked_mutton",
 			"amount": {

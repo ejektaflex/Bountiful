@@ -1,10 +1,7 @@
 package io.ejekta.bountiful.util
 
 import io.ejekta.bountiful.bounty.BountyData
-import io.ejekta.bountiful.bounty.BountyType
-import io.ejekta.bountiful.bounty.logic.EntityLogic
 import io.ejekta.bountiful.content.BountyItem
-import io.ejekta.kambrik.ext.identifier
 import net.fabricmc.api.EnvType
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.MinecraftClient

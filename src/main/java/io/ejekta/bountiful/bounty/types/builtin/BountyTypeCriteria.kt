@@ -1,20 +1,15 @@
-package io.ejekta.bountiful.bounty.logic
+package io.ejekta.bountiful.bounty.types.builtin
 
 import io.ejekta.bountiful.bounty.BountyDataEntry
+import io.ejekta.bountiful.bounty.types.IBountyObjective
+import io.ejekta.bountiful.bounty.types.IBountyType
+import io.ejekta.bountiful.bounty.types.Progress
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 
 
-object CriteriaLogic : IEntryLogic {
-
-    fun getNumTriggers(entry: BountyDataEntry): Int {
-        return entry.tracking.getInt(triggerCompleteAmount)
-    }
-
-    fun setNumTriggers(entry: BountyDataEntry, value: Int) {
-        entry.tracking.putInt(triggerCompleteAmount, value)
-    }
+class BountyTypeCriteria : IBountyObjective {
 
     override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText? {
         return null
@@ -22,14 +17,7 @@ object CriteriaLogic : IEntryLogic {
 
     override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): MutableText {
         val progress = getProgress(entry, player)
-//        return when (isObj) {
-//            true -> Text.literal("Kill ").append(
-//                getEntityType(entry).name.copy()
-//            ).formatted(progress.color).append(
-//                progress.neededText.colored(Formatting.WHITE)
-//            )
-//            false -> error("Cannot have an entity (${entry.content}) as a reward.")
-//        }
+
         return Text.literal(entry.criteria?.description ?: "NO TRIGGER DESCRIPTION")
     }
 
@@ -44,10 +32,6 @@ object CriteriaLogic : IEntryLogic {
 
     override fun tryFinishObjective(entry: BountyDataEntry, player: PlayerEntity): Boolean {
         return getNumTriggers(entry) >= entry.amount
-    }
-
-    override fun giveReward(entry: BountyDataEntry, player: PlayerEntity): Boolean {
-        return false
     }
 
     private const val triggerCompleteAmount = "numTriggers"
