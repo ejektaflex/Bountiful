@@ -253,14 +253,14 @@ object BountifulCommands : CommandRegistrationCallback {
 
     private fun genBounty(rep: Int) = PlayerCommand {
         try {
-            val bd = BountyCreator.createData(
+            val stack = BountyCreator.createBountyItem(
                 source.world,
                 source.position.toBlockPos(),
                 BountifulContent.Decrees.toSet(),
                 rep,
                 it.world.time
             )
-            it.giveItemStack(BountyItem.create(bd))
+            it.giveItemStack(stack)
         } catch (e: Exception) {
             e.printStackTrace()
         }

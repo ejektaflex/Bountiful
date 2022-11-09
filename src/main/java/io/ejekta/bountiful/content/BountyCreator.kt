@@ -2,6 +2,7 @@ package io.ejekta.bountiful.content
 
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
+import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.data.Decree
@@ -9,6 +10,7 @@ import io.ejekta.bountiful.data.Pool
 import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.bountiful.util.randomSplit
 import io.ejekta.bountiful.util.weightedRandomDblBy
+import net.minecraft.item.ItemStack
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
 import kotlin.math.ceil
@@ -21,20 +23,31 @@ class BountyCreator private constructor(
     private val startTime: Long = 0L
 ) {
 
-    var data = BountyData()
+    private var data = BountyData()
+    private var info = BountyInfo()
 
-    fun create(): BountyData {
-        data = BountyData()
+    val stack: ItemStack? by lazy {
+        create()
+        ItemStack(BountifulContent.BOUNTY_ITEM).apply {
+            BountyData[this] = data
+            BountyInfo[this] = info.apply {
+                update(data)
+            }
+        }
+    }
+
+    fun create(): Pair<BountyData, BountyInfo> {
+        //data = BountyData()
 
         // Gen reward entries and max rarity
         val rewardEntries = genRewardEntries()
 
         if (rewardEntries.isEmpty()) {
             Bountiful.LOGGER.error("Rewards are empty, can only generate an empty reward")
-            return data
+            return data to info
         }
 
-        data.rarity = rewardEntries.maxOf { it.rarity }
+        info.rarity = rewardEntries.maxOf { it.rarity }
 
         // Gen rewards and total worth
         val rewards = genRewards(rewardEntries)
@@ -43,7 +56,7 @@ class BountyCreator private constructor(
 
         // return early if we have no rewards :(
         if (rewards.isEmpty()) {
-            return data
+            return data to info
         }
 
         // Gen objectives
@@ -53,11 +66,11 @@ class BountyCreator private constructor(
         )
         data.objectives.addAll(objectives)
 
-        data.timeStarted = startTime
-        data.timeToComplete += 15000L + BountifulIO.configData.flatBonusTimePerBounty
+        info.timeStarted = startTime
+        info.timeToComplete += 15000L + BountifulIO.configData.flatBonusTimePerBounty
 
 
-        return data
+        return data to info
     }
 
     private fun genRewards(entries: List<PoolEntry>): List<BountyDataEntry> {
@@ -133,7 +146,7 @@ class BountyCreator private constructor(
             val entry = picked.toEntry(world, pos, w)
 
             // Add time based on entry
-            data.timeToComplete += (picked.timeMult * entry.worth).toLong() * 7
+            info.timeToComplete += (picked.timeMult * entry.worth).toLong() * 7
 
             // Append on a new worth to add obj for
             // if we still haven't fulfilled it
@@ -170,8 +183,8 @@ class BountyCreator private constructor(
             return 1 - (rep / 75.0)
         }
 
-        fun createData(world: ServerWorld, pos: BlockPos, decrees: Set<Decree>, rep: Int, startTime: Long = 0L): BountyData {
-            return BountyCreator(world, pos, decrees, rep.coerceIn(-30..30), startTime).create()
+        fun createBountyItem(world: ServerWorld, pos: BlockPos, decrees: Set<Decree>, rep: Int, startTime: Long = 0L): ItemStack? {
+            return BountyCreator(world, pos, decrees, rep.coerceIn(-30..30), startTime).stack
         }
 
         private fun getObjectivePoolsFor(decrees: Set<Decree>): Set<Pool> {

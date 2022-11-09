@@ -1,6 +1,7 @@
 package io.ejekta.bountiful.content.board
 
-import io.ejekta.bountiful.bounty.BountyData
+import io.ejekta.bountiful.Bountiful
+import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
@@ -25,6 +26,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SimpleInventory
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtString
 import net.minecraft.network.PacketByteBuf
@@ -99,15 +101,14 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         }
     }
 
-    private fun addBounty(slot: Int, data: BountyData) {
+    private fun addBounty(slot: Int, stack: ItemStack) {
         if (slot !in BountyInventory.bountySlots) return
-        val item = BountyItem.create(data)
 
         modifyTrackedGuiInvs {
-            it.setStack(slot, item.copy()) // All connected players get copies, so that taken bounties are instanced
+            it.setStack(slot, stack.copy()) // All connected players get copies, so that taken bounties are instanced
         }
 
-        bounties.setStack(slot, item)
+        bounties.setStack(slot, stack)
     }
 
     fun removeBounty(slot: Int) {
@@ -119,7 +120,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     // If the bounty board has never been used before (pristine), populate it
-    fun tryInitalPopulation() {
+    fun tryInitialPopulation() {
         if (isPristine) {
             if (decrees.isEmpty) {
                 decrees.setStack((0..2).random(), DecreeItem.create())
@@ -144,7 +145,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             (BountyInventory.bountySlots - slotToAddTo).random()
         }
 
-        val commonBounty = BountyCreator.createData(
+        val commonBounty = BountyCreator.createBountyItem(
             ourWorld,
             pos,
             getBoardDecrees(),
@@ -154,7 +155,13 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
         // Add to board
         removeBounty(slotToAddTo)
-        addBounty(slotToAddTo, commonBounty)
+
+        if (commonBounty != null) {
+            addBounty(slotToAddTo, commonBounty)
+        } else {
+            Bountiful.LOGGER.warn("Cannot create a bounty for board with these decrees: ${getBoardDecrees().map { it.id }}")
+        }
+
 
         // Clear mask because slot was updated
         takenMask.forEach { (uuid, mask) ->
@@ -267,7 +274,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         fun tick(world: World, pos: BlockPos, state: BlockState, entity: BoardBlockEntity) {
             if (world.isClient) return
 
-            entity.tryInitalPopulation()
+            entity.tryInitialPopulation()
 
             // Set unset decrees every 20 ticks
             if (world.time % 20L == 0L) {
@@ -296,8 +303,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
                     if (stack.item !is BountyItem) {
                         continue
                     }
-                    val data = BountyData[stack]
-                    if (data.timeLeft(world) <= 0) {
+                    val info = BountyInfo[stack]
+                    if (info.timeLeft(world) <= 0) {
                         entity.removeBounty(i)
                     }
                 }

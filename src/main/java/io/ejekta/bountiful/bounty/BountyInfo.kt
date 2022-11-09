@@ -1,6 +1,8 @@
 package io.ejekta.bountiful.bounty
 
 import io.ejekta.bountiful.Bountiful
+import io.ejekta.bountiful.config.BountifulIO
+import io.ejekta.bountiful.util.GameTime
 import io.ejekta.kambrik.serial.ItemDataJson
 import io.ejekta.kambrik.text.textTranslate
 import kotlinx.serialization.Contextual
@@ -11,14 +13,30 @@ import net.minecraft.nbt.NbtCompound
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
+import net.minecraft.world.World
+import kotlin.math.max
 
 @Serializable
-class BountyInfo private constructor(
+class BountyInfo(
     var tooltip: List<@Contextual MutableText> = listOf(Text.literal("DOOT")),
     var rarity: BountyRarity = BountyRarity.COMMON,
-    var timeStarted: Long = 0,
+    var timeStarted: Long = -1L,
+    var timeToComplete: Long = -1L,
     var objectiveFlags: List<Int> = emptyList()
 ) {
+
+    fun timeLeft(world: World): Long {
+        return when (BountifulIO.configData.shouldBountiesHaveTimersAndExpire) {
+            true -> max(timeStarted - world.time + timeToComplete, 0L)
+            false -> 1L
+        }
+    }
+
+    // ### Formatting ### //
+
+    fun formattedTimeLeft(world: World): Text {
+        return GameTime.formatTimeExpirable(timeLeft(world) / 20)
+    }
 
     fun newTooltipInfo(fromData: BountyData): List<MutableText> {
         return buildList {
@@ -33,6 +51,12 @@ class BountyInfo private constructor(
         }
     }
 
+    fun update(data: BountyData) {
+        objectiveFlags = data.objectives.map { it.type.ordinal }
+        // TODO tooltip!
+        tooltip = newTooltipInfo(data)
+    }
+
     @Suppress("RemoveRedundantQualifierName")
     companion object : ItemDataJson<BountyInfo>() {
         override val identifier = Bountiful.id("bounty_info")
@@ -45,9 +69,7 @@ class BountyInfo private constructor(
 
         private fun fromBountyData(data: BountyData): BountyInfo {
             return BountyInfo().apply {
-                rarity = data.rarity
                 objectiveFlags = data.objectives.map { it.type.ordinal }
-                timeStarted = data.timeStarted
                 // TODO tooltip!
                 tooltip = newTooltipInfo(data)
             }

@@ -5,6 +5,8 @@ import net.minecraft.util.Formatting
 
 object GameTime {
 
+
+
     fun formatTimeExpirable(n: Long): Text {
         return if (n <= 0) {
             Text.translatable("bountiful.tooltip.expired").formatted(Formatting.RED)

@@ -24,19 +24,20 @@ class BountyItem : Item(
 
     override fun getName(stack: ItemStack?): Text {
         return if (stack != null && clientWorld() != null) {
-            val data = BountyData[stack]
-            var text = Text.translatable(data.rarity.name.lowercase()
+            val info = BountyInfo[stack]
+            //val data = BountyData[stack]
+            var text = Text.translatable(info.rarity.name.lowercase()
                 // Capitalizing
                 .replaceFirstChar {
                     if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
-                } + " Bounty ").formatted(data.rarity.color)
-            if (data.rarity == BountyRarity.LEGENDARY) {
+                } + " Bounty ").formatted(info.rarity.color)
+            if (info.rarity == BountyRarity.LEGENDARY) {
                 text = text.formatted(Formatting.BOLD)
             }
             if (BountifulIO.configData.shouldBountiesHaveTimersAndExpire) {
                 text = text.append(
                     Text.literal("(")
-                        .append(data.formattedTimeLeft(clientWorld()!!))
+                        .append(info.formattedTimeLeft(clientWorld()!!))
                         .append(Text.literal(")"))
                         .formatted(Formatting.WHITE)
                 )
@@ -59,16 +60,6 @@ class BountyItem : Item(
             tooltip?.addAll(data)
         }
         super.appendTooltip(stack, world, tooltip, context)
-    }
-
-    companion object {
-        fun create(data: BountyData? = null): ItemStack {
-            return ItemStack(BountifulContent.BOUNTY_ITEM).apply {
-                val theData = data ?: BountyData()
-                BountyData[this] = theData
-                BountyInfo.cacheWithData(this, theData)
-            }
-        }
     }
 
 }

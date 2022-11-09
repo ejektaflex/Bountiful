@@ -21,19 +21,8 @@ import kotlin.math.max
 @Serializable
 class BountyData {
 
-    var owner: String? = null // UUID
-    var timeStarted = -1L
-    var timeToComplete = -1L
-    var rarity = BountyRarity.COMMON
     val objectives = mutableListOf<BountyDataEntry>()
     val rewards = mutableListOf<BountyDataEntry>()
-
-    fun timeLeft(world: World): Long {
-        return when (BountifulIO.configData.shouldBountiesHaveTimersAndExpire) {
-            true -> max(timeStarted - world.time + timeToComplete, 0L)
-            false -> 1L
-        }
-    }
 
     private fun hasFinishedObjectives(player: PlayerEntity): Boolean {
         return objectives.all {
@@ -51,7 +40,7 @@ class BountyData {
 
         // Give XP to player
         player.addExperience(rewards.sumOf {
-            it.rarity.ordinal + 1
+            (it.rarity.ordinal) * 2 + 1
         })
 
         for (reward in rewards) {
@@ -61,7 +50,7 @@ class BountyData {
 
     fun tryCashIn(player: PlayerEntity, stack: ItemStack): Boolean {
 
-        if (timeLeft(player.world) <= 0) {
+        if (BountyInfo[stack].timeLeft(player.world) <= 0) {
             player.sendMessage(Text.translatable("bountiful.bounty.expired"))
             return false
         }
@@ -89,12 +78,6 @@ class BountyData {
 
     override fun toString(): String {
         return JsonFormats.DataPack.encodeToString(ser, this)
-    }
-
-    // ### Formatting ### //
-
-    fun formattedTimeLeft(world: World): Text {
-        return GameTime.formatTimeExpirable(timeLeft(world) / 20)
     }
 
     fun tooltipInfo(): List<MutableText> {

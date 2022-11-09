@@ -2,6 +2,7 @@ package io.ejekta.bountiful.client
 
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
+import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.messages.ClipboardCopy
@@ -22,7 +23,7 @@ class BountifulClient : ClientModInitializer {
             BountifulContent.BOUNTY_ITEM,
             Bountiful.id("rarity")
         ) { itemStack: ItemStack, _: ClientWorld?, _: LivingEntity?, _: Int ->
-            val rarity = BountyData[itemStack].rarity
+            val rarity = BountyInfo[itemStack].rarity
             rarity.ordinal.toFloat() / 10f
         }
 
