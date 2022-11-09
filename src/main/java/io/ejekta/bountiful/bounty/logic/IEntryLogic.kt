@@ -14,7 +14,7 @@ import net.minecraft.util.math.BlockPos
 
 sealed interface IEntryLogic {
 
-    fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): Text
+    fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): MutableText
 
     fun textBoard(entry: BountyDataEntry, player: PlayerEntity): List<Text>
 
@@ -30,7 +30,7 @@ sealed interface IEntryLogic {
 
     }
 
-    fun getDescription(entry: BountyDataEntry): Text {
+    fun getDescription(entry: BountyDataEntry): MutableText {
         return entry.translation?.let {
             textTranslate(it)
         } ?: entry.name?.let {

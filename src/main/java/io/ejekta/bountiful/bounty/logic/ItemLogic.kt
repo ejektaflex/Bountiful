@@ -48,7 +48,7 @@ object ItemLogic : IEntryLogic {
         }
     }
 
-    override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): Text {
+    override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): MutableText {
         val progress = getProgress(entry, player)
         val itemName = getItemName(entry)
         return when (isObj) {

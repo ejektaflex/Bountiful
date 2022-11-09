@@ -1,6 +1,7 @@
 package io.ejekta.bountiful.content
 
 import io.ejekta.bountiful.bounty.BountyData
+import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.util.clientWorld
@@ -53,7 +54,8 @@ class BountyItem : Item(
         context: TooltipContext?
     ) {
         if (stack != null && world != null) {
-            val data = BountyData[stack].tooltipInfo()
+            val data = BountyInfo[stack].tooltip
+            //val data = BountyData[stack].tooltipInfo()
             tooltip?.addAll(data)
         }
         super.appendTooltip(stack, world, tooltip, context)
@@ -62,7 +64,9 @@ class BountyItem : Item(
     companion object {
         fun create(data: BountyData? = null): ItemStack {
             return ItemStack(BountifulContent.BOUNTY_ITEM).apply {
-                BountyData[this] = data ?: BountyData()
+                val theData = data ?: BountyData()
+                BountyData[this] = theData
+                BountyInfo.cacheWithData(this, theData)
             }
         }
     }

@@ -10,13 +10,13 @@ import net.minecraft.text.Text
 
 object CommandLogic : IEntryLogic {
 
-    override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText? {
+    override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText {
         val server = player.server ?: return textLiteral("Server does not exist!") // oh my
         val parsed = server.commandManager.dispatcher.parse(entry.content, player.commandSource)
         return textLiteral("Cmd Err: ${parsed.reader.read}")
     }
 
-    override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): Text {
+    override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): MutableText {
         return getDescription(entry)
     }
 

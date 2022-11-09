@@ -11,6 +11,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
+import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.world.World
@@ -96,7 +97,7 @@ class BountyData {
         return GameTime.formatTimeExpirable(timeLeft(world) / 20)
     }
 
-    fun tooltipInfo(): List<Text> {
+    fun tooltipInfo(): List<MutableText> {
         return buildList {
             add(Text.translatable("bountiful.tooltip.required").formatted(Formatting.GOLD).append(":"))
             addAll(objectives.map {
@@ -113,6 +114,17 @@ class BountyData {
         override val identifier = Bountiful.id("bounty_data")
         override val ser = BountyData.serializer()
         override val default: () -> BountyData = { BountyData() }
+
+        fun editWithCacheIf(stack: ItemStack, func: BountyData.() -> Boolean) {
+            editIf(stack) {
+                val result = func()
+                if (result) {
+                    BountyInfo.cacheWithData(stack, this)
+                }
+                result
+            }
+        }
+
     }
 
 }

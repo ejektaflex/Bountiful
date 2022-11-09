@@ -29,7 +29,7 @@ object BiomeLogic : IEntryLogic {
 
     override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText? = null
 
-    override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): Text {
+    override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): MutableText {
         return textLiteral(entry.content)
     }
 

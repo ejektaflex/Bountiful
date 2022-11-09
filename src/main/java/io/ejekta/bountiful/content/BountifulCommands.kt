@@ -1,9 +1,6 @@
 package io.ejekta.bountiful.content
 
-import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
-import com.mojang.brigadier.arguments.IntegerArgumentType.getInteger
-import com.mojang.brigadier.context.CommandContext
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyRarity
@@ -12,20 +9,13 @@ import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.messages.ClipboardCopy
 import io.ejekta.bountiful.data.PoolEntry
-import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.command.*
 import io.ejekta.kambrik.command.types.PlayerCommand
 import io.ejekta.kambrik.ext.identifier
 import io.ejekta.kambrik.ext.math.toBlockPos
 import io.ejekta.kambrik.text.sendMessage
-import io.ejekta.kambrik.text.textLiteral
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.minecraft.command.CommandRegistryAccess
-import net.minecraft.command.CommandSource
-import net.minecraft.command.argument.IdentifierArgumentType.getIdentifier
-import net.minecraft.command.argument.NumberRangeArgumentType
-import net.minecraft.entity.EntityType
-import net.minecraft.entity.MovementType
 import net.minecraft.item.ItemStack
 import net.minecraft.predicate.NumberRange
 import net.minecraft.server.command.CommandManager
@@ -34,9 +24,7 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.*
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
-import net.minecraft.util.math.Vec3d
 import net.minecraft.util.registry.Registry
-import java.io.File
 
 
 object BountifulCommands : CommandRegistrationCallback {
@@ -265,7 +253,7 @@ object BountifulCommands : CommandRegistrationCallback {
 
     private fun genBounty(rep: Int) = PlayerCommand {
         try {
-            val bd = BountyCreator.create(
+            val bd = BountyCreator.createData(
                 source.world,
                 source.position.toBlockPos(),
                 BountifulContent.Decrees.toSet(),

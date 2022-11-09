@@ -46,7 +46,7 @@ object ItemTagLogic : IEntryLogic {
         }
     }
 
-    override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): Text {
+    override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): MutableText {
         val progress = getProgress(entry, player)
         val title = if (entry.translation != null) Text.translatable(entry.translation) else Text.literal(entry.name ?: entry.content)
         return when (isObj) {

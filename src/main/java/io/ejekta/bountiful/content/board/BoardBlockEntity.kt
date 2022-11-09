@@ -144,7 +144,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             (BountyInventory.bountySlots - slotToAddTo).random()
         }
 
-        val commonBounty = BountyCreator.create(
+        val commonBounty = BountyCreator.createData(
             ourWorld,
             pos,
             getBoardDecrees(),

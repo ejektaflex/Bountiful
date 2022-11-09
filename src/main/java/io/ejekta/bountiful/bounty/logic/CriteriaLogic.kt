@@ -20,7 +20,7 @@ object CriteriaLogic : IEntryLogic {
         return null
     }
 
-    override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): Text {
+    override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): MutableText {
         val progress = getProgress(entry, player)
 //        return when (isObj) {
 //            true -> Text.literal("Kill ").append(

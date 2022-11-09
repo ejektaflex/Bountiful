@@ -17,7 +17,7 @@ object NullLogic : IEntryLogic {
         throw logicUsageError()
     }
 
-    override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): Text {
+    override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): MutableText {
         throw logicUsageError()
     }
 

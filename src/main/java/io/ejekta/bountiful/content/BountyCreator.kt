@@ -170,7 +170,7 @@ class BountyCreator private constructor(
             return 1 - (rep / 75.0)
         }
 
-        fun create(world: ServerWorld, pos: BlockPos, decrees: Set<Decree>, rep: Int, startTime: Long = 0L): BountyData {
+        fun createData(world: ServerWorld, pos: BlockPos, decrees: Set<Decree>, rep: Int, startTime: Long = 0L): BountyData {
             return BountyCreator(world, pos, decrees, rep.coerceIn(-30..30), startTime).create()
         }
 
