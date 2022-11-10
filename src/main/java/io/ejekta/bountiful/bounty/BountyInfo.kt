@@ -4,12 +4,10 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.util.GameTime
 import io.ejekta.kambrik.serial.ItemDataJson
-import io.ejekta.kambrik.text.textTranslate
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NbtCompound
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
@@ -39,23 +37,24 @@ class BountyInfo(
         return GameTime.formatTimeExpirable(timeLeft(world) / 20)
     }
 
-    fun newTooltipInfo(fromData: BountyData): List<MutableText> {
+    private fun genTooltip(fromData: BountyData): List<MutableText> {
+        val localPlayer = MinecraftClient.getInstance().player ?: return emptyList()
         return buildList {
             add(Text.translatable("bountiful.tooltip.required").formatted(Formatting.GOLD).append(":"))
             addAll(fromData.objectives.map {
-                it.textSummary(fromData, MinecraftClient.getInstance().player!!, true)
+                it.textSummary(fromData, localPlayer, true)
             })
             add(Text.translatable("bountiful.tooltip.rewards").formatted(Formatting.GOLD).append(":"))
             addAll(fromData.rewards.map {
-                it.textSummary(fromData, MinecraftClient.getInstance().player!!, false)
+                it.textSummary(fromData, localPlayer, false)
             })
         }
     }
 
-    fun update(data: BountyData) {
+    fun update(data: BountyData): BountyInfo {
         objectiveFlags = data.objectives.map { it.logicId }.toSet()
-        // TODO tooltip!
-        tooltip = newTooltipInfo(data)
+        tooltip = genTooltip(data)
+        return this
     }
 
     @Suppress("RemoveRedundantQualifierName")
@@ -63,16 +62,6 @@ class BountyInfo(
         override val identifier = Bountiful.id("bounty_info")
         override val ser = BountyInfo.serializer()
         override val default: () -> BountyInfo = { BountyInfo() }
-
-        fun cacheWithData(stack: ItemStack, data: BountyData) {
-            set(stack, fromBountyData(data))
-        }
-
-        private fun fromBountyData(data: BountyData): BountyInfo {
-            return BountyInfo().apply {
-                update(data)
-            }
-        }
     }
 
 }

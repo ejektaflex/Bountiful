@@ -1,8 +1,11 @@
 package io.ejekta.bountiful.bounty.types.builtin
 
+import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
+import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.util.iterateBountyData
+import io.ejekta.bountiful.util.iterateBountyStacks
 import io.ejekta.kambrik.ext.identifier
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
@@ -44,17 +47,23 @@ class BountyTypeEntity : IBountyObjective {
     }
 
     fun incrementEntityBounties(playerEntity: ServerPlayerEntity, killedEntity: LivingEntity) {
-        playerEntity.iterateBountyData {
-            var didWork = false
-            val entityObjectives = objectives.filter { it.logicId == this@BountyTypeEntity.id }
-            if (entityObjectives.isEmpty()) return@iterateBountyData false
-            for (obj in entityObjectives) {
-                if (obj.content == killedEntity.type.identifier.toString()) {
-                    obj.current += 1
-                    didWork = true
+        playerEntity.iterateBountyStacks {
+            val info = BountyInfo[this]
+            if (this@BountyTypeEntity.id in info.objectiveFlags) {
+                val data = BountyData[this]
+                val entityObjectives = data.objectives.filter { it.logicId == this@BountyTypeEntity.id }
+                var didChange = false
+                for (obj in entityObjectives) {
+                    if (obj.content == killedEntity.type.identifier.toString()) {
+                        obj.current += 1
+                        didChange = true
+                    }
+                }
+                // Update tooltip if changed
+                if (didChange) {
+                    BountyInfo[this] = info.update(data)
                 }
             }
-            return@iterateBountyData didWork
         }
     }
 

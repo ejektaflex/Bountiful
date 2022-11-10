@@ -1,12 +1,16 @@
 @file:UseSerializers(IdentitySer::class)
 package io.ejekta.bountiful
 
+import io.ejekta.bountiful.bounty.BountyData
+import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
+import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.bounty.types.builtin.BountyTypeEntity
 import io.ejekta.bountiful.bounty.types.IBountyType
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.messages.SelectBounty
 import io.ejekta.bountiful.util.iterateBountyData
+import io.ejekta.bountiful.util.iterateBountyStacks
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.serial.serializers.IdentitySer
 import kotlinx.serialization.UseSerializers
@@ -16,6 +20,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.advancement.criterion.EnterBlockCriterion
 import net.minecraft.advancement.criterion.TickCriterion
+import net.minecraft.item.ItemStack
 import net.minecraft.resource.ResourceType
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
@@ -65,6 +70,24 @@ class Bountiful : ModInitializer {
                 }
             }
         })
+
+        // Update Item / Item Tag Bounties
+        Kambrik.Criterion.addCriterionHandler("""
+            {"trigger": "minecraft:inventory_changed"}
+        """.trimIndent()) {
+            iterateBountyStacks {
+                val info = BountyInfo[this]
+                // If we have an item/item-tag bounty, update it
+                if (setOf(BountyTypeRegistry.ITEM.id, BountyTypeRegistry.ITEM_TAG.id).intersect(info.objectiveFlags).isNotEmpty()) {
+                    val data = BountyData[this]
+                    for (obj in data.objectives) {
+                        obj.current = (obj.logic as IBountyObjective).getProgress(obj, this@addCriterionHandler).current.toInt()
+                    }
+
+                    BountyInfo[this] = info.update(data)
+                }
+            }
+        }
 
         // Update Criterion bounties
         Kambrik.Criterion.subscribe { player, criterion, predicate ->

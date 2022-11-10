@@ -48,7 +48,7 @@ class BountyTypeItem : IBountyExchangeable {
     }
 
     override fun getProgress(entry: BountyDataEntry, player: PlayerEntity): Progress {
-        return Progress(getCurrentStacks(entry, player).values.sum() ?: 0, entry.amount)
+        return Progress(getCurrentStacks(entry, player).values.sum(), entry.amount)
     }
 
     override fun tryFinishObjective(entry: BountyDataEntry, player: PlayerEntity): Boolean {

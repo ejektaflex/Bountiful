@@ -86,17 +86,6 @@ class BountyData {
         override val identifier = Bountiful.id("bounty_data")
         override val ser = BountyData.serializer()
         override val default: () -> BountyData = { BountyData() }
-
-        fun editWithCacheIf(stack: ItemStack, func: BountyData.() -> Boolean) {
-            editIf(stack) {
-                val result = func()
-                if (result) {
-                    BountyInfo.cacheWithData(stack, this)
-                }
-                result
-            }
-        }
-
     }
 
 }
