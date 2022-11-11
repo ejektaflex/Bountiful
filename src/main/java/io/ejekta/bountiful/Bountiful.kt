@@ -5,10 +5,11 @@ import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.IBountyObjective
-import io.ejekta.bountiful.bounty.types.builtin.BountyTypeEntity
 import io.ejekta.bountiful.bounty.types.IBountyType
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.messages.SelectBounty
+import io.ejekta.bountiful.content.messages.UpdateBountyTooltip
+import io.ejekta.bountiful.util.isClientSide
 import io.ejekta.bountiful.util.iterateBountyData
 import io.ejekta.bountiful.util.iterateBountyStacks
 import io.ejekta.kambrik.Kambrik
@@ -20,7 +21,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.advancement.criterion.EnterBlockCriterion
 import net.minecraft.advancement.criterion.TickCriterion
-import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.resource.ResourceType
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
@@ -79,12 +80,48 @@ class Bountiful : ModInitializer {
                 val info = BountyInfo[this]
                 // If we have an item/item-tag bounty, update it
                 if (setOf(BountyTypeRegistry.ITEM.id, BountyTypeRegistry.ITEM_TAG.id).intersect(info.objectiveFlags).isNotEmpty()) {
+
                     val data = BountyData[this]
+
+                    var objChanged = false
                     for (obj in data.objectives) {
-                        obj.current = (obj.logic as IBountyObjective).getProgress(obj, this@addCriterionHandler).current.toInt()
+                        if (obj.logicId in setOf(BountyTypeRegistry.ITEM.id, BountyTypeRegistry.ITEM_TAG.id)) {
+                            val oldCurrent = obj.current
+                            val newCurrent = (obj.logic as IBountyObjective).getNewCurrent(obj, this@addCriterionHandler)
+                            println("Checked $oldCurrent against $newCurrent")
+                            if (oldCurrent != newCurrent) {
+                                println("We changed $obj, $oldCurrent to $newCurrent")
+                                objChanged = true
+                            }
+                        }
                     }
 
-                    BountyInfo[this] = info.update(data)
+                    /**
+                     * Thoughts: we are updating the data but not re-setting it again. We are setting the info though
+                     */
+
+                    println("INV: ${(0 until 9).map { inventory.getStack(it) }}")
+
+                    if (objChanged) {
+
+                        // Update server data, otherwise if on a client it will update on receiving
+                        if (!isClientSide()) {
+                            BountyData[this] = data
+                        }
+
+                        println("Sending tooltip update to player")
+
+                        println("Slot ${inventory.indexOf(this)} has $this (${this.item.name})")
+
+                        UpdateBountyTooltip(
+                            inventory.indexOf(this),
+                            NbtCompound().apply {
+                                put("payload", BountyData.encode(data))
+                            }
+                        ).sendToClient(this@addCriterionHandler)
+                    }
+
+                    //BountyInfo[this] = info.update(data)
                 }
             }
         }

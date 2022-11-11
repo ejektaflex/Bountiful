@@ -14,6 +14,7 @@ import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import net.minecraft.world.World
 import kotlin.math.max
+import kotlin.random.Random
 
 @Serializable
 class BountyInfo(
@@ -21,7 +22,8 @@ class BountyInfo(
     var rarity: BountyRarity = BountyRarity.COMMON,
     var timeStarted: Long = -1L,
     var timeToComplete: Long = -1L,
-    var objectiveFlags: Set<@Contextual Identifier> = emptySet()
+    var objectiveFlags: Set<@Contextual Identifier> = emptySet(),
+    var lastCached: Long = -1L
 ) {
 
     fun timeLeft(world: World): Long {
@@ -37,23 +39,35 @@ class BountyInfo(
         return GameTime.formatTimeExpirable(timeLeft(world) / 20)
     }
 
+    fun getOrRefreshTooltip(stack: ItemStack, worldTime: Long): List<MutableText> {
+        if (worldTime - lastCached >= 20L) {
+            BountyInfo[stack] = apply {
+                tooltip = genTooltip(BountyData[stack])
+                lastCached = worldTime
+            }
+        }
+        return tooltip
+    }
+
     private fun genTooltip(fromData: BountyData): List<MutableText> {
         val localPlayer = MinecraftClient.getInstance().player ?: return emptyList()
         return buildList {
             add(Text.translatable("bountiful.tooltip.required").formatted(Formatting.GOLD).append(":"))
             addAll(fromData.objectives.map {
-                it.textSummary(fromData, localPlayer, true)
+                it.textSummary(localPlayer, true)
             })
             add(Text.translatable("bountiful.tooltip.rewards").formatted(Formatting.GOLD).append(":"))
             addAll(fromData.rewards.map {
-                it.textSummary(fromData, localPlayer, false)
+                it.textSummary(localPlayer, false)
             })
+            add(Text.literal(Random.nextFloat().toString()))
         }
     }
 
-    fun update(data: BountyData): BountyInfo {
+    fun update(data: BountyData, worldTime: Long? = null): BountyInfo {
         objectiveFlags = data.objectives.map { it.logicId }.toSet()
         tooltip = genTooltip(data)
+        //worldTime?.let { lastCached = it }
         return this
     }
 

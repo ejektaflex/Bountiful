@@ -3,21 +3,15 @@ package io.ejekta.bountiful.bounty
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.bounty.types.IBountyReward
-import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
-import io.ejekta.bountiful.util.GameTime
 import io.ejekta.kambrik.serial.ItemDataJson
 import kotlinx.serialization.Serializable
-import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
-import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
-import net.minecraft.world.World
-import kotlin.math.max
 
 @Suppress("RemoveRedundantQualifierName")
 @Serializable
@@ -67,6 +61,7 @@ class BountyData {
         }
 
     }
+
 
     fun verifyValidity(player: PlayerEntity): Boolean {
         val objs = objectives.mapNotNull { it.verifyValidity(player)?.formatted(Formatting.RED) }

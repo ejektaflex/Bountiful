@@ -61,7 +61,7 @@ class BountyTypeEntity : IBountyObjective {
                 }
                 // Update tooltip if changed
                 if (didChange) {
-                    BountyInfo[this] = info.update(data)
+                    BountyInfo[this] = info.update(data, playerEntity.world.time)
                 }
             }
         }

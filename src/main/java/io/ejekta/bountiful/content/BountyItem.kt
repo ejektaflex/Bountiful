@@ -55,8 +55,7 @@ class BountyItem : Item(
         context: TooltipContext?
     ) {
         if (stack != null && world != null) {
-            val data = BountyInfo[stack].tooltip
-            //val data = BountyData[stack].tooltipInfo()
+            val data = BountyInfo[stack].getOrRefreshTooltip(stack, world.time)
             tooltip?.addAll(data)
         }
         super.appendTooltip(stack, world, tooltip, context)

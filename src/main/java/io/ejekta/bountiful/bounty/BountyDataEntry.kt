@@ -45,7 +45,7 @@ data class BountyDataEntry private constructor(
         return logic.textBoard(this, player)
     }
 
-    fun textSummary(data: BountyData, player: PlayerEntity, isObj: Boolean): MutableText {
+    fun textSummary(player: PlayerEntity, isObj: Boolean): MutableText {
         return when (isMystery) {
             true -> Text.literal("???").formatted(Formatting.BOLD).append(
                 Text.literal("x$amount").formatted(Formatting.WHITE)

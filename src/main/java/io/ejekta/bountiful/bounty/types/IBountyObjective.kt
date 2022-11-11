@@ -12,5 +12,8 @@ interface IBountyObjective : IBountyType {
         return entry.current >= entry.amount
     }
 
+    fun getNewCurrent(entry: BountyDataEntry, player: PlayerEntity): Int {
+        return entry.current
+    }
 
 }

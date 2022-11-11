@@ -67,6 +67,10 @@ class BountyTypeItemTag : IBountyExchangeable {
         return Progress(getCurrentStacks(entry, player)?.values?.sum() ?: 0, entry.amount)
     }
 
+    override fun getNewCurrent(entry: BountyDataEntry, player: PlayerEntity): Int {
+        return getCurrentStacks(entry, player)?.values?.sum() ?: 0
+    }
+
     override fun tryFinishObjective(entry: BountyDataEntry, player: PlayerEntity): Boolean {
         return getCurrentStacks(entry, player)?.let {
             it.forEach { (stack, toShrink) ->

@@ -51,6 +51,10 @@ class BountyTypeItem : IBountyExchangeable {
         return Progress(getCurrentStacks(entry, player).values.sum(), entry.amount)
     }
 
+    override fun getNewCurrent(entry: BountyDataEntry, player: PlayerEntity): Int {
+        return getCurrentStacks(entry, player).values.sum()
+    }
+
     override fun tryFinishObjective(entry: BountyDataEntry, player: PlayerEntity): Boolean {
         val currStacks = getCurrentStacks(entry, player)
         if (currStacks.values.sum() >= entry.amount) {
