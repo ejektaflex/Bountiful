@@ -100,7 +100,7 @@ class Bountiful : ModInitializer {
                      * Thoughts: we are updating the data but not re-setting it again. We are setting the info though
                      */
 
-                    println("INV: ${(0 until 9).map { inventory.getStack(it) }}")
+                    //println("INV: ${(0 until 9).map { inventory.getStack(it) }}")
 
                     if (objChanged) {
 
@@ -109,16 +109,16 @@ class Bountiful : ModInitializer {
                             BountyData[this] = data
                         }
 
-                        println("Sending tooltip update to player")
+                        //println("Sending tooltip update to player")
 
-                        println("Slot ${inventory.indexOf(this)} has $this (${this.item.name})")
+                        //println("Slot ${inventory.indexOf(this)} has $this (${this.item.name})")
 
-                        UpdateBountyTooltip(
-                            inventory.indexOf(this),
-                            NbtCompound().apply {
-                                put("payload", BountyData.encode(data))
-                            }
-                        ).sendToClient(this@addCriterionHandler)
+//                        UpdateBountyTooltip(
+//                            inventory.indexOf(this),
+//                            NbtCompound().apply {
+//                                put("payload", BountyData.encode(data))
+//                            }
+//                        ).sendToClient(this@addCriterionHandler)
                     }
 
                     //BountyInfo[this] = info.update(data)
@@ -129,9 +129,10 @@ class Bountiful : ModInitializer {
         // Update Criterion bounties
         Kambrik.Criterion.subscribe { player, criterion, predicate ->
             if (criterion !is TickCriterion && criterion !is EnterBlockCriterion) {
-                player.iterateBountyData {
-                    val triggerObjs = objectives.filter { it.criteria != null }.takeIf { it.isNotEmpty() }
-                        ?: return@iterateBountyData false
+                player.iterateBountyStacks {
+                    val data = BountyData[this]
+                    val triggerObjs = data.objectives.filter { it.criteria != null }.takeIf { it.isNotEmpty() }
+                        ?: return@iterateBountyStacks
 
                     for (obj in triggerObjs) {
                         val trigger = obj.criteria!!
@@ -147,10 +148,17 @@ class Bountiful : ModInitializer {
 
                         if (result) {
                             println("Do something I guess")
+                            obj.current += 1
+                            UpdateBountyTooltip(
+                                player.inventory.indexOf(this),
+                                NbtCompound().apply {
+                                    put("payload", BountyData.encode(data))
+                                }
+                            ).sendToClient(player)
                         }
                     }
 
-                    return@iterateBountyData false
+                    return@iterateBountyStacks
                 }
             }
         }

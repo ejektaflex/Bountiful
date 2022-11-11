@@ -21,14 +21,14 @@ class UpdateBountyTooltip(val slot: Int, val compound: @Contextual NbtCompound) 
             val stack = player.inventory.getStack(slot)
 
             if (stack.item is BountyItem) {
-//                println("Lets do it bro")
-//
-//                val payload = compound.get("payload") ?: return
-//                println("Doing..")
-//                val newData = BountyData.decode(payload)
-//                println("New data is: $newData")
-//                BountyData[stack] = newData
-//                BountyInfo[stack] = BountyInfo[stack].update(newData, player.world.time)
+                println("Lets do it bro")
+
+                val payload = compound.get("payload") ?: return
+                println("Doing..")
+                val newData = BountyData.decode(payload)
+                println("New data is: $newData")
+                BountyData[stack] = newData
+                BountyInfo[stack] = BountyInfo[stack].update(newData, player.world.time)
             }
         }
     }

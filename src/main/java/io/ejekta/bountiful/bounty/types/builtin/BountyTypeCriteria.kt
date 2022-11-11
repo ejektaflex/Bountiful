@@ -7,6 +7,7 @@ import io.ejekta.bountiful.bounty.types.Progress
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
+import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 
 
@@ -19,7 +20,9 @@ class BountyTypeCriteria : IBountyObjective {
     }
 
     override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): MutableText {
-        return Text.literal(entry.criteria?.description ?: "NO TRIGGER DESCRIPTION")
+        val progress = getProgress(entry, player)
+        return Text.literal(entry.criteria?.description ?: "NO TRIGGER DESCRIPTION").append(progress.neededText.colored(
+            Formatting.WHITE))
     }
 
     override fun textBoard(entry: BountyDataEntry, player: PlayerEntity): List<Text> {
