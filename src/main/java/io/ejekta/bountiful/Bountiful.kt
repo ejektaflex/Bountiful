@@ -8,9 +8,8 @@ import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.bounty.types.IBountyType
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.messages.SelectBounty
-import io.ejekta.bountiful.content.messages.UpdateBountyTooltip
+import io.ejekta.bountiful.content.messages.UpdateBountyData
 import io.ejekta.bountiful.util.isClientSide
-import io.ejekta.bountiful.util.iterateBountyData
 import io.ejekta.bountiful.util.iterateBountyStacks
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.serial.serializers.IdentitySer
@@ -24,6 +23,7 @@ import net.minecraft.advancement.criterion.TickCriterion
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.resource.ResourceType
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.sound.SoundEvents
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.RegistryKey
 
@@ -84,6 +84,9 @@ class Bountiful : ModInitializer {
                     val data = BountyData[this]
 
                     var objChanged = false
+                    var numPreviouslyCompleted = 0
+                    var numNowCompleted = 0
+                    var numNewlyCompleted = 0
                     for (obj in data.objectives) {
                         if (obj.logicId in setOf(BountyTypeRegistry.ITEM.id, BountyTypeRegistry.ITEM_TAG.id)) {
                             val oldCurrent = obj.current
@@ -91,37 +94,33 @@ class Bountiful : ModInitializer {
                             println("Checked $oldCurrent against $newCurrent")
                             if (oldCurrent != newCurrent) {
                                 println("We changed $obj, $oldCurrent to $newCurrent")
+                                if (oldCurrent >= obj.amount) {
+                                    numPreviouslyCompleted++
+                                }
+                                if (obj.amount in (oldCurrent + 1)..newCurrent) {
+                                    numNewlyCompleted++
+                                }
+                                if (newCurrent >= obj.amount) {
+                                    numNowCompleted++
+                                }
                                 objChanged = true
                             }
                         }
                     }
 
-                    /**
-                     * Thoughts: we are updating the data but not re-setting it again. We are setting the info though
-                     */
-
-                    //println("INV: ${(0 until 9).map { inventory.getStack(it) }}")
-
-                    if (objChanged) {
-
-                        // Update server data, otherwise if on a client it will update on receiving
-                        if (!isClientSide()) {
-                            BountyData[this] = data
-                        }
-
-                        //println("Sending tooltip update to player")
-
-                        //println("Slot ${inventory.indexOf(this)} has $this (${this.item.name})")
-
-//                        UpdateBountyTooltip(
-//                            inventory.indexOf(this),
-//                            NbtCompound().apply {
-//                                put("payload", BountyData.encode(data))
-//                            }
-//                        ).sendToClient(this@addCriterionHandler)
+                    // If we crossed the threshold into completing them all
+                    if (data.objectives.size in (numPreviouslyCompleted + 1)..numNowCompleted) {
+                        println("We finished the bounty!")
+                        this@addCriterionHandler.playSound(SoundEvents.ENTITY_GOAT_SCREAMING_DEATH, 1f, 1f)
+                    } else if (numNowCompleted > numPreviouslyCompleted) {
+                        println("We completed a new bounty!")
+                        this@addCriterionHandler.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 1f, 1f)
                     }
 
-                    //BountyInfo[this] = info.update(data)
+                    if (objChanged) {
+                        // TODO send a ping sound?
+                    }
+
                 }
             }
         }
@@ -149,12 +148,16 @@ class Bountiful : ModInitializer {
                         if (result) {
                             println("Do something I guess")
                             obj.current += 1
-                            UpdateBountyTooltip(
+                            UpdateBountyData(
                                 player.inventory.indexOf(this),
                                 NbtCompound().apply {
                                     put("payload", BountyData.encode(data))
                                 }
                             ).sendToClient(player)
+
+                            if (!isClientSide()) {
+                                BountyData[this] = data // update server with new data
+                            }
                         }
                     }
 
