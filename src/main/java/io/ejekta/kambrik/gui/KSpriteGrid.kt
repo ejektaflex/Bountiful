@@ -20,7 +20,7 @@ open class KSpriteGrid(val location: Identifier, val texWidth: Int, val texHeigh
             get() = this@KSpriteGrid
 
         fun draw(screen: Screen, matrixStack: MatrixStack, x: Int, y: Int, w: Int = width, h: Int = height) {
-            RenderSystem.setShader(GameRenderer::getPositionTexShader)
+            //RenderSystem.setShader(GameRenderer::getPositionTexShader)
             RenderSystem.setShaderTexture(0, location)
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
             DrawableHelper.drawTexture(matrixStack, x, y, screen.zOffset, u, v, w, h, texWidth, texHeight)

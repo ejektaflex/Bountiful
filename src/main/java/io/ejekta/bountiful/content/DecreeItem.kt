@@ -15,7 +15,6 @@ class DecreeItem : Item(
     FabricItemSettings()
         .maxCount(1)
         .fireproof()
-        .group(ItemGroup.MISC)
 ) {
 
     override fun getTranslationKey() = "bountiful.decree"

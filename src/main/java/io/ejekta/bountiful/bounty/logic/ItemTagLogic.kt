@@ -10,19 +10,18 @@ import net.fabricmc.fabric.mixin.resource.conditions.TagManagerLoaderMixin
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.tag.ItemTags
-import net.minecraft.tag.TagKey
+import net.minecraft.registry.Registries
+import net.minecraft.registry.tag.TagKey
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 
 
 object ItemTagLogic : IEntryLogic {
 
-    private fun getTag(entry: BountyDataEntry) = TagKey.of(Registry.ITEM_KEY, Identifier(entry.content))
+    private fun getTag(entry: BountyDataEntry) = TagKey.of(Registries.ITEM.key, Identifier(entry.content))
 
 
     fun getItems(world: World, entry: BountyDataEntry): List<Item> {
@@ -30,7 +29,7 @@ object ItemTagLogic : IEntryLogic {
     }
 
     fun entryAppliesToStack(entry: BountyDataEntry, stack: ItemStack): Boolean {
-        return stack.isIn(TagKey.of(Registry.ITEM_KEY, Identifier(entry.content)))
+        return stack.isIn(TagKey.of(Registries.ITEM.key, Identifier(entry.content)))
     }
 
     override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText? {

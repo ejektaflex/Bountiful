@@ -9,18 +9,17 @@ import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registries
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
-import kotlin.math.min
 
 
 object ItemLogic : IEntryLogic {
 
     fun getItem(entry: BountyDataEntry): Item {
-        return Registry.ITEM.get(Identifier(entry.content))
+        return Registries.ITEM.get(Identifier(entry.content))
     }
 
     fun getItemStack(entry: BountyDataEntry): ItemStack {
@@ -58,7 +57,7 @@ object ItemLogic : IEntryLogic {
     }
 
     override fun textBoard(entry: BountyDataEntry, player: PlayerEntity): List<Text> {
-        return getItemStack(entry).getTooltip(player) { false }
+        return getItemStack(entry).getTooltip(player, TooltipContext.BASIC)
     }
 
     override fun getProgress(entry: BountyDataEntry, player: PlayerEntity): Progress {

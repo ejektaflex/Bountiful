@@ -1,34 +1,34 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	kotlin("jvm") version "1.6.0"
+	kotlin("jvm") version "1.8.10"
 	kotlin("plugin.serialization") version "1.6.0"
-	id("fabric-loom") version "0.12-SNAPSHOT"
+	id("fabric-loom") version "1.1-SNAPSHOT"
 	`idea`
 }
 
 object Versions {
-	const val Minecraft = "1.19.2"
+	const val Minecraft = "1.19.3"
 	object Jvm {
 		val Java = JavaVersion.VERSION_17
-		const val Kotlin = "1.7.10"
+		const val Kotlin = "1.8.10"
 		const val TargetKotlin = "17"
 	}
 	object Fabric {
-		const val Yarn = "1.19.2+build.4"
-		const val Loader = "0.14.9"
-		const val Api = "0.60.0+1.19.2"
+		const val Yarn = "1.19.3+build.4"
+		const val Loader = "0.14.14"
+		const val Api = "0.75.1+1.19.3"
 	}
 	object Mod {
 		const val Group = "io.ejekta"
 		const val ID = "bountiful"
-		const val Version = "4.0.0"
+		const val Version = "4.1.0"
 	}
 	object Env {
-		const val Kambrik = "4.0-1.19.2"
-		const val FLK = "1.8.2+kotlin.1.7.10"
-		const val ClothConfig = "8.0.75"
-		const val ModMenu = "4.0.6"
+		const val Kambrik = "5.0-1.19.3-SNAPSHOT+"
+		const val FLK = "1.9.1+kotlin.1.8.10"
+		const val ClothConfig = "9.0.93"
+		const val ModMenu = "5.0.2"
 	}
 }
 

@@ -40,9 +40,6 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
 
     private fun renderEntry(dsl: KGuiDsl, entry: BountyDataEntry, x: Int, y: Int, isReward: Boolean = false) {
         when (entry.type) {
-            BountyType.EXPLORE_BIOME -> {
-                dsl { itemStackIcon(ItemStack(Items.FILLED_MAP), x, y) }
-            }
             BountyType.COMMAND -> {
                 dsl { itemStackIcon(ItemStack(Items.COMMAND_BLOCK), x, y) }
             }
