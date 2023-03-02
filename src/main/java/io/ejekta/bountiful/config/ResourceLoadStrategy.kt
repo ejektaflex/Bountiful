@@ -35,7 +35,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
         }
     }
 
-    val loadedLocations = mutableSetOf<String>()
+    private val loadedLocations = mutableSetOf<String>()
 
     private fun getConfigFile(id: Identifier): File {
         val fileName = id.fileName() + ".json"
@@ -86,6 +86,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
             items?.reduce {
                     a, b -> a.merged(b)
             }?.also {
+                it.finishMergedSetup()
                 // Merge with config if possible. Else just add resource data
                 if (configData != null) {
                     val mergedWithConfig = it.merged(configData)

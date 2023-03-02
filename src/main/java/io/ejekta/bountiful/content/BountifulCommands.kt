@@ -206,7 +206,7 @@ object BountifulCommands : CommandRegistrationCallback {
 
             val file = BountifulIO.getPoolFile(poolName).apply {
                 ensureExistence()
-                edit { content.add(newPoolEntry) }
+                edit { items.add(newPoolEntry) }
             }.getOrCreateFile()
 
             player.sendMessage("Content added.")
@@ -318,7 +318,7 @@ object BountifulCommands : CommandRegistrationCallback {
 
         for (pool in BountifulContent.Pools.sortedBy { it.id }) {
             Bountiful.LOGGER.info("Pool: ${pool.id}")
-            for (item in pool.content.sortedBy { it.content }) {
+            for (item in pool.items.sortedBy { it.content }) {
                 Bountiful.LOGGER.info("    * [${item.type}] ${item.content}")
             }
         }

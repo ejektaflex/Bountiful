@@ -14,4 +14,8 @@ interface IMerge<T : IMerge<T>> {
 
     fun merged(other: T): T
 
+    fun finishMergedSetup() {
+
+    }
+
 }

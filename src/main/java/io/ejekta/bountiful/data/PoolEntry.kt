@@ -10,6 +10,9 @@ import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.util.getTagItemKey
 import io.ejekta.bountiful.util.getTagItems
 import io.ejekta.kambrik.ext.identifier
+import io.ejekta.kudzu.KudzuItem
+import io.ejekta.kudzu.KudzuLeaf
+import io.ejekta.kudzu.KudzuVine
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -39,7 +42,9 @@ class PoolEntry private constructor() {
     var repRequired = 0.0
     private val forbids: MutableList<ForbiddenContent> = mutableListOf()
 
-    @Transient val sources: MutableSet<String> = mutableSetOf()
+
+    @Transient lateinit var id: String
+    @Transient var src: KudzuItem = KudzuLeaf.LeafNull
 
     val typeLogic: IBountyType
         get() = BountyTypeRegistry[type] ?: BountyTypeRegistry.NULL
@@ -147,6 +152,10 @@ class PoolEntry private constructor() {
     class ForbiddenContent(val type: @Contextual Identifier, val content: String)
 
     companion object {
+        fun fromKudzu(kv: KudzuVine): PoolEntry {
+            @Suppress("RemoveRedundantQualifierName")
+            return JsonFormats.Hand.decodeFromString(PoolEntry.serializer(), kv.toString())
+        }
 
         // With encodeDefaults = false, we need a separate constructor
         fun create() = PoolEntry().apply {

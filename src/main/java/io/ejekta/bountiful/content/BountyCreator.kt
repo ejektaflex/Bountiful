@@ -197,11 +197,11 @@ class BountyCreator private constructor(
         }
 
         private fun getRewardsFor(decrees: Set<Decree>): Set<PoolEntry> {
-            return getRewardPoolsFor(decrees).map { it.content }.flatten().filter { it.typeLogic is IBountyReward }.toSet()
+            return getRewardPoolsFor(decrees).map { it.items }.flatten().filter { it.typeLogic is IBountyReward }.toSet()
         }
 
         private fun getObjectivesFor(decrees: Set<Decree>): Set<PoolEntry> {
-            return getObjectivePoolsFor(decrees).map { it.content }.flatten().filter { it.typeLogic is IBountyObjective }.toSet()
+            return getObjectivePoolsFor(decrees).map { it.items }.flatten().filter { it.typeLogic is IBountyObjective }.toSet()
         }
 
         private fun getObjectivesWithinVariance(objs: List<PoolEntry>, worth: Double, variance: Double): List<PoolEntry> {

@@ -24,7 +24,6 @@
 				"max": 1
 			},
 			"unitWorth": 1000,
-			"rarity": "UNCOMMON",
 			"nbt": "{Damage:0}"
 		},
 
