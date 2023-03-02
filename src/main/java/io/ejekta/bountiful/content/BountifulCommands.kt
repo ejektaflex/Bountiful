@@ -1,6 +1,7 @@
 package io.ejekta.bountiful.content
 
 import com.mojang.brigadier.CommandDispatcher
+import com.mojang.brigadier.context.CommandContext
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyRarity
@@ -97,12 +98,12 @@ object BountifulCommands : CommandRegistrationCallback {
                 argString("poolName", items = pools) { poolName ->
                     "add" {
                         "hand" {
-                            this runs { addHandToPool(poolName = poolName()).run(this) }
+                            this runs { addHandToPool(poolName = poolName()) }
                             argIntRange("amount") { amount ->
                                 argInt("unit_worth") runs { worth ->
                                     addToPoolCommand(amount(), worth()) { amtRange, worthAmt ->
-                                        addHandToPool(amtRange, worthAmt, poolName()).run(this)
-                                    }.run(this)
+                                        addHandToPool(amtRange, worthAmt, poolName())
+                                    }
                                 }
                             }
                         }
@@ -111,13 +112,13 @@ object BountifulCommands : CommandRegistrationCallback {
                             val entityTypes = suggestionList { Registries.ENTITY_TYPE.ids.toList() }
                             argIdentifier("entity_identifier", items = entityTypes) { eId ->
                                 this runs {
-                                    addEntityToPool(null, null, eId(), poolName()).run(this)
+                                    addEntityToPool(null, null, eId(), poolName())
                                 }
                                 argIntRange("amount") { amount ->
                                     argInt("unit_worth") runs { worth ->
                                         addToPoolCommand(amount(), worth()) { amtRange, worthAmt ->
-                                            addEntityToPool(amtRange, worthAmt, eId(), poolName()).run(this)
-                                        }.run(this)
+                                            addEntityToPool(amtRange, worthAmt, eId(), poolName())
+                                        }
                                     }
                                 }
                             }
@@ -133,7 +134,7 @@ object BountifulCommands : CommandRegistrationCallback {
                 "debug" {
                     "weights" {
                         argInt("rep", -30..30) runs { rep ->
-                            weights(rep()).run(this)
+                            weights(rep())
                         }
                     }
                     "dump" runs dumpData()
@@ -169,17 +170,20 @@ object BountifulCommands : CommandRegistrationCallback {
         1
     }
 
-    private fun addToPoolCommand(
+    private fun CommandContext<ServerCommandSource>.addToPoolCommand(
         amt: NumberRange.IntRange,
         inWorth: Int,
         func: (amount: IntRange, worth: Int) -> Unit = { a, w -> }
-    ) = kambrikCommand<ServerCommandSource> {
-        if (amt.min == null || amt.max == null) {
-            source.sendError(Text.literal("Amount Range must have a minimum and maximum value!"))
-            return@kambrikCommand
-        }
+    ) {
+        val cmd = kambrikCommand<ServerCommandSource> {
+            if (amt.min == null || amt.max == null) {
+                source.sendError(Text.literal("Amount Range must have a minimum and maximum value!"))
+                return@kambrikCommand
+            }
 
-        func(amt.min!!..amt.max!!, inWorth)
+            func(amt.min!!..amt.max!!, inWorth)
+        }
+        cmd.run(this)
     }
 
     private fun addToPool(
@@ -216,30 +220,36 @@ object BountifulCommands : CommandRegistrationCallback {
 
     }
 
-    private fun addHandToPool(inAmount: IntRange? = null, inUnitWorth: Int? = null, poolName: String) = PlayerCommand {
-        val held = it.mainHandStack
+    private fun CommandContext<ServerCommandSource>.addHandToPool(inAmount: IntRange? = null, inUnitWorth: Int? = null, poolName: String) {
+        val cmd = PlayerCommand {
+            val held = it.mainHandStack
 
-        addToPool(it, inAmount, inUnitWorth, poolName) {
-            content = held.identifier.toString()
-            nbt = held.nbt
+            addToPool(it, inAmount, inUnitWorth, poolName) {
+                content = held.identifier.toString()
+                nbt = held.nbt
+            }
+            1
         }
-        1
+        cmd.run(this)
     }
 
-    private fun addEntityToPool(
+    private fun CommandContext<ServerCommandSource>.addEntityToPool(
         inAmount: IntRange? = null,
         inUnitWorth: Int? = null,
         entityId: Identifier,
         poolName: String
-    ) = kambrikCommand<ServerCommandSource> {
-        try {
-            addToPool(source.player!!, inAmount, inUnitWorth, poolName) {
-                type = BountyTypeRegistry.ENTITY.id
-                content = entityId.toString()
+    ) {
+        val cmd = kambrikCommand<ServerCommandSource> {
+            try {
+                addToPool(source.player!!, inAmount, inUnitWorth, poolName) {
+                    type = BountyTypeRegistry.ENTITY.id
+                    content = entityId.toString()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
+        cmd.run(this)
     }
 
     private fun complete() = PlayerCommand {
@@ -269,17 +279,20 @@ object BountifulCommands : CommandRegistrationCallback {
         1
     }
 
-    private fun weights(rep: Int) = kambrikCommand<ServerCommandSource> {
-        try {
+    private fun CommandContext<ServerCommandSource>.weights(rep: Int) {
+        val cmd = kambrikCommand<ServerCommandSource> {
+            try {
 
-            println("RARITY WEIGHTS:")
-            BountyRarity.values().forEach { rarity ->
-                println("${rarity.name}\t ${rarity.weightAdjustedFor(rep)}")
+                println("RARITY WEIGHTS:")
+                BountyRarity.values().forEach { rarity ->
+                    println("${rarity.name}\t ${rarity.weightAdjustedFor(rep)}")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
+            1
         }
-        1
+        cmd.run(this)
     }
 
     private fun verifyBounty() = PlayerCommand {
