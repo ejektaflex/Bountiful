@@ -87,6 +87,9 @@ object BountifulCommands : CommandRegistrationCallback {
                 }
 
                 "bounty" {
+                    this runs {
+                        genBounty(0).run(this)
+                    }
                     argInt("rep", -30..30) runs { rep ->
                         genBounty(rep()).run(this)
                     }
