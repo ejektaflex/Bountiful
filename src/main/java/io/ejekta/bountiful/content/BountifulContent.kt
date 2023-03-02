@@ -7,8 +7,11 @@ import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.kambrik.registration.KambrikAutoRegistrar
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
+import net.minecraft.item.ItemGroup
+import net.minecraft.item.ItemGroups
 
 object BountifulContent : KambrikAutoRegistrar {
 
@@ -37,5 +40,12 @@ object BountifulContent : KambrikAutoRegistrar {
     val BOARD_ENTITY = "board-be".forBlockEntity(BOARD, ::BoardBlockEntity)
 
     val BOARD_SCREEN_HANDLER = "board".forExtendedScreen(::BoardScreenHandler)
+
+    init {
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register { e ->
+            e.add(DECREE_ITEM)
+            e.add(BOARD_ITEM)
+        }
+    }
 
 }

@@ -18,6 +18,7 @@ class BountifulConfigData {
         "bounty_pools/bountiful/something_here"
     )
     var objectiveModifier = 0
+    var maxNumRewards = 2
 
 
     fun buildScreen(): Screen {
@@ -114,6 +115,20 @@ class BountifulConfigData {
                 objectiveModifier = it
             }.setTextGetter {
                 textLiteral("$it% Change")
+            }.build()
+        )
+
+        bounty.addEntry(
+            creator.startIntSlider(
+                Text.literal("Max Number of Rewards"),
+                maxNumRewards,
+                1, 4
+            ).setDefaultValue(2).setTooltip(
+                Text.literal("Determines the max number of rewards that will be in a bounty")
+            ).setSaveConsumer {
+                maxNumRewards = it
+            }.setTextGetter {
+                textLiteral("$it Rewards")
             }.build()
         )
 
