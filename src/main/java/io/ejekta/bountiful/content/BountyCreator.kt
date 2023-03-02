@@ -72,7 +72,7 @@ class BountyCreator private constructor(
         }
 
         // Num rewards to give
-        val numRewards = (1..2).random()
+        val numRewards = (1..BountifulIO.configData.maxNumRewards).random()
         val toReturn = mutableListOf<PoolEntry>()
 
         for (i in 0 until numRewards) {
