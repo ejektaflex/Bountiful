@@ -27,7 +27,7 @@ interface IBountyType {
 
     fun getDescription(entry: BountyDataEntry): MutableText {
         return entry.translation?.let {
-            textTranslate(it)
+            textTranslate(it, it)
         } ?: entry.name?.let {
             textLiteral(it)
         } ?: textLiteral(entry.content)

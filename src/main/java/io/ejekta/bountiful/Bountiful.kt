@@ -21,11 +21,12 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.advancement.criterion.EnterBlockCriterion
 import net.minecraft.advancement.criterion.TickCriterion
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.registry.Registry
+import net.minecraft.registry.RegistryKey
 import net.minecraft.resource.ResourceType
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.sound.SoundEvents
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.RegistryKey
 
 
 class Bountiful : ModInitializer {
@@ -34,7 +35,7 @@ class Bountiful : ModInitializer {
         const val ID = "bountiful"
         fun id(str: String) = Identifier(ID, str)
         val LOGGER = Kambrik.Logging.createLogger(ID)
-        val BOUNTY_LOGIC_REGISTRY_KEY = RegistryKey.ofRegistry<IBountyType>(Bountiful.id("logic_registry"))
+        val BOUNTY_LOGIC_REGISTRY_KEY: RegistryKey<Registry<IBountyType>> = RegistryKey.ofRegistry<IBountyType>(id("logic_registry"))
     }
 
     init {

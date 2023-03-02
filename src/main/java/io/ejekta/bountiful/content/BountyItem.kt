@@ -19,7 +19,6 @@ class BountyItem : Item(
     FabricItemSettings()
         .maxCount(1)
         .fireproof()
-        .group(ItemGroup.MISC)
 ) {
 
     override fun getName(stack: ItemStack?): Text {

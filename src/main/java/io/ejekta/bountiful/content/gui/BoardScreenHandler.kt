@@ -31,9 +31,10 @@ class BoardScreenHandler @JvmOverloads constructor(
         return inventory.canPlayerUse(player)
     }
 
-    override fun close(player: PlayerEntity?) {
+    override fun onClosed(player: PlayerEntity?) {
         inventory.onClose(player)
     }
+
 
     //This constructor gets called from the BlockEntity on the server without calling the other constructor first, the server knows the inventory of the container
     //and can therefore directly provide it as an argument. This inventory will then be synced to the client.

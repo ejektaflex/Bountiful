@@ -10,12 +10,12 @@ import io.ejekta.kambrik.ext.identifier
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.registry.Registries
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
 
 
 class BountyTypeEntity : IBountyObjective {
@@ -61,7 +61,7 @@ class BountyTypeEntity : IBountyObjective {
                 }
                 // Update tooltip if changed
                 if (didChange) {
-                    BountyInfo[this] = info.update(data, playerEntity.world.time)
+                    BountyInfo[this] = info.update(data, playerEntity)
                 }
             }
         }
@@ -70,7 +70,7 @@ class BountyTypeEntity : IBountyObjective {
 
     companion object {
         fun getEntityType(entry: BountyDataEntry): EntityType<*> {
-            return Registry.ENTITY_TYPE.get(Identifier(entry.content))
+            return Registries.ENTITY_TYPE.get(Identifier(entry.content))
         }
     }
 

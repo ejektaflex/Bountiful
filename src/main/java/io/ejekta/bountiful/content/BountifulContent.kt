@@ -1,6 +1,5 @@
 package io.ejekta.bountiful.content
 
-import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.data.Pool
 import io.ejekta.bountiful.content.board.BoardBlock
@@ -10,7 +9,6 @@ import io.ejekta.kambrik.registration.KambrikAutoRegistrar
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
-import net.minecraft.item.ItemGroup
 
 object BountifulContent : KambrikAutoRegistrar {
 
@@ -34,10 +32,10 @@ object BountifulContent : KambrikAutoRegistrar {
 
     val BOARD = "bountyboard" forBlock BoardBlock()
 
-    val BOARD_ITEM = "bountyboard" forItem BlockItem(BOARD, Item.Settings().group(ItemGroup.MISC))
+    val BOARD_ITEM = "bountyboard" forItem BlockItem(BOARD, Item.Settings())
 
     val BOARD_ENTITY = "board-be".forBlockEntity(BOARD, ::BoardBlockEntity)
 
-    val BOARD_SCREEN_HANDLER = forExtendedScreen(Bountiful.id("board"), ::BoardScreenHandler)
+    val BOARD_SCREEN_HANDLER = "board".forExtendedScreen(::BoardScreenHandler)
 
 }

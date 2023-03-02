@@ -6,8 +6,8 @@ import io.ejekta.bountiful.util.GameTime
 import io.ejekta.kambrik.serial.ItemDataJson
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
@@ -49,24 +49,23 @@ class BountyInfo(
         return tooltip
     }
 
-    private fun genTooltip(fromData: BountyData): List<MutableText> {
-        val localPlayer = MinecraftClient.getInstance().player ?: return emptyList()
+    private fun genTooltip(fromData: BountyData, player: ServerPlayerEntity): List<MutableText> {
         return buildList {
             add(Text.translatable("bountiful.tooltip.required").formatted(Formatting.GOLD).append(":"))
             addAll(fromData.objectives.map {
-                it.textSummary(localPlayer, true)
+                it.textSummary(player, true)
             })
             add(Text.translatable("bountiful.tooltip.rewards").formatted(Formatting.GOLD).append(":"))
             addAll(fromData.rewards.map {
-                it.textSummary(localPlayer, false)
+                it.textSummary(player, false)
             })
             add(Text.literal(Random.nextFloat().toString()))
         }
     }
 
-    fun update(data: BountyData, worldTime: Long? = null): BountyInfo {
+    fun update(data: BountyData, player: ServerPlayerEntity): BountyInfo {
         objectiveFlags = data.objectives.map { it.logicId }.toSet()
-        tooltip = genTooltip(data)
+        tooltip = genTooltip(data, player)
         //worldTime?.let { lastCached = it }
         return this
     }

@@ -4,10 +4,9 @@ import com.mojang.serialization.Lifecycle
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.types.builtin.*
 import io.ejekta.kambrik.ext.register
-import net.minecraft.util.Identifier
-import net.minecraft.util.registry.SimpleRegistry
+import net.minecraft.registry.SimpleRegistry
 
-object BountyTypeRegistry : SimpleRegistry<IBountyType>(Bountiful.BOUNTY_LOGIC_REGISTRY_KEY, Lifecycle.stable(), null) {
+object BountyTypeRegistry : SimpleRegistry<IBountyType>(Bountiful.BOUNTY_LOGIC_REGISTRY_KEY, Lifecycle.stable(), false) {
     val NULL = BountyTypeNull().apply { register(id, this) }
     val ITEM = BountyTypeItem().apply { register(id, this) }
     val ENTITY = BountyTypeEntity().apply { register(id, this) }

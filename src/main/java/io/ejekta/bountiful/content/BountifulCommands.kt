@@ -20,13 +20,13 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.minecraft.command.CommandRegistryAccess
 import net.minecraft.item.ItemStack
 import net.minecraft.predicate.NumberRange
+import net.minecraft.registry.Registries
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.*
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
 
 
 object BountifulCommands : CommandRegistrationCallback {
@@ -108,7 +108,7 @@ object BountifulCommands : CommandRegistrationCallback {
                         }
 
                         "entity" {
-                            val entityTypes = suggestionList { Registry.ENTITY_TYPE.ids.toList() }
+                            val entityTypes = suggestionList { Registries.ENTITY_TYPE.ids.toList() }
                             argIdentifier("entity_identifier", items = entityTypes) { eId ->
                                 this runs {
                                     addEntityToPool(null, null, eId(), poolName()).run(this)

@@ -36,7 +36,7 @@ abstract class KambrikScreenHandler<S : ScreenHandler, INV : Inventory>(type: Sc
         }
     }
 
-    override fun transferSlot(player: PlayerEntity, invSlot: Int): ItemStack {
+    override fun quickMove(player: PlayerEntity, invSlot: Int): ItemStack {
         var newStack = ItemStack.EMPTY
         val slot: Slot? = slots[invSlot]
         if (slot != null && slot.hasStack()) {

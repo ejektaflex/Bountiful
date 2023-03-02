@@ -7,6 +7,7 @@ import io.ejekta.kambrik.gui.reactor.MouseReactor
 import io.ejekta.kambrik.text.KambrikTextBuilder
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.font.TextRenderer
 import net.minecraft.client.gui.DrawableHelper
 import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.client.render.LightmapTextureManager
@@ -124,12 +125,11 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
     }
 
     fun textCentered(x: Int, y: Int, text: Text) {
-        DrawableHelper.drawCenteredText(
+        ctx.screen.textRenderer.draw(
             matrices,
-            ctx.screen.textRenderer,
             text,
-            ctx.absX(x),
-            ctx.absY(y),
+            (ctx.absX(x) - ctx.screen.textRenderer.getWidth(text) / 2).toFloat(),
+            ctx.absY(y).toFloat(),
             0xFFFFFF
         )
     }
@@ -151,7 +151,7 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
             true,
             matrixStack.peek().positionMatrix,
             immediate,
-            false,
+            TextRenderer.TextLayerType.NORMAL,
             0,
             LightmapTextureManager.MAX_LIGHT_COORDINATE
         )

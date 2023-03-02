@@ -1,23 +1,23 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	kotlin("jvm") version "1.6.0"
+	kotlin("jvm") version "1.8.10"
 	kotlin("plugin.serialization") version "1.6.0"
-	id("fabric-loom") version "0.12-SNAPSHOT"
+	id("fabric-loom") version "1.1-SNAPSHOT"
 	`idea`
 }
 
 object Versions {
-	const val Minecraft = "1.19.2"
+	const val Minecraft = "23w07a"
 	object Jvm {
 		val Java = JavaVersion.VERSION_17
-		const val Kotlin = "1.7.10"
+		const val Kotlin = "1.8.10"
 		const val TargetKotlin = "17"
 	}
 	object Fabric {
-		const val Yarn = "1.19.2+build.4"
-		const val Loader = "0.14.9"
-		const val Api = "0.60.0+1.19.2"
+		const val Yarn = "23w07a+build.11"
+		const val Loader = "0.14.14"
+		const val Api = "0.75.2+1.19.4"
 	}
 	object Mod {
 		const val Group = "io.ejekta"
@@ -25,10 +25,10 @@ object Versions {
 		const val Version = "5.0.0"
 	}
 	object Env {
-		const val Kambrik = "5.0-1.19.2-SNAPSHOT+"
-		const val FLK = "1.8.2+kotlin.1.7.10"
-		const val ClothConfig = "8.0.75"
-		const val ModMenu = "4.0.6"
+		const val Kambrik = "5.0-1.19.4-SNAPSHOT+"
+		const val FLK = "1.9.1+kotlin.1.8.10"
+		const val ClothConfig = "9.0.93"
+		const val ModMenu = "5.0.2"
 	}
 }
 
@@ -76,7 +76,9 @@ dependencies {
 	modImplementation(group = "net.fabricmc", name = "fabric-language-kotlin", version = Versions.Env.FLK)
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation("net.fabricmc.fabric-api:fabric-api:${Versions.Fabric.Api}")
+	modImplementation("net.fabricmc.fabric-api:fabric-api:${Versions.Fabric.Api}") {
+		exclude(group = "net.fabricmc.fabric-api", module = "fabric-biome-api-v1") // err on 23w07a
+	}
 }
 
 tasks.getByName<ProcessResources>("processResources") {
