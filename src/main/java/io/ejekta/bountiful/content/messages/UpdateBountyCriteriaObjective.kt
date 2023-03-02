@@ -1,7 +1,6 @@
 package io.ejekta.bountiful.content.messages
 
 import io.ejekta.bountiful.bounty.BountyData
-import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.content.BountyItem
 import io.ejekta.kambrik.message.ClientMsg
 import kotlinx.serialization.Contextual
@@ -9,7 +8,7 @@ import kotlinx.serialization.Serializable
 import net.minecraft.nbt.NbtCompound
 
 @Serializable
-class UpdateBountyData(val slot: Int, val compound: @Contextual NbtCompound) : ClientMsg() {
+class UpdateBountyCriteriaObjective(val slot: Int, val objIndex: Int) : ClientMsg() {
     override fun onClientReceived(ctx: MsgContext) {
         println("Client received update bounty tooltip update with slot number: $slot")
         val player = ctx.client.player
@@ -20,14 +19,13 @@ class UpdateBountyData(val slot: Int, val compound: @Contextual NbtCompound) : C
             val stack = player.inventory.getStack(slot)
 
             if (stack.item is BountyItem) {
-                println("Lets do it bro")
+                println("Lets do it")
 
-                val payload = compound.get("payload") ?: return
-                println("Doing..")
-                val newData = BountyData.decode(payload)
-                println("New data is: $newData")
-                BountyData[stack] = newData
-                BountyInfo[stack] = BountyInfo[stack].update(newData, player.world.time)
+                BountyData.edit(stack) {
+                    objectives[objIndex].current += 1
+                }
+
+                println("Done!")
             }
         }
     }

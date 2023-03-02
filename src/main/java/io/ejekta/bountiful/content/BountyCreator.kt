@@ -32,9 +32,7 @@ class BountyCreator private constructor(
         create()
         ItemStack(BountifulContent.BOUNTY_ITEM).apply {
             BountyData[this] = data
-            BountyInfo[this] = info.apply {
-                update(data)
-            }
+            BountyInfo[this] = info
         }
     }
 

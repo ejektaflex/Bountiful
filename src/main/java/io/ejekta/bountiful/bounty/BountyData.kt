@@ -26,6 +26,9 @@ class BountyData {
         }
     }
 
+    val objectiveTypes: List<IBountyObjective>
+        get() = objectives.map { it.logic as IBountyObjective }
+
     private fun rewardPlayer(player: PlayerEntity) {
         // Play XP pickup sound
         player.playSound(

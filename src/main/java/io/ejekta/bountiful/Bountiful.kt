@@ -4,11 +4,10 @@ package io.ejekta.bountiful
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
-import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.bounty.types.IBountyType
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.messages.SelectBounty
-import io.ejekta.bountiful.content.messages.UpdateBountyData
+import io.ejekta.bountiful.content.messages.UpdateBountyCriteriaObjective
 import io.ejekta.bountiful.util.isClientSide
 import io.ejekta.bountiful.util.iterateBountyStacks
 import io.ejekta.kambrik.Kambrik
@@ -25,7 +24,6 @@ import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
 import net.minecraft.resource.ResourceType
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.sound.SoundEvents
 import net.minecraft.util.Identifier
 
 
@@ -79,48 +77,13 @@ class Bountiful : ModInitializer {
         """.trimIndent()) {
             iterateBountyStacks {
                 val info = BountyInfo[this]
+                val data = BountyData[this]
                 // If we have an item/item-tag bounty, update it
-                if (setOf(BountyTypeRegistry.ITEM.id, BountyTypeRegistry.ITEM_TAG.id).intersect(info.objectiveFlags).isNotEmpty()) {
+                if (setOf(BountyTypeRegistry.ITEM.id, BountyTypeRegistry.ITEM_TAG.id).intersect(data.objectiveTypes.toSet()).isNotEmpty()) {
 
-                    val data = BountyData[this]
+                    // Send an update notification to the Player
 
-                    var objChanged = false
-                    var numPreviouslyCompleted = 0
-                    var numNowCompleted = 0
-                    var numNewlyCompleted = 0
-                    for (obj in data.objectives) {
-                        if (obj.logicId in setOf(BountyTypeRegistry.ITEM.id, BountyTypeRegistry.ITEM_TAG.id)) {
-                            val oldCurrent = obj.current
-                            val newCurrent = (obj.logic as IBountyObjective).getNewCurrent(obj, this@addCriterionHandler)
-                            println("Checked $oldCurrent against $newCurrent")
-                            if (oldCurrent != newCurrent) {
-                                println("We changed $obj, $oldCurrent to $newCurrent")
-                                if (oldCurrent >= obj.amount) {
-                                    numPreviouslyCompleted++
-                                }
-                                if (obj.amount in (oldCurrent + 1)..newCurrent) {
-                                    numNewlyCompleted++
-                                }
-                                if (newCurrent >= obj.amount) {
-                                    numNowCompleted++
-                                }
-                                objChanged = true
-                            }
-                        }
-                    }
 
-                    // If we crossed the threshold into completing them all
-                    if (data.objectives.size in (numPreviouslyCompleted + 1)..numNowCompleted) {
-                        println("We finished the bounty!")
-                        this@addCriterionHandler.playSound(SoundEvents.ENTITY_GOAT_SCREAMING_DEATH, 1f, 1f)
-                    } else if (numNowCompleted > numPreviouslyCompleted) {
-                        println("We completed a new bounty!")
-                        this@addCriterionHandler.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 1f, 1f)
-                    }
-
-                    if (objChanged) {
-                        // TODO send a ping sound?
-                    }
 
                 }
             }
@@ -136,7 +99,7 @@ class Bountiful : ModInitializer {
 
                     for (obj in triggerObjs) {
                         val trigger = obj.criteria!!
-                        println("Handling bounty trigger objective")
+                        println("Handling bounty trigger objective $trigger")
 
                         val result = Kambrik.Criterion.testAgainst(
                             criterion,
@@ -144,16 +107,12 @@ class Bountiful : ModInitializer {
                             predicate
                         )
 
-                        println("RESULT: $result")
-
                         if (result) {
                             println("Do something I guess")
                             obj.current += 1
-                            UpdateBountyData(
+                            UpdateBountyCriteriaObjective(
                                 player.inventory.indexOf(this),
-                                NbtCompound().apply {
-                                    put("payload", BountyData.encode(data))
-                                }
+                                data.objectives.indexOf(obj)
                             ).sendToClient(player)
 
                             if (!isClientSide()) {

@@ -14,7 +14,6 @@ class BoardBountySlot(val inv: BoardInventory, index: Int, x: Int, y: Int) : Slo
     }
 
     override fun canTakeItems(player: PlayerEntity): Boolean {
-        println("Taking?")
         if (player is ServerPlayerEntity) {
             val board = player.world.getBlockEntity(inv.pos) as? BoardBlockEntity ?: return false
             // Mask all matching bounties
@@ -27,8 +26,7 @@ class BoardBountySlot(val inv: BoardInventory, index: Int, x: Int, y: Int) : Slo
                     }
                 }.filterNotNull()
             for (newIndex in matchingMaskIndices) {
-                println("Adding mask for: $newIndex")
-                board.maskFor(player)?.add(newIndex)
+                board.maskFor(player).add(newIndex)
             }
         }
         super.onTakeItem(player, stack)

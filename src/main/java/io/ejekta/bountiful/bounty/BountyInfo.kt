@@ -3,9 +3,12 @@ package io.ejekta.bountiful.bounty
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.util.GameTime
+import io.ejekta.bountiful.util.isClientSide
+import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.serial.ItemDataJson
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.MutableText
@@ -18,12 +21,10 @@ import kotlin.random.Random
 
 @Serializable
 class BountyInfo(
-    var tooltip: List<@Contextual MutableText> = listOf(Text.literal("DOOT")),
     var rarity: BountyRarity = BountyRarity.COMMON,
     var timeStarted: Long = -1L,
     var timeToComplete: Long = -1L,
-    var objectiveFlags: Set<@Contextual Identifier> = emptySet(),
-    var lastCached: Long = -1L
+    var pingComplete: Boolean = false
 ) {
 
     fun timeLeft(world: World): Long {
@@ -39,17 +40,11 @@ class BountyInfo(
         return GameTime.formatTimeExpirable(timeLeft(world) / 20)
     }
 
-    fun getOrRefreshTooltip(stack: ItemStack, worldTime: Long): List<MutableText> {
-        if (worldTime - lastCached >= 20L) {
-            BountyInfo[stack] = apply {
-                tooltip = genTooltip(BountyData[stack])
-                lastCached = worldTime
-            }
+    fun genTooltip(fromData: BountyData): List<MutableText> {
+        if (!isClientSide()) {
+            return emptyList()
         }
-        return tooltip
-    }
-
-    private fun genTooltip(fromData: BountyData, player: ServerPlayerEntity): List<MutableText> {
+        val player = MinecraftClient.getInstance().player!!
         return buildList {
             add(Text.translatable("bountiful.tooltip.required").formatted(Formatting.GOLD).append(":"))
             addAll(fromData.objectives.map {
@@ -61,13 +56,6 @@ class BountyInfo(
             })
             add(Text.literal(Random.nextFloat().toString()))
         }
-    }
-
-    fun update(data: BountyData, player: ServerPlayerEntity): BountyInfo {
-        objectiveFlags = data.objectives.map { it.logicId }.toSet()
-        tooltip = genTooltip(data, player)
-        //worldTime?.let { lastCached = it }
-        return this
     }
 
     @Suppress("RemoveRedundantQualifierName")

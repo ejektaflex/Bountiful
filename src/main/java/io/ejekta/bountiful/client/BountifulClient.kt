@@ -5,7 +5,8 @@ import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.messages.ClipboardCopy
-import io.ejekta.bountiful.content.messages.UpdateBountyData
+import io.ejekta.bountiful.content.messages.UpdateBountyCriteriaObjective
+import io.ejekta.bountiful.content.messages.UpdateBountyTooltipNotification
 import io.ejekta.bountiful.mixin.ModelPredicateProviderRegistrar
 import io.ejekta.kambrik.Kambrik
 import net.fabricmc.api.ClientModInitializer
@@ -41,7 +42,12 @@ class BountifulClient : ClientModInitializer {
         )
 
         Kambrik.Message.registerClientMessage(
-            UpdateBountyData.serializer(),
+            UpdateBountyCriteriaObjective.serializer(),
+            Bountiful.id("update_bounty_criteria")
+        )
+
+        Kambrik.Message.registerClientMessage(
+            UpdateBountyTooltipNotification.serializer(),
             Bountiful.id("update_bounty_tooltip")
         )
 

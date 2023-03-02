@@ -49,19 +49,13 @@ class BountyTypeEntity : IBountyObjective {
     fun incrementEntityBounties(playerEntity: ServerPlayerEntity, killedEntity: LivingEntity) {
         playerEntity.iterateBountyStacks {
             val info = BountyInfo[this]
-            if (this@BountyTypeEntity.id in info.objectiveFlags) {
-                val data = BountyData[this]
-                val entityObjectives = data.objectives.filter { it.logicId == this@BountyTypeEntity.id }
-                var didChange = false
-                for (obj in entityObjectives) {
+            val data = BountyData[this]
+            val entityObjs = data.objectives.filter { it.logicId == this@BountyTypeEntity.id }
+            if (entityObjs.isNotEmpty()) {
+                for (obj in entityObjs) {
                     if (obj.content == killedEntity.type.identifier.toString()) {
                         obj.current += 1
-                        didChange = true
                     }
-                }
-                // Update tooltip if changed
-                if (didChange) {
-                    BountyInfo[this] = info.update(data, playerEntity)
                 }
             }
         }
