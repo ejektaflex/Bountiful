@@ -1,9 +1,8 @@
 
 {
     "requires": ["charm"],
-	"content": [
-
-        {
+	"content": {
+        "toolsmith_rew_raid_horn": {
             "type": "item",
             "rarity": "LEGENDARY",
             "content": "charm:raid_horn",
@@ -15,8 +14,5 @@
             "nbt": "{Damage:0}",
             "weightMult": 0.5
         }
-
-	]
-
-
+	}
 }

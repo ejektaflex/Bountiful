@@ -1,9 +1,9 @@
 
 {
 	"requires": ["gofish"],
-	"content": [
+	"content": {
 
-		{
+		"fisherman_rew_blaze_rod": {
 			"type": "item",
 			"rarity": "RARE",
 			"content": "gofish:blaze_rod",
@@ -15,7 +15,7 @@
 			"nbt": "{Damage:0}"
 		},
 
-		{
+		"fisherman_rew_skeletal_rod": {
 			"type": "item",
 			"rarity": "RARE",
 			"content": "gofish:skeletal_rod",
@@ -28,7 +28,7 @@
 			"nbt": "{Damage:0}"
 		},
 
-		{
+		"fisherman_rew_diamond_reinforced_rod": {
 			"type": "item",
 			"rarity": "EPIC",
 			"content": "gofish:diamond_reinforced_rod",
@@ -41,7 +41,7 @@
 		},
 
 
-		{
+		"fisherman_rew_celestial_rod": {
 			"type": "item",
 			"rarity": "LEGENDARY",
 			"content": "gofish:celestial_rod",
@@ -53,7 +53,6 @@
 			"nbt": "{Damage:0}"
 		}
 
-	]
-
+	}
 
 }

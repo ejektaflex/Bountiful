@@ -1,9 +1,9 @@
 
 {
     "requires": ["campanion"],
-	"content": [
+	"content": {
 
-        {
+        "leatherer_obj_day_pack": {
             "type": "item",
             "content": "campanion:day_pack",
             "amount": {
@@ -13,7 +13,7 @@
             "unitWorth": 1000
         },
 
-        {
+        "leatherer_obj_tanned_leather_pouch": {
             "type": "item",
             "rarity": "UNCOMMON",
             "content": "campanion:tanned_leather_pouch",
@@ -24,7 +24,7 @@
             "unitWorth": 800
         }
 
-	]
+	}
 
 
 }

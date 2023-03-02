@@ -1,9 +1,9 @@
 
 {
 	"requires": ["charm"],
-	"content": [
+	"content": {
 
-		{
+		"librarian_obj_woodcutter": {
 			"type": "item",
 			"content": "charm:woodcutter",
 			"amount": {
@@ -13,7 +13,6 @@
 			"unitWorth": 750
 		}
 
-	]
-
+	}
 
 }
