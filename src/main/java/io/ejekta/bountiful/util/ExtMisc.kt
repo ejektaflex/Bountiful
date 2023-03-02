@@ -40,12 +40,12 @@ val Inventory.readOnlyCopy: DefaultedList<ItemStack>
     }
 
 fun <T : Any> List<T>.weightedRandomIntBy(func: T.() -> Int): T {
-    val mapped = map { it to func(it) }.toMap()
+    val mapped = associate { it to func(it) }
     return mapped.weightedRandomInt()
 }
 
 fun <T : Any> List<T>.weightedRandomDblBy(func: T.() -> Double): T {
-    val mapped = map { it to func(it) }.toMap()
+    val mapped = associate { it to func(it) }
     return mapped.weightedRandomDbl()
 }
 

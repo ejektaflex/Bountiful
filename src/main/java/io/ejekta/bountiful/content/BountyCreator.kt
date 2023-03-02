@@ -150,6 +150,7 @@ class BountyCreator private constructor(
 
             // Append on a new worth to add obj for
             // if we still haven't fulfilled it
+            // think of this as the "emergency foot-shooting escape plan"
             if (entry.worth < w * 0.5) {
                 worthGroups.add(w - entry.worth)
             }
