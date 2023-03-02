@@ -1,8 +1,8 @@
 
 {
-	"content": [
+	"content": {
 
-        {
+        "mapper_rew_map": {
             "type": "item",
             "content": "minecraft:map",
             "amount": {
@@ -12,7 +12,7 @@
             "unitWorth": 1000
         },
 
-        {
+        "mapper_rew_item_frame": {
             "type": "item",
             "content": "minecraft:item_frame",
             "amount": {
@@ -22,7 +22,7 @@
             "unitWorth": 300.0
         },
 
-        {
+        "mapper_rew_black_dye": {
             "type": "item",
             "content": "minecraft:black_dye",
             "amount": {
@@ -32,7 +32,7 @@
             "unitWorth": 100.0
         },
 
-        {
+        "mapper_rew_pink_banner": {
             "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:pink_banner",
@@ -43,7 +43,7 @@
             "unitWorth": 1000.0
         },
 
-        {
+        "mapper_rew_light_blue_banner": {
             "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:light_blue_banner",
@@ -54,7 +54,7 @@
             "unitWorth": 1000.0
         },
 
-        {
+        "mapper_rew_flower_pattern": {
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:flower_banner_pattern",
@@ -65,7 +65,7 @@
             "unitWorth": 3000
         },
 
-        {
+        "mapper_rew_globe_pattern": {
             "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:globe_banner_pattern",
@@ -76,7 +76,7 @@
             "unitWorth": 3000
         },
 
-        {
+        "mapper_rew_piglin_pattern": {
             "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:piglin_banner_pattern",
@@ -87,7 +87,7 @@
             "unitWorth": 2500
         },
 
-        {
+        "mapper_rew_creeper_pattern": {
             "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:creeper_banner_pattern",
@@ -98,7 +98,7 @@
             "unitWorth": 2500
         },
 
-        {
+        "mapper_rew_skull_pattern": {
             "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:skull_banner_pattern",
@@ -109,7 +109,7 @@
             "unitWorth": 2500
         },
 
-        {
+        "mapper_rew_mojang_pattern": {
             "type": "item",
 			"rarity": "LEGENDARY",
             "content": "minecraft:mojang_banner_pattern",
@@ -120,8 +120,6 @@
             "unitWorth": 3000
         }
 
-
-	]
-
+	}
 
 }

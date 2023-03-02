@@ -1,7 +1,7 @@
 {
-	"content": [
+	"content": {
 
-		{
+		"gardening_rew_stone_shovel": {
 			"type": "item",
 			"content": "minecraft:stone_shovel",
 			"amount": {
@@ -12,7 +12,7 @@
 			"nbt": "{Damage:0}"
 		},
 
-		{
+		"gardening_rew_stone_hoe": {
 			"type": "item",
 			"content": "minecraft:stone_hoe",
 			"amount": {
@@ -23,7 +23,7 @@
 			"nbt": "{Damage:0}"
 		},
 
-		{
+		"gardening_rew_iron_hoe": {
 			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:iron_hoe",
@@ -41,7 +41,7 @@
 			]
 		},
 
-		{
+		"gardening_rew_iron_shovel": {
 			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:iron_shovel",
@@ -59,7 +59,7 @@
 			]
 		}
 
-	]
+	}
 
 
 }

@@ -1,7 +1,7 @@
 {
-	"content": [
+	"content": {
 
-		{
+		"metal_obj_coal": {
 			"type": "item",
 			"content": "minecraft:coal",
 			"amount": {
@@ -11,7 +11,7 @@
 			"unitWorth": 100
 		},
 
-		{
+		"metal_obj_raw_iron": {
 			"type": "item",
 			"content": "minecraft:raw_iron",
 			"amount": {
@@ -43,7 +43,7 @@
 			]
 		},
 
-		{
+		"metal_obj_raw_copper": {
 			"type": "item",
 			"content": "minecraft:raw_copper",
 			"amount": {
@@ -59,7 +59,7 @@
 			]
 		},
 
-		{
+		"metal_obj_copper_ingot": {
 			"type": "item",
 			"content": "minecraft:copper_ingot",
 			"amount": {
@@ -69,7 +69,7 @@
 			"unitWorth": 750
 		},
 
-		{
+		"metal_obj_raw_gold": {
 			"type": "item",
 			"content": "minecraft:raw_gold",
 			"rarity": "UNCOMMON",
@@ -80,7 +80,7 @@
 			"unitWorth": 1200
 		},
 
-		{
+		"metal_obj_gold_ingot": {
 			"type": "item",
 			"content": "minecraft:gold_ingot",
 			"rarity": "UNCOMMON",
@@ -91,7 +91,7 @@
 			"unitWorth": 1250
 		},
 
-		{
+		"metal_obj_iron_ingot": {
 			"type": "item",
 			"content": "minecraft:iron_ingot",
 			"amount": {
@@ -101,7 +101,7 @@
 			"unitWorth": 1000
 		},
 
-		{
+		"metal_obj_diamond": {
 			"type": "item",
 			"content": "minecraft:diamond",
 			"amount": {
@@ -112,7 +112,7 @@
 			"weightMult": 0.1
 		},
 
-		{
+		"metal_obj_chain": {
 			"type": "item",
 			"content": "minecraft:chain",
 			"amount": {
@@ -128,7 +128,7 @@
 			]
 		},
 
-		{
+		"metal_obj_iron_bars": {
 			"type": "item",
 			"content": "minecraft:iron_bars",
 			"amount": {
@@ -144,7 +144,7 @@
 			]
 		},
 
-		{
+		"metal_obj_netherite": {
 			"type": "item",
 			"rarity": "LEGENDARY",
 			"content": "minecraft:netherite_ingot",
@@ -157,7 +157,7 @@
 
 
 
-	]
+	}
 
 
 }

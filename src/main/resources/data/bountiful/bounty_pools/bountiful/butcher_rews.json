@@ -1,8 +1,8 @@
 
 {
-	"content": [
+	"content": {
 
-		{
+		"butcher_rew_rabbit_stew": {
 			"type": "item",
 			"content": "minecraft:rabbit_stew",
 			"amount": {
@@ -12,7 +12,7 @@
 			"unitWorth": 1000
 		},
 
-		{
+		"butcher_rew_cooked_porkchop": {
 			"type": "item",
 			"content": "minecraft:cooked_porkchop",
 			"amount": {
@@ -22,7 +22,7 @@
 			"unitWorth": 200
 		},
 
-		{
+		"butcher_rew_cooked_chicken": {
 			"type": "item",
 			"content": "minecraft:cooked_chicken",
 			"amount": {
@@ -32,7 +32,7 @@
 			"unitWorth": 125
 		},
 
-		{
+		"butcher_rew_leather": {
 			"type": "item",
 			"content": "minecraft:leather",
 			"amount": {
@@ -42,7 +42,7 @@
 			"unitWorth": 150
 		},
 
-		{
+		"butcher_rew_cooked_beef": {
 			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:cooked_beef",
@@ -53,7 +53,7 @@
 			"unitWorth": 125
 		},
 
-		{
+		"butcher_rew_cooked_mutton": {
 			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:cooked_mutton",
@@ -64,9 +64,6 @@
 			"unitWorth": 125
 		}
 
-
-
-	]
-
+	}
 
 }

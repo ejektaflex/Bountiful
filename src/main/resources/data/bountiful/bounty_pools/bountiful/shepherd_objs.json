@@ -1,8 +1,8 @@
 
 {
-	"content": [
+	"content": {
 
-        {
+        "shepherd_obj_loom": {
             "type": "item",
             "content": "minecraft:loom",
             "amount": {
@@ -12,7 +12,7 @@
             "unitWorth": 150
         },
 
-        {
+        "shepherd_obj_wool_random": {
             "type": "item",
             "content": "#minecraft:wool",
             "amount": {
@@ -23,7 +23,7 @@
             "weightMult": 6.0
         },
 
-        {
+        "shepherd_obj_wool_wildcard": {
             "type": "item_tag",
             "content": "minecraft:wool",
             "translation": "bountiful.item_tag.any_wool",
@@ -35,7 +35,7 @@
             "weightMult": 4.0
         },
 
-        {
+        "shepherd_obj_banner_random": {
             "type": "item",
             "content": "#minecraft:banners",
             "amount": {
@@ -46,7 +46,7 @@
             "weightMult": 4.0
         },
 
-        {
+        "shepherd_obj_banner_wildcard": {
             "type": "item_tag",
             "content": "minecraft:banners",
             "translation": "bountiful.item_tag.any_banner",
@@ -58,7 +58,7 @@
             "weightMult": 4.0
         },
 
-        {
+        "shepherd_obj_bed_wildcard": {
             "type": "item_tag",
             "content": "minecraft:beds",
             "translation": "bountiful.item_tag.any_bed",
@@ -69,7 +69,7 @@
             "unitWorth": 500
         },
 
-        {
+        "shepherd_obj_gray_dye": {
             "type": "item",
             "content": "minecraft:gray_dye",
             "amount": {
@@ -79,7 +79,7 @@
             "unitWorth": 80
         },
 
-        {
+        "shepherd_obj_black_dye": {
             "type": "item",
             "content": "minecraft:black_dye",
             "amount": {
@@ -89,7 +89,7 @@
             "unitWorth": 85
         },
 
-        {
+        "shepherd_obj_light_blue_dye": {
             "type": "item",
             "content": "minecraft:light_blue_dye",
             "amount": {
@@ -99,7 +99,7 @@
             "unitWorth": 85
         },
 
-        {
+        "shepherd_obj_lime_dye": {
             "type": "item",
             "content": "minecraft:lime_dye",
             "amount": {
@@ -109,7 +109,7 @@
             "unitWorth": 85
         },
 
-        {
+        "shepherd_obj_yellow_dye": {
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:yellow_dye",
@@ -120,7 +120,7 @@
             "unitWorth": 85
         },
 
-        {
+        "shepherd_obj_orange_dye": {
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:orange_dye",
@@ -131,7 +131,7 @@
             "unitWorth": 85
         },
 
-        {
+        "shepherd_obj_red_dye": {
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:red_dye",
@@ -142,7 +142,7 @@
             "unitWorth": 85
         },
 
-        {
+        "shepherd_obj_pink_dye": {
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:pink_dye",
@@ -153,8 +153,6 @@
             "unitWorth": 85
         }
 
-
-	]
-
+	}
 
 }

@@ -1,8 +1,8 @@
 
 {
-	"content": [
+	"content": {
 
-		{
+        "fisherman_obj_string": {
             "type": "item",
             "content": "minecraft:string",
             "amount": {
@@ -12,7 +12,7 @@
             "unitWorth": 50
         },
 
-        {
+        "fisherman_obj_coal": {
             "type": "item",
             "content": "minecraft:coal",
             "amount": {
@@ -22,7 +22,7 @@
             "unitWorth": 100
         },
 
-        {
+        "fisherman_obj_cod": {
             "type": "item",
             "content": "minecraft:cod",
             "amount": {
@@ -33,7 +33,7 @@
             "weightMult": 1.5
         },
 
-        {
+        "fisherman_obj_barrel": {
             "type": "item",
             "content": "minecraft:barrel",
             "amount": {
@@ -43,7 +43,7 @@
             "unitWorth": 250
         },
 
-        {
+        "fisherman_obj_salmon": {
             "type": "item",
             "content": "minecraft:salmon",
             "amount": {
@@ -54,7 +54,7 @@
             "weightMult": 1.5
         },
 
-        {
+        "fisherman_obj_trop_fish": {
             "type": "item",
             "content": "minecraft:tropical_fish",
             "amount": {
@@ -65,7 +65,7 @@
             "weightMult": 1.5
         },
 
-        {
+        "fisherman_obj_pufferfish": {
             "type": "item",
             "content": "minecraft:pufferfish",
             "amount": {
@@ -76,7 +76,7 @@
             "weightMult": 1.5
         },
 
-        {
+        "fisherman_obj_oak_boat": {
             "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:oak_boat",
@@ -87,7 +87,7 @@
             "unitWorth": 800.0
         },
 
-        {
+        "fisherman_obj_naut_shell": {
             "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:nautilus_shell",
@@ -96,10 +96,9 @@
                 "max": 1
             },
             "unitWorth": 1100.0
-        }
+        },
 
-    ,
-        {
+        "fisherman_obj_any_boat": {
             "type": "item_tag",
             "content": "minecraft:boats",
             "translation": "bountiful.item_tag.any_boat",
@@ -110,8 +109,6 @@
             "unitWorth": 450
         }
 
-
-	]
-
+	}
 
 }

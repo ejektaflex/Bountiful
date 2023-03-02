@@ -1,8 +1,8 @@
 
 {
-	"content": [
+	"content": {
 
-		{
+        "librarian_obj_paper": {
             "type": "item",
             "content": "minecraft:paper",
             "amount": {
@@ -12,7 +12,7 @@
             "unitWorth": 45
         },
 
-        {
+        "librarian_obj_bookshelf": {
             "type": "item",
             "content": "minecraft:bookshelf",
             "amount": {
@@ -22,7 +22,7 @@
             "unitWorth": 1500
         },
 
-        {
+        "librarian_obj_sugar_cane": {
             "type": "item",
             "content": "minecraft:sugar_cane",
             "amount": {
@@ -32,7 +32,7 @@
             "unitWorth": 40
         },
 
-        {
+        "librarian_obj_book": {
             "type": "item",
             "content": "minecraft:book",
             "amount": {
@@ -42,7 +42,7 @@
             "unitWorth": 250
         },
 
-        {
+        "librarian_obj_lectern": {
             "type": "item",
             "content": "minecraft:lectern",
             "amount": {
@@ -52,7 +52,7 @@
             "unitWorth": 1000
         },
 
-        {
+        "librarian_obj_ink_sac": {
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:ink_sac",
@@ -63,7 +63,7 @@
             "unitWorth": 200
         },
 
-        {
+        "librarian_obj_writing_book": {
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:writable_book",
@@ -74,7 +74,6 @@
             "unitWorth": 500
         }
 
-	]
-
+	}
 
 }

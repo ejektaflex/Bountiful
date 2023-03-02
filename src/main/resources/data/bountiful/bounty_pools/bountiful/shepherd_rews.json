@@ -1,8 +1,8 @@
 
 {
-	"content": [
+	"content": {
 
-        {
+        "shepherd_rew_shears": {
             "type": "item",
             "content": "minecraft:shears",
             "amount": {
@@ -13,7 +13,7 @@
             "nbt": "{Damage:0}"
         },
 
-        {
+        "shepherd_rew_lapis_block": {
             "type": "item",
             "content": "minecraft:lapis_block",
             "amount": {
@@ -23,7 +23,7 @@
             "unitWorth": 1000
         },
 
-        {
+        "shepherd_rew_wool_random": {
             "type": "item",
             "content": "#minecraft:wool",
             "amount": {
@@ -34,7 +34,7 @@
             "weightMult": 4.0
         },
 
-        {
+        "shepherd_rew_carpet_random": {
             "type": "item",
             "content": "#minecraft:wool_carpets",
             "amount": {
@@ -45,7 +45,7 @@
             "weightMult": 4.0
         },
 
-        {
+        "shepherd_rew_bed_random": {
             "type": "item",
             "rarity": "UNCOMMON",
             "content": "#minecraft:beds",
@@ -57,7 +57,7 @@
             "weightMult": 4.0
         },
 
-        {
+        "shepherd_rew_banner_random": {
             "type": "item",
             "rarity": "RARE",
             "content": "#minecraft:banners",
@@ -69,7 +69,7 @@
             "weightMult": 4.0
         },
 
-        {
+        "shepherd_rew_painting": {
             "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:painting",
@@ -80,7 +80,7 @@
             "unitWorth": 650
         },
 
-        {
+        "shepherd_rew_light_gray_dye": {
             "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:light_gray_dye",
@@ -91,7 +91,7 @@
             "unitWorth": 80
         },
 
-        {
+        "shepherd_rew_purple_dye": {
             "type": "item",
             "rarity": "RARE",
             "content": "minecraft:purple_dye",
@@ -102,7 +102,7 @@
             "unitWorth": 80
         },
 
-        {
+        "shepherd_rew_magenta_dye": {
             "type": "item",
             "rarity": "RARE",
             "content": "minecraft:magenta_dye",
@@ -113,7 +113,7 @@
             "unitWorth": 80
         },
 
-        {
+        "shepherd_rew_blue_dye": {
             "type": "item",
             "rarity": "RARE",
             "content": "minecraft:blue_dye",
@@ -124,7 +124,7 @@
             "unitWorth": 80
         },
 
-        {
+        "shepherd_rew_cyan_dye": {
             "type": "item",
             "rarity": "RARE",
             "content": "minecraft:cyan_dye",
@@ -135,7 +135,7 @@
             "unitWorth": 80
         },
 
-        {
+        "shepherd_rew_green_dye": {
             "type": "item",
             "rarity": "RARE",
             "content": "minecraft:green_dye",
@@ -146,7 +146,7 @@
             "unitWorth": 80
         },
 
-        {
+        "shepherd_rew_brown_dye": {
             "type": "item",
             "rarity": "RARE",
             "content": "minecraft:brown_dye",
@@ -157,8 +157,6 @@
             "unitWorth": 80
         }
 
-
-	]
-
+	}
 
 }

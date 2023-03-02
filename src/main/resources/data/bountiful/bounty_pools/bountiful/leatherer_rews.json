@@ -1,8 +1,8 @@
 
 {
-	"content": [
+	"content": {
 
-        {
+        "leatherer_rew_leather_chest": {
             "type": "item",
             "content": "minecraft:leather_chestplate",
             "amount": {
@@ -19,7 +19,7 @@
             ]
         },
 
-        {
+        "leatherer_rew_leather_legs": {
             "type": "item",
             "content": "minecraft:leather_leggings",
             "amount": {
@@ -36,7 +36,7 @@
             ]
         },
 
-        {
+        "leatherer_rew_leather_helm": {
             "type": "item",
             "content": "minecraft:leather_helmet",
             "amount": {
@@ -53,7 +53,7 @@
             ]
         },
 
-        {
+        "leatherer_rew_leather_boots": {
             "type": "item",
             "content": "minecraft:leather_boots",
             "amount": {
@@ -70,7 +70,7 @@
             ]
         },
 
-        {
+        "leatherer_rew_leather_horse_armor": {
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:leather_horse_armor",
@@ -81,7 +81,7 @@
             "unitWorth": 2000
         },
 
-        {
+        "leatherer_rew_saddle": {
             "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:saddle",
@@ -92,8 +92,6 @@
             "unitWorth": 3000
         }
 
-
-	]
-
+	}
 
 }

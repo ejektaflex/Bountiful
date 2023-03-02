@@ -1,8 +1,8 @@
 
 {
-	"content": [
+	"content": {
 
-        {
+        "armorer_obj_lava_bucket": {
             "type": "item",
             "content": "minecraft:lava_bucket",
             "amount": {
@@ -12,7 +12,7 @@
             "unitWorth": 1800
         },
 
-        {
+        "armorer_obj_leather_helm": {
             "type": "item",
             "content": "minecraft:leather_helmet",
             "amount": {
@@ -23,7 +23,7 @@
             "nbt": "{Damage:0}"
         },
 
-        {
+        "armorer_obj_leather_chest": {
             "type": "item",
             "content": "minecraft:leather_chestplate",
             "amount": {
@@ -34,7 +34,7 @@
             "nbt": "{Damage:0}"
         },
 
-        {
+        "armorer_obj_leather_legs": {
             "type": "item",
             "content": "minecraft:leather_leggings",
             "amount": {
@@ -45,7 +45,7 @@
             "nbt": "{Damage:0}"
         },
 
-        {
+        "armorer_obj_leather_boots": {
             "type": "item",
             "content": "minecraft:leather_boots",
             "amount": {
@@ -56,7 +56,7 @@
             "nbt": "{Damage:0}"
         },
 
-        {
+        "armorer_obj_blast_furnace": {
             "type": "item",
             "content": "minecraft:blast_furnace",
             "amount": {
@@ -66,7 +66,7 @@
             "unitWorth": 5000
         },
 
-        {
+        "armorer_obj_lava_bucket_2": {
             "type": "item",
             "content": "minecraft:lava_bucket",
             "amount": {
@@ -76,7 +76,7 @@
             "unitWorth": 1000
         }
 
-	]
+	}
 
 
 }

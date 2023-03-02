@@ -1,8 +1,8 @@
 
 {
-	"content": [
+	"content": {
 
-        {
+        "toolsmith_obj_flint": {
             "type": "item",
             "content": "minecraft:flint",
             "amount": {
@@ -12,7 +12,7 @@
             "unitWorth": 32
         }
 
-	]
+	}
 
 
 }

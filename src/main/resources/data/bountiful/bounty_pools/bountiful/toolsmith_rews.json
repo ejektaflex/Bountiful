@@ -1,8 +1,8 @@
 
 {
-	"content": [
+	"content": {
 
-        {
+        "toolsmith_rew_stone_axe": {
             "type": "item",
             "content": "minecraft:stone_axe",
             "amount": {
@@ -13,7 +13,7 @@
             "nbt": "{Damage:0}"
         },
 
-        {
+        "toolsmith_rew_stone_pickaxe": {
             "type": "item",
             "content": "minecraft:stone_pickaxe",
             "amount": {
@@ -24,7 +24,7 @@
             "nbt": "{Damage:0}"
         },
 
-        {
+        "toolsmith_rew_stone_hoe": {
             "type": "item",
             "content": "minecraft:stone_hoe",
             "amount": {
@@ -35,7 +35,7 @@
             "nbt": "{Damage:0}"
         },
 
-        {
+        "toolsmith_rew_iron_pickaxe": {
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:iron_pickaxe",
@@ -53,7 +53,7 @@
             ]
         },
 
-        {
+        "toolsmith_rew_iron_hoe": {
             "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:iron_hoe",
@@ -71,7 +71,7 @@
             ]
         },
 
-        {
+        "toolsmith_rew_gold_axe": {
             "type": "item",
             "rarity": "RARE",
             "content": "minecraft:golden_axe",
@@ -89,7 +89,7 @@
             ]
         },
 
-        {
+        "toolsmith_rew_gold_pickaxe": {
             "type": "item",
             "rarity": "RARE",
             "content": "minecraft:golden_pickaxe",
@@ -107,7 +107,7 @@
             ]
         },
 
-        {
+        "toolsmith_rew_gold_hoe": {
             "type": "item",
             "rarity": "RARE",
             "content": "minecraft:golden_hoe",
@@ -125,7 +125,7 @@
             ]
         },
 
-        {
+        "toolsmith_rew_diamond_pickaxe": {
             "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:diamond_pickaxe",
@@ -144,7 +144,7 @@
             "weightMult": 0.3
         },
 
-        {
+        "toolsmith_rew_diamond_axe": {
             "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:diamond_axe",
@@ -163,7 +163,7 @@
             "weightMult": 0.3
         },
 
-        {
+        "toolsmith_rew_diamond_hoe": {
             "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:diamond_hoe",
@@ -182,7 +182,7 @@
             "weightMult": 0.3
         },
 
-        {
+        "toolsmith_rew_bell": {
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:bell",
@@ -193,11 +193,6 @@
             "unitWorth": 12000
         }
 
-
-
-
-
-	]
-
+	}
 
 }

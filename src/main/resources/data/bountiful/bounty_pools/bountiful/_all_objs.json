@@ -1,7 +1,7 @@
 {
-	"content": [
+	"content": {
 
-		{
+		"all_obj_emerald": {
 			"type": "item",
 			"content": "minecraft:emerald",
 			"amount": {
@@ -11,7 +11,7 @@
 			"unitWorth": 1000
 		},
 
-		{
+		"all_obj_iron_block": {
 			"type": "item",
 			"rarity": "EPIC",
 			"content": "minecraft:iron_block",
@@ -23,7 +23,7 @@
 			"weightMult": 0.1
 		},
 
-		{
+		"all_obj_anvil": {
 			"type": "item",
 			"rarity": "EPIC",
 			"content": "minecraft:anvil",
@@ -35,7 +35,7 @@
 			"weightMult": 0.1
 		},
 
-		{
+		"all_obj_zombie": {
 			"type": "entity",
 			"timeMult": 6.0,
 			"content": "minecraft:zombie",
@@ -46,7 +46,7 @@
 			"unitWorth": 250
 		},
 
-		{
+		"all_obj_spider": {
 			"type": "entity",
 			"timeMult": 6.0,
 			"content": "minecraft:spider",
@@ -57,7 +57,7 @@
 			"unitWorth": 275
 		},
 
-		{
+		"all_obj_creeper": {
 			"type": "entity",
 			"timeMult": 7.0,
 			"content": "minecraft:creeper",
@@ -70,7 +70,7 @@
 
 
 
-	]
+	}
 
 
 }
