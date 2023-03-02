@@ -36,20 +36,7 @@ class BountifulClient : ClientModInitializer {
             if (data.ids.isNotEmpty()) 1f else 0f
         }
 
-        Kambrik.Message.registerClientMessage(
-            ClipboardCopy.serializer(),
-            Bountiful.id("clipboard_copy")
-        )
 
-        Kambrik.Message.registerClientMessage(
-            UpdateBountyCriteriaObjective.serializer(),
-            Bountiful.id("update_bounty_criteria")
-        )
-
-        Kambrik.Message.registerClientMessage(
-            UpdateBountyTooltipNotification.serializer(),
-            Bountiful.id("update_bounty_tooltip")
-        )
 
         ScreenRegistry.register(BountifulContent.BOARD_SCREEN_HANDLER, ::BoardScreen)
 

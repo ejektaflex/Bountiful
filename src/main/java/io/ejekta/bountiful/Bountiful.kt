@@ -6,8 +6,10 @@ import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.IBountyType
 import io.ejekta.bountiful.config.BountifulIO
+import io.ejekta.bountiful.content.messages.ClipboardCopy
 import io.ejekta.bountiful.content.messages.SelectBounty
 import io.ejekta.bountiful.content.messages.UpdateBountyCriteriaObjective
+import io.ejekta.bountiful.content.messages.UpdateBountyTooltipNotification
 import io.ejekta.bountiful.util.isClientSide
 import io.ejekta.bountiful.util.iterateBountyStacks
 import io.ejekta.kambrik.Kambrik
@@ -33,7 +35,7 @@ class Bountiful : ModInitializer {
         const val ID = "bountiful"
         fun id(str: String) = Identifier(ID, str)
         val LOGGER = Kambrik.Logging.createLogger(ID)
-        val BOUNTY_LOGIC_REGISTRY_KEY: RegistryKey<Registry<IBountyType>> = RegistryKey.ofRegistry<IBountyType>(id("logic_registry"))
+        val BOUNTY_LOGIC_REGISTRY_KEY: RegistryKey<Registry<IBountyType>> = RegistryKey.ofRegistry(id("logic_registry"))
     }
 
     init {
@@ -125,6 +127,21 @@ class Bountiful : ModInitializer {
                 }
             }
         }
+
+        Kambrik.Message.registerClientMessage(
+            ClipboardCopy.serializer(),
+            Bountiful.id("clipboard_copy")
+        )
+
+        Kambrik.Message.registerClientMessage(
+            UpdateBountyCriteriaObjective.serializer(),
+            Bountiful.id("update_bounty_criteria")
+        )
+
+        Kambrik.Message.registerClientMessage(
+            UpdateBountyTooltipNotification.serializer(),
+            Bountiful.id("update_bounty_tooltip")
+        )
 
     }
 
