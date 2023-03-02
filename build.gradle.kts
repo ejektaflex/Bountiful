@@ -22,7 +22,7 @@ object Versions {
 	object Mod {
 		const val Group = "io.ejekta"
 		const val ID = "bountiful"
-		const val Version = "4.1.0"
+		const val Version = "4.1.1"
 	}
 	object Env {
 		const val Kambrik = "5.0-1.19.3-SNAPSHOT+"
