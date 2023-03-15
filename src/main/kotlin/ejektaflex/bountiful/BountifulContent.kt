@@ -2,7 +2,7 @@ package ejektaflex.bountiful
 
 import ejektaflex.bountiful.block.BlockBountyBoard
 import ejektaflex.bountiful.block.BoardBlockEntity
-import ejektaflex.bountiful.gui.BoardContainer
+import ejektaflex.bountiful.gui.BoardMenu
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.item.ItemDecree
 import net.minecraft.world.item.BlockItem
@@ -38,7 +38,7 @@ object BountifulContent {
 
     val DECREE by ItemRegistry.registerObject("decree", ::ItemDecree)
 
-    val BOARDCONTAINER: ContainerType<BoardContainer> by ContainerRegistry.registerObject("bountyboard") {
+    val BOARDCONTAINER: ContainerType<BoardMenu> by ContainerRegistry.registerObject("bountyboard") {
         IForgeContainerType.create(::BoardContainer)
     }
 

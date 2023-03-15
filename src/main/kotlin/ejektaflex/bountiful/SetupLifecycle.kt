@@ -15,6 +15,8 @@ import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.item.ItemDecree
 import ejektaflex.bountiful.worldgen.JigsawHelper
 import net.minecraft.commands.CommandSource
+import net.minecraft.commands.CommandSourceStack
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -78,9 +80,9 @@ object SetupLifecycle {
     }
 
 
-    fun validatePool(pool: EntryPool, sender: CommandSource? = null, log: Boolean = false): MutableList<BountyEntry> {
+    fun validatePool(pool: EntryPool, sender: CommandSourceStack? = null, log: Boolean = false): MutableList<BountyEntry> {
 
-        sender?.sendMessage("Validating pool '${pool.id}'")
+        sender?.sendSystemMessage(Component.literal("Validating pool '${pool.id}'"))
 
         val invalidEntries = mutableListOf<BountyEntry>()
 

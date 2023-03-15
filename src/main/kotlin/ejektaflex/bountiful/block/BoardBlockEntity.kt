@@ -6,12 +6,14 @@ import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.data.registry.DecreeRegistry
 import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.ext.*
-import ejektaflex.bountiful.gui.BoardContainer
+import ejektaflex.bountiful.gui.BoardMenu
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.item.ItemDecree
 import net.minecraft.core.BlockPos
 import net.minecraft.world.item.ItemStack
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.chat.Component
+import net.minecraft.world.MenuProvider
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraftforge.common.capabilities.Capability
@@ -19,7 +21,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities
 import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.items.ItemStackHandler
 
-class BoardBlockEntity(inPos: BlockPos, inState: BlockState) : BlockEntity(BountifulContent.BOUNTYTILEENTITY, inPos, inState) {
+class BoardBlockEntity(inPos: BlockPos, inState: BlockState) : BlockEntity(BountifulContent.BOUNTYTILEENTITY, inPos, inState), MenuProvider {
 
 
     // Lazy load lazy optional ( ... :| )
@@ -178,10 +180,13 @@ class BoardBlockEntity(inPos: BlockPos, inState: BlockState) : BlockEntity(Bount
     }
 
     override fun createMenu(i: Int, inv: PlayerInventory, player: PlayerEntity): Container? {
-        return BoardContainer(i, inv, this)
+        return BoardMenu(i, inv, this)
         //return BoardContainer(i, world!!, pos, inv)
     }
 
+    override fun getDisplayName(): Component {
+        return Component.translatable("block.bountiful.bountyboard")
+    }
 
     companion object {
         const val SIZE = 24

@@ -10,14 +10,13 @@ import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.ext.*
 import ejektaflex.bountiful.util.ValueRegistry
 import net.minecraft.client.Minecraft
-import net.minecraft.client.resources.I18n
 import net.minecraft.world.item.ItemStack
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.util.NonNullList
 import net.minecraft.network.chat.Component
 import net.minecraft.ChatFormatting
-import net.minecraft.util.text.TranslationTextComponent
-import net.minecraft.world.World
+import net.minecraft.core.NonNullList
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.world.level.Level
 import net.minecraftforge.common.util.INBTSerializable
 import java.util.*
 import kotlin.math.ceil
@@ -32,31 +31,31 @@ class BountyData : INBTSerializable<CompoundTag> {
     val rewards = ValueRegistry<BountyEntry>()
     var bountyStamp: Long? = null
 
-    fun timeTaken(world: World): Long {
-        return world.gameTime - (bountyStamp ?: world.gameTime)
+    fun timeTaken(level: Level): Long {
+        return level.gameTime - (bountyStamp ?: level.gameTime)
     }
 
-    fun timeLeft(world: World): Long {
+    fun timeLeft(level: Level): Long {
         return if (bountyStamp == null) {
             bountyTime
         } else {
-            max(bountyStamp!! + bountyTime - world.gameTime, 0)
+            max(bountyStamp!! + bountyTime - level.gameTime, 0)
         }
     }
 
-    fun hasExpired(world: World): Boolean {
-        return timeLeft(world) <= 0
+    fun hasExpired(level: Level): Boolean {
+        return timeLeft(level) <= 0
     }
 
     val rarityEnum: BountyRarity
         get() = BountyRarity.getRarityFromInt(rarity)
 
-    fun boardTimeLeft(world: World): Long {
-        return max(boardStamp + maxTimeAtBoard - world.gameTime, 0)
+    fun boardTimeLeft(level: Level): Long {
+        return max(boardStamp + maxTimeAtBoard - level.gameTime, 0)
     }
 
 
-    fun tooltipInfo(world: World, advanced: Boolean): List<Component> {
+    fun tooltipInfo(level: Level, advanced: Boolean): List<Component> {
         val passed = CheckerRegistry.passedChecks(Minecraft.getInstance().player!!, this)
 
         val typeIds = BountyType.values().map { it.id }
@@ -81,8 +80,8 @@ class BountyData : INBTSerializable<CompoundTag> {
 
     }
 
-    fun remainingTime(world: World): String {
-        return formatTimeExpirable(timeLeft(world) / bountyTickFreq)
+    fun remainingTime(level: Level): MutableComponent {
+        return formatTimeExpirable(timeLeft(level) / bountyTickFreq)
     }
 
     private fun formatTickTime(n: Long): String {
@@ -93,11 +92,11 @@ class BountyData : INBTSerializable<CompoundTag> {
         }
     }
 
-    private fun formatTimeExpirable(n: Long): String {
+    private fun formatTimeExpirable(n: Long): MutableComponent {
         return if (n <= 0) {
-            "§4${I18n.format("bountiful.tooltip.expired")}"
+            Component.translatable("bountiful.tooltip.expired").withStyle(ChatFormatting.DARK_RED)
         } else {
-            formatTickTime(n)
+            Component.literal(formatTickTime(n))
         }
     }
 

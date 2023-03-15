@@ -6,21 +6,23 @@ import ejektaflex.bountiful.gui.slot.BountySlot
 import ejektaflex.bountiful.gui.slot.DecreeSlot
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.inventory.container.Container
 import net.minecraft.world.item.ItemStack
 import net.minecraft.network.PacketBuffer
+import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraftforge.items.IItemHandler
 import net.minecraftforge.items.SlotItemHandler
 import net.minecraftforge.items.wrapper.InvWrapper
 
 
-class BoardContainer(val windowId: Int, val inv: PlayerInventory, val boardTE: BoardBlockEntity) : Container(BountifulContent.BOARDCONTAINER, windowId) {
+class BoardMenu(val windowId: Int, val inv: Inventory, val boardTE: BoardBlockEntity) : AbstractContainerMenu(BountifulContent.BOARDCONTAINER, windowId) {
 
-    constructor(inWindow: Int, inInv: PlayerInventory, data: PacketBuffer) : this(inWindow, inInv, getTileEntity(inInv, data))
+    constructor(inWindow: Int, inInv: Inventory, data: PacketBuffer) : this(inWindow, inInv, getTileEntity(inInv, data))
 
     companion object {
-        fun getTileEntity(inv: PlayerInventory, data: PacketBuffer): BoardBlockEntity {
-            val tileAtPos = inv.player.world.getTileEntity(data.readBlockPos())
+        fun getTileEntity(inv: Inventory, data: PacketBuffer): BoardBlockEntity {
+            val tileAtPos = inv.player.level.getBlockEntity(data.readBlockPos())
             return tileAtPos as? BoardBlockEntity ?: throw IllegalStateException("Tile entity is not correct! $tileAtPos")
         }
     }
@@ -54,12 +56,12 @@ class BoardContainer(val windowId: Int, val inv: PlayerInventory, val boardTE: B
     }
 
     // TODO Maybe use isWithinUsableDistance later on
-    override fun canInteractWith(playerIn: PlayerEntity): Boolean {
+    override fun stillValid(playerIn: Player): Boolean {
         return true
     }
 
     // abomination
-    override fun transferStackInSlot(player: PlayerEntity, index: Int): ItemStack {
+    override fun quickMoveStack(player: Player, index: Int): ItemStack {
         var itemstack = ItemStack.EMPTY
         val slot = inventorySlots[index]
 

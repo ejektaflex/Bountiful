@@ -43,7 +43,7 @@ class ExperienceCheckHandler : CheckHandler<BountyEntryEntity>() {
             }
         }
 
-        val xpNeededForLevels = player.experienceTotal - xpAtLevel(player.experienceLevel - levelsToRemove)
+        val xpNeededForLevels = player.totalExperience - xpAtLevel(player.experienceLevel - levelsToRemove)
 
         var totalXpToRemove = max(xpNeededForLevels, pointsToRemove)
 
@@ -60,7 +60,7 @@ class ExperienceCheckHandler : CheckHandler<BountyEntryEntity>() {
         for (obj in entityObjs) {
             succ[obj] = when (obj.content) {
                 "levels" -> BountyProgress(player.experienceLevel to obj.amount)
-                "points" -> BountyProgress(player.experienceTotal to obj.amount)
+                "points" -> BountyProgress(player.totalExperience to obj.amount)
                 else -> BountyProgress(1 to 1)
             }
         }

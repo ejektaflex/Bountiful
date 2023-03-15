@@ -3,6 +3,7 @@ package ejektaflex.bountiful.data.bounty
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.data.bounty.enums.BountyType
+import ejektaflex.bountiful.ext.registryName
 import ejektaflex.bountiful.ext.withSibling
 import net.minecraft.ChatFormatting
 import net.minecraft.nbt.CompoundTag
@@ -39,18 +40,15 @@ class BountyEntryEntity : BountyEntry(), IBountyObjective {
     }
 
     fun isSameEntity(e: LivingEntity): Boolean {
-        val ereg = e.type.registryName
-        if (ereg.toString() == content) {
-            return true
-        }
-        return false
+        val ereg = e.registryName
+        return ereg.toString() == content
     }
 
     override val formattedName: MutableComponent
         get() = Component.translatable(
-            ForgeRegistries.ENTITIES.entries.find {
-                it.key.location.toString() == content
-            }?.value?.translationKey ?: "entity.generic.name"
+            ForgeRegistries.ENTITY_TYPES.entries.find {
+                it.key.location().toString() == content
+            }?.value?.descriptionId ?: "entity.generic.name"
         )
 
     override fun tooltipObjective(progress: BountyProgress): Component {

@@ -20,11 +20,14 @@ import ejektaflex.bountiful.network.BountifulNetwork
 import ejektaflex.bountiful.network.MessageClipboardCopy
 import net.minecraft.ChatFormatting
 import net.minecraft.commands.CommandSource
+import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands.literal
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.HoverEvent
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
 import net.minecraftforge.items.ItemHandlerHelper
+import net.minecraftforge.network.PacketDistributor
 import net.minecraftforge.registries.ForgeRegistries
 import kotlin.system.measureTimeMillis
 
@@ -121,16 +124,13 @@ object BountifulCommand {
         )
     }
 
-    fun hasPermission(c: CommandSource): Boolean {
-        if (c.hasPermissionLevel(2) ||
-                (c.entity is PlayerEntity && c.asPlayer().isCreative)) {
-            return true
-        }
-        return false
+    fun hasPermission(c: CommandSourceStack): Boolean {
+        return c.hasPermission(2) ||
+                (c.entity is Player && (c.entity as Player).isCreative)
     }
 
 
-    private fun entities() = Command<CommandSource> { ctx ->
+    private fun entities() = Command<CommandSourceStack> { ctx ->
 
         ctx.source.sendSystemMessage(
             Component.literal("Dumping list of entities to ").withStyle(ChatFormatting.GOLD).append(
@@ -140,7 +140,7 @@ object BountifulCommand {
 
         val time = measureTimeMillis {
             BountifulMod.logFile.appendText("### Entities in Registry: ###")
-            for ((eKey, eType) in ForgeRegistries.ENTITIES.entries) {
+            for ((eKey, eType) in ForgeRegistries.ENTITY_TYPES.entries) {
                 BountifulMod.logFile.appendText("$eKey\n")
             }
         }
@@ -153,48 +153,43 @@ object BountifulCommand {
     }
 
 
-    private fun hand() = Command<CommandSource> {
+    private fun hand() = Command<CommandSourceStack> {
 
-        if (it.source is Player) {
-            val player = it.source as Player
 
-            val holding = player.mainHandItem
+        val player = it.source.player
 
-            val newEntry = BountyEntryItem().apply {
-                content = holding.item.registryName.toString()
-                amount = holding.count
-                if (holding.hasTag()) {
-                    jsonNBT = JsonAdapter.parse(holding.tag.toString())
-                }
-                unitWorth = 1000
+        val holding = player.mainHandItem
+
+        val newEntry = BountyEntryItem().apply {
+            content = holding.item.registryName.toString()
+            amount = holding.count
+            if (holding.hasTag()) {
+                jsonNBT = JsonAdapter.parse(holding.tag.toString())
             }
-
-            val asText = JsonAdapter.toJson(newEntry)
-
-
-            BountifulNetwork.channel.send(PacketDistributor.PLAYER.with {
-                it.source.asPlayer()
-            }, MessageClipboardCopy(asText))
-
-            val msg = Component.literal("§aItem: §9${holding.item.registryName}§r, §aBounty Entry Copied To Clipboard!§r: §6[hover for preview]§r").apply {
-                style.withHoverEvent(
-                    HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("§6Bounty Entry (Copied to Clipboard):\n").append(
-                        Component.literal(asText).withStyle(ChatFormatting.DARK_PURPLE)
-                    ))
-                )
-            }
-
-            it.source.sendMessage(msg)
-
-
-        } else {
-            it.source.sendErrorMsg("Must be a player to check their hand")
+            unitWorth = 1000
         }
+
+        val asText = JsonAdapter.toJson(newEntry)
+
+
+        BountifulNetwork.channel.send(PacketDistributor.PLAYER.with {
+            it.source as ServerPlayer
+        }, MessageClipboardCopy(asText))
+
+        val msg = Component.literal("§aItem: §9${holding.item.registryName}§r, §aBounty Entry Copied To Clipboard!§r: §6[hover for preview]§r").apply {
+            style.withHoverEvent(
+                HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("§6Bounty Entry (Copied to Clipboard):\n").append(
+                    Component.literal(asText).withStyle(ChatFormatting.DARK_PURPLE)
+                ))
+            )
+        }
+
+        it.source.sendSystemMessage(msg)
 
         1
     }
 
-    private fun sample(inSafety: Int) = Command<CommandSource> {
+    private fun sample(inSafety: Int) = Command<CommandSourceStack> {
 
         val safety = if (inSafety < 0) {
             getInteger(it, "safety")
@@ -204,26 +199,26 @@ object BountifulCommand {
 
         val decreeName = getString(it, "decType")
 
-        it.source.sendMessage("§6Sampling...")
+        it.source.sendSystemMessage(Component.literal("§6Sampling..."))
 
         val decree = DecreeRegistry.getDecree(decreeName)
         val log = BountifulMod.logger
 
         if (decree == null) {
-            it.source.sendErrorMsg("Decree '$decreeName' does not exist!")
+            it.source.sendSystemMessage(Component.literal("Decree '$decreeName' does not exist!"))
             return@Command 1
         }
 
         val objs = DecreeRegistry.getObjectives(listOf(decree))
 
         if (objs.isEmpty()) {
-            it.source.sendErrorMsg("Cannot sample decree '$decreeName' as it has no valid objectives!")
+            it.source.sendSystemMessage(Component.literal("Cannot sample decree '$decreeName' as it has no valid objectives!"))
         }
 
         val rewards = DecreeRegistry.getRewards(listOf(decree))
 
         if (rewards.isEmpty()) {
-            it.source.sendErrorMsg("Cannot sample decree '$decreeName', as there are no valid rewards for it!")
+            it.source.sendSystemMessage(Component.literal("Cannot sample decree '$decreeName', as there are no valid rewards for it!"))
         }
 
         for (reward in rewards) {
@@ -240,11 +235,11 @@ object BountifulCommand {
             val nearest = BountyData.pickObjective(supposedlyNotNull(objs), worthToMatch).pick(worthToMatch)
 
             if (within.isEmpty()) {
-                it.source.sendMessage("§cDecree can't handle theoretical bounty of $safety of §4${reward.amountRange.max}x[${reward.content}]§c, next closest obj was: §4${nearest.amount}x[${nearest.content}]§c")
-                it.source.sendErrorMsg("- * §cNeeded: §4$worthToMatch§c, had: §4${nearest.calculatedWorth}§c")
+                it.source.sendSystemMessage(Component.literal("§cDecree can't handle theoretical bounty of $safety of §4${reward.amountRange.max}x[${reward.content}]§c, next closest obj was: §4${nearest.amount}x[${nearest.content}]§c"))
+                it.source.sendSystemMessage(Component.literal("- * §cNeeded: §4$worthToMatch§c, had: §4${nearest.calculatedWorth}§c"))
             } else {
-                it.source.sendMessage("§2Matched: 2x[${reward.content}] with ${within.size} objectives!")
-                it.source.sendMessage("- * §5${within.joinToString("§f, §5") { thing -> thing.content }}")
+                it.source.sendSystemMessage(Component.literal("§2Matched: 2x[${reward.content}] with ${within.size} objectives!"))
+                it.source.sendSystemMessage(Component.literal("- * §5${within.joinToString("§f, §5") { thing -> thing.content }}"))
             }
 
 
@@ -258,21 +253,21 @@ object BountifulCommand {
 
 
     // TODO If test is true, warn on invalid pool entries
-    private fun dump(test: Boolean = false) = Command<CommandSource> {
+    private fun dump(test: Boolean = false) = Command<CommandSourceStack> {
 
-        it.source.sendMessage("Dumping Decrees to console")
+        it.source.sendSystemMessage(Component.literal("Dumping Decrees to console"))
         for (decree in DecreeRegistry.content) {
             BountifulMod.logger.info("* $decree")
         }
-        it.source.sendMessage("Decrees dumped.")
+        it.source.sendSystemMessage(Component.literal("Decrees dumped."))
 
-        it.source.sendMessage("Dumping Pools to console...")
+        it.source.sendSystemMessage(Component.literal("Dumping Pools to console..."))
         for (pool in PoolRegistry.content) {
 
             val invalid = SetupLifecycle.validatePool(pool, it.source, true)
 
             if (invalid.isNotEmpty()) {
-                it.source.sendMessage("Some items are invalid. Invalid entries have been printed in the log.")
+                it.source.sendSystemMessage(Component.literal("Some items are invalid. Invalid entries have been printed in the log."))
 
                 for (item in invalid) {
                     BountifulMod.logger.warn("Invalid item from pool '${pool.id}': $item")
@@ -281,7 +276,7 @@ object BountifulCommand {
             }
 
         }
-        it.source.sendMessage("Pools dumped.")
+        it.source.sendSystemMessage(Component.literal("Pools dumped."))
 
         1
     }

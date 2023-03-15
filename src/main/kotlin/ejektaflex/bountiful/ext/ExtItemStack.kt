@@ -1,12 +1,14 @@
 package ejektaflex.bountiful.ext
 
 import ejektaflex.bountiful.BountifulMod
-import net.minecraft.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.Item
 import net.minecraftforge.common.util.INBTSerializable
 import net.minecraftforge.fml.ModList
+import net.minecraftforge.registries.ForgeRegistries
 
 val ItemStack.toNBT: CompoundTag
     get() {
@@ -16,6 +18,10 @@ val ItemStack.toNBT: CompoundTag
             put("e_nbt", serializeNBT())
         }
     }
+
+
+val Entity.registryName: ResourceLocation?
+    get() = ForgeRegistries.ENTITY_TYPES.getKey(type)
 
 val CompoundTag.toItemStack: ItemStack?
     get() {

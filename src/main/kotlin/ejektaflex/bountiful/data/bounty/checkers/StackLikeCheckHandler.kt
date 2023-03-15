@@ -69,7 +69,7 @@ class StackLikeCheckHandler : CheckHandler<BountyEntryItem>() {
     }
 
     private fun validStackCheck(stacks: List<ItemStack>, other: ItemStack): Boolean {
-        return stacks.any { stack -> stack.isItemEqualIgnoreDurability(other) && ItemStack.areItemStackTagsEqual(stack, other) }
+        return stacks.any { stack -> stack.item == other.item && stack.areShareTagsEqual(other) }
     }
 
 

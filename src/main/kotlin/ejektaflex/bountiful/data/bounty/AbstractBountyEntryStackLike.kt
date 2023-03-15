@@ -3,7 +3,6 @@ package ejektaflex.bountiful.data.bounty
 import ejektaflex.bountiful.ext.withSibling
 import net.minecraft.world.item.ItemStack
 import net.minecraft.network.chat.Component
-import net.minecraft.util.text.StringTextComponent
 import net.minecraft.ChatFormatting
 
 abstract class AbstractBountyEntryStackLike : BountyEntry(), IBountyObjective, IBountyReward {
