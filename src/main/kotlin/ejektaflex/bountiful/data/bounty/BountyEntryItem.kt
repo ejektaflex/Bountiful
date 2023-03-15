@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.data.bounty.enums.BountyType
 import ejektaflex.bountiful.ext.toItemStack
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.ItemStack
+import net.minecraft.world.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.util.text.IFormattableTextComponent
 import net.minecraft.util.text.StringTextComponent

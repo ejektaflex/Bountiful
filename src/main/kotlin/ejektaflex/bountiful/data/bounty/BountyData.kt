@@ -11,8 +11,8 @@ import ejektaflex.bountiful.ext.*
 import ejektaflex.bountiful.util.ValueRegistry
 import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.I18n
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundNBT
+import net.minecraft.world.item.ItemStack
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.util.NonNullList
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.TextFormatting
@@ -23,7 +23,7 @@ import java.util.*
 import kotlin.math.ceil
 import kotlin.math.max
 
-class BountyData : INBTSerializable<CompoundNBT> {
+class BountyData : INBTSerializable<CompoundTag> {
 
     var boardStamp = maxTimeAtBoard
     var bountyTime = 0L
@@ -102,7 +102,7 @@ class BountyData : INBTSerializable<CompoundNBT> {
     }
 
 
-    override fun deserializeNBT(tag: CompoundNBT) {
+    override fun deserializeNBT(tag: CompoundTag) {
         boardStamp = tag.getInt(BountyNBT.BoardStamp.key)
         bountyTime = tag.getLong(BountyNBT.BountyTime.key)
         rarity = tag.getInt(BountyNBT.Rarity.key)
@@ -120,8 +120,8 @@ class BountyData : INBTSerializable<CompoundNBT> {
         )
     }
 
-    override fun serializeNBT(): CompoundNBT {
-        return CompoundNBT().apply {
+    override fun serializeNBT(): CompoundTag {
+        return CompoundTag().apply {
             putInt(BountyNBT.BoardStamp.key, boardStamp)
             putLong(BountyNBT.BountyTime.key, bountyTime)
             putInt(BountyNBT.Rarity.key, rarity)

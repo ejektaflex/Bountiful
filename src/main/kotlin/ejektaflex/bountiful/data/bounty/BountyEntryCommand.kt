@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.text.IFormattableTextComponent
 import net.minecraft.util.text.StringTextComponent
 import net.minecraft.util.text.TextFormatting
+import net.minecraft.world.entity.player.Player
 
 class BountyEntryCommand : BountyEntry(), IBountyReward {
 
@@ -24,13 +25,13 @@ class BountyEntryCommand : BountyEntry(), IBountyReward {
         return formattedName.mergeStyle(TextFormatting.BOLD)
     }
 
-    override fun reward(player: PlayerEntity) {
+    override fun reward(player: Player) {
         val server = player.server!!
         var newCommand = content
         newCommand = newCommand.replace("%player%", player.displayName.string) // .formattedText?
         newCommand = newCommand.replace("%amount%", amount.toString())
         BountifulMod.logger.info("About to run command: $newCommand")
-        server.commandManager.handleCommand(server.commandSource, newCommand)
+        server.commands.performPrefixedCommand(server.createCommandSourceStack(), newCommand)
     }
 
 }

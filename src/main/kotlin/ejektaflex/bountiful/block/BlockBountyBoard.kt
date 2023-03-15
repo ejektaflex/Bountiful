@@ -3,39 +3,31 @@ package ejektaflex.bountiful.block
 import ejektaflex.bountiful.BountifulConfig
 import ejektaflex.bountiful.BountifulContent
 import ejektaflex.bountiful.item.ItemBounty
-import net.minecraft.block.Block
-import net.minecraft.block.BlockState
-import net.minecraft.block.SoundType
-import net.minecraft.block.material.Material
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.material.Material
 import net.minecraft.entity.item.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.ServerPlayerEntity
 import net.minecraft.inventory.container.INamedContainerProvider
-import net.minecraft.item.ItemStack
+import net.minecraft.world.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.ActionResultType
 import net.minecraft.util.Hand
-import net.minecraft.util.math.BlockPos
+import net.minecraft.core.BlockPos
 import net.minecraft.util.math.BlockRayTraceResult
 import net.minecraft.world.IBlockReader
 import net.minecraft.world.World
 import net.minecraftforge.fml.network.NetworkHooks
 
 class BlockBountyBoard : Block(
-        Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(10f)
+        //Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(10f)
+    Properties.of(Material.WOOD)
 ) {
 
-    override fun getPlayerRelativeBlockHardness(
-        state: BlockState,
-        player: PlayerEntity,
-        worldIn: IBlockReader,
-        pos: BlockPos
-    ): Float {
-        return if (BountifulConfig.SERVER.bountyBoardBreakable.get())
-            super.getPlayerRelativeBlockHardness(state, player, worldIn, pos)
-        else
-            -1f
-    }
+
+
+
 
     override fun onBlockActivated(state: BlockState, worldIn: World, pos: BlockPos, player: PlayerEntity, handIn: Hand, hit: BlockRayTraceResult): ActionResultType {
         if (!worldIn.isRemote) {
@@ -61,7 +53,7 @@ class BlockBountyBoard : Block(
 
         val te = worldIn.getTileEntity(pos)
 
-        if (!worldIn.isRemote && te is BoardTileEntity) {
+        if (!worldIn.isRemote && te is BoardBlockEntity) {
             // Create stack and serialize data
             val stack = ItemStack(BountifulContent.BOUNTYBOARD)
             stack.setTagInfo("BlockEntityTag", te.serializeNBT())
@@ -100,14 +92,13 @@ class BlockBountyBoard : Block(
 
      */
 
-
     // Will always have a tile entity
     override fun hasTileEntity(state: BlockState?): Boolean {
         return true
     }
 
     override fun createTileEntity(state: BlockState?, world: IBlockReader?): TileEntity {
-        return BoardTileEntity()
+        return BoardBlockEntity()
     }
 
 

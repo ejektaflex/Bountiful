@@ -2,14 +2,14 @@ package ejektaflex.bountiful.data.structure
 
 import ejektaflex.bountiful.ext.getUnsortedList
 import ejektaflex.bountiful.ext.setUnsortedListOfNbt
-import net.minecraft.nbt.CompoundNBT
+import net.minecraft.nbt.CompoundTag
 import net.minecraftforge.common.util.INBTSerializable
 
-class DecreeList : INBTSerializable<CompoundNBT> {
+class DecreeList : INBTSerializable<CompoundTag> {
 
     var ids: MutableList<String> = mutableListOf()
 
-    override fun deserializeNBT(nbt: CompoundNBT) {
+    override fun deserializeNBT(nbt: CompoundTag) {
         ids = nbt.getUnsortedList("ids").map { tag ->
             tag.getString("id")
         }.toMutableList()
@@ -21,10 +21,10 @@ class DecreeList : INBTSerializable<CompoundNBT> {
         }
     }
 
-    override fun serializeNBT(): CompoundNBT {
-        return CompoundNBT().apply {
+    override fun serializeNBT(): CompoundTag {
+        return CompoundTag().apply {
             setUnsortedListOfNbt("ids", ids.map { id ->
-                CompoundNBT().apply {
+                CompoundTag().apply {
                     putString("id", id)
                 }
             }.toSet())

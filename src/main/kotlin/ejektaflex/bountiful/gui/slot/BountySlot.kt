@@ -2,14 +2,14 @@ package ejektaflex.bountiful.gui.slot
 
 //import ejektaflex.bountiful.advancement.BountifulTriggers
 import ejektaflex.bountiful.BountifulStats
-import ejektaflex.bountiful.block.BoardTileEntity
+import ejektaflex.bountiful.block.BoardBlockEntity
 import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.item.ItemBounty
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.ItemStack
+import net.minecraft.world.item.ItemStack
 import net.minecraftforge.items.SlotItemHandler
 
-class BountySlot(val board: BoardTileEntity, index: Int, x: Int, y: Int) : SlotItemHandler(board.handler, index, x, y) {
+class BountySlot(val board: BoardBlockEntity, index: Int, x: Int, y: Int) : SlotItemHandler(board.handler, index, x, y) {
     override fun onSlotChanged() {
         board.markDirty()
     }

@@ -1,9 +1,9 @@
 package ejektaflex.bountiful.worldgen
 
 import com.mojang.serialization.Codec
-import net.minecraft.block.BlockState
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.util.Direction
-import net.minecraft.util.math.BlockPos
+import net.minecraft.core.BlockPos
 import net.minecraft.world.ISeedReader
 import net.minecraft.world.gen.ChunkGenerator
 import net.minecraft.world.gen.feature.Feature

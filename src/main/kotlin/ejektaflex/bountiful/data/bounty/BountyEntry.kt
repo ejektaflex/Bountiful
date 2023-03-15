@@ -9,7 +9,7 @@ import ejektaflex.bountiful.data.json.JsonBiSerializer
 import ejektaflex.bountiful.ext.hackyRandom
 import ejektaflex.bountiful.util.IWeighted
 import ejektaflex.bountiful.util.ItemRange
-import net.minecraft.nbt.CompoundNBT
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.JsonToNBT
 import net.minecraft.util.text.IFormattableTextComponent
 import net.minecraftforge.common.util.INBTSerializable
@@ -18,7 +18,7 @@ import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min
 
-abstract class BountyEntry : JsonBiSerializer<BountyEntry>, INBTSerializable<CompoundNBT>, IWeighted, Cloneable {
+abstract class BountyEntry : JsonBiSerializer<BountyEntry>, INBTSerializable<CompoundTag>, IWeighted, Cloneable {
 
     class EntryValidationException(reason: String) : Exception("An entry has failed validation and will not be loaded. Reason: $reason. Skipping entry..")
 
@@ -35,7 +35,7 @@ abstract class BountyEntry : JsonBiSerializer<BountyEntry>, INBTSerializable<Com
     @SerializedName("nbt")
     var jsonNBT: JsonElement? = null
 
-    val nbtTag: CompoundNBT?
+    val nbtTag: CompoundTag?
         get() {
             return when (jsonNBT) {
                 null -> null
@@ -110,8 +110,8 @@ abstract class BountyEntry : JsonBiSerializer<BountyEntry>, INBTSerializable<Com
         get() = (amountRange.min..amountRange.max).hackyRandom()
 
 
-    override fun serializeNBT(): CompoundNBT {
-        return CompoundNBT().apply {
+    override fun serializeNBT(): CompoundTag {
+        return CompoundTag().apply {
             putString("type", bType)
             putString("content", content)
             putInt("unitWorth", unitWorth)
@@ -127,7 +127,7 @@ abstract class BountyEntry : JsonBiSerializer<BountyEntry>, INBTSerializable<Com
 
     private val jsonParser = JsonParser()
 
-    override fun deserializeNBT(tag: CompoundNBT) {
+    override fun deserializeNBT(tag: CompoundTag) {
         bType = tag.getString("type")
         content = tag.getString("content")
         unitWorth = tag.getInt("unitWorth")

@@ -2,7 +2,7 @@ package ejektaflex.bountiful.ext
 
 import ejektaflex.bountiful.util.IWeighted
 import ejektaflex.bountiful.util.ItemRange
-import net.minecraft.command.CommandSource
+import net.minecraft.commands.CommandSource
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.ServerPlayerEntity
 import net.minecraft.util.NonNullList
@@ -14,7 +14,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 /*
-fun <T : INBTSerializable<CompoundNBT>> World.ifHasCapability(capability: Capability<T>, func: T.() -> Unit) {
+fun <T : INBTSerializable<CompoundTag>> World.ifHasCapability(capability: Capability<T>, func: T.() -> Unit) {
     if (hasCapability(capability, null)) {
         func(getCapability(capability, null)!!)
     }

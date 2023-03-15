@@ -1,34 +1,31 @@
 package ejektaflex.bountiful
 
 import ejektaflex.bountiful.block.BlockBountyBoard
-import ejektaflex.bountiful.block.BoardTileEntity
+import ejektaflex.bountiful.block.BoardBlockEntity
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.item.ItemDecree
-import net.minecraft.inventory.container.ContainerType
-import net.minecraft.item.BlockItem
-import net.minecraft.item.Item
-import net.minecraft.item.ItemGroup
-import net.minecraft.item.ItemStack
-import net.minecraft.tileentity.TileEntityType
-import net.minecraftforge.common.extensions.IForgeContainerType
+import net.minecraft.world.item.BlockItem
+import net.minecraft.world.item.Item
+import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
-import thedarkcolour.kotlinforforge.forge.KDeferredRegister
+import thedarkcolour.kotlinforforge.forge.registerObject
 
 object BountifulContent {
 
-    val ContainerRegistry = KDeferredRegister(ForgeRegistries.CONTAINERS, BountifulMod.MODID)
-    val BlockRegistry = KDeferredRegister(ForgeRegistries.BLOCKS, BountifulMod.MODID)
-    val TileEntityRegistry = KDeferredRegister(ForgeRegistries.TILE_ENTITIES, BountifulMod.MODID)
-    val ItemRegistry = KDeferredRegister(ForgeRegistries.ITEMS, BountifulMod.MODID)
-    val FeatureRegistry = KDeferredRegister(ForgeRegistries.FEATURES, BountifulMod.MODID)
+    //val ContainerRegistry = KDeferredRegister(ForgeRegistries.CONTAINERS, BountifulMod.MODID)
+    val BlockRegistry = DeferredRegister.create(ForgeRegistries.BLOCKS, BountifulMod.MODID)
+    val BlockEntityRegistry = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, BountifulMod.MODID)
+    val ItemRegistry = DeferredRegister.create(ForgeRegistries.ITEMS, BountifulMod.MODID)
+    val FeatureRegistry = DeferredRegister.create(ForgeRegistries.FEATURES, BountifulMod.MODID)
 
     val BOUNTYBOARD by BlockRegistry.registerObject("bountyboard") {
         BlockBountyBoard()
     }
 
-    val BOUNTYTILEENTITY by TileEntityRegistry.registerObject("bounty-te") {
-        TileEntityType(::BoardTileEntity, setOf(BOUNTYBOARD), null)
+    val BOUNTYTILEENTITY by BlockEntityRegistry.registerObject("bounty-be") {
+        BlockEntityType(::BoardBlockEntity, setOf(BOUNTYBOARD), null)
     }
 
     val BOUNTY by ItemRegistry.registerObject("bounty") {
@@ -36,7 +33,7 @@ object BountifulContent {
     }
 
     val BOUNTYBOARDITEM by ItemRegistry.registerObject("bountyboard") {
-        BlockItem(BOUNTYBOARD, Item.Properties().group(ItemGroup.MISC))
+        BlockItem(BOUNTYBOARD, Item.Properties())
     }
 
     val DECREE by ItemRegistry.registerObject("decree", ::ItemDecree)

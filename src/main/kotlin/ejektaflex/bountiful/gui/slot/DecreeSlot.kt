@@ -1,12 +1,12 @@
 package ejektaflex.bountiful.gui.slot
 
-import ejektaflex.bountiful.block.BoardTileEntity
+import ejektaflex.bountiful.block.BoardBlockEntity
 import ejektaflex.bountiful.item.ItemDecree
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.ItemStack
+import net.minecraft.world.item.ItemStack
 import net.minecraftforge.items.SlotItemHandler
 
-class DecreeSlot(val board: BoardTileEntity, index: Int, x: Int, y: Int) : SlotItemHandler(board.handler, index, x, y) {
+class DecreeSlot(val board: BoardBlockEntity, index: Int, x: Int, y: Int) : SlotItemHandler(board.handler, index, x, y) {
 
     init {
         //setBackgroundName(BountifulMod.MODID + ":bg")

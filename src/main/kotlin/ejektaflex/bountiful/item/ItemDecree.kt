@@ -7,15 +7,15 @@ import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.data.structure.DecreeList
 import ejektaflex.bountiful.ext.*
 import net.minecraft.client.util.ITooltipFlag
-import net.minecraft.item.Item
-import net.minecraft.item.ItemGroup
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundNBT
+import net.minecraft.world.item.ItemStack
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.StringTextComponent
 import net.minecraft.util.text.TextFormatting
 import net.minecraft.util.text.TranslationTextComponent
 import net.minecraft.world.World
+import net.minecraft.world.item.Item
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.api.distmarker.OnlyIn
 
@@ -25,7 +25,7 @@ import net.minecraftforge.api.distmarker.OnlyIn
  * @constructor Creates a new Decree item.
  */
 class ItemDecree : Item(
-        Properties().maxStackSize(1).group(ItemGroup.MISC)
+        Properties().stacksTo(1)
 ) {
 
     /**
@@ -89,7 +89,7 @@ class ItemDecree : Item(
                     return
                 }
 
-                stack.tag = CompoundNBT().apply {
+                stack.tag = CompoundTag().apply {
                     setUnsortedList("ids", data.toSet())
                 }
 

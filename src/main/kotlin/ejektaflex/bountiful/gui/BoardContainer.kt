@@ -1,27 +1,27 @@
 package ejektaflex.bountiful.gui
 
 import ejektaflex.bountiful.BountifulContent
-import ejektaflex.bountiful.block.BoardTileEntity
+import ejektaflex.bountiful.block.BoardBlockEntity
 import ejektaflex.bountiful.gui.slot.BountySlot
 import ejektaflex.bountiful.gui.slot.DecreeSlot
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.container.Container
-import net.minecraft.item.ItemStack
+import net.minecraft.world.item.ItemStack
 import net.minecraft.network.PacketBuffer
 import net.minecraftforge.items.IItemHandler
 import net.minecraftforge.items.SlotItemHandler
 import net.minecraftforge.items.wrapper.InvWrapper
 
 
-class BoardContainer(val windowId: Int, val inv: PlayerInventory, val boardTE: BoardTileEntity) : Container(BountifulContent.BOARDCONTAINER, windowId) {
+class BoardContainer(val windowId: Int, val inv: PlayerInventory, val boardTE: BoardBlockEntity) : Container(BountifulContent.BOARDCONTAINER, windowId) {
 
     constructor(inWindow: Int, inInv: PlayerInventory, data: PacketBuffer) : this(inWindow, inInv, getTileEntity(inInv, data))
 
     companion object {
-        fun getTileEntity(inv: PlayerInventory, data: PacketBuffer): BoardTileEntity {
+        fun getTileEntity(inv: PlayerInventory, data: PacketBuffer): BoardBlockEntity {
             val tileAtPos = inv.player.world.getTileEntity(data.readBlockPos())
-            return tileAtPos as? BoardTileEntity ?: throw IllegalStateException("Tile entity is not correct! $tileAtPos")
+            return tileAtPos as? BoardBlockEntity ?: throw IllegalStateException("Tile entity is not correct! $tileAtPos")
         }
     }
 
@@ -39,7 +39,7 @@ class BoardContainer(val windowId: Int, val inv: PlayerInventory, val boardTE: B
                 addSlot(BountySlot(boardTE, k + j * bCols, 8 + k * 18, 18 + j * 18))
             }
 
-            addSlot(DecreeSlot(boardTE, BoardTileEntity.SIZE - 3 + j, 19 + 7 * 18, 18 + j * 18))
+            addSlot(DecreeSlot(boardTE, BoardBlockEntity.SIZE - 3 + j, 19 + 7 * 18, 18 + j * 18))
         }
 
         for (j in 0..2) {

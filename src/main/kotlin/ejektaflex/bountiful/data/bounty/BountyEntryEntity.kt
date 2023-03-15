@@ -6,8 +6,9 @@ import ejektaflex.bountiful.data.bounty.enums.BountyType
 import ejektaflex.bountiful.ext.toEntityType
 import ejektaflex.bountiful.ext.withSibling
 import net.minecraft.entity.LivingEntity
-import net.minecraft.nbt.CompoundNBT
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.util.text.*
+import net.minecraft.world.entity.LivingEntity
 import net.minecraftforge.registries.ForgeRegistries
 
 class BountyEntryEntity : BountyEntry(), IBountyObjective {
@@ -25,13 +26,13 @@ class BountyEntryEntity : BountyEntry(), IBountyObjective {
         // TODO Implement entity validation
     }
 
-    override fun deserializeNBT(tag: CompoundNBT) {
+    override fun deserializeNBT(tag: CompoundTag) {
         super.deserializeNBT(tag)
         killedAmount = tag.getInt("killedAmount")
     }
 
 
-    override fun serializeNBT(): CompoundNBT {
+    override fun serializeNBT(): CompoundTag {
         return super.serializeNBT().apply {
             putInt("killedAmount", killedAmount)
         }

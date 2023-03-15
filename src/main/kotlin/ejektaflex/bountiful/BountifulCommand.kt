@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType.getInteger
 import com.mojang.brigadier.arguments.IntegerArgumentType.integer
 import com.mojang.brigadier.arguments.StringArgumentType.getString
 import com.mojang.brigadier.arguments.StringArgumentType.string
+import com.mojang.brigadier.builder.RequiredArgumentBuilder.argument
 import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.data.bounty.BountyEntryItem
 import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
@@ -19,14 +20,15 @@ import ejektaflex.bountiful.item.ItemDecree
 import ejektaflex.bountiful.network.BountifulNetwork
 import ejektaflex.bountiful.network.MessageClipboardCopy
 import net.minecraft.client.Minecraft
-import net.minecraft.command.CommandSource
-import net.minecraft.command.Commands.argument
-import net.minecraft.command.Commands.literal
+import net.minecraft.commands.CommandSource
+import net.minecraft.commands.CommandSourceStack
+import net.minecraft.commands.Commands.literal
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.resources.IResourceManager
 import net.minecraft.util.text.StringTextComponent
 import net.minecraft.util.text.TextFormatting
 import net.minecraft.util.text.event.HoverEvent
+import net.minecraft.world.entity.player.Player
 import net.minecraftforge.fml.network.PacketDistributor
 import net.minecraftforge.items.ItemHandlerHelper
 import net.minecraftforge.registries.ForgeRegistries
@@ -160,10 +162,10 @@ object BountifulCommand {
 
     private fun hand() = Command<CommandSource> {
 
-        if (it.source.entity is PlayerEntity) {
-            val player = it.source.asPlayer()
+        if (it.source is Player) {
+            val player = it.source as Player
 
-            val holding = player.heldItemMainhand
+            val holding = player.mainHandItem
 
             val newEntry = BountyEntryItem().apply {
                 content = holding.item.registryName.toString()
@@ -187,7 +189,8 @@ object BountifulCommand {
                 ))
             }
 
-            it.source.sendFeedback(msg, true)
+            it.source.sendMessage(msg)
+
 
         } else {
             it.source.sendErrorMsg("Must be a player to check their hand")

@@ -1,7 +1,7 @@
 package ejektaflex.bountiful.data.bounty.checkers
 
 import ejektaflex.bountiful.data.bounty.*
-import net.minecraft.item.ItemStack
+import net.minecraft.world.item.ItemStack
 
 class StackLikeCheckHandler : CheckHandler<BountyEntryItem>() {
 

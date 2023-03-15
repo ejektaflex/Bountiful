@@ -6,7 +6,7 @@ import ejektaflex.bountiful.data.bounty.enums.BountyType
 import ejektaflex.bountiful.ext.hackyRandom
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
+import net.minecraft.world.item.ItemStack
 import net.minecraft.tags.ItemTags
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.IFormattableTextComponent

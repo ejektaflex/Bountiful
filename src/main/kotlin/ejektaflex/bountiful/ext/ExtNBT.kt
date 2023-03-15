@@ -2,18 +2,18 @@ package ejektaflex.bountiful.ext
 
 import ejektaflex.bountiful.data.bounty.BountyEntry
 import ejektaflex.bountiful.data.bounty.enums.BountyType
-import net.minecraft.nbt.CompoundNBT
+import net.minecraft.nbt.CompoundTag
 import net.minecraftforge.common.util.INBTSerializable
 import kotlin.reflect.full.createInstance
 
-fun CompoundNBT.clear() {
-    for (key in keySet()) {
+fun CompoundTag.clear() {
+    for (key in allKeys) {
         remove(key)
     }
 }
 
-fun CompoundNBT.setUnsortedList(key: String, items: Set<INBTSerializable<CompoundNBT>>) {
-    val listTag = CompoundNBT().apply {
+fun CompoundTag.setUnsortedList(key: String, items: Set<INBTSerializable<CompoundTag>>) {
+    val listTag = CompoundTag().apply {
         items.forEachIndexed { index, item ->
             put(index.toString(), item.serializeNBT())
         }
@@ -21,8 +21,8 @@ fun CompoundNBT.setUnsortedList(key: String, items: Set<INBTSerializable<Compoun
     put(key, listTag)
 }
 
-fun CompoundNBT.setUnsortedListOfNbt(key: String, items: Set<CompoundNBT>) {
-    val listTag = CompoundNBT().apply {
+fun CompoundTag.setUnsortedListOfNbt(key: String, items: Set<CompoundTag>) {
+    val listTag = CompoundTag().apply {
         items.forEachIndexed { index, nbt ->
             put(index.toString(), nbt)
         }
@@ -30,17 +30,17 @@ fun CompoundNBT.setUnsortedListOfNbt(key: String, items: Set<CompoundNBT>) {
     put(key, listTag)
 }
 
-fun CompoundNBT.getUnsortedList(key: String): Set<CompoundNBT> {
-    val listTag = get(key) as? CompoundNBT ?: return setOf()
-    return listTag.keySet().map { index ->
-        listTag.get(index) as CompoundNBT
+fun CompoundTag.getUnsortedList(key: String): Set<CompoundTag> {
+    val listTag = get(key) as? CompoundTag ?: return setOf()
+    return listTag.allKeys.map { index ->
+        listTag.get(index) as CompoundTag
     }.toSet()
 }
 
-fun <T : INBTSerializable<CompoundNBT>> CompoundNBT.getUnsortedListTyped(key: String, fact: () -> T): Set<T> {
-    val listTag = get(key) as CompoundNBT
-    return listTag.keySet().map { index ->
-        listTag.get(index) as CompoundNBT
+fun <T : INBTSerializable<CompoundTag>> CompoundTag.getUnsortedListTyped(key: String, fact: () -> T): Set<T> {
+    val listTag = get(key) as CompoundTag
+    return listTag.allKeys.map { index ->
+        listTag.get(index) as CompoundTag
     }.map {
         fact().apply {
             deserializeNBT(it)
@@ -49,7 +49,7 @@ fun <T : INBTSerializable<CompoundNBT>> CompoundNBT.getUnsortedListTyped(key: St
 }
 
 
-val CompoundNBT.toBountyEntry: BountyEntry
+val CompoundTag.toBountyEntry: BountyEntry
     get() {
         val bTypeName = getString("type")
         val bType = BountyType.values().find { bTypeName == it.id }

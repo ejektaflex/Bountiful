@@ -2,26 +2,26 @@ package ejektaflex.bountiful.ext
 
 import ejektaflex.bountiful.BountifulMod
 import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundNBT
+import net.minecraft.world.item.ItemStack
+import net.minecraft.nbt.CompoundTag
 import net.minecraftforge.common.util.INBTSerializable
 import net.minecraftforge.fml.ModList
 
-val ItemStack.toNBT: CompoundNBT
+val ItemStack.toNBT: CompoundTag
     get() {
-        return CompoundNBT().apply {
+        return CompoundTag().apply {
             putString("e_item", toPretty)
             putInt("e_amt", count)
             put("e_nbt", serializeNBT())
         }
     }
 
-val CompoundNBT.toItemStack: ItemStack?
+val CompoundTag.toItemStack: ItemStack?
     get() {
         val istack = getString("e_item").toItemStack
         return istack?.apply {
             count = getInt("e_amt")
-            tag = get("e_nbt") as CompoundNBT
+            tag = get("e_nbt") as CompoundTag
         }
     }
 
@@ -34,19 +34,19 @@ inline fun <reified T : Item> ItemStack.edit(func: T.(stack: ItemStack) -> Unit)
 }
 
 /*
-inline fun <reified T : INBTSerializable<CompoundNBT>> ItemStack.editNbt(func: T.() -> Unit) {
+inline fun <reified T : INBTSerializable<CompoundTag>> ItemStack.editNbt(func: T.() -> Unit) {
     if ()
 }
 
  */
 
-inline fun <reified T : INBTSerializable<CompoundNBT>> ItemStack.toData(func: () -> T): T {
+inline fun <reified T : INBTSerializable<CompoundTag>> ItemStack.toData(func: () -> T): T {
     return func().apply {
         deserializeNBT(stack.tag)
     }
 }
 
-inline fun <reified T : INBTSerializable<CompoundNBT>> ItemStack.toSafeData(func: () -> T): T? {
+inline fun <reified T : INBTSerializable<CompoundTag>> ItemStack.toSafeData(func: () -> T): T? {
     return try {
         func().apply {
             deserializeNBT(stack.tag)

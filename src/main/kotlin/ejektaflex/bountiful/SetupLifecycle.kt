@@ -14,7 +14,7 @@ import ejektaflex.bountiful.ext.toData
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.item.ItemDecree
 import ejektaflex.bountiful.worldgen.JigsawHelper
-import net.minecraft.command.CommandSource
+import net.minecraft.commands.CommandSource
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.ResourceLocation
@@ -37,7 +37,7 @@ object SetupLifecycle {
 
     init {
         BountifulMod.logger.info("Loading Bountiful listeners..")
-        BountifulContent.TileEntityRegistry.register(MOD_BUS)
+        BountifulContent.BlockEntityRegistry.register(MOD_BUS)
         BountifulContent.BlockRegistry.register(MOD_BUS)
         BountifulContent.ContainerRegistry.register(MOD_BUS)
         BountifulContent.ItemRegistry.register(MOD_BUS)

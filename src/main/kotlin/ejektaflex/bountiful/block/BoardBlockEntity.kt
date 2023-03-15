@@ -9,23 +9,17 @@ import ejektaflex.bountiful.ext.*
 import ejektaflex.bountiful.gui.BoardContainer
 import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.item.ItemDecree
-import net.minecraft.block.BlockState
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.inventory.container.Container
-import net.minecraft.inventory.container.INamedContainerProvider
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundNBT
-import net.minecraft.tileentity.ITickableTileEntity
-import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.text.ITextComponent
-import net.minecraft.util.text.TranslationTextComponent
+import net.minecraft.core.BlockPos
+import net.minecraft.world.item.ItemStack
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraftforge.common.capabilities.Capability
+import net.minecraftforge.common.capabilities.ForgeCapabilities
 import net.minecraftforge.common.util.LazyOptional
-import net.minecraftforge.items.CapabilityItemHandler
 import net.minecraftforge.items.ItemStackHandler
 
-class BoardTileEntity : TileEntity(BountifulContent.BOUNTYTILEENTITY), ITickableTileEntity, INamedContainerProvider {
+class BoardBlockEntity(inPos: BlockPos, inState: BlockState) : BlockEntity(BountifulContent.BOUNTYTILEENTITY, inPos, inState) {
 
 
     // Lazy load lazy optional ( ... :| )
@@ -158,16 +152,16 @@ class BoardTileEntity : TileEntity(BountifulContent.BOUNTYTILEENTITY), ITickable
     var pulseLeft = 0
 
 
-    override fun write(compound: CompoundNBT): CompoundNBT {
-        return super.write(compound).apply {
+    override fun serializeNBT(): CompoundTag {
+        return CompoundTag().apply {
             put("inv", handler.serializeNBT())
             putBoolean("newBoard", newBoard)
             putInt("pulseLeft", pulseLeft)
         }
     }
 
-    override fun read(state: BlockState, nbt: CompoundNBT) {
-        super.read(state, nbt)
+
+    override fun deserializeNBT(nbt: CompoundTag) {
         handler.deserializeNBT(nbt.getCompound("inv"))
         newBoard = nbt.getBoolean("newBoard")
         pulseLeft = nbt.getInt("pulseLeft")
@@ -176,7 +170,7 @@ class BoardTileEntity : TileEntity(BountifulContent.BOUNTYTILEENTITY), ITickable
     // Remove side when you want to remove hopper access
     @Suppress("UNCHECKED_CAST")
     override fun <T : Any?> getCapability(cap: Capability<T>): LazyOptional<T> {
-        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if (cap == ForgeCapabilities.ITEM_HANDLER) {
             return lazyOptional as LazyOptional<T>
         }
 
@@ -188,9 +182,6 @@ class BoardTileEntity : TileEntity(BountifulContent.BOUNTYTILEENTITY), ITickable
         //return BoardContainer(i, world!!, pos, inv)
     }
 
-    override fun getDisplayName(): ITextComponent {
-        return TranslationTextComponent("block.bountiful.bountyboard")
-    }
 
     companion object {
         const val SIZE = 24
