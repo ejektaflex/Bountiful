@@ -1,0 +1,88 @@
+{
+
+	"block.bountiful.bountyboard": "Bacheca degli annunci",
+
+	"itemGroup.bountiful": "Bountiful",
+
+	"bountiful.item_tag.any_door": "Qualsiasi porta",
+	"bountiful.item_tag.any_wool": "Qualsiasi lana",
+	"bountiful.item_tag.any_planks": "Qualsiasi asse",
+	"bountiful.item_tag.any_log": "Qualsiasi legno",
+	"bountiful.item_tag.any_fence": "Qualsiasi staccionata",
+	"bountiful.item_tag.any_bed": "Qualsiasi letto",
+	"bountiful.item_tag.any_boat": "Qualsiasi barca",
+	"bountiful.item_tag.any_candle": "Qualsiasi candela",
+	"bountiful.item_tag.any_banner": "Qualsiasi stendardo",
+	"bountiful.item_tag.any_wool": "Qualsiasi lana",
+
+	"bountiful.decree": "Incarico",
+	"bountiful.decrees": "Incarichi",
+	"bountiful.decree.invalid": "Incarico non valido",
+	"bountiful.decree.notset": "Porta questo a una bacheca degli annunci!",
+
+	"bountiful.bounty.expired": "Questo incarico è scaduto.",
+	"bountiful.bounty.turnin": "Completa l'incarico facendo click destro su una bacheca degli annunci.",
+
+	"bountiful.advancement.bounty_taken.title": "Lavoro a noleggio",
+	"bountiful.advancement.bounty_taken.desc": "Accetta un incarico da una bacheca degli annunci",
+
+	"bountiful.advancement.bounty_complete.title": "Paga onesta per un lavoro onesto",
+	"bountiful.advancement.bounty_complete.desc": "Completa un incarico",
+
+	"bountiful.advancement.rush_order.title": "Consegna al volo",
+	"bountiful.advancement.rush_order.desc": "Completa un incarico in meno di un minuto",
+
+	"bountiful.advancement.procrastinator.title": "Procrastinatore nato",
+	"bountiful.advancement.procrastinator.desc": "Completa un incarico con meno di 5 secondi dalla scadenza",
+
+	"bountiful.advancement.town_crier.title": "Strillone",
+	"bountiful.advancement.town_crier.desc": "Ottini un decreto",
+
+	"bountiful.advancement.royal_mandate.title": "Mandato reale",
+	"bountiful.advancement.royal_mandate.desc": "Inserisci un incarico su una bacheca degli annunci",
+
+	"bountiful.bounty": "Bounty",
+
+	"bountiful.decree.armorer.name": "Forgiatura",
+	"bountiful.decree.butcher.name": "Macelleria",
+	"bountiful.decree.chef.name": "Forniture culinarie",
+	"bountiful.decree.cleric.name": "Forniture mediche",
+	"bountiful.decree.farmer.name": "Agricoltura",
+	"bountiful.decree.fisherman.name": "Pesca",
+	"bountiful.decree.fletcher.name": "Impennaggio",
+	"bountiful.decree.hunting.name": "Caccia",
+	"bountiful.decree.leatherer.name": "Lavorazione della pelle",
+	"bountiful.decree.librarian.name": "Impaginatura",
+	"bountiful.decree.mapper.name": "Cartografia",
+	"bountiful.decree.mason.name": "Muratura",
+	"bountiful.decree.shepherd.name": "Pastorizia",
+	"bountiful.decree.tinker.name": "Armeggiamento",
+	"bountiful.decree.toolsmith.name": "Fabbricazione",
+	"bountiful.decree.runewright.name": "Scrittura di rune",
+	"bountiful.decree.invalid_decree.name": "Non valido",
+
+	"bountiful.bounty.type.entity.kills": "Uccisioni",
+
+	"bountiful.bounty.type.experience.levels": "Livelli XP",
+	"bountiful.bounty.type.experience.points": "Punti XP",
+
+
+	"bountiful.rarity.Common": "Comune",
+	"bountiful.rarity.Uncommon": "Non comune",
+	"bountiful.rarity.Rare": "Raro",
+	"bountiful.rarity.Epic": "Epico",
+
+	"stat.bountiful.bounties_taken": "Incarichi accettati",
+	"stat.bountiful.bounties_done": "Incarichi completati (Totale)",
+	"stat.bountiful.bounties_done_0": "Incarichi completati (Comuni)",
+	"stat.bountiful.bounties_done_1": "Incarichi completati (Non comuni)",
+	"stat.bountiful.bounties_done_2": "Incarichi completati (Rari)",
+	"stat.bountiful.bounties_done_3": "Incarichi completati (Epici)",
+
+	"bountiful.tooltip.advanced": "Tieni premuto SHIFT per i dettagli",
+	"bountiful.tooltip.time": "Tempo alla scadenza",
+	"bountiful.tooltip.required": "Requisiti",
+	"bountiful.tooltip.rewards": "Ricompense",
+	"bountiful.tooltip.expired": "Scaduto",
+	"bountiful.tooltip.requirements": "Requisiti non raggiunti."
+}
