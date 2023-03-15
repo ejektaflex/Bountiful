@@ -1,7 +1,18 @@
 {
+
 	"block.bountiful.bountyboard": "悬赏板",
 
 	"itemGroup.bountiful": "悬赏",
+
+	"bountiful.item_tag.any_door": "任何门",
+	"bountiful.item_tag.any_wool": "任何羊毛",
+	"bountiful.item_tag.any_planks": "任何木板",
+	"bountiful.item_tag.any_log": "任何木头",
+	"bountiful.item_tag.any_fence": "任何栅栏",
+	"bountiful.item_tag.any_bed": "任何床",
+	"bountiful.item_tag.any_boat": "任何船",
+	"bountiful.item_tag.any_candle": "任何蜡烛",
+	"bountiful.item_tag.any_banner": "任何旗帜",
 
 	"bountiful.decree": "悬赏令",
 	"bountiful.decrees": "悬赏令",
@@ -46,6 +57,7 @@
 	"bountiful.decree.shepherd.name": "牧羊悬赏",
 	"bountiful.decree.tinker.name": "红石悬赏",
 	"bountiful.decree.toolsmith.name": "工具悬赏",
+	"bountiful.decree.runewright.name": "Runewright",
 	"bountiful.decree.invalid_decree.name": "无效的悬赏令",
 
 	"bountiful.bounty.type.entity.kills": "击杀",
@@ -71,6 +83,5 @@
 	"bountiful.tooltip.required": "需要",
 	"bountiful.tooltip.rewards": "奖励",
 	"bountiful.tooltip.expired": "已过期",
-	"bountiful.tooltip.requirements": "不满足需求",
-	"bountiful.decree.runewright.name": "Runewright"
+	"bountiful.tooltip.requirements": "不满足需求"
 }
