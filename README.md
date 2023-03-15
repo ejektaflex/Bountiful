@@ -8,11 +8,11 @@ A mod that adds bounty boards to Minecraft.
 
 ### Versions
 
-Actively Maintained: *Bountiful v3.3 @ MC v1.16.4*
+Actively Maintained: *Bountiful v4.0 @ MC v1.19.4*
 
-Critical Maintenance: *Bountiful v2.X @ MC v1.12, Bountiful v3.X @ MC v1.14, v1.15*
+Critical Maintenance: *Bountiful v2.X @ MC v1.12, Bountiful v3.X @ MC v1.14, v1.15, v1.16*
 
 ### Contributing
 
-Currently, the actively maintained versions are for: **1.14** and **1.15**. They are being worked on in parallel on the **develop** branch. If you wish to contribute translations or code changes to either of these versions, please make a Pull Request into the **develop** branch. If you wish to contribute to an older version of Bountiful (e.g. 1.12), please PR into that branch directly.
+Currently, the actively maintained versions are for: **1.19.4**. They are being worked on in parallel on the **develop** branch. If you wish to contribute translations or code changes to either of these versions, please make a Pull Request into the **develop** branch. If you wish to contribute to an older version of Bountiful (e.g. 1.12), please PR into that branch directly.
 
