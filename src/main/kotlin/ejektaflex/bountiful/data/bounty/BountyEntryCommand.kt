@@ -5,9 +5,10 @@ import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.data.bounty.enums.BountyType
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.util.text.IFormattableTextComponent
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.util.text.StringTextComponent
-import net.minecraft.util.text.TextFormatting
+import net.minecraft.ChatFormatting
 import net.minecraft.world.entity.player.Player
 
 class BountyEntryCommand : BountyEntry(), IBountyReward {
@@ -18,11 +19,11 @@ class BountyEntryCommand : BountyEntry(), IBountyReward {
 
     override val calculatedWorth: Int = unitWorth
 
-    override val formattedName: IFormattableTextComponent
-        get() = StringTextComponent(name ?: content)
+    override val formattedName: MutableComponent
+        get() = Component.literal(name ?: content)
 
-    override fun tooltipReward(): IFormattableTextComponent {
-        return formattedName.mergeStyle(TextFormatting.BOLD)
+    override fun tooltipReward(): MutableComponent {
+        return formattedName.withStyle(ChatFormatting.BOLD)
     }
 
     override fun reward(player: Player) {

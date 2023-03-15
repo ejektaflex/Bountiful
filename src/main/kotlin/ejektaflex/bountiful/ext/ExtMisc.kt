@@ -7,7 +7,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.player.ServerPlayerEntity
 import net.minecraft.util.NonNullList
 import net.minecraft.util.ResourceLocation
-import net.minecraft.util.text.ITextComponent
+import net.minecraft.network.chat.Component
 import net.minecraft.util.text.StringTextComponent
 import net.minecraft.util.text.TranslationTextComponent
 import kotlin.math.max
@@ -37,31 +37,31 @@ val Entity.registryName: ResourceLocation?
 
  */
 
-//fun ICommandSender.sendMessage(str: String) = sendMessage(StringTextComponent(str))
+//fun ICommandSender.sendMessage(str: String) = sendMessage(Component.literal(str))
 
 //fun ICommandSender.sendTranslation(key: String) = sendMessage(TextComponentTranslation(key))
 
 fun CommandSource.sendMessage(str: String) {
-    sendFeedback(StringTextComponent(str), true)
+    sendFeedback(Component.literal(str), true)
 }
 
 fun CommandSource.sendTranslation(str: String) {
-    sendFeedback(TranslationTextComponent(str), true)
+    sendFeedback(Component.translatable(str), true)
 }
 
 fun CommandSource.sendErrorMsg(str: String) {
-    sendErrorMessage(StringTextComponent(str))
+    sendErrorMessage(Component.literal(str))
 }
 
 // TODO Make update this
-fun Entity.sendTranslation(key: String) = sendMessage(TranslationTextComponent(key), uniqueID)
+fun Entity.sendTranslation(key: String) = sendMessage(Component.translatable(key), uniqueID)
 
 fun ServerPlayerEntity.sendTranslation() {
 
 }
 
 
-fun ITextComponent.withSibling(component: ITextComponent): ITextComponent {
+fun Component.withSibling(component: Component): Component {
     siblings.add(component)
     return this
 }

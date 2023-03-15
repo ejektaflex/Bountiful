@@ -7,10 +7,10 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen
 import net.minecraft.client.resources.I18n
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.util.ResourceLocation
-import net.minecraft.util.text.ITextComponent
+import net.minecraft.network.chat.Component
 import net.minecraft.util.text.TranslationTextComponent
 
-class BoardScreen(container: BoardContainer, inv: PlayerInventory, name: ITextComponent) : ContainerScreen<BoardContainer>(container, inv, name) {
+class BoardScreen(container: BoardContainer, inv: PlayerInventory, name: Component) : ContainerScreen<BoardContainer>(container, inv, name) {
 
     override fun drawGuiContainerForegroundLayer(matrixStack: MatrixStack, mouseX: Int, mouseY: Int) {
         // 'Bounty Board'
@@ -18,7 +18,7 @@ class BoardScreen(container: BoardContainer, inv: PlayerInventory, name: ITextCo
 
         font.func_243246_a(
             matrixStack,
-            TranslationTextComponent("block.bountiful.bountyboard"),
+            Component.translatable("block.bountiful.bountyboard"),
             xSize / 2 - font.getStringWidth(name) - 12f,
             6f,
             0xEADAB5

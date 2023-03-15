@@ -22,7 +22,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.item.Rarity
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
-import net.minecraft.util.text.ITextComponent
+import net.minecraft.network.chat.Component
 import net.minecraft.util.text.StringTextComponent
 import net.minecraft.util.text.TranslationTextComponent
 import net.minecraft.world.World
@@ -45,13 +45,13 @@ class ItemBounty : Item(
 
     override fun getTranslationKey() = "bountiful.bounty"
 
-    override fun getDisplayName(stack: ItemStack): ITextComponent {
+    override fun getDisplayName(stack: ItemStack): Component {
 
         return if (BountyData.isValidBounty(stack)) {
             val bd = stack.toData(::BountyData)
-            TranslationTextComponent("bountiful.rarity.${bd.rarityEnum.name}").apply {
+            Component.translatable("bountiful.rarity.${bd.rarityEnum.name}").apply {
 
-                append(StringTextComponent(" "))
+                append(Component.literal(" "))
 
                 append(super.getDisplayName(stack))
 
@@ -59,7 +59,7 @@ class ItemBounty : Item(
                 if (FMLEnvironment.dist == Dist.CLIENT) {
                     Minecraft.getInstance().world?.let { world ->
                         append(
-                                StringTextComponent(
+                                Component.literal(
                                         " §f(${bd.remainingTime(world)}§f)"
                                 )
                         )
@@ -100,7 +100,7 @@ class ItemBounty : Item(
     }
 
     @OnlyIn(Dist.CLIENT)
-    override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<ITextComponent>, flagIn: ITooltipFlag) {
+    override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<Component>, flagIn: ITooltipFlag) {
         if (stack.hasTag()) {
             val bounty = stack.toData(::BountyData)
             val bountyTipInfo = bounty.tooltipInfo(worldIn!!, Minecraft.getInstance().player?.isSneaking == true)

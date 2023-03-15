@@ -3,11 +3,11 @@ package ejektaflex.bountiful.data.bounty
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.data.bounty.enums.BountyType
-import ejektaflex.bountiful.ext.toEntityType
 import ejektaflex.bountiful.ext.withSibling
-import net.minecraft.entity.LivingEntity
+import net.minecraft.ChatFormatting
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.util.text.*
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.entity.LivingEntity
 import net.minecraftforge.registries.ForgeRegistries
 
@@ -23,7 +23,7 @@ class BountyEntryEntity : BountyEntry(), IBountyObjective {
         get() = unitWorth * amount
 
     override fun validate() {
-        // TODO Implement entity validation
+        // TODO Implement entity validation (this is an old todo)
     }
 
     override fun deserializeNBT(tag: CompoundTag) {
@@ -46,24 +46,24 @@ class BountyEntryEntity : BountyEntry(), IBountyObjective {
         return false
     }
 
-    override val formattedName: IFormattableTextComponent
-        get() = TranslationTextComponent(
+    override val formattedName: MutableComponent
+        get() = Component.translatable(
             ForgeRegistries.ENTITIES.entries.find {
                 it.key.location.toString() == content
             }?.value?.translationKey ?: "entity.generic.name"
         )
 
-    override fun tooltipObjective(progress: BountyProgress): ITextComponent {
-        return StringTextComponent("").withSibling(
-                formattedName.mergeStyle(progress.color)
+    override fun tooltipObjective(progress: BountyProgress): Component {
+        return Component.literal("").withSibling(
+                formattedName.withStyle(progress.color)
         ).withSibling(
-                StringTextComponent(" ")
+                Component.literal(" ")
         ).withSibling(
-                TranslationTextComponent("bountiful.bounty.type.entity.kills").mergeStyle(progress.color)
+                Component.translatable("bountiful.bounty.type.entity.kills").withStyle(progress.color)
         ).withSibling(
-                StringTextComponent(" ")
+                Component.literal(" ")
         ).withSibling(
-                StringTextComponent(progress.stringNums).mergeStyle(TextFormatting.WHITE)
+                Component.literal(progress.stringNums).withStyle(ChatFormatting.WHITE)
         )
     }
 

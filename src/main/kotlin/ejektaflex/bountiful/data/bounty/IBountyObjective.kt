@@ -1,10 +1,10 @@
 package ejektaflex.bountiful.data.bounty
 
-import net.minecraft.util.text.ITextComponent
+import net.minecraft.network.chat.Component
 
 interface IBountyObjective {
 
-    fun tooltipObjective(progress: BountyProgress): ITextComponent
+    fun tooltipObjective(progress: BountyProgress): Component
 
     /*
     fun checkComplete(world: World, player: PlayerEntity, data: IBountyData): Boolean {

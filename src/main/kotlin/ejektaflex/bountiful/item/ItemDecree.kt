@@ -10,9 +10,9 @@ import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.world.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.util.text.ITextComponent
+import net.minecraft.network.chat.Component
 import net.minecraft.util.text.StringTextComponent
-import net.minecraft.util.text.TextFormatting
+import net.minecraft.ChatFormatting
 import net.minecraft.util.text.TranslationTextComponent
 import net.minecraft.world.World
 import net.minecraft.world.item.Item
@@ -35,12 +35,12 @@ class ItemDecree : Item(
 
     override fun getTranslationKey() = "bountiful.decree"
 
-    override fun getDisplayName(stack: ItemStack): ITextComponent {
-        return TranslationTextComponent(translationKey).mergeStyle(TextFormatting.DARK_PURPLE)
+    override fun getDisplayName(stack: ItemStack): Component {
+        return Component.translatable(translationKey).withStyle(ChatFormatting.DARK_PURPLE)
     }
 
     @OnlyIn(Dist.CLIENT)
-    override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<ITextComponent>, flagIn: ITooltipFlag) {
+    override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<Component>, flagIn: ITooltipFlag) {
 
         val ids = stack.tag?.getUnsortedList("ids")?.map { nbt ->
             nbt.getString("id")
@@ -49,22 +49,22 @@ class ItemDecree : Item(
         if (ids != null) {
             if (stack.tag != null) {
                 val components = ids.map {
-                    TranslationTextComponent("bountiful.decree.${it}.name").mergeStyle(TextFormatting.GOLD)
+                    Component.translatable("bountiful.decree.${it}.name").withStyle(ChatFormatting.GOLD)
                 }.forEach {
                     tooltip.add(it)
                 }
 
             } else {
-                tooltip.add(TranslationTextComponent("bountiful.decree.invalid").append(
-                        StringTextComponent(" ($ids)")
+                tooltip.add(Component.translatable("bountiful.decree.invalid").append(
+                        Component.literal(" ($ids)")
                 ))
             }
         } else {
-            tooltip.add(TranslationTextComponent("bountiful.decree.notset"))
+            tooltip.add(Component.translatable("bountiful.decree.notset"))
         }
 
         // TODO Add debug tool when holding sneak, showing which pools are being used
-        //tooltip.add(StringTextComponent("Replace Me!"))
+        //tooltip.add(Component.literal("Replace Me!"))
     }
 
     fun setData(stack: ItemStack, list: DecreeList) {

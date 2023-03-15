@@ -14,8 +14,8 @@ import net.minecraft.client.resources.I18n
 import net.minecraft.world.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.util.NonNullList
-import net.minecraft.util.text.ITextComponent
-import net.minecraft.util.text.TextFormatting
+import net.minecraft.network.chat.Component
+import net.minecraft.ChatFormatting
 import net.minecraft.util.text.TranslationTextComponent
 import net.minecraft.world.World
 import net.minecraftforge.common.util.INBTSerializable
@@ -56,7 +56,7 @@ class BountyData : INBTSerializable<CompoundTag> {
     }
 
 
-    fun tooltipInfo(world: World, advanced: Boolean): List<ITextComponent> {
+    fun tooltipInfo(world: World, advanced: Boolean): List<Component> {
         val passed = CheckerRegistry.passedChecks(Minecraft.getInstance().player!!, this)
 
         val typeIds = BountyType.values().map { it.id }
@@ -73,9 +73,9 @@ class BountyData : INBTSerializable<CompoundTag> {
 
 
         return listOf(
-                listOf(TranslationTextComponent("bountiful.tooltip.required").mergeStyle(TextFormatting.GOLD)) +
+                listOf(Component.translatable("bountiful.tooltip.required").withStyle(ChatFormatting.GOLD)) +
                         objs +
-                        listOf(TranslationTextComponent("bountiful.tooltip.rewards").mergeStyle(TextFormatting.GOLD)) +
+                        listOf(Component.translatable("bountiful.tooltip.rewards").withStyle(ChatFormatting.GOLD)) +
                         rews
         ).flatten()
 

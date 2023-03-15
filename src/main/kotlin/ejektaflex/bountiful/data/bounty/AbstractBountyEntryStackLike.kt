@@ -2,9 +2,9 @@ package ejektaflex.bountiful.data.bounty
 
 import ejektaflex.bountiful.ext.withSibling
 import net.minecraft.world.item.ItemStack
-import net.minecraft.util.text.ITextComponent
+import net.minecraft.network.chat.Component
 import net.minecraft.util.text.StringTextComponent
-import net.minecraft.util.text.TextFormatting
+import net.minecraft.ChatFormatting
 
 abstract class AbstractBountyEntryStackLike : BountyEntry(), IBountyObjective, IBountyReward {
 
@@ -13,16 +13,16 @@ abstract class AbstractBountyEntryStackLike : BountyEntry(), IBountyObjective, I
 
     abstract val validStacks: List<ItemStack>
 
-    override fun tooltipObjective(progress: BountyProgress): ITextComponent {
-        return formattedName.mergeStyle(progress.color).apply {
-            siblings.add(StringTextComponent(" "))
-            siblings.add(StringTextComponent(progress.stringNums).mergeStyle(TextFormatting.WHITE))
+    override fun tooltipObjective(progress: BountyProgress): Component {
+        return formattedName.withStyle(progress.color).apply {
+            siblings.add(Component.literal(" "))
+            siblings.add(Component.literal(progress.stringNums).withStyle(ChatFormatting.WHITE))
         }
     }
 
-    override fun tooltipReward(): ITextComponent {
-        return StringTextComponent(amount.toString() + "x ").mergeStyle(TextFormatting.WHITE).withSibling(
-                formattedName.mergeStyle(TextFormatting.AQUA)
+    override fun tooltipReward(): Component {
+        return Component.literal(amount.toString() + "x ").withStyle(ChatFormatting.WHITE).withSibling(
+                formattedName.withStyle(ChatFormatting.AQUA)
         )
     }
 

@@ -26,7 +26,7 @@ import net.minecraft.commands.Commands.literal
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.resources.IResourceManager
 import net.minecraft.util.text.StringTextComponent
-import net.minecraft.util.text.TextFormatting
+import net.minecraft.ChatFormatting
 import net.minecraft.util.text.event.HoverEvent
 import net.minecraft.world.entity.player.Player
 import net.minecraftforge.fml.network.PacketDistributor
@@ -140,8 +140,8 @@ object BountifulCommand {
 
         ctx.source.sendFeedback(
 
-            StringTextComponent("Dumping list of entities to ").mergeStyle(TextFormatting.GOLD).append(
-                        StringTextComponent("/logs/bountiful.log...").mergeStyle(TextFormatting.GREEN)
+            Component.literal("Dumping list of entities to ").withStyle(ChatFormatting.GOLD).append(
+                        Component.literal("/logs/bountiful.log...").withStyle(ChatFormatting.GREEN)
                 ), true
         )
 
@@ -153,7 +153,7 @@ object BountifulCommand {
         }
 
         ctx.source.sendFeedback(
-                StringTextComponent("Dump complete! Took: ${time}ms").mergeStyle(TextFormatting.GOLD), true
+                Component.literal("Dump complete! Took: ${time}ms").withStyle(ChatFormatting.GOLD), true
         )
 
         1
@@ -183,9 +183,9 @@ object BountifulCommand {
                 it.source.asPlayer()
             }, MessageClipboardCopy(asText))
 
-            val msg = StringTextComponent("§aItem: §9${holding.item.registryName}§r, §aBounty Entry Copied To Clipboard!§r: §6[hover for preview]§r").apply {
-                style.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, StringTextComponent("§6Bounty Entry (Copied to Clipboard):\n").append(
-                        StringTextComponent(asText).mergeStyle(TextFormatting.DARK_PURPLE)
+            val msg = Component.literal("§aItem: §9${holding.item.registryName}§r, §aBounty Entry Copied To Clipboard!§r: §6[hover for preview]§r").apply {
+                style.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("§6Bounty Entry (Copied to Clipboard):\n").append(
+                        Component.literal(asText).withStyle(ChatFormatting.DARK_PURPLE)
                 ))
             }
 

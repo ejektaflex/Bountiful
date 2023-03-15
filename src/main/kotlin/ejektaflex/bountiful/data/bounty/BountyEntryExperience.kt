@@ -19,16 +19,16 @@ class BountyEntryExperience : BountyEntry(), IBountyObjective, IBountyReward {
     override val calculatedWorth: Int
         get() = unitWorth * amount
 
-    override val formattedName: IFormattableTextComponent
+    override val formattedName: MutableComponent
         get() = when (content) {
-            "levels" -> TranslationTextComponent("bountiful.bounty.type.experience.levels")
-            "points" -> TranslationTextComponent("bountiful.bounty.type.experience.points")
-            else -> StringTextComponent("??? (xp)")
+            "levels" -> Component.translatable("bountiful.bounty.type.experience.levels")
+            "points" -> Component.translatable("bountiful.bounty.type.experience.points")
+            else -> Component.literal("??? (xp)")
         }
 
-    override fun tooltipReward(): ITextComponent {
-        return StringTextComponent(amount.toString() + "x ").mergeStyle(TextFormatting.WHITE).withSibling(
-                formattedName.mergeStyle(TextFormatting.AQUA)
+    override fun tooltipReward(): Component {
+        return Component.literal(amount.toString() + "x ").withStyle(ChatFormatting.WHITE).withSibling(
+                formattedName.withStyle(ChatFormatting.AQUA)
         )
     }
 
@@ -59,8 +59,8 @@ class BountyEntryExperience : BountyEntry(), IBountyObjective, IBountyReward {
 
     }
 
-    override fun tooltipObjective(progress: BountyProgress): ITextComponent {
-        return StringTextComponent(progress.stringNums).mergeStyle(progress.color).withSibling(
+    override fun tooltipObjective(progress: BountyProgress): Component {
+        return Component.literal(progress.stringNums).withStyle(progress.color).withSibling(
             formattedName
         )
     }
