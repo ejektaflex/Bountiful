@@ -23,6 +23,13 @@ val ItemStack.toNBT: CompoundTag
 val Entity.registryName: ResourceLocation?
     get() = ForgeRegistries.ENTITY_TYPES.getKey(type)
 
+
+val Item.registryName: ResourceLocation?
+    get() = ForgeRegistries.ITEMS.getKey(this)
+
+val ItemStack.registryName: ResourceLocation?
+    get() = item.registryName
+
 val CompoundTag.toItemStack: ItemStack?
     get() {
         val istack = getString("e_item").toItemStack
