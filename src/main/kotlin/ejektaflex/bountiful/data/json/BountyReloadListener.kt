@@ -11,7 +11,7 @@ import ejektaflex.bountiful.data.structure.EntryPool
 import net.minecraft.client.resources.JsonReloadListener
 import net.minecraft.profiler.IProfiler
 import net.minecraft.resources.IResourceManager
-import net.minecraft.util.ResourceLocation
+import net.minecraft.resources.ResourceLocation
 
 class BountyReloadListener : JsonReloadListener(JsonAdapter.gson, "bounties") {
 

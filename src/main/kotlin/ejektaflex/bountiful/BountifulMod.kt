@@ -1,7 +1,7 @@
 package ejektaflex.bountiful
 
 import ejektaflex.bountiful.network.BountifulNetwork
-import net.minecraft.util.ResourceLocation
+import net.minecraft.resources.ResourceLocation
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.config.ModConfig

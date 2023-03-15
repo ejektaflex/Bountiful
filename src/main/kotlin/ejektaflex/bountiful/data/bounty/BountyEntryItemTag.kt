@@ -4,13 +4,14 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.data.bounty.enums.BountyType
 import ejektaflex.bountiful.ext.hackyRandom
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.Item
+import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import net.minecraft.tags.ItemTags
-import net.minecraft.util.ResourceLocation
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.util.text.StringTextComponent
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.Item
 import net.minecraftforge.items.ItemHandlerHelper
 import kotlin.math.min
 
@@ -45,7 +46,7 @@ class BountyEntryItemTag : AbstractBountyEntryStackLike(), IBountyObjective, IBo
             }
         }
 
-    override fun reward(player: PlayerEntity) {
+    override fun reward(player: Player) {
         var amountNeeded = amount
         val stacksToGive = mutableListOf<ItemStack>()
 

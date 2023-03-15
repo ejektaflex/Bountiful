@@ -15,9 +15,9 @@ import ejektaflex.bountiful.item.ItemBounty
 import ejektaflex.bountiful.item.ItemDecree
 import ejektaflex.bountiful.worldgen.JigsawHelper
 import net.minecraft.commands.CommandSource
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.util.ResourceLocation
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player
 import net.minecraftforge.event.AddReloadListenerEvent
 import net.minecraftforge.event.AnvilUpdateEvent
 import net.minecraftforge.event.RegisterCommandsEvent
@@ -25,7 +25,6 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.ModList
 import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent
 import thedarkcolour.kotlinforforge.forge.FORGE_BUS
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import kotlin.math.min
@@ -76,8 +75,6 @@ object SetupLifecycle {
 
         JsonSerializers.register()
 
-        //BountifulTriggers.register()
-        BountifulStats.init()
     }
 
 
@@ -108,16 +105,16 @@ object SetupLifecycle {
     // Update mob bounties
     @SubscribeEvent
     fun entityLivingDeath(e: LivingDeathEvent) {
-        val deadEntity = e.entityLiving
+        val deadEntity = e.entity
 
-        if (e.source.trueSource is PlayerEntity) {
-            val player = e.source.trueSource as PlayerEntity
+        if (e.source.entity is Player) {
+            val player = e.source.entity as Player
 
             if (BountifulConfig.SERVER.coopKillsCount.get()) {
 
-                val withinRange = player.world.players.filter {
-                    it.getDistance(player) <= BountifulConfig.SERVER.coopKillDistance.get() ||
-                            it.getDistance(deadEntity) <= BountifulConfig.SERVER.coopKillDistance.get()
+                val withinRange = player.level.players().filter {
+                    it.distanceTo(player) <= BountifulConfig.SERVER.coopKillDistance.get() ||
+                            it.distanceTo(deadEntity) <= BountifulConfig.SERVER.coopKillDistance.get()
                 }
 
                 withinRange.forEach {
@@ -131,8 +128,8 @@ object SetupLifecycle {
         }
     }
 
-    private fun updateBountiesForEntity(player: PlayerEntity, deadEntity: LivingEntity) {
-        val bountyStacks = player.inventory.mainInventory.filter { it.item is ItemBounty && it.hasTag() }
+    private fun updateBountiesForEntity(player: Player, deadEntity: LivingEntity) {
+        val bountyStacks = player.inventory.items.filter { it.item is ItemBounty && it.hasTag() }
         if (bountyStacks.isNotEmpty()) {
             bountyStacks.forEach { stack ->
                 val data = stack.toData(::BountyData)
@@ -175,23 +172,6 @@ object SetupLifecycle {
             event.cost = 5 + (event.output.toData(::DecreeList).ids.size * 5)
         }
     }
-
-    // TODO reimplement wandering decree trades
-
-    /*
-    private val decreeTrade = BasicTrade(3, ItemStack(BountifulContent.Items.DECREE), 5, 5, 0.5f)
-
-    @SubscribeEvent
-    fun doWandererTrades(event: WandererTradesEvent) {
-        event.genericTrades.add(decreeTrade)
-    }
-
-    @SubscribeEvent
-    fun doVillagerTrades(event: VillagerTradesEvent) {
-        event.trades[2].add(decreeTrade)
-    }
-
-     */
 
 }
 

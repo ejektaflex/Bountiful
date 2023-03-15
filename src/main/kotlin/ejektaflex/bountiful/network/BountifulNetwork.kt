@@ -2,7 +2,7 @@ package ejektaflex.bountiful.network
 
 import ejektaflex.bountiful.BountifulMod
 import net.minecraft.network.PacketBuffer
-import net.minecraft.util.ResourceLocation
+import net.minecraft.resources.ResourceLocation
 import net.minecraftforge.fml.network.NetworkEvent
 import net.minecraftforge.fml.network.NetworkRegistry
 import java.util.function.Supplier

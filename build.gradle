@@ -35,11 +35,6 @@ configurations {
     mod
 }
 
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
 
 
 minecraft {

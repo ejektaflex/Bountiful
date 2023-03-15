@@ -1,12 +1,8 @@
 package ejektaflex.bountiful.worldgen
 
 import net.minecraft.server.MinecraftServer
-import net.minecraft.util.ResourceLocation
-import net.minecraft.util.registry.Registry
-import net.minecraft.world.gen.feature.jigsaw.JigsawPattern
-import net.minecraft.world.gen.feature.jigsaw.JigsawPattern.PlacementBehaviour
-import net.minecraft.world.gen.feature.jigsaw.JigsawPiece
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper
+import net.minecraft.resources.ResourceLocation
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper
 
 
 object JigsawHelper {

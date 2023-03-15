@@ -6,7 +6,7 @@ import ejektaflex.bountiful.ext.toData
 import ejektaflex.bountiful.gui.BoardScreen
 import net.minecraft.client.gui.ScreenManager
 import net.minecraft.item.ItemModelsProperties
-import net.minecraft.util.ResourceLocation
+import net.minecraft.resources.ResourceLocation
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.DeferredWorkQueue

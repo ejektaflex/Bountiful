@@ -6,9 +6,14 @@ import ejektaflex.bountiful.BountifulConfig
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.data.bounty.enums.BountyType
 import ejektaflex.bountiful.ext.withSibling
+import net.minecraft.ChatFormatting
 import net.minecraft.entity.item.ExperienceOrbEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.util.text.*
+import net.minecraft.world.entity.ExperienceOrb
+import net.minecraft.world.entity.player.Player
 
 class BountyEntryExperience : BountyEntry(), IBountyObjective, IBountyReward {
 
@@ -32,20 +37,20 @@ class BountyEntryExperience : BountyEntry(), IBountyObjective, IBountyReward {
         )
     }
 
-    private fun dropXpOnPlayer(player: PlayerEntity, amt: Int) {
+    private fun dropXpOnPlayer(player: Player, amt: Int) {
         var dropsLeft = amt
         while (dropsLeft > 0) {
-            val dropAmount = ExperienceOrbEntity.getXPSplit(dropsLeft)
+            val dropAmount = ExperienceOrb.getXPSplit(dropsLeft)
             dropsLeft -= dropAmount
-            player.world.addEntity(ExperienceOrbEntity(player.world, player.posX, player.posY, player.posZ, dropAmount))
+            player.level.addEntity(ExperienceOrb(player.world, player.posX, player.posY, player.posZ, dropAmount))
         }
     }
 
-    override fun reward(player: PlayerEntity) {
+    override fun reward(player: Player) {
 
         when (content) {
             "levels" -> {
-                player.addExperienceLevel(amount)
+                player.giveExperienceLevels(amount)
             }
             "points" -> {
                 if (BountifulConfig.SERVER.doXpDrop.get()) {

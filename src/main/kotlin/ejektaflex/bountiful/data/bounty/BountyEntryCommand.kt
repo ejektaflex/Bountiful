@@ -4,10 +4,8 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ejektaflex.bountiful.BountifulMod
 import ejektaflex.bountiful.data.bounty.enums.BountyType
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.util.text.StringTextComponent
 import net.minecraft.ChatFormatting
 import net.minecraft.world.entity.player.Player
 

@@ -4,6 +4,7 @@ import ejektaflex.bountiful.BountifulMod
 import net.minecraft.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.world.item.Item
 import net.minecraftforge.common.util.INBTSerializable
 import net.minecraftforge.fml.ModList
 
@@ -29,7 +30,7 @@ inline fun <reified T : Item> ItemStack.edit(func: T.(stack: ItemStack) -> Unit)
     if (item is T) {
         func(item as T, this)
     } else {
-        throw Exception("Tried to edit stack ${stack.count}x ${stack.item.registryName} as if it was a ${T::class}")
+        throw Exception("Tried to edit stack ${count}x ${item.registryName} as if it was a ${T::class}")
     }
 }
 
@@ -42,14 +43,14 @@ inline fun <reified T : INBTSerializable<CompoundTag>> ItemStack.editNbt(func: T
 
 inline fun <reified T : INBTSerializable<CompoundTag>> ItemStack.toData(func: () -> T): T {
     return func().apply {
-        deserializeNBT(stack.tag)
+        deserializeNBT(tag)
     }
 }
 
 inline fun <reified T : INBTSerializable<CompoundTag>> ItemStack.toSafeData(func: () -> T): T? {
     return try {
         func().apply {
-            deserializeNBT(stack.tag)
+            deserializeNBT(tag)
         }
     } catch (e: Exception) {
         BountifulMod.logger.error(e.message)

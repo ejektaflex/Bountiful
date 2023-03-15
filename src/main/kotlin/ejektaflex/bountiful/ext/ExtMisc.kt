@@ -2,80 +2,34 @@ package ejektaflex.bountiful.ext
 
 import ejektaflex.bountiful.util.IWeighted
 import ejektaflex.bountiful.util.ItemRange
+import net.minecraft.ChatFormatting
 import net.minecraft.commands.CommandSource
-import net.minecraft.entity.Entity
-import net.minecraft.entity.player.ServerPlayerEntity
-import net.minecraft.util.NonNullList
-import net.minecraft.util.ResourceLocation
+import net.minecraft.core.NonNullList
 import net.minecraft.network.chat.Component
-import net.minecraft.util.text.StringTextComponent
-import net.minecraft.util.text.TranslationTextComponent
-import kotlin.math.max
-import kotlin.math.min
-
-/*
-fun <T : INBTSerializable<CompoundTag>> World.ifHasCapability(capability: Capability<T>, func: T.() -> Unit) {
-    if (hasCapability(capability, null)) {
-        func(getCapability(capability, null)!!)
-    }
-}
-*/
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.Entity
 
 val String.rl: ResourceLocation
     get() = ResourceLocation(substringBefore(":"), substringAfter(":"))
 
-/*
-val Entity.registryName: ResourceLocation?
-    get() {
-        val valid = ForgeRegistries.ENTITIES.entries.filter {
-            this::class.java.isAssignableFrom(it.value.entityClass) &&
-                    it.value.entityClass.isAssignableFrom(this::class.java)
-        }
-        return valid.firstOrNull()?.key
-    }
-
-
- */
-
-//fun ICommandSender.sendMessage(str: String) = sendMessage(Component.literal(str))
-
-//fun ICommandSender.sendTranslation(key: String) = sendMessage(TextComponentTranslation(key))
-
 fun CommandSource.sendMessage(str: String) {
-    sendFeedback(Component.literal(str), true)
+    sendSystemMessage(Component.literal(str))
 }
 
 fun CommandSource.sendTranslation(str: String) {
-    sendFeedback(Component.translatable(str), true)
+    sendSystemMessage(Component.translatable(str))
 }
 
 fun CommandSource.sendErrorMsg(str: String) {
-    sendErrorMessage(Component.literal(str))
+    this.sendSystemMessage(Component.literal(str).withStyle(ChatFormatting.RED))
 }
 
 // TODO Make update this
-fun Entity.sendTranslation(key: String) = sendMessage(Component.translatable(key), uniqueID)
-
-fun ServerPlayerEntity.sendTranslation() {
-
-}
-
+fun Entity.sendTranslation(key: String) = sendSystemMessage(Component.translatable(key))
 
 fun Component.withSibling(component: Component): Component {
     siblings.add(component)
     return this
-}
-
-fun Int.clampTo(range: IntRange): Int {
-    return max(range.first, min(this, range.last))
-}
-
-fun Double.clampTo(low: Double, high: Double): Double {
-    return max(low, min(this, high))
-}
-
-fun Long.clampTo(range: LongRange): Long {
-    return max(range.first, min(this, range.last))
 }
 
 val IntRange.ir: ItemRange
@@ -91,11 +45,11 @@ fun IntRange.hackyRandom(): Int {
 }
 
 inline fun <reified T : Any> supposedlyNotNull(list: List<T>): NonNullList<T> {
-    return NonNullList.from<T>(list.first(), *list.toTypedArray())
+    return NonNullList.of(list.first(), *list.toTypedArray())
 }
 
 fun <T : Any> List<T>.hackyRandom(): T {
-    return this[(0 until size).hackyRandom()]
+    return this[(indices).hackyRandom()]
 }
 
 val <T : IWeighted> List<T>.weightedRandom: T
@@ -115,7 +69,7 @@ val <T : IWeighted> List<T>.weightedRandom: T
 
 fun <T : IWeighted> List<T>.weightedRandomNorm(exp: Double): T {
     //if (size == 1) return first()
-    val sum = this.sumBy { it.normalizedWeight(exp) }
+    val sum = this.sumOf { it.normalizedWeight(exp) }
     var point = (0..sum).hackyRandom()
     for (item in this) {
         if (point <= item.normalizedWeight(exp)) {

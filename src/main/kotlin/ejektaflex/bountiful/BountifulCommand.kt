@@ -9,7 +9,6 @@ import com.mojang.brigadier.arguments.StringArgumentType.string
 import com.mojang.brigadier.builder.RequiredArgumentBuilder.argument
 import ejektaflex.bountiful.data.bounty.BountyData
 import ejektaflex.bountiful.data.bounty.BountyEntryItem
-import ejektaflex.bountiful.data.bounty.enums.BountifulResourceType
 import ejektaflex.bountiful.data.json.JsonAdapter
 import ejektaflex.bountiful.data.registry.DecreeRegistry
 import ejektaflex.bountiful.data.registry.PoolRegistry
@@ -19,17 +18,12 @@ import ejektaflex.bountiful.ext.supposedlyNotNull
 import ejektaflex.bountiful.item.ItemDecree
 import ejektaflex.bountiful.network.BountifulNetwork
 import ejektaflex.bountiful.network.MessageClipboardCopy
-import net.minecraft.client.Minecraft
-import net.minecraft.commands.CommandSource
-import net.minecraft.commands.CommandSourceStack
-import net.minecraft.commands.Commands.literal
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.resources.IResourceManager
-import net.minecraft.util.text.StringTextComponent
 import net.minecraft.ChatFormatting
-import net.minecraft.util.text.event.HoverEvent
+import net.minecraft.commands.CommandSource
+import net.minecraft.commands.Commands.literal
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.HoverEvent
 import net.minecraft.world.entity.player.Player
-import net.minecraftforge.fml.network.PacketDistributor
 import net.minecraftforge.items.ItemHandlerHelper
 import net.minecraftforge.registries.ForgeRegistries
 import kotlin.system.measureTimeMillis
@@ -138,11 +132,10 @@ object BountifulCommand {
 
     private fun entities() = Command<CommandSource> { ctx ->
 
-        ctx.source.sendFeedback(
-
+        ctx.source.sendSystemMessage(
             Component.literal("Dumping list of entities to ").withStyle(ChatFormatting.GOLD).append(
-                        Component.literal("/logs/bountiful.log...").withStyle(ChatFormatting.GREEN)
-                ), true
+                Component.literal("/logs/bountiful.log...").withStyle(ChatFormatting.GREEN)
+            )
         )
 
         val time = measureTimeMillis {
@@ -152,8 +145,8 @@ object BountifulCommand {
             }
         }
 
-        ctx.source.sendFeedback(
-                Component.literal("Dump complete! Took: ${time}ms").withStyle(ChatFormatting.GOLD), true
+        ctx.source.sendSystemMessage(
+            Component.literal("Dump complete! Took: ${time}ms").withStyle(ChatFormatting.GOLD)
         )
 
         1
@@ -184,9 +177,11 @@ object BountifulCommand {
             }, MessageClipboardCopy(asText))
 
             val msg = Component.literal("§aItem: §9${holding.item.registryName}§r, §aBounty Entry Copied To Clipboard!§r: §6[hover for preview]§r").apply {
-                style.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("§6Bounty Entry (Copied to Clipboard):\n").append(
+                style.withHoverEvent(
+                    HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("§6Bounty Entry (Copied to Clipboard):\n").append(
                         Component.literal(asText).withStyle(ChatFormatting.DARK_PURPLE)
-                ))
+                    ))
+                )
             }
 
             it.source.sendMessage(msg)

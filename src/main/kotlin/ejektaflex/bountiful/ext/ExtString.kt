@@ -3,7 +3,7 @@ package ejektaflex.bountiful.ext
 import net.minecraft.entity.EntityType
 import net.minecraft.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.util.ResourceLocation
+import net.minecraft.resources.ResourceLocation
 import net.minecraftforge.registries.ForgeRegistries
 
 val String.toEntityType: EntityType<*>?

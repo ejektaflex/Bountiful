@@ -6,16 +6,13 @@ import ejektaflex.bountiful.data.registry.DecreeRegistry
 import ejektaflex.bountiful.data.structure.Decree
 import ejektaflex.bountiful.data.structure.DecreeList
 import ejektaflex.bountiful.ext.*
-import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.world.item.ItemStack
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
-import net.minecraft.util.text.StringTextComponent
 import net.minecraft.ChatFormatting
-import net.minecraft.util.text.TranslationTextComponent
-import net.minecraft.world.World
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.level.Level
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.api.distmarker.OnlyIn
 
@@ -33,14 +30,12 @@ class ItemDecree : Item(
      */
     class DecreeCreationException(err: String = "Decree could not be created!") : Exception(err)
 
-    override fun getTranslationKey() = "bountiful.decree"
-
-    override fun getDisplayName(stack: ItemStack): Component {
-        return Component.translatable(translationKey).withStyle(ChatFormatting.DARK_PURPLE)
+    override fun getName(stack: ItemStack): Component {
+        return Component.translatable("bountiful.decree").withStyle(ChatFormatting.DARK_PURPLE)
     }
 
     @OnlyIn(Dist.CLIENT)
-    override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<Component>, flagIn: ITooltipFlag) {
+    override fun appendHoverText(stack: ItemStack, levelIn: Level?, tooltip: MutableList<Component>, flagIn: TooltipFlag) {
 
         val ids = stack.tag?.getUnsortedList("ids")?.map { nbt ->
             nbt.getString("id")
