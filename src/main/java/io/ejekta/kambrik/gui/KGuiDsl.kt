@@ -64,11 +64,11 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
     }
 
     fun itemStackIcon(stack: ItemStack, x: Int = 0, y: Int = 0) {
-        ctx.screen.itemRenderer.renderInGui(stack, ctx.absX(x), ctx.absY(y))
+        ctx.screen.itemRenderer.renderInGui(matrices, stack, ctx.absX(x), ctx.absY(y))
     }
 
     fun itemStackOverlay(stack: ItemStack, x: Int = 0, y: Int = 0) {
-        ctx.screen.itemRenderer.renderGuiItemOverlay(ctx.screen.textRenderer, stack, x, y)
+        ctx.screen.itemRenderer.renderGuiItemOverlay(matrices, ctx.screen.textRenderer, stack, x, y)
     }
 
     fun itemStack(stack: ItemStack, x: Int = 0, y: Int = 0) {
@@ -140,7 +140,7 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
 
     fun textImmediate(x: Int, y: Int, text: Text) {
         val matrixStack = MatrixStack()
-        matrixStack.translate(0.0, 0.0, (ctx.screen.zOffset + 200.0f).toDouble())
+        matrixStack.translate(0.0, 0.0, 1000.0)
         val immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().buffer)
 
         ctx.screen.textRenderer.draw(
@@ -184,6 +184,7 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
         val dims = entity.getDimensions(entity.pose)
         val maxDim = (1 / max(dims.height, dims.width) * 1 * size).toInt().coerceAtLeast(1)
         InventoryScreen.drawEntity(
+            matrices,
             ctx.absX(x),
             ctx.absY(y),
             maxDim,

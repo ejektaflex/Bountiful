@@ -13,7 +13,6 @@
 	"bountiful.item_tag.any_boat": "Any Boat",
 	"bountiful.item_tag.any_candle": "Any Candle",
 	"bountiful.item_tag.any_banner": "Any Banner",
-	"bountiful.item_tag.any_wool": "Any Wool",
 
 	"bountiful.decree": "Decree",
 	"bountiful.decrees": "Decrees",
@@ -65,7 +64,6 @@
 
 	"bountiful.bounty.type.experience.levels": "Experience Levels",
 	"bountiful.bounty.type.experience.points": "Experience Points",
-
 
 	"bountiful.rarity.Common": "Common",
 	"bountiful.rarity.Uncommon": "Uncommon",

@@ -8,27 +8,27 @@ plugins {
 }
 
 object Versions {
-	const val Minecraft = "23w07a"
+	const val Minecraft = "1.19.4"
 	object Jvm {
 		val Java = JavaVersion.VERSION_17
 		const val Kotlin = "1.8.10"
 		const val TargetKotlin = "17"
 	}
 	object Fabric {
-		const val Yarn = "23w07a+build.11"
-		const val Loader = "0.14.14"
-		const val Api = "0.75.2+1.19.4"
+		const val Yarn = "1.19.4+build.1"
+		const val Loader = "0.14.17"
+		const val Api = "0.76.0+1.19.4"
 	}
 	object Mod {
 		const val Group = "io.ejekta"
 		const val ID = "bountiful"
-		const val Version = "5.0.0"
+		const val Version = "5.1.0"
 	}
 	object Env {
-		const val Kambrik = "5.0-1.19.4-SNAPSHOT+"
+		const val Kambrik = "5.1.0-1.19.4-SNAPSHOT+"
 		const val FLK = "1.9.1+kotlin.1.8.10"
-		const val ClothConfig = "9.0.93"
-		const val ModMenu = "5.0.2"
+		const val ClothConfig = "10.0.96"
+		const val ModMenu = "6.1.0-rc.2"
 	}
 }
 
@@ -78,6 +78,7 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${Versions.Fabric.Api}") {
 		exclude(group = "net.fabricmc.fabric-api", module = "fabric-biome-api-v1") // err on 23w07a
+		exclude(group = "net.fabricmc.fabric-api", module = "fabric-renderer-api-v1")
 	}
 }
 
@@ -91,6 +92,12 @@ tasks.getByName<ProcessResources>("processResources") {
 				"fabricApiVersion" to Versions.Fabric.Api
 			)
 		)
+	}
+}
+
+configurations.all {
+	resolutionStrategy {
+		force("net.fabricmc:fabric-loader:${Versions.Fabric.Loader}")
 	}
 }
 

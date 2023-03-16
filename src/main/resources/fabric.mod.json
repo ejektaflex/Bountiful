@@ -8,8 +8,12 @@
   "authors": [
     "Ejektaflex"
   ],
+  "contributors": [
+    "Zano1999 (translations)",
+    "GodGun968 (translations)"
+  ],
   "contact": {
-    "homepage": "None yet",
+    "homepage": "https://kambrik.ejekta.io/mods/bountiful/",
     "sources": "https://github.com/ejektaflex/Bountiful-Fabric",
     "issues": "https://github.com/ejektaflex/Bountiful-Fabric/issues"
   },
@@ -53,10 +57,10 @@
   },
 
   "depends": {
-    "fabricloader": ">=0.11.6",
+    "fabricloader": ">=0.14.9",
     "fabric": "*",
-    "minecraft": "~1.19-0",
-    "kambrik": "^5.0.0-0"
+    "minecraft": "~1.19.4-0",
+    "kambrik": "^5.1.0-0"
   },
   "suggests": {
     "flamingo": "*"
