@@ -4,15 +4,13 @@
 
 	"itemGroup.bountiful": "悬赏",
 
-	"bountiful.item_tag.any_door": "任何门",
-	"bountiful.item_tag.any_wool": "任何羊毛",
-	"bountiful.item_tag.any_planks": "任何木板",
-	"bountiful.item_tag.any_log": "任何木头",
-	"bountiful.item_tag.any_fence": "任何栅栏",
-	"bountiful.item_tag.any_bed": "任何床",
-	"bountiful.item_tag.any_boat": "任何船",
-	"bountiful.item_tag.any_candle": "任何蜡烛",
-	"bountiful.item_tag.any_banner": "任何旗帜",
+	"bountiful.entry.shepherd_obj_wool_wildcard": "任何羊毛",
+	"bountiful.entry.fletcher_obj_planks": "任何木板",
+	"bountiful.entry.fletcher_obj_logs": "任何木头",
+	"bountiful.entry.shepherd_obj_bed_wildcard": "任何床",
+	"bountiful.entry.fisherman_obj_any_boat": "任何船",
+	"bountiful.entry.mapper_obj_candles": "任何蜡烛",
+	"bountiful.entry.shepherd_obj_banner_wildcard": "任何旗帜",
 
 	"bountiful.decree": "悬赏令",
 	"bountiful.decrees": "悬赏令",
