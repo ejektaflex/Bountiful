@@ -140,14 +140,14 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
 
     fun textImmediate(x: Int, y: Int, text: Text) {
         val matrixStack = MatrixStack()
-        matrixStack.translate(0.0, 0.0, 1000.0)
+        matrixStack.translate(0.0, 0.0, 201.0)
         val immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().buffer)
 
         ctx.screen.textRenderer.draw(
             text,
             (ctx.absX(x) + ctx.screen.textRenderer.getWidth(text)).toFloat(),
             ctx.absY(y).toFloat(),
-            16777215,
+            0xFFFFFF,
             true,
             matrixStack.peek().positionMatrix,
             immediate,

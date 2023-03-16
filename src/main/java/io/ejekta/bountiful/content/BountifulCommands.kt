@@ -93,42 +93,42 @@ object BountifulCommands : CommandRegistrationCallback {
             // /bo pool [poolName] add tag [#tag] (not yet implemented)
             // /bo pool [poolName] add entity (entity_id)
             // /bo pool [poolName] add entity (entity_id) (minAmt)..(maxAmt) (unitWorth)
-            "pool" {
-
-                argString("poolName", items = pools) { poolName ->
-                    "add" {
-                        "hand" {
-                            this runs { addHandToPool(poolName = poolName()) }
-                            argIntRange("amount") { amount ->
-                                argInt("unit_worth") runs { worth ->
-                                    addToPoolCommand(amount(), worth()) { amtRange, worthAmt ->
-                                        addHandToPool(amtRange, worthAmt, poolName())
-                                    }
-                                }
-                            }
-                        }
-
-                        "entity" {
-                            val entityTypes = suggestionList { Registries.ENTITY_TYPE.ids.toList() }
-                            argIdentifier("entity_identifier", items = entityTypes) { eId ->
-                                this runs {
-                                    addEntityToPool(null, null, eId(), poolName())
-                                }
-                                argIntRange("amount") { amount ->
-                                    argInt("unit_worth") runs { worth ->
-                                        addToPoolCommand(amount(), worth()) { amtRange, worthAmt ->
-                                            addEntityToPool(amtRange, worthAmt, eId(), poolName())
-                                        }
-                                    }
-                                }
-                            }
-
-                        }
-
-                    }
-                }
-
-            }
+//            "pool" {
+//
+//                argString("poolName", items = pools) { poolName ->
+//                    "add" {
+//                        "hand" {
+//                            this runs { addHandToPool(poolName = poolName()) }
+//                            argIntRange("amount") { amount ->
+//                                argInt("unit_worth") runs { worth ->
+//                                    addToPoolCommand(amount(), worth()) { amtRange, worthAmt ->
+//                                        addHandToPool(amtRange, worthAmt, poolName())
+//                                    }
+//                                }
+//                            }
+//                        }
+//
+//                        "entity" {
+//                            val entityTypes = suggestionList { Registries.ENTITY_TYPE.ids.toList() }
+//                            argIdentifier("entity_identifier", items = entityTypes) { eId ->
+//                                this runs {
+//                                    addEntityToPool(null, null, eId(), poolName())
+//                                }
+//                                argIntRange("amount") { amount ->
+//                                    argInt("unit_worth") runs { worth ->
+//                                        addToPoolCommand(amount(), worth()) { amtRange, worthAmt ->
+//                                            addEntityToPool(amtRange, worthAmt, eId(), poolName())
+//                                        }
+//                                    }
+//                                }
+//                            }
+//
+//                        }
+//
+//                    }
+//                }
+//
+//            }
 
             "util" {
                 "debug" {
@@ -319,7 +319,7 @@ object BountifulCommands : CommandRegistrationCallback {
         for (pool in BountifulContent.Pools.sortedBy { it.id }) {
             Bountiful.LOGGER.info("Pool: ${pool.id}")
             for (item in pool.items.sortedBy { it.content }) {
-                Bountiful.LOGGER.info("    * [${item.type}] ${item.content}")
+                Bountiful.LOGGER.info("    * [${item.type.path}] - ${item.id} - ${item.content}")
             }
         }
     }
