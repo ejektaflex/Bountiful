@@ -26,7 +26,6 @@
         "shepherd_obj_wool_wildcard": {
             "type": "item_tag",
             "content": "minecraft:wool",
-            "translation": "bountiful.item_tag.any_wool",
             "amount": {
                 "min": 3,
                 "max": 24
@@ -49,7 +48,6 @@
         "shepherd_obj_banner_wildcard": {
             "type": "item_tag",
             "content": "minecraft:banners",
-            "translation": "bountiful.item_tag.any_banner",
             "amount": {
                 "min": 2,
                 "max": 16
@@ -61,7 +59,6 @@
         "shepherd_obj_bed_wildcard": {
             "type": "item_tag",
             "content": "minecraft:beds",
-            "translation": "bountiful.item_tag.any_bed",
             "amount": {
                 "min": 1,
                 "max": 6

@@ -102,7 +102,6 @@ class Bountiful : ModInitializer {
 
                     for (obj in triggerObjs) {
                         val conds = obj.critConditions!!
-                        println("Handling bounty trigger objective $conds")
 
                         val result = Kambrik.Criterion.testAgainst(
                             criterion,
@@ -116,7 +115,6 @@ class Bountiful : ModInitializer {
                         )
 
                         if (result) {
-                            println("Do something I guess")
                             obj.current += 1
                             UpdateBountyCriteriaObjective(
                                 player.inventory.indexOf(this),

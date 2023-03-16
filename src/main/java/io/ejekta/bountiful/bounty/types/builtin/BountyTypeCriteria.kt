@@ -21,12 +21,14 @@ class BountyTypeCriteria : IBountyObjective {
 
     override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): MutableText {
         val progress = getProgress(entry, player)
-        return Text.literal(entry.name ?: "NO CRITERIA DESCRIPTION").append(progress.neededText.colored(
-            Formatting.WHITE))
+        val textSum = if (entry.name != null) Text.literal(entry.name) else entry.translation
+        return textSum.colored(progress.color).append(progress.neededText.colored(Formatting.WHITE))
     }
 
     override fun textBoard(entry: BountyDataEntry, player: PlayerEntity): List<Text> {
-        return listOf(Text.literal(entry.name ?: "NO CRITERIA DESC"))
+        return listOf(
+            if (entry.name != null) Text.literal(entry.name) else entry.translation
+        )
     }
 
     override fun getProgress(entry: BountyDataEntry, player: PlayerEntity): Progress {

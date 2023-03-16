@@ -4,15 +4,18 @@
 
 	"itemGroup.bountiful": "Bountiful",
 
-	"bountiful.item_tag.any_door": "Any Door",
-	"bountiful.item_tag.any_wool": "Any Wool",
-	"bountiful.item_tag.any_planks": "Any Planks",
-	"bountiful.item_tag.any_log": "Any Log",
-	"bountiful.item_tag.any_fence": "Any Fence",
-	"bountiful.item_tag.any_bed": "Any Bed",
-	"bountiful.item_tag.any_boat": "Any Boat",
-	"bountiful.item_tag.any_candle": "Any Candle",
-	"bountiful.item_tag.any_banner": "Any Banner",
+	"bountiful.entry.shepherd_obj_wool_wildcard": "Any Wool",
+	"bountiful.entry.fletcher_obj_planks": "Any Planks",
+	"bountiful.entry.fletcher_obj_logs": "Any Log",
+	"bountiful.entry.shepherd_obj_bed_wildcard": "Any Bed",
+	"bountiful.entry.fisherman_obj_any_boat": "Any Boat",
+	"bountiful.entry.mapper_obj_candles": "Any Candle",
+	"bountiful.entry.shepherd_obj_banner_wildcard": "Any Banner",
+
+	"bountiful.entry.fisherman_obj_catch_ench_book": "Fish up Enchanted Books",
+	"bountiful.entry.cleric_obj_brew_swiftness": "Brew a basic Swiftness Potion",
+	"bountiful.entry.cleric_obj_cure_zombie_villager": "Cure a Zombie Villager",
+
 
 	"bountiful.decree": "Decree",
 	"bountiful.decrees": "Decrees",

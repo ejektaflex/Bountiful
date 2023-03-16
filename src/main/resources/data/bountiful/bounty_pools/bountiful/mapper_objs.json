@@ -36,7 +36,6 @@
         "mapper_obj_candles": {
             "type": "item_tag",
             "content": "minecraft:candles",
-            "translation": "bountiful.item_tag.any_candle",
             "amount": {
                 "min": 2,
                 "max": 6

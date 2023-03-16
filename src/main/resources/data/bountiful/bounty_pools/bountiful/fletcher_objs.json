@@ -15,7 +15,6 @@
         "fletcher_obj_planks": {
             "type": "item_tag",
             "content": "minecraft:planks",
-            "translation": "bountiful.item_tag.any_planks",
             "amount": {
                 "min": 6,
                 "max": 64
@@ -26,7 +25,6 @@
         "fletcher_obj_logs": {
             "type": "item_tag",
             "content": "minecraft:logs",
-            "translation": "bountiful.item_tag.any_log",
             "amount": {
                 "min": 2,
                 "max": 10

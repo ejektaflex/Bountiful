@@ -74,7 +74,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
                 }
             }
             BountyTypeRegistry.CRITERIA.id -> {
-                dsl { itemStackIcon(ItemStack(Items.LIGHT), x, y) }
+                dsl { itemStackIcon(ItemStack(Items.PAINTING), x, y) }
             }
             else -> {}
         }
