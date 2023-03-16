@@ -43,7 +43,7 @@ class BountyTypeItemTag : IBountyExchangeable {
 
     override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): MutableText {
         val progress = getProgress(entry, player)
-        val title = if (entry.translation != null) Text.translatable(entry.translation) else Text.literal(entry.name ?: entry.content)
+        val title = if (entry.name != null) Text.literal(entry.name) else entry.translation
         return when (isObj) {
             true -> title.copy().formatted(progress.color).append(progress.neededText.colored(Formatting.WHITE))
             false -> progress.givingText.append(title.colored(entry.rarity.color))
@@ -52,10 +52,10 @@ class BountyTypeItemTag : IBountyExchangeable {
 
     override fun textBoard(entry: BountyDataEntry, player: PlayerEntity): List<Text> {
         return listOf(
-            if (entry.translation != null) {
-                textTranslate(entry.translation!!, entry.content)
+            if (entry.name != null) {
+                textLiteral(entry.name!!)
             } else {
-                textLiteral("Item Tag")
+                entry.translation
             },
             textLiteral(entry.content) {
                 format(Formatting.DARK_GRAY)

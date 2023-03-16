@@ -54,7 +54,6 @@ class BountyInfo(
             addAll(fromData.rewards.map {
                 it.textSummary(player, false)
             })
-            add(Text.literal(Random.nextFloat().toString()))
         }
     }
 

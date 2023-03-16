@@ -15,13 +15,14 @@ import io.ejekta.bountiful.util.iterateBountyStacks
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.serial.serializers.IdentitySer
 import kotlinx.serialization.UseSerializers
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.advancement.criterion.EnterBlockCriterion
 import net.minecraft.advancement.criterion.TickCriterion
-import net.minecraft.nbt.NbtCompound
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
 import net.minecraft.resource.ResourceType
@@ -96,16 +97,21 @@ class Bountiful : ModInitializer {
             if (criterion !is TickCriterion && criterion !is EnterBlockCriterion) {
                 player.iterateBountyStacks {
                     val data = BountyData[this]
-                    val triggerObjs = data.objectives.filter { it.criteria != null }.takeIf { it.isNotEmpty() }
+                    val triggerObjs = data.objectives.filter { it.critConditions != null }.takeIf { it.isNotEmpty() }
                         ?: return@iterateBountyStacks
 
                     for (obj in triggerObjs) {
-                        val trigger = obj.criteria!!
-                        println("Handling bounty trigger objective $trigger")
+                        val conds = obj.critConditions!!
+                        println("Handling bounty trigger objective $conds")
 
                         val result = Kambrik.Criterion.testAgainst(
                             criterion,
-                            Kambrik.Criterion.createCriterionConditionsFromJson(trigger.criterion) ?: continue,
+                            Kambrik.Criterion.createCriterionConditionsFromJson(
+                                buildJsonObject {
+                                    put("trigger", obj.content)
+                                    put("conditions", conds)
+                                }
+                            ) ?: continue,
                             predicate
                         )
 

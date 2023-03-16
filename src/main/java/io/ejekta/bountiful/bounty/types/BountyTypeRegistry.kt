@@ -7,7 +7,6 @@ import io.ejekta.kambrik.ext.register
 import net.minecraft.registry.SimpleRegistry
 
 object BountyTypeRegistry : SimpleRegistry<IBountyType>(Bountiful.BOUNTY_LOGIC_REGISTRY_KEY, Lifecycle.stable(), false) {
-    val NULL = BountyTypeNull().apply { register(id, this) }
     val ITEM = BountyTypeItem().apply { register(id, this) }
     val ENTITY = BountyTypeEntity().apply { register(id, this) }
     val ITEM_TAG = BountyTypeItemTag().apply { register(id, this) }

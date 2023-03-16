@@ -20,6 +20,7 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.SpawnGroup
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
+import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
 
 class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget {
@@ -38,7 +39,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
         }
     }
 
-    private fun renderEntry(dsl: KGuiDsl, entry: BountyDataEntry, x: Int, y: Int, isReward: Boolean = false) {
+    private fun renderEntryBasedOnLogic(dsl: KGuiDsl, entry: BountyDataEntry, x: Int, y: Int, isReward: Boolean) {
         when (entry.logicId) {
             BountyTypeRegistry.COMMAND.id -> {
                 dsl { itemStackIcon(ItemStack(Items.COMMAND_BLOCK), x, y) }
@@ -72,8 +73,22 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
                     )
                 }
             }
+            BountyTypeRegistry.CRITERIA.id -> {
+                dsl { itemStackIcon(ItemStack(Items.LIGHT), x, y) }
+            }
             else -> {}
         }
+    }
+
+    private fun renderEntry(dsl: KGuiDsl, entry: BountyDataEntry, x: Int, y: Int, isReward: Boolean = false) {
+
+        if (entry.icon != null) {
+            val itemForIcon = Registries.ITEM.get(entry.icon)
+            dsl { itemStackIcon(ItemStack(itemForIcon), x, y) }
+        } else {
+            renderEntryBasedOnLogic(dsl, entry, x, y, isReward)
+        }
+
         // Render amount
         dsl {
             val textToShow = textLiteral(entry.amount.toString()) {

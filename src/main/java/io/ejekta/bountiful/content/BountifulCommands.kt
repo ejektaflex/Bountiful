@@ -290,7 +290,6 @@ object BountifulCommands : CommandRegistrationCallback {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-            1
         }
         cmd.run(this)
     }

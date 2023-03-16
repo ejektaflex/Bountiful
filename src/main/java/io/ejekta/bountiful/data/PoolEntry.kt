@@ -3,20 +3,18 @@ package io.ejekta.bountiful.data
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.BountyRarity
-import io.ejekta.bountiful.bounty.CriteriaData
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.IBountyType
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.util.getTagItemKey
 import io.ejekta.bountiful.util.getTagItems
 import io.ejekta.kambrik.ext.identifier
-import io.ejekta.kudzu.KudzuItem
-import io.ejekta.kudzu.KudzuLeaf
 import io.ejekta.kudzu.KudzuVine
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
 import net.minecraft.item.Item
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.world.ServerWorld
@@ -29,12 +27,11 @@ import kotlin.math.min
 
 @Serializable
 class PoolEntry private constructor() {
-    var type: @Contextual Identifier = BountyTypeRegistry.NULL.id
+    var type: @Contextual Identifier = Identifier(Bountiful.ID, "null_pool")
     var rarity = BountyRarity.COMMON
     var content = "Nope"
     var name: String? = null
     var icon: @Contextual Identifier? = null // TODO allow custom icons, this works well for criterion
-    var translation: String? = null
     var amount = EntryRange(-1, -1)
     var unitWorth = -1000.0
     var weightMult = 1.0
@@ -44,12 +41,11 @@ class PoolEntry private constructor() {
 
 
     @Transient lateinit var id: String
-    @Transient var src: KudzuItem = KudzuLeaf.LeafNull
 
-    val typeLogic: IBountyType
-        get() = BountyTypeRegistry[type] ?: BountyTypeRegistry.NULL
+    val typeLogic: IBountyType?
+        get() = BountyTypeRegistry[type]
 
-    val criteria: CriteriaData? = null
+    val conditions: JsonObject? = null
 
     var mystery: Boolean = false
 
@@ -92,6 +88,7 @@ class PoolEntry private constructor() {
         }
 
         return BountyDataEntry.of(
+            id,
             world,
             pos,
             type,
@@ -100,15 +97,15 @@ class PoolEntry private constructor() {
             amt * unitWorth,
             nbt,
             name,
-            translation,
+            icon,
             isMystery = false,
             rarity = rarity,
-            criteriaData = criteria
+            critConditions = conditions
         )
     }
 
     private fun amountAt(worth: Double? = null): Int {
-        var toGive = if (worth != null) {
+        val toGive = if (worth != null) {
             max(1, ceil(worth.toDouble() / unitWorth).toInt())
         } else {
             amount.pick()

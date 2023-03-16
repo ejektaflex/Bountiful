@@ -1,6 +1,5 @@
 package io.ejekta.bountiful.data
 
-import io.ejekta.bountiful.bounty.types.builtin.BountyTypeNull
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.kudzu.KudzuLeaf
@@ -29,10 +28,9 @@ data class Pool(
             if (value != null) {
                 val pe = JsonFormats.Hand.decodeFromString(PoolEntry.serializer(), value.toString()).apply {
                     this.id = key
-                    this.src = value.toKudzu()
                 }
                 // Don't insert entries with no type set
-                if (pe.typeLogic !is BountyTypeNull) {
+                if (pe.typeLogic != null) {
                     items.add(pe)
                 }
             }

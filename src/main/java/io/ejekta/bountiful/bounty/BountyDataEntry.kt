@@ -18,18 +18,22 @@ import net.minecraft.util.math.BlockPos
 // Tracks the status of a given bounty
 @Serializable
 data class BountyDataEntry private constructor(
+    val id: String,
     val logicId: @Contextual Identifier,
     val content: String,
     val amount: Int,
     var nbt: @Contextual NbtCompound? = null,
     var name: String? = null,
-    var translation: String? = null,
+    var icon: @Contextual Identifier? = null,
     var isMystery: Boolean = false,
     var rarity: BountyRarity = BountyRarity.COMMON,
     var tracking: JsonObject = JsonObject(emptyMap()), // Used to track extra data, e.g. current progress if needed
-    var criteria: CriteriaData? = null,
+    var critConditions: JsonObject? = null,
     var current: Int = 0 // Current progress
 ) {
+
+    val translation: MutableText
+        get() = Text.translatable("bountiful.entry.${id}")
 
     val logic: IBountyType
         get() = BountyTypeRegistry[logicId]!!
@@ -65,6 +69,7 @@ data class BountyDataEntry private constructor(
     companion object {
 
         fun of(
+            id: String,
             world: ServerWorld,
             pos: BlockPos,
             type: Identifier,
@@ -73,14 +78,14 @@ data class BountyDataEntry private constructor(
             worth: Double,
             nbt: NbtCompound? = null,
             name: String? = null,
-            translation: String? = null,
+            icon: Identifier? = null,
             isMystery: Boolean = false,
             rarity: BountyRarity = BountyRarity.COMMON,
             tracking: JsonObject = JsonObject(emptyMap()),
-            criteriaData: CriteriaData? = null
+            critConditions: JsonObject? = null
         ): BountyDataEntry {
             return BountyDataEntry(
-                type, content, amount, nbt, name, translation, isMystery, rarity, tracking, criteriaData
+                id, type, content, amount, nbt, name, icon, isMystery, rarity, tracking, critConditions
             ).apply {
                 this.worth = worth
                 logic.setup(this, world, pos)
