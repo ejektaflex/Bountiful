@@ -118,6 +118,17 @@
                 "max": 1
             },
             "unitWorth": 3000
+        },
+
+        "mapper_rew_recovery_compass": {
+            "type": "item",
+            "rarity": "LEGENDARY",
+            "content": "minecraft:recovery_compass",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 6500
         }
 
 	}

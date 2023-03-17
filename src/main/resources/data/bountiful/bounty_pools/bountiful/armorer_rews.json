@@ -165,24 +165,6 @@
             "nbt": "{Damage:0}"
         },
 
-        "armorer_rew_shield": {
-            "type": "item",
-			"rarity": "UNCOMMON",
-            "content": "minecraft:shield",
-            "amount": {
-                "min": 1,
-                "max": 1
-            },
-            "unitWorth": 1000,
-            "nbt": "{Damage:0}",
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:iron_ingot"
-                }
-            ]
-        },
-
         "armorer_rew_gold_horse_armor": {
             "type": "item",
 			"rarity": "RARE",

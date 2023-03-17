@@ -80,7 +80,7 @@
             "content": "minecraft:compass",
             "amount": {
                 "min": 1,
-                "max": 1
+                "max": 2
             },
             "unitWorth": 2500
         }

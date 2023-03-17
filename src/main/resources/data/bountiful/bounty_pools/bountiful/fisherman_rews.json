@@ -78,6 +78,17 @@
             "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:unbreaking\"}]}"
         },
 
+        "fisherman_rew_saddle": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:saddle",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 2500
+        },
+
         "fisherman_rew_bamboo": {
             "type": "item",
             "rarity": "EPIC",
@@ -98,6 +109,17 @@
                 "max": 1
             },
             "unitWorth": 1100.0
+        },
+
+        "fisherman_rew_name_tag": {
+            "type": "item",
+            "rarity": "EPIC",
+            "content": "minecraft:name_tag",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 4500
         },
 
         "fisherman_rew_heart_sea": {

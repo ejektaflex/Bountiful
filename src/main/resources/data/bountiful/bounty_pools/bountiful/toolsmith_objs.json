@@ -10,6 +10,16 @@
                 "max": 48
             },
             "unitWorth": 32
+        },
+
+        "toolsmith_obj_prismarine_shard": {
+            "type": "item",
+            "content": "minecraft:prismarine_shard",
+            "amount": {
+                "min": 1,
+                "max": 8
+            },
+            "unitWorth": 750
         }
 
 	}

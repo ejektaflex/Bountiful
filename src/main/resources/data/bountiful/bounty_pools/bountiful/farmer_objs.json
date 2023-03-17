@@ -93,6 +93,16 @@
 			"unitWorth": 40
 		},
 
+		"farmer_obj_poisonous_potato": {
+			"type": "item",
+			"content": "minecraft:poisonous_potato",
+			"amount": {
+				"min": 2,
+				"max": 6
+			},
+			"unitWorth": 350
+		},
+
 		"farmer_obj_nether_wart": {
 			"type": "item",
 			"content": "minecraft:nether_wart",

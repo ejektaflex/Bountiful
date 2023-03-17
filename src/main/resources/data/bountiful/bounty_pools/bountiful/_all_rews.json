@@ -32,7 +32,7 @@
 				"max": 1
 			},
 			"unitWorth": 800,
-			"weightMult": 0.2
+			"weightMult": 0.3
 		},
 
 		"all_rew_spyglass": {

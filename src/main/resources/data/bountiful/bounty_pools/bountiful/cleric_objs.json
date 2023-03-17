@@ -131,13 +131,13 @@
 
         "cleric_obj_nether_wart": {
             "type": "item",
-			"rarity": "EPIC",
+			"rarity": "UNCOMMON",
             "content": "minecraft:nether_wart",
             "amount": {
                 "min": 10,
                 "max": 40
             },
-            "unitWorth": 65
+            "unitWorth": 85
         },
 
         "cleric_obj_brew_swiftness": {

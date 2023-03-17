@@ -6,6 +6,7 @@
 	],
 	"rewards": [
 		"armorer_rews",
-		"_all_rews"
+		"_all_rews",
+		"_equip_rews"
 	]
 }
