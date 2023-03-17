@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.content.messages
 
+import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.kambrik.message.ClientMsg
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
@@ -24,10 +25,9 @@ class OnBountyComplete(
 
         val mc = MinecraftClient.getInstance()
 
-        println(player.currentScreenHandler::class.simpleName)
 
         // Don't show toasts when in an inventory (to prevent toast spam when moving items related to bounties)
-        if (mc.currentScreen == null) {
+        if (mc.currentScreen == null && BountifulIO.configData.showCompletionToast) {
             mc.toastManager.add(
                 SystemToast.create(
                     mc,

@@ -9,11 +9,12 @@
     "Ejektaflex"
   ],
   "contributors": [
+    "AkiShirai (board block art)",
     "Zano1999 (translations)",
     "GodGun968 (translations)"
   ],
   "contact": {
-    "homepage": "https://kambrik.ejekta.io/mods/bountiful/",
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/bountiful-fabric",
     "sources": "https://github.com/ejektaflex/Bountiful-Fabric",
     "issues": "https://github.com/ejektaflex/Bountiful-Fabric/issues"
   },
@@ -51,7 +52,8 @@
     },
     "modmenu": {
       "links": {
-        "modmenu.discord": "https://discord.gg/TCsRjJ6vwZ"
+        "modmenu.discord": "https://discord.gg/TCsRjJ6vwZ",
+        "modmenu.wiki": "https://kambrik.ejekta.io/mods/bountiful/"
       }
     }
   },

@@ -19,6 +19,7 @@ class BountifulConfigData {
     )
     var objectiveModifier = 0
     var maxNumRewards = 2
+    var showCompletionToast = true
 
 
     fun buildScreen(): Screen {
@@ -129,6 +130,19 @@ class BountifulConfigData {
                 maxNumRewards = it
             }.setTextGetter {
                 textLiteral("$it Rewards")
+            }.build()
+        )
+
+        val client = builder.getOrCreateCategory(Text.literal("Client"))
+
+        client.addEntry(
+            creator.startBooleanToggle(
+                Text.literal("Completion Toast Messages"),
+                showCompletionToast
+            ).setDefaultValue(true).setTooltip(
+                Text.literal("Whether toast messages should appear upon bounty completion")
+            ).setSaveConsumer {
+                showCompletionToast = it
             }.build()
         )
 
