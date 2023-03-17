@@ -21,13 +21,11 @@ class OnBountyComplete(
     }
 
     fun runLocally(player: PlayerEntity) {
-        player.playSound(soundEvent, volume, pitch)
-
         val mc = MinecraftClient.getInstance()
-
 
         // Don't show toasts when in an inventory (to prevent toast spam when moving items related to bounties)
         if (mc.currentScreen == null && BountifulIO.configData.showCompletionToast) {
+            player.playSound(soundEvent, volume, pitch)
             mc.toastManager.add(
                 SystemToast.create(
                     mc,
