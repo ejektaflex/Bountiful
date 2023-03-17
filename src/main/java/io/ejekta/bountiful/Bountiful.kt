@@ -19,6 +19,7 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.advancement.criterion.EnterBlockCriterion
+import net.minecraft.advancement.criterion.InventoryChangedCriterion
 import net.minecraft.advancement.criterion.TickCriterion
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
@@ -127,7 +128,6 @@ class Bountiful : ModInitializer {
 
                     data.checkForCompletionAndAlert(player, this)
 
-                    return@iterateBountyStacks
                 }
             }
         }

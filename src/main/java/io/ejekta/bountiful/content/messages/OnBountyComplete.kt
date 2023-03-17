@@ -22,15 +22,21 @@ class OnBountyComplete(
     fun runLocally(player: PlayerEntity) {
         player.playSound(soundEvent, volume, pitch)
 
-        MinecraftClient.getInstance().toastManager.add(
-            SystemToast.create(
-                MinecraftClient.getInstance(),
-                SystemToast.Type.PERIODIC_NOTIFICATION,
-                Text.literal("Hello!"),
-                Text.literal("This is a description!").append(
-                    Text.literal("\nHallo!")
+        val mc = MinecraftClient.getInstance()
+
+        println(player.currentScreenHandler::class.simpleName)
+
+        // Don't show toasts when in an inventory (to prevent toast spam when moving items related to bounties)
+        if (mc.currentScreen == null) {
+            mc.toastManager.add(
+                SystemToast.create(
+                    mc,
+                    SystemToast.Type.PERIODIC_NOTIFICATION,
+                    Text.literal("Bounty Complete!"),
+                    Text.literal("Turn in at a Bounty Board!")
                 )
             )
-        )
+        }
+
     }
 }

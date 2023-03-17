@@ -5,8 +5,10 @@ import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.bounty.types.IBountyReward
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.messages.OnBountyComplete
+import io.ejekta.bountiful.util.isClientSide
 import io.ejekta.kambrik.serial.ItemDataJson
 import kotlinx.serialization.Serializable
+import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.server.network.ServerPlayerEntity
@@ -30,6 +32,8 @@ class BountyData {
     }
 
     fun checkForCompletionAndAlert(player: PlayerEntity, stack: ItemStack): BountyData {
+
+
         val isDone = objectives.all {
             (it.logic as IBountyObjective).getProgress(it, player).isComplete()
         }

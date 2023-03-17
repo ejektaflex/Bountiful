@@ -99,27 +99,6 @@ object BountifulCommands : CommandRegistrationCallback {
                     "dump" runs dumpData()
                 }
 
-                "toast" runs {
-                    println("Toasting!")
-
-                    MinecraftClient.getInstance().toastManager.add(
-//                        SystemToast.create(
-//                            MinecraftClient.getInstance(),
-//                            SystemToast.Type.PERIODIC_NOTIFICATION,
-//                            Text.literal("Bounty Complete!"),
-//                            Text.literal("Maybe some details here..").append(
-//                                Text.literal("\nHallo!")
-//                            )
-//                        )
-                        BountyToast(
-                            BountyToast.Type.RECIPE_BOOK,
-                            Text.literal("Bounty Text"),
-                            Text.literal("Toast Description"),
-                            true
-                        )
-                    )
-                }
-
                 "verify" {
                     "pools" runs verifyPools()
                     "hand" runs verifyBounty()
