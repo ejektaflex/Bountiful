@@ -6,10 +6,7 @@ import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.IBountyType
 import io.ejekta.bountiful.config.BountifulIO
-import io.ejekta.bountiful.content.messages.ClipboardCopy
-import io.ejekta.bountiful.content.messages.SelectBounty
-import io.ejekta.bountiful.content.messages.UpdateBountyCriteriaObjective
-import io.ejekta.bountiful.content.messages.UpdateBountyTooltipNotification
+import io.ejekta.bountiful.content.messages.*
 import io.ejekta.bountiful.util.isClientSide
 import io.ejekta.bountiful.util.iterateBountyStacks
 import io.ejekta.kambrik.Kambrik
@@ -97,8 +94,9 @@ class Bountiful : ModInitializer {
             if (criterion !is TickCriterion && criterion !is EnterBlockCriterion) {
                 player.iterateBountyStacks {
                     val data = BountyData[this]
+
                     val triggerObjs = data.objectives.filter { it.critConditions != null }.takeIf { it.isNotEmpty() }
-                        ?: return@iterateBountyStacks
+                        ?: emptyList()
 
                     for (obj in triggerObjs) {
                         val conds = obj.critConditions!!
@@ -127,6 +125,8 @@ class Bountiful : ModInitializer {
                         }
                     }
 
+                    data.checkForCompletionAndAlert(player, this)
+
                     return@iterateBountyStacks
                 }
             }
@@ -134,17 +134,22 @@ class Bountiful : ModInitializer {
 
         Kambrik.Message.registerClientMessage(
             ClipboardCopy.serializer(),
-            Bountiful.id("clipboard_copy")
+            id("clipboard_copy")
+        )
+
+        Kambrik.Message.registerClientMessage(
+            PlaySoundOnClient.serializer(),
+            id("play_sound_on_client")
         )
 
         Kambrik.Message.registerClientMessage(
             UpdateBountyCriteriaObjective.serializer(),
-            Bountiful.id("update_bounty_criteria")
+            id("update_bounty_criteria")
         )
 
         Kambrik.Message.registerClientMessage(
             UpdateBountyTooltipNotification.serializer(),
-            Bountiful.id("update_bounty_tooltip")
+            id("update_bounty_tooltip")
         )
 
     }

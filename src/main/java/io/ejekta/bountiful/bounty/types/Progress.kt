@@ -9,7 +9,7 @@ data class Progress(val current: Double, val goal: Double, private val precision
 
     constructor(currentInt: Int, goalInt: Int, precision: Int = 0) : this(currentInt.toDouble(), goalInt.toDouble(), precision)
 
-    private fun isComplete() = current >= goal
+    fun isComplete() = current >= goal
 
     val color: Formatting
         get() = if (isComplete()) Formatting.GREEN else Formatting.RED

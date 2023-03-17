@@ -35,7 +35,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
     val reactor = MouseReactor().apply {
         onClickDown = { relX, relY, button ->
             parent.boardHandler.inventory.select(bountyIndex)
-            SelectBounty(bountyIndex).sendToServer()
+            SelectBounty(bountyIndex, MinecraftClient.getInstance().player!!.uuidAsString).sendToServer()
         }
     }
 

@@ -5,9 +5,11 @@ import io.ejekta.kambrik.message.ServerMsg
 import kotlinx.serialization.Serializable
 
 @Serializable
-class SelectBounty(val index: Int) : ServerMsg() {
+class SelectBounty(private val index: Int, private val uuidString: String) : ServerMsg() {
     override fun onServerReceived(ctx: MsgContext) {
-        val handler = ctx.server.playerManager.playerList.first().currentScreenHandler as? BoardScreenHandler ?: return
+        val handler = ctx.server.playerManager.playerList.firstOrNull {
+            it.uuidAsString == uuidString
+        }?.currentScreenHandler as? BoardScreenHandler ?: return
         handler.inventory.select(index)
     }
 }

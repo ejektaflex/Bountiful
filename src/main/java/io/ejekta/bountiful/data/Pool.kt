@@ -59,9 +59,9 @@ data class Pool(
 
         for ((otherKey, otherValue) in other.content) {
 
-            if (otherKey !in newContent) {
-                newContent[otherKey] = otherValue // put in other one's value
-            } else if (otherValue == null) {
+            if (otherKey !in newContent) { // Add new item with merge
+                newContent[otherKey] = otherValue
+            } else if (otherValue == null) { // Overwrite with null
                 newContent[otherKey] = null
             } else {
 

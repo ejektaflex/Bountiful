@@ -4,10 +4,14 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.bounty.types.IBountyReward
 import io.ejekta.bountiful.config.JsonFormats
+import io.ejekta.bountiful.content.messages.PlaySoundOnClient
+import io.ejekta.bountiful.util.isClientSide
 import io.ejekta.kambrik.serial.ItemDataJson
 import kotlinx.serialization.Serializable
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
@@ -19,11 +23,42 @@ class BountyData {
 
     val objectives = mutableListOf<BountyDataEntry>()
     val rewards = mutableListOf<BountyDataEntry>()
+    var pingComplete: Boolean = false
 
-    private fun hasFinishedObjectives(player: PlayerEntity): Boolean {
+    private fun tryFinishObjectives(player: PlayerEntity): Boolean {
         return objectives.all {
             (it.logic as IBountyObjective).tryFinishObjective(it, player)
         }
+    }
+
+    fun checkForCompletionAndAlert(player: PlayerEntity, stack: ItemStack): BountyData {
+        val isDone = objectives.all {
+            (it.logic as IBountyObjective).getProgress(it, player).isComplete()
+        }
+
+        if (isDone) {
+
+            if (!pingComplete) {
+                pingComplete = true
+                println("It's done!")
+                val playAction = PlaySoundOnClient(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
+
+                if (player is ServerPlayerEntity) {
+                    playAction.sendToClient(player)
+                } else {
+                    playAction.runLocally(player)
+                }
+                BountyData[stack] = this // set new data
+            } else {
+                // do nothing was already complete
+            }
+
+        } else {
+            pingComplete = false
+            BountyData[stack] = this
+        }
+
+        return this
     }
 
     val objectiveTypes: List<IBountyObjective>
@@ -54,7 +89,7 @@ class BountyData {
             return false
         }
 
-        return if (hasFinishedObjectives(player)) {
+        return if (tryFinishObjectives(player)) {
             rewardPlayer(player)
             stack.decrement(stack.maxCount)
             true

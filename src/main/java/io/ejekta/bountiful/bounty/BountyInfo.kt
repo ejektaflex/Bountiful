@@ -23,8 +23,7 @@ import kotlin.random.Random
 class BountyInfo(
     var rarity: BountyRarity = BountyRarity.COMMON,
     var timeStarted: Long = -1L,
-    var timeToComplete: Long = -1L,
-    var pingComplete: Boolean = false
+    var timeToComplete: Long = -1L
 ) {
 
     fun timeLeft(world: World): Long {
