@@ -8,6 +8,7 @@ import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.bounty.types.IBountyReward
+import io.ejekta.bountiful.client.BountyToast
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.messages.ClipboardCopy
@@ -18,6 +19,8 @@ import io.ejekta.kambrik.ext.identifier
 import io.ejekta.kambrik.ext.math.toBlockPos
 import io.ejekta.kambrik.text.sendMessage
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.toast.SystemToast
 import net.minecraft.command.CommandRegistryAccess
 import net.minecraft.item.ItemStack
 import net.minecraft.predicate.NumberRange
@@ -86,50 +89,6 @@ object BountifulCommands : CommandRegistrationCallback {
                 }
             }
 
-
-            // /bo pool [poolName]
-            // /bo pool [poolName] add hand
-            // /bo pool [poolName] add hand (minAmt)..(maxAmt) (unitWorth)
-            // /bo pool [poolName] add tag [#tag] (not yet implemented)
-            // /bo pool [poolName] add entity (entity_id)
-            // /bo pool [poolName] add entity (entity_id) (minAmt)..(maxAmt) (unitWorth)
-//            "pool" {
-//
-//                argString("poolName", items = pools) { poolName ->
-//                    "add" {
-//                        "hand" {
-//                            this runs { addHandToPool(poolName = poolName()) }
-//                            argIntRange("amount") { amount ->
-//                                argInt("unit_worth") runs { worth ->
-//                                    addToPoolCommand(amount(), worth()) { amtRange, worthAmt ->
-//                                        addHandToPool(amtRange, worthAmt, poolName())
-//                                    }
-//                                }
-//                            }
-//                        }
-//
-//                        "entity" {
-//                            val entityTypes = suggestionList { Registries.ENTITY_TYPE.ids.toList() }
-//                            argIdentifier("entity_identifier", items = entityTypes) { eId ->
-//                                this runs {
-//                                    addEntityToPool(null, null, eId(), poolName())
-//                                }
-//                                argIntRange("amount") { amount ->
-//                                    argInt("unit_worth") runs { worth ->
-//                                        addToPoolCommand(amount(), worth()) { amtRange, worthAmt ->
-//                                            addEntityToPool(amtRange, worthAmt, eId(), poolName())
-//                                        }
-//                                    }
-//                                }
-//                            }
-//
-//                        }
-//
-//                    }
-//                }
-//
-//            }
-
             "util" {
                 "debug" {
                     "weights" {
@@ -138,6 +97,27 @@ object BountifulCommands : CommandRegistrationCallback {
                         }
                     }
                     "dump" runs dumpData()
+                }
+
+                "toast" runs {
+                    println("Toasting!")
+
+                    MinecraftClient.getInstance().toastManager.add(
+//                        SystemToast.create(
+//                            MinecraftClient.getInstance(),
+//                            SystemToast.Type.PERIODIC_NOTIFICATION,
+//                            Text.literal("Bounty Complete!"),
+//                            Text.literal("Maybe some details here..").append(
+//                                Text.literal("\nHallo!")
+//                            )
+//                        )
+                        BountyToast(
+                            BountyToast.Type.RECIPE_BOOK,
+                            Text.literal("Bounty Text"),
+                            Text.literal("Toast Description"),
+                            true
+                        )
+                    )
                 }
 
                 "verify" {

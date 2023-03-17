@@ -138,7 +138,7 @@ class Bountiful : ModInitializer {
         )
 
         Kambrik.Message.registerClientMessage(
-            PlaySoundOnClient.serializer(),
+            OnBountyComplete.serializer(),
             id("play_sound_on_client")
         )
 

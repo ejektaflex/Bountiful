@@ -4,11 +4,9 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.bounty.types.IBountyReward
 import io.ejekta.bountiful.config.JsonFormats
-import io.ejekta.bountiful.content.messages.PlaySoundOnClient
-import io.ejekta.bountiful.util.isClientSide
+import io.ejekta.bountiful.content.messages.OnBountyComplete
 import io.ejekta.kambrik.serial.ItemDataJson
 import kotlinx.serialization.Serializable
-import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.server.network.ServerPlayerEntity
@@ -41,7 +39,7 @@ class BountyData {
             if (!pingComplete) {
                 pingComplete = true
                 println("It's done!")
-                val playAction = PlaySoundOnClient(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
+                val playAction = OnBountyComplete(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
 
                 if (player is ServerPlayerEntity) {
                     playAction.sendToClient(player)
