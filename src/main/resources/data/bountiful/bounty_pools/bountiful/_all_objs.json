@@ -8,7 +8,8 @@
 				"min": 1,
 				"max": 24
 			},
-			"unitWorth": 1000
+			"unitWorth": 1000,
+			"weightMult": 0.8
 		},
 
 		"all_obj_iron_block": {
@@ -43,7 +44,8 @@
 				"min": 1,
 				"max": 4
 			},
-			"unitWorth": 250
+			"unitWorth": 250,
+			"weightMult": 0.2
 		},
 
 		"all_obj_spider": {
@@ -54,7 +56,8 @@
 				"min": 1,
 				"max": 4
 			},
-			"unitWorth": 275
+			"unitWorth": 275,
+			"weightMult": 0.2
 		},
 
 		"all_obj_creeper": {
@@ -65,10 +68,43 @@
 				"min": 1,
 				"max": 4
 			},
-			"unitWorth": 550
+			"unitWorth": 550,
+			"weightMult": 0.2
+		},
+
+		"all_obj_dirt": {
+			"type": "item",
+			"content": "minecraft:dirt",
+			"amount": {
+				"min": 24,
+				"max": 64
+			},
+			"unitWorth": 15,
+			"weightMult": 0.2
+		},
+
+		"all_obj_cobblestone": {
+			"type": "item",
+			"content": "minecraft:cobblestone",
+			"amount": {
+				"min": 24,
+				"max": 64
+			},
+			"unitWorth": 25,
+			"weightMult": 0.2
+		},
+
+		"all_obj_stonebrick": {
+			"type": "item",
+			"rarity": "UNCOMMON",
+			"content": "minecraft:stone_bricks",
+			"amount": {
+				"min": 12,
+				"max": 64
+			},
+			"unitWorth": 50,
+			"weightMult": 0.2
 		}
-
-
 
 	}
 

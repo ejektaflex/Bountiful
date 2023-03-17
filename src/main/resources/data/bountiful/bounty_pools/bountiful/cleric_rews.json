@@ -65,9 +65,9 @@
             "content": "minecraft:enchanted_book",
             "amount": {
                 "min": 1,
-                "max": 1
+                "max": 2
             },
-            "unitWorth": 1000,
+            "unitWorth": 1500,
             "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:unbreaking\"}]}"
         },
 
@@ -112,7 +112,7 @@
                 "min": 1,
                 "max": 2
             },
-            "unitWorth": 1500,
+            "unitWorth": 2000,
             "nbt": "{Potion:\"minecraft:luck\"}"
         },
 
@@ -146,7 +146,7 @@
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 2500,
+            "unitWorth": 5500,
             "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:mending\"}]}"
         }
 
