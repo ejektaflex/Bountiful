@@ -52,10 +52,16 @@ class BountyTypeEntity : IBountyObjective {
             val data = BountyData[this]
             val entityObjs = data.objectives.filter { it.logicId == this@BountyTypeEntity.id }
             if (entityObjs.isNotEmpty()) {
+                var changes = false
                 for (obj in entityObjs) {
                     if (obj.content == killedEntity.type.identifier.toString()) {
                         obj.current += 1
+                        changes = true
                     }
+                }
+                if (changes) {
+                    BountyData[this] = data
+                    data.checkForCompletionAndAlert(playerEntity, this)
                 }
             }
         }

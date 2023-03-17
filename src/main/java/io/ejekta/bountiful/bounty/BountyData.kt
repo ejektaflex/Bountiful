@@ -42,7 +42,6 @@ class BountyData {
 
             if (!pingComplete) {
                 pingComplete = true
-                println("It's done!")
                 val playAction = OnBountyComplete(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
 
                 if (player is ServerPlayerEntity) {

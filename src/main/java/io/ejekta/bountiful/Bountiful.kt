@@ -64,6 +64,7 @@ class Bountiful : ModInitializer {
 
         // Increment entity bounties for all players within 12 blocks of the player and all players within 12 blocks of the mob
         ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(ServerEntityCombatEvents.AfterKilledOtherEntity { world, entity, killedEntity ->
+            println("Entity killed, bounty update check..")
             if (entity is ServerPlayerEntity) {
                 val playersInAction = world.getPlayers { it.distanceTo(entity) < 12f } + world.getPlayers { it.distanceTo(killedEntity) < 12f } + entity
                 playersInAction.toSet().forEach {
@@ -71,24 +72,6 @@ class Bountiful : ModInitializer {
                 }
             }
         })
-
-        // Update Item / Item Tag Bounties
-        Kambrik.Criterion.addCriterionHandler("""
-            {"trigger": "minecraft:inventory_changed"}
-        """.trimIndent()) {
-            iterateBountyStacks {
-                val info = BountyInfo[this]
-                val data = BountyData[this]
-                // If we have an item/item-tag bounty, update it
-                if (setOf(BountyTypeRegistry.ITEM.id, BountyTypeRegistry.ITEM_TAG.id).intersect(data.objectiveTypes.toSet()).isNotEmpty()) {
-
-                    // Send an update notification to the Player
-
-
-
-                }
-            }
-        }
 
         // Update Criterion bounties
         Kambrik.Criterion.subscribe { player, criterion, predicate ->

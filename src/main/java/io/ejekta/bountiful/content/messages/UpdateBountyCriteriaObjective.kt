@@ -19,13 +19,11 @@ class UpdateBountyCriteriaObjective(val slot: Int, val objIndex: Int) : ClientMs
             val stack = player.inventory.getStack(slot)
 
             if (stack.item is BountyItem) {
-                println("Lets do it")
 
                 BountyData.edit(stack) {
                     objectives[objIndex].current += 1
                 }
 
-                println("Done!")
             }
         }
     }
