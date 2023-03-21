@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) as closely as it can.
 
-## [5.0.0] for 1.19.4 - Unreleased
+## [5.0.0] for 1.19.4 - 2023-03-21
 
 ### Added
 - Added the ability to compost both Bounties and Decrees
@@ -29,6 +29,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bounty pool entries are each given its own ID so that other mods and data packs can more easily overwrite only parts of our data
 - Fundamentally changed how bounty data is stored in bounties
   - This will break existing bounties if upgrading a world that used Bountiful from before 1.19.4 to 1.19.4
+
+### Fixed
+- Fixed rare situation where bounties with unmet dependencies could be partially, but not fully completed
 
 ## [4.1.1] for 1.19.3 - 2022-03-02
 

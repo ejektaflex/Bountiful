@@ -22,10 +22,10 @@ object Versions {
 	object Mod {
 		const val Group = "io.ejekta"
 		const val ID = "bountiful"
-		const val Version = "5.1.0"
+		const val Version = "5.0.0"
 	}
 	object Env {
-		const val Kambrik = "5.1.0-1.19.4-SNAPSHOT+"
+		const val Kambrik = "5.1.0-1.19.4"
 		const val FLK = "1.9.1+kotlin.1.8.10"
 		const val ClothConfig = "10.0.96"
 		const val ModMenu = "6.1.0-rc.2"
