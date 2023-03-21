@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [5.1.0] for 1.19.4 - Unreleased
 
 ### Added
+- Added the ability to compost both Bounties and Decrees
 - Added Criterion type objectives - see [the wiki](https://kambrik.ejekta.io/mods/bountiful/) for details!
   - These objectives allow us to check for objective completion using the same triggers that vanilla uses for Advancements
   - This allows us to create fun objectives such as "kill a zombie while on fire" if we want!
@@ -16,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a patch-overwrite system for data loading for modpack makers
   - This allows modpack makers to edit/update/remove specific bounties without replacing entire pools
 - Added compat for new mods such as Tech Reborn, Xtra Arrows and Villager Hats
+- Did a minor balance pass, adding a few rewards where applicable to several pools
+
 
 ### Changed
 - Non-core data now loads from built-in resource packs
@@ -24,6 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - These packs are loaded by default if the associated mod is present
   - Players can use the `/datapack` command or modify datapacks on world creation to change which compat is enabled for a particular world
 - Bounty pool data is now each given its own ID so that other mods and data packs can more easily overwrite only parts of our data
+- Fundamentally changed how bounty data is stored in bounties
+  - This will break existing bounties if upgrading a world that used Bountiful from before 1.19.4 to 1.19.4
 
 ## [4.1.1] for 1.19.3 - 2022-03-02
 
