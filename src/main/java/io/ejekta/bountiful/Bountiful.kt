@@ -2,7 +2,6 @@
 package io.ejekta.bountiful
 
 import io.ejekta.bountiful.bounty.BountyData
-import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.IBountyType
 import io.ejekta.bountiful.config.BountifulIO
@@ -21,7 +20,6 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.advancement.criterion.EnterBlockCriterion
-import net.minecraft.advancement.criterion.InventoryChangedCriterion
 import net.minecraft.advancement.criterion.TickCriterion
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
@@ -43,7 +41,10 @@ class Bountiful : ModInitializer {
     init {
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(BountifulIO)
         listOf(
+            "campanion",
             "charm",
+            "croptopia",
+            "gofish",
             "techreborn",
             "villager-hats",
             "xtraarrows"
@@ -102,14 +103,13 @@ class Bountiful : ModInitializer {
                         ?: emptyList()
 
                     for (obj in triggerObjs) {
-                        val conds = obj.critConditions!!
 
                         val result = Kambrik.Criterion.testAgainst(
                             criterion,
                             Kambrik.Criterion.createCriterionConditionsFromJson(
                                 buildJsonObject {
                                     put("trigger", obj.content)
-                                    put("conditions", conds)
+                                    put("conditions", obj.critConditions ?: buildJsonObject {  })
                                 }
                             ) ?: continue,
                             predicate
