@@ -4,6 +4,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) as closely as it can.
 
+## [5.1.0] for 1.29.4 - Unreleased
+
+### Added
+- Added Criterion type objectives - see [the wiki](https://kambrik.ejekta.io/mods/bountiful/) for details!
+  - These objectives allow us to check for objective completion using the same triggers that vanilla uses for Advancements
+  - This allows us to create fun objectives such as "kill a zombie while on fire" if we want!
+- Added Notifications upon bounty completion
+  - Toast notifications and audio notifications (ping sound) are currently added
+  - This can be toggled off in the config
+- Added a patch-overwrite system for data loading for modpack makers
+  - 
+
+### Changed
+- Non-core data now loads from built-in resource packs
+  - This allows us to create a resource pack for every mod we want to add compatibility for
+  - This also allows users to turn off compatibility easily for any mods they desire
+  - These packs are loaded by default if the associated mod is present
+  - Players can use the `/datapack` command or modify datapacks on world creation to change which compat is enabled for a particular world
+- Bounty pool data is now each given its own ID so that other mods and data packs can more easily overwrite only parts of our data
+
+## [4.1.1] for 1.19.3 - 2022-03-02
+
+### Added
+- Added mod items into the Functional creative tab
+- Added config option for maximum number of rewards per bounty
+
+## [4.1.0] for 1.19.3 - 2022-03-02
+
+### Removed
+- Removed mod items from creative tabs, this is scheduled to be reimplemented at a later time
+
 ## [2.0.2] for 1.18.1 - 2022-01-09
 
 ### Fixed

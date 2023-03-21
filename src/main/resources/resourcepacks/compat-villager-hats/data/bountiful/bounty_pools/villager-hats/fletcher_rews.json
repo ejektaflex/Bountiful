@@ -1,0 +1,16 @@
+
+{
+    "requires": ["villager-hats"],
+	"content": {
+        "fletcher_rew_vh_fletcher_hat": {
+            "type": "item",
+            "rarity": "RARE",
+            "content": "villager-hats:fletcher_hat",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1250
+        }
+	}
+}

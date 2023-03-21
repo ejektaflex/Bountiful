@@ -76,10 +76,7 @@ dependencies {
 	modImplementation(group = "net.fabricmc", name = "fabric-language-kotlin", version = Versions.Env.FLK)
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation("net.fabricmc.fabric-api:fabric-api:${Versions.Fabric.Api}") {
-		exclude(group = "net.fabricmc.fabric-api", module = "fabric-biome-api-v1") // err on 23w07a
-		exclude(group = "net.fabricmc.fabric-api", module = "fabric-renderer-api-v1")
-	}
+	modImplementation("net.fabricmc.fabric-api:fabric-api:${Versions.Fabric.Api}")
 }
 
 tasks.getByName<ProcessResources>("processResources") {

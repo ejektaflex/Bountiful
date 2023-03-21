@@ -27,6 +27,7 @@ import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
 import net.minecraft.resource.ResourceType
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
 
@@ -41,11 +42,19 @@ class Bountiful : ModInitializer {
 
     init {
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(BountifulIO)
-        listOf("charm", "techreborn").forEach {
+        listOf(
+            "charm",
+            "techreborn",
+            "villager-hats",
+            "xtraarrows"
+        ).forEach {
+            val ourContainer = FabricLoader.getInstance().getModContainer(ID).get()
             if (FabricLoader.getInstance().isModLoaded(it)) {
+                val modContainer = FabricLoader.getInstance().getModContainer(it).get()
                 ResourceManagerHelper.registerBuiltinResourcePack(
-                    Identifier(ID, "$it-compat"),
-                    FabricLoader.getInstance().getModContainer(ID).get(),
+                    Identifier(ID, "compat-$it"),
+                    ourContainer,
+                    Text.literal("${ourContainer.metadata.name} - ${modContainer.metadata.name} Compat"),
                     ResourcePackActivationType.DEFAULT_ENABLED
                 )
             }
@@ -75,7 +84,6 @@ class Bountiful : ModInitializer {
 
         // Increment entity bounties for all players within 12 blocks of the player and all players within 12 blocks of the mob
         ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(ServerEntityCombatEvents.AfterKilledOtherEntity { world, entity, killedEntity ->
-            println("Entity killed, bounty update check..")
             if (entity is ServerPlayerEntity) {
                 val playersInAction = world.getPlayers { it.distanceTo(entity) < 12f } + world.getPlayers { it.distanceTo(killedEntity) < 12f } + entity
                 playersInAction.toSet().forEach {
