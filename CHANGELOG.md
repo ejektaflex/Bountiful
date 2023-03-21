@@ -14,7 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Toast notifications and audio notifications (ping sound) are currently added
   - This can be toggled off in the config
 - Added a patch-overwrite system for data loading for modpack makers
-  - 
+  - This allows modpack makers to edit/update/remove specific bounties without replacing entire pools
+- Added compat for new mods such as Tech Reborn, Xtra Arrows and Villager Hats
 
 ### Changed
 - Non-core data now loads from built-in resource packs
