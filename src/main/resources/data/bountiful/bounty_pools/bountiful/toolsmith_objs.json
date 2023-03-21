@@ -9,11 +9,12 @@
                 "min": 4,
                 "max": 48
             },
-            "unitWorth": 32
+            "unitWorth": 80
         },
 
         "toolsmith_obj_prismarine_shard": {
             "type": "item",
+            "rarity": "UNCOMMON",
             "content": "minecraft:prismarine_shard",
             "amount": {
                 "min": 1,

@@ -25,6 +25,12 @@ class BountyData {
     val rewards = mutableListOf<BountyDataEntry>()
     var pingComplete: Boolean = false
 
+    private fun hasFinishedAllObjectives(player: PlayerEntity): Boolean {
+        return objectives.all {
+            (it.logic as IBountyObjective).getProgress(it, player).isComplete()
+        }
+    }
+
     private fun tryFinishObjectives(player: PlayerEntity): Boolean {
         return objectives.all {
             (it.logic as IBountyObjective).tryFinishObjective(it, player)
@@ -90,7 +96,8 @@ class BountyData {
             return false
         }
 
-        return if (tryFinishObjectives(player)) {
+        return if (hasFinishedAllObjectives(player)) {
+            tryFinishObjectives(player)
             rewardPlayer(player)
             stack.decrement(stack.maxCount)
             true
