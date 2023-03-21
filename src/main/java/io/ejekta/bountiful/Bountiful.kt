@@ -18,6 +18,8 @@ import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.advancement.criterion.EnterBlockCriterion
 import net.minecraft.advancement.criterion.InventoryChangedCriterion
 import net.minecraft.advancement.criterion.TickCriterion
@@ -39,6 +41,15 @@ class Bountiful : ModInitializer {
 
     init {
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(BountifulIO)
+        listOf("charm", "techreborn").forEach {
+            if (FabricLoader.getInstance().isModLoaded(it)) {
+                ResourceManagerHelper.registerBuiltinResourcePack(
+                    Identifier(ID, "$it-compat"),
+                    FabricLoader.getInstance().getModContainer(ID).get(),
+                    ResourcePackActivationType.DEFAULT_ENABLED
+                )
+            }
+        }
     }
 
     override fun onInitialize() {

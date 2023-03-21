@@ -1,0 +1,11 @@
+{
+	"requires": ["techreborn"],
+	"objectives": [
+		"inventor_objs",
+		"_all_objs"
+	],
+	"rewards": [
+		"inventor_rews",
+		"_all_rews"
+	]
+}

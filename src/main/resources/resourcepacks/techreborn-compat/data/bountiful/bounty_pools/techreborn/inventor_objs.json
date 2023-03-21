@@ -1,0 +1,24 @@
+{
+	"requires": ["techreborn"],
+	"content": {
+		"inventor_objs_tr_insulated_copper_cable": {
+			"type": "item",
+			"content": "techreborn:insulated_copper_cable",
+			"amount": {
+				"min": 2,
+				"max": 18
+			},
+			"unitWorth": 800
+		},
+
+		"inventor_objs_tr_rubber": {
+			"type": "item",
+			"content": "techreborn:rubber",
+			"amount": {
+				"min": 2,
+				"max": 16
+			},
+			"unitWorth": 300
+		}
+	}
+}

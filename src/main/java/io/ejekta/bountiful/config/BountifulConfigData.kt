@@ -14,8 +14,10 @@ class BountifulConfigData {
     var boardGenFrequency: Int = 2
     var flatBonusTimePerBounty: Int = 0
     var shouldBountiesHaveTimersAndExpire = true
-    var dataPackExclusions = mutableListOf(
-        "bounty_pools/bountiful/something_here"
+    var dataPackExclusions = listOf(
+        "bounty_pools/bountiful/example_pool",
+        "bounty_pools/*/another_example",
+        "bounty_decrees/other/*"
     )
     var objectiveModifier = 0
     var maxNumRewards = 2
@@ -52,12 +54,12 @@ class BountifulConfigData {
 
         general.addEntry(
             creator.startIntSlider(
-                textLiteral("Board generation frequency in villages"),
+                textLiteral("Board Gen Frequency in Villages"),
                 boardGenFrequency,
                 0, 32
             ).setDefaultValue(boardGenFrequency)
                 .setTooltip(
-                    textLiteral("How often bounty boards generate in villages")
+                    textLiteral("How often bounty boards replace houses in villages")
                 )
                 .setSaveConsumer {
                     boardGenFrequency = it

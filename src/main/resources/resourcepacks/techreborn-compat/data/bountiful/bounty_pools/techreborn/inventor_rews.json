@@ -1,0 +1,27 @@
+
+{
+    "requires": ["techreborn"],
+	"content": {
+        "inventor_rews_tr_electronic_circuit": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "techreborn:electronic_circuit",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 4750
+        },
+
+        "inventor_rews_tr_electric_furnace": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "techreborn:electric_furnace",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 9750
+        }
+	}
+}
