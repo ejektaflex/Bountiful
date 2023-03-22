@@ -4,20 +4,14 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.util.GameTime
 import io.ejekta.bountiful.util.isClientSide
-import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.serial.ItemDataJson
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import net.minecraft.client.MinecraftClient
-import net.minecraft.item.ItemStack
-import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
-import net.minecraft.util.Identifier
 import net.minecraft.world.World
 import kotlin.math.max
-import kotlin.random.Random
 
 @Serializable
 class BountyInfo(

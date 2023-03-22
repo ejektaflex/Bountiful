@@ -1,20 +1,15 @@
 package io.ejekta.bountiful.content
 
 import io.ejekta.bountiful.bounty.DecreeData
-import kotlinx.serialization.InternalSerializationApi
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.Item
-import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.world.World
 
 class DecreeItem : Item(
-    FabricItemSettings()
-        .maxCount(1)
-        .fireproof()
+    Settings().maxCount(1).fireproof()
 ) {
 
     override fun getTranslationKey() = "bountiful.decree"

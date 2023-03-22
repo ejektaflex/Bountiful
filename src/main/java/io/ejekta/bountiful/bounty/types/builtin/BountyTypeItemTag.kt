@@ -2,12 +2,10 @@ package io.ejekta.bountiful.bounty.types.builtin
 
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.types.IBountyExchangeable
-import io.ejekta.bountiful.bounty.types.IBountyType
 import io.ejekta.bountiful.bounty.types.Progress
 import io.ejekta.bountiful.util.getTagItems
 import io.ejekta.kambrik.ext.collect
 import io.ejekta.kambrik.text.textLiteral
-import io.ejekta.kambrik.text.textTranslate
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack

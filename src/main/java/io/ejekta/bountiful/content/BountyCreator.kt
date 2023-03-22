@@ -2,8 +2,8 @@ package io.ejekta.bountiful.content
 
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
-import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.BountyDataEntry
+import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.bounty.types.IBountyReward
 import io.ejekta.bountiful.config.BountifulIO

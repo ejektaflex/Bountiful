@@ -2,10 +2,10 @@ package io.ejekta.bountiful.client
 
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyRarity
-import io.ejekta.bountiful.content.board.BoardBlockEntity
-import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.client.widgets.BountyLongButton
 import io.ejekta.bountiful.content.BountyCreator
+import io.ejekta.bountiful.content.board.BoardBlockEntity
+import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.kambrik.KambrikHandledScreen
 import io.ejekta.kambrik.gui.KSpriteGrid
 import io.ejekta.kambrik.gui.widgets.KListWidget

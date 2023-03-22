@@ -1,6 +1,5 @@
 package io.ejekta.kambrik.gui
 
-import io.ejekta.kambrik.KambrikHandledScreen
 import io.ejekta.kambrik.KambrikScreenCommon
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack

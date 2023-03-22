@@ -4,11 +4,7 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.content.BountifulContent
-import io.ejekta.bountiful.content.messages.ClipboardCopy
-import io.ejekta.bountiful.content.messages.UpdateBountyCriteriaObjective
-import io.ejekta.bountiful.content.messages.UpdateBountyTooltipNotification
 import io.ejekta.bountiful.mixin.ModelPredicateProviderRegistrar
-import io.ejekta.kambrik.Kambrik
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry
 import net.minecraft.client.world.ClientWorld

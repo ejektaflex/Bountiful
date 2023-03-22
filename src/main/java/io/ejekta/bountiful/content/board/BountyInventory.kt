@@ -1,9 +1,5 @@
 package io.ejekta.bountiful.content.board
 
-import io.ejekta.bountiful.bounty.BountyData
-import io.ejekta.bountiful.content.BountyItem
-import io.ejekta.bountiful.content.gui.BoardScreenHandler
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup
 import net.minecraft.inventory.SimpleInventory
 
 class BountyInventory : SimpleInventory(SIZE) {

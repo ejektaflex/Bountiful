@@ -1,17 +1,16 @@
 package io.ejekta.bountiful.content
 
-import io.ejekta.bountiful.data.Decree
-import io.ejekta.bountiful.data.Pool
 import io.ejekta.bountiful.content.board.BoardBlock
 import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
+import io.ejekta.bountiful.data.Decree
+import io.ejekta.bountiful.data.Pool
 import io.ejekta.kambrik.registration.KambrikAutoRegistrar
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.registry.CompostingChanceRegistry
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
-import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemGroups
 
 object BountifulContent : KambrikAutoRegistrar {

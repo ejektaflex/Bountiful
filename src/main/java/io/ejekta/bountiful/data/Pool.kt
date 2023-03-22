@@ -2,7 +2,6 @@ package io.ejekta.bountiful.data
 
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.BountifulContent
-import io.ejekta.kudzu.KudzuLeaf
 import io.ejekta.kudzu.KudzuVine
 import io.ejekta.kudzu.toJsonObject
 import io.ejekta.kudzu.toKudzu

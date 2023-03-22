@@ -3,7 +3,6 @@ package io.ejekta.bountiful.content.board
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyItem
-import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
@@ -22,7 +21,7 @@ import net.minecraft.world.World
 
 
 class BoardBlock : BlockWithEntity(
-    FabricBlockSettings
+    Settings
         .of(Material.WOOD)
         .hardness(3f)
         .resistance(3600000f)

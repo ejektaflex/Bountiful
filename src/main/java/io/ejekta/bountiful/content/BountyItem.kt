@@ -5,10 +5,8 @@ import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.util.clientWorld
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.Item
-import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
@@ -16,9 +14,7 @@ import net.minecraft.world.World
 import java.util.*
 
 class BountyItem : Item(
-    FabricItemSettings()
-        .maxCount(1)
-        .fireproof()
+    Settings().maxCount(1).fireproof()
 ) {
 
     override fun getName(stack: ItemStack?): Text {

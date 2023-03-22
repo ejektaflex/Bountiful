@@ -4,7 +4,6 @@ import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.types.IBountyObjective
-import io.ejekta.bountiful.util.iterateBountyData
 import io.ejekta.bountiful.util.iterateBountyStacks
 import io.ejekta.kambrik.ext.identifier
 import net.minecraft.entity.EntityType

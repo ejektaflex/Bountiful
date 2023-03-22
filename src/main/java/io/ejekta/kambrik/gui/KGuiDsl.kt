@@ -2,7 +2,6 @@ package io.ejekta.kambrik.gui
 
 import io.ejekta.kambrik.ext.fapi.itemRenderer
 import io.ejekta.kambrik.ext.fapi.textRenderer
-import io.ejekta.kambrik.gui.reactor.EventReactor
 import io.ejekta.kambrik.gui.reactor.MouseReactor
 import io.ejekta.kambrik.text.KambrikTextBuilder
 import io.ejekta.kambrik.text.textLiteral

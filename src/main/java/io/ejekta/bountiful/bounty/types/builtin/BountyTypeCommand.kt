@@ -2,8 +2,6 @@ package io.ejekta.bountiful.bounty.types.builtin
 
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.types.IBountyReward
-import io.ejekta.bountiful.bounty.types.IBountyType
-import io.ejekta.bountiful.bounty.types.Progress
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.MutableText

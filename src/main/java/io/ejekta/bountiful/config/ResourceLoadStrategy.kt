@@ -3,9 +3,7 @@ package io.ejekta.bountiful.config
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.data.IMerge
 import io.ejekta.bountiful.data.Pool
-import io.ejekta.kambrik.Kambrik
 import kotlinx.serialization.DeserializationStrategy
-import net.fabricmc.fabric.impl.resource.loader.FabricModResourcePack
 import net.minecraft.resource.ResourceManager
 import net.minecraft.util.Identifier
 import java.io.File

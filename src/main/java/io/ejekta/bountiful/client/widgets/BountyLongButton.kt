@@ -9,8 +9,8 @@ import io.ejekta.bountiful.bounty.types.builtin.BountyTypeItemTag
 import io.ejekta.bountiful.client.BoardScreen
 import io.ejekta.bountiful.content.messages.SelectBounty
 import io.ejekta.kambrik.ext.fapi.textRenderer
-import io.ejekta.kambrik.gui.KSpriteGrid
 import io.ejekta.kambrik.gui.KGuiDsl
+import io.ejekta.kambrik.gui.KSpriteGrid
 import io.ejekta.kambrik.gui.KWidget
 import io.ejekta.kambrik.gui.reactor.MouseReactor
 import io.ejekta.kambrik.text.textLiteral
