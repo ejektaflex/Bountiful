@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "kambrik",
+  "version": "5.1.0",
+  "name": "Kambrik",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "Me!"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "Insert License Here",
+  "icon": "assets/examplemod/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+		"io.ejekta.kambrik.KambrikModFabric"
+    ]
+  },
+  "depends": {
+    "fabric": "*",
+    "minecraft": "~1.19-0"
+  }
+}
