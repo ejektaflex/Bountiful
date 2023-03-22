@@ -5,13 +5,11 @@ import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.data.Pool
 import io.ejekta.kambrik.Kambrik
-import io.ejekta.kambrik.ext.ensured
+import io.ejekta.kambrik.ext.jvm.ensured
 import io.ejekta.kambrikx.file.KambrikConfigFile
 import io.ejekta.kambrikx.file.KambrikParseFailMode
-import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
-import net.minecraft.resource.ResourceManager
 
-object BountifulIO : SimpleSynchronousResourceReloadListener {
+object BountifulIO {
 
     var configData = BountifulConfigData()
 
@@ -44,17 +42,9 @@ object BountifulIO : SimpleSynchronousResourceReloadListener {
         configData = configFile.read()
     }
 
-    private val contentLoaders = listOf(
+    val contentLoaders = listOf(
         ResourceLoadStrategy("Pool Loader", "bounty_pools", poolConfigs, Pool.serializer(), BountifulContent.Pools),
         ResourceLoadStrategy("Decree Loader", "bounty_decrees", decreeConfigs, Decree.serializer(), BountifulContent.Decrees)
     )
 
-    override fun reload(manager: ResourceManager) {
-        contentLoaders.forEach {
-            it.clearDestination()
-            it.loadData(manager)
-        }
-    }
-
-    override fun getFabricId() = Bountiful.id("reload_listener")
 }

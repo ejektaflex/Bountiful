@@ -13,7 +13,7 @@ architectury {
 // The generated resources directory for the AW.
 val generatedResources = file("src/generated/resources")
 // The path to the AW file in the common subproject.
-val accessWidenerFile = project(":common").file("src/main/resources/kambrik.accesswidener")
+val accessWidenerFile = project(":common").file("src/main/resources/bountiful.accesswidener")
 
 loom {
     // Make the Fabric project use the common access widener.
@@ -65,6 +65,8 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:0.14.17")
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.76.0+1.19.4")
     modApi("net.fabricmc:fabric-language-kotlin:1.9.2+kotlin.1.8.10")
+    implementation("io.ejekta:kambrik-common:123")
+    implementation("io.ejekta:kambrik-fabric:123")
 
     // Bundle Jankson in the mod and use it as a regular "implementation" library.
     //bundle(implementation("blue.endless:jankson:${rootProject.property("jankson")}")!!)

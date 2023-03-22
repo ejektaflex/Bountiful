@@ -13,7 +13,7 @@ architectury {
 }
 
 loom {
-    //accessWidenerPath.set(file("src/main/resources/kambrik.accesswidener"))
+    accessWidenerPath.set(file("src/main/resources/bountiful.accesswidener"))
 }
 repositories {
     mavenCentral()

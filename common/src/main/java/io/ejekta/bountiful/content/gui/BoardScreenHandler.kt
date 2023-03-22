@@ -18,10 +18,10 @@ class BoardScreenHandler @JvmOverloads constructor(
 
     var totalDone = 0
 
-    constructor(syncId: Int, playerInventory: PlayerInventory, buf: PacketByteBuf) : this(syncId, playerInventory,
+    constructor(syncId: Int, playerInventory: PlayerInventory) : this(syncId, playerInventory,
         BoardInventory(BlockPos.ORIGIN)
     ) {
-        totalDone = buf.readInt()
+        //totalDone = buf.readInt()
     }
 
     override fun canUse(player: PlayerEntity): Boolean {

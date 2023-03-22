@@ -6,18 +6,13 @@ import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.data.Pool
 import io.ejekta.kambrik.registration.KambrikAutoRegistrar
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
-import net.fabricmc.fabric.api.registry.CompostingChanceRegistry
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
-import net.minecraft.item.ItemGroups
+import net.minecraft.screen.ScreenHandlerType
 
 object BountifulContent : KambrikAutoRegistrar {
 
-    override fun beforeRegistration() {
-        CommandRegistrationCallback.EVENT.register(BountifulCommands)
-    }
+    override fun getId() = "bountiful"
 
     val Decrees = mutableListOf<Decree>()
 
@@ -39,16 +34,6 @@ object BountifulContent : KambrikAutoRegistrar {
 
     val BOARD_ENTITY = "board-be".forBlockEntity(BOARD, ::BoardBlockEntity)
 
-    val BOARD_SCREEN_HANDLER = "board".forExtendedScreen(::BoardScreenHandler)
-
-    init {
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register { e ->
-            e.add(DECREE_ITEM)
-            e.add(BOARD_ITEM)
-        }
-
-        CompostingChanceRegistry.INSTANCE.add({ BOUNTY_ITEM }, 0.5f)
-        CompostingChanceRegistry.INSTANCE.add({ DECREE_ITEM }, 0.85f)
-    }
+    val BOARD_SCREEN_HANDLER = ScreenHandlerType.register("board", ::BoardScreenHandler)
 
 }
