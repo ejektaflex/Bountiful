@@ -18,16 +18,6 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import kotlin.random.Random
 
-fun isClientSide(): Boolean = FabricLoader.getInstance().environmentType == EnvType.CLIENT
-
-fun clientWorld(): World? {
-    return if (isClientSide()) {
-        MinecraftClient.getInstance().world
-    } else {
-        null
-    }
-}
-
 fun randomSplit(num: Double, ways: Int): List<Double> {
     val bits = (0 until ways).map { Random.nextDouble() }
     val sum = bits.sum()

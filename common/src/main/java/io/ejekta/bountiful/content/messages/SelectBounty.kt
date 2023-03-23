@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class SelectBounty(private val index: Int, private val uuidString: String) : ServerMsg() {
     override fun onServerReceived(ctx: MsgContext) {
-        val handler = ctx.server.playerManager.playerList.firstOrNull {
+        val handler = ctx.player.server.playerManager.playerList.firstOrNull {
             it.uuidAsString == uuidString
         }?.currentScreenHandler as? BoardScreenHandler ?: return
         handler.inventory.select(index)

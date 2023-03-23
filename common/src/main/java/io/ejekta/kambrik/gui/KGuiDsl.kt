@@ -1,7 +1,5 @@
 package io.ejekta.kambrik.gui
 
-import io.ejekta.kambrik.ext.fapi.itemRenderer
-import io.ejekta.kambrik.ext.fapi.textRenderer
 import io.ejekta.kambrik.gui.reactor.MouseReactor
 import io.ejekta.kambrik.text.KambrikTextBuilder
 import io.ejekta.kambrik.text.textLiteral
@@ -12,6 +10,7 @@ import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.client.render.LightmapTextureManager
 import net.minecraft.client.render.Tessellator
 import net.minecraft.client.render.VertexConsumerProvider
+import net.minecraft.client.render.item.ItemRenderer
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
@@ -21,6 +20,12 @@ import net.minecraft.text.Text
 import kotlin.math.max
 
 data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, val mouseY: Int, val delta: Float?) {
+
+    val textRenderer: TextRenderer
+        get() = MinecraftClient.getInstance().textRenderer
+
+    val itemRenderer: ItemRenderer
+        get() = MinecraftClient.getInstance().itemRenderer
 
     private val frameDeferredTasks = mutableListOf<KGuiDsl.() -> Unit>()
 
@@ -63,11 +68,11 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
     }
 
     fun itemStackIcon(stack: ItemStack, x: Int = 0, y: Int = 0) {
-        ctx.screen.itemRenderer.renderInGui(matrices, stack, ctx.absX(x), ctx.absY(y))
+        itemRenderer.renderInGui(matrices, stack, ctx.absX(x), ctx.absY(y))
     }
 
     fun itemStackOverlay(stack: ItemStack, x: Int = 0, y: Int = 0) {
-        ctx.screen.itemRenderer.renderGuiItemOverlay(matrices, ctx.screen.textRenderer, stack, x, y)
+        itemRenderer.renderGuiItemOverlay(matrices, textRenderer, stack, x, y)
     }
 
     fun itemStack(stack: ItemStack, x: Int = 0, y: Int = 0) {
@@ -108,7 +113,7 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
     }
 
     fun text(x: Int, y: Int, text: Text) {
-        ctx.screen.textRenderer.drawWithShadow(matrices, text, ctx.absX(x).toFloat(), ctx.absY(y).toFloat(), 0xFFFFFF)
+        textRenderer.drawWithShadow(matrices, text, ctx.absX(x).toFloat(), ctx.absY(y).toFloat(), 0xFFFFFF)
     }
 
     fun text(x: Int = 0, y: Int = 0, textDsl: KambrikTextBuilder<MutableText>.() -> Unit) {
@@ -116,7 +121,7 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
     }
 
     fun textNoShadow(x: Int, y: Int, text: Text) {
-        ctx.screen.textRenderer.draw(matrices, text, ctx.absX(x).toFloat(), ctx.absY(y).toFloat(), 0xFFFFFF)
+        textRenderer.draw(matrices, text, ctx.absX(x).toFloat(), ctx.absY(y).toFloat(), 0xFFFFFF)
     }
 
     fun textNoShadow(x: Int = 0, y: Int = 0, textDsl: KambrikTextBuilder<MutableText>.() -> Unit) {
@@ -124,10 +129,10 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
     }
 
     fun textCentered(x: Int, y: Int, text: Text) {
-        ctx.screen.textRenderer.draw(
+        textRenderer.draw(
             matrices,
             text,
-            (ctx.absX(x) - ctx.screen.textRenderer.getWidth(text) / 2).toFloat(),
+            (ctx.absX(x) - textRenderer.getWidth(text) / 2).toFloat(),
             ctx.absY(y).toFloat(),
             0xFFFFFF
         )
@@ -142,9 +147,9 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
         matrixStack.translate(0.0, 0.0, 201.0)
         val immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().buffer)
 
-        ctx.screen.textRenderer.draw(
+        textRenderer.draw(
             text,
-            (ctx.absX(x) + ctx.screen.textRenderer.getWidth(text)).toFloat(),
+            (ctx.absX(x) + textRenderer.getWidth(text)).toFloat(),
             ctx.absY(y).toFloat(),
             0xFFFFFF,
             true,

@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.data
 
+import io.ejekta.bountiful.bridge.Bountybridge
 import net.fabricmc.loader.api.FabricLoader
 
 interface IMerge<T : IMerge<T>> {
@@ -10,7 +11,7 @@ interface IMerge<T : IMerge<T>> {
     val requires: MutableList<String>
 
     val canLoad: Boolean
-        get() = requires.all { FabricLoader.getInstance().isModLoaded(it) }
+        get() = requires.all { Bountybridge.isModLoaded(it) }
 
     fun merged(other: T): T
 

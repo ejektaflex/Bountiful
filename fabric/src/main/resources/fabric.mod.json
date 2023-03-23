@@ -16,7 +16,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-		"io.ejekta.kambrik.KambrikModFabric"
+		"io.ejekta.bountiful.BountifulModFabric"
     ]
   },
   "depends": {

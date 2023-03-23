@@ -3,7 +3,6 @@ package io.ejekta.bountiful.bounty
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.util.GameTime
-import io.ejekta.bountiful.util.isClientSide
 import io.ejekta.kambrik.serial.ItemDataJson
 import kotlinx.serialization.Serializable
 import net.minecraft.client.MinecraftClient
@@ -33,8 +32,8 @@ class BountyInfo(
         return GameTime.formatTimeExpirable(timeLeft(world) / 20)
     }
 
-    fun genTooltip(fromData: BountyData): List<MutableText> {
-        if (!isClientSide()) {
+    fun genTooltip(fromData: BountyData, isServer: Boolean): List<MutableText> {
+        if (isServer) {
             return emptyList()
         }
         val player = MinecraftClient.getInstance().player!!

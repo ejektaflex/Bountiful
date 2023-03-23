@@ -18,6 +18,7 @@ import io.ejekta.kambrik.command.requiresCreativeOrOp
 import io.ejekta.kambrik.command.suggestionListTooltipped
 import io.ejekta.kambrik.command.types.PlayerCommand
 import io.ejekta.kambrik.ext.identifier
+import io.ejekta.kambrik.ext.math.floor
 import io.ejekta.kambrik.text.sendMessage
 import net.minecraft.command.CommandRegistryAccess
 import net.minecraft.item.ItemStack
@@ -29,6 +30,7 @@ import net.minecraft.text.ClickEvent
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
+import net.minecraft.util.math.BlockPos
 
 
 object BountifulCommands {
@@ -222,9 +224,10 @@ object BountifulCommands {
 
     private fun genBounty(rep: Int) = PlayerCommand {
         try {
+            val sourcePos = BlockPos(source.position.floor())
             val stack = BountyCreator.createBountyItem(
                 source.world,
-                source.position.toBlockPos(),
+                sourcePos,
                 BountifulContent.Decrees.toSet(),
                 rep,
                 it.world.time
@@ -286,7 +289,8 @@ object BountifulCommands {
         for (pool in BountifulContent.Pools) {
             for (poolEntry in pool) {
                 val dummy = BountyData()
-                val data = poolEntry.toEntry(source.world, source.position.toBlockPos())
+                val sourcePos = BlockPos(source.position.floor())
+                val data = poolEntry.toEntry(source.world, sourcePos)
                 data.let { bde ->
                     when {
                         bde.logic is IBountyObjective -> dummy.objectives.add(bde)
