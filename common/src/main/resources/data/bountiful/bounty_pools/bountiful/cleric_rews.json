@@ -1,0 +1,155 @@
+
+{
+	"content": {
+
+        "cleric_rew_redstone": {
+            "type": "item",
+            "content": "minecraft:redstone",
+            "amount": {
+                "min": 1,
+                "max": 6
+            },
+            "unitWorth": 500
+        },
+
+        "cleric_rew_magma_cream": {
+            "type": "item",
+            "content": "minecraft:magma_cream",
+            "amount": {
+                "min": 2,
+                "max": 6
+            },
+            "unitWorth": 450,
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:magma_cream"
+                }
+            ]
+        },
+
+        "cleric_rew_lapis": {
+            "type": "item",
+            "content": "minecraft:lapis_lazuli",
+            "amount": {
+                "min": 1,
+                "max": 3
+            },
+            "unitWorth": 750
+        },
+
+        "cleric_rew_potion_heals": {
+            "type": "item",
+            "content": "minecraft:potion",
+            "amount": {
+                "min": 1,
+                "max": 3
+            },
+            "unitWorth": 550,
+            "nbt": "{Potion:\"minecraft:healing\"}"
+        },
+
+        "cleric_rew_potion_fire_resist": {
+            "type": "item",
+            "content": "minecraft:potion",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 600,
+            "nbt": "{Potion:\"minecraft:fire_resistance\"}"
+        },
+
+        "cleric_rew_ench_book_unbreaking": {
+            "type": "item",
+            "content": "minecraft:enchanted_book",
+            "amount": {
+                "min": 1,
+                "max": 2
+            },
+            "unitWorth": 1500,
+            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:unbreaking\"}]}"
+        },
+
+        "cleric_rew_glowstone": {
+            "type": "item",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:glowstone",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 2000
+        },
+
+        "cleric_rew_ghast_tear": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:ghast_tear",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 2000
+        },
+
+        "cleric_rew_ender_pearl": {
+            "type": "item",
+			"rarity": "RARE",
+            "content": "minecraft:ender_pearl",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 4000
+        },
+
+        "cleric_rew_potion_luck": {
+            "type": "item",
+            "rarity": "RARE",
+            "content": "minecraft:potion",
+            "amount": {
+                "min": 1,
+                "max": 2
+            },
+            "unitWorth": 2000,
+            "nbt": "{Potion:\"minecraft:luck\"}"
+        },
+
+        "cleric_rew_xp_bottle": {
+            "type": "item",
+			"rarity": "EPIC",
+            "content": "minecraft:experience_bottle",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1000.0
+        },
+
+        "cleric_rew_ender_pearl_bargain": {
+            "type": "item",
+			"rarity": "LEGENDARY",
+            "content": "minecraft:ender_pearl",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 2500
+        },
+
+        "cleric_rew_ench_book_mending": {
+            "type": "item",
+            "rarity": "LEGENDARY",
+            "content": "minecraft:enchanted_book",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 5500,
+            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:mending\"}]}"
+        }
+
+	}
+
+}

@@ -1,0 +1,45 @@
+
+{
+    "requires": ["xtraarrows"],
+	"content": {
+        "fletcher_rew_xa_iron_arrow": {
+            "type": "item",
+            "content": "xtraarrows:iron_arrow",
+            "amount": {
+                "min": 3,
+                "max": 16
+            },
+            "unitWorth": 300
+        },
+        "fletcher_rew_xa_golden_arrow": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "xtraarrows:golden_arrow",
+            "amount": {
+                "min": 3,
+                "max": 16
+            },
+            "unitWorth": 312.5
+        },
+        "fletcher_rew_xa_diamond_arrow": {
+            "type": "item",
+            "rarity": "RARE",
+            "content": "xtraarrows:diamond_arrow",
+            "amount": {
+                "min": 1,
+                "max": 12
+            },
+            "unitWorth": 1000
+        },
+        "fletcher_rew_xa_netherite_arrow": {
+            "type": "item",
+            "rarity": "EPIC",
+            "content": "xtraarrows:netherite_arrow",
+            "amount": {
+                "min": 1,
+                "max": 8
+            },
+            "unitWorth": 1500
+        }
+	}
+}

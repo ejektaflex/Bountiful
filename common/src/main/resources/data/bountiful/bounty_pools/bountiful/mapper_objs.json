@@ -1,0 +1,90 @@
+
+{
+	"content": {
+
+        "mapper_obj_paper": {
+            "type": "item",
+            "content": "minecraft:paper",
+            "amount": {
+                "min": 12,
+                "max": 48
+            },
+            "unitWorth": 40
+        },
+
+        "mapper_obj_campfire": {
+            "type": "item",
+            "content": "minecraft:campfire",
+            "amount": {
+                "min": 1,
+                "max": 4
+            },
+            "unitWorth": 250
+        },
+
+        "mapper_obj_quartz": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:quartz",
+            "amount": {
+                "min": 2,
+                "max": 16
+            },
+            "unitWorth": 400
+        },
+
+        "mapper_obj_candles": {
+            "type": "item_tag",
+            "content": "minecraft:candles",
+            "amount": {
+                "min": 2,
+                "max": 6
+            },
+            "unitWorth": 250
+        },
+
+        "mapper_obj_glass_pane": {
+            "type": "item",
+            "content": "minecraft:glass_pane",
+            "amount": {
+                "min": 4,
+                "max": 48
+            },
+            "unitWorth": 100
+        },
+
+        "mapper_obj_glass": {
+            "type": "item",
+            "content": "minecraft:glass",
+            "amount": {
+                "min": 4,
+                "max": 32
+            },
+            "unitWorth": 265
+        },
+
+        "mapper_obj_cartography_table": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:cartography_table",
+            "amount": {
+                "min": 1,
+                "max": 4
+            },
+            "unitWorth": 300
+        },
+
+        "mapper_obj_compass": {
+            "type": "item",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:compass",
+            "amount": {
+                "min": 1,
+                "max": 2
+            },
+            "unitWorth": 2500
+        }
+
+	}
+
+}

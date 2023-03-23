@@ -1,0 +1,36 @@
+{
+	"requires": ["techreborn"],
+	"content": {
+
+		"metal_obj_tr_bronze_ingot": {
+			"type": "item",
+			"content": "techreborn:bronze_ingot",
+			"amount": {
+				"min": 3,
+				"max": 18
+			},
+			"unitWorth": 850
+		},
+
+		"metal_obj_tr_silver_ingot": {
+			"type": "item",
+			"content": "techreborn:silver_ingot",
+			"amount": {
+				"min": 2,
+				"max": 8
+			},
+			"unitWorth": 1000
+		},
+
+		"metal_obj_tr_steel_ingot": {
+			"type": "item",
+			"content": "techreborn:steel_ingot",
+			"amount": {
+				"min": 2,
+				"max": 6
+			},
+			"unitWorth": 2400
+		}
+
+	}
+}

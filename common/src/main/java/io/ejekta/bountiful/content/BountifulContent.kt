@@ -12,6 +12,10 @@ import net.minecraft.screen.ScreenHandlerType
 
 object BountifulContent : KambrikAutoRegistrar {
 
+    init {
+        println("Doing init of Bountiful content")
+    }
+
     override fun getId() = "bountiful"
 
     val Decrees = mutableListOf<Decree>()
@@ -36,4 +40,7 @@ object BountifulContent : KambrikAutoRegistrar {
 
     val BOARD_SCREEN_HANDLER = ScreenHandlerType.register("board", ::BoardScreenHandler)
 
+    init {
+        println("Did init of Bountiful content")
+    }
 }

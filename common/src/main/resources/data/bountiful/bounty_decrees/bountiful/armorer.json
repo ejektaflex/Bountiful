@@ -1,0 +1,12 @@
+{
+	"objectives": [
+		"armorer_objs",
+		"_metal_objs",
+		"_all_objs"
+	],
+	"rewards": [
+		"armorer_rews",
+		"_all_rews",
+		"_equip_rews"
+	]
+}

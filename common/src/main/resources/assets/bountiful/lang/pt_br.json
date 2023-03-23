@@ -1,0 +1,77 @@
+{
+	"block.bountiful.bountyboard": "Quadro de Recompensas",
+
+	"itemGroup.bountiful": "Bountiful",
+
+	"bountiful.decree": "Decreto",
+	"bountiful.decrees": "Decretos",
+	"bountiful.decree.invalid": "Decreto Inválido",
+	"bountiful.decree.notset": "Leve isso para um Quadro de Recompensas!",
+
+	"bountiful.bounty.turnin": "Botão direito em um Quadro de Recompensas para resgatar sua recompensa.",
+
+	"bountiful.advancement.bounty_taken.title": "Prestação de Serviços",
+	"bountiful.advancement.bounty_taken.desc": "Pegue uma recompensa de um quadro de recompensas",
+
+	"bountiful.advancement.bounty_complete.title": "Pagamento Honesto por Trabalho Honesto",
+	"bountiful.advancement.bounty_complete.desc": "Complete uma recompensa!",
+
+	"bountiful.advancement.rush_order.title": "Entrega de Pedidos Urgentesy",
+	"bountiful.advancement.rush_order.desc": "Complete uma recompensa em menos de um minuto",
+
+	"bountiful.advancement.procrastinator.title": "Procrastinador Mestre",
+	"bountiful.advancement.procrastinator.desc": "Complete uma recompensa com menos de cinco segundos restantes",
+
+	"bountiful.advancement.town_crier.title": "Leiloeiro da Cidade",
+	"bountiful.advancement.town_crier.desc": "Obter um decreto!",
+
+	"bountiful.advancement.royal_mandate.title": "Mandato Real",
+	"bountiful.advancement.royal_mandate.desc": "Coloque um decreto em um Quadro de Recompensas",
+
+	"bountiful.bounty": "Contrato",
+
+	"bountiful.decree.armorer.name": "Armeiro",
+	"bountiful.decree.butcher.name": "Açougueiro",
+	"bountiful.decree.chef.name": "Chefe de Cozinha",
+	"bountiful.decree.cleric.name": "Clérigo",
+	"bountiful.decree.farmer.name": "Agricultor",
+	"bountiful.decree.fisherman.name": "Pescador",
+	"bountiful.decree.fletcher.name": "Flecheiro",
+	"bountiful.decree.hunting.name": "Caçador",
+	"bountiful.decree.leatherer.name": "Coureiro",
+	"bountiful.decree.librarian.name": "Bibliotecário",
+	"bountiful.decree.mapper.name": "Cartografo",
+	"bountiful.decree.mason.name": "Pedreiro",
+	"bountiful.decree.shepherd.name": "Pastor",
+	"bountiful.decree.tinker.name": "Funileiro",
+	"bountiful.decree.toolsmith.name": "Ferramenteiro",
+	"bountiful.decree.invalid_decree.name": "Decreto Inválido",
+
+	"bountiful.bounty.type.entity.kills": "Mortos",
+
+	"bountiful.bounty.type.experience.levels": "Níveis de Experiência",
+	"bountiful.bounty.type.experience.points": "Pontos de Experiência",
+
+
+	"bountiful.rarity.Common": "(Comum)",
+	"bountiful.rarity.Uncommon": "(Incomum)",
+	"bountiful.rarity.Rare": "(Raro)",
+	"bountiful.rarity.Epic": "(Épico)",
+
+	"stat.bountiful.bounties_taken": "Contratos Recebidos",
+	"stat.bountiful.bounties_done": "Contratos Concluídos (Total)",
+	"stat.bountiful.bounties_done_0": "Contratos Concluídos (Comum)",
+	"stat.bountiful.bounties_done_1": "Contratos Concluídos (Incomum)",
+	"stat.bountiful.bounties_done_2": "Contratos Concluídos (Raro)",
+	"stat.bountiful.bounties_done_3": "Contratos Concluídos (Épico)",
+
+	"bountiful.tooltip.advanced": "Segure Shift para ver detalhes do item",
+	"bountiful.tooltip.time": "Tempo Para Concluir",
+	"bountiful.tooltip.required": "Exigido",
+	"bountiful.tooltip.rewards": "Recompensa(s)",
+	"bountiful.tooltip.expired": "Expirado",
+
+	"bountiful.tooltip.requirements": "Requisitos não atendidos.",
+	"bountiful.bounty.expired": "This bounty has expired.",
+	"bountiful.decree.runewright.name": "Runewright"
+  }

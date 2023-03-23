@@ -1,0 +1,110 @@
+
+{
+	"content": {
+
+        "fletcher_rew_arrow": {
+            "type": "item",
+            "content": "minecraft:arrow",
+            "amount": {
+                "min": 8,
+                "max": 48
+            },
+            "unitWorth": 60
+        },
+
+        "fletcher_rew_bow": {
+            "type": "item",
+            "content": "minecraft:bow",
+            "amount": {
+                "min": 1,
+                "max": 2
+            },
+            "unitWorth": 1000,
+            "nbt": "{Damage:0}"
+        },
+
+        "fletcher_rew_crossbow": {
+            "type": "item",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:crossbow",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1500,
+            "nbt": "{Damage:0}"
+        },
+
+        "fletcher_rew_bow_power": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:bow",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1500,
+            "nbt": "{RepairCost:1,Damage:0,Enchantments:[{lvl:1s,id:\"minecraft:power\"}]}"
+        },
+
+        "fletcher_rew_ench_book_flame": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:enchanted_book",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1500,
+            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:flame\"}]}"
+        },
+
+        "fletcher_rew_tipped_arrow_heals": {
+            "type": "item",
+			"rarity": "RARE",
+            "content": "minecraft:tipped_arrow",
+            "amount": {
+                "min": 3,
+                "max": 10
+            },
+            "unitWorth": 400,
+            "nbt": "{Potion:\"minecraft:strong_healing\"}"
+        },
+
+        "fletcher_rew_tipped_arrow_weakness": {
+            "type": "item",
+            "content": "minecraft:tipped_arrow",
+            "amount": {
+                "min": 2,
+                "max": 8
+            },
+            "unitWorth": 400.0,
+            "nbt": "{Potion:\"minecraft:weakness\"}"
+        },
+
+        "fletcher_rew_spectral_arrow": {
+            "type": "item",
+            "rarity": "RARE",
+            "content": "minecraft:spectral_arrow",
+            "amount": {
+                "min": 3,
+                "max": 10
+            },
+            "unitWorth": 400
+        },
+
+        "fletcher_rew_bow_infinity": {
+            "type": "item",
+            "rarity": "EPIC",
+            "content": "minecraft:bow",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1500.0,
+            "nbt": "{Damage:0,RepairCost:1,Enchantments:[{lvl:1s,id:\"minecraft:infinity\"}]}"
+        }
+
+    }
+
+}

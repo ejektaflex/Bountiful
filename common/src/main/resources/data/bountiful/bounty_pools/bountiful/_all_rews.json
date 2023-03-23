@@ -1,0 +1,122 @@
+{
+	"content": {
+
+		"all_rew_primary_currency": {
+			"type": "item",
+			"content": "minecraft:emerald",
+			"amount": {
+				"min": 1,
+				"max": 4
+			},
+			"unitWorth": 1000,
+			"weightMult": 1.3
+		},
+
+		"all_rew_primary_currency_rare_bargain": {
+			"type": "item",
+			"content": "minecraft:emerald",
+			"amount": {
+				"min": 1,
+				"max": 4
+			},
+			"unitWorth": 800,
+			"weightMult": 0.2
+		},
+
+		"all_rew_decree": {
+			"type": "item",
+			"rarity": "UNCOMMON",
+			"content": "bountiful:decree",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 800,
+			"weightMult": 0.35
+		},
+
+		"all_rew_spyglass": {
+			"type": "item",
+			"content": "minecraft:spyglass",
+			"rarity": "RARE",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 2500.0
+		},
+
+		"all_rew_totem_undying": {
+			"type": "item",
+			"content": "minecraft:totem_of_undying",
+			"rarity": "LEGENDARY",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 4000
+		},
+
+		"all_rew_arrow": {
+			"type": "item",
+			"content": "minecraft:arrow",
+			"amount": {
+				"min": 3,
+				"max": 9
+			},
+			"unitWorth": 100,
+			"weightMult": 0.4
+		},
+
+		"all_rew_glow_ink": {
+			"type": "item",
+			"content": "minecraft:glow_ink_sac",
+			"rarity": "EPIC",
+			"weightMult": 0.3,
+			"amount": {
+				"min": 1,
+				"max": 3
+			},
+			"unitWorth": 500
+		},
+
+		"all_rew_prismarine_crystals": {
+			"type": "item",
+			"content": "minecraft:prismarine_crystals",
+			"rarity": "EPIC",
+			"weightMult": 0.15,
+			"amount": {
+				"min": 1,
+				"max": 6
+			},
+			"unitWorth": 2000
+		},
+
+		"all_rew_minecart": {
+			"type": "item",
+			"content": "minecraft:tnt_minecart",
+			"rarity": "EPIC",
+			"weightMult": 0.15,
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 6000
+		},
+
+		"all_rew_axolotl_bucket": {
+			"type": "item",
+			"content": "minecraft:axolotl_bucket",
+			"rarity": "LEGENDARY",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 4000
+		}
+
+
+	}
+
+
+}

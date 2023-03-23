@@ -1,0 +1,16 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "bountiful:item/decree"
+  },
+  "overrides": [
+    {
+      "predicate": { "bountiful:status": 0.0 },
+      "model": "bountiful:item/decree-unknown"
+    },
+    {
+      "predicate": { "bountiful:status": 1.0 },
+      "model": "bountiful:item/decree-known"
+    }
+  ]
+}
