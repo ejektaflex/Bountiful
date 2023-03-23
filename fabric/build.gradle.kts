@@ -1,14 +1,12 @@
 
-architectury {
-    // Create the IDE launch configurations for this subproject.
-    platformSetupLoomIde()
-    // Set up Architectury for Fabric.
-    fabric()
+plugins {
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
-// The files below are for using the access widener for the common project.
-// We need to copy the file from common resources to fabric resource
-// for Fabric Loader to find it and not crash.
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
 
 // The generated resources directory for the AW.
 val generatedResources = file("src/generated/resources")
@@ -21,12 +19,16 @@ loom {
     accessWidenerPath.set(accessWidenerFile)
 }
 
+configurations {
+    println(asMap.keys)
+    val bindle = getByName("bundle")
+    getByName("compileClasspath").extendsFrom()
+}
+
+// Mark the AW generated resource directory as a source directory for the resources of the "main" source set.
 sourceSets {
     main {
         resources {
-            // Mark the AW generated resource directory as
-            // a source directory for the resources of
-            // the "main" source set.
             srcDir(generatedResources)
         }
     }
@@ -34,22 +36,9 @@ sourceSets {
 
 // Set up various Maven repositories for mod compat.
 repositories {
-
-    // TerraformersMC maven for Mod Menu and EMI.
-    maven {
-        name = "TerraformersMC"
-        url = uri("https://maven.terraformersmc.com/releases")
-
-        content {
-            includeGroup("com.terraformersmc")
-        }
-    }
-    maven {
-        name = "Shedaniel"
-        url = uri("https://maven.terraformersmc.com/releases/")
-    }
-    mavenLocal()
-
+    maven("https://maven.terraformersmc.com/releases") // Modmenu
+    maven("https://maven.terraformersmc.com/releases/") // Shedaniel
+    mavenLocal() // Kambrik
 }
 
 dependencies {

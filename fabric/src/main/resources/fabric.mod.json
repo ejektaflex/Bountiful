@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "kambrik",
+  "id": "bountiful",
   "version": "5.1.0",
-  "name": "Kambrik",
+  "name": "Bountiful",
   "description": "This is an example description! Tell everyone what your mod is about!",
   "authors": [
     "Me!"
