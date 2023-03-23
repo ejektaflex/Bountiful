@@ -3,18 +3,10 @@ plugins {
     kotlin("plugin.serialization") version "1.6.0"
 }
 
-architectury {
-    // Set up Architectury for the common project.
-    // This sets up the transformations (@ExpectPlatform etc.) we need for production environments.
-    common(
-            "fabric",
-            "forge",
-    )
-}
+architectury { common("fabric", "forge") }
 
-loom {
-    accessWidenerPath.set(file("src/main/resources/bountiful.accesswidener"))
-}
+loom { accessWidenerPath.set(file("src/main/resources/bountiful.accesswidener")) }
+
 repositories {
     mavenCentral()
     mavenLocal()

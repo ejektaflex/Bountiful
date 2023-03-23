@@ -13,11 +13,7 @@ val generatedResources = file("src/generated/resources")
 // The path to the AW file in the common subproject.
 val accessWidenerFile = project(":common").file("src/main/resources/bountiful.accesswidener")
 
-loom {
-    // Make the Fabric project use the common access widener.
-    // Technically useless, BUT this file is also needed at dev runtime of course
-    accessWidenerPath.set(accessWidenerFile)
-}
+loom { accessWidenerPath.set(accessWidenerFile) }
 
 configurations {
     println(asMap.keys)
@@ -42,15 +38,10 @@ repositories {
 }
 
 dependencies {
-
-    // Depend on the common project. The "namedElements" configuration contains the non-remapped
-    // classes and resources of the project.
-    // It follows Gradle's own convention of xyzElements for "outgoing" configurations like apiElements.
     implementation(project(":common", configuration = "namedElements")) {
         isTransitive = false
     }
-    // Bundle the transformed version of the common project in the mod.
-    // The transformed version includes things like fixed refmaps.
+
     bundle(project(path = ":common", configuration = "transformProductionFabric")) {
         isTransitive = false
     }
@@ -61,12 +52,7 @@ dependencies {
     modApi("net.fabricmc:fabric-language-kotlin:1.9.2+kotlin.1.8.10")
     //implementation("io.ejekta:kambrik-common:123")
     implementation("io.ejekta:kambrik-fabric:123")
-
-    // Bundle Jankson in the mod and use it as a regular "implementation" library.
-    //bundle(implementation("blue.endless:jankson:${rootProject.property("jankson")}")!!)
-
     modLocalRuntime(modCompileOnly("com.terraformersmc:modmenu:6.1.0-rc.4")!!)
-
 }
 
 tasks {

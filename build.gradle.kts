@@ -1,17 +1,13 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import net.fabricmc.loom.api.LoomGradleExtensionAPI
 import net.fabricmc.loom.task.RemapJarTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 
 plugins {
     kotlin("jvm") version "1.8.10"
     kotlin("plugin.serialization") version "1.6.0"
     base
-
     id("architectury-plugin") version "3.4.143"
     id("dev.architectury.loom") version "1.0.302" apply false
-
     id("com.github.johnrengelman.shadow") version "7.1.2" apply false
 }
 
@@ -30,13 +26,12 @@ group = "io.ejekta.bountiful"
 version = "${Versions.Mod}+${Versions.MC}"
 base.archivesName.set("Bountiful")
 
-// Do the shared set up for the Minecraft subprojects.
+// Do the shared setup for the Minecraft subprojects.
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "dev.architectury.loom")
     apply(plugin = "architectury-plugin")
 
-    // Set Java version.
     extensions.configure<JavaPluginExtension> {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -83,25 +78,24 @@ subprojects {
             isCanBeResolved = true
         }
 
-        tasks {
-            "jar"(Jar::class) {
-                archiveClassifier.set("dev-slim")
-            }
+        tasks.withType<JavaCompile> {
+            options.encoding = "UTF-8"
+            options.release.set(17)
+        }
 
+        tasks {
             "shadowJar"(ShadowJar::class) {
                 archiveClassifier.set("dev-shadow")
                 // Include our bundle configuration in the shadow jar.
                 configurations = listOf(bundle)
             }
-
             "remapJar"(RemapJarTask::class) {
-                dependsOn("shadowJar")
-                // Replace the remap jar task's input with the shadow jar containing the common classes.
+                injectAccessWidener.set(true)
                 inputFile.set(named<ShadowJar>("shadowJar").flatMap { it.archiveFile })
-                // The project name will be "fabric" or "forge", so this will become the classifier/suffix
-                // for the jar. For example: ABC-3.4.0-fabric.jar
+                dependsOn("shadowJar")
                 archiveClassifier.set(project.name)
             }
+            "jar"(Jar::class) { archiveClassifier.set("dev") }
         }
     }
 }
