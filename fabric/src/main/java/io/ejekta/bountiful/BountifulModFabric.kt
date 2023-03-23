@@ -6,6 +6,7 @@ import io.ejekta.bountiful.config.BountifulReloadListener
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.messages.*
 import io.ejekta.kambrik.Kambrik
+import io.ejekta.kambrik.internal.registration.KambrikRegistrar
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
@@ -52,6 +53,8 @@ class BountifulModFabric : ModInitializer {
 
         CompostingChanceRegistry.INSTANCE.add({ BountifulContent.BOUNTY_ITEM }, 0.5f)
         CompostingChanceRegistry.INSTANCE.add({ BountifulContent.DECREE_ITEM }, 0.85f)
+
+        KambrikRegistrar.doRegistrationsFor(Bountiful.ID)
     }
 
     override fun onInitialize() {

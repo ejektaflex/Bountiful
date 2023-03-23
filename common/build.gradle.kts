@@ -22,7 +22,7 @@ dependencies {
     implementation(kotlin("reflect"))
     modImplementation("net.fabricmc:fabric-loader:0.14.17")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("io.ejekta:kambrik-common:123")
+    modImplementation("io.ejekta:kambrik-common:123-SNAPSHOT+")
     modImplementation("me.shedaniel.cloth:cloth-config:10.0.96")
 }
 

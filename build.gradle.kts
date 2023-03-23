@@ -86,7 +86,8 @@ subprojects {
         tasks {
             "shadowJar"(ShadowJar::class) {
                 archiveClassifier.set("dev-shadow")
-                // Include our bundle configuration in the shadow jar.
+                if (path == ":forge") { exclude("fabric.mod.json") }
+                exclude("architectury.common.json")
                 configurations = listOf(bundle)
             }
             "remapJar"(RemapJarTask::class) {
