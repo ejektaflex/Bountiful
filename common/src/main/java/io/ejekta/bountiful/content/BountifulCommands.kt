@@ -18,9 +18,7 @@ import io.ejekta.kambrik.command.requiresCreativeOrOp
 import io.ejekta.kambrik.command.suggestionListTooltipped
 import io.ejekta.kambrik.command.types.PlayerCommand
 import io.ejekta.kambrik.ext.identifier
-import io.ejekta.kambrik.ext.math.toBlockPos
 import io.ejekta.kambrik.text.sendMessage
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.minecraft.command.CommandRegistryAccess
 import net.minecraft.item.ItemStack
 import net.minecraft.predicate.NumberRange
@@ -33,9 +31,9 @@ import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 
 
-object BountifulCommands : CommandRegistrationCallback {
+object BountifulCommands {
 
-    override fun register(
+    fun register(
         dispatcher: CommandDispatcher<ServerCommandSource>,
         registryAccess: CommandRegistryAccess,
         environment: CommandManager.RegistrationEnvironment?

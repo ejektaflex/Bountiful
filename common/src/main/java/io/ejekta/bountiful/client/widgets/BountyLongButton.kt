@@ -8,7 +8,6 @@ import io.ejekta.bountiful.bounty.types.builtin.BountyTypeItem
 import io.ejekta.bountiful.bounty.types.builtin.BountyTypeItemTag
 import io.ejekta.bountiful.client.BoardScreen
 import io.ejekta.bountiful.content.messages.SelectBounty
-import io.ejekta.kambrik.ext.fapi.textRenderer
 import io.ejekta.kambrik.gui.KGuiDsl
 import io.ejekta.kambrik.gui.KSpriteGrid
 import io.ejekta.kambrik.gui.KWidget
@@ -98,7 +97,8 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
                     0xFFFFFF
                 }
             }
-            textImmediate(x + 17 - ctx.screen.textRenderer.getWidth(textToShow.string) * 2, y + 9, textToShow)
+            val tr = MinecraftClient.getInstance().textRenderer
+            textImmediate(x + 17 - tr.getWidth(textToShow.string) * 2, y + 9, textToShow)
         }
         // Entry tooltip
         dsl {

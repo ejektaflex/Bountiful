@@ -38,7 +38,7 @@ architectury {
 
 // Set up basic Maven artifact metadata, including the project version
 // and archive names.
-group = "io.ejekta.kambrik"
+group = "io.ejekta.bountiful"
 // Set the project version to be <mod version>+<Minecraft version> so the MC version is semver build metadata.
 // The "mod-version" and "minecraft-version" properties are read from gradle.properties.
 version = "${Versions.Mod}+${Versions.MC}"
@@ -197,8 +197,9 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
 }
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 kotlin {
-    jvmToolchain(8)
+    jvmToolchain(17)
 }

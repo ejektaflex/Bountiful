@@ -9,6 +9,7 @@ version = "0.1+1.19.4"
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {

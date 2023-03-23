@@ -18,6 +18,10 @@ loom {
 repositories {
     mavenCentral()
     mavenLocal()
+    maven {
+        name = "Shedaniel"
+        url = uri("https://maven.terraformersmc.com/releases/")
+    }
 }
 
 dependencies {
@@ -27,6 +31,7 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:0.14.17")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.ejekta:kambrik-common:123")
+    modImplementation("me.shedaniel.cloth:cloth-config:10.0.96")
 }
 
 kotlin {

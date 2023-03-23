@@ -25,6 +25,7 @@ repositories {
         setUrl("https://thedarkcolour.github.io/KotlinForForge/")
     }
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {

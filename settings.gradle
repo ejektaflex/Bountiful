@@ -11,6 +11,6 @@ include("common")
 include("fabric")
 include("forge")
 
-rootProject.name = "KambrikSingularity"
-includeBuild("commonBuild")
+rootProject.name = "BountifulSingularity"
+//includeBuild("commonBuild")
 
