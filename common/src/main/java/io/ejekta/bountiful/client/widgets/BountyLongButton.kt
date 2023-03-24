@@ -8,10 +8,10 @@ import io.ejekta.bountiful.bounty.types.builtin.BountyTypeItem
 import io.ejekta.bountiful.bounty.types.builtin.BountyTypeItemTag
 import io.ejekta.bountiful.client.BoardScreen
 import io.ejekta.bountiful.content.messages.SelectBounty
-import io.ejekta.kambrik.gui.KGuiDsl
-import io.ejekta.kambrik.gui.KSpriteGrid
-import io.ejekta.kambrik.gui.KWidget
-import io.ejekta.kambrik.gui.reactor.MouseReactor
+import io.ejekta.bountiful.gui.KGuiDsl
+import io.ejekta.bountiful.gui.KSpriteGrid
+import io.ejekta.bountiful.gui.KWidget
+import io.ejekta.bountiful.gui.reactor.MouseReactor
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.EntityType

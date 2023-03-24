@@ -4,23 +4,23 @@ loaderVersion = "[4,)"
 license = "Insert License Here"
 
 [[mods]]
-modId = "kambrik"
+modId = "bountiful"
 version = "${version}"
-displayName = "Kambrik"
+displayName = "Bountiful"
 authors = "Me!"
 description = '''
 This is an example description! Tell everyone what your mod is about!
 '''
 #logoFile = ""
 
-[[dependencies.kambrik]]
+[[dependencies.bountiful]]
 modId = "forge"
 mandatory = true
 versionRange = "[43,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.kambrik]]
+[[dependencies.bountiful]]
 modId = "minecraft"
 mandatory = true
 versionRange = "[1.19.4,)"

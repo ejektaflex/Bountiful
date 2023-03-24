@@ -1,4 +1,4 @@
-package io.ejekta.kambrik
+package io.ejekta.bountiful
 
 import io.ejekta.bountiful.bridge.BountifulSharedApi
 import net.minecraftforge.fml.ModList

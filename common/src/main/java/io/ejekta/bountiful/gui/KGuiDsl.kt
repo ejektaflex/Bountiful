@@ -1,6 +1,6 @@
-package io.ejekta.kambrik.gui
+package io.ejekta.bountiful.gui
 
-import io.ejekta.kambrik.gui.reactor.MouseReactor
+import io.ejekta.bountiful.gui.reactor.MouseReactor
 import io.ejekta.kambrik.text.KambrikTextBuilder
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.MinecraftClient

@@ -1,4 +1,4 @@
-package io.ejekta.kambrik.gui.reactor
+package io.ejekta.bountiful.gui.reactor
 
 sealed class EventReactor(defaultCanPass: Boolean) {
     /**

@@ -1,4 +1,4 @@
-package io.ejekta.kambrik.gui.widgets
+package io.ejekta.bountiful.gui.widgets
 
 import kotlin.math.min
 

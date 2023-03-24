@@ -3,7 +3,7 @@ package io.ejekta.bountiful.content.gui
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.board.BoardBlock
 import io.ejekta.bountiful.content.board.BoardInventory
-import io.ejekta.kambrik.KambrikScreenHandler
+import io.ejekta.bountiful.KambrikScreenHandler
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.network.PacketByteBuf

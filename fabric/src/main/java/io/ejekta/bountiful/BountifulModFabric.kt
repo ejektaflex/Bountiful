@@ -25,7 +25,6 @@ class BountifulModFabric : ModInitializer {
 
     init {
 
-
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(BountifulReloadListener)
         listOf(
             "campanion",
@@ -48,11 +47,6 @@ class BountifulModFabric : ModInitializer {
             }
         }
 
-
-
-//        CompostingChanceRegistry.INSTANCE.add({ BountifulContent.BOUNTY_ITEM }, 0.5f)
-//        CompostingChanceRegistry.INSTANCE.add({ BountifulContent.DECREE_ITEM }, 0.85f)
-
     }
 
     override fun onInitialize() {
@@ -60,10 +54,13 @@ class BountifulModFabric : ModInitializer {
         BountifulIO.loadConfig()
         KambrikRegistrar.doRegistrationsFor(Bountiful.ID)
 
-//        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register { e ->
-//            e.add(BountifulContent.DECREE_ITEM)
-//            e.add(BountifulContent.BOARD_ITEM)
-//        }
+        CompostingChanceRegistry.INSTANCE.add({ BountifulContent.BOUNTY_ITEM }, 0.5f)
+        CompostingChanceRegistry.INSTANCE.add({ BountifulContent.DECREE_ITEM }, 0.85f)
+
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register { e ->
+            e.add(BountifulContent.DECREE_ITEM)
+            e.add(BountifulContent.BOARD_ITEM)
+        }
 
         ServerLifecycleEvents.SERVER_STARTING.register(ServerLifecycleEvents.ServerStarting { server ->
             listOf("plains", "savanna", "snowy", "taiga", "desert").forEach { villageType ->
