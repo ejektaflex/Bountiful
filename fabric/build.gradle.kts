@@ -46,7 +46,6 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:0.14.17")
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.76.0+1.19.4")
     modApi("net.fabricmc:fabric-language-kotlin:1.9.2+kotlin.1.8.10")
-    //implementation("io.ejekta:kambrik-common:123")
     modImplementation("io.ejekta:kambrik-fabric:123-SNAPSHOT.+")
     modCompileOnly("com.terraformersmc:modmenu:6.1.0-rc.4")
 }

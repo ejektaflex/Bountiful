@@ -96,7 +96,6 @@ class ResourceLoadStrategy<T : IMerge<T>>(
             }
 
         }
-
         loadUnloadedFiles()
     }
 
@@ -130,13 +129,14 @@ class ResourceLoadStrategy<T : IMerge<T>>(
     }
 
     private fun loadUnloadedFiles() {
-        Bountiful.LOGGER.debug("Trying to load unloaded files from: $configPath")
+        Bountiful.LOGGER.info("Trying to load unloaded files from: $configPath")
         configPath.toFile().listFiles()?.forEach { file ->
             if (file.nameWithoutExtension !in loadedLocations && file.extension == "json") {
                 val resourceName = configPath.toString().replace('\\', '/') + "/" + file.nameWithoutExtension
                 val fileId = Bountiful.id(resourceName)
                 val item = loadFile(fileId)
                 item?.let {
+                    println("Completing load of $it from $fileId")
                     completeLoadOf(it)
                 }
             }

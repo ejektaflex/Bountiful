@@ -8,6 +8,7 @@ import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.ext.jvm.ensured
 import io.ejekta.kambrikx.file.KambrikConfigFile
 import io.ejekta.kambrikx.file.KambrikParseFailMode
+import net.minecraft.resource.ResourceManager
 
 object BountifulIO {
 
@@ -40,6 +41,13 @@ object BountifulIO {
 
     fun loadConfig() {
         configData = configFile.read()
+    }
+
+    fun doContentReload(manager: ResourceManager) {
+        contentLoaders.forEach {
+            it.clearDestination()
+            it.loadData(manager)
+        }
     }
 
     val contentLoaders = listOf(
