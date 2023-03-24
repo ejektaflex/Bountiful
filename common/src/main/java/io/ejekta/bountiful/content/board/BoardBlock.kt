@@ -115,6 +115,7 @@ class BoardBlock : BlockWithEntity(
                     println("Attempting to create screen handler for bounty block")
                     val screenHandlerFactory = state!!.createScreenHandlerFactory(world, pos)
                     if (screenHandlerFactory != null) {
+                        println("Opening handled screen...")
                         player.openHandledScreen(screenHandlerFactory)
                         return ActionResult.success(true)
                     } else {

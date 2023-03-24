@@ -14,7 +14,7 @@ architectury {
 
 loom {
     forge {
-        //mixinConfig("bountiful.mixins.json")
+        mixinConfig("bountiful.mixins.json")
         //convertAccessWideners.set(true)
     }
 }

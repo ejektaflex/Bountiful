@@ -21,6 +21,7 @@ class BountifulForgeApi : BountifulSharedApi {
         println("Forge evt bus registering register event")
         BountifulContent.getId()
         KambrikRegistrar[BountifulContent].content.forEach { entry ->
+            @Suppress("UNCHECKED_CAST")
             evt.register(entry.registry.key as RegistryKey<out Registry<Any>>, Identifier(BountifulContent.getId(), entry.itemId)) { entry.item }
         }
     }
