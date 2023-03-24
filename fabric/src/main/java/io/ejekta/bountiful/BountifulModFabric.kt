@@ -1,6 +1,7 @@
 package io.ejekta.bountiful
 
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
+import io.ejekta.bountiful.bridge.Bountybridge
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.BountifulReloadListener
 import io.ejekta.bountiful.content.BountifulContent
@@ -54,6 +55,8 @@ class BountifulModFabric : ModInitializer {
         BountifulIO.loadConfig()
         KambrikRegistrar.doRegistrationsFor(Bountiful.ID)
 
+        Bountybridge.registerMessages()
+
         CompostingChanceRegistry.INSTANCE.add({ BountifulContent.BOUNTY_ITEM }, 0.5f)
         CompostingChanceRegistry.INSTANCE.add({ BountifulContent.DECREE_ITEM }, 0.85f)
 
@@ -64,24 +67,15 @@ class BountifulModFabric : ModInitializer {
 
         ServerLifecycleEvents.SERVER_STARTING.register(ServerLifecycleEvents.ServerStarting { server ->
             listOf("plains", "savanna", "snowy", "taiga", "desert").forEach { villageType ->
-
                 Bountiful.LOGGER.info("Registering Bounty Board Jigsaw Piece for Village Type: $villageType")
-
                 Kambrik.Structure.addToStructurePool(
                     server,
                     Identifier("bountiful:village/common/bounty_gazebo"),
                     Identifier("minecraft:village/$villageType/houses"),
                     BountifulIO.configData.boardGenFrequency
                 )
-
             }
         })
-
-        Kambrik.Message.registerServerMessage(
-            SelectBounty.serializer(),
-            SelectBounty::class,
-            Bountiful.id("select_bounty")
-        )
 
         // Increment entity bounties for all players within 12 blocks of the player and all players within 12 blocks of the mob
         ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(ServerEntityCombatEvents.AfterKilledOtherEntity { world, entity, killedEntity ->
@@ -135,28 +129,6 @@ class BountifulModFabric : ModInitializer {
 //            }
 //        }
 
-        Kambrik.Message.registerClientMessage(
-            ClipboardCopy.serializer(),
-            ClipboardCopy::class,
-            Bountiful.id("clipboard_copy")
-        )
 
-        Kambrik.Message.registerClientMessage(
-            OnBountyComplete.serializer(),
-            OnBountyComplete::class,
-            Bountiful.id("play_sound_on_client")
-        )
-
-        Kambrik.Message.registerClientMessage(
-            UpdateBountyCriteriaObjective.serializer(),
-            UpdateBountyCriteriaObjective::class,
-            Bountiful.id("update_bounty_criteria")
-        )
-
-        Kambrik.Message.registerClientMessage(
-            UpdateBountyTooltipNotification.serializer(),
-            UpdateBountyTooltipNotification::class,
-            Bountiful.id("update_bounty_tooltip")
-        )
     }
 }

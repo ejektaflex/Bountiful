@@ -18,6 +18,7 @@ object BountifulModForge {
     init {
         println("Bountiful forge init called")
 
+        Bountybridge.registerMessages()
         FORGE_BUS.addListener(this::registerCommands)
         FORGE_BUS.addListener(this::onGameReload)
 
@@ -35,7 +36,7 @@ object BountifulModForge {
 
     }
 
-    val BountyDataReloader = SynchronousResourceReloader { manager ->
+    private val BountyDataReloader = SynchronousResourceReloader { manager ->
         doContentReload(manager)
     }
 
