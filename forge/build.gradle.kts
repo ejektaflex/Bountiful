@@ -14,10 +14,9 @@ architectury {
 
 loom {
     forge {
-
+        //mixinConfig("bountiful.mixins.json")
     }
 }
-
 
 repositories {
     // Set up Kotlin for Forge's Maven repository.
@@ -37,10 +36,15 @@ dependencies {
     // Based on their own instructions: https://github.com/thedarkcolour/KotlinForForge/blob/70385f5/thedarkcolour/kotlinforforge/gradle/kff-3.0.0.gradle
     implementation("thedarkcolour:kotlinforforge:4.1.0")
     // Without the manually specified versions, Loom's generateDLIConfig fails??
-    //forgeRuntimeLibrary(kotlin("stdlib-jdk8", version = "1.8.0"))
-    //forgeRuntimeLibrary(kotlin("reflect", version = "1.8.0"))
+    forgeRuntimeLibrary(kotlin("stdlib-jdk8", version = "1.8.0"))
+    forgeRuntimeLibrary(kotlin("reflect", version = "1.8.0"))
 
-    modImplementationMapped("io.ejekta:kambrik-forge:123-SNAPSHOT.+")
+    forgeRuntimeLibrary("io.ejekta:kambrik-forge:123-SNAPSHOT.+") {
+        exclude(group = "thedarkcolour", module = "kotlinforforge")
+        exclude(group = "org.jetbrains.kotlinx")
+        exclude(group = "org.jetbrains.kotlin")
+    }
+    //forge
     //modImplementation()
 
     // Depend on the common project. The "namedElements" configuration contains the non-remapped
