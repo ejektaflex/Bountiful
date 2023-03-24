@@ -9,6 +9,7 @@ import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyCreator
 import io.ejekta.bountiful.content.BountyItem
 import io.ejekta.bountiful.content.DecreeItem
+import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.mixin.SimpleInventoryAccessor
 import io.ejekta.bountiful.util.readOnlyCopy
@@ -20,17 +21,23 @@ import kotlinx.serialization.builtins.serializer
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtString
+import net.minecraft.screen.NamedScreenHandlerFactory
+import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.world.ServerWorld
+import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 
-class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(BountifulContent.BOARD_ENTITY, pos, state) {
+class BoardBlockEntity(pos: BlockPos, state: BlockState)
+    : BlockEntity(BountifulContent.BOARD_ENTITY, pos, state),
+    NamedScreenHandlerFactory {
 
     private val decrees = SimpleInventory(3)
     private val bounties = BountyInventory()
@@ -305,6 +312,16 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
         }
 
+    }
+
+    override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
+        //We provide *this* to the screenHandler as our class Implements Inventory
+        //Only the Server has the Inventory at the start, this will be synced to the client in the ScreenHandler
+        return BoardScreenHandler(syncId, playerInventory, getMaskedInventory(player))
+    }
+
+    override fun getDisplayName(): Text {
+        return Text.translatable(cachedState.block.translationKey)
     }
 
 }

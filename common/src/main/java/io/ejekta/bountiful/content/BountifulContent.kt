@@ -38,7 +38,7 @@ object BountifulContent : KambrikAutoRegistrar {
 
     val BOARD_ENTITY = "board-be".forBlockEntity(BOARD, ::BoardBlockEntity)
 
-    val BOARD_SCREEN_HANDLER = ScreenHandlerType.register("board", ::BoardScreenHandler)
+    val BOARD_SCREEN_HANDLER = "board".forScreen(::BoardScreenHandler)
 
     init {
         println("Did init of Bountiful content")

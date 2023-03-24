@@ -13,6 +13,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.loot.context.LootContext
 import net.minecraft.loot.context.LootContextParameters
+import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
@@ -91,6 +92,8 @@ class BoardBlock : BlockWithEntity(
         hit: BlockHitResult?
     ): ActionResult {
 
+        println("using bounty board block")
+
         if (world?.isClient == false) {
 
             if (!player.isSneaking) {
@@ -109,10 +112,13 @@ class BoardBlock : BlockWithEntity(
                     }
 
                 } else {
+                    println("Attempting to create screen handler for bounty block")
                     val screenHandlerFactory = state!!.createScreenHandlerFactory(world, pos)
                     if (screenHandlerFactory != null) {
                         player.openHandledScreen(screenHandlerFactory)
                         return ActionResult.success(true)
+                    } else {
+                        println("Screenhandler was actually null, didn't open it")
                     }
                 }
 

@@ -6,8 +6,6 @@ interface BountifulSharedApi {
 
     fun registerScreenHandler(key: String) {
 
-
-
     }
 
 }

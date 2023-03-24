@@ -32,8 +32,6 @@ class BountifulClient : ClientModInitializer {
             if (data.ids.isNotEmpty()) 1f else 0f
         }
 
-
-
         ScreenRegistry.register(BountifulContent.BOARD_SCREEN_HANDLER, ::BoardScreen)
 
     }
