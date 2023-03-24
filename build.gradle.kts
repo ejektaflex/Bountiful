@@ -1,3 +1,5 @@
+import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import net.fabricmc.loom.task.RemapJarTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -64,6 +66,7 @@ subprojects {
 // Set up "platform" subprojects (non-common subprojects).
 subprojects {
     if (path != ":common") {
+
         // Apply the shadow plugin which lets us include contents
         // of any libraries in our mod jars. Architectury uses it
         // for bundling the common mod code in the platform jars.
@@ -84,6 +87,13 @@ subprojects {
         }
 
         tasks {
+
+//            "processResources"(ProcessResources::class) {
+//                from(fileTree(project(":common").file("src/generated/resources"))) {
+//
+//                }
+//            }
+
             "shadowJar"(ShadowJar::class) {
                 archiveClassifier.set("dev-shadow")
                 if (path == ":forge") { exclude("fabric.mod.json") }

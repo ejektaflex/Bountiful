@@ -18,6 +18,7 @@ loom {
     }
 }
 
+
 repositories {
     // Set up Kotlin for Forge's Maven repository.
     maven {
@@ -39,7 +40,7 @@ dependencies {
     //forgeRuntimeLibrary(kotlin("stdlib-jdk8", version = "1.8.0"))
     //forgeRuntimeLibrary(kotlin("reflect", version = "1.8.0"))
 
-    modCompileClasspath("io.ejekta:kambrik-forge:123-SNAPSHOT.+")
+    modImplementationMapped("io.ejekta:kambrik-forge:123-SNAPSHOT.+")
     //modImplementation()
 
     // Depend on the common project. The "namedElements" configuration contains the non-remapped

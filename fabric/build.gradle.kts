@@ -25,7 +25,9 @@ configurations {
 sourceSets {
     main {
         resources {
-            srcDir(generatedResources)
+            // TODO does this break AW?
+            //srcDir(generatedResources)
+            srcDir(project(":common").file("src/main/resources"))
         }
     }
 }
