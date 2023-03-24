@@ -10,10 +10,7 @@ loom { accessWidenerPath.set(file("src/main/resources/bountiful.accesswidener"))
 repositories {
     mavenCentral()
     mavenLocal()
-    maven {
-        name = "Shedaniel"
-        url = uri("https://maven.terraformersmc.com/releases/")
-    }
+    maven("https://maven.terraformersmc.com/releases/") // Shedaniel
 }
 
 dependencies {

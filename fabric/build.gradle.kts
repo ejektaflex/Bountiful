@@ -15,12 +15,6 @@ val accessWidenerFile = project(":common").file("src/main/resources/bountiful.ac
 
 loom { accessWidenerPath.set(accessWidenerFile) }
 
-configurations {
-    println(asMap.keys)
-    val bindle = getByName("bundle")
-    getByName("compileClasspath").extendsFrom()
-}
-
 // Mark the AW generated resource directory as a source directory for the resources of the "main" source set.
 sourceSets {
     main {

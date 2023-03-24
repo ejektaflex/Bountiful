@@ -87,13 +87,6 @@ subprojects {
         }
 
         tasks {
-
-//            "processResources"(ProcessResources::class) {
-//                from(fileTree(project(":common").file("src/generated/resources"))) {
-//
-//                }
-//            }
-
             "shadowJar"(ShadowJar::class) {
                 archiveClassifier.set("dev-shadow")
                 if (path == ":forge") { exclude("fabric.mod.json") }
