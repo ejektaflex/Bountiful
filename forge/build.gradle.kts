@@ -15,6 +15,7 @@ architectury {
 loom {
     forge {
         //mixinConfig("bountiful.mixins.json")
+        //convertAccessWideners.set(true)
     }
 }
 
@@ -24,8 +25,8 @@ repositories {
         name = "Kotlin for Forge"
         setUrl("https://thedarkcolour.github.io/KotlinForForge/")
     }
-    mavenCentral()
     mavenLocal()
+    mavenCentral()
 }
 
 dependencies {
@@ -35,21 +36,11 @@ dependencies {
     // Add Kotlin for Forge.
     // Based on their own instructions: https://github.com/thedarkcolour/KotlinForForge/blob/70385f5/thedarkcolour/kotlinforforge/gradle/kff-3.0.0.gradle
     implementation("thedarkcolour:kotlinforforge:4.1.0")
-    // Without the manually specified versions, Loom's generateDLIConfig fails??
-    forgeRuntimeLibrary(kotlin("stdlib-jdk8", version = "1.8.0"))
-    forgeRuntimeLibrary(kotlin("reflect", version = "1.8.0"))
 
-    forgeRuntimeLibrary("io.ejekta:kambrik-forge:123-SNAPSHOT.+") {
-        exclude(group = "thedarkcolour", module = "kotlinforforge")
-        exclude(group = "org.jetbrains.kotlinx")
-        exclude(group = "org.jetbrains.kotlin")
+    modImplementation("io.ejekta:kambrik-forge:123-SNAPSHOT.+") {
+        isTransitive = false
     }
-    //forge
-    //modImplementation()
 
-    // Depend on the common project. The "namedElements" configuration contains the non-remapped
-    // classes and resources of the project.
-    // It follows Gradle's own convention of xyzElements for "outgoing" configurations like apiElements.
     implementation(project(":common", configuration = "namedElements")) {
         isTransitive = false
     }
