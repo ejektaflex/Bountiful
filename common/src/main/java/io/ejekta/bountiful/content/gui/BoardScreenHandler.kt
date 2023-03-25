@@ -6,23 +6,23 @@ import io.ejekta.bountiful.content.board.BoardInventory
 import io.ejekta.bountiful.KambrikScreenHandler
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.network.PacketByteBuf
+import net.minecraft.screen.ArrayPropertyDelegate
+import net.minecraft.screen.PropertyDelegate
 import net.minecraft.util.math.BlockPos
 
 
 class BoardScreenHandler @JvmOverloads constructor(
     syncId: Int,
     playerInventory: PlayerInventory,
-    override var inventory: BoardInventory
+    override var inventory: BoardInventory,
+    doneProp: PropertyDelegate
 ) : KambrikScreenHandler<BoardScreenHandler, BoardInventory>(BountifulContent.BOARD_SCREEN_HANDLER, syncId) {
 
-    var totalDone = 0
+    private val doneProperty = doneProp
 
     constructor(syncId: Int, playerInventory: PlayerInventory) : this(syncId, playerInventory,
-        BoardInventory(BlockPos.ORIGIN)
-    ) {
-        //totalDone = buf.readInt()
-    }
+        BoardInventory(BlockPos.ORIGIN), ArrayPropertyDelegate(1)
+    )
 
     override fun canUse(player: PlayerEntity): Boolean {
         return inventory.canPlayerUse(player)
@@ -32,6 +32,9 @@ class BoardScreenHandler @JvmOverloads constructor(
         inventory.onClose(player)
     }
 
+    fun getTotalNumComplete(): Int {
+        return doneProperty.get(0)
+    }
 
     //This constructor gets called from the BlockEntity on the server without calling the other constructor first, the server knows the inventory of the container
     //and can therefore directly provide it as an argument. This inventory will then be synced to the client.
@@ -43,6 +46,7 @@ class BoardScreenHandler @JvmOverloads constructor(
         //this.inventory = inventory
         //some inventories do custom logic when a player opens it.
         inventory.onOpen(playerInventory.player)
+        addProperties(doneProperty)
 
         val boardInv = inventory as BoardInventory
 
@@ -72,6 +76,13 @@ class BoardScreenHandler @JvmOverloads constructor(
 
         //The player inventory
         makePlayerDefaultGrid(playerInventory, 181, 84)
+
+//        if (playerInventory.player !is ServerPlayerEntity) {
+//            println("Opened screen as client player, sending data")
+//            BoardDoneRequest(playerInventory.player.world.dimensionKey.value, boardInv.pos)
+//        }
+
+        //val pd = PropertyDelegate
 
     }
 }

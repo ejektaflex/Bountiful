@@ -28,6 +28,25 @@ group = "io.ejekta.bountiful"
 version = "${Versions.Mod}+${Versions.MC}"
 base.archivesName.set("Bountiful")
 
+tasks {
+    // Register a custom "collect jars" task that copies the Fabric and Forge mod jars into the root project's build/libs.
+    val collectJars by registering(Copy::class) {
+        // Find the remapJar tasks of projects that aren't :common (so :fabric and :forge) and depend on them.
+        val tasks = subprojects.filter { it.path != ":common" }.map { it.tasks.named("remapJar") }
+        dependsOn(tasks)
+
+        // Copy the outputs of the tasks...
+        from(tasks)
+        // ...into build/libs.
+        into(buildDir.resolve("libs"))
+    }
+
+    // Set up assemble to depend on the collectJars task, so it gets run on gradlew build.
+    assemble {
+        dependsOn(collectJars)
+    }
+}
+
 // Do the shared setup for the Minecraft subprojects.
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")

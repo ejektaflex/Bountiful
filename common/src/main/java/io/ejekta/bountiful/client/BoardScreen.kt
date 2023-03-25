@@ -72,7 +72,7 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
     }
 
     val fgGui = kambrikGui {
-        val levelData = BoardBlockEntity.levelProgress(boardHandler.totalDone)
+        val levelData = BoardBlockEntity.levelProgress(boardHandler.getTotalNumComplete())
         val percentDone = (levelData.second.toDouble() / levelData.third * 100).toInt()
 
         // Selection highlight on selected stack

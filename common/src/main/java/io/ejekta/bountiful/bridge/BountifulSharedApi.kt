@@ -54,11 +54,17 @@ interface BountifulSharedApi {
             Bountiful.id("update_bounty_criteria")
         )
 
-        Kambrik.Message.registerClientMessage(
-            UpdateBountyTooltipNotification.serializer(),
-            UpdateBountyTooltipNotification::class,
-            Bountiful.id("update_bounty_tooltip")
-        )
+//        Kambrik.Message.registerServerMessage(
+//            BoardDoneRequest.serializer(),
+//            BoardDoneRequest::class,
+//            Bountiful.id("board_done_request")
+//        )
+//
+//        Kambrik.Message.registerClientMessage(
+//            BoardDoneResponse.serializer(),
+//            BoardDoneResponse::class,
+//            Bountiful.id("board_done_response")
+//        )
     }
 
     fun registerScreenHandler(key: String) {

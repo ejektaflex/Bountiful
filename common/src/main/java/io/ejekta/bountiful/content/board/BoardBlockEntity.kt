@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtString
 import net.minecraft.screen.NamedScreenHandlerFactory
+import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
@@ -54,7 +55,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
     private var finishMap = mutableMapOf<String, Int>()
     private val finishSerializer = MapSerializer(String.serializer(), Int.serializer())
 
-    val isPristine: Boolean
+    // Whether this board has even been initialized/given starting data
+    private val isPristine: Boolean
         get() = bounties.isEmpty && finishMap.keys.isEmpty() && takenMask.keys.isEmpty()
 
     // Calculated level, progress to next, point of next level
@@ -71,6 +73,9 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
             )
         }
     }
+
+    val numCompleted: Int
+        get() = finishMap.values.sum()
 
     fun updateCompletedBounties(player: PlayerEntity) {
         finishMap[player.uuidAsString] = finishMap.getOrPut(player.uuidAsString) {
@@ -189,22 +194,13 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
         return BoardInventory(pos, bounties.cloned(maskFor(player)), decrees)
     }
 
-//    override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
-//        //We provide *this* to the screenHandler as our class Implements Inventory
-//        //Only the Server has the Inventory at the start, this will be synced to the client in the ScreenHandler
-//        return BoardScreenHandler(syncId, playerInventory, getMaskedInventory(player))
-//    }
 
-//    override fun getDisplayName(): Text {
-//        return Text.translatable(cachedState.block.translationKey)
-//    }
 
-//    override fun writeScreenOpeningData(serverPlayerEntity: ServerPlayerEntity, packetByteBuf: PacketByteBuf) {
-//        setDecree()
-//        packetByteBuf.apply {
-//            writeInt(finishMap.values.sum())
-//        }
-//    }
+    val DoneProperty = object : PropertyDelegate {
+        override fun get(index: Int) = numCompleted
+        override fun set(index: Int, value: Int) {  }
+        override fun size() = 1
+    }
 
     @Suppress("CAST_NEVER_SUCCEEDS")
     override fun readNbt(base: NbtCompound) {
@@ -322,7 +318,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
     override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
         //We provide *this* to the screenHandler as our class Implements Inventory
         //Only the Server has the Inventory at the start, this will be synced to the client in the ScreenHandler
-        return BoardScreenHandler(syncId, playerInventory, getMaskedInventory(player))
+        return BoardScreenHandler(syncId, playerInventory, getMaskedInventory(player), DoneProperty)
     }
 
     override fun getDisplayName(): Text {
