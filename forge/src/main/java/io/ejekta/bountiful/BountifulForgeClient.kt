@@ -1,4 +1,4 @@
-package io.ejekta
+package io.ejekta.bountiful
 
 import io.ejekta.bountiful.bridge.Bountybridge
 import io.ejekta.bountiful.client.BoardScreen
