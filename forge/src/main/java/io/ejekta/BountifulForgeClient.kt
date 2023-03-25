@@ -1,5 +1,6 @@
 package io.ejekta
 
+import io.ejekta.bountiful.bridge.Bountybridge
 import io.ejekta.bountiful.client.BoardScreen
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.BountifulContent
@@ -16,12 +17,13 @@ object BountifulForgeClient {
         println("Bountiful setting up forge client init!")
         HandledScreens.register(BountifulContent.BOARD_SCREEN_HANDLER, ::BoardScreen)
         // Register config screen
-        evt.enqueueWork {
-            ModLoadingContext.get().registerExtensionPoint( ConfigScreenFactory::class.java) {
-                ConfigScreenFactory { c, s -> BountifulIO.configData.buildScreen() }
+        if (Bountybridge.isModLoaded("cloth_config")) {
+            evt.enqueueWork {
+                ModLoadingContext.get().registerExtensionPoint( ConfigScreenFactory::class.java) {
+                    ConfigScreenFactory { c, s -> BountifulIO.configData.buildScreen() }
+                }
             }
         }
-
     }
 
 }

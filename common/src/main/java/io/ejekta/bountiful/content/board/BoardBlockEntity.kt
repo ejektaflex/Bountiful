@@ -29,9 +29,11 @@ import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtString
 import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.ScreenHandler
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.ChunkPos
 import net.minecraft.world.World
 
 
@@ -86,19 +88,22 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
         )
     }
 
+    private fun getPlayersTrackingUs(): List<ServerPlayerEntity> {
+        return (world as? ServerWorld)?.chunkManager?.threadedAnvilChunkStorage?.getPlayersWatchingChunk(ChunkPos(pos)) ?: emptyList()
+    }
+
     private fun modifyTrackedGuiInvs(func: (inv: BoardInventory) -> Unit) {
-        // TODO modify tracked inventories
-//        val players = PlayerLookup.tracking(this)
-//        players.forEach { player ->
-//            val handler = player.currentScreenHandler as? BoardScreenHandler
-//            // The handler has to refer to the same Board position as the Entity
-//            if (handler?.inventory?.pos == pos) {
-//                handler?.let {
-//                    val boardInv = it.inventory
-//                    func(boardInv)
-//                }
-//            }
-//        }
+        val players = getPlayersTrackingUs()
+        players.forEach { player ->
+            val handler = player.currentScreenHandler as? BoardScreenHandler
+            // The handler has to refer to the same Board position as the Entity
+            if (handler?.inventory?.pos == pos) {
+                handler?.let {
+                    val boardInv = it.inventory
+                    func(boardInv)
+                }
+            }
+        }
     }
 
     private fun addBounty(slot: Int, stack: ItemStack) {
