@@ -25,6 +25,7 @@ repositories {
         name = "Kotlin for Forge"
         setUrl("https://thedarkcolour.github.io/KotlinForForge/")
     }
+    maven("https://maven.shedaniel.me/") // Cloth Config
     mavenLocal()
     mavenCentral()
 }
@@ -51,6 +52,7 @@ dependencies {
     }
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    modImplementation("me.shedaniel.cloth:cloth-config-forge:10.0.96")
 }
 
 tasks {

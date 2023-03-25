@@ -36,14 +36,12 @@ object BountifulModForge {
 
     }
 
-    private val BountyDataReloader = SynchronousResourceReloader { manager ->
-        doContentReload(manager)
-    }
-
     @JvmStatic
     @SubscribeEvent
     fun onGameReload(evt: AddReloadListenerEvent) {
-        evt.addListener(BountyDataReloader)
+        evt.addListener(SynchronousResourceReloader { manager ->
+            doContentReload(manager)
+        })
     }
 
     @JvmStatic

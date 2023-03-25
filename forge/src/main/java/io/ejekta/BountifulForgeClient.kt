@@ -1,10 +1,12 @@
 package io.ejekta
 
 import io.ejekta.bountiful.client.BoardScreen
+import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.BountifulContent
-import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.gui.screen.ingame.HandledScreens
+import net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory
 import net.minecraftforge.eventbus.api.SubscribeEvent
+import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 
 object BountifulForgeClient {
@@ -13,6 +15,13 @@ object BountifulForgeClient {
     fun initClient(evt: FMLClientSetupEvent) {
         println("Bountiful setting up forge client init!")
         HandledScreens.register(BountifulContent.BOARD_SCREEN_HANDLER, ::BoardScreen)
+        // Register config screen
+        evt.enqueueWork {
+            ModLoadingContext.get().registerExtensionPoint( ConfigScreenFactory::class.java) {
+                ConfigScreenFactory { c, s -> BountifulIO.configData.buildScreen() }
+            }
+        }
+
     }
 
 }

@@ -23,7 +23,6 @@ class BountifulConfigData {
     var maxNumRewards = 2
     var showCompletionToast = true
 
-
     fun buildScreen(): Screen {
         val builder = ConfigBuilder.create()
             .setParentScreen(MinecraftClient.getInstance().currentScreen)

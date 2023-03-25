@@ -12,12 +12,7 @@ import net.minecraft.resource.ResourceManager
 
 object BountifulIO {
 
-    var configData = BountifulConfigData()
-
     private val rootFolder = Kambrik.File.getConfigFolderRelativePath(Bountiful.ID)
-
-    private val poolConfigs = rootFolder.ensured("bounty_pools")
-    private val decreeConfigs = rootFolder.ensured("bounty_decrees")
 
     private val configFile = KambrikConfigFile(
         rootFolder,
@@ -26,6 +21,11 @@ object BountifulIO {
         KambrikParseFailMode.LEAVE,
         BountifulConfigData.serializer()
     ) { BountifulConfigData() }
+
+    var configData = configFile.read()
+
+    private val poolConfigs = rootFolder.ensured("bounty_pools")
+    private val decreeConfigs = rootFolder.ensured("bounty_decrees")
 
     fun getPoolFile(poolName: String): KambrikConfigFile<Pool> {
         return KambrikConfigFile(
