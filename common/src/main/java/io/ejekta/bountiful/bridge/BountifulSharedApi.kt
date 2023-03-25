@@ -40,13 +40,15 @@ interface BountifulSharedApi {
         }
     }
 
-    fun registerMessages() {
+    fun registerServerMessages() {
         Kambrik.Message.registerServerMessage(
             SelectBounty.serializer(),
             SelectBounty::class,
             Bountiful.id("select_bounty")
         )
+    }
 
+    fun registerClientMessages() {
         Kambrik.Message.registerClientMessage(
             ClipboardCopy.serializer(),
             ClipboardCopy::class,

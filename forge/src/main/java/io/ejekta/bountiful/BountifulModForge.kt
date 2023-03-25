@@ -8,7 +8,6 @@ import net.minecraft.server.world.ServerWorld
 import net.minecraftforge.event.AddReloadListenerEvent
 import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.event.entity.living.LivingDeathEvent
-import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 import thedarkcolour.kotlinforforge.forge.FORGE_BUS
 import thedarkcolour.kotlinforforge.forge.MOD_CONTEXT
@@ -19,7 +18,8 @@ object BountifulModForge {
     init {
         println("Bountiful forge init called")
 
-        Bountybridge.registerMessages()
+        Bountybridge.registerServerMessages()
+        Bountybridge.registerClientMessages()
         FORGE_BUS.addListener(this::registerCommands)
         FORGE_BUS.addListener(this::onGameReload)
         FORGE_BUS.addListener(this::onEntityKilled)

@@ -1,17 +1,11 @@
 package io.ejekta.bountiful
 
-import io.ejekta.bountiful.bounty.BountyData
-import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bridge.Bountybridge
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.BountifulReloadListener
 import io.ejekta.bountiful.content.BountifulContent
-import io.ejekta.bountiful.content.messages.*
-import io.ejekta.bountiful.util.iterateBountyStacks
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.internal.registration.KambrikRegistrar
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
@@ -20,11 +14,8 @@ import net.fabricmc.fabric.api.registry.CompostingChanceRegistry
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType
 import net.fabricmc.loader.api.FabricLoader
-import net.minecraft.advancement.criterion.EnterBlockCriterion
-import net.minecraft.advancement.criterion.TickCriterion
 import net.minecraft.item.ItemGroups
 import net.minecraft.resource.ResourceType
-import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
@@ -61,7 +52,8 @@ class BountifulModFabric : ModInitializer {
         BountifulIO.loadConfig()
         KambrikRegistrar.doRegistrationsFor(Bountiful.ID)
 
-        Bountybridge.registerMessages()
+        Bountybridge.registerServerMessages()
+        Bountybridge.registerClientMessages()
 
         CompostingChanceRegistry.INSTANCE.add({ BountifulContent.BOUNTY_ITEM }, 0.5f)
         CompostingChanceRegistry.INSTANCE.add({ BountifulContent.DECREE_ITEM }, 0.85f)
