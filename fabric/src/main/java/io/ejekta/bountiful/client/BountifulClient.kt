@@ -3,6 +3,7 @@ package io.ejekta.bountiful.client
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.DecreeData
+import io.ejekta.bountiful.bridge.Bountybridge
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.mixin.ModelPredicateProviderRegistrar
 import net.fabricmc.api.ClientModInitializer
@@ -16,21 +17,7 @@ class BountifulClient : ClientModInitializer {
     override fun onInitializeClient() {
         println("Init client for Bountiful")
 
-        ModelPredicateProviderRegistrar.registerInvoker(
-            BountifulContent.BOUNTY_ITEM,
-            Bountiful.id("rarity")
-        ) { itemStack: ItemStack, _: ClientWorld?, _: LivingEntity?, _: Int ->
-            val rarity = BountyInfo[itemStack].rarity
-            rarity.ordinal.toFloat() / 10f
-        }
-
-        ModelPredicateProviderRegistrar.registerInvoker(
-            BountifulContent.DECREE_ITEM,
-            Bountiful.id("status")
-        ) { itemStack: ItemStack, _: ClientWorld?, _: LivingEntity?, _: Int ->
-            val data = DecreeData[itemStack]
-            if (data.ids.isNotEmpty()) 1f else 0f
-        }
+        Bountybridge.registerItemDynamicTextures()
 
         ScreenRegistry.register(BountifulContent.BOARD_SCREEN_HANDLER, ::BoardScreen)
 

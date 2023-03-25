@@ -15,7 +15,8 @@ architectury {
 loom {
     forge {
         mixinConfig("bountiful.mixins.json")
-        //convertAccessWideners.set(true)
+        accessWidenerPath.set(project(":common").file("src/main/resources/bountiful.accesswidener"))
+        convertAccessWideners.set(true)
     }
 }
 
