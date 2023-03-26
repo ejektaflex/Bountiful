@@ -1,15 +1,15 @@
 modLoader = "kotlinforforge"
 loaderVersion = "[4,)"
 #issueTrackerURL = ""
-license = "Insert License Here"
+license = "GPL 3.0"
 
 [[mods]]
 modId = "bountiful"
 version = "${version}"
 displayName = "Bountiful"
-authors = "Me!"
+authors = "Ejektaflex"
 description = '''
-This is an example description! Tell everyone what your mod is about!
+Bountiful adds bounty boards to the world.
 '''
 #logoFile = ""
 
@@ -17,6 +17,13 @@ This is an example description! Tell everyone what your mod is about!
 modId = "forge"
 mandatory = true
 versionRange = "[43,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.bountiful]]
+modId = "kambrik"
+mandatory = true
+versionRange = "[6.0.0-beta.1,6.0.0-beta.2)"
 ordering = "NONE"
 side = "BOTH"
 

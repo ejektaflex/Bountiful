@@ -11,7 +11,6 @@ import io.ejekta.bountiful.content.BountyItem
 import io.ejekta.bountiful.content.DecreeItem
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.data.Decree
-import io.ejekta.bountiful.mixin.SimpleInventoryAccessor
 import io.ejekta.bountiful.util.readOnlyCopy
 import io.ejekta.kambrik.ext.ksx.decodeFromStringTag
 import io.ejekta.kambrik.ext.ksx.encodeToStringTag
@@ -209,12 +208,12 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
 
         Inventories.readNbt(
             decreeList,
-            (decrees as SimpleInventoryAccessor).stacks
+            decrees.stacks
         )
 
         Inventories.readNbt(
             bountyList,
-            (bounties as SimpleInventoryAccessor).stacks
+            bounties.stacks
         )
 
         val doneMap = base.get("completed")
@@ -279,7 +278,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
 
             // Set unset decrees every 20 ticks
             if (world.time % 20L == 0L) {
-                (entity.decrees as SimpleInventoryAccessor).stacks.filter {
+                entity.decrees.stacks.filter {
                     it.item is DecreeItem // must be a decree and not null
                 }.forEach { stack ->
                     DecreeData.edit(stack) {

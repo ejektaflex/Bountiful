@@ -1,14 +1,21 @@
 package io.ejekta.bountiful
 
 import io.ejekta.bountiful.bridge.Bountybridge
+import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.BountifulIO.doContentReload
 import io.ejekta.bountiful.content.BountifulCommands
+import io.ejekta.kambrik.Kambrik
 import net.minecraft.resource.SynchronousResourceReloader
 import net.minecraft.server.world.ServerWorld
+import net.minecraft.util.Identifier
 import net.minecraftforge.event.AddReloadListenerEvent
 import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.event.entity.living.LivingDeathEvent
+import net.minecraftforge.event.server.ServerStartingEvent
 import net.minecraftforge.fml.common.Mod
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
+import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent
+import net.minecraftforge.fml.loading.targets.FMLServerLaunchHandler
 import thedarkcolour.kotlinforforge.forge.FORGE_BUS
 import thedarkcolour.kotlinforforge.forge.MOD_CONTEXT
 import thedarkcolour.kotlinforforge.forge.runForDist
@@ -16,19 +23,17 @@ import thedarkcolour.kotlinforforge.forge.runForDist
 @Mod("bountiful")
 object BountifulModForge {
     init {
-        println("Bountiful forge init called")
-
         Bountybridge.registerServerMessages()
         Bountybridge.registerClientMessages()
         FORGE_BUS.addListener(this::registerCommands)
         FORGE_BUS.addListener(this::onGameReload)
         FORGE_BUS.addListener(this::onEntityKilled)
+        FORGE_BUS.addListener(this::onServerStarting)
 
         MOD_CONTEXT.getKEventBus().register(Bountybridge)
 
         runForDist(
             clientTarget = {
-                println("Registering client listeners for Bountiful..")
                 MOD_CONTEXT.getKEventBus().register(BountifulForgeClient::class.java)
             },
             serverTarget = {
@@ -46,6 +51,18 @@ object BountifulModForge {
         }
     }
 
+    private fun onServerStarting(evt: ServerStartingEvent) {
+        listOf("plains", "savanna", "snowy", "taiga", "desert").forEach { villageType ->
+            Bountiful.LOGGER.info("Registering Bounty Board Jigsaw Piece for Village Type: $villageType")
+            Kambrik.Structure.addToStructurePool(
+                evt.server,
+                Identifier("bountiful:village/common/bounty_gazebo"),
+                Identifier("minecraft:village/$villageType/houses"),
+                BountifulIO.configData.boardGenFrequency
+            )
+        }
+    }
+
     private fun onGameReload(evt: AddReloadListenerEvent) {
         evt.addListener(SynchronousResourceReloader { manager ->
             doContentReload(manager)
@@ -53,7 +70,6 @@ object BountifulModForge {
     }
 
     private fun registerCommands(evt: RegisterCommandsEvent) {
-        println("Forge evt bus registering Bountiful commands")
         BountifulCommands.register(evt.dispatcher, evt.buildContext, evt.commandSelection)
     }
 

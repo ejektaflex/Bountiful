@@ -9,7 +9,6 @@ import net.minecraft.client.gui.screen.ingame.HandledScreens
 class BountifulClient : ClientModInitializer {
 
     override fun onInitializeClient() {
-        println("Init client for Bountiful")
         Bountybridge.registerItemDynamicTextures()
         //Bountybridge.registerClientMessages()
         ScreenRegistry.register(BountifulContent.BOARD_SCREEN_HANDLER, ::BoardScreen)

@@ -14,7 +14,6 @@ object BountifulForgeClient {
     @SubscribeEvent
     @JvmStatic
     fun initClient(evt: FMLClientSetupEvent) {
-        println("Bountiful setting up forge client init!")
         HandledScreens.register(BountifulContent.BOARD_SCREEN_HANDLER, ::BoardScreen)
         // Register config screen
         if (Bountybridge.isModLoaded("cloth_config")) {

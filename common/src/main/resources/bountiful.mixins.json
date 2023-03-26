@@ -4,10 +4,10 @@
 	"package": "io.ejekta.bountiful.mixin",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
-		"SimpleInventoryAccessor"
+
 	],
 	"client": [
-		"ModelPredicateProviderRegistrar"
+
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -20,7 +20,6 @@ class BountifulForgeApi : BountifulSharedApi {
 
     @SubscribeEvent
     fun registerRegistryContent(evt: RegisterEvent) {
-        println("Forge evt bus registering register event")
         BountifulContent.getId()
         KambrikRegistrar[BountifulContent].content.forEach { entry ->
             @Suppress("UNCHECKED_CAST")
