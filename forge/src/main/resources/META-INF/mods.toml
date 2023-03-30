@@ -23,7 +23,7 @@ side = "BOTH"
 [[dependencies.bountiful]]
 modId = "kambrik"
 mandatory = true
-versionRange = "[6.0.0-beta.1,6.0.0-beta.2)"
+versionRange = "[6.0.0-beta.2,6.0.0]"
 ordering = "NONE"
 side = "BOTH"
 

@@ -46,7 +46,7 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:0.14.17")
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.76.0+1.19.4")
     modApi("net.fabricmc:fabric-language-kotlin:1.9.2+kotlin.1.8.10")
-    modImplementation("io.ejekta:kambrik-fabric:123-SNAPSHOT.+")
+    modImplementation("io.ejekta:kambrik-fabric:6.0.0-beta.2+1.19.4")
     modCompileOnly("com.terraformersmc:modmenu:6.1.0-rc.4")
 }
 
@@ -63,11 +63,11 @@ tasks {
         dependsOn(copyAccessWidener)
         // Mark that this task depends on the project version,
         // and should reset when the project version changes.
-        inputs.property("version", project.version)
+        inputs.property("version", rootProject.version.toString())
 
         // Replace the $version template in fabric.mod.json with the project version.
         filesMatching("fabric.mod.json") {
-            expand("version" to project.version)
+            expand("version" to rootProject.version.toString())
         }
     }
 

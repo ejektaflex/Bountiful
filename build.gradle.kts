@@ -14,7 +14,7 @@ plugins {
 }
 
 object Versions {
-    val Mod = "6.0.0-beta.2"
+    val Mod = "6.0.0-beta.3"
     val MC = "1.19.4"
     val Yarn = "1.19.4+build.1"
 }

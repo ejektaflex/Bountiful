@@ -1,8 +1,6 @@
 
 object Versions {
-    val Mod = "0.1"
     val MC = "1.19.4"
-    val Yarn = "1.19.4+build.1"
 }
 
 architectury {
@@ -39,7 +37,7 @@ dependencies {
     // Based on their own instructions: https://github.com/thedarkcolour/KotlinForForge/blob/70385f5/thedarkcolour/kotlinforforge/gradle/kff-3.0.0.gradle
     implementation("thedarkcolour:kotlinforforge:4.1.0")
 
-    modImplementation("io.ejekta:kambrik-forge:123-SNAPSHOT.+") {
+    modImplementation("io.ejekta:kambrik-forge:6.0.0-beta.2+1.19.4") {
         isTransitive = false
     }
 
@@ -61,11 +59,11 @@ tasks {
     processResources {
         // Mark that this task depends on the project version,
         // and should reset when the project version changes.
-        inputs.property("version", project.version)
+        inputs.property("version", rootProject.version.toString())
 
         // Replace the $version template in mods.toml with the project version.
         filesMatching("META-INF/mods.toml") {
-            expand("version" to project.version)
+            expand("version" to rootProject.version.toString())
         }
     }
 }

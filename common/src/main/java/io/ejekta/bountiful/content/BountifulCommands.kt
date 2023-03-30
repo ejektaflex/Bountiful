@@ -12,10 +12,7 @@ import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.messages.ClipboardCopy
 import io.ejekta.bountiful.data.PoolEntry
-import io.ejekta.kambrik.command.addCommand
-import io.ejekta.kambrik.command.kambrikCommand
-import io.ejekta.kambrik.command.requiresCreativeOrOp
-import io.ejekta.kambrik.command.suggestionListTooltipped
+import io.ejekta.kambrik.command.*
 import io.ejekta.kambrik.command.types.PlayerCommand
 import io.ejekta.kambrik.ext.identifier
 import io.ejekta.kambrik.ext.math.floor
@@ -43,7 +40,8 @@ object BountifulCommands {
         Bountiful.LOGGER.info("Adding serverside commands..")
 
         dispatcher.addCommand("bo") {
-            requiresCreativeOrOp(2)
+
+            requiresOp(2)
 
             val pools = suggestionListTooltipped {
                 BountifulContent.Pools.map { pool ->
