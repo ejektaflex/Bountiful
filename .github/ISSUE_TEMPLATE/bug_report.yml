@@ -31,11 +31,23 @@ body:
       description: What version of Bountiful are you running?
     validations:
       required: true
+  - type: dropdown
+      id: mod-loader
+      attributes:
+        label: "Mod Loader"
+        description: Which mod loader are you using?
+        multiple: false
+        options:
+          - Fabric
+          - Forge
+          - Quilt
+      validations:
+        required: false
   - type: input
-    id: forge-version
+    id: mod-loader-version
     attributes:
-      label: Forge Version
-      description: What version of Forge are you running?
+      label: Mod Loader Version
+      description: If using Forge, which version? If using Fabric, which version of Fabric API?
     validations:
       required: true
   - type: textarea
