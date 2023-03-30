@@ -1,0 +1,3 @@
+files:
+  - source: /common/src/main/resources/assets/bountiful/lang
+    translation: /%original_path%/%locale_with_underscore%.json
