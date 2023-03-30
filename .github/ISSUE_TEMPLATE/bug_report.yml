@@ -32,25 +32,26 @@ body:
     validations:
       required: true
   - type: dropdown
-      id: modloader
-      attributes:
-        label: "Mod Loader"
-        description: "Which mod loader are you using?"
-        options:
-          - Fabric
-          - Forge
-          - Quilt
-      validations:
-        required: false
+    id: mod-loader
+    attributes:
+      label: "Mod Loader"
+      description: Which mod loader are you using?
+      multiple: false
+      options:
+        - Fabric
+        - Forge
+        - Quilt
+    validations:
+      required: false
   - type: input
-    id: modloaderversion
+    id: mod-loader-version
     attributes:
       label: Mod Loader Version
-      description: "If using Forge, which version? If using Fabric, which version of Fabric API?"
+      description: If using Forge, which version? If using Fabric, which version of Fabric API?
     validations:
       required: true
   - type: textarea
     id: logs
     attributes:
-      label: "Relevant log output"
-      description: "Please copy and paste any relevant log output, or (preferably) drag in your log file(s)."
+      label: Relevant log output
+      description: Please copy and paste any relevant log output, or (preferably) drag in your log file(s).
