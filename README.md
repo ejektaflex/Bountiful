@@ -1,6 +1,10 @@
 # Bountiful
 
+Fabric:
 [![](http://cf.way2muchnoise.eu/versions/bountiful-fabric.svg)](https://minecraft.curseforge.com/projects/bountiful-fabric) [![](http://cf.way2muchnoise.eu/full_bountiful-fabric_downloads.svg)](https://minecraft.curseforge.com/projects/bountiful-fabric/files)
+
+Forge:
+[![](http://cf.way2muchnoise.eu/versions/bountiful.svg)](https://minecraft.curseforge.com/projects/bountiful) [![](http://cf.way2muchnoise.eu/full_bountiful_downloads.svg)](https://minecraft.curseforge.com/projects/bountiful/files)
 
 A mod that adds bounty boards to Minecraft.
 
@@ -8,18 +12,5 @@ A mod that adds bounty boards to Minecraft.
 
 ### Versions
 
-This is the Fabric version of Bountiful.
-
-Compared to the Forge version, the Fabric also includes:
-* A reworked GUI interface
-* A reworked rarity system
-* A reputation system
-* More balanced objectives and rewards
-* Dual content loading from both datapacks and the config folder
-* More flexible objective and reward definitions
-* Commands to more easily add objectives/rewards to the game
-* Boards generate with bounties already inside, in new villages
-* Instanced bounties - everyone can take their own copy of a bounty off of the board.
-
-The Forge version will be kept up to date, but will not get these additional features until 
-I have time (and I'm quite busy!), or until someone would like to contribute a port.
+I try to stay up to date with the most current version of Minecraft that's available. However, I still try to release
+critical maintenance patches for *slightly* older versions in case something goes awry.
