@@ -1,0 +1,18 @@
+
+{
+    "requires": ["charm"],
+	"content": {
+        "toolsmith_rew_raid_horn": {
+            "type": "item",
+            "rarity": "LEGENDARY",
+            "content": "charm:raid_horn",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 8000,
+            "nbt": "{Damage:0}",
+            "weightMult": 0.5
+        }
+	}
+}

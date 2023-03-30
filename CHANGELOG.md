@@ -4,67 +4,76 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) as closely as it can.
 
-## [3.3.1] - 2021-03-14
-### Compat
-- Added compatibility with Repurposed Structures villages (#113)
+## [5.0.0] for 1.19.4 - 2023-03-21
+
 ### Added
-- Full Spanish language support, thanks to FrannDzs
-### Changes
-- Moved items to the Miscellaneous itemgroup
-### Fixes
-- Fixed the occasional 'air' bounty when using Bountiful with Quark. (#110)
-- Fixed a rare crash having to do with Decrees (#97, #120)
-- Cleaned up output log (#99, #111)
-
-## [3.3.0] - 2021-01-27
-### Ported
-- Port from 1.15.2 to 1.16.4
-- Mostly complete feature parity, exceptions listed here
-### Changes
-- Changed Kotlin dependency mod from *Kottle* to *Kotlin for Forge*.
-### Removals
-- Item-Tag bounty objectives temporarily not working
-- Removed the `/bo hand` command. You should now reload like normal with `/reload`.
-- Removed decrees from Villager & Wandering Trader trades temporarily.
-### Fixes
-- Fixed bounty boards not generating in some villages. They will now appear much more reliably.
-
-
-## [3.1.2] - 2020-06-09
-### Fixes
-- Update zh_cn & add ru_ru translations (thanks to EnderFor & JokerDima)
-- In 1.15, using ender pearls on a bounty board does not throw the pearl anymore
-- Some ingots now use Forge tags instead of hardcoded item registry names
-- Fix possible "Air" bounties when using Simple Farming and not Vanilla Food Pantry
-- Fixed possible crash when other mods get a bounty's display name
-
-## [3.1.1] - 2020-05-06
-### Fixes
-- Fixed possible crash when rendering tooltip with certain mods present
-
-## [3.1.0] - 2020-03-27
-### Added
-- "Tinkering" Decree for redstone objectives/rewards
-- New objectives/rewards to default bounty data
-- Bounty difficulty can now be globally changed via config (`worthRatio`)
-- Allow Decrees to be combined at an anvil (not cheap)
-- New community made Korean & Chinese language support
-- Support for commands as rewards (for modpack makers)
-- New '/bo entities' command to dump a list of all entities to `logs/bountiful.log`
-- New '/bo hand' command to copy hand content to clipboard
-- More compat for some other popular mods
-- Recipes for Bounty Boards and Decrees
-- Bounty boards now keep their inventory when broken
+- Added the ability to compost both Bounties and Decrees
+- Added Criterion type objectives - see [the wiki](https://kambrik.ejekta.io/mods/bountiful/) for details!
+  - These objectives allow us to check for objective completion using the same triggers that vanilla uses for Advancements
+  - This allows us to create fun objectives such as "kill a zombie while on fire" if we want!
+- Added Notifications upon bounty completion
+  - Toast notifications and audio notifications (ping sound) are currently added
+  - This can be toggled off in the config
+- Added a patch-overwrite system for data loading for modpack makers
+  - This allows modpack makers to edit/update/remove specific bounties without replacing entire pools
+- Added compat for new mods such as Tech Reborn, Xtra Arrows and Villager Hats
+- Did a minor balance pass, adding a few rewards where applicable to several pools
+- Added a new Decree called the Inventor Decree, used for redstone and tech mod related items
 
 ### Changed
-- Rebalance some objectives and rewards
-- Datapack structure for more modpack flexibility
+- Non-core data now loads from built-in resource packs
+  - This allows us to create a resource pack for every mod we want to add compatibility for
+  - This also allows users to turn off compatibility easily for any mods they desire
+  - These packs are loaded by default if the associated mod is present
+  - Players can use the `/datapack` command or modify datapacks on world creation to change which compat is enabled for a particular world
+- Bounty pool entries are each given its own ID so that other mods and data packs can more easily overwrite only parts of our data
+- Fundamentally changed how bounty data is stored in bounties
+  - This will break existing bounties if upgrading a world that used Bountiful from before 1.19.4 to 1.19.4
 
-### Fixes
-- Fix bounty boards not breaking ever
-- Fixed some Item-Tag bounties ("Get X of any Y"/"Rewards X of random Y") causing a crash on servers (#71)
+### Fixed
+- Fixed rare situation where bounties with unmet dependencies could be partially, but not fully completed
 
-## [3.0.0] - 2020-03-11
+## [4.1.1] for 1.19.3 - 2022-03-02
+
 ### Added
-- Initial release of Bountiful 3 for v1.14 & v1.15
+- Added mod items into the Functional creative tab
+- Added config option for maximum number of rewards per bounty
 
+## [4.1.0] for 1.19.3 - 2022-03-02
+
+### Removed
+- Removed mod items from creative tabs, this is scheduled to be reimplemented at a later time
+
+## [2.0.2] for 1.18.1 - 2022-01-09
+
+### Fixed
+- Rebuilt mod with newly compiled class files to avoid default interface method bug with Kambrik 3.0.1 and Bountiful 2.0.1
+
+## [2.0.1] for 1.18 - 2021-11-21
+
+### Fixed
+- Removed several GUIs that existed for testing purposes
+
+## [2.0.0] for 1.18 - 2021-11-20
+
+### Added
+- A new GUI interface for bounty boards
+- Item Tag bounties
+  - e.g. get 10 of any type of wool
+- Item bounties derived from item tag
+  - e.g. picks a type of wool and asks you to get 10 of it
+- Command rewards for bounties (intended for modpack makers)
+  - runs a command when the bounty completes
+- Bounty boards in villages (as well as newly crafted boards) come pre-populated with bounties
+- Added a slider for bounty objective frequency
+
+### Fixed
+- Fixed a problem with bounty board generation in villages
+- Fixed an issue with reputation levels over 30 being allowed
+
+### Changed
+- Lightly rebalanced many objectives and added some new rewards
+- Lowered default bounty board generation frequency
+
+## [1.0.0] for 1.17.1 - 2021-08-25
+- Initial release of Bountiful

@@ -1,0 +1,368 @@
+
+{
+	"content": {
+
+        "armorer_rew_iron_helm": {
+            "type": "item",
+            "content": "minecraft:iron_helmet",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 4000,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:iron_ingot"
+                }
+            ]
+        },
+
+        "armorer_rew_iron_chest": {
+            "type": "item",
+            "content": "minecraft:iron_chestplate",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 6400,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:iron_ingot"
+                }
+            ]
+        },
+
+        "armorer_rew_iron_legs": {
+            "type": "item",
+            "content": "minecraft:iron_leggings",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 5600,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:iron_ingot"
+                }
+            ]
+        },
+
+        "armorer_rew_iron_boots": {
+            "type": "item",
+            "content": "minecraft:iron_boots",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 3200,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:iron_ingot"
+                }
+            ]
+        },
+
+        "armorer_rew_bell": {
+            "type": "item",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:bell",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 12000
+        },
+
+        "armorer_rew_chain_legs": {
+            "type": "item",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:chainmail_leggings",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 4200,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:iron_ingot"
+                }
+            ]
+        },
+
+        "armorer_rew_chain_boots": {
+            "type": "item",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:chainmail_boots",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 2400,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:iron_ingot"
+                }
+            ]
+        },
+
+        "armorer_rew_gold_helm": {
+            "type": "item",
+            "content": "minecraft:golden_helmet",
+            "rarity": "RARE",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 6250,
+            "nbt": "{Damage:0}"
+        },
+
+        "armorer_rew_gold_chest": {
+            "type": "item",
+            "content": "minecraft:golden_chestplate",
+            "rarity": "RARE",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 10000,
+            "nbt": "{Damage:0}"
+        },
+
+        "armorer_rew_gold_legs": {
+            "type": "item",
+            "content": "minecraft:golden_leggings",
+            "rarity": "RARE",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 8750,
+            "nbt": "{Damage:0}"
+        },
+
+        "armorer_rew_gold_boots": {
+            "type": "item",
+            "content": "minecraft:golden_boots",
+            "rarity": "RARE",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 5000,
+            "nbt": "{Damage:0}"
+        },
+
+        "armorer_rew_gold_horse_armor": {
+            "type": "item",
+			"rarity": "RARE",
+            "content": "minecraft:golden_horse_armor",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 5000
+        },
+
+        "armorer_rew_iron_horse_armor": {
+            "type": "item",
+			"rarity": "RARE",
+            "content": "minecraft:iron_horse_armor",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 5000,
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:iron_ingot"
+                }
+            ]
+        },
+
+        "armorer_rew_diamond_horse_armor": {
+            "type": "item",
+			"rarity": "EPIC",
+            "content": "minecraft:diamond_horse_armor",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 24000,
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:diamond"
+                }
+            ],
+            "weightMult": 0.15
+        },
+
+        "armorer_rew_diamond_helm": {
+            "type": "item",
+			"rarity": "EPIC",
+            "content": "minecraft:diamond_helmet",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 20000,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:diamond"
+                }
+            ],
+            "weightMult": 0.15
+        },
+
+        "armorer_rew_diamond_chest": {
+            "type": "item",
+			"rarity": "EPIC",
+            "content": "minecraft:diamond_chestplate",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 32000,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:diamond"
+                }
+            ],
+            "weightMult": 0.15
+        },
+
+        "armorer_rew_diamond_legs": {
+            "type": "item",
+			"rarity": "EPIC",
+            "content": "minecraft:diamond_leggings",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 28000,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:diamond"
+                }
+            ],
+            "weightMult": 0.15
+        },
+
+        "armorer_rew_diamond_boots": {
+            "type": "item",
+			"rarity": "EPIC",
+            "content": "minecraft:diamond_boots",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 16000,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:diamond"
+                }
+            ],
+            "weightMult": 0.15
+        },
+
+        "armorer_rew_nether_helm": {
+            "type": "item",
+            "rarity": "LEGENDARY",
+            "content": "minecraft:netherite_helmet",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 30000,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:netherite_ingot"
+                }
+            ],
+            "weightMult": 0.1
+        },
+
+        "armorer_rew_nether_chest": {
+            "type": "item",
+            "rarity": "LEGENDARY",
+            "content": "minecraft:netherite_chestplate",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 48000,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:netherite_ingot"
+                }
+            ],
+            "weightMult": 0.1
+        },
+
+        "armorer_rew_nether_legs": {
+            "type": "item",
+            "rarity": "LEGENDARY",
+            "content": "minecraft:netherite_leggings",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 42000,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:netherite_ingot"
+                }
+            ],
+            "weightMult": 0.1
+        },
+
+        "armorer_rew_nether_boots": {
+            "type": "item",
+            "rarity": "LEGENDARY",
+            "content": "minecraft:netherite_boots",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 24000,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:netherite_ingot"
+                }
+            ],
+            "weightMult": 0.1
+        }
+
+	}
+
+}

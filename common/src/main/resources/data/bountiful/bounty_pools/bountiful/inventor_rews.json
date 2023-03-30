@@ -1,0 +1,83 @@
+
+{
+	"content": {
+        "inventor_rews_sticky_piston": {
+            "type": "item",
+            "content": "minecraft:sticky_piston",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1300
+        },
+        "inventor_rews_repeater": {
+            "type": "item",
+            "content": "minecraft:repeater",
+            "amount": {
+                "min": 1,
+                "max": 2
+            },
+            "unitWorth": 750
+        },
+        "inventor_rews_comparator": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:comparator",
+            "amount": {
+                "min": 1,
+                "max": 2
+            },
+            "unitWorth": 1000
+        },
+        "inventor_rews_redstone_lamp": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:redstone_lamp",
+            "amount": {
+                "min": 1,
+                "max": 2
+            },
+            "unitWorth": 1800
+        },
+        "inventor_rews_note_block": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:note_block",
+            "amount": {
+                "min": 1,
+                "max": 4
+            },
+            "unitWorth": 500
+        },
+        "inventor_rews_dispenser": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:dispenser",
+            "amount": {
+                "min": 1,
+                "max": 2
+            },
+            "unitWorth": 1000
+        },
+        "inventor_rews_observer": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:observer",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 750
+        },
+        "inventor_objs_jukebox": {
+            "type": "item",
+            "rarity": "EPIC",
+            "content": "minecraft:jukebox",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 3250
+        }
+	}
+}

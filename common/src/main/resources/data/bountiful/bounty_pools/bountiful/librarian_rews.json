@@ -1,0 +1,178 @@
+
+{
+	"content": {
+
+        "librarian_rew_bookshelf": {
+            "type": "item",
+            "content": "minecraft:bookshelf",
+            "amount": {
+                "min": 1,
+                "max": 6
+            },
+            "unitWorth": 1500
+        },
+
+        "librarian_rew_lantern": {
+            "type": "item",
+            "content": "minecraft:lantern",
+            "amount": {
+                "min": 1,
+                "max": 2
+            },
+            "unitWorth": 650
+        },
+
+        "librarian_rew_ench_book_protect": {
+            "type": "item",
+            "content": "minecraft:enchanted_book",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1500,
+            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:protection\"}]}",
+            "weightMult": 0.2
+        },
+
+        "librarian_rew_ench_book_feather_falling": {
+            "type": "item",
+            "content": "minecraft:enchanted_book",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1500,
+            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:feather_falling\"}]}",
+            "weightMult": 0.2
+        },
+
+        "librarian_rew_ench_book_respiration": {
+            "type": "item",
+            "content": "minecraft:enchanted_book",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1500,
+            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:respiration\"}]}",
+            "weightMult": 0.2
+        },
+
+        "librarian_rew_ench_book_thorns": {
+            "type": "item",
+            "content": "minecraft:enchanted_book",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1500,
+            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:thorns\"}]}",
+            "weightMult": 0.2
+        },
+
+        "librarian_rew_ench_bookdepth_strider": {
+            "type": "item",
+            "content": "minecraft:enchanted_book",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1500.0,
+            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:depth_strider\"}]}",
+            "weightMult": 0.2
+        },
+
+        "librarian_rew_ench_book_sharpness": {
+            "type": "item",
+            "content": "minecraft:enchanted_book",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1500.0,
+            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:sharpness\"}]}",
+            "weightMult": 0.2
+        },
+
+        "librarian_rew_ench_book_frost_walker": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:enchanted_book",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1500.0,
+            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:frost_walker\"}]}",
+            "weightMult": 0.2
+        },
+
+        "librarian_rew_glass": {
+            "type": "item",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:glass",
+            "amount": {
+                "min": 1,
+                "max": 12
+            },
+            "unitWorth": 250
+        },
+
+        "librarian_rew_tinted_glass": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:tinted_glass",
+            "amount": {
+                "min": 1,
+                "max": 12
+            },
+            "unitWorth": 350
+        },
+
+        "librarian_rew_clock": {
+            "type": "item",
+			"rarity": "RARE",
+            "content": "minecraft:clock",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 4000
+        },
+
+        "librarian_rew_compass": {
+            "type": "item",
+			"rarity": "RARE",
+            "content": "minecraft:compass",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 4000
+        },
+
+        "librarian_rew_name_tag": {
+            "type": "item",
+			"rarity": "EPIC",
+            "content": "minecraft:name_tag",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 4500
+        },
+
+        "librarian_rew_name_tag_bargain": {
+            "type": "item",
+			"rarity": "LEGENDARY",
+            "content": "minecraft:name_tag",
+            "amount": {
+                "min": 1,
+                "max": 2
+            },
+            "unitWorth": 2500
+        }
+
+	}
+
+}

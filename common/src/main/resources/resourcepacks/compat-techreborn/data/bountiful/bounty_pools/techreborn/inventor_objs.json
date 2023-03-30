@@ -1,0 +1,45 @@
+{
+	"requires": ["techreborn"],
+	"content": {
+		"inventor_objs_tr_insulated_copper_cable": {
+			"type": "item",
+			"content": "techreborn:insulated_copper_cable",
+			"amount": {
+				"min": 2,
+				"max": 18
+			},
+			"unitWorth": 800
+		},
+
+		"inventor_objs_tr_rubber": {
+			"type": "item",
+			"content": "techreborn:rubber",
+			"amount": {
+				"min": 2,
+				"max": 16
+			},
+			"unitWorth": 300
+		},
+
+		"inventor_objs_tr_refined_iron_ingot": {
+			"type": "item",
+			"content": "techreborn:refined_iron_ingot",
+			"amount": {
+				"min": 2,
+				"max": 16
+			},
+			"unitWorth": 1500
+		},
+
+
+		"inventor_objs_tr_basic_machine_frame": {
+			"type": "item",
+			"content": "techreborn:basic_machine_frame",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 13500
+		}
+	}
+}

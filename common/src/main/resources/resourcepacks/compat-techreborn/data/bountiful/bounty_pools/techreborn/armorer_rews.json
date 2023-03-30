@@ -1,0 +1,218 @@
+
+{
+    "requires": ["techreborn"],
+    "content": {
+        "armorer_rew_tr_bronze_helm": {
+            "type": "item",
+            "content": "techreborn:bronze_helmet",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 3500,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "techreborn:bronze_ingot"
+                }
+            ]
+        },
+
+        "armorer_rew_tr_bronze_chest": {
+            "type": "item",
+            "content": "techreborn:bronze_chestplate",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 5600,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "techreborn:bronze_ingot"
+                }
+            ]
+        },
+
+        "armorer_rew_tr_bronze_legs": {
+            "type": "item",
+            "content": "techreborn:bronze_leggings",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 4900,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "techreborn:bronze_ingot"
+                }
+            ]
+        },
+
+        "armorer_rew_tr_bronze_boots": {
+            "type": "item",
+            "content": "techreborn:bronze_boots",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 2800,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "techreborn:bronze_ingot"
+                }
+            ]
+        },
+
+        "armorer_rew_tr_silver_helm": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "techreborn:silver_helmet",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 5000,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "techreborn:silver_ingot"
+                }
+            ]
+        },
+
+        "armorer_rew_tr_silver_chest": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "techreborn:silver_chestplate",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 8000,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "techreborn:silver_ingot"
+                }
+            ]
+        },
+
+        "armorer_rew_tr_silver_legs": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "techreborn:silver_leggings",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 7000,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "techreborn:silver_ingot"
+                }
+            ]
+        },
+
+        "armorer_rew_tr_silver_boots": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "techreborn:silver_boots",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 4000,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "techreborn:silver_ingot"
+                }
+            ]
+        },
+
+        "armorer_rew_tr_steel_helm": {
+            "type": "item",
+            "rarity": "RARE",
+            "content": "techreborn:steel_helmet",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 12000,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "techreborn:steel_ingot"
+                }
+            ]
+        },
+
+        "armorer_rew_tr_steel_chest": {
+            "type": "item",
+            "rarity": "RARE",
+            "content": "techreborn:steel_chestplate",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 19200,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "techreborn:steel_ingot"
+                }
+            ]
+        },
+
+        "armorer_rew_tr_steel_legs": {
+            "type": "item",
+            "rarity": "RARE",
+            "content": "techreborn:steel_leggings",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 16800,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "techreborn:steel_ingot"
+                }
+            ]
+        },
+
+        "armorer_rew_tr_steel_boots": {
+            "type": "item",
+            "rarity": "RARE",
+            "content": "techreborn:steel_boots",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 9600,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "techreborn:steel_ingot"
+                }
+            ]
+        }
+
+	}
+}

@@ -1,0 +1,57 @@
+
+{
+	"requires": ["gofish"],
+	"content": {
+
+		"fisherman_rew_blaze_rod": {
+			"type": "item",
+			"rarity": "RARE",
+			"content": "gofish:blaze_rod",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 1000,
+			"nbt": "{Damage:0}"
+		},
+
+		"fisherman_rew_skeletal_rod": {
+			"type": "item",
+			"rarity": "RARE",
+			"content": "gofish:skeletal_rod",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 1000,
+			"nbt": "{Damage:0}"
+		},
+
+		"fisherman_rew_diamond_reinforced_rod": {
+			"type": "item",
+			"rarity": "EPIC",
+			"content": "gofish:diamond_reinforced_rod",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 4000,
+			"nbt": "{Damage:0}"
+		},
+
+
+		"fisherman_rew_celestial_rod": {
+			"type": "item",
+			"rarity": "LEGENDARY",
+			"content": "gofish:celestial_rod",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 5000,
+			"nbt": "{Damage:0}"
+		}
+
+	}
+
+}

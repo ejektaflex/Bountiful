@@ -1,0 +1,162 @@
+
+{
+	"content": {
+
+        "shepherd_rew_shears": {
+            "type": "item",
+            "content": "minecraft:shears",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 2000,
+            "nbt": "{Damage:0}"
+        },
+
+        "shepherd_rew_lapis_block": {
+            "type": "item",
+            "content": "minecraft:lapis_block",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1000
+        },
+
+        "shepherd_rew_wool_random": {
+            "type": "item",
+            "content": "#minecraft:wool",
+            "amount": {
+                "min": 4,
+                "max": 24
+            },
+            "unitWorth": 70,
+            "weightMult": 4.0
+        },
+
+        "shepherd_rew_carpet_random": {
+            "type": "item",
+            "content": "#minecraft:wool_carpets",
+            "amount": {
+                "min": 1,
+                "max": 6
+            },
+            "unitWorth": 250,
+            "weightMult": 4.0
+        },
+
+        "shepherd_rew_bed_random": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "#minecraft:beds",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1000,
+            "weightMult": 4.0
+        },
+
+        "shepherd_rew_banner_random": {
+            "type": "item",
+            "rarity": "RARE",
+            "content": "#minecraft:banners",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1000.0,
+            "weightMult": 4.0
+        },
+
+        "shepherd_rew_painting": {
+            "type": "item",
+            "rarity": "EPIC",
+            "content": "minecraft:painting",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 650
+        },
+
+        "shepherd_rew_light_gray_dye": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:light_gray_dye",
+            "amount": {
+                "min": 4,
+                "max": 8
+            },
+            "unitWorth": 80
+        },
+
+        "shepherd_rew_purple_dye": {
+            "type": "item",
+            "rarity": "RARE",
+            "content": "minecraft:purple_dye",
+            "amount": {
+                "min": 4,
+                "max": 8
+            },
+            "unitWorth": 80
+        },
+
+        "shepherd_rew_magenta_dye": {
+            "type": "item",
+            "rarity": "RARE",
+            "content": "minecraft:magenta_dye",
+            "amount": {
+                "min": 4,
+                "max": 8
+            },
+            "unitWorth": 80
+        },
+
+        "shepherd_rew_blue_dye": {
+            "type": "item",
+            "rarity": "RARE",
+            "content": "minecraft:blue_dye",
+            "amount": {
+                "min": 4,
+                "max": 8
+            },
+            "unitWorth": 80
+        },
+
+        "shepherd_rew_cyan_dye": {
+            "type": "item",
+            "rarity": "RARE",
+            "content": "minecraft:cyan_dye",
+            "amount": {
+                "min": 4,
+                "max": 8
+            },
+            "unitWorth": 80
+        },
+
+        "shepherd_rew_green_dye": {
+            "type": "item",
+            "rarity": "RARE",
+            "content": "minecraft:green_dye",
+            "amount": {
+                "min": 4,
+                "max": 8
+            },
+            "unitWorth": 80
+        },
+
+        "shepherd_rew_brown_dye": {
+            "type": "item",
+            "rarity": "RARE",
+            "content": "minecraft:brown_dye",
+            "amount": {
+                "min": 4,
+                "max": 8
+            },
+            "unitWorth": 80
+        }
+
+	}
+
+}

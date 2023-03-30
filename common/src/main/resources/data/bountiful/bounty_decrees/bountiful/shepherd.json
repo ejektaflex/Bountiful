@@ -1,0 +1,10 @@
+{
+	"objectives": [
+		"shepherd_objs",
+		"_all_objs"
+	],
+	"rewards": [
+		"shepherd_rews",
+		"_all_rews"
+	]
+}

@@ -1,0 +1,163 @@
+{
+	"content": {
+
+		"metal_obj_coal": {
+			"type": "item",
+			"content": "minecraft:coal",
+			"amount": {
+				"min": 3,
+				"max": 24
+			},
+			"unitWorth": 100
+		},
+
+		"metal_obj_raw_iron": {
+			"type": "item",
+			"content": "minecraft:raw_iron",
+			"amount": {
+				"min": 3,
+				"max": 32
+			},
+			"unitWorth": 900,
+			"forbids": [
+				{
+					"type": "item",
+					"content": "minecraft:iron_ingot"
+				},
+				{
+					"type": "item",
+					"content": "minecraft:iron_helmet"
+				},
+				{
+					"type": "item",
+					"content": "minecraft:iron_chestplate"
+				},
+				{
+					"type": "item",
+					"content": "minecraft:iron_leggings"
+				},
+				{
+					"type": "item",
+					"content": "minecraft:iron_boots"
+				}
+			]
+		},
+
+		"metal_obj_raw_copper": {
+			"type": "item",
+			"content": "minecraft:raw_copper",
+			"amount": {
+				"min": 3,
+				"max": 18
+			},
+			"unitWorth": 700,
+			"forbids": [
+				{
+					"type": "item",
+					"content": "minecraft:copper_ingot"
+				}
+			]
+		},
+
+		"metal_obj_copper_ingot": {
+			"type": "item",
+			"content": "minecraft:copper_ingot",
+			"amount": {
+				"min": 3,
+				"max": 18
+			},
+			"unitWorth": 750
+		},
+
+		"metal_obj_raw_gold": {
+			"type": "item",
+			"content": "minecraft:raw_gold",
+			"rarity": "UNCOMMON",
+			"amount": {
+				"min": 3,
+				"max": 16
+			},
+			"unitWorth": 1200
+		},
+
+		"metal_obj_gold_ingot": {
+			"type": "item",
+			"content": "minecraft:gold_ingot",
+			"rarity": "UNCOMMON",
+			"amount": {
+				"min": 2,
+				"max": 9
+			},
+			"unitWorth": 1250
+		},
+
+		"metal_obj_iron_ingot": {
+			"type": "item",
+			"content": "minecraft:iron_ingot",
+			"amount": {
+				"min": 3,
+				"max": 24
+			},
+			"unitWorth": 1000
+		},
+
+		"metal_obj_diamond": {
+			"type": "item",
+			"content": "minecraft:diamond",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 4000,
+			"weightMult": 0.1
+		},
+
+		"metal_obj_chain": {
+			"type": "item",
+			"content": "minecraft:chain",
+			"amount": {
+				"min": 1,
+				"max": 16
+			},
+			"unitWorth": 1100,
+			"forbids": [
+				{
+					"type": "item",
+					"content": "minecraft:iron_ingot"
+				}
+			]
+		},
+
+		"metal_obj_iron_bars": {
+			"type": "item",
+			"content": "minecraft:iron_bars",
+			"amount": {
+				"min": 4,
+				"max": 24
+			},
+			"unitWorth": 375,
+			"forbids": [
+				{
+					"type": "item",
+					"content": "minecraft:iron_ingot"
+				}
+			]
+		},
+
+		"metal_obj_netherite": {
+			"type": "item",
+			"rarity": "LEGENDARY",
+			"content": "minecraft:netherite_ingot",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 4000
+		}
+
+
+
+	}
+
+
+}

@@ -1,0 +1,59 @@
+
+{
+    "requires": ["techreborn"],
+	"content": {
+        "inventor_rews_tr_electronic_circuit": {
+            "type": "item",
+            "content": "techreborn:electronic_circuit",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 4750
+        },
+
+        "inventor_rews_tr_red_cell_battery": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "techreborn:red_cell_battery",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 7200
+        },
+
+        "inventor_rews_tr_overclocker_upgrade": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "techreborn:overclocker_upgrade",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 5750
+        },
+
+        "inventor_rews_tr_advanced_circuit": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "techreborn:red_cell_battery",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 6200
+        },
+
+        "inventor_rews_tr_electric_furnace": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "techreborn:electric_furnace",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 9750
+        }
+	}
+}

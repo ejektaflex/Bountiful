@@ -1,0 +1,210 @@
+
+{
+	"content": {
+
+        "toolsmith_rew_stone_axe": {
+            "type": "item",
+            "content": "minecraft:stone_axe",
+            "amount": {
+                "min": 2,
+                "max": 4
+            },
+            "unitWorth": 300,
+            "nbt": "{Damage:0}"
+        },
+
+        "toolsmith_rew_stone_pickaxe": {
+            "type": "item",
+            "content": "minecraft:stone_pickaxe",
+            "amount": {
+                "min": 2,
+                "max": 4
+            },
+            "unitWorth": 300,
+            "nbt": "{Damage:0}"
+        },
+
+        "toolsmith_rew_stone_hoe": {
+            "type": "item",
+            "content": "minecraft:stone_hoe",
+            "amount": {
+                "min": 2,
+                "max": 4
+            },
+            "unitWorth": 200,
+            "nbt": "{Damage:0}"
+        },
+
+        "toolsmith_rew_iron_pickaxe": {
+            "type": "item",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:iron_pickaxe",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 2700,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:iron_ingot"
+                }
+            ]
+        },
+
+        "toolsmith_rew_iron_hoe": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:iron_hoe",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1800,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:iron_ingot"
+                }
+            ]
+        },
+
+        "toolsmith_rew_gold_axe": {
+            "type": "item",
+            "rarity": "RARE",
+            "content": "minecraft:golden_axe",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 2700,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:gold_ingot"
+                }
+            ]
+        },
+
+        "toolsmith_rew_trident": {
+            "type": "item",
+            "rarity": "RARE",
+            "content": "minecraft:trident",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 6500,
+            "nbt": "{Damage:0}"
+        },
+
+        "toolsmith_rew_gold_pickaxe": {
+            "type": "item",
+            "rarity": "RARE",
+            "content": "minecraft:golden_pickaxe",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 2700,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:gold_ingot"
+                }
+            ]
+        },
+
+        "toolsmith_rew_gold_hoe": {
+            "type": "item",
+            "rarity": "RARE",
+            "content": "minecraft:golden_hoe",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1800,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:gold_ingot"
+                }
+            ]
+        },
+
+        "toolsmith_rew_diamond_pickaxe": {
+            "type": "item",
+            "rarity": "EPIC",
+            "content": "minecraft:diamond_pickaxe",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 9000,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:diamond"
+                }
+            ],
+            "weightMult": 0.3
+        },
+
+        "toolsmith_rew_diamond_axe": {
+            "type": "item",
+            "rarity": "EPIC",
+            "content": "minecraft:diamond_axe",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 9000,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:diamond"
+                }
+            ],
+            "weightMult": 0.3
+        },
+
+        "toolsmith_rew_diamond_hoe": {
+            "type": "item",
+            "rarity": "EPIC",
+            "content": "minecraft:diamond_hoe",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 6000,
+            "nbt": "{Damage:0}",
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:diamond"
+                }
+            ],
+            "weightMult": 0.3
+        },
+
+        "toolsmith_rew_bell": {
+            "type": "item",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:bell",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 12000
+        }
+
+	}
+
+}
