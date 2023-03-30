@@ -32,7 +32,7 @@ body:
     validations:
       required: true
   - type: dropdown
-      id: mod-loader
+      id: modloader
       attributes:
         label: "Mod Loader"
         description: "Which mod loader are you using?"
@@ -43,7 +43,7 @@ body:
       validations:
         required: false
   - type: input
-    id: mod-loader-version
+    id: modloaderversion
     attributes:
       label: Mod Loader Version
       description: "If using Forge, which version? If using Fabric, which version of Fabric API?"
