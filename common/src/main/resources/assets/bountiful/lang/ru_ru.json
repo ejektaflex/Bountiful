@@ -67,11 +67,9 @@
 	"stat.bountiful.bounties_done_2": "Завершенные заказы (Редких)",
 	"stat.bountiful.bounties_done_3": "Завершенные заказы (Эпических)",
 
-	"bountiful.tooltip.advanced": "Удерживайте Shift для деталей",
 	"bountiful.tooltip.time": "Время до завершения",
 	"bountiful.tooltip.required": "Требуется",
 	"bountiful.tooltip.rewards": "Вознаграждение",
 	"bountiful.tooltip.expired": "Истекший",
-	"bountiful.tooltip.requirements": "Требования не выполнены",
-	"bountiful.decree.runewright.name": "Runewright"
+	"bountiful.tooltip.requirements": "Требования не выполнены"
 }

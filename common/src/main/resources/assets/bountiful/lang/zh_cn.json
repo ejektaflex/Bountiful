@@ -55,7 +55,6 @@
 	"bountiful.decree.shepherd.name": "牧羊悬赏",
 	"bountiful.decree.tinker.name": "红石悬赏",
 	"bountiful.decree.toolsmith.name": "工具悬赏",
-	"bountiful.decree.runewright.name": "Runewright",
 	"bountiful.decree.invalid_decree.name": "无效的悬赏令",
 
 	"bountiful.bounty.type.entity.kills": "击杀",
@@ -76,7 +75,6 @@
 	"stat.bountiful.bounties_done_2": "完成悬赏 (稀有)",
 	"stat.bountiful.bounties_done_3": "完成悬赏 (史诗)",
 
-	"bountiful.tooltip.advanced": "按住Shift键查看物品详情",
 	"bountiful.tooltip.time": "倒计时",
 	"bountiful.tooltip.required": "需要",
 	"bountiful.tooltip.rewards": "奖励",

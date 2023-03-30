@@ -65,13 +65,11 @@
 	"stat.bountiful.bounties_done_2": "Contratos Concluídos (Raro)",
 	"stat.bountiful.bounties_done_3": "Contratos Concluídos (Épico)",
 
-	"bountiful.tooltip.advanced": "Segure Shift para ver detalhes do item",
 	"bountiful.tooltip.time": "Tempo Para Concluir",
 	"bountiful.tooltip.required": "Exigido",
 	"bountiful.tooltip.rewards": "Recompensa(s)",
 	"bountiful.tooltip.expired": "Expirado",
 
 	"bountiful.tooltip.requirements": "Requisitos não atendidos.",
-	"bountiful.bounty.expired": "This bounty has expired.",
-	"bountiful.decree.runewright.name": "Runewright"
+	"bountiful.bounty.expired": "This bounty has expired."
   }

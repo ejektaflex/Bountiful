@@ -53,7 +53,7 @@
 	"bountiful.decree.fisherman.name": "Fishing",
 	"bountiful.decree.fletcher.name": "Fletching",
 	"bountiful.decree.hunting.name": "Mob Hunting",
-	"bountiful.decree.inventor.name": "Inventor",
+	"bountiful.decree.inventor.name": "Inventing",
 	"bountiful.decree.leatherer.name": "Leatherworking",
 	"bountiful.decree.librarian.name": "Librarian",
 	"bountiful.decree.mapper.name": "Cartography",
@@ -61,7 +61,6 @@
 	"bountiful.decree.shepherd.name": "Shepherding",
 	"bountiful.decree.tinker.name": "Tinkering",
 	"bountiful.decree.toolsmith.name": "Toolsmithing",
-	"bountiful.decree.runewright.name": "Runewright",
 	"bountiful.decree.invalid_decree.name": "Invalid Decree",
 
 	"bountiful.bounty.type.entity.kills": "Kills",
@@ -81,7 +80,6 @@
 	"stat.bountiful.bounties_done_2": "Bounties Completed (Rare)",
 	"stat.bountiful.bounties_done_3": "Bounties Completed (Epic)",
 
-	"bountiful.tooltip.advanced": "Hold Shift for item details",
 	"bountiful.tooltip.time": "Time To Complete",
 	"bountiful.tooltip.required": "Required",
 	"bountiful.tooltip.rewards": "Rewards",

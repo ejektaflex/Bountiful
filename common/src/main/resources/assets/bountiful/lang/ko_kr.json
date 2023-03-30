@@ -59,7 +59,6 @@
 	"stat.bountiful.bounties_done_2": "완수한 의뢰 수 (희귀한)",
 	"stat.bountiful.bounties_done_3": "완수한 의뢰 수 (놀라운)",
 
-	"bountiful.tooltip.advanced": "Shift 키를 눌러 상세 설명 보기",
 	"bountiful.tooltip.time": "완료까지 남은 시간",
 	"bountiful.tooltip.required": "요구사항",
 	"bountiful.tooltip.rewards": "보상",
@@ -69,7 +68,6 @@
 	"bountiful.bounty.expired": "This bounty has expired.",
 	"bountiful.decree.mason.name": "Masonry",
 	"bountiful.decree.tinker.name": "Tinkering",
-	"bountiful.decree.runewright.name": "Runewright",
 	"bountiful.decree.invalid_decree.name": "Invalid Decree",
 	"bountiful.bounty.type.experience.levels": "Experience Levels",
 	"bountiful.bounty.type.experience.points": "Experience Points",

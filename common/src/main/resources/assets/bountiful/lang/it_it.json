@@ -55,7 +55,6 @@
 	"bountiful.decree.shepherd.name": "Pastorizia",
 	"bountiful.decree.tinker.name": "Armeggiamento",
 	"bountiful.decree.toolsmith.name": "Fabbricazione",
-	"bountiful.decree.runewright.name": "Scrittura di rune",
 	"bountiful.decree.invalid_decree.name": "Non valido",
 
 	"bountiful.bounty.type.entity.kills": "Uccisioni",
@@ -76,7 +75,6 @@
 	"stat.bountiful.bounties_done_2": "Incarichi completati (Rari)",
 	"stat.bountiful.bounties_done_3": "Incarichi completati (Epici)",
 
-	"bountiful.tooltip.advanced": "Tieni premuto SHIFT per i dettagli",
 	"bountiful.tooltip.time": "Tempo alla scadenza",
 	"bountiful.tooltip.required": "Requisiti",
 	"bountiful.tooltip.rewards": "Ricompense",
