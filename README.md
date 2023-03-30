@@ -8,7 +8,13 @@ Forge:
 
 A mod that adds bounty boards to Minecraft.
 
-[CurseForge](https://minecraft.curseforge.com/projects/bountiful) | [GitHub](https://github.com/ejektaflex/Bountiful)
+[Forge](https://minecraft.curseforge.com/projects/bountiful) | [Fabric](https://minecraft.curseforge.com/projects/bountiful) | [GitHub](https://github.com/ejektaflex/Bountiful)
+
+### Language Localization
+
+You can contribute towards localizing Bountiful! 
+
+See: [Bountiful's CrowdIn Page](https://crowdin.com/project/bountiful)!
 
 ### Versions
 
