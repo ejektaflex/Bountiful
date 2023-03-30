@@ -1,0 +1,4 @@
+accessWidener   v2  named
+accessible method net/minecraft/screen/ScreenHandlerType register (Ljava/lang/String;Lnet/minecraft/screen/ScreenHandlerType$Factory;)Lnet/minecraft/screen/ScreenHandlerType;
+accessible method net/minecraft/client/item/ModelPredicateProviderRegistry register (Lnet/minecraft/item/Item;Lnet/minecraft/util/Identifier;Lnet/minecraft/client/item/ClampedModelPredicateProvider;)V
+accessible field net/minecraft/inventory/SimpleInventory stacks Lnet/minecraft/util/collection/DefaultedList;

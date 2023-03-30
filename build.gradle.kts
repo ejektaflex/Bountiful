@@ -1,105 +1,134 @@
+import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import net.fabricmc.loom.task.RemapJarTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	kotlin("jvm") version "1.8.10"
-	kotlin("plugin.serialization") version "1.6.0"
-	id("fabric-loom") version "1.1-SNAPSHOT"
-	`idea`
+    kotlin("jvm") version "1.8.10"
+    kotlin("plugin.serialization") version "1.6.0"
+    base
+    id("architectury-plugin") version "3.4.143"
+    id("dev.architectury.loom") version "1.0.302" apply false
+    id("com.github.johnrengelman.shadow") version "7.1.2" apply false
 }
 
 object Versions {
-	const val Minecraft = "1.19.4"
-	object Jvm {
-		val Java = JavaVersion.VERSION_17
-		const val Kotlin = "1.8.10"
-		const val TargetKotlin = "17"
-	}
-	object Fabric {
-		const val Yarn = "1.19.4+build.1"
-		const val Loader = "0.14.17"
-		const val Api = "0.76.0+1.19.4"
-	}
-	object Mod {
-		const val Group = "io.ejekta"
-		const val ID = "bountiful"
-		const val Version = "5.0.0"
-	}
-	object Env {
-		const val Kambrik = "5.1.0-1.19.4"
-		const val FLK = "1.9.1+kotlin.1.8.10"
-		const val ClothConfig = "10.0.96"
-		const val ModMenu = "6.1.0-rc.2"
-	}
+    val Mod = "6.0.0-beta.3"
+    val MC = "1.19.4"
+    val Yarn = "1.19.4+build.1"
 }
 
-
-java {
-	sourceCompatibility = Versions.Jvm.Java
-	targetCompatibility = Versions.Jvm.Java
-	withSourcesJar()
-	withJavadocJar()
+// Set the Minecraft version for Architectury.
+architectury {
+    minecraft = Versions.MC
 }
 
-project.group = Versions.Mod.Group
-version = Versions.Mod.Version
+group = "io.ejekta.bountiful"
+version = "${Versions.Mod}+${Versions.MC}"
+base.archivesName.set("Bountiful")
 
-repositories {
-	mavenLocal()
-	mavenCentral()
-	//maven(url = "https://kotlin.bintray.com/kotlinx")
-	maven(url = "https://maven.shedaniel.me/")
-	maven(url = "https://maven.terraformersmc.com/") {
-		name = "Mod Menu"
-	}
+tasks {
+    // Register a custom "collect jars" task that copies the Fabric and Forge mod jars into the root project's build/libs.
+    val collectJars by registering(Copy::class) {
+        // Find the remapJar tasks of projects that aren't :common (so :fabric and :forge) and depend on them.
+        val tasks = subprojects.filter { it.path != ":common" }.map { it.tasks.named("remapJar") }
+        dependsOn(tasks)
+
+        // Copy the outputs of the tasks...
+        from(tasks)
+        // ...into build/libs.
+        into(buildDir.resolve("libs"))
+    }
+
+    // Set up assemble to depend on the collectJars task, so it gets run on gradlew build.
+    assemble {
+        dependsOn(collectJars)
+    }
 }
 
+// Do the shared setup for the Minecraft subprojects.
+subprojects {
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "dev.architectury.loom")
+    apply(plugin = "architectury-plugin")
+
+    extensions.configure<JavaPluginExtension> {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    group = rootProject.group
+    version = rootProject.version
+    base.archivesName.set(rootProject.base.archivesName)
+
+    dependencies {
+        // Note that the configuration name has to be in quotes (a string) since Loom isn't applied to the root project,
+        // and so the Kotlin accessor method for it isn't generated for this file.
+        "minecraft"("net.minecraft:minecraft:${Versions.MC}")
+        implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+        "mappings"("net.fabricmc:yarn:${Versions.Yarn}:v2")
+    }
+
+    tasks {
+        withType<JavaCompile> {
+            options.encoding = "UTF-8"
+            options.release.set(17)
+        }
+        withType<KotlinCompile> {
+            kotlinOptions.jvmTarget = "17"
+            kotlinOptions.freeCompilerArgs = listOf("-Xlambdas=indy", "-Xjvm-default=all",)
+        }
+    }
+}
+
+// Set up "platform" subprojects (non-common subprojects).
+subprojects {
+    if (path != ":common") {
+
+        // Apply the shadow plugin which lets us include contents
+        // of any libraries in our mod jars. Architectury uses it
+        // for bundling the common mod code in the platform jars.
+        apply(plugin = "com.github.johnrengelman.shadow")
+
+        // Define the "bundle" configuration which will be included in the shadow jar.
+        val bundle by configurations.creating {
+            // This configuration is only meant to be resolved to its files but not published in
+            // any way, so we set canBeConsumed = false and canBeResolved = true.
+            // See https://docs.gradle.org/current/userguide/declaring_dependencies.html#sec:resolvable-consumable-configs.
+            isCanBeConsumed = false
+            isCanBeResolved = true
+        }
+
+        tasks.withType<JavaCompile> {
+            options.encoding = "UTF-8"
+            options.release.set(17)
+        }
+
+        tasks {
+            "shadowJar"(ShadowJar::class) {
+                archiveClassifier.set("dev-shadow")
+                if (path == ":forge") { exclude("fabric.mod.json") }
+                exclude("architectury.common.json")
+                configurations = listOf(bundle)
+            }
+            "remapJar"(RemapJarTask::class) {
+                injectAccessWidener.set(true)
+                inputFile.set(named<ShadowJar>("shadowJar").flatMap { it.archiveFile })
+                dependsOn("shadowJar")
+                archiveClassifier.set(project.name)
+            }
+            "jar"(Jar::class) { archiveClassifier.set("dev") }
+        }
+    }
+}
 dependencies {
-	//to change the versions see the gradle.properties file
-	minecraft("com.mojang:minecraft:${Versions.Minecraft}")
-	mappings("net.fabricmc:yarn:${Versions.Fabric.Yarn}:v2")
-	modImplementation("net.fabricmc:fabric-loader:${Versions.Fabric.Loader}")
-
-	// Kambrik API
-	modImplementation("io.ejekta:kambrik:${Versions.Env.Kambrik}")
-
-	modApi("me.shedaniel.cloth:cloth-config-fabric:${Versions.Env.ClothConfig}") {
-		exclude(group = "net.fabricmc.fabric-api")
-	}
-
-	implementation("com.google.code.findbugs:jsr305:3.0.2")
-
-	modApi("com.terraformersmc:modmenu:${Versions.Env.ModMenu}") {
-		exclude(module = "fabric-api")
-		exclude(module = "config-2")
-	}
-
-	modImplementation(group = "net.fabricmc", name = "fabric-language-kotlin", version = Versions.Env.FLK)
-
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation("net.fabricmc.fabric-api:fabric-api:${Versions.Fabric.Api}")
+    implementation(kotlin("stdlib-jdk8"))
 }
-
-tasks.getByName<ProcessResources>("processResources") {
-	filesMatching("fabric.mod.json") {
-		expand(
-			mutableMapOf<String, String>(
-				"modid" to Versions.Mod.ID,
-				"version" to Versions.Mod.Version,
-				"kotlinVersion" to Versions.Jvm.Kotlin,
-				"fabricApiVersion" to Versions.Fabric.Api
-			)
-		)
-	}
+repositories {
+    mavenLocal()
+    mavenCentral()
 }
-
-configurations.all {
-	resolutionStrategy {
-		force("net.fabricmc:fabric-loader:${Versions.Fabric.Loader}")
-	}
-}
-
-tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		jvmTarget = Versions.Jvm.TargetKotlin
-	}
+kotlin {
+    jvmToolchain(8)
 }
