@@ -1,1 +1,8 @@
 blank_issues_enabled: false
+contact_links:
+  - name: Discussion Posts
+    url: https://github.com/ejektaflex/Bountiful/discussions
+    about: Not a bug? Got an idea or mod compat request? Put it here!
+  - name: Discord
+    url: https://discord.gg/BaH88W9
+    about: Want to talk with me directly? You can find us here!
