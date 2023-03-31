@@ -64,5 +64,14 @@
 	"bountiful.tooltip.required": "요구사항",
 	"bountiful.tooltip.rewards": "보상",
 	"bountiful.tooltip.expired": "만료됨",
-	"bountiful.tooltip.requirements": "요구사항이 충족되지 않았습니다."
+
+	"bountiful.tooltip.requirements": "요구사항이 충족되지 않았습니다.",
+
+	"bountiful.bounty.expired": "This bounty has expired.",
+	"bountiful.decree.mason.name": "Masonry",
+	"bountiful.decree.tinker.name": "Tinkering",
+	"bountiful.decree.invalid_decree.name": "Invalid Decree",
+	"bountiful.bounty.type.experience.levels": "Experience Levels",
+	"bountiful.bounty.type.experience.points": "Experience Points"
+
 }
