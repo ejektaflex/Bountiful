@@ -1,36 +1,35 @@
 {
-
 	"block.bountiful.bountyboard": "의뢰 게시판",
-
 	"itemGroup.bountiful": "Bountiful",
-
+	"bountiful.entry.shepherd_obj_wool_wildcard": "Any Wool",
+	"bountiful.entry.fletcher_obj_planks": "Any Planks",
+	"bountiful.entry.fletcher_obj_logs": "Any Log",
+	"bountiful.entry.shepherd_obj_bed_wildcard": "Any Bed",
+	"bountiful.entry.fisherman_obj_any_boat": "Any Boat",
+	"bountiful.entry.mapper_obj_candles": "Any Candle",
+	"bountiful.entry.shepherd_obj_banner_wildcard": "Any Banner",
+	"bountiful.entry.fisherman_obj_catch_ench_book": "Fish up Enchanted Books",
+	"bountiful.entry.cleric_obj_brew_swiftness": "Brew a basic Swiftness Potion",
+	"bountiful.entry.cleric_obj_cure_zombie_villager": "Cure a Zombie Villager",
 	"bountiful.decree": "포고문",
 	"bountiful.decrees": "포고문 일람",
 	"bountiful.decree.invalid": "유효하지 않은 포고문",
 	"bountiful.decree.notset": "이것을 의뢰 게시판에 붙이십시오!",
-
+	"bountiful.bounty.expired": "This bounty has expired.",
 	"bountiful.bounty.turnin": "의뢰 게시판에 우클릭 해서 의뢰를 완수하세요.",
-
 	"bountiful.advancement.bounty_taken.title": "고용된 몸",
 	"bountiful.advancement.bounty_taken.desc": "의뢰 게시판에서 의뢰를 받으세요",
-
 	"bountiful.advancement.bounty_complete.title": "정직한 일에는 정직한 보상을",
 	"bountiful.advancement.bounty_complete.desc": "의뢰를 완수하세요!",
-
 	"bountiful.advancement.rush_order.title": "총알배송",
 	"bountiful.advancement.rush_order.desc": "의뢰를 1 분 안에 완수하세요",
-
 	"bountiful.advancement.procrastinator.title": "더 이상 미룰 순 없다",
 	"bountiful.advancement.procrastinator.desc": "의뢰의 남은 시간이 5 초 이내일 때 완수하세요",
-
 	"bountiful.advancement.town_crier.title": "마을 포고꾼",
 	"bountiful.advancement.town_crier.desc": "포고문을 입수하세요!",
-
 	"bountiful.advancement.royal_mandate.title": "왕의 칙령",
 	"bountiful.advancement.royal_mandate.desc": "의뢰 게시판에 포고문을 붙이세요",
-
 	"bountiful.bounty": "의뢰",
-
 	"bountiful.decree.armorer.name": "갑옷 제조",
 	"bountiful.decree.butcher.name": "도축",
 	"bountiful.decree.chef.name": "요리사 납품",
@@ -39,30 +38,33 @@
 	"bountiful.decree.fisherman.name": "낚시",
 	"bountiful.decree.fletcher.name": "화살 제조",
 	"bountiful.decree.hunting.name": "현상금 사냥",
+	"bountiful.decree.inventor.name": "Inventing",
 	"bountiful.decree.leatherer.name": "가죽 세공",
 	"bountiful.decree.librarian.name": "사서",
 	"bountiful.decree.mapper.name": "지도 제작",
+	"bountiful.decree.mason.name": "Masonry",
 	"bountiful.decree.shepherd.name": "양차기",
+	"bountiful.decree.tinker.name": "Tinkering",
 	"bountiful.decree.toolsmith.name": "도구 제조",
-
+	"bountiful.decree.invalid_decree.name": "Invalid Decree",
 	"bountiful.bounty.type.entity.kills": "처치",
-
+	"bountiful.bounty.type.experience.levels": "Experience Levels",
+	"bountiful.bounty.type.experience.points": "Experience Points",
 	"bountiful.rarity.Common": "흔한",
 	"bountiful.rarity.Uncommon": "드문",
 	"bountiful.rarity.Rare": "희귀한",
 	"bountiful.rarity.Epic": "놀라운",
-
 	"stat.bountiful.bounties_taken": "받은 의뢰 수",
 	"stat.bountiful.bounties_done": "완수한 의뢰 수 (총합)",
 	"stat.bountiful.bounties_done_0": "완수한 의뢰 수 (흔한)",
 	"stat.bountiful.bounties_done_1": "완수한 의뢰 수 (드문)",
 	"stat.bountiful.bounties_done_2": "완수한 의뢰 수 (희귀한)",
 	"stat.bountiful.bounties_done_3": "완수한 의뢰 수 (놀라운)",
-
 	"bountiful.tooltip.time": "완료까지 남은 시간",
 	"bountiful.tooltip.required": "요구사항",
 	"bountiful.tooltip.rewards": "보상",
 	"bountiful.tooltip.expired": "만료됨",
+
 	"bountiful.tooltip.requirements": "요구사항이 충족되지 않았습니다.",
 
 	"bountiful.bounty.expired": "This bounty has expired.",
