@@ -31,7 +31,7 @@ repositories {
 
 dependencies {
     // Add dependency on Forge. This is mainly used for generating the patched Minecraft jar with Forge classes.
-    forge("net.minecraftforge:forge:${Versions.MC}-45.0.20")
+    forge("net.minecraftforge:forge:${Versions.MC}-45.0.42")
 
     // Add Kotlin for Forge.
     // Based on their own instructions: https://github.com/thedarkcolour/KotlinForForge/blob/70385f5/thedarkcolour/kotlinforforge/gradle/kff-3.0.0.gradle
@@ -50,7 +50,6 @@ dependencies {
         isTransitive = false
     }
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     modImplementation("me.shedaniel.cloth:cloth-config-forge:10.0.96")
 }
 
