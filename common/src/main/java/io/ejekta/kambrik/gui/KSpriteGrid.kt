@@ -1,4 +1,4 @@
-package io.ejekta.bountiful.gui
+package io.ejekta.kambrik.gui
 
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.DrawableHelper

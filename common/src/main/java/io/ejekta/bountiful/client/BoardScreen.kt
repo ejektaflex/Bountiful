@@ -6,10 +6,10 @@ import io.ejekta.bountiful.client.widgets.BountyLongButton
 import io.ejekta.bountiful.content.BountyCreator
 import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
-import io.ejekta.bountiful.KambrikHandledScreen
-import io.ejekta.bountiful.gui.KSpriteGrid
-import io.ejekta.bountiful.gui.widgets.KListWidget
-import io.ejekta.bountiful.gui.widgets.KScrollbarVertical
+import io.ejekta.kambrik.KambrikHandledScreen
+import io.ejekta.kambrik.gui.KSpriteGrid
+import io.ejekta.kambrik.gui.widgets.KListWidget
+import io.ejekta.kambrik.gui.widgets.KScrollbarVertical
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack

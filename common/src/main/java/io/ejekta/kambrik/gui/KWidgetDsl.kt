@@ -1,4 +1,4 @@
-package io.ejekta.bountiful.gui
+package io.ejekta.kambrik.gui
 
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.ParentElement

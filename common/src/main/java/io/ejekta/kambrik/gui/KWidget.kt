@@ -1,4 +1,4 @@
-package io.ejekta.bountiful.gui
+package io.ejekta.kambrik.gui
 
 interface KWidget {
 

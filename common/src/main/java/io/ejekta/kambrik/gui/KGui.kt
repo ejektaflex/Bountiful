@@ -1,6 +1,6 @@
-package io.ejekta.bountiful.gui
+package io.ejekta.kambrik.gui
 
-import io.ejekta.bountiful.KambrikScreenCommon
+import io.ejekta.kambrik.KambrikScreenCommon
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.EntityType

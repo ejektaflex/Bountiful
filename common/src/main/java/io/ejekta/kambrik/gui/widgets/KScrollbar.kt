@@ -1,9 +1,9 @@
-package io.ejekta.bountiful.gui.widgets
+package io.ejekta.kambrik.gui.widgets
 
-import io.ejekta.bountiful.gui.KGuiDsl
-import io.ejekta.bountiful.gui.KSpriteGrid
-import io.ejekta.bountiful.gui.KWidget
-import io.ejekta.bountiful.gui.reactor.MouseReactor
+import io.ejekta.kambrik.gui.KGuiDsl
+import io.ejekta.kambrik.gui.KSpriteGrid
+import io.ejekta.kambrik.gui.KWidget
+import io.ejekta.kambrik.gui.reactor.MouseReactor
 import kotlin.math.roundToInt
 
 abstract class KScrollbar(

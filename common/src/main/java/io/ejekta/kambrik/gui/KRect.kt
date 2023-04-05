@@ -1,4 +1,4 @@
-package io.ejekta.bountiful.gui
+package io.ejekta.kambrik.gui
 
 data class KRect(val x: Int, val y: Int, val w: Int, val h: Int) {
     fun isInside(ix: Int, iy: Int): Boolean {
