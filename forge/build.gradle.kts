@@ -50,6 +50,8 @@ dependencies {
         isTransitive = false
     }
 
+    implementation("org.ow2.asm:asm-tree:9.4")
+
     modImplementation("me.shedaniel.cloth:cloth-config-forge:10.0.96")
 }
 

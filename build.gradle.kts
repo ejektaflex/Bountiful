@@ -8,8 +8,10 @@ plugins {
     kotlin("jvm") version "1.8.10"
     kotlin("plugin.serialization") version "1.6.0"
     base
-    id("architectury-plugin") version "3.4.143"
-    id("dev.architectury.loom") version "1.0.302" apply false
+    // https://maven.architectury.dev/architectury-plugin/architectury-plugin.gradle.plugin/
+    id("architectury-plugin") version "3.4.145"
+    // https://maven.architectury.dev/dev/architectury/loom/dev.architectury.loom.gradle.plugin/
+    id("dev.architectury.loom") version "1.1.329" apply false
     id("com.github.johnrengelman.shadow") version "7.1.2" apply false
 }
 
