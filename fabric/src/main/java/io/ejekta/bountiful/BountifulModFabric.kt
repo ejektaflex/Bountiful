@@ -26,6 +26,7 @@ class BountifulModFabric : ModInitializer {
     init {
 
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(BountifulReloadListener)
+
         listOf(
             "campanion",
             "charm",

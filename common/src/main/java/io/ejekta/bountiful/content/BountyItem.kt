@@ -21,7 +21,6 @@ class BountyItem : Item(
     override fun getName(stack: ItemStack): Text {
         // TODO this may be sided
         val info = BountyInfo[stack]
-        //val data = BountyData[stack]
         var text = Text.translatable(info.rarity.name.lowercase()
             // Capitalizing
             .replaceFirstChar {

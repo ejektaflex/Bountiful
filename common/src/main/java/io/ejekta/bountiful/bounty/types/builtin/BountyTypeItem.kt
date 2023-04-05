@@ -3,6 +3,7 @@ package io.ejekta.bountiful.bounty.types.builtin
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.types.IBountyExchangeable
 import io.ejekta.bountiful.bounty.types.Progress
+import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.kambrik.ext.collect
 import io.ejekta.kambrik.ext.identifier
 import net.minecraft.client.item.TooltipContext
@@ -11,6 +12,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
+import net.minecraft.server.MinecraftServer
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
@@ -21,12 +23,9 @@ class BountyTypeItem : IBountyExchangeable {
 
     override val id: Identifier = Identifier("item")
 
-    override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText? {
-        val id = getItem(entry).identifier
-        if (id != Identifier(entry.content)) {
-            return Text.literal("* '${entry.content}' is not a valid item!")
-        }
-        return null
+    override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {
+        val id = getItem(Identifier(entry.content)).identifier
+        return id == Identifier(entry.content)
     }
 
     private fun getCurrentStacks(entry: BountyDataEntry, player: PlayerEntity): Map<ItemStack, Int> {
@@ -89,7 +88,11 @@ class BountyTypeItem : IBountyExchangeable {
 
     companion object {
         fun getItem(entry: BountyDataEntry): Item {
-            return Registries.ITEM.get(Identifier(entry.content))
+            return getItem(Identifier(entry.content))
+        }
+
+        fun getItem(id: Identifier): Item {
+            return Registries.ITEM.get(id)
         }
 
         fun getItemStack(entry: BountyDataEntry): ItemStack {

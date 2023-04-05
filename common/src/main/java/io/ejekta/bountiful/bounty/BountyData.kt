@@ -21,7 +21,7 @@ class BountyData {
 
     val objectives = mutableListOf<BountyDataEntry>()
     val rewards = mutableListOf<BountyDataEntry>()
-    var pingComplete: Boolean = false
+    private var pingComplete: Boolean = false
 
     private fun hasFinishedAllObjectives(player: PlayerEntity): Boolean {
         return objectives.all {
@@ -104,17 +104,6 @@ class BountyData {
             false
         }
 
-    }
-
-
-    fun verifyValidity(player: PlayerEntity): Boolean {
-        val objs = objectives.mapNotNull { it.verifyValidity(player)?.formatted(Formatting.RED) }
-        val rews = rewards.mapNotNull { it.verifyValidity(player)?.formatted(Formatting.RED) }
-        val combined = objs + rews
-        combined.forEach { text ->
-            player.sendMessage(text, false)
-        }
-        return combined.isEmpty()
     }
 
     override fun toString(): String {

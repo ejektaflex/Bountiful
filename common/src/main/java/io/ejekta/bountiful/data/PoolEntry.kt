@@ -17,6 +17,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import net.minecraft.item.Item
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.server.MinecraftServer
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
@@ -39,6 +40,9 @@ class PoolEntry private constructor() {
     var repRequired = 0.0
     private val forbids: MutableList<ForbiddenContent> = mutableListOf()
 
+    fun isValid(server: MinecraftServer): Boolean {
+        return BountyTypeRegistry[type]!!.isValid(this, server)
+    }
 
     @Transient lateinit var id: String
 
@@ -129,8 +133,7 @@ class PoolEntry private constructor() {
         val related = getRelatedItems(world)
         return forbids.any {
             it.type == entry.type && it.content == entry.content
-        } || (related != null
-                    && related.isNotEmpty()
+        } || (!related.isNullOrEmpty()
                     && related.any { it.identifier.toString() == entry.content }
                 )
     }

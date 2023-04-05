@@ -3,14 +3,19 @@ package io.ejekta.bountiful.bounty.types.builtin
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.types.IBountyExchangeable
 import io.ejekta.bountiful.bounty.types.Progress
+import io.ejekta.bountiful.data.PoolEntry
+import io.ejekta.bountiful.util.getTagItemKey
 import io.ejekta.bountiful.util.getTagItems
 import io.ejekta.kambrik.ext.collect
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
 import net.minecraft.registry.Registries
+import net.minecraft.registry.tag.ItemTags
 import net.minecraft.registry.tag.TagKey
+import net.minecraft.server.MinecraftServer
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
@@ -22,15 +27,12 @@ class BountyTypeItemTag : IBountyExchangeable {
 
     override val id: Identifier = Identifier("item_tag")
 
-    fun entryAppliesToStack(entry: BountyDataEntry, stack: ItemStack): Boolean {
+    private fun entryAppliesToStack(entry: BountyDataEntry, stack: ItemStack): Boolean {
         return stack.isIn(TagKey.of(Registries.ITEM.key, Identifier(entry.content)))
     }
 
-    override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText? {
-//        if (getTag(entry) == null) {
-//            return Text.literal("* '${entry.content}' is not a valid tag!")
-//        }
-        return null
+    override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {
+        return getTagItems(server, getTagItemKey(Identifier(entry.content))).isNotEmpty()
     }
 
     private fun getCurrentStacks(entry: BountyDataEntry, player: PlayerEntity): Map<ItemStack, Int>? {

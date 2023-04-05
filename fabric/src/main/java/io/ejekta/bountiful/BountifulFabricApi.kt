@@ -7,5 +7,4 @@ class BountifulFabricApi : BountifulSharedApi {
     override fun isModLoaded(id: String): Boolean {
         return FabricLoader.getInstance().isModLoaded(id)
     }
-
 }

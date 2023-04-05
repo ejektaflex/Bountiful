@@ -2,8 +2,10 @@ package io.ejekta.bountiful.bounty.types.builtin
 
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.types.IBountyReward
+import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.server.MinecraftServer
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
@@ -13,10 +15,9 @@ class BountyTypeCommand : IBountyReward {
 
     override val id: Identifier = Identifier("command")
 
-    override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText {
-        val server = player.server ?: return textLiteral("Server does not exist!") // oh my
-        val parsed = server.commandManager.dispatcher.parse(entry.content, player.commandSource)
-        return textLiteral("Cmd Err: ${parsed.reader.read}")
+    override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {
+        val parsed = server.commandManager.dispatcher.parse(entry.content, server.commandSource)
+        return parsed.exceptions.isEmpty()
     }
 
     override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): MutableText {

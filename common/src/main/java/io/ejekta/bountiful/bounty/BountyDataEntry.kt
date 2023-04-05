@@ -58,14 +58,6 @@ data class BountyDataEntry private constructor(
         }
     }
 
-//    fun giveReward(player: PlayerEntity) {
-//        logic.giveReward(this, player)
-//    }
-
-//    fun tryFinishObjective(player: PlayerEntity) = logic.tryFinishObjective(this, player)
-
-    fun verifyValidity(player: PlayerEntity) = logic.verifyValidity(this, player)
-
     companion object {
 
         fun of(

@@ -1,9 +1,11 @@
 package io.ejekta.bountiful.bounty.types
 
 import io.ejekta.bountiful.bounty.BountyDataEntry
+import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.kambrik.text.textLiteral
 import io.ejekta.kambrik.text.textTranslate
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.server.MinecraftServer
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
@@ -19,7 +21,7 @@ interface IBountyType {
 
     fun textBoard(entry: BountyDataEntry, player: PlayerEntity): List<Text>
 
-    fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText?
+    fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean
 
     fun setup(entry: BountyDataEntry, world: ServerWorld, pos: BlockPos) {
         // Default no-op

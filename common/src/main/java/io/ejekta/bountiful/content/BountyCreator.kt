@@ -78,7 +78,7 @@ class BountyCreator private constructor(
     }
 
     private fun genRewardEntries(): List<PoolEntry> {
-        val rewards = getRewardsFor(decrees)
+        val rewards = getRewardsFor(decrees, world)
 
         if (rewards.isEmpty()) {
             return emptyList()
@@ -115,6 +115,12 @@ class BountyCreator private constructor(
             // obj entry can not be in any reward forbidlist
             // no rew entry can be in this obj entry's forbidlist either
             !entry.forbidsAny(world, rewardPools) && !rewardPools.any { it.forbids(world, entry) }
+        }.mapNotNull {
+            val entryIsValid = it.isValid(world.server)
+            if (!entryIsValid) {
+                Bountiful.LOGGER.warn("Bountiful objective pool entry is not valid!: ${it.id}")
+            }
+            it.takeIf { entryIsValid } // Only use valid pool entries
         }
     }
 
@@ -196,8 +202,14 @@ class BountyCreator private constructor(
             return decrees.map { it.rewardPools }.flatten().toSet()
         }
 
-        private fun getRewardsFor(decrees: Set<Decree>): Set<PoolEntry> {
-            return getRewardPoolsFor(decrees).map { it.items }.flatten().filter { it.typeLogic is IBountyReward }.toSet()
+        private fun getRewardsFor(decrees: Set<Decree>, world: ServerWorld): Set<PoolEntry> {
+            return getRewardPoolsFor(decrees).asSequence().map { it.items }.flatten().filter { it.typeLogic is IBountyReward }.mapNotNull {
+                val entryIsValid = it.isValid(world.server)
+                if (!entryIsValid) {
+                    Bountiful.LOGGER.warn("Bountiful reward pool entry is not valid!: ${it.id}")
+                }
+                it.takeIf { entryIsValid } // Only use valid pool entries
+            }.toSet()
         }
 
         private fun getObjectivesFor(decrees: Set<Decree>): Set<PoolEntry> {

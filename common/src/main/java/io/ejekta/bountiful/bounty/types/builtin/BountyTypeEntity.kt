@@ -4,12 +4,14 @@ import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.types.IBountyObjective
+import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.bountiful.util.iterateBountyStacks
 import io.ejekta.kambrik.ext.identifier
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.registry.Registries
+import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
@@ -21,12 +23,9 @@ class BountyTypeEntity : IBountyObjective {
 
     override val id: Identifier = Identifier("entity")
 
-    override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText? {
-        val id = getEntityType(entry).identifier
-        if (id != Identifier(entry.content)) {
-            return Text.literal("* '${entry.content}' is not a valid entity!")
-        }
-        return null
+    override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {
+        val id = getEntityType(Identifier(entry.content)).identifier
+        return id == Identifier(entry.content)
     }
 
     override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): MutableText {
@@ -69,7 +68,11 @@ class BountyTypeEntity : IBountyObjective {
 
     companion object {
         fun getEntityType(entry: BountyDataEntry): EntityType<*> {
-            return Registries.ENTITY_TYPE.get(Identifier(entry.content))
+            return getEntityType(Identifier(entry.content))
+        }
+
+        fun getEntityType(id: Identifier): EntityType<*> {
+            return Registries.ENTITY_TYPE.get(id)
         }
     }
 

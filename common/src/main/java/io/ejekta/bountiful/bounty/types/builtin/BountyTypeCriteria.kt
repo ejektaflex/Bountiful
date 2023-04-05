@@ -3,7 +3,9 @@ package io.ejekta.bountiful.bounty.types.builtin
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.bounty.types.Progress
+import io.ejekta.bountiful.data.PoolEntry
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.server.MinecraftServer
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
@@ -14,8 +16,9 @@ class BountyTypeCriteria : IBountyObjective {
 
     override val id: Identifier = Identifier("criteria")
 
-    override fun verifyValidity(entry: BountyDataEntry, player: PlayerEntity): MutableText? {
-        return null
+
+    override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {
+        return true // TODO can we validate Criteria?
     }
 
     override fun textSummary(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity): MutableText {

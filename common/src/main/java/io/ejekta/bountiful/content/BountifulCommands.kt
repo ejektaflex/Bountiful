@@ -96,11 +96,6 @@ object BountifulCommands {
                     }
                     "dump" runs dumpData()
                 }
-
-                "verify" {
-                    "pools" runs verifyPools()
-                    "hand" runs verifyBounty()
-                }
             }
 
         }
@@ -252,16 +247,6 @@ object BountifulCommands {
         cmd.run(this)
     }
 
-    private fun verifyBounty() = PlayerCommand {
-        val held = it.mainHandStack
-        if (held.item is BountyItem) {
-            if (!BountyData[held].verifyValidity(it)) {
-                source.sendError(Text.literal("Please report this to the modpack author (or the mod author, if this is not part of a modpack)"))
-            }
-        }
-        1
-    }
-
     private fun dumpData() = kambrikCommand<ServerCommandSource> {
         for (decree in BountifulContent.Decrees.sortedBy { it.id }) {
             Bountiful.LOGGER.info("Decree: ${decree.id}")
@@ -281,37 +266,5 @@ object BountifulCommands {
         }
     }
 
-    private fun verifyPools() = PlayerCommand {
-        var errors = false
-
-        for (pool in BountifulContent.Pools) {
-            for (poolEntry in pool) {
-                val dummy = BountyData()
-                val sourcePos = BlockPos(source.position.floor())
-                val data = poolEntry.toEntry(source.world, sourcePos)
-                data.let { bde ->
-                    when {
-                        bde.logic is IBountyObjective -> dummy.objectives.add(bde)
-                        bde.logic is IBountyReward -> dummy.objectives.add(bde)
-                        else -> throw Exception("Pool Data was neither an entry nor a reward!: '${poolEntry.type}', '${poolEntry.content}'")
-                    }
-                }
-
-                if (!dummy.verifyValidity(it)) {
-                    it.sendMessage("    - Source Pool: '${pool.id}'", Formatting.RED, Formatting.ITALIC)
-                    errors = true
-                }
-            }
-        }
-
-        if (errors) {
-            it.sendMessage("Some items are invalid. See above for details", Formatting.DARK_RED, Formatting.BOLD)
-            return@PlayerCommand 0
-        } else {
-            it.sendMessage("All Pool data has been verified successfully.", Formatting.BOLD)
-            return@PlayerCommand 1
-        }
-
-    }
 
 }
