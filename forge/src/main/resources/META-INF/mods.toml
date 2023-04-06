@@ -1,5 +1,5 @@
-modLoader = "kotlinforforge"
-loaderVersion = "[4,)"
+modLoader = "javafml"
+loaderVersion = "[44,)"
 #issueTrackerURL = ""
 license = "GPL 3.0"
 

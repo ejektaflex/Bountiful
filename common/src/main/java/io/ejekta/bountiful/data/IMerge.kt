@@ -1,7 +1,6 @@
 package io.ejekta.bountiful.data
 
 import io.ejekta.bountiful.bridge.Bountybridge
-import net.fabricmc.loader.api.FabricLoader
 
 interface IMerge<T : IMerge<T>> {
     var id: String

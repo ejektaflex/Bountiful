@@ -1,10 +1,11 @@
 package io.ejekta.bountiful.bridge
 
-import io.ejekta.kambrik.bridge.LoaderBridge
+import java.util.ServiceLoader
 
 class Bountybridge {
-    companion object : BountifulSharedApi by LoaderBridge<BountifulSharedApi>(
-        "io.ejekta.bountiful.BountifulFabricApi",
-        "io.ejekta.bountiful.BountifulForgeApi"
-    )()
+    companion object : BountifulSharedApi by ServiceLoader
+        .load(BountifulSharedApi::class.java)
+        .findFirst()
+        .orElseThrow()
+
 }
