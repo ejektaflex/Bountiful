@@ -11,7 +11,7 @@ plugins {
     // https://maven.architectury.dev/architectury-plugin/architectury-plugin.gradle.plugin/
     id("architectury-plugin") version "3.4.145"
     // https://maven.architectury.dev/dev/architectury/loom/dev.architectury.loom.gradle.plugin/
-    id("dev.architectury.loom") version "1.1.329" apply false
+    id("dev.architectury.loom") version "1.1-SNAPSHOT" apply false
     id("com.github.johnrengelman.shadow") version "7.1.2" apply false
 }
 
