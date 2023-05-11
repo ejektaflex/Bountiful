@@ -31,7 +31,7 @@ repositories {
 
 dependencies {
     // Add dependency on Forge. This is mainly used for generating the patched Minecraft jar with Forge classes.
-    forge("net.minecraftforge:forge:${Versions.MC}-45.0.42")
+    forge("net.minecraftforge:forge:${Versions.MC}-45.0.49")
 
     // Add Kotlin for Forge.
     // Based on their own instructions: https://github.com/thedarkcolour/KotlinForForge/blob/70385f5/thedarkcolour/kotlinforforge/gradle/kff-3.0.0.gradle
@@ -41,14 +41,17 @@ dependencies {
         isTransitive = false
     }
 
-    implementation(project(":common", configuration = "namedElements")) {
+//    implementation(project(":common", configuration = "namedElements")) {
+//        isTransitive = false
+//    }
+
+    "developmentForge"(project(":common", configuration = "namedElements")) {
         isTransitive = false
     }
+
     // Bundle the transformed version of the common project in the mod.
     // The transformed version includes things like fixed refmaps.
-    bundle(project(path = ":common", configuration = "transformProductionForge")) {
-        isTransitive = false
-    }
+    shadowCommon(project(path = ":common", configuration = "transformProductionForge")) { isTransitive = false }
 
     //implementation("org.ow2.asm:asm-tree:9.4")
 

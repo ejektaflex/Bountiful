@@ -1,7 +1,7 @@
-package io.ejekta.kambrik.gui.widgets
+package io.ejekta.bountiful.kambrik.gui.widgets
 
-import io.ejekta.kambrik.gui.KGuiDsl
-import io.ejekta.kambrik.gui.KSpriteGrid
+import io.ejekta.bountiful.kambrik.gui.KGuiDsl
+import io.ejekta.bountiful.kambrik.gui.KSpriteGrid
 
 class KScrollbarVertical(
     scrollHeight: Int,

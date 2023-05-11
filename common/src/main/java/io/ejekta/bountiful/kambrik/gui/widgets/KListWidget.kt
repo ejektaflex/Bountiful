@@ -1,8 +1,8 @@
-package io.ejekta.kambrik.gui.widgets
+package io.ejekta.bountiful.kambrik.gui.widgets
 
-import io.ejekta.kambrik.gui.KGuiDsl
-import io.ejekta.kambrik.gui.KWidget
-import io.ejekta.kambrik.gui.reactor.MouseReactor
+import io.ejekta.bountiful.kambrik.gui.KGuiDsl
+import io.ejekta.bountiful.kambrik.gui.KWidget
+import io.ejekta.bountiful.kambrik.gui.reactor.MouseReactor
 import net.minecraft.client.gui.screen.Screen
 import kotlin.math.max
 import kotlin.math.min

@@ -1,4 +1,4 @@
-package io.ejekta.kambrik.gui.reactor
+package io.ejekta.bountiful.kambrik.gui.reactor
 
 open class MouseReactor(
     defaultCanPass: Boolean = false,

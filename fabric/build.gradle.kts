@@ -41,13 +41,8 @@ configurations.all {
 }
 
 dependencies {
-    implementation(project(":common", configuration = "namedElements")) {
-        isTransitive = false
-    }
-
-    bundle(project(path = ":common", configuration = "transformProductionFabric")) {
-        isTransitive = false
-    }
+    implementation(project(":common", configuration = "namedElements")) { isTransitive = false }
+    shadowCommon(project(path = ":common", configuration = "transformProductionFabric")) { isTransitive = false }
 
     // Standard Fabric mod setup.
     modImplementation("net.fabricmc:fabric-loader:0.14.19")

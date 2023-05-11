@@ -9,7 +9,7 @@ plugins {
     kotlin("plugin.serialization") version "1.6.0"
     base
     // https://maven.architectury.dev/architectury-plugin/architectury-plugin.gradle.plugin/
-    id("architectury-plugin") version "3.4.145"
+    id("architectury-plugin") version "3.4-SNAPSHOT"
     // https://maven.architectury.dev/dev/architectury/loom/dev.architectury.loom.gradle.plugin/
     id("dev.architectury.loom") version "1.1-SNAPSHOT" apply false
     id("com.github.johnrengelman.shadow") version "7.1.2" apply false
@@ -84,6 +84,7 @@ subprojects {
     }
 }
 
+
 // Set up "platform" subprojects (non-common subprojects).
 subprojects {
     if (path != ":common") {
@@ -94,12 +95,13 @@ subprojects {
         apply(plugin = "com.github.johnrengelman.shadow")
 
         // Define the "bundle" configuration which will be included in the shadow jar.
-        val bundle by configurations.creating {
+        val shadowCommon by configurations.creating {
             // This configuration is only meant to be resolved to its files but not published in
             // any way, so we set canBeConsumed = false and canBeResolved = true.
             // See https://docs.gradle.org/current/userguide/declaring_dependencies.html#sec:resolvable-consumable-configs.
-            isCanBeConsumed = false
-            isCanBeResolved = true
+//            isCanBeConsumed = false
+//            isCanBeResolved = true
+            configurations.implementation.get().extendsFrom(this)
         }
 
         tasks.withType<JavaCompile> {
@@ -112,7 +114,7 @@ subprojects {
                 archiveClassifier.set("dev-shadow")
                 if (path == ":forge") { exclude("fabric.mod.json") }
                 exclude("architectury.common.json")
-                configurations = listOf(bundle)
+                configurations = listOf(shadowCommon)
             }
             "remapJar"(RemapJarTask::class) {
                 injectAccessWidener.set(true)

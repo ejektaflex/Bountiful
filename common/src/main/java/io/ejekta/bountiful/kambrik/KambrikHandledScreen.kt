@@ -1,11 +1,11 @@
-package io.ejekta.kambrik
+package io.ejekta.bountiful.kambrik
 
 import com.mojang.blaze3d.systems.RenderSystem
-import io.ejekta.kambrik.gui.KGui
-import io.ejekta.kambrik.gui.KGuiDsl
-import io.ejekta.kambrik.gui.KRect
-import io.ejekta.kambrik.gui.KSpriteGrid
-import io.ejekta.kambrik.gui.reactor.MouseReactor
+import io.ejekta.bountiful.kambrik.gui.KGui
+import io.ejekta.bountiful.kambrik.gui.KGuiDsl
+import io.ejekta.bountiful.kambrik.gui.KRect
+import io.ejekta.bountiful.kambrik.gui.KSpriteGrid
+import io.ejekta.bountiful.kambrik.gui.reactor.MouseReactor
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory

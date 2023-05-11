@@ -1,4 +1,4 @@
-package io.ejekta.kambrik
+package io.ejekta.bountiful.kambrik
 
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory

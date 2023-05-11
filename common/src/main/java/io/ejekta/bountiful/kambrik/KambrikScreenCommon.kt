@@ -1,8 +1,8 @@
-package io.ejekta.kambrik
+package io.ejekta.bountiful.kambrik
 
-import io.ejekta.kambrik.gui.KGuiDsl
-import io.ejekta.kambrik.gui.KRect
-import io.ejekta.kambrik.gui.reactor.MouseReactor
+import io.ejekta.bountiful.kambrik.gui.KGuiDsl
+import io.ejekta.bountiful.kambrik.gui.KRect
+import io.ejekta.bountiful.kambrik.gui.reactor.MouseReactor
 import net.minecraft.client.gui.Element
 import net.minecraft.client.util.math.MatrixStack
 

@@ -1,5 +1,7 @@
-package io.ejekta.bountiful
+package io.ejekta.bountiful.forge
 
+import io.ejekta.bountiful.Bountiful
+import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.bridge.Bountybridge
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.BountifulIO.doContentReload
@@ -16,15 +18,21 @@ import net.minecraftforge.event.AddReloadListenerEvent
 import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.event.entity.living.LivingDeathEvent
 import net.minecraftforge.event.server.ServerStartingEvent
+import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.registries.RegisterEvent
 import thedarkcolour.kotlinforforge.forge.FORGE_BUS
+import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import thedarkcolour.kotlinforforge.forge.MOD_CONTEXT
 import thedarkcolour.kotlinforforge.forge.runForDist
 
 @Mod("bountiful")
 class BountifulModForge {
     init {
+
+        println("Hello!")
+        val dd = DecreeData(ids = mutableListOf("hello", "world"))
+        println("DD: $dd")
 
         Bountybridge.registerServerMessages()
         Bountybridge.registerClientMessages()
@@ -34,7 +42,7 @@ class BountifulModForge {
         FORGE_BUS.addListener(this::onEntityKilled)
         FORGE_BUS.addListener(this::onServerStarting)
 
-        MOD_CONTEXT.getKEventBus().register(this::registerRegistryContent)
+        MOD_CONTEXT.getKEventBus().register(this)
 
         runForDist(
             clientTarget = {
@@ -77,8 +85,8 @@ class BountifulModForge {
         BountifulCommands.register(evt.dispatcher, evt.buildContext, evt.commandSelection)
     }
 
+    @SubscribeEvent
     fun registerRegistryContent(evt: RegisterEvent) {
-        BountifulContent.getId()
         KambrikRegistrar[BountifulContent].content.forEach { entry ->
             @Suppress("UNCHECKED_CAST")
             evt.register(entry.registry.key as RegistryKey<out Registry<Any>>, Identifier(BountifulContent.getId(), entry.itemId)) { entry.item }
