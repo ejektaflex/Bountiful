@@ -36,7 +36,7 @@ repositories {
 // Please just use current fab loader
 configurations.all {
     resolutionStrategy {
-        force("net.fabricmc:fabric-loader:0.14.19")
+        force("net.fabricmc:fabric-loader:0.14.21")
     }
 }
 

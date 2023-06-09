@@ -68,11 +68,11 @@ data class KGuiDsl(val ctx: KGui, val context: DrawContext, val mouseX: Int, val
     }
 
     fun itemStackIcon(stack: ItemStack, x: Int = 0, y: Int = 0) {
-        itemRenderer.renderInGui(matrices, stack, ctx.absX(x), ctx.absY(y))
+        context.drawItem(stack, ctx.absX(x), ctx.absY(y))
     }
 
     fun itemStackOverlay(stack: ItemStack, x: Int = 0, y: Int = 0) {
-        itemRenderer.renderGuiItemOverlay(matrices, textRenderer, stack, x, y)
+        context.drawItem(stack, x, y)
     }
 
     fun itemStack(stack: ItemStack, x: Int = 0, y: Int = 0) {
@@ -83,7 +83,7 @@ data class KGuiDsl(val ctx: KGui, val context: DrawContext, val mouseX: Int, val
     fun itemStackWithTooltip(stack: ItemStack, x: Int, y: Int) {
         itemStack(stack, x, y)
         onHover(x, y, 18, 18) {
-            tooltip(ctx.screen.getTooltipFromItem(stack))
+            context.drawItemTooltip(textRenderer, stack, x, y)
         }
     }
 
@@ -99,8 +99,8 @@ data class KGuiDsl(val ctx: KGui, val context: DrawContext, val mouseX: Int, val
 
     fun tooltip(texts: List<Text>) {
         defer {
-            ctx.screen.renderTooltip(
-                matrices,
+            context.drawTooltip(
+                textRenderer,
                 texts,
                 mouseX,
                 mouseY
@@ -166,7 +166,7 @@ data class KGuiDsl(val ctx: KGui, val context: DrawContext, val mouseX: Int, val
     fun sprite(sprite: KSpriteGrid.Sprite, x: Int = 0, y: Int = 0, w: Int = sprite.width, h: Int = sprite.height, func: (AreaDsl.() -> Unit)? = null) {
         sprite.draw(
             ctx.screen,
-            context.matrices,
+            context,
             ctx.absX(x),
             ctx.absY(y),
             w,
