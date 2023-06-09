@@ -10,6 +10,7 @@ import io.ejekta.bountiful.kambrik.KambrikHandledScreen
 import io.ejekta.bountiful.kambrik.gui.KSpriteGrid
 import io.ejekta.bountiful.kambrik.gui.widgets.KListWidget
 import io.ejekta.bountiful.kambrik.gui.widgets.KScrollbarVertical
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack
@@ -144,12 +145,16 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
 
     }
 
-    override fun onDrawBackground(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        bgGui.draw(matrices, mouseX, mouseY, delta)
+    override fun onDrawBackground(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+        bgGui.draw(context, mouseX, mouseY, delta)
     }
 
-    override fun onDrawForeground(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        fgGui.draw(matrices, mouseX, mouseY, delta)
+    override fun onDrawForeground(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+        fgGui.draw(context, mouseX, mouseY, delta)
+    }
+
+    override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
+        // Currently does nothing
     }
 
     override fun init() {

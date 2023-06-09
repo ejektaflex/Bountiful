@@ -5,7 +5,7 @@ import io.ejekta.kambrik.text.KambrikTextBuilder
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.font.TextRenderer
-import net.minecraft.client.gui.DrawableHelper
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.client.render.LightmapTextureManager
 import net.minecraft.client.render.Tessellator
@@ -19,7 +19,7 @@ import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import kotlin.math.max
 
-data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, val mouseY: Int, val delta: Float?) {
+data class KGuiDsl(val ctx: KGui, val context: DrawContext, val mouseX: Int, val mouseY: Int, val delta: Float?) {
 
     val textRenderer: TextRenderer
         get() = MinecraftClient.getInstance().textRenderer
@@ -58,7 +58,7 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
         offset(x, y) {
             val sx = ctx.absX()
             val sy = ctx.absY()
-            DrawableHelper.fill(matrices, sx, sy, sx + w, sy + h, (alpha shl 24) + color)
+            context.fill(sx, sy, sx + w, sy + h, (alpha shl 24) + color)
             apply(func)
         }
     }
@@ -113,7 +113,7 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
     }
 
     fun text(x: Int, y: Int, text: Text) {
-        textRenderer.drawWithShadow(matrices, text, ctx.absX(x).toFloat(), ctx.absY(y).toFloat(), 0xFFFFFF)
+        context.drawText(textRenderer, text, ctx.absX(x), ctx.absY(y), 0xFFFFFF, false)
     }
 
     fun text(x: Int = 0, y: Int = 0, textDsl: KambrikTextBuilder<MutableText>.() -> Unit) {
@@ -121,7 +121,7 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
     }
 
     fun textNoShadow(x: Int, y: Int, text: Text) {
-        textRenderer.draw(matrices, text, ctx.absX(x).toFloat(), ctx.absY(y).toFloat(), 0xFFFFFF)
+        context.drawText(textRenderer, text, ctx.absX(x), ctx.absY(y), 0xFFFFFF, false)
     }
 
     fun textNoShadow(x: Int = 0, y: Int = 0, textDsl: KambrikTextBuilder<MutableText>.() -> Unit) {
@@ -129,12 +129,13 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
     }
 
     fun textCentered(x: Int, y: Int, text: Text) {
-        textRenderer.draw(
-            matrices,
+        context.drawText(
+            textRenderer,
             text,
-            (ctx.absX(x) - textRenderer.getWidth(text) / 2).toFloat(),
-            ctx.absY(y).toFloat(),
-            0xFFFFFF
+            ctx.absX(x) - textRenderer.getWidth(text) / 2,
+            ctx.absY(y),
+            0xFFFFFF,
+            false
         )
     }
 
@@ -165,7 +166,7 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
     fun sprite(sprite: KSpriteGrid.Sprite, x: Int = 0, y: Int = 0, w: Int = sprite.width, h: Int = sprite.height, func: (AreaDsl.() -> Unit)? = null) {
         sprite.draw(
             ctx.screen,
-            matrices,
+            context.matrices,
             ctx.absX(x),
             ctx.absY(y),
             w,
@@ -188,7 +189,7 @@ data class KGuiDsl(val ctx: KGui, val matrices: MatrixStack, val mouseX: Int, va
         val dims = entity.getDimensions(entity.pose)
         val maxDim = (1 / max(dims.height, dims.width) * 1 * size).toInt().coerceAtLeast(1)
         InventoryScreen.drawEntity(
-            matrices,
+            context,
             ctx.absX(x),
             ctx.absY(y),
             maxDim,

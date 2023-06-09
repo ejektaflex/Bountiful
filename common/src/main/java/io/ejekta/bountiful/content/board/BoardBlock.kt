@@ -12,8 +12,10 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.loot.context.LootContext
+import net.minecraft.loot.context.LootContextParameterSet
 import net.minecraft.loot.context.LootContextParameters
 import net.minecraft.screen.NamedScreenHandlerFactory
+import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
@@ -22,10 +24,7 @@ import net.minecraft.world.World
 
 
 class BoardBlock : BlockWithEntity(
-    Settings
-        .of(Material.WOOD)
-        .hardness(3f)
-        .resistance(3600000f)
+    Settings.create().sounds(BlockSoundGroup.WOOD).hardness(3f).resistance(3600000f)
 ), BlockEntityProvider {
 
     override fun getRenderType(state: BlockState?): BlockRenderType {
@@ -46,8 +45,11 @@ class BoardBlock : BlockWithEntity(
         }
     }
 
-    override fun getDroppedStacks(state: BlockState?, builder: LootContext.Builder?): MutableList<ItemStack> {
-        val blockEntity = builder?.getNullable(LootContextParameters.BLOCK_ENTITY) ?: return mutableListOf()
+    override fun getDroppedStacks(
+        state: BlockState,
+        builder: LootContextParameterSet.Builder
+    ): MutableList<ItemStack> {
+        val blockEntity = builder.get(LootContextParameters.BLOCK_ENTITY) ?: return mutableListOf()
         if (blockEntity.type == BountifulContent.BOARD_ENTITY) {
             return super.getDroppedStacks(state, builder).map {
                 it.also { blockEntity.setStackNbt(it) }

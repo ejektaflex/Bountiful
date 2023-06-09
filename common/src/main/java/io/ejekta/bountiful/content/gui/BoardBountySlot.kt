@@ -19,7 +19,7 @@ class BoardBountySlot(val inv: BoardInventory, index: Int, x: Int, y: Int) : Slo
             // Mask all matching bounties
             val matchingMaskIndices = board.fullInventoryCopy().readOnlyCopy
                 .mapIndexed { indexI, itemStack ->
-                    if (ItemStack.areNbtEqual(stack, itemStack)) {
+                    if (ItemStack.canCombine(stack, itemStack)) {
                         indexI
                     } else {
                         null

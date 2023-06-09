@@ -5,20 +5,20 @@ import net.fabricmc.loom.task.RemapJarTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.8.10"
+    kotlin("jvm") version "1.8.21"
     kotlin("plugin.serialization") version "1.6.0"
     base
     // https://maven.architectury.dev/architectury-plugin/architectury-plugin.gradle.plugin/
-    id("architectury-plugin") version "3.4-SNAPSHOT"
+    id("architectury-plugin") version "3.4.146"
     // https://maven.architectury.dev/dev/architectury/loom/dev.architectury.loom.gradle.plugin/
-    id("dev.architectury.loom") version "1.1-SNAPSHOT" apply false
+    id("dev.architectury.loom") version "1.2.342" apply false
     id("com.github.johnrengelman.shadow") version "7.1.2" apply false
 }
 
 object Versions {
-    val Mod = "6.0.0-beta.3"
-    val MC = "1.19.4"
-    val Yarn = "1.19.4+build.1"
+    val Mod = "6.0.1"
+    val MC = "1.20"
+    val Yarn = "1.20+build.1"
 }
 
 // Set the Minecraft version for Architectury.

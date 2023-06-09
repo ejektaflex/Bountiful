@@ -6,6 +6,7 @@ import io.ejekta.bountiful.kambrik.gui.KGuiDsl
 import io.ejekta.bountiful.kambrik.gui.KRect
 import io.ejekta.bountiful.kambrik.gui.KSpriteGrid
 import io.ejekta.bountiful.kambrik.gui.reactor.MouseReactor
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
@@ -27,16 +28,17 @@ abstract class KambrikHandledScreen<SH : ScreenHandler>(
         backgroundHeight = sprite.height
     }
 
-    override fun drawForeground(matrices: MatrixStack?, mouseX: Int, mouseY: Int) { /* Pass here */ }
-    override fun drawBackground(matrices: MatrixStack, delta: Float, mouseX: Int, mouseY: Int) {
-        onDrawBackground(matrices, mouseX, mouseY, delta)
+    override fun drawForeground(context: DrawContext?, mouseX: Int, mouseY: Int) {  /* Pass here */ }
+
+    override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
+        onDrawBackground(context, mouseX, mouseY, delta)
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        renderBackground(matrices)
-        super.render(matrices, mouseX, mouseY, delta)
-        onDrawForeground(matrices, mouseX, mouseY, delta)
-        drawMouseoverTooltip(matrices, mouseX, mouseY)
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+        renderBackground(context)
+        super.render(context, mouseX, mouseY, delta)
+        onDrawForeground(context, mouseX, mouseY, delta)
+        drawMouseoverTooltip(context, mouseX, mouseY)
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

@@ -1,6 +1,6 @@
 
 object Versions {
-    val MC = "1.19.4"
+    val MC = "1.20"
 }
 
 architectury {
@@ -31,17 +31,13 @@ repositories {
 
 dependencies {
     // Add dependency on Forge. This is mainly used for generating the patched Minecraft jar with Forge classes.
-    forge("net.minecraftforge:forge:${Versions.MC}-45.0.49")
+    forge("net.minecraftforge:forge:${Versions.MC}-46.0.1")
 
     // Add Kotlin for Forge.
     // Based on their own instructions: https://github.com/thedarkcolour/KotlinForForge/blob/70385f5/thedarkcolour/kotlinforforge/gradle/kff-3.0.0.gradle
     implementation("thedarkcolour:kotlinforforge:4.1.0")
 
-    modImplementation("io.ejekta:kambrik-forge:6.0.0-beta.2+1.19.4") {
-        isTransitive = false
-    }
-
-//    implementation(project(":common", configuration = "namedElements")) {
+//    modImplementation("io.ejekta:kambrik-forge:6.0.0-beta.2+1.19.4") {
 //        isTransitive = false
 //    }
 

@@ -1,6 +1,7 @@
 package io.ejekta.bountiful.kambrik.gui
 
 import io.ejekta.bountiful.kambrik.KambrikScreenCommon
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.EntityType
@@ -20,11 +21,11 @@ class KGui(
 
     val entityRenderCache = mutableMapOf<EntityType<*>, LivingEntity>()
 
-    fun draw(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float? = null) {
+    fun draw(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float? = null) {
         logic.boundsStack.clear()
         logic.areaClickStack.clear()
         val toDraw = logic.modalStack.lastOrNull() ?: func // Draw top of modal stack, or func if not exists
-        val dsl = KGuiDsl(this, matrices, mouseX, mouseY, delta).draw(toDraw)
+        val dsl = KGuiDsl(this, context, mouseX, mouseY, delta).draw(toDraw)
     }
 
     fun pushModal(dsl: KGuiDsl.() -> Unit) = logic.modalStack.add(dsl)

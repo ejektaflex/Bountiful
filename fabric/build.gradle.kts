@@ -45,11 +45,13 @@ dependencies {
     shadowCommon(project(path = ":common", configuration = "transformProductionFabric")) { isTransitive = false }
 
     // Standard Fabric mod setup.
-    modImplementation("net.fabricmc:fabric-loader:0.14.19")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.77.0+1.19.4")
-    modApi("net.fabricmc:fabric-language-kotlin:1.9.2+kotlin.1.8.10")
-    modImplementation("io.ejekta:kambrik-fabric:6.0.0-beta.2+1.19.4")
-    modImplementation("com.terraformersmc:modmenu:6.1.0-rc.4")
+    modImplementation("net.fabricmc:fabric-loader:0.14.21")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.83.0+1.20")  {
+        exclude("net.fabricmc", "fabric-loader")
+    }
+    modApi("net.fabricmc:fabric-language-kotlin:1.9.4+kotlin.1.8.21")
+    modImplementation("io.ejekta:kambrik-fabric:6.0.1+1.20")
+    modImplementation("com.terraformersmc:modmenu:7.0.1")
 }
 
 tasks {

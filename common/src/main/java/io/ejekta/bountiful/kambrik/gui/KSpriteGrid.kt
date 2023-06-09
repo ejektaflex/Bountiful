@@ -1,7 +1,7 @@
 package io.ejekta.bountiful.kambrik.gui
 
 import com.mojang.blaze3d.systems.RenderSystem
-import net.minecraft.client.gui.DrawableHelper
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.util.math.MatrixStack
@@ -19,11 +19,11 @@ open class KSpriteGrid(val location: Identifier, val texWidth: Int, val texHeigh
         val grid: KSpriteGrid
             get() = this@KSpriteGrid
 
-        fun draw(screen: Screen, matrixStack: MatrixStack, x: Int, y: Int, w: Int = width, h: Int = height) {
-            RenderSystem.setShader(GameRenderer::getPositionTexProgram)
-            RenderSystem.setShaderTexture(0, location)
-            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
-            DrawableHelper.drawTexture(matrixStack, x, y, u, v, w, h, texWidth, texHeight)
+        fun draw(screen: Screen, context: DrawContext, x: Int, y: Int, w: Int = width, h: Int = height) {
+            //RenderSystem.setShader(GameRenderer::getPositionTexProgram)
+            //RenderSystem.setShaderTexture(0, location)
+            //RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
+            context.drawTexture(location, x, y, u, v, w, h, texWidth, texHeight)
         }
     }
 

@@ -30,10 +30,6 @@ import thedarkcolour.kotlinforforge.forge.runForDist
 class BountifulModForge {
     init {
 
-        println("Hello!")
-        val dd = DecreeData(ids = mutableListOf("hello", "world"))
-        println("DD: $dd")
-
         Bountybridge.registerServerMessages()
         Bountybridge.registerClientMessages()
 

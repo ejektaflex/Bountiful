@@ -3,6 +3,7 @@ package io.ejekta.bountiful.kambrik
 import io.ejekta.bountiful.kambrik.gui.KGuiDsl
 import io.ejekta.bountiful.kambrik.gui.KRect
 import io.ejekta.bountiful.kambrik.gui.reactor.MouseReactor
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.Element
 import net.minecraft.client.util.math.MatrixStack
 
@@ -10,8 +11,8 @@ interface KambrikScreenCommon : Element {
     val boundsStack: MutableList<Pair<MouseReactor, KRect>>
     val areaClickStack: MutableList<Pair<() -> Unit, KRect>>
     val modalStack: MutableList<KGuiDsl.() -> Unit>
-    fun onDrawBackground(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float)
-    fun onDrawForeground(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float)
+    fun onDrawBackground(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float)
+    fun onDrawForeground(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float)
 
     fun cycleDrawnWidgets(func: (widget: MouseReactor, rect: KRect) -> Unit) {
         for (bounds in boundsStack) {
