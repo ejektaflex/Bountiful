@@ -46,12 +46,12 @@ dependencies {
 
     // Standard Fabric mod setup.
     modImplementation("net.fabricmc:fabric-loader:0.14.21")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.83.0+1.20")  {
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.84.0+1.20.1")  {
         exclude("net.fabricmc", "fabric-loader")
     }
-    modApi("net.fabricmc:fabric-language-kotlin:1.9.4+kotlin.1.8.21")
-    modImplementation("io.ejekta:kambrik-fabric:6.0.1+1.20")
-    modImplementation("com.terraformersmc:modmenu:7.0.1")
+    modApi("net.fabricmc:fabric-language-kotlin:1.9.5+kotlin.1.8.22")
+    modImplementation("io.ejekta:kambrik-fabric:6.0.1+1.20.1")
+    modImplementation("com.terraformersmc:modmenu:7.1.0")
 }
 
 tasks {
