@@ -1,0 +1,149 @@
+
+{
+	"content": {
+
+        "fisherman_rew_cod_bucket": {
+            "type": "item",
+            "content": "minecraft:cod_bucket",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 3000
+        },
+
+        "fisherman_rew_cooked_cod": {
+            "type": "item",
+            "content": "minecraft:cooked_cod",
+            "amount": {
+                "min": 3,
+                "max": 15
+            },
+            "unitWorth": 165
+        },
+
+        "fisherman_rew_campfire": {
+            "type": "item",
+            "content": "minecraft:campfire",
+            "amount": {
+                "min": 1,
+                "max": 2
+            },
+            "unitWorth": 800
+        },
+
+        "fisherman_rew_cooked_salmon": {
+            "type": "item",
+            "content": "minecraft:cooked_salmon",
+            "amount": {
+                "min": 1,
+                "max": 6
+            },
+            "unitWorth": 165
+        },
+
+        "fisherman_rew_ench_book_lure": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:enchanted_book",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1500,
+            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:lure\"}]}"
+        },
+
+        "fisherman_rew_ench_book_luck_sea": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:enchanted_book",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1500,
+            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:luck_of_the_sea\"}]}"
+        },
+
+        "fisherman_rew_ench_book_unbreaking": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:enchanted_book",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1500.0,
+            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:unbreaking\"}]}"
+        },
+
+        "fisherman_rew_saddle": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:saddle",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 2500
+        },
+
+        "fisherman_rew_bamboo": {
+            "type": "item",
+            "rarity": "EPIC",
+            "content": "minecraft:bamboo",
+            "amount": {
+                "min": 1,
+                "max": 3
+            },
+            "unitWorth": 350.0
+        },
+
+        "fisherman_rew_naut_shell": {
+            "type": "item",
+            "rarity": "EPIC",
+            "content": "minecraft:nautilus_shell",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 1100.0
+        },
+
+        "fisherman_rew_name_tag": {
+            "type": "item",
+            "rarity": "EPIC",
+            "content": "minecraft:name_tag",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 4500
+        },
+
+        "fisherman_rew_sponge": {
+            "type": "item",
+            "rarity": "EPIC",
+            "content": "minecraft:sponge",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 2500
+        },
+
+        "fisherman_rew_heart_sea": {
+            "type": "item",
+            "rarity": "LEGENDARY",
+            "content": "minecraft:heart_of_the_sea",
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "unitWorth": 3000.0
+        }
+
+	}
+
+}

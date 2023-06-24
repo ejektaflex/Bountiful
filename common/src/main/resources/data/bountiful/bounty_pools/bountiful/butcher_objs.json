@@ -1,0 +1,113 @@
+
+{
+	"content": {
+
+		"butcher_obj_chicken": {
+			"type": "item",
+			"content": "minecraft:chicken",
+			"amount": {
+				"min": 2,
+				"max": 16
+			},
+			"unitWorth": 70
+		},
+
+		"butcher_obj_egg": {
+			"type": "item",
+			"content": "minecraft:egg",
+			"amount": {
+				"min": 4,
+				"max": 32
+			},
+			"unitWorth": 50
+		},
+
+		"butcher_obj_porkchop": {
+			"type": "item",
+			"content": "minecraft:porkchop",
+			"amount": {
+				"min": 2,
+				"max": 16
+			},
+			"unitWorth": 145
+		},
+
+		"butcher_obj_rabbit": {
+			"type": "item",
+			"content": "minecraft:rabbit",
+			"amount": {
+				"min": 1,
+				"max": 4
+			},
+			"unitWorth": 250
+		},
+
+		"butcher_obj_coal": {
+			"type": "item",
+			"content": "minecraft:coal",
+			"amount": {
+				"min": 6,
+				"max": 48
+			},
+			"unitWorth": 65
+		},
+
+		"butcher_obj_smoker": {
+			"type": "item",
+			"rarity": "UNCOMMON",
+			"content": "minecraft:smoker",
+			"amount": {
+				"min": 1,
+				"max": 4
+			},
+			"unitWorth": 650
+		},
+
+		"butcher_obj_mutton": {
+			"type": "item",
+			"rarity": "UNCOMMON",
+			"content": "minecraft:mutton",
+			"amount": {
+				"min": 3,
+				"max": 16
+			},
+			"unitWorth": 145
+		},
+
+		"butcher_obj_beef": {
+			"type": "item",
+			"rarity": "UNCOMMON",
+			"content": "minecraft:beef",
+			"amount": {
+				"min": 2,
+				"max": 24
+			},
+			"unitWorth": 100
+		},
+
+		"butcher_obj_dried_kelp_block": {
+			"type": "item",
+			"rarity": "RARE",
+			"content": "minecraft:dried_kelp_block",
+			"amount": {
+				"min": 2,
+				"max": 24
+			},
+			"unitWorth": 100
+		},
+
+		"butcher_obj_sweet_berries": {
+			"type": "item",
+			"rarity": "EPIC",
+			"content": "minecraft:sweet_berries",
+			"amount": {
+				"min": 2,
+				"max": 24
+			},
+			"unitWorth": 100
+		}
+
+	}
+
+
+}

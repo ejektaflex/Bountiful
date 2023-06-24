@@ -125,5 +125,5 @@ dependencyResolutionManagement {
     }
 }
 
-include("common", "fabric", "forge")
+include("common", "fabric", "forge", "datagen")
 

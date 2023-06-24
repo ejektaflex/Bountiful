@@ -1,0 +1,111 @@
+
+{
+	"content": {
+
+        "fletcher_obj_stick": {
+            "type": "item",
+            "content": "minecraft:stick",
+            "amount": {
+                "min": 8,
+                "max": 64
+            },
+            "unitWorth": 30
+        },
+
+        "fletcher_obj_planks": {
+            "type": "item_tag",
+            "content": "minecraft:planks",
+            "amount": {
+                "min": 6,
+                "max": 64
+            },
+            "unitWorth": 60
+        },
+
+        "fletcher_obj_logs": {
+            "type": "item_tag",
+            "content": "minecraft:logs",
+            "amount": {
+                "min": 2,
+                "max": 10
+            },
+            "unitWorth": 240
+        },
+
+        "fletcher_obj_gravel": {
+            "type": "item",
+            "content": "minecraft:gravel",
+            "amount": {
+                "min": 16,
+                "max": 32
+            },
+            "unitWorth": 30
+        },
+
+        "fletcher_obj_flint": {
+            "type": "item",
+            "content": "minecraft:flint",
+            "amount": {
+                "min": 16,
+                "max": 32
+            },
+            "unitWorth": 35
+        },
+
+        "fletcher_obj_target": {
+            "type": "item",
+            "rarity": "UNCOMMON",
+            "content": "minecraft:target",
+            "amount": {
+                "min": 1,
+                "max": 2
+            },
+            "unitWorth": 750
+        },
+
+        "fletcher_obj_fletching_table": {
+            "type": "item",
+            "content": "minecraft:fletching_table",
+            "amount": {
+                "min": 1,
+                "max": 4
+            },
+            "unitWorth": 400
+        },
+
+        "fletcher_obj_string": {
+            "type": "item",
+			"rarity": "UNCOMMON",
+            "content": "minecraft:string",
+            "amount": {
+                "min": 4,
+                "max": 28
+            },
+            "unitWorth": 70
+        },
+
+        "fletcher_obj_feather": {
+            "type": "item",
+			"rarity": "RARE",
+            "content": "minecraft:feather",
+            "amount": {
+                "min": 6,
+                "max": 36
+            },
+            "unitWorth": 40
+        },
+
+        "fletcher_obj_tripwire_hook": {
+            "type": "item",
+			"rarity": "EPIC",
+            "content": "minecraft:tripwire_hook",
+            "amount": {
+                "min": 4,
+                "max": 12
+            },
+            "unitWorth": 550
+        }
+
+	}
+
+}

@@ -1,0 +1,10 @@
+{
+	"objectives": [
+		"librarian_objs",
+		"_all_objs"
+	],
+	"rewards": [
+		"librarian_rews",
+		"_all_rews"
+	]
+}
