@@ -1,6 +1,6 @@
 
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("com.github.johnrengelman.shadow") version libs.versions.shadow
 }
 
 architectury {
@@ -36,7 +36,7 @@ repositories {
 // Please just use current fab loader
 configurations.all {
     resolutionStrategy {
-        force("net.fabricmc:fabric-loader:0.14.21")
+        force(libs.fabric.loader)
     }
 }
 
@@ -45,13 +45,11 @@ dependencies {
     shadowCommon(project(path = ":common", configuration = "transformProductionFabric")) { isTransitive = false }
 
     // Standard Fabric mod setup.
-    modImplementation("net.fabricmc:fabric-loader:0.14.21")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.84.0+1.20.1")  {
+    modImplementation(libs.bundles.mod.deps.fabric)
+    modImplementation(libs.fabric.api)  {
         exclude("net.fabricmc", "fabric-loader")
     }
-    modApi("net.fabricmc:fabric-language-kotlin:1.9.5+kotlin.1.8.22")
-    modImplementation("io.ejekta:kambrik-fabric:6.0.1+1.20.1")
-    modImplementation("com.terraformersmc:modmenu:7.1.0")
+    modApi(libs.fabric.adapter)
 }
 
 tasks {

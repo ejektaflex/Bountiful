@@ -5,29 +5,23 @@ import net.fabricmc.loom.task.RemapJarTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.8.22"
-    kotlin("plugin.serialization") version "1.6.0"
+    kotlin("jvm") version libs.versions.kotlin
+    kotlin("plugin.serialization") version libs.versions.ksx
     base
     // https://maven.architectury.dev/architectury-plugin/architectury-plugin.gradle.plugin/
-    id("architectury-plugin") version "3.4.146"
+    id("architectury-plugin") version libs.versions.architectury
     // https://maven.architectury.dev/dev/architectury/loom/dev.architectury.loom.gradle.plugin/
-    id("dev.architectury.loom") version "1.2.348" apply false
-    id("com.github.johnrengelman.shadow") version "7.1.2" apply false
-}
-
-object Versions {
-    val Mod = "6.0.1"
-    val MC = "1.20.1"
-    val Yarn = "1.20.1+build.8"
+    id("dev.architectury.loom") version libs.versions.archloom apply false
+    id("com.github.johnrengelman.shadow") version libs.versions.shadow apply false
 }
 
 // Set the Minecraft version for Architectury.
 architectury {
-    minecraft = Versions.MC
+    minecraft = libs.versions.mc.get()
 }
 
-group = "io.ejekta.bountiful"
-version = "${Versions.Mod}+${Versions.MC}"
+group = libs.versions.pkg.get()
+version = libs.versions.fullversion.get() //"${Versions.Mod}+${Versions.MC}"
 base.archivesName.set("Bountiful")
 
 tasks {
@@ -67,9 +61,9 @@ subprojects {
     dependencies {
         // Note that the configuration name has to be in quotes (a string) since Loom isn't applied to the root project,
         // and so the Kotlin accessor method for it isn't generated for this file.
-        "minecraft"("net.minecraft:minecraft:${Versions.MC}")
-        implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
-        "mappings"("net.fabricmc:yarn:${Versions.Yarn}:v2")
+        "minecraft"(rootProject.libs.minecraft)
+        implementation(rootProject.libs.ksx)
+        "mappings"("net.fabricmc:yarn:${rootProject.libs.versions.yarn.get()}:v2")
     }
 
     tasks {
