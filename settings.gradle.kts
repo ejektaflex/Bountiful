@@ -119,11 +119,6 @@ dependencyResolutionManagement {
                 modDepModMenu
             ))
 
-            bundle("mod-deps-forge", listOf(
-                modDepClothConfigForge,
-                kambrikForge // might need isTransitive = false so if there are errors check here!
-            ))
-
         }
     }
 }

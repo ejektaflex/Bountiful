@@ -25,14 +25,7 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
     val boardHandler: BoardScreenHandler
         get() = handler as BoardScreenHandler
 
-    var toggledOut: Boolean = true
-        set(value) {
-            field = value
-            sizeToSprite(bgSprite)
-            for (slot in handler.slots) {
-                //slot.y -= bgOffset
-            }
-        }
+    val toggledOut: Boolean = true
 
     val bgSprite: KSpriteGrid.Sprite
         get() = when(toggledOut) {
@@ -146,7 +139,7 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
     }
 
     override fun onDrawBackground(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
-        bgGui.draw(context, mouseX, mouseY, delta)
+        // do nothing
     }
 
     override fun onDrawForeground(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
@@ -154,7 +147,7 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
     }
 
     override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
-        // Currently does nothing
+        bgGui.draw(context, mouseX, mouseY, delta)
     }
 
     override fun init() {

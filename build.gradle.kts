@@ -21,7 +21,7 @@ architectury {
 }
 
 group = libs.versions.pkg.get()
-version = libs.versions.fullversion.get() //"${Versions.Mod}+${Versions.MC}"
+version = libs.versions.fullversion.get()
 base.archivesName.set("Bountiful")
 
 tasks {

@@ -43,7 +43,10 @@ dependencies {
 
     //implementation("org.ow2.asm:asm-tree:9.4")
 
-    modImplementation(libs.bundles.mod.deps.forge)
+    modImplementation(libs.mod.dep.cloth.config.forge)
+    modImplementation(libs.kambrik.forge) {
+        isTransitive = false
+    }
 }
 
 tasks {
