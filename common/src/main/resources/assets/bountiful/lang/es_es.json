@@ -19,7 +19,7 @@
 
 	"bountiful.decree": "Decreto",
 	"bountiful.decrees": "Decretos",
-	"bountiful.decree.invalid": "Decreto Inválido",
+	"bountiful.decree.invalid": "Decreto inválido",
 	"bountiful.decree.notset": "¡Llévalo a un tablón de recompensas!",
 
 	"bountiful.bounty.expired": "Esta recompensa ha expirado.",
@@ -61,7 +61,7 @@
 	"bountiful.decree.shepherd.name": "Pastoreo",
 	"bountiful.decree.tinker.name": "Trabajos de precisión",
 	"bountiful.decree.toolsmith.name": "Herrería de herramientas",
-	"bountiful.decree.invalid_decree.name": "Decreto Inválido",
+	"bountiful.decree.invalid_decree.name": "Decreto inválido",
 
 	"bountiful.bounty.type.entity.kills": "Asesinatos",
 
