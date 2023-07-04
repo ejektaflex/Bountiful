@@ -1,0 +1,88 @@
+{
+	"__comment__": "Translated by @alpeerkaraca",
+	"block.bountiful.bountyboard": "Ödül Panosu",
+
+	"itemGroup.bountiful": "Ödül Alabilir",
+
+	"bountiful.item_tag.any_door": "Herhangi Bir Kapı",
+	"bountiful.item_tag.any_wool": "Herhangi Bir Yün",
+	"bountiful.item_tag.any_planks": "Herhangi Bir Tahta",
+	"bountiful.item_tag.any_log": "Herhangi Bir Kütük",
+	"bountiful.item_tag.any_fence": "Herhangi Bir Çit",
+	"bountiful.item_tag.any_bed": "Herhangi Bir Yatak",
+	"bountiful.item_tag.any_boat": "Herhangi Bir Tekne",
+	"bountiful.item_tag.any_candle": "Herhangi Bir Mum",
+	"bountiful.item_tag.any_banner": "Herhangi Bir Flama",
+	"bountiful.item_tag.any_wool": "Herhangi Bir Yün",
+
+	"bountiful.decree": "Kararname",
+	"bountiful.decrees": "Kararnameler",
+	"bountiful.decree.invalid": "Geçersiz Kararname",
+	"bountiful.decree.notset": "Bunu bir Ödül Panosuna getir!",
+
+	"bountiful.bounty.expired": "Bu ödülün süresi doldu.",
+	"bountiful.bounty.turnin": "Bir ödül panosuna sağ tıklayarak ödülünüzü alın.",
+
+	"bountiful.advancement.bounty_taken.title": "Kiralık Çalışan",
+	"bountiful.advancement.bounty_taken.desc": "Ödül Panosundan Ödül Al",
+
+	"bountiful.advancement.bounty_complete.title": "Alın Terini Sil",
+	"bountiful.advancement.bounty_complete.desc": "Bir Ödülü Tamamla!",
+
+	"bountiful.advancement.rush_order.title": "Hızz... Ben Hızlıyım",
+	"bountiful.advancement.rush_order.desc": "Bir süreden daha kısa sürede Ödül Tamamla!",
+
+	"bountiful.advancement.procrastinator.title": "Son Dakika",
+	"bountiful.advancement.procrastinator.desc": "Bir ödülü son 5 saniye içinde tamamla!",
+
+	"bountiful.advancement.town_crier.title": "Felaket Tellalı",
+	"bountiful.advancement.town_crier.desc": "Adınıza kararname çıksın!",
+
+	"bountiful.advancement.royal_mandate.title": "Kraliyet Emri",
+	"bountiful.advancement.royal_mandate.desc": "Ödül Panosuna bir Kararname yerleştirin!",
+
+	"bountiful.bounty": "Ödül",
+
+	"bountiful.decree.armorer.name": "Zırh Ustası",
+	"bountiful.decree.butcher.name": "Kasapçılık",
+	"bountiful.decree.chef.name": "Aşçılık",
+	"bountiful.decree.cleric.name": "Rahiplik",
+	"bountiful.decree.farmer.name": "Çiftçilik",
+	"bountiful.decree.fisherman.name": "Balıkçılık",
+	"bountiful.decree.fletcher.name": "Okçuluk",
+	"bountiful.decree.hunting.name": "Yaratık Avcılığı",
+	"bountiful.decree.leatherer.name": "Deri İşçiliği",
+	"bountiful.decree.librarian.name": "Kütüphanecilik",
+	"bountiful.decree.mapper.name": "Haritacılık",
+	"bountiful.decree.mason.name": "Taş Ustalığı",
+	"bountiful.decree.shepherd.name": "Çobanlık",
+	"bountiful.decree.tinker.name": "Tamircilik",
+	"bountiful.decree.toolsmith.name": "Alet Ustalığı",
+	"bountiful.decree.runewright.name": "Rün İşlemeciliği",
+	"bountiful.decree.invalid_decree.name": "Geçersiz Kararname",
+
+	"bountiful.bounty.type.entity.kills": "Katletmeler",
+
+	"bountiful.bounty.type.experience.levels": "Deneyim Seviyesi",
+	"bountiful.bounty.type.experience.points": "Deneyim Puanı",
+
+
+	"bountiful.rarity.Common": "Sıradan",
+	"bountiful.rarity.Uncommon": "Sıradışı",
+	"bountiful.rarity.Rare": "Nadir",
+	"bountiful.rarity.Epic": "Destansı",
+
+	"stat.bountiful.bounties_taken": "Alının Ödüller",
+	"stat.bountiful.bounties_done": "Tamamlanan Ödüller (Toplam)",
+	"stat.bountiful.bounties_done_0": "Tamamlanan Ödüller (Sıradan)",
+	"stat.bountiful.bounties_done_1": "Tamamlanan Ödüller (Sıradışı)",
+	"stat.bountiful.bounties_done_2": "Tamamlanan Ödüller (Nadir)",
+	"stat.bountiful.bounties_done_3": "Tamamlanan Ödüller (Destansı)",
+
+	"bountiful.tooltip.advanced": "Eşya detayları için SHIFT'e basılı tutun",
+	"bountiful.tooltip.time": "Kalan Süre",
+	"bountiful.tooltip.required": "Gereklilikler",
+	"bountiful.tooltip.rewards": "Ödüller",
+	"bountiful.tooltip.expired": "Süresi doldu.",
+	"bountiful.tooltip.requirements": "Gereklilikler karşılanmadı."
+}
