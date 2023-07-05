@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) as closely as it can.
 
+## [6.0.2] for 1.20.1 - 2023-06-24
+
+### Fixed
+- Fixed pool validation so that it will not crash for item objectives/rewards that pull from tags. 
+
+## [6.0.1] for 1.20.1 - 2023-06-24
+
+First release for 1.20.1.
+
 ## [6.0.0-beta.3] for 1.19.4 - 2023-03-30
 
 ### Fixed
@@ -20,6 +29,7 @@ not letting players run commands at all
 ### Changed
 - Bountiful (and Kambrik) have now been split into separate modules per type of loader. This allows us to
 develop for both Fabric and Forge at the same time, releasing for both platforms at once
+- Added data validation for pools, allowing us to reject invalid pool entries rather than load them as air
 
 
 
