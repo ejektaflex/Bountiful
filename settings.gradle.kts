@@ -49,7 +49,7 @@ dependencyResolutionManagement {
 
             val ejektaGroup = "io.ejekta"
             val modPackage = "bountiful"
-            val modVersion = "6.0.1"
+            val modVersion = "6.0.2"
 
             version("org", ejektaGroup)
             version("pkg", "$ejektaGroup.$modPackage")

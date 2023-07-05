@@ -54,7 +54,9 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
                 val frameTime = (world.time / 30L).toInt()
                 val options = BountyTypeItemTag.getItems(world, entry).map { ItemStack(it) }.takeUnless { it.isEmpty() } ?: return
                 val frame = frameTime % options.size
-                dsl { itemStack(options[frame], x, y) }
+                dsl {
+                    itemStackIcon(options[frame], x, y)
+                }
             }
             BountyTypeRegistry.ENTITY.id -> {
                 val entityType = BountyTypeEntity.getEntityType(entry)

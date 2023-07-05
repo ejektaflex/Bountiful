@@ -9,6 +9,7 @@ import net.minecraft.inventory.Inventory
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.registry.DynamicRegistryManager
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.server.MinecraftServer
@@ -100,8 +101,8 @@ fun NbtCompound.getBlockPos(key: String): BlockPos {
 
 fun getTagItemKey(id: Identifier) = TagKey.of(Registries.ITEM.key, id)
 
-fun getTagItems(server: MinecraftServer, tagKey: TagKey<Item>): List<Item> {
-    val itemReg = server.registryManager?.get(Registries.ITEM.key) ?: return emptyList()
+fun getTagItems(reg: DynamicRegistryManager, tagKey: TagKey<Item>): List<Item> {
+    val itemReg = reg.get(Registries.ITEM.key) ?: return emptyList()
     val doot = itemReg.streamTagsAndEntries().filter {
         tagKey == it.first
     }.map {
@@ -110,10 +111,6 @@ fun getTagItems(server: MinecraftServer, tagKey: TagKey<Item>): List<Item> {
         }
     }.toList().flatten()
     return doot
-}
-
-fun getTagItems(world: World, tagKey: TagKey<Item>): List<Item> {
-    return world.server?.run { getTagItems(this, tagKey) } ?: emptyList()
 }
 
 fun ServerPlayerEntity.iterateBountyStacks(func: ItemStack.() -> Unit) {

@@ -32,7 +32,7 @@ class BountyTypeItemTag : IBountyExchangeable {
     }
 
     override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {
-        return getTagItems(server, getTagItemKey(Identifier(entry.content))).isNotEmpty()
+        return getTagItems(server.registryManager, getTagItemKey(Identifier(entry.content))).isNotEmpty()
     }
 
     private fun getCurrentStacks(entry: BountyDataEntry, player: PlayerEntity): Map<ItemStack, Int>? {
@@ -87,7 +87,7 @@ class BountyTypeItemTag : IBountyExchangeable {
 
 
         fun getItems(world: World, entry: BountyDataEntry): List<Item> {
-            return getTagItems(world, getTag(entry))
+            return getTagItems(world.registryManager, getTag(entry))
         }
     }
 

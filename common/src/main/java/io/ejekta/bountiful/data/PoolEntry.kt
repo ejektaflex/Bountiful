@@ -70,11 +70,11 @@ class PoolEntry private constructor() {
         return when (type) {
             BountyTypeRegistry.ITEM.id -> {
                 val tagId = Identifier(content.substringAfter("#"))
-                getTagItems(world, getTagItemKey(tagId))
+                getTagItems(world.registryManager, getTagItemKey(tagId))
             }
             BountyTypeRegistry.ITEM_TAG.id -> {
                 val tagId = Identifier(content)
-                getTagItems(world, getTagItemKey(tagId))
+                getTagItems(world.registryManager, getTagItemKey(tagId))
             }
             else -> null
         }
@@ -85,7 +85,7 @@ class PoolEntry private constructor() {
 
         val actualContent = if (type == BountyTypeRegistry.ITEM.id && content.startsWith("#")) {
             val tagId = Identifier(content.substringAfter("#"))
-            val tags = getTagItems(world, getTagItemKey(tagId))
+            val tags = getTagItems(world.registryManager, getTagItemKey(tagId))
             if (tags.isEmpty()){
                 Bountiful.LOGGER.warn("A pool entry tag has an empty list! $content")
                 "minecraft:air"

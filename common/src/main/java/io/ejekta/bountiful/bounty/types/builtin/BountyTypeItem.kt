@@ -27,7 +27,7 @@ class BountyTypeItem : IBountyExchangeable {
 
     override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {
         return if (entry.content.startsWith("#")) {
-            getTagItems(server, getTagItemKey(
+            getTagItems(server.registryManager, getTagItemKey(
                 Identifier(entry.content.substringAfter("#"))
             )).isNotEmpty()
         } else {
