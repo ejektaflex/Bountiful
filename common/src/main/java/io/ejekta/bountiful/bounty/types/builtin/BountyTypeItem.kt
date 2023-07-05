@@ -4,6 +4,8 @@ import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.types.IBountyExchangeable
 import io.ejekta.bountiful.bounty.types.Progress
 import io.ejekta.bountiful.data.PoolEntry
+import io.ejekta.bountiful.util.getTagItemKey
+import io.ejekta.bountiful.util.getTagItems
 import io.ejekta.kambrik.ext.collect
 import io.ejekta.kambrik.ext.identifier
 import net.minecraft.client.item.TooltipContext
@@ -24,8 +26,14 @@ class BountyTypeItem : IBountyExchangeable {
     override val id: Identifier = Identifier("item")
 
     override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {
-        val id = getItem(Identifier(entry.content)).identifier
-        return id == Identifier(entry.content)
+        return if (entry.content.startsWith("#")) {
+            getTagItems(server, getTagItemKey(
+                Identifier(entry.content.substringAfter("#"))
+            )).isNotEmpty()
+        } else {
+            val id = getItem(Identifier(entry.content)).identifier
+            id == Identifier(entry.content)
+        }
     }
 
     private fun getCurrentStacks(entry: BountyDataEntry, player: PlayerEntity): Map<ItemStack, Int> {

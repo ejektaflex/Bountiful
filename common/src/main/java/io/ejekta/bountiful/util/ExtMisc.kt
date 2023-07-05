@@ -102,7 +102,6 @@ fun getTagItemKey(id: Identifier) = TagKey.of(Registries.ITEM.key, id)
 
 fun getTagItems(server: MinecraftServer, tagKey: TagKey<Item>): List<Item> {
     val itemReg = server.registryManager?.get(Registries.ITEM.key) ?: return emptyList()
-    //val itemReg = world.registryManager.getManaged(Registry.ITEM_KEY)
     val doot = itemReg.streamTagsAndEntries().filter {
         tagKey == it.first
     }.map {

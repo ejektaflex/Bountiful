@@ -5,6 +5,7 @@ import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.IBountyType
+import io.ejekta.bountiful.bounty.types.builtin.BountyTypeItem
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.util.getTagItemKey
 import io.ejekta.bountiful.util.getTagItems
@@ -41,7 +42,12 @@ class PoolEntry private constructor() {
     private val forbids: MutableList<ForbiddenContent> = mutableListOf()
 
     fun isValid(server: MinecraftServer): Boolean {
-        return BountyTypeRegistry[type]!!.isValid(this, server)
+        return try {
+            BountyTypeRegistry[type]?.isValid(this, server) ?: return false
+        } catch (e: Exception) {
+            Bountiful.LOGGER.warn("Bounty Pool Entry Invalid: (${id} - ${content}) details: ${save()}")
+            false
+        }
     }
 
     @Transient lateinit var id: String
