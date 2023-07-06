@@ -14,7 +14,8 @@
 									"type": "minecraft:dynamic",
 									"name": "minecraft:contents"
 								}
-							]
+							],
+							"type": "bountiful:board-be"
 						}
 					],
 					"name": "bountiful:bountyboard"

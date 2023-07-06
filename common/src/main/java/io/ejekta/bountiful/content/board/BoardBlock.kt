@@ -58,15 +58,6 @@ class BoardBlock : BlockWithEntity(
         return mutableListOf()
     }
 
-    override fun onBreak(world: World, pos: BlockPos, state: BlockState, player: PlayerEntity?) {
-        val stack = BountifulContent.BOARD_ITEM.defaultStack
-        val be = world.getBlockEntity(pos) as? BoardBlockEntity ?: return
-        be.setStackNbt(stack)
-        val itemEntity = ItemEntity(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), stack)
-        world.spawnEntity(itemEntity)
-        super.onBreak(world, pos, state, player)
-    }
-
     override fun onPlaced(
         world: World?,
         pos: BlockPos?,
