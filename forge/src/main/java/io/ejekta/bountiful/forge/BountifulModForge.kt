@@ -9,12 +9,15 @@ import io.ejekta.bountiful.content.BountifulCommands
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.internal.registration.KambrikRegistrar
+import net.minecraft.item.ItemGroup
+import net.minecraft.item.ItemGroups
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
 import net.minecraft.resource.SynchronousResourceReloader
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.Identifier
 import net.minecraftforge.event.AddReloadListenerEvent
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent
 import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.event.entity.living.LivingDeathEvent
 import net.minecraftforge.event.server.ServerStartingEvent

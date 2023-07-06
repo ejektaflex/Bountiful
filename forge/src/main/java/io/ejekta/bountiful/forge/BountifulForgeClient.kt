@@ -5,7 +5,9 @@ import io.ejekta.bountiful.client.BoardScreen
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.BountifulContent
 import net.minecraft.client.gui.screen.ingame.HandledScreens
+import net.minecraft.item.ItemGroups
 import net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
@@ -24,6 +26,15 @@ object BountifulForgeClient {
             }
         }
         Bountybridge.registerItemDynamicTextures()
+    }
+
+    @SubscribeEvent
+    @JvmStatic
+    fun onItemGroups(evt: BuildCreativeModeTabContentsEvent) {
+        if (evt.tabKey == ItemGroups.FUNCTIONAL) {
+            evt.accept { BountifulContent.BOARD_ITEM }
+            evt.accept { BountifulContent.DECREE_ITEM }
+        }
     }
 
 }
