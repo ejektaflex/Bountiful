@@ -13,6 +13,16 @@
 			"unitWorth": 85
 		},
 
+		"farmer_obj_five_plus_ingredients": {
+			"type": "item",
+			"content": "#croptopia:advancements_food_big",
+			"amount": {
+				"min": 1,
+				"max": 6
+			},
+			"unitWorth": 300
+		},
+
 		"farmer_obj_nuts": {
 			"type": "item",
 			"content": "#croptopia:nuts",

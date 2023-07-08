@@ -1,0 +1,30 @@
+
+{
+	"requires": ["supplementaries"],
+	"content": {
+
+		"fletcher_rew_quiver": {
+			"type": "item",
+			"content": "supplementaries:quiver",
+			"rarity": "UNCOMMON",
+			"amount": {
+				"min": 1,
+				"max": 2
+			},
+			"unitWorth": 2000
+		},
+
+		"fletcher_rew_rope_arrows": {
+			"type": "minecraft:item",
+			"content": "supplementaries:rope_arrow",
+			"amount": {
+				"min": 1,
+				"max": 1
+			},
+			"unitWorth": 1000.0,
+			"nbt": "{Damage:24}"
+		}
+
+	}
+
+}
