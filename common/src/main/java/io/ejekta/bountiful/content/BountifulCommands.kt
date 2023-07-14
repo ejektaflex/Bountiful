@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.content
 
+import com.example.recipe.RecursiveRecipeParser
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.context.CommandContext
 import io.ejekta.bountiful.Bountiful
@@ -8,6 +9,7 @@ import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.bounty.types.IBountyReward
+import io.ejekta.bountiful.chaos.ChaosMode
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.messages.ClipboardCopy
@@ -20,6 +22,7 @@ import io.ejekta.kambrik.text.sendMessage
 import net.minecraft.command.CommandRegistryAccess
 import net.minecraft.item.ItemStack
 import net.minecraft.predicate.NumberRange
+import net.minecraft.registry.Registries
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
@@ -95,6 +98,27 @@ object BountifulCommands {
                         }
                     }
                     "dump" runs dumpData()
+                }
+            }
+
+            "chaos" {
+                "get" runs {
+                    ChaosMode.getRecipes()
+                }
+                "old" {
+                    val allItems = Registries.ITEM.keys.map { it.value }
+                    val sugg = suggestionList { allItems }
+                    argIdentifier("item", sugg) { item ->
+                        this runs {
+                            val picked = Registries.ITEM.get(item())
+                            try {
+                                val rep = RecursiveRecipeParser(source.server).apply { query(ItemStack(picked)) }
+                                println("Ok!")
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                        }
+                    }
                 }
             }
 
