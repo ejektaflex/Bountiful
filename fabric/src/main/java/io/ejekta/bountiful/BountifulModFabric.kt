@@ -34,7 +34,8 @@ class BountifulModFabric : ModInitializer {
             "gofish",
             "techreborn",
             "villager-hats",
-            "xtraarrows"
+            "xtraarrows",
+            "numismatic-overhaul"
         ).forEach {
             val ourContainer = FabricLoader.getInstance().getModContainer(Bountiful.ID).get()
             if (FabricLoader.getInstance().isModLoaded(it)) {

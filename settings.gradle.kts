@@ -30,7 +30,7 @@ dependencyResolutionManagement {
             }
 
             val Ejekta = object {
-                val Kambrik = "6.1.1"
+                val Kambrik = "6.1.0"
                 val KambrikSnapshot = true
             }
 
@@ -50,7 +50,7 @@ dependencyResolutionManagement {
 
             val ejektaGroup = "io.ejekta"
             val modPackage = "bountiful"
-            val modVersion = "6.0.2"
+            val modVersion = "6.0.3"
 
             version("org", ejektaGroup)
             version("pkg", "$ejektaGroup.$modPackage")

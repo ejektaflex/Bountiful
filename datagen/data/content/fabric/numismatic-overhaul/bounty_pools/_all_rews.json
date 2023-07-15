@@ -1,0 +1,17 @@
+{
+	"requires": ["numismatic-overhaul"],
+	"content": {
+		"all_rew_primary_currency": {
+			"type": "item",
+			"content": "numismatic-overhaul:silver_coin",
+			"unitWorth": 800,
+			"weightMult": 0.5
+		},
+        "all_rew_primary_currency_rare_bargain": {
+			"type": "item",
+			"content": "numismatic-overhaul:silver_coin",
+			"unitWorth": 640,
+			"weightMult": 0.1
+		}
+	}
+}

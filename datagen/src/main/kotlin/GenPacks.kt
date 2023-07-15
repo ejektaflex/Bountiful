@@ -16,6 +16,7 @@ fun createResourcePacks() {
         println("Platform Folder Name: $platFolder")
 
         platFolder.folderIter { folder ->
+            println("* Creating pack for ${folder.name}")
             when (platFolder.name) {
                 "common" -> {
                     if (folder.name != "bountiful") {
@@ -99,7 +100,6 @@ fun createMainPack(from: File) {
 
 fun main() {
     createResourcePacks()
-
     println("Resource pack gen done.")
 }
 
