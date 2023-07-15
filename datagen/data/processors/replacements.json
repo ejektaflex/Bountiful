@@ -1,0 +1,6 @@
+{
+	"desert": {
+		"block": "minecraft:chiseled_sandstone",
+		"slab": "minecraft:cut_sandstone_slab"
+	}
+}

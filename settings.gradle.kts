@@ -30,7 +30,8 @@ dependencyResolutionManagement {
             }
 
             val Ejekta = object {
-                val Kambrik = "6.0.1"
+                val Kambrik = "6.1.1"
+                val KambrikSnapshot = true
             }
 
             val Kotlin = object {
@@ -83,14 +84,16 @@ dependencyResolutionManagement {
 
             // Self Dependencies
 
+            val kambrikDepSuffix = "${Ejekta.Kambrik}+${Platform.MC}${if (Ejekta.KambrikSnapshot) ".SNAPSHOT+" else null}"
+
             val kambrikCommon = "kambrik-common"
-            library(kambrikCommon, "$ejektaGroup:$kambrikCommon:${Ejekta.Kambrik}+${Platform.MC}")
+            library(kambrikCommon, "$ejektaGroup:$kambrikCommon:$kambrikDepSuffix")
 
             val kambrikFabric = "kambrik-fabric"
-            library(kambrikFabric, "$ejektaGroup:$kambrikFabric:${Ejekta.Kambrik}+${Platform.MC}")
+            library(kambrikFabric, "$ejektaGroup:$kambrikFabric:$kambrikDepSuffix")
 
             val kambrikForge = "kambrik-forge"
-            library(kambrikForge, "$ejektaGroup:$kambrikForge:${Ejekta.Kambrik}+${Platform.MC}")
+            library(kambrikForge, "$ejektaGroup:$kambrikForge:$kambrikDepSuffix")
 
             // Mod Dependencies
 

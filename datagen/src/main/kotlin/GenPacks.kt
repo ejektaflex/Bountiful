@@ -4,17 +4,11 @@ import java.util.*
 
 val packIcon = File("common/src/main/resources/assets/bountiful/textures/block/bountyboard.png")
 val fabricGenPacks = File("common/src/main/resources/resourcepacks")
-val dataGenFolder = File("datagen/data")
+val dataGenFolder = File("datagen/data/content")
 val replacements = File(dataGenFolder, "names.txt").readLines().map {
     it.split("|")
 }.associate {
     it[0] to it[1]
-}
-
-fun File.folderIter(folderFunc: (it: File) -> Unit) {
-    for (folder in listFiles()?.filter { it.isDirectory } ?: return) {
-        folderFunc(folder)
-    }
 }
 
 fun createResourcePacks() {
@@ -104,7 +98,6 @@ fun createMainPack(from: File) {
 }
 
 fun main() {
-
     createResourcePacks()
 
     println("Resource pack gen done.")

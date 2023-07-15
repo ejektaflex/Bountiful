@@ -34,10 +34,10 @@ object BountifulContent : KambrikAutoRegistrar {
 
     val BOARD = "bountyboard" forBlock BoardBlock()
 
-    val BOARD_ITEM = "bountyboard" forItem BlockItem(BOARD, Item.Settings())
+    val BOARD_ITEM = "bountyboard" forItem BlockItem(BOARD, Item.Settings().maxCount(1).fireproof())
 
     val BOARD_ENTITY = "board-be".forBlockEntity(BOARD, ::BoardBlockEntity)
 
-    val BOARD_SCREEN_HANDLER = "board".forScreen(::BoardScreenHandler)
+    val BOARD_SCREEN_HANDLER = "board" forScreen ::BoardScreenHandler
 
 }

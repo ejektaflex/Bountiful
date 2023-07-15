@@ -45,7 +45,9 @@ dependencies {
     shadowCommon(project(path = ":common", configuration = "transformProductionFabric")) { isTransitive = false }
 
     // Standard Fabric mod setup.
-    modImplementation(libs.bundles.mod.deps.fabric)
+    modImplementation(libs.bundles.mod.deps.fabric) {
+        isTransitive = false
+    }
     modImplementation(libs.fabric.api)  {
         exclude("net.fabricmc", "fabric-loader")
     }
