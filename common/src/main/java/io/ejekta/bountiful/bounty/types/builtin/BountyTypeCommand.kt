@@ -14,7 +14,7 @@ import net.minecraft.util.Identifier
 
 class BountyTypeCommand : IBountyReward {
 
-    override val id: Identifier = Bountiful.id("command")
+    override val id: Identifier = Identifier("command")
 
     override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {
         val parsed = server.commandManager.dispatcher.parse(entry.content, server.commandSource)

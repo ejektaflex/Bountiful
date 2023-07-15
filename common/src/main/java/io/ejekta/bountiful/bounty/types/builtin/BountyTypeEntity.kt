@@ -22,7 +22,7 @@ import net.minecraft.util.Identifier
 
 class BountyTypeEntity : IBountyObjective {
 
-    override val id: Identifier = Bountiful.id("entity")
+    override val id: Identifier = Identifier("entity")
 
     override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {
         val id = getEntityType(Identifier(entry.content)).identifier

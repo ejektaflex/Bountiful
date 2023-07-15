@@ -15,7 +15,7 @@ import net.minecraft.util.Identifier
 
 class BountyTypeCriteria : IBountyObjective {
 
-    override val id: Identifier = Bountiful.id("criteria")
+    override val id: Identifier = Identifier("criteria")
 
 
     override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {

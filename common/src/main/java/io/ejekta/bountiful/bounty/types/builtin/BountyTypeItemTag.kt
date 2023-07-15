@@ -26,7 +26,7 @@ import net.minecraft.world.World
 
 class BountyTypeItemTag : IBountyExchangeable {
 
-    override val id: Identifier = Bountiful.id("item_tag")
+    override val id: Identifier = Identifier("item_tag")
 
     private fun entryAppliesToStack(entry: BountyDataEntry, stack: ItemStack): Boolean {
         return stack.isIn(TagKey.of(Registries.ITEM.key, Identifier(entry.content)))

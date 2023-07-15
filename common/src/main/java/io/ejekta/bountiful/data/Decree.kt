@@ -11,7 +11,8 @@ data class Decree(
     val objectives: MutableSet<String>,
     val rewards: MutableSet<String>,
     override val requires: MutableList<String> = mutableListOf(),
-    override val replace: Boolean = false
+    override val replace: Boolean = false,
+    val name: String? = null
     ) : IMerge<Decree> {
 
     val objectivePools: List<Pool>
@@ -34,7 +35,10 @@ data class Decree(
         return Decree(
             id,
             (objectives + other.objectives).toMutableSet(),
-            (rewards + other.rewards).toMutableSet()
+            (rewards + other.rewards).toMutableSet(),
+            (requires + other.requires).toSet().toMutableList(),
+            replace || other.replace,
+            name ?: other.name
         )
     }
 

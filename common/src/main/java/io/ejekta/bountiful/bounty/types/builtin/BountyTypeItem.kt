@@ -24,7 +24,7 @@ import net.minecraft.util.Identifier
 
 class BountyTypeItem : IBountyExchangeable {
 
-    override val id: Identifier = Bountiful.id("item")
+    override val id: Identifier = Identifier("item")
 
     override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {
         return if (entry.content.startsWith("#")) {
