@@ -43,7 +43,12 @@ class PoolEntry private constructor() {
 
     fun isValid(server: MinecraftServer): Boolean {
         return try {
-            BountyTypeRegistry[type]?.isValid(this, server) ?: return false
+            val bountyType = BountyTypeRegistry[type]
+            if (bountyType == null) {
+                Bountiful.LOGGER.warn("Bounty Pool Entry has Invalid Type: (${id} - ${content}) details: ${save()}")
+                return false
+            }
+            bountyType.isValid(this, server)
         } catch (e: Exception) {
             Bountiful.LOGGER.warn("Bounty Pool Entry Invalid: (${id} - ${content}) details: ${save()}")
             false

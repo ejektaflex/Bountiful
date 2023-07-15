@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.bounty.types.builtin
 
+import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.bounty.types.Progress
@@ -14,7 +15,7 @@ import net.minecraft.util.Identifier
 
 class BountyTypeCriteria : IBountyObjective {
 
-    override val id: Identifier = Identifier("criteria")
+    override val id: Identifier = Bountiful.id("criteria")
 
 
     override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {

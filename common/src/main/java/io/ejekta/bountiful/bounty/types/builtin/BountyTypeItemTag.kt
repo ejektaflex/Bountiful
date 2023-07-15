@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.bounty.types.builtin
 
+import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.types.IBountyExchangeable
 import io.ejekta.bountiful.bounty.types.Progress
@@ -25,7 +26,7 @@ import net.minecraft.world.World
 
 class BountyTypeItemTag : IBountyExchangeable {
 
-    override val id: Identifier = Identifier("item_tag")
+    override val id: Identifier = Bountiful.id("item_tag")
 
     private fun entryAppliesToStack(entry: BountyDataEntry, stack: ItemStack): Boolean {
         return stack.isIn(TagKey.of(Registries.ITEM.key, Identifier(entry.content)))

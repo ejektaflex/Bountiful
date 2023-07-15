@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.bounty.types.builtin
 
+import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.types.IBountyReward
 import io.ejekta.bountiful.data.PoolEntry
@@ -13,7 +14,7 @@ import net.minecraft.util.Identifier
 
 class BountyTypeCommand : IBountyReward {
 
-    override val id: Identifier = Identifier("command")
+    override val id: Identifier = Bountiful.id("command")
 
     override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {
         val parsed = server.commandManager.dispatcher.parse(entry.content, server.commandSource)

@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.bounty.types.builtin
 
+import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.BountyInfo
@@ -21,7 +22,7 @@ import net.minecraft.util.Identifier
 
 class BountyTypeEntity : IBountyObjective {
 
-    override val id: Identifier = Identifier("entity")
+    override val id: Identifier = Bountiful.id("entity")
 
     override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {
         val id = getEntityType(Identifier(entry.content)).identifier

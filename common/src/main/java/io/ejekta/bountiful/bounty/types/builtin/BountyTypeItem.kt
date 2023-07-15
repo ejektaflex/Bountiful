@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.bounty.types.builtin
 
+import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.types.IBountyExchangeable
 import io.ejekta.bountiful.bounty.types.Progress
@@ -23,7 +24,7 @@ import net.minecraft.util.Identifier
 
 class BountyTypeItem : IBountyExchangeable {
 
-    override val id: Identifier = Identifier("item")
+    override val id: Identifier = Bountiful.id("item")
 
     override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {
         return if (entry.content.startsWith("#")) {
