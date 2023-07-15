@@ -7,7 +7,7 @@
 				/*block_start*/
 				{
 					"output_state": {
-						"Name": "%block%"
+						"Name": "%%%%"
 					},
 					"input_predicate": {
 						"predicate_type": "minecraft:block_match",
@@ -21,7 +21,7 @@
 				/*slab_start*/
 				{
 					"output_state": {
-						"Name": "%slab%",
+						"Name": "%%%%",
 						"Properties": { "type": "bottom", "waterlogged": "false" }
 					},
 					"input_predicate": {
@@ -36,10 +36,10 @@
 					}
 				},
 				/*slab_end*/
-				/*fence_start*/
+				/*gate_start*/
 				{
 					"output_state": {
-						"Name": "%fence%",
+						"Name": "%%%%",
 						"Properties": { "facing": "east", "in_wall": "false", "open": "false", "powered": "false"}
 					},
 					"input_predicate": {
@@ -53,9 +53,11 @@
 						"predicate_type": "minecraft:always_true"
 					}
 				},
+				/*gate_end*/
+				/*fence_start*/
 				{
 					"output_state": {
-						"Name": "minecraft:dark_oak_fence",
+						"Name": "%%%%",
 						"Properties": { "east": "false", "west": "false", "south": "false", "north": "false", "waterlogged": "false" }
 					},
 					"input_predicate": {
@@ -71,7 +73,7 @@
 				},
 				{
 					"output_state": {
-						"Name": "minecraft:dark_oak_fence",
+						"Name": "%%%%",
 						"Properties": { "east": "true", "west": "true", "south": "false", "north": "false", "waterlogged": "false" }
 					},
 					"input_predicate": {
@@ -87,7 +89,7 @@
 				},
 				{
 					"output_state": {
-						"Name": "minecraft:dark_oak_fence",
+						"Name": "%%%%",
 						"Properties": { "east": "false", "west": "false", "south": "true", "north": "true", "waterlogged": "false" }
 					},
 					"input_predicate": {
@@ -103,7 +105,7 @@
 				},
 				{
 					"output_state": {
-						"Name": "minecraft:dark_oak_fence",
+						"Name": "%%%%",
 						"Properties": { "east": "true", "west": "false", "south": "false", "north": "false", "waterlogged": "false" }
 					},
 					"input_predicate": {
@@ -119,7 +121,7 @@
 				},
 				{
 					"output_state": {
-						"Name": "minecraft:dark_oak_fence",
+						"Name": "%%%%",
 						"Properties": { "east": "false", "west": "true", "south": "false", "north": "false", "waterlogged": "false" }
 					},
 					"input_predicate": {
@@ -135,7 +137,7 @@
 				},
 				{
 					"output_state": {
-						"Name": "minecraft:dark_oak_fence",
+						"Name": "%%%%",
 						"Properties": { "east": "false", "west": "false", "south": "true", "north": "false", "waterlogged": "false" }
 					},
 					"input_predicate": {
@@ -151,7 +153,7 @@
 				},
 				{
 					"output_state": {
-						"Name": "minecraft:dark_oak_fence",
+						"Name": "%%%%",
 						"Properties": { "east": "false", "west": "false", "south": "false", "north": "true", "waterlogged": "false" }
 					},
 					"input_predicate": {

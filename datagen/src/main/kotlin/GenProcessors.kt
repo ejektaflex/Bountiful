@@ -16,9 +16,9 @@ val procReplace = File(processorFolder, "replacements.json").readText()
 fun extract(text: String, section: String, replaceBlock: String? = null): String {
     println("Extracting $section")
     return text.substringAfter("/*${section}_start*/")
-        .substringBefore("/*${section}_end*/").apply { println("DOOT: $this") }
+        .substringBefore("/*${section}_end*/")
         .run { if (replaceBlock != null)
-            replace("%${section}%", replaceBlock)
+            replace("%%%%", replaceBlock)
         else
             this
         }
@@ -29,6 +29,14 @@ fun main() {
     val replaceObj = Json.decodeFromString(
         MapSerializer(String.serializer(), MapSerializer(String.serializer(), String.serializer())), procReplace
     )
+
+    // Delete old processors
+    processorsLocation.apply {
+        if (exists()) {
+            deleteRecursively()
+        }
+        mkdirs()
+    }
 
     for ((type, obj) in replaceObj) {
         var procText = defaultProcessorText
@@ -44,22 +52,29 @@ fun main() {
             proto += extract(defaultProcessorText, pair.first, pair.second)
         }
 
-        if (obj.size > 1) {
-            proto = proto.reversed().replaceFirst(",", "").reversed() // gross
-        }
+        val abc = """
+            					},
+					"location_predicate": {
+						"predicate_type": "minecraft:always_true"
+					}
+				},
+				
+			],
+			"processor_type": "minecraft:rule"
+		}
+        """.trimIndent()
 
         proto += extract(defaultProcessorText, "footer")
 
-        // Replace commas
-        processorsLocation.apply {
-            if (exists()) {
-                deleteRecursively()
-            }
-            mkdirs()
-        }
-        File(processorsLocation, "${type}.json").writeText(proto.replace(
+        // Replace the comment section seps
+        proto = proto.replace(
             Regex("/\\*.+\\*/"), ""
-        ))
+        )
+
+        // Remove trailing comma
+        proto = proto.replace(Regex("}(,)([\n\\s]+)]"), "}$2]")
+
+        File(processorsLocation, "${type}.json").writeText(proto)
     }
 
 }

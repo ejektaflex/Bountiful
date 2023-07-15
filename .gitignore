@@ -17,3 +17,4 @@ classes/
 .vscode
 .settings
 *.launch
+common/src/main/resources/data/bountiful/worldgen/processor_list

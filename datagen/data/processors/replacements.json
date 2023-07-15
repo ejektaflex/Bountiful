@@ -2,5 +2,17 @@
 	"desert": {
 		"block": "minecraft:chiseled_sandstone",
 		"slab": "minecraft:cut_sandstone_slab"
+	},
+	"savanna": {
+		"block": "minecraft:acacia_planks",
+		"slab": "minecraft:acacia_slab"
+	},
+	"snowy": {
+		"block": "minecraft:spruce_planks",
+		"slab": "minecraft:spruce_slab"
+	},
+	"taiga": {
+		"block": "minecraft:spruce_planks",
+		"slab": "minecraft:spruce_slab"
 	}
 }
