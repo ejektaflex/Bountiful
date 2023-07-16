@@ -16,6 +16,8 @@ import net.minecraft.advancement.criterion.TickCriterion
 import net.minecraft.client.item.ModelPredicateProviderRegistry
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.passive.TameableEntity
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 
@@ -69,9 +71,21 @@ interface BountifulSharedApi {
     }
 
     fun handleEntityKills(world: ServerWorld, entity: Entity, killedEntity: LivingEntity) {
-        if (entity is ServerPlayerEntity) {
-            val playersInAction = world.getPlayers { it.distanceTo(entity) < 12f } + world.getPlayers { it.distanceTo(killedEntity) < 12f } + entity
-            playersInAction.toSet().forEach {
+        if (entity is LivingEntity) {
+            val playerList = mutableListOf<ServerPlayerEntity>()
+            playerList.addAll(world.getPlayers { it.distanceTo(entity) < 12f })
+            playerList.addAll(world.getPlayers { it.distanceTo(killedEntity) < 12f })
+            (entity as? ServerPlayerEntity)?.let { playerList.add(it) }
+
+            if (entity is TameableEntity) {
+                val owner = entity.owner as? ServerPlayerEntity
+                owner?.let { playerList.add(it) }
+            }
+
+            (killedEntity.attacker as? ServerPlayerEntity)?.let { playerList.add(it) }
+            (killedEntity.attacking as? ServerPlayerEntity)?.let { playerList.add(it) }
+
+            playerList.toSet().forEach {
                 BountyTypeRegistry.ENTITY.incrementEntityBounties(it, killedEntity)
             }
         }
