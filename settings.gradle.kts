@@ -15,42 +15,42 @@ dependencyResolutionManagement {
 
             val Plugins = object {
                 val Architectury = "3.4.146" //=> https://maven.architectury.dev/architectury-plugin/architectury-plugin.gradle.plugin/
-                val ArchLoom = "1.2.348" //=> https://maven.architectury.dev/dev/architectury/architectury-loom/
+                val ArchLoom = "1.3.358" //=> https://maven.architectury.dev/dev/architectury/architectury-loom/
                 val Shadow = "7.1.2"
             }
 
             val Platform = object {
-                val MC = "1.20.1"
+                val MC = "1.20.2"
                 // https://fabricmc.net/develop/
-                val Yarn = "build.8"
-                val FabricLoader = "0.14.21"
-                val FabricApi = "0.84.0"
-                val Forge = "47.0.19" //=> https://files.minecraftforge.net/net/minecraftforge/forge/
+                val Yarn = "build.4"
+                val FabricLoader = "0.14.23"
+                val FabricApi = "0.90.4"
+                val Forge = "48.0.31" //=> https://files.minecraftforge.net/net/minecraftforge/forge/
 
             }
 
             val Ejekta = object {
-                val Kambrik = "6.1.0"
+                val Kambrik = "6.2.0"
                 val KambrikSnapshot = true
             }
 
             val Kotlin = object {
-                val Version = "1.8.22"
-                val Serialization = "1.5.0"
-                val FabricAdapter = "1.9.5"
-                val ForgeAdapter = "4.3.0"
+                val Version = "1.9.10" // => https://kotlinlang.org/docs/releases.html
+                val Serialization = "1.6.0" // => https://github.com/Kotlin/kotlinx.serialization/releases
+                val FabricAdapter = "1.10.10" // => https://modrinth.com/mod/fabric-language-kotlin/versions
+                val ForgeAdapter = "4.3.0" // => https://modrinth.com/mod/kotlin-for-forge/versions
             }
 
             val Mods = object {
-                val Cloth = "11.0.99"
-                val ModMenu = "7.1.0"
+                val Cloth = "12.0.109" // => https://modrinth.com/mod/cloth-config/versions
+                val ModMenu = "8.0.0" // => https://modrinth.com/mod/modmenu/versions
             }
 
             // Versions
 
             val ejektaGroup = "io.ejekta"
             val modPackage = "bountiful"
-            val modVersion = "6.0.3"
+            val modVersion = "6.1.0"
 
             version("org", ejektaGroup)
             version("pkg", "$ejektaGroup.$modPackage")

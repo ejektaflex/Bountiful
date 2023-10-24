@@ -7,6 +7,7 @@ import net.minecraft.block.BlockEntityProvider
 import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState
 import net.minecraft.block.BlockWithEntity
+import net.minecraft.block.entity.AbstractFurnaceBlockEntity
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
@@ -32,17 +33,11 @@ class BoardBlock : BlockWithEntity(
     }
 
     override fun <T : BlockEntity> getTicker(
-        world: World?,
+        world: World,
         state: BlockState?,
         type: BlockEntityType<T>
     ): BlockEntityTicker<T>? {
-        //return super.getTicker(world, state, type)
-        //return world.isClient ? null : checkType(type, BlockEntityType.BREWING_STAND, BrewingStandBlockEntity::tick);
-        return if (world?.isClient == true) {
-            null
-        } else {
-            checkType(type, BountifulContent.BOARD_ENTITY, BoardBlockEntity::tick)
-        }
+        return boardTicker(world, type, BountifulContent.BOARD_ENTITY)
     }
 
     override fun getDroppedStacks(
@@ -122,6 +117,19 @@ class BoardBlock : BlockWithEntity(
 
     companion object {
         const val BOUNTY_SIZE = 24
+
+        protected fun <T : BlockEntity?> boardTicker(
+            world: World,
+            givenType: BlockEntityType<T>?,
+            expectedType: BlockEntityType<out BoardBlockEntity?>?
+        ): BlockEntityTicker<T>? {
+            //return world.isClient ? null : AbstractFurnaceBlock.validateTicker(givenType, expectedType, AbstractFurnaceBlockEntity::tick);
+            return if (world.isClient) {
+                null
+            } else {
+                validateTicker(givenType, expectedType, BoardBlockEntity::tick)
+            }
+        }
     }
 
 }

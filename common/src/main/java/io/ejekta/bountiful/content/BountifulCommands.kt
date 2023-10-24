@@ -28,6 +28,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
+import kotlin.jvm.optionals.getOrNull
 
 
 object BountifulCommands {
@@ -128,12 +129,12 @@ object BountifulCommands {
         func: (amount: IntRange, worth: Int) -> Unit = { a, w -> }
     ) {
         val cmd = kambrikCommand<ServerCommandSource> {
-            if (amt.min == null || amt.max == null) {
+            if (amt.min.getOrNull() == null || amt.max.getOrNull() == null) {
                 source.sendError(Text.literal("Amount Range must have a minimum and maximum value!"))
                 return@kambrikCommand
             }
 
-            func(amt.min!!..amt.max!!, inWorth)
+            func(amt.min.get()..amt.max.get(), inWorth)
         }
         cmd.run(this)
     }
