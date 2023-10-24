@@ -261,7 +261,7 @@ object BountifulCommands {
         for (pool in BountifulContent.Pools.sortedBy { it.id }) {
             Bountiful.LOGGER.info("Pool: ${pool.id}")
             for (item in pool.items.sortedBy { it.content }) {
-                Bountiful.LOGGER.info("    * [${item.type.path}] - ${item.id} - ${item.content}")
+                Bountiful.LOGGER.info("    * [${item.type.path}] - ${item.id} - ${item.weightMult} - ${item.content}")
             }
         }
     }

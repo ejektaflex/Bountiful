@@ -136,6 +136,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
                 val fileId = Bountiful.id(resourceName)
                 val item = loadFile(fileId)
                 item?.let {
+                    it.finishMergedSetup() // Normalize and such
                     println("Completing load of $it from $fileId")
                     completeLoadOf(it)
                 }
