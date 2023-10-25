@@ -9,7 +9,6 @@ import io.ejekta.bountiful.bounty.types.builtin.BountyTypeItemTag
 import io.ejekta.bountiful.client.BoardScreen
 import io.ejekta.bountiful.content.messages.SelectBounty
 import io.ejekta.kambrik.gui.draw.KGuiDsl
-import io.ejekta.kambrik.gui.draw.KSpriteGrid
 import io.ejekta.kambrik.gui.draw.KWidget
 import io.ejekta.kambrik.gui.draw.reactor.MouseReactor
 import io.ejekta.kambrik.text.textLiteral
@@ -31,7 +30,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
         return BountyData[parent.boardHandler.inventory.getStack(bountyIndex)]
     }
 
-    val reactor = MouseReactor().apply {
+    private val reactor = MouseReactor().apply {
         onClickDown = { relX, relY, button ->
             parent.boardHandler.inventory.select(bountyIndex)
             SelectBounty(bountyIndex, MinecraftClient.getInstance().player!!.uuidAsString).sendToServer()
@@ -65,12 +64,9 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
                     return
                 }
 
-                dsl {
+                dsl.area(16, 16) {
                     livingEntity(entityType as? EntityType<out LivingEntity>
-                        ?: throw Exception("Bounty cannot have ${entry.content} as entity objective, it is not a LivingEntity!"),
-                        x + 7,
-                        y + 15,
-                        size = 15.0
+                        ?: throw Exception("Bounty cannot have ${entry.content} as entity objective, it is not a LivingEntity!")
                     )
                 }
             }
