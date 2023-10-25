@@ -24,27 +24,13 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
     val boardHandler: BoardScreenHandler
         get() = handler as BoardScreenHandler
 
-    val toggledOut: Boolean = true
-
-    val bgSprite: KSpriteGrid.Sprite
-        get() = when(toggledOut) {
-            true -> BOARD_BG_BIG
-            false -> BOARD_BG_SMALL
-        }
-
-    val bgOffset: Int
-        get() = when(toggledOut) {
-            true -> 204
-            false -> 4
-        }
-
-
     init {
-        sizeToSprite(bgSprite)
+        backgroundWidth = 348
+        backgroundHeight = 165
     }
 
     private val bgGui = kambrikGui {
-        sprite(bgSprite)
+        img(TEXTURE, 349, 166)
     }
 
     private val buttons = (0 until 21).map { BountyLongButton(this, it) }
@@ -52,7 +38,7 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
     private val validButtons: List<BountyLongButton>
         get() = buttons.filter { it.getBountyData().objectives.isNotEmpty() }
 
-    private val scroller = KScrollbarVertical(140, SLIDER, 0x0)
+    private val scroller = KScrollbarVertical(140, 6, 27, SCROLLER, 0x0)
 
     private val buttonList = KListWidget(
         { validButtons }, 160, 20, 7, KListWidget.Orientation.VERTICAL, KListWidget.Mode.SINGLE,
@@ -69,15 +55,13 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         val percentDone = (levelData.second.toDouble() / levelData.third * 100).toInt()
 
         // Selection highlight on selected stack
-        if (toggledOut) {
-            if (!ItemStack.areEqual(boardHandler.inventory.selected(), ItemStack.EMPTY)) {
-                boardHandler.inventory.selectedIndex?.let {
-                    offset(179 + ((it % 7) * 18), 16 + ((it / 7) * 18)) {
-                        sprite(BOARD_HIGHLIGHT)
-                        offset(2, 2) {
-                            area(16, 16) {
-                                rect(0x0, 0x88)
-                            }
+        if (!ItemStack.areEqual(boardHandler.inventory.selected(), ItemStack.EMPTY)) {
+            boardHandler.inventory.selectedIndex?.let {
+                offset(179 + ((it % 7) * 18), 16 + ((it / 7) * 18)) {
+                    img(SELECTOR, 20, 20)
+                    offset(2, 2) {
+                        area(16, 16) {
+                            rect(0x0, 0x88)
                         }
                     }
                 }
@@ -85,9 +69,9 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         }
 
         // Reputation Bar (background, foreground, label)
-        offset(bgOffset, 75) {
-            sprite(BAR_BG)
-            sprite(BAR_FG, w = percentDone + 1)
+        offset(204, 75) {
+            img(XP_BG, 102, 5)
+            img(XP_FG, percentDone + 1, 5, x = 1)
             textCentered(-16, -2) {
                 color(0xabff7a)
                 addLiteral(levelData.first.toString()) {
@@ -123,16 +107,14 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         }
 
         // Button list and scroll bar
-        if (toggledOut) {
-            widget(buttonList, 5, 18)
-            if (validButtons.isEmpty()) {
-                textCentered(85, 78) {
-                    color = 0xEADAB5
-                    addLiteral("It's Empty! Check back soon!")
-                }
-            } else {
-                widget(scroller, 166, 18)
+        widget(buttonList, 5, 18)
+        if (validButtons.isEmpty()) {
+            textCentered(85, 78) {
+                color = 0xEADAB5
+                addLiteral("It's Empty! Check back soon!")
             }
+        } else {
+            widget(scroller, 166, 18)
         }
 
     }
@@ -155,18 +137,11 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
     }
 
     companion object {
-        private val TEXTURE = Bountiful.id("textures/gui/container/new_new_board.png")
-        private val WANDER = Identifier("textures/gui/container/villager2.png")
-
-        private val BOARD_SHEET = KSpriteGrid(TEXTURE, texWidth = 512, texHeight = 512)
-        private val BOARD_BG_BIG = BOARD_SHEET.Sprite(0f, 0f, 348, 165)
-        private val BOARD_BG_SMALL = BOARD_SHEET.Sprite(0f, 166f, 176, 165)
-        private val BOARD_HIGHLIGHT = BOARD_SHEET.Sprite(349f, 0f, 20, 20)
-
-        private val WANDER_SHEET = KSpriteGrid(WANDER, texWidth = 512, texHeight = 256)
-        private val BAR_BG = WANDER_SHEET.Sprite(0f, 186f, 102, 5)
-        private val BAR_FG = WANDER_SHEET.Sprite(0f, 191f, 102, 5)
-        private val SLIDER = WANDER_SHEET.Sprite(0f, 199f, 6, 27)
+        private val TEXTURE = Bountiful.id("board_bg")
+        private val SELECTOR = Bountiful.id("selector")
+        private val SCROLLER = Identifier("container/villager/scroller")
+        private val XP_FG = Identifier("container/villager/experience_bar_current")
+        private val XP_BG = Identifier("container/villager/experience_bar_background")
     }
 }
 

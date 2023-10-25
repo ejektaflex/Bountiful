@@ -118,8 +118,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
         area.reactWith(reactor)
         area.dsl {
             // Draw button background
-            sprite(DEFAULT, w = DEFAULT.width - 42)
-            sprite(CAP, DEFAULT.width - 42)
+            img(BUTTON, width, height)
 
             area(width, height) {
                 if (isSelected()) {
@@ -148,9 +147,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
     }
 
     companion object {
-        val SHEET = KSpriteGrid(Identifier("textures/gui/widgets.png"), 256, 256)
-        val DEFAULT = SHEET.Sprite(0f, 66f, 200, 20)
-        val CAP = SHEET.Sprite(198f, 66f, 2, 20)
+        val BUTTON = Identifier("widget/button")
     }
 
 }

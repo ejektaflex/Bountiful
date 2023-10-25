@@ -67,11 +67,15 @@ tasks {
         dependsOn(copyAccessWidener)
         // Mark that this task depends on the project version,
         // and should reset when the project version changes.
-        inputs.property("version", rootProject.version.toString())
+        inputs.property("version", libs.versions.mod.get())
 
         // Replace the $version template in fabric.mod.json with the project version.
         filesMatching("fabric.mod.json") {
-            expand("version" to rootProject.version.toString())
+            expand(mapOf(
+                "version" to libs.versions.mod.get(),
+                "kambrik_version" to libs.versions.kambrik.get(),
+                "minecraft_version" to libs.versions.mc.get()
+            ))
         }
     }
 
