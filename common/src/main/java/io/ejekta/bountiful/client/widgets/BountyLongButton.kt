@@ -41,7 +41,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
     private fun renderEntryBasedOnLogic(dsl: KGuiDsl, entry: BountyDataEntry, x: Int, y: Int, isReward: Boolean) {
         when (entry.logicId) {
             BountyTypeRegistry.COMMAND.id -> {
-                dsl { itemStackIcon(ItemStack(Items.COMMAND_BLOCK), x, y) }
+                dsl { itemStackIcon(ItemStack(Items.COMMAND_BLOCK), x, y + 1) }
             }
             BountyTypeRegistry.ITEM.id -> {
                 val stack = BountyTypeItem.getItemStack(entry).apply {
@@ -160,11 +160,10 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
 
         fun KGuiDsl.renderEntries(entries: List<BountyDataEntry>, renderFunc: KGuiDsl.(rx: Int, ry: Int, e: BountyDataEntry) -> Unit) {
             for (i in entries.indices) {
-                val numSpaces = entries.size + 1
-                val spaceDiff = BountyZoneSize - (entries.size * 16)
-                val spaceSize = spaceDiff.toFloat() / numSpaces
+                val spaceDiff = BountyZoneSize - (entries.size * 18)
+                val spaceStart = spaceDiff / 2
                 renderFunc(
-                    ((spaceSize * (i + 1)) + 16 * i).toInt(), 1, entries[i]
+                    (spaceStart + (i * 18)), 1, entries[i]
                 )
             }
         }
