@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.client.widgets
 
+import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
@@ -23,8 +24,8 @@ import net.minecraft.util.Identifier
 
 class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget {
 
-    override val width: Int = 160
-    override val height: Int = 20
+    override val width: Int = ButtonWidth
+    override val height: Int = ButtonHeight
 
     fun getBountyData(): BountyData {
         return BountyData[parent.boardHandler.inventory.getStack(bountyIndex)]
@@ -64,9 +65,10 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
                     return
                 }
 
-                dsl.area(16, 16) {
+                dsl.area(x, y, 16, 16) {
                     livingEntity(entityType as? EntityType<out LivingEntity>
-                        ?: throw Exception("Bounty cannot have ${entry.content} as entity objective, it is not a LivingEntity!")
+                        ?: throw Exception("Bounty cannot have ${entry.content} as entity objective, it is not a LivingEntity!"),
+                        size = 14.0
                     )
                 }
             }
@@ -106,7 +108,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
         }
     }
 
-    fun isSelected(): Boolean {
+    private fun isSelected(): Boolean {
         return ItemStack.areEqual(parent.boardHandler.inventory.getStack(-1), parent.boardHandler.inventory.getStack(bountyIndex))
     }
 
@@ -133,17 +135,34 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
 
             // Render objectives
             for (i in data.objectives.indices) {
-                renderEntry(this, data.objectives[i], i * 20 + 1, 1)
+                val numSpaces = data.objectives.size + 1
+                val spaceDiff = BountyZoneSize - (data.objectives.size * 16)
+                val spaceSize = spaceDiff.toFloat() / numSpaces
+                renderEntry(this, data.objectives[i], ((spaceSize * (i + 1)) + 16 * i).toInt(), 1)
             }
+
+            offset(width / 2 - 10, 0) {
+                img(ARROW, 20, 20)
+            }
+
             // Render rewards
             for (i in data.rewards.indices) {
-                renderEntry(this, data.rewards[i], width - (20 * (i + 1)), 1, isReward = true)
+                val numSpaces = data.rewards.size + 1
+                val spaceDiff = BountyZoneSize - (data.rewards.size * 16)
+                val spaceSize = spaceDiff.toFloat() / numSpaces
+                renderEntry(this, data.rewards[i], BountyZoneSize + ArrowWidth + ((spaceSize * (i + 1)) + 16 * i).toInt(), 1)
             }
         }
     }
 
     companion object {
         val BUTTON = Identifier("widget/button")
+        val ARROW = Bountiful.id("arrow")
+
+        const val ButtonWidth = 160
+        const val ButtonHeight = 20
+        const val ArrowWidth = 20
+        const val BountyZoneSize = (ButtonWidth - ArrowWidth) / 2
     }
 
 }
