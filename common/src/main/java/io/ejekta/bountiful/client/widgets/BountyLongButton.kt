@@ -134,11 +134,8 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
             val data = getBountyData()
 
             // Render objectives
-            for (i in data.objectives.indices) {
-                val numSpaces = data.objectives.size + 1
-                val spaceDiff = BountyZoneSize - (data.objectives.size * 16)
-                val spaceSize = spaceDiff.toFloat() / numSpaces
-                renderEntry(this, data.objectives[i], ((spaceSize * (i + 1)) + 16 * i).toInt(), 1)
+            renderEntries(data.objectives) { rx, ry, e ->
+                renderEntry(this, e, rx, ry, false)
             }
 
             offset(width / 2 - 10, 0) {
@@ -146,11 +143,8 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
             }
 
             // Render rewards
-            for (i in data.rewards.indices) {
-                val numSpaces = data.rewards.size + 1
-                val spaceDiff = BountyZoneSize - (data.rewards.size * 16)
-                val spaceSize = spaceDiff.toFloat() / numSpaces
-                renderEntry(this, data.rewards[i], BountyZoneSize + ArrowWidth + ((spaceSize * (i + 1)) + 16 * i).toInt(), 1)
+            renderEntries(data.rewards) { rx, ry, e ->
+                renderEntry(this, e, BountyZoneSize + ArrowWidth + rx, ry, true)
             }
         }
     }
@@ -163,6 +157,18 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
         const val ButtonHeight = 20
         const val ArrowWidth = 20
         const val BountyZoneSize = (ButtonWidth - ArrowWidth) / 2
+
+        fun KGuiDsl.renderEntries(entries: List<BountyDataEntry>, renderFunc: KGuiDsl.(rx: Int, ry: Int, e: BountyDataEntry) -> Unit) {
+            for (i in entries.indices) {
+                val numSpaces = entries.size + 1
+                val spaceDiff = BountyZoneSize - (entries.size * 16)
+                val spaceSize = spaceDiff.toFloat() / numSpaces
+                renderFunc(
+                    ((spaceSize * (i + 1)) + 16 * i).toInt(), 1, entries[i]
+                )
+            }
+        }
+
     }
 
 }
