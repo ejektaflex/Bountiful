@@ -4,17 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) as closely as it can.
 
-## [6.1.0] for 1.20.(4?) - WIP
+## [7.0.0] for 1.20.(4?) - WIP
+
+This is largely a Quality Of Life update, making it easier for modpack makers to configure Bountiful. As such,
+old config files and datapacks that overwrote existing Bountiful data may not function correctly in this version.
 
 ### Added
 - Decrees now have two new, optional fields:
   - `canSpawn` determines whether a bounty board can spawn with this Decree in it (default: true)
   - `canReveal` determines whether a blank Decree can be revealed to be this Decree when placed on the board (default: true)
+- Added a new config option, `board.canBreak`, that determines whether bounty boards can be broken (default: true)
 
 ### Changed
 - The board layout for objectives and rewards is now centered, with an arrow dividing the objectives and rewards. 
   - Hopefully this is a visually pleasing change, I will be looking at user feedback to see how it is received.
 - Much better handling and notification of possible config file errors via the log.
+- Reformatted the config, making it easier for users without ClothConfig to understand.
 
 ## [6.0.3] for 1.20.1 - 2023-07-17
 
@@ -154,11 +159,6 @@ develop for both Fabric and Forge at the same time, releasing for both platforms
 - Added a new Decree called the Inventor Decree, used for redstone and tech mod related items
 
 ### Changed
-- Non-core data now loads from built-in resource packs
-  - This allows us to create a resource pack for every mod we want to add compatibility for
-  - This also allows users to turn off compatibility easily for any mods they desire
-  - These packs are loaded by default if the associated mod is present
-  - Players can use the `/datapack` command or modify datapacks on world creation to change which compat is enabled for a particular world
 - Bounty pool entries are each given its own ID so that other mods and data packs can more easily overwrite only parts of our data
 - Fundamentally changed how bounty data is stored in bounties
   - This will break existing bounties if upgrading a world that used Bountiful from before 1.19.4 to 1.19.4

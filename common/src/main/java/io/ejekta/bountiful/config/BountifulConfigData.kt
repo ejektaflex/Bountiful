@@ -1,10 +1,7 @@
 package io.ejekta.bountiful.config
 
 import io.ejekta.kambrik.text.textLiteral
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonNames
 import me.shedaniel.clothconfig2.api.ConfigBuilder
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
@@ -24,9 +21,9 @@ class BountifulConfigData {
 
     @Serializable
     class BountyConfigData {
-        var flatBonusTimePerBounty: Int = 0
+        var flatBonusTimePerBountyInTicks: Int = 0
         var shouldHaveTimersAndExpire = true
-        var objectiveModifier = 0
+        var objectiveDifficultyModifierPercent = 0
         var maxNumRewards = 2
     }
 
@@ -135,12 +132,12 @@ class BountifulConfigData {
         bountyCat.addEntry(
             creator.startIntSlider(
                 Text.literal("Objective Requirement Multiplier"),
-                bounty.objectiveModifier,
+                bounty.objectiveDifficultyModifierPercent,
                 -50, 100
             ).setDefaultValue(0).setTooltip(
                 Text.literal("Makes new bounties this percent more/less expensive, objective-wise")
             ).setSaveConsumer {
-                bounty.objectiveModifier = it
+                bounty.objectiveDifficultyModifierPercent = it
             }.setTextGetter {
                 textLiteral("$it% Change")
             }.build()
@@ -163,12 +160,12 @@ class BountifulConfigData {
         bountyCat.addEntry(
             creator.startIntSlider(
                 Text.literal("Bonus Time"),
-                bounty.flatBonusTimePerBounty,
+                bounty.flatBonusTimePerBountyInTicks,
                 0, 6000
             ).setDefaultValue(0).setTooltip(
                 Text.literal("How much bonus time is given to bounties, in ticks")
             ).setSaveConsumer {
-                bounty.flatBonusTimePerBounty = it
+                bounty.flatBonusTimePerBountyInTicks = it
             }.build()
         )
 

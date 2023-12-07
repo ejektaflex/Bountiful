@@ -61,13 +61,13 @@ class BountyCreator private constructor(
 
         // Gen objectives
         val objectives = genObjectives(
-            totalRewardWorth * (1 + (BountifulIO.configData.bounty.objectiveModifier * 0.01)),
+            totalRewardWorth * (1 + (BountifulIO.configData.bounty.objectiveDifficultyModifierPercent * 0.01)),
             rewardEntries
         )
         data.objectives.addAll(objectives)
 
         info.timeStarted = startTime
-        info.timeToComplete += 15000L + BountifulIO.configData.bounty.flatBonusTimePerBounty
+        info.timeToComplete += 15000L + BountifulIO.configData.bounty.flatBonusTimePerBountyInTicks
 
 
         return data to info
