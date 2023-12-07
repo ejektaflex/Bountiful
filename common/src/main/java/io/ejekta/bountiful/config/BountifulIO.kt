@@ -12,6 +12,8 @@ import io.ejekta.kambrikx.file.KambrikParseFailMode
 import net.minecraft.resource.ResourceManager
 import net.minecraft.util.Identifier
 import java.util.*
+import kotlin.math.max
+import kotlin.math.min
 
 object BountifulIO {
 
@@ -60,19 +62,36 @@ object BountifulIO {
     private val contentLoaders = listOf(
         ResourceLoadStrategy("Pool Loader", "bounty_pools", poolConfigs, Pool.serializer(), BountifulContent.Pools) {
             if (usedInDecrees.isEmpty()) {
-                Bountiful.LOGGER.warn("Pool '$id' is not used in any Decrees! This is probably a configuration error. Did you name this file correctly?")
-                Bountiful.LOGGER.warn("Please add '$id' to a Decree, or it will not have any effect.")
+
+                val poolAssoc = BountifulContent.Pools.filter { it.usedInDecrees.isNotEmpty() }.associateBy { it.id.toSet() }
+                val poolQuery = id.toSet()
+
+                // Compare to existing pool names based on char similarity to see if they just misspelled it
+                val bestFit = poolAssoc.maxByOrNull { it.key.intersect(poolQuery).size }?.takeIf {
+                    // Must be at most two characters off
+                    it.key.intersect(poolQuery).size >= min(poolQuery.size, it.key.size) - 2
+                }
+
+                Bountiful.LOGGER.warn("Pool '$id' has been loaded, but is not attached to any existing data! This is probably a configuration error.")
+                Bountiful.LOGGER.warn("* If you intended to add this data to an existing Pool, please use an existing Pool name instead of '$id'.")
+
+                bestFit?.let {
+                    Bountiful.LOGGER.warn("  * Did you mean to use the pool name '${it.value.id}' instead of '$id'?")
+                }
+
+                Bountiful.LOGGER.warn("* Otherwise, please add '$id' to a Decree.")
+                Bountiful.LOGGER.warn("* NOTE: This data will not show up in game until one of the above fixes is made.")
             }
         },
         ResourceLoadStrategy("Decree Loader", "bounty_decrees", decreeConfigs, Decree.serializer(), BountifulContent.Decrees) {
             if (objectivePools.isEmpty()) {
-                Bountiful.LOGGER.warn("Decree '$id' has no Objective Pools!")
+                Bountiful.LOGGER.warn("Decree '$id' has no Objective Pools! This is probably a configuration error.")
             } else if (objectives.isEmpty()) {
                 Bountiful.LOGGER.warn("Decree '$id' has one or more Objective Pools, but they are all empty!")
             }
 
             if (rewardPools.isEmpty()) {
-                Bountiful.LOGGER.warn("Decree '$id' has no Reward Pools!")
+                Bountiful.LOGGER.warn("Decree '$id' has no Reward Pools! This is probably a configuration error.")
             } else if (rewards.isEmpty()) {
                 Bountiful.LOGGER.warn("Decree '$id' has one or more Reward Pools, but they are all empty!")
             }
