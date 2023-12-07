@@ -61,13 +61,13 @@ class BountyCreator private constructor(
 
         // Gen objectives
         val objectives = genObjectives(
-            totalRewardWorth * (1 + (BountifulIO.configData.objectiveModifier * 0.01)),
+            totalRewardWorth * (1 + (BountifulIO.configData.bounty.objectiveModifier * 0.01)),
             rewardEntries
         )
         data.objectives.addAll(objectives)
 
         info.timeStarted = startTime
-        info.timeToComplete += 15000L + BountifulIO.configData.flatBonusTimePerBounty
+        info.timeToComplete += 15000L + BountifulIO.configData.bounty.flatBonusTimePerBounty
 
 
         return data to info
@@ -85,7 +85,7 @@ class BountyCreator private constructor(
         }
 
         // Num rewards to give
-        val numRewards = (1..BountifulIO.configData.maxNumRewards).random()
+        val numRewards = (1..BountifulIO.configData.bounty.maxNumRewards).random()
         val toReturn = mutableListOf<PoolEntry>()
 
         for (i in 0 until numRewards) {

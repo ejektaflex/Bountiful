@@ -77,7 +77,7 @@ class BountifulModFabric : ModInitializer {
                     Identifier("bountiful:village/common/bounty_gazebo"),
                     Identifier("minecraft:village/$villageType/houses"),
                     Identifier("bountiful:$villageType"),
-                    BountifulIO.configData.boardGenFrequency
+                    BountifulIO.configData.board.villageGenFrequency
                 )
             }
         })

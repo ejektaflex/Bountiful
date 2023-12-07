@@ -20,7 +20,7 @@ class BountyInfo(
 ) {
 
     fun timeLeft(world: World): Long {
-        return when (BountifulIO.configData.shouldBountiesHaveTimersAndExpire) {
+        return when (BountifulIO.configData.bounty.shouldHaveTimersAndExpire) {
             true -> max(timeStarted - world.time + timeToComplete, 0L)
             false -> 1L
         }

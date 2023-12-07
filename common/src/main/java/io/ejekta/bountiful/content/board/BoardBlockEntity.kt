@@ -280,7 +280,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
             }
 
             // Add & remove bounties according to update frequency
-            if ((world.time + 13L) % (20L * BountifulIO.configData.boardUpdateFrequency) == 0L) {
+            if ((world.time + 13L) % (20L * BountifulIO.configData.board.updateFrequency) == 0L) {
                 // Change bounty population
                 entity.randomlyUpdateBoard()
             }

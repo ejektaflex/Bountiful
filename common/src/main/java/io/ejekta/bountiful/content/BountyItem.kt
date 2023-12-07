@@ -29,7 +29,7 @@ class BountyItem : Item(
         if (info.rarity == BountyRarity.LEGENDARY) {
             text = text.formatted(Formatting.BOLD)
         }
-        if (BountifulIO.configData.shouldBountiesHaveTimersAndExpire) {
+        if (BountifulIO.configData.bounty.shouldHaveTimersAndExpire) {
             text = text.append(
                 Text.literal("(")
                     .append(info.formattedTimeLeft(MinecraftClient.getInstance().world!!))

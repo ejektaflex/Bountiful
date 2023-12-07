@@ -1,6 +1,7 @@
 package io.ejekta.bountiful.content.board
 
 import io.ejekta.bountiful.bounty.BountyData
+import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyItem
 import net.minecraft.block.BlockEntityProvider
@@ -13,6 +14,7 @@ import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
 import net.minecraft.loot.context.LootContextParameterSet
 import net.minecraft.loot.context.LootContextParameters
@@ -21,6 +23,7 @@ import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
 
@@ -68,6 +71,20 @@ class BoardBlock : BlockWithEntity(
                 it.readNbt(itemNbt)
                 it.markDirty()
             }
+        }
+    }
+
+    // Refuse to break the block if the config disallows it
+    override fun calcBlockBreakingDelta(
+        state: BlockState?,
+        player: PlayerEntity?,
+        world: BlockView?,
+        pos: BlockPos?
+    ): Float {
+        return if (BountifulIO.configData.board.canBreak) {
+            super.calcBlockBreakingDelta(state, player, world, pos)
+        } else {
+            0.0f
         }
     }
 
