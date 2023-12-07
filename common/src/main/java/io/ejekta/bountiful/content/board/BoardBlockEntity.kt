@@ -62,17 +62,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
     private val levelData: Triple<Int, Int, Int>
         get() = levelProgress(finishMap.values.sum())
 
-    private fun setDecree() {
-        if (world is ServerWorld && decrees.isEmpty) {
-            val slot = (0..2).random()
-            val stack = DecreeItem.create()
-            decrees.setStack(
-                slot,
-                stack
-            )
-        }
-    }
-
     val numCompleted: Int
         get() = finishMap.values.sum()
 
@@ -132,7 +121,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
     fun tryInitialPopulation() {
         if (isPristine) {
             if (decrees.isEmpty) {
-                decrees.setStack((0..2).random(), DecreeItem.create())
+                decrees.setStack((0..2).random(), DecreeItem.create(followSpawnLogic = true))
             }
             for (i in 0..5) {
                 randomlyUpdateBoard()
@@ -281,9 +270,10 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
                 entity.decrees.stacks.filter {
                     it.item is DecreeItem // must be a decree and not null
                 }.forEach { stack ->
+                    val revealable = BountifulContent.Decrees.filter { it.canReveal }
                     DecreeData.edit(stack) {
-                        if (ids.isEmpty() && BountifulContent.Decrees.isNotEmpty()) {
-                            ids.add(BountifulContent.Decrees.random().id)
+                        if (ids.isEmpty() && revealable.isNotEmpty()) {
+                            ids.add(revealable.random().id)
                         }
                     }
                 }

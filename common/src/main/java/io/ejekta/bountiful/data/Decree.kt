@@ -12,7 +12,9 @@ data class Decree(
     val rewards: MutableSet<String>,
     override val requires: MutableList<String> = mutableListOf(),
     override val replace: Boolean = false,
-    val name: String? = null
+    val name: String? = null,
+    val canSpawn: Boolean = true,
+    val canReveal: Boolean = true
     ) : IMerge<Decree> {
 
     val objectivePools: List<Pool>

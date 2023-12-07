@@ -33,11 +33,17 @@ class DecreeItem : Item(
 
     companion object {
 
-        fun create(data: DecreeData? = null): ItemStack {
+        fun create(data: DecreeData? = null, followSpawnLogic: Boolean = false): ItemStack {
+            val spawnableDecrees = if (followSpawnLogic) {
+                // Spawn logic
+                BountifulContent.Decrees.filter { it.canSpawn }
+            } else {
+                BountifulContent.Decrees
+            }
             return ItemStack(BountifulContent.DECREE_ITEM).apply {
                 DecreeData[this] = data ?: DecreeData(
                     mutableListOf(
-                        BountifulContent.Decrees.randomOrNull()?.id
+                        spawnableDecrees.randomOrNull()?.id
                     ).filterNotNull().toMutableList()
                 )
             }

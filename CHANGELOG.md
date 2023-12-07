@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [6.1.0] for 1.20.(4?) - WIP
 
+### Added
+- Decrees now have two new, optional fields:
+  - `canSpawn` determines whether a bounty board can spawn with this Decree in it (default: true)
+  - `canReveal` determines whether a blank Decree can be revealed to be this Decree when placed on the board (default: true)
+
 ### Changed
 - The board layout for objectives and rewards is now centered, with an arrow dividing the objectives and rewards. 
   - Hopefully this is a visually pleasing change, I will be looking at user feedback to see how it is received.
