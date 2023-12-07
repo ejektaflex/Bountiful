@@ -8,6 +8,7 @@ import net.minecraft.resource.ResourceManager
 import net.minecraft.util.Identifier
 import java.io.File
 import java.nio.file.Path
+import kotlin.io.path.walk
 
 class ResourceLoadStrategy<T : IMerge<T>>(
     private val strategyName: String,
@@ -28,7 +29,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
                 }
             }
         } catch (e: Exception) {
-            println("Could not decode file with ${this::class.simpleName}, given id '$newId' in folder '$folderName' on id $identifier")
+            Bountiful.LOGGER.error("Could not decode file with ${this::class.simpleName}, given id '$newId' in folder '$folderName' on id $identifier")
             e.printStackTrace()
             null
         }
@@ -38,7 +39,23 @@ class ResourceLoadStrategy<T : IMerge<T>>(
 
     private fun getConfigFile(id: Identifier): File {
         val fileName = id.fileName() + ".json"
-        return File(configPath.toFile(), fileName)
+        val default = File(configPath.toFile(), fileName)
+
+        val isValid: File.() -> Boolean = {
+            exists() && isFile && name == fileName
+        }
+
+        // Look for config files anywhere in the config path that matches this name
+        val found = configPath.toFile().walk().filter(isValid).toList()
+
+        // Return found file, or base file if none is found
+        val toUse = found.firstOrNull() ?: default
+
+        // Make sure the user doesn't have more than one file that matches the ID, otherwise tell them
+        if (found.size > 1) {
+            Bountiful.LOGGER.error("More than one config file in $configPath has the name $id! This will result in unexpected behaviour! Using: ${toUse.absolutePath}")
+        }
+        return toUse
     }
 
     private fun completeLoadOf(data: T) {
@@ -71,7 +88,6 @@ class ResourceLoadStrategy<T : IMerge<T>>(
                         continue
                     }
                 }
-
             }
 
             val items = resources.mapNotNull {
@@ -119,8 +135,12 @@ class ResourceLoadStrategy<T : IMerge<T>>(
 
     private fun loadFile(id: Identifier): T? {
         val file = getConfigFile(id)
-        val fileContent = file.readText()
-        return decode(id, fileContent, file.nameWithoutExtension)
+        if (file.exists()) {
+            Bountiful.LOGGER.info("Reading config file: ${file.absolutePath}")
+            val fileContent = file.readText()
+            return decode(id, fileContent, file.nameWithoutExtension)
+        }
+        return null
     }
 
     private fun loadResource(id: Identifier, manager: ResourceManager): T? {
