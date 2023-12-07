@@ -33,7 +33,7 @@ class PoolEntry private constructor() {
     var rarity = BountyRarity.COMMON
     var content = "Nope"
     var name: String? = null
-    private var icon: @Contextual Identifier? = null // TODO allow custom icons, this works well for criterion
+    private var icon: @Contextual Identifier? = null
     var amount = EntryRange(-1, -1)
     var unitWorth = -1000.0
     var weightMult = 1.0

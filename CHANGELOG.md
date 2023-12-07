@@ -4,14 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) as closely as it can.
 
+## [6.1.0] for 1.20.(4?) - WIP
+
+### Changed
+- The board layout for objectives and rewards is now centered, with an arrow dividing the objectives and rewards. 
+  - Hopefully this is a visually pleasing change, I will be looking at user feedback to see how it is received.
+- Much better handling and notification of possible config file errors via the log.
+
 ## [6.0.3] for 1.20.1 - 2023-07-17
 
 ### Added
 - Implemented the new item group system, so that items will once again show up in creative tabs, as well as in JEI.
-- Added processor lists, so that bounty boards can generate with a different look depending which village it generates in.
+- Added processor lists, so that bounty boards can generate with a different look, depending on which village it generates in.
 - Added Numismatic Overhaul compat for Fabric.
 - Updated translations.
 - Added a default single localization override for Decrees
+- Allow mob deaths from pets to count towards entity objectives
 
 ### Fixed
 - Fixed the "missing ops" cosmetic issue upon world load.
@@ -45,7 +53,7 @@ develop for both Fabric and Forge at the same time, releasing for both platforms
 
 
 
-# Old Forge Versions (Pre-Merge)
+# Old Fabric Versions (Pre-Merge)
 
 ## [Fabric-5.0.0] for 1.19.4 - 2023-03-21
 

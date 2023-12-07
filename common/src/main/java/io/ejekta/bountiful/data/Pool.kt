@@ -1,6 +1,7 @@
 package io.ejekta.bountiful.data
 
 import io.ejekta.bountiful.Bountiful
+import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.kudzu.KudzuVine
@@ -32,6 +33,9 @@ data class Pool(
                 // Don't insert entries with no type set
                 if (pe.typeLogic != null) {
                     items.add(pe)
+                } else {
+                    Bountiful.LOGGER.warn("Pool entry '${pe.id}' is using an invalid type '${pe.type.path}' and will be skipped.")
+                    Bountiful.LOGGER.warn("* Valid entry types: ${BountyTypeRegistry.map { it.id.path }}")
                 }
             }
         }

@@ -61,6 +61,7 @@ object BountifulIO {
 
     private val contentLoaders = listOf(
         ResourceLoadStrategy("Pool Loader", "bounty_pools", poolConfigs, Pool.serializer(), BountifulContent.Pools) {
+            // If the pool isn't being used, that's usually problematic
             if (usedInDecrees.isEmpty()) {
 
                 val poolAssoc = BountifulContent.Pools.filter { it.usedInDecrees.isNotEmpty() }.associateBy { it.id.toSet() }
