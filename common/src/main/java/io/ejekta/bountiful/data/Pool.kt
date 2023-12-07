@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.data
 
+import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.kudzu.KudzuVine
@@ -54,7 +55,7 @@ data class Pool(
 
         val newContent = content.toMutableMap()
 
-        println("Merging $id with ${other.id}")
+        Bountiful.LOGGER.info("Merging $id with ${other.id}")
 
         for ((otherKey, otherValue) in other.content) {
 
@@ -64,8 +65,8 @@ data class Pool(
                 newContent[otherKey] = null
             } else {
 
-                println("Merge candidate: ${content[otherKey]}")
-                println("Merge new edits: $otherValue")
+                Bountiful.LOGGER.debug("Merge candidate: ${content[otherKey]}")
+                Bountiful.LOGGER.debug("Merge new edits: $otherValue")
 
                 // key is in new content, must graft merge
                 val currSrc = content[otherKey]?.toKudzu() ?: KudzuVine()
@@ -78,7 +79,7 @@ data class Pool(
 
                 newContent[otherKey] = graftedVine.toJsonObject()
 
-                println("Newly Merged: ${newContent[otherKey]}")
+                Bountiful.LOGGER.info("* Newly Merged: $otherKey ${newContent[otherKey]}")
             }
 
         }

@@ -15,7 +15,8 @@ class ResourceLoadStrategy<T : IMerge<T>>(
     private val folderName: String,
     private val configPath: Path,
     private val decoder: DeserializationStrategy<T>,
-    private val destination: MutableList<T>
+    private val destination: MutableList<T>,
+    private val postLintFunc: T.() -> Unit
 ) {
 
     private fun decode(identifier: Identifier, fileText: String, newId: String): T? {
@@ -53,7 +54,12 @@ class ResourceLoadStrategy<T : IMerge<T>>(
 
         // Make sure the user doesn't have more than one file that matches the ID, otherwise tell them
         if (found.size > 1) {
-            Bountiful.LOGGER.error("More than one config file in $configPath has the name $id! This will result in unexpected behaviour! Using: ${toUse.absolutePath}")
+            Bountiful.LOGGER.error("More than one config file in '$configPath' has the name name! This will result in unexpected behaviour!")
+            for (f in found) {
+                Bountiful.LOGGER.error("* ${f.path}")
+            }
+            Bountiful.LOGGER.error("Using this one, since we found it first:")
+            Bountiful.LOGGER.error("* ${toUse.path}")
         }
         return toUse
     }
@@ -115,6 +121,12 @@ class ResourceLoadStrategy<T : IMerge<T>>(
         loadUnloadedFiles()
     }
 
+    fun lint() {
+        for (item in destination) {
+            item.postLintFunc()
+        }
+    }
+
     private fun getResources(manager: ResourceManager): List<Identifier> {
         return manager.findResources(folderName) {
             it.toString().endsWith(".json")
@@ -157,7 +169,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
                 val item = loadFile(fileId)
                 item?.let {
                     it.finishMergedSetup() // Normalize and such
-                    println("Completing load of $it from $fileId")
+                    Bountiful.LOGGER.debug("Completing load of $it from $fileId")
                     completeLoadOf(it)
                 }
             }
