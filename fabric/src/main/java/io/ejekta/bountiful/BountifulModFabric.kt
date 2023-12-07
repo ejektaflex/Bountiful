@@ -12,9 +12,12 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
+import net.fabricmc.fabric.api.`object`.builder.v1.trade.TradeOfferHelper
+import net.fabricmc.fabric.api.`object`.builder.v1.trade.TradeOfferHelper.WanderingTraderOffersBuilder
 import net.fabricmc.fabric.api.registry.CompostingChanceRegistry
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType
+import net.fabricmc.fabric.impl.`object`.builder.TradeOfferInternals.WanderingTraderOffersBuilderImpl
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.item.ItemGroups
 import net.minecraft.resource.ResourceType

@@ -2,24 +2,17 @@ package io.ejekta.bountiful.util
 
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.content.BountyItem
-import net.fabricmc.api.EnvType
-import net.fabricmc.loader.api.FabricLoader
-import net.minecraft.client.MinecraftClient
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.registry.DynamicRegistryManager
 import net.minecraft.registry.Registries
-import net.minecraft.registry.Registry
-import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.tag.TagKey
-import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
 import kotlin.random.Random
 
 fun randomSplit(num: Double, ways: Int): List<Double> {

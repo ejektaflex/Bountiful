@@ -1,6 +1,5 @@
 package io.ejekta.bountiful.bounty.types.builtin
 
-import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.bounty.types.Progress

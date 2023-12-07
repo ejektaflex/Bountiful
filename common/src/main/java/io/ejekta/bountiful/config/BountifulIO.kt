@@ -1,7 +1,6 @@
 package io.ejekta.bountiful.config
 
 import io.ejekta.bountiful.Bountiful
-import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.data.Pool
@@ -10,9 +9,6 @@ import io.ejekta.kambrik.ext.jvm.ensured
 import io.ejekta.kambrikx.file.KambrikConfigFile
 import io.ejekta.kambrikx.file.KambrikParseFailMode
 import net.minecraft.resource.ResourceManager
-import net.minecraft.util.Identifier
-import java.util.*
-import kotlin.math.max
 import kotlin.math.min
 
 object BountifulIO {

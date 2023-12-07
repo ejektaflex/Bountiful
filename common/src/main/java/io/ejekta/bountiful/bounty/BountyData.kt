@@ -13,7 +13,6 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
-import net.minecraft.util.Formatting
 
 @Suppress("RemoveRedundantQualifierName")
 @Serializable
