@@ -1,7 +1,6 @@
 {
 	"content": {
-
-		"equip_rew_shield": {
+		"shield": {
 			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:shield",
@@ -18,6 +17,5 @@
 				}
 			]
 		}
-
 	}
 }

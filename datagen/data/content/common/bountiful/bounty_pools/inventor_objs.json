@@ -9,7 +9,7 @@
 			},
 			"unitWorth": 1100
 		},
-		"inventor_objs_redstone": {
+		"redstone": {
 			"type": "item",
 			"content": "minecraft:redstone",
 			"amount": {
@@ -18,7 +18,7 @@
 			},
 			"unitWorth": 200
 		},
-		"inventor_objs_lever": {
+		"lever": {
 			"type": "item",
 			"content": "minecraft:lever",
 			"amount": {
@@ -28,7 +28,7 @@
 			"unitWorth": 150,
 			"weightMult": 0.5
 		},
-		"inventor_objs_redstone_torch": {
+		"redstone_torch": {
 			"type": "item",
 			"content": "minecraft:redstone_torch",
 			"amount": {
@@ -37,7 +37,7 @@
 			},
 			"unitWorth": 225
 		},
-		"inventor_objs_redstone_block": {
+		"redstone_block": {
 			"type": "item",
 			"content": "minecraft:redstone_block",
 			"amount": {
@@ -46,7 +46,7 @@
 			},
 			"unitWorth": 1800
 		},
-		"inventor_objs_hopper": {
+		"hopper": {
 			"type": "item",
 			"content": "minecraft:hopper",
 			"amount": {
@@ -55,7 +55,7 @@
 			},
 			"unitWorth": 5000
 		},
-		"inventor_objs_jukebox": {
+		"jukebox": {
 			"type": "item",
 			"rarity": "RARE",
 			"content": "minecraft:jukebox",

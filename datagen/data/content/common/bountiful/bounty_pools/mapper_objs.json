@@ -2,7 +2,7 @@
 {
 	"content": {
 
-        "mapper_obj_paper": {
+        "paper": {
             "type": "item",
             "content": "minecraft:paper",
             "amount": {
@@ -12,7 +12,7 @@
             "unitWorth": 40
         },
 
-        "mapper_obj_campfire": {
+        "campfire": {
             "type": "item",
             "content": "minecraft:campfire",
             "amount": {
@@ -22,7 +22,7 @@
             "unitWorth": 250
         },
 
-        "mapper_obj_quartz": {
+        "quartz": {
             "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:quartz",
@@ -33,7 +33,7 @@
             "unitWorth": 400
         },
 
-        "mapper_obj_candles": {
+        "candles": {
             "type": "item_tag",
             "content": "minecraft:candles",
             "amount": {
@@ -43,7 +43,7 @@
             "unitWorth": 250
         },
 
-        "mapper_obj_glass_pane": {
+        "glass_pane": {
             "type": "item",
             "content": "minecraft:glass_pane",
             "amount": {
@@ -53,7 +53,7 @@
             "unitWorth": 100
         },
 
-        "mapper_obj_glass": {
+        "glass": {
             "type": "item",
             "content": "minecraft:glass",
             "amount": {
@@ -63,7 +63,7 @@
             "unitWorth": 265
         },
 
-        "mapper_obj_cartography_table": {
+        "cartography_table": {
             "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:cartography_table",
@@ -74,7 +74,7 @@
             "unitWorth": 300
         },
 
-        "mapper_obj_compass": {
+        "compass": {
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:compass",

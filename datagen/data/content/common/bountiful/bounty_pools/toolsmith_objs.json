@@ -2,7 +2,7 @@
 {
 	"content": {
 
-        "toolsmith_obj_flint": {
+        "flint": {
             "type": "item",
             "content": "minecraft:flint",
             "amount": {
@@ -12,7 +12,7 @@
             "unitWorth": 80
         },
 
-        "toolsmith_obj_prismarine_shard": {
+        "prismarine_shard": {
             "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:prismarine_shard",

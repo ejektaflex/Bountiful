@@ -4,13 +4,13 @@
 
 	"itemGroup.bountiful": "Bountiful",
 
-	"bountiful.entry.shepherd_obj_wool_wildcard": "Any Wool",
-	"bountiful.entry.fletcher_obj_planks": "Any Planks",
-	"bountiful.entry.fletcher_obj_logs": "Any Log",
-	"bountiful.entry.shepherd_obj_bed_wildcard": "Any Bed",
-	"bountiful.entry.fisherman_obj_any_boat": "Any Boat",
-	"bountiful.entry.mapper_obj_candles": "Any Candle",
-	"bountiful.entry.shepherd_obj_banner_wildcard": "Any Banner",
+	"bountiful.entry.shepherd_objs.wool_wildcard": "Any Wool",
+	"bountiful.entry.fletcher_objs.planks": "Any Planks",
+	"bountiful.entry.fletcher_objs.logs": "Any Log",
+	"bountiful.entry.shepherd_objs.bed_wildcard": "Any Bed",
+	"bountiful.entry.fisherman_objs.any_boat": "Any Boat",
+	"bountiful.entry.mapper_objs.candles": "Any Candle",
+	"bountiful.entry.shepherd_objs.banner_wildcard": "Any Banner",
 
 	"bountiful.entry.fisherman_obj_catch_ench_book": "Fish up Enchanted Books",
 	"bountiful.entry.cleric_obj_brew_swiftness": "Brew a basic Swiftness Potion",

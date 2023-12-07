@@ -2,7 +2,7 @@
 {
 	"content": {
 
-		"farmer_rew_bread": {
+		"bread": {
 			"type": "item",
 			"content": "minecraft:bread",
 			"amount": {
@@ -12,7 +12,7 @@
 			"unitWorth": 165
 		},
 
-		"farmer_rew_pumpkin_pie": {
+		"pumpkin_pie": {
 			"type": "item",
 			"content": "minecraft:pumpkin_pie",
 			"amount": {
@@ -22,7 +22,7 @@
 			"unitWorth": 250
 		},
 
-		"farmer_rew_apple": {
+		"apple": {
 			"type": "item",
 			"content": "minecraft:apple",
 			"amount": {
@@ -33,7 +33,7 @@
 		},
 
 
-		"farmer_rew_cookie": {
+		"cookie": {
 			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:cookie",
@@ -45,7 +45,7 @@
 		},
 
 
-		"farmer_rew_sus_stew": {
+		"sus_stew": {
 			"type": "item",
 			"rarity": "RARE",
 			"content": "minecraft:suspicious_stew",
@@ -56,7 +56,7 @@
 			"unitWorth": 1000.0
 		},
 
-		"farmer_rew_cake": {
+		"cake": {
 			"type": "item",
 			"rarity": "RARE",
 			"content": "minecraft:cake",
@@ -67,7 +67,7 @@
 			"unitWorth": 1000.0
 		},
 
-		"farmer_rew_honey_bottle": {
+		"honey_bottle": {
 			"type": "item",
 			"rarity": "RARE",
 			"content": "minecraft:honey_bottle",
@@ -78,7 +78,7 @@
 			"unitWorth": 1000.0
 		},
 
-		"farmer_rew_gold_carrot": {
+		"gold_carrot": {
 			"type": "item",
 			"rarity": "EPIC",
 			"content": "minecraft:golden_carrot",
@@ -89,7 +89,7 @@
 			"unitWorth": 1000.0
 		},
 
-		"farmer_rew_melon_slice": {
+		"melon_slice": {
 			"type": "item",
 			"rarity": "EPIC",
 			"content": "minecraft:glistering_melon_slice",
@@ -100,7 +100,7 @@
 			"unitWorth": 700.0
 		},
 
-		"farmer_rew_gold_apple": {
+		"gold_apple": {
 			"type": "item",
 			"rarity": "LEGENDARY",
 			"content": "minecraft:golden_apple",

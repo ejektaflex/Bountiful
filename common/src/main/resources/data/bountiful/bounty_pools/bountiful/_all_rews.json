@@ -1,7 +1,7 @@
 {
 	"content": {
 
-		"all_rew_primary_currency": {
+		"primary_currency": {
 			"type": "item",
 			"content": "minecraft:emerald",
 			"amount": {
@@ -12,7 +12,7 @@
 			"weightMult": 1.3
 		},
 
-		"all_rew_primary_currency_rare_bargain": {
+		"primary_currency_rare_bargain": {
 			"type": "item",
 			"content": "minecraft:emerald",
 			"amount": {
@@ -23,7 +23,7 @@
 			"weightMult": 0.2
 		},
 
-		"all_rew_decree": {
+		"decree": {
 			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "bountiful:decree",
@@ -35,7 +35,7 @@
 			"weightMult": 0.35
 		},
 
-		"all_rew_spyglass": {
+		"spyglass": {
 			"type": "item",
 			"content": "minecraft:spyglass",
 			"rarity": "RARE",
@@ -46,7 +46,7 @@
 			"unitWorth": 2500.0
 		},
 
-		"all_rew_totem_undying": {
+		"totem_undying": {
 			"type": "item",
 			"content": "minecraft:totem_of_undying",
 			"rarity": "LEGENDARY",
@@ -57,7 +57,7 @@
 			"unitWorth": 4000
 		},
 
-		"all_rew_arrow": {
+		"arrow": {
 			"type": "item",
 			"content": "minecraft:arrow",
 			"amount": {
@@ -68,7 +68,7 @@
 			"weightMult": 0.4
 		},
 
-		"all_rew_glow_ink": {
+		"glow_ink": {
 			"type": "item",
 			"content": "minecraft:glow_ink_sac",
 			"rarity": "EPIC",
@@ -80,7 +80,7 @@
 			"unitWorth": 500
 		},
 
-		"all_rew_prismarine_crystals": {
+		"prismarine_crystals": {
 			"type": "item",
 			"content": "minecraft:prismarine_crystals",
 			"rarity": "EPIC",
@@ -92,7 +92,7 @@
 			"unitWorth": 2000
 		},
 
-		"all_rew_minecart": {
+		"minecart": {
 			"type": "item",
 			"content": "minecraft:tnt_minecart",
 			"rarity": "EPIC",
@@ -104,7 +104,7 @@
 			"unitWorth": 6000
 		},
 
-		"all_rew_axolotl_bucket": {
+		"axolotl_bucket": {
 			"type": "item",
 			"content": "minecraft:axolotl_bucket",
 			"rarity": "LEGENDARY",

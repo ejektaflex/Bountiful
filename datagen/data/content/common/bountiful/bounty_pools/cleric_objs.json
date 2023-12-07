@@ -2,7 +2,7 @@
 {
 	"content": {
 
-        "cleric_obj_rotflesh": {
+        "rotflesh": {
             "type": "item",
             "content": "minecraft:rotten_flesh",
             "amount": {
@@ -12,7 +12,7 @@
             "unitWorth": 30
         },
 
-        "cleric_obj_gold_ingot": {
+        "gold_ingot": {
             "type": "item",
             "content": "minecraft:gold_ingot",
             "amount": {
@@ -22,7 +22,7 @@
             "unitWorth": 800
         },
 
-        "cleric_obj_magma_cream": {
+        "magma_cream": {
             "type": "item",
             "content": "minecraft:magma_cream",
             "amount": {
@@ -32,7 +32,7 @@
             "unitWorth": 450
         },
 
-        "cleric_obj_blaze_powder": {
+        "blaze_powder": {
             "type": "item",
             "content": "minecraft:blaze_powder",
             "amount": {
@@ -42,7 +42,7 @@
             "unitWorth": 400
         },
 
-        "cleric_obj_blaze_rod": {
+        "blaze_rod": {
             "type": "item",
             "content": "minecraft:blaze_rod",
             "amount": {
@@ -52,7 +52,7 @@
             "unitWorth": 800
         },
 
-        "cleric_obj_potion_water": {
+        "potion_water": {
             "type": "item",
             "content": "minecraft:potion",
             "amount": {
@@ -63,7 +63,7 @@
             "nbt": "{Potion:\"minecraft:water\"}"
         },
 
-        "cleric_obj_potion_awkward": {
+        "potion_awkward": {
             "type": "item",
             "content": "minecraft:potion",
             "amount": {
@@ -74,7 +74,7 @@
             "nbt": "{Potion:\"minecraft:awkward\"}"
         },
 
-        "cleric_obj_rabbit_foot": {
+        "rabbit_foot": {
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:rabbit_foot",
@@ -85,7 +85,7 @@
             "unitWorth": 500
         },
 
-        "cleric_obj_cauldron": {
+        "cauldron": {
             "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:cauldron",
@@ -96,7 +96,7 @@
             "unitWorth": 4200
         },
 
-        "cleric_obj_glass_bottle": {
+        "glass_bottle": {
             "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:glass_bottle",
@@ -107,7 +107,7 @@
             "unitWorth": 110
         },
 
-        "cleric_obj_ghast_tear": {
+        "ghast_tear": {
             "type": "item",
             "rarity": "RARE",
             "content": "minecraft:ghast_tear",
@@ -118,7 +118,7 @@
             "unitWorth": 1500
         },
 
-        "cleric_obj_scute": {
+        "scute": {
             "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:scute",
@@ -129,7 +129,7 @@
             "unitWorth": 250
         },
 
-        "cleric_obj_nether_wart": {
+        "nether_wart": {
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:nether_wart",
@@ -140,7 +140,7 @@
             "unitWorth": 85
         },
 
-        "cleric_obj_brew_swiftness": {
+        "brew_swiftness": {
             "type": "criteria",
             "content": "minecraft:brewed_potion",
             "conditions": {
@@ -153,7 +153,7 @@
             "unitWorth": 350
         },
 
-        "cleric_obj_cure_zombie_villager": {
+        "cure_zombie_villager": {
             "type": "criteria",
             "rarity": "EPIC",
             "content": "minecraft:cured_zombie_villager",

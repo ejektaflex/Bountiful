@@ -2,7 +2,7 @@
 {
 	"content": {
 
-        "fisherman_obj_string": {
+        "string": {
             "type": "item",
             "content": "minecraft:string",
             "amount": {
@@ -12,7 +12,7 @@
             "unitWorth": 50
         },
 
-        "fisherman_obj_coal": {
+        "coal": {
             "type": "item",
             "content": "minecraft:coal",
             "amount": {
@@ -22,7 +22,7 @@
             "unitWorth": 100
         },
 
-        "fisherman_obj_cod": {
+        "cod": {
             "type": "item",
             "content": "minecraft:cod",
             "amount": {
@@ -33,7 +33,7 @@
             "weightMult": 1.5
         },
 
-        "fisherman_obj_barrel": {
+        "barrel": {
             "type": "item",
             "content": "minecraft:barrel",
             "amount": {
@@ -43,7 +43,7 @@
             "unitWorth": 250
         },
 
-        "fisherman_obj_salmon": {
+        "salmon": {
             "type": "item",
             "content": "minecraft:salmon",
             "amount": {
@@ -54,7 +54,7 @@
             "weightMult": 1.5
         },
 
-        "fisherman_obj_trop_fish": {
+        "trop_fish": {
             "type": "item",
             "content": "minecraft:tropical_fish",
             "amount": {
@@ -65,7 +65,7 @@
             "weightMult": 1.5
         },
 
-        "fisherman_obj_pufferfish": {
+        "pufferfish": {
             "type": "item",
             "content": "minecraft:pufferfish",
             "amount": {
@@ -76,7 +76,7 @@
             "weightMult": 1.5
         },
 
-        "fisherman_obj_oak_boat": {
+        "oak_boat": {
             "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:oak_boat",
@@ -87,7 +87,7 @@
             "unitWorth": 800.0
         },
 
-        "fisherman_obj_naut_shell": {
+        "naut_shell": {
             "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:nautilus_shell",
@@ -98,7 +98,7 @@
             "unitWorth": 1100.0
         },
 
-        "fisherman_obj_any_boat": {
+        "any_boat": {
             "type": "item_tag",
             "content": "minecraft:boats",
             "amount": {
@@ -108,7 +108,7 @@
             "unitWorth": 450
         },
 
-        "fisherman_obj_catch_ench_book": {
+        "catch_ench_book": {
             "type": "criteria",
             "content": "minecraft:fishing_rod_hooked",
             "conditions": {

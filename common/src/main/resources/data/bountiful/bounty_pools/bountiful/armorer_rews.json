@@ -2,7 +2,7 @@
 {
 	"content": {
 
-        "armorer_rew_iron_helm": {
+        "iron_helm": {
             "type": "item",
             "content": "minecraft:iron_helmet",
             "amount": {
@@ -19,7 +19,7 @@
             ]
         },
 
-        "armorer_rew_iron_chest": {
+        "iron_chest": {
             "type": "item",
             "content": "minecraft:iron_chestplate",
             "amount": {
@@ -36,7 +36,7 @@
             ]
         },
 
-        "armorer_rew_iron_legs": {
+        "iron_legs": {
             "type": "item",
             "content": "minecraft:iron_leggings",
             "amount": {
@@ -53,7 +53,7 @@
             ]
         },
 
-        "armorer_rew_iron_boots": {
+        "iron_boots": {
             "type": "item",
             "content": "minecraft:iron_boots",
             "amount": {
@@ -70,7 +70,7 @@
             ]
         },
 
-        "armorer_rew_bell": {
+        "bell": {
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:bell",
@@ -81,7 +81,7 @@
             "unitWorth": 12000
         },
 
-        "armorer_rew_chain_legs": {
+        "chain_legs": {
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:chainmail_leggings",
@@ -99,7 +99,7 @@
             ]
         },
 
-        "armorer_rew_chain_boots": {
+        "chain_boots": {
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:chainmail_boots",
@@ -117,7 +117,7 @@
             ]
         },
 
-        "armorer_rew_gold_helm": {
+        "gold_helm": {
             "type": "item",
             "content": "minecraft:golden_helmet",
             "rarity": "RARE",
@@ -129,7 +129,7 @@
             "nbt": "{Damage:0}"
         },
 
-        "armorer_rew_gold_chest": {
+        "gold_chest": {
             "type": "item",
             "content": "minecraft:golden_chestplate",
             "rarity": "RARE",
@@ -141,7 +141,7 @@
             "nbt": "{Damage:0}"
         },
 
-        "armorer_rew_gold_legs": {
+        "gold_legs": {
             "type": "item",
             "content": "minecraft:golden_leggings",
             "rarity": "RARE",
@@ -153,7 +153,7 @@
             "nbt": "{Damage:0}"
         },
 
-        "armorer_rew_gold_boots": {
+        "gold_boots": {
             "type": "item",
             "content": "minecraft:golden_boots",
             "rarity": "RARE",
@@ -165,7 +165,7 @@
             "nbt": "{Damage:0}"
         },
 
-        "armorer_rew_gold_horse_armor": {
+        "gold_horse_armor": {
             "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:golden_horse_armor",
@@ -176,7 +176,7 @@
             "unitWorth": 5000
         },
 
-        "armorer_rew_iron_horse_armor": {
+        "iron_horse_armor": {
             "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:iron_horse_armor",
@@ -193,7 +193,7 @@
             ]
         },
 
-        "armorer_rew_diamond_horse_armor": {
+        "diamond_horse_armor": {
             "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:diamond_horse_armor",
@@ -211,7 +211,7 @@
             "weightMult": 0.15
         },
 
-        "armorer_rew_diamond_helm": {
+        "diamond_helm": {
             "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:diamond_helmet",
@@ -230,7 +230,7 @@
             "weightMult": 0.15
         },
 
-        "armorer_rew_diamond_chest": {
+        "diamond_chest": {
             "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:diamond_chestplate",
@@ -249,7 +249,7 @@
             "weightMult": 0.15
         },
 
-        "armorer_rew_diamond_legs": {
+        "diamond_legs": {
             "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:diamond_leggings",
@@ -268,7 +268,7 @@
             "weightMult": 0.15
         },
 
-        "armorer_rew_diamond_boots": {
+        "diamond_boots": {
             "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:diamond_boots",
@@ -287,7 +287,7 @@
             "weightMult": 0.15
         },
 
-        "armorer_rew_nether_helm": {
+        "nether_helm": {
             "type": "item",
             "rarity": "LEGENDARY",
             "content": "minecraft:netherite_helmet",
@@ -306,7 +306,7 @@
             "weightMult": 0.1
         },
 
-        "armorer_rew_nether_chest": {
+        "nether_chest": {
             "type": "item",
             "rarity": "LEGENDARY",
             "content": "minecraft:netherite_chestplate",
@@ -325,7 +325,7 @@
             "weightMult": 0.1
         },
 
-        "armorer_rew_nether_legs": {
+        "nether_legs": {
             "type": "item",
             "rarity": "LEGENDARY",
             "content": "minecraft:netherite_leggings",
@@ -344,7 +344,7 @@
             "weightMult": 0.1
         },
 
-        "armorer_rew_nether_boots": {
+        "nether_boots": {
             "type": "item",
             "rarity": "LEGENDARY",
             "content": "minecraft:netherite_boots",

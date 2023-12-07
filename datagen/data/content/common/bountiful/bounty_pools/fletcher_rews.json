@@ -2,7 +2,7 @@
 {
 	"content": {
 
-        "fletcher_rew_arrow": {
+        "arrow": {
             "type": "item",
             "content": "minecraft:arrow",
             "amount": {
@@ -12,7 +12,7 @@
             "unitWorth": 60
         },
 
-        "fletcher_rew_bow": {
+        "bow": {
             "type": "item",
             "content": "minecraft:bow",
             "amount": {
@@ -23,7 +23,7 @@
             "nbt": "{Damage:0}"
         },
 
-        "fletcher_rew_crossbow": {
+        "crossbow": {
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:crossbow",
@@ -35,7 +35,7 @@
             "nbt": "{Damage:0}"
         },
 
-        "fletcher_rew_bow_power": {
+        "bow_power": {
             "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:bow",
@@ -47,7 +47,7 @@
             "nbt": "{RepairCost:1,Damage:0,Enchantments:[{lvl:1s,id:\"minecraft:power\"}]}"
         },
 
-        "fletcher_rew_ench_book_flame": {
+        "ench_book_flame": {
             "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:enchanted_book",
@@ -59,7 +59,7 @@
             "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:flame\"}]}"
         },
 
-        "fletcher_rew_tipped_arrow_heals": {
+        "tipped_arrow_heals": {
             "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:tipped_arrow",
@@ -71,7 +71,7 @@
             "nbt": "{Potion:\"minecraft:strong_healing\"}"
         },
 
-        "fletcher_rew_tipped_arrow_weakness": {
+        "tipped_arrow_weakness": {
             "type": "item",
             "content": "minecraft:tipped_arrow",
             "amount": {
@@ -82,7 +82,7 @@
             "nbt": "{Potion:\"minecraft:weakness\"}"
         },
 
-        "fletcher_rew_spectral_arrow": {
+        "spectral_arrow": {
             "type": "item",
             "rarity": "RARE",
             "content": "minecraft:spectral_arrow",
@@ -93,7 +93,7 @@
             "unitWorth": 400
         },
 
-        "fletcher_rew_bow_infinity": {
+        "bow_infinity": {
             "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:bow",

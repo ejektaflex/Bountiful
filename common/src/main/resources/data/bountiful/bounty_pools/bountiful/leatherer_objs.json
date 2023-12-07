@@ -2,7 +2,7 @@
 {
 	"content": {
 
-        "leatherer_obj_leather": {
+        "leather": {
             "type": "item",
             "content": "minecraft:leather",
             "amount": {
@@ -13,7 +13,7 @@
             "weightMult": 1.6
         },
 
-        "leatherer_obj_flint": {
+        "flint": {
             "type": "item",
             "content": "minecraft:flint",
             "amount": {
@@ -23,7 +23,7 @@
             "unitWorth": 35
         },
 
-        "leatherer_obj_rabbit_hide": {
+        "rabbit_hide": {
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:rabbit_hide",
@@ -34,7 +34,7 @@
             "unitWorth": 250
         },
 
-        "leatherer_obj_scute": {
+        "scute": {
             "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:scute",
@@ -45,7 +45,7 @@
             "unitWorth": 250
         },
 
-        "leatherer_obj_cauldron": {
+        "cauldron": {
             "type": "item",
             "content": "minecraft:cauldron",
             "amount": {

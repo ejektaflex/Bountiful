@@ -2,7 +2,7 @@
 {
 	"content": {
 
-        "fletcher_obj_stick": {
+        "stick": {
             "type": "item",
             "content": "minecraft:stick",
             "amount": {
@@ -12,7 +12,7 @@
             "unitWorth": 30
         },
 
-        "fletcher_obj_planks": {
+        "planks": {
             "type": "item_tag",
             "content": "minecraft:planks",
             "amount": {
@@ -22,7 +22,7 @@
             "unitWorth": 60
         },
 
-        "fletcher_obj_logs": {
+        "logs": {
             "type": "item_tag",
             "content": "minecraft:logs",
             "amount": {
@@ -32,7 +32,7 @@
             "unitWorth": 240
         },
 
-        "fletcher_obj_gravel": {
+        "gravel": {
             "type": "item",
             "content": "minecraft:gravel",
             "amount": {
@@ -42,7 +42,7 @@
             "unitWorth": 30
         },
 
-        "fletcher_obj_flint": {
+        "flint": {
             "type": "item",
             "content": "minecraft:flint",
             "amount": {
@@ -52,7 +52,7 @@
             "unitWorth": 35
         },
 
-        "fletcher_obj_target": {
+        "target": {
             "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:target",
@@ -63,7 +63,7 @@
             "unitWorth": 750
         },
 
-        "fletcher_obj_fletching_table": {
+        "fletching_table": {
             "type": "item",
             "content": "minecraft:fletching_table",
             "amount": {
@@ -73,7 +73,7 @@
             "unitWorth": 400
         },
 
-        "fletcher_obj_string": {
+        "string": {
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:string",
@@ -84,7 +84,7 @@
             "unitWorth": 70
         },
 
-        "fletcher_obj_feather": {
+        "feather": {
             "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:feather",
@@ -95,7 +95,7 @@
             "unitWorth": 40
         },
 
-        "fletcher_obj_tripwire_hook": {
+        "tripwire_hook": {
             "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:tripwire_hook",

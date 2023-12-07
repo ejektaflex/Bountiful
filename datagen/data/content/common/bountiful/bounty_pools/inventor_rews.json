@@ -1,7 +1,7 @@
 
 {
 	"content": {
-        "inventor_rews_sticky_piston": {
+        "sticky_piston": {
             "type": "item",
             "content": "minecraft:sticky_piston",
             "amount": {
@@ -10,7 +10,7 @@
             },
             "unitWorth": 1300
         },
-        "inventor_rews_repeater": {
+        "repeater": {
             "type": "item",
             "content": "minecraft:repeater",
             "amount": {
@@ -19,7 +19,7 @@
             },
             "unitWorth": 750
         },
-        "inventor_rews_comparator": {
+        "comparator": {
             "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:comparator",
@@ -29,7 +29,7 @@
             },
             "unitWorth": 1000
         },
-        "inventor_rews_redstone_lamp": {
+        "redstone_lamp": {
             "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:redstone_lamp",
@@ -39,7 +39,7 @@
             },
             "unitWorth": 1800
         },
-        "inventor_rews_note_block": {
+        "note_block": {
             "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:note_block",
@@ -49,7 +49,7 @@
             },
             "unitWorth": 500
         },
-        "inventor_rews_dispenser": {
+        "dispenser": {
             "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:dispenser",
@@ -59,7 +59,7 @@
             },
             "unitWorth": 1000
         },
-        "inventor_rews_observer": {
+        "observer": {
             "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:observer",
@@ -69,7 +69,7 @@
             },
             "unitWorth": 750
         },
-        "inventor_objs_jukebox": {
+        "jukebox": {
             "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:jukebox",

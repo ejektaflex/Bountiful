@@ -1,7 +1,7 @@
 {
 	"content": {
 
-		"all_obj_primary_currency": {
+		"primary_currency": {
 			"type": "item",
 			"content": "minecraft:emerald",
 			"amount": {
@@ -12,7 +12,7 @@
 			"weightMult": 0.65
 		},
 
-		"all_obj_iron_block": {
+		"iron_block": {
 			"type": "item",
 			"rarity": "EPIC",
 			"content": "minecraft:iron_block",
@@ -24,7 +24,7 @@
 			"weightMult": 0.1
 		},
 
-		"all_obj_anvil": {
+		"anvil": {
 			"type": "item",
 			"rarity": "EPIC",
 			"content": "minecraft:anvil",
@@ -36,7 +36,7 @@
 			"weightMult": 0.1
 		},
 
-		"all_obj_zombie": {
+		"zombie": {
 			"type": "entity",
 			"timeMult": 6.0,
 			"content": "minecraft:zombie",
@@ -48,7 +48,7 @@
 			"weightMult": 0.2
 		},
 
-		"all_obj_spider": {
+		"spider": {
 			"type": "entity",
 			"timeMult": 6.0,
 			"content": "minecraft:spider",
@@ -60,7 +60,7 @@
 			"weightMult": 0.2
 		},
 
-		"all_obj_creeper": {
+		"creeper": {
 			"type": "entity",
 			"timeMult": 7.0,
 			"content": "minecraft:creeper",
@@ -72,7 +72,7 @@
 			"weightMult": 0.2
 		},
 
-		"all_obj_dirt": {
+		"dirt": {
 			"type": "item",
 			"content": "minecraft:dirt",
 			"amount": {
@@ -83,7 +83,7 @@
 			"weightMult": 0.2
 		},
 
-		"all_obj_cobblestone": {
+		"cobblestone": {
 			"type": "item",
 			"content": "minecraft:cobblestone",
 			"amount": {
@@ -94,7 +94,7 @@
 			"weightMult": 0.2
 		},
 
-		"all_obj_stonebrick": {
+		"stonebrick": {
 			"type": "item",
 			"rarity": "UNCOMMON",
 			"content": "minecraft:stone_bricks",
