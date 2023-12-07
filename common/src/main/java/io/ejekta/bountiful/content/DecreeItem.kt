@@ -49,12 +49,22 @@ class DecreeItem : Item(
             }
         }
 
-        fun create(decId: String): ItemStack {
+        fun create(decId: String, ranked: Int = 1): ItemStack {
             return ItemStack(BountifulContent.DECREE_ITEM).apply {
                 DecreeData[this] =  DecreeData(
                     mutableListOf(
                         BountifulContent.Decrees.find { it.id == decId }?.id
-                    ).filterNotNull().toMutableList()
+                    ).filterNotNull().toMutableList(),
+                    rank = ranked
+                )
+            }
+        }
+
+        fun create(ranked: Int = 1): ItemStack {
+            return ItemStack(BountifulContent.DECREE_ITEM).apply {
+                DecreeData[this] =  DecreeData(
+                    mutableListOf(),
+                    rank = ranked
                 )
             }
         }

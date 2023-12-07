@@ -72,9 +72,17 @@ object BountifulCommands {
             // /bo gen bounty (rep_level)
             "gen" {
                 "decree" {
-                    argString("decType", items = decrees) runs { decType ->
-                        val stack = DecreeItem.create(decType())
-                        source.player?.giveItemStack(stack)
+                    "type" {
+                        argString("decType", items = decrees) runs { decType ->
+                            val stack = DecreeItem.create(decType())
+                            source.player?.giveItemStack(stack)
+                        }
+                    }
+                    "rank" {
+                        argInt("rank", 1..5) runs { rank ->
+                            val stack = DecreeItem.create(ranked = rank())
+                            source.player?.giveItemStack(stack)
+                        }
                     }
                 }
 

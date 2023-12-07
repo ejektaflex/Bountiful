@@ -90,6 +90,8 @@ class BountifulModFabric : ModInitializer {
             Bountybridge.handleEntityKills(world, entity, killedEntity)
         })
 
+        //TradeOfferHelper.registerWanderingTraderOffers()
+
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(ItemGroupEvents.ModifyEntries {
             it.add(BountifulContent.BOARD_ITEM)
             it.add(BountifulContent.DECREE_ITEM)

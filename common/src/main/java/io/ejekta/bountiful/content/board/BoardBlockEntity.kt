@@ -35,6 +35,8 @@ import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.ChunkPos
 import net.minecraft.world.World
+import kotlin.math.min
+import kotlin.random.Random
 
 
 class BoardBlockEntity(pos: BlockPos, state: BlockState)
@@ -270,10 +272,17 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
                 entity.decrees.stacks.filter {
                     it.item is DecreeItem // must be a decree and not null
                 }.forEach { stack ->
-                    val revealable = BountifulContent.Decrees.filter { it.canReveal }
+                    // Get revealable decrees
+                    val revealable = BountifulContent.Decrees.filter { it.canReveal }.shuffled().toMutableList()
                     DecreeData.edit(stack) {
-                        if (ids.isEmpty() && revealable.isNotEmpty()) {
-                            ids.add(revealable.random().id)
+                        if (ids.isEmpty()) {
+                            // Number of total revealables, or reveal rank, whichever comes first
+                            for (i in 0 until min(revealable.size, rank)) {
+                                // 100% chance of 1 revealable, 33% chance stacked per rank of another
+                                if (i == 0 || Random.nextDouble() <= 0.33) {
+                                    ids.add(revealable.removeLast().id)
+                                }
+                            }
                         }
                     }
                 }
