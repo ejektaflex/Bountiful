@@ -5,6 +5,7 @@ import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.BountifulReloadListener
 import io.ejekta.bountiful.content.BountifulCommands
 import io.ejekta.bountiful.content.BountifulContent
+import io.ejekta.bountiful.content.DecreeTradeFactory
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.internal.registration.KambrikRegistrar
 import net.fabricmc.api.ModInitializer
@@ -13,11 +14,9 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.`object`.builder.v1.trade.TradeOfferHelper
-import net.fabricmc.fabric.api.`object`.builder.v1.trade.TradeOfferHelper.WanderingTraderOffersBuilder
 import net.fabricmc.fabric.api.registry.CompostingChanceRegistry
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType
-import net.fabricmc.fabric.impl.`object`.builder.TradeOfferInternals.WanderingTraderOffersBuilderImpl
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.item.ItemGroups
 import net.minecraft.resource.ResourceType
@@ -90,7 +89,17 @@ class BountifulModFabric : ModInitializer {
             Bountybridge.handleEntityKills(world, entity, killedEntity)
         })
 
-        //TradeOfferHelper.registerWanderingTraderOffers()
+        val decreeTrades = DecreeTradeFactory()
+
+        TradeOfferHelper.registerWanderingTraderOffers(1) {
+            it.add(decreeTrades)
+        }
+
+        TradeOfferHelper.registerRebalancedWanderingTraderOffers {
+            it.pool(
+                Bountiful.id("merchant_trade_offers"), 1, decreeTrades
+            )
+        }
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(ItemGroupEvents.ModifyEntries {
             it.add(BountifulContent.BOARD_ITEM)

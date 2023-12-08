@@ -8,9 +8,11 @@ import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyCreator
 import io.ejekta.bountiful.content.BountyItem
-import io.ejekta.bountiful.content.DecreeItem
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.data.Decree
+import io.ejekta.bountiful.decree.DecreeItem
+import io.ejekta.bountiful.decree.DecreeSpawnCondition
+import io.ejekta.bountiful.decree.DecreeSpawnRank
 import io.ejekta.bountiful.util.readOnlyCopy
 import io.ejekta.kambrik.ext.ksx.decodeFromStringTag
 import io.ejekta.kambrik.ext.ksx.encodeToStringTag
@@ -35,8 +37,6 @@ import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.ChunkPos
 import net.minecraft.world.World
-import kotlin.math.min
-import kotlin.random.Random
 
 
 class BoardBlockEntity(pos: BlockPos, state: BlockState)
@@ -63,6 +63,9 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
     // Calculated level, progress to next, point of next level
     private val levelData: Triple<Int, Int, Int>
         get() = levelProgress(finishMap.values.sum())
+
+    private val reputation: Int
+        get() = levelData.first
 
     val numCompleted: Int
         get() = finishMap.values.sum()
@@ -123,7 +126,9 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
     fun tryInitialPopulation() {
         if (isPristine) {
             if (decrees.isEmpty) {
-                decrees.setStack((0..2).random(), DecreeItem.create(followSpawnLogic = true))
+                decrees.setStack((0..2).random(), DecreeItem.create(
+                    DecreeSpawnCondition.BOARD_SPAWN, 1, DecreeSpawnRank.CONSTANT
+                ))
             }
             for (i in 0..5) {
                 randomlyUpdateBoard()
@@ -186,7 +191,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
 
 
 
-    val DoneProperty = object : PropertyDelegate {
+    private val DoneProperty = object : PropertyDelegate {
         override fun get(index: Int) = numCompleted
         override fun set(index: Int, value: Int) {  }
         override fun size() = 1
@@ -273,16 +278,11 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
                     it.item is DecreeItem // must be a decree and not null
                 }.forEach { stack ->
                     // Get revealable decrees
-                    val revealable = BountifulContent.Decrees.filter { it.canReveal }.shuffled().toMutableList()
+                    val revealable = BountifulContent.Decrees.filter(DecreeSpawnCondition.BOARD_REVEAL.spawnFunc).map { it.id }
                     DecreeData.edit(stack) {
                         if (ids.isEmpty()) {
-                            // Number of total revealables, or reveal rank, whichever comes first
-                            for (i in 0 until min(revealable.size, rank)) {
-                                // 100% chance of 1 revealable, 33% chance stacked per rank of another
-                                if (i == 0 || Random.nextDouble() <= 0.33) {
-                                    ids.add(revealable.removeLast().id)
-                                }
-                            }
+                            // Random populate
+                            DecreeSpawnRank.RANDOM.populateFunc(this, revealable)
                         }
                     }
                 }

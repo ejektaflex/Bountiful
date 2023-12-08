@@ -5,6 +5,7 @@ import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.data.Pool
+import io.ejekta.bountiful.decree.DecreeItem
 import io.ejekta.kambrik.registration.KambrikAutoRegistrar
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item

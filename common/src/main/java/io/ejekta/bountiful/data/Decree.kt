@@ -14,7 +14,8 @@ data class Decree(
     override val replace: Boolean = false,
     val name: String? = null,
     val canSpawn: Boolean = true,
-    val canReveal: Boolean = true
+    val canReveal: Boolean = true,
+    val canWanderBuy: Boolean = true
     ) : IMerge<Decree> {
 
     val objectivePools: List<Pool>
@@ -40,7 +41,10 @@ data class Decree(
             (rewards + other.rewards).toMutableSet(),
             (requires + other.requires).toSet().toMutableList(),
             replace || other.replace,
-            name ?: other.name
+            name ?: other.name,
+            canSpawn || other.canSpawn,
+            canReveal || other.canReveal,
+            canWanderBuy || other.canWanderBuy
         )
     }
 

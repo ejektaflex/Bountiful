@@ -10,6 +10,8 @@ import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.messages.ClipboardCopy
 import io.ejekta.bountiful.data.PoolEntry
+import io.ejekta.bountiful.decree.DecreeItem
+import io.ejekta.bountiful.decree.DecreeSpawnCondition
 import io.ejekta.kambrik.command.*
 import io.ejekta.kambrik.command.types.PlayerCommand
 import io.ejekta.kambrik.ext.identifier
@@ -74,13 +76,13 @@ object BountifulCommands {
                 "decree" {
                     "type" {
                         argString("decType", items = decrees) runs { decType ->
-                            val stack = DecreeItem.create(decType())
+                            val stack = DecreeItem.create(listOf(decType()))
                             source.player?.giveItemStack(stack)
                         }
                     }
                     "rank" {
                         argInt("rank", 1..5) runs { rank ->
-                            val stack = DecreeItem.create(ranked = rank())
+                            val stack = DecreeItem.create(DecreeSpawnCondition.NONE, ranked = rank())
                             source.player?.giveItemStack(stack)
                         }
                     }
