@@ -8,11 +8,11 @@ import net.minecraft.entity.Entity
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.util.math.random.Random
-import kotlin.random.Random as KotlinRandom
 import net.minecraft.village.TradeOffer
 import net.minecraft.village.TradeOffers
 import kotlin.math.pow
 import kotlin.random.nextInt
+import kotlin.random.Random as KotlinRandom
 
 class DecreeTradeFactory : TradeOffers.Factory {
     override fun create(entity: Entity?, random: Random): TradeOffer {

@@ -35,8 +35,6 @@ class BountyData {
     }
 
     fun checkForCompletionAndAlert(player: PlayerEntity, stack: ItemStack): BountyData {
-
-
         val isDone = objectives.all {
             (it.logic as IBountyObjective).getProgress(it, player).isComplete()
         } && BountyInfo[stack].timeLeft(player.world) > 0

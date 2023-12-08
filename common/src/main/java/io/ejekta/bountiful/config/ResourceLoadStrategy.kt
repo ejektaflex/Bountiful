@@ -8,7 +8,6 @@ import net.minecraft.resource.ResourceManager
 import net.minecraft.util.Identifier
 import java.io.File
 import java.nio.file.Path
-import kotlin.io.path.walk
 
 class ResourceLoadStrategy<T : IMerge<T>>(
     private val strategyName: String,

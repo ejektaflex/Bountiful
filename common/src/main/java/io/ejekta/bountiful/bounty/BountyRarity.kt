@@ -19,7 +19,7 @@ enum class BountyRarity(val color: Formatting, val weight: Int, val repTier: Int
 
     companion object {
         fun forReputation(rep: Int): BountyRarity {
-            return values().last { rep >= it.repTier  }
+            return entries.last { rep >= it.repTier  }
         }
 
         const val rarityWeightScaling = 2.25

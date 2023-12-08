@@ -1,6 +1,6 @@
 package io.ejekta.bountiful.bridge
 
-import java.util.ServiceLoader
+import java.util.*
 
 class Bountybridge {
     companion object : BountifulSharedApi by loadService()
