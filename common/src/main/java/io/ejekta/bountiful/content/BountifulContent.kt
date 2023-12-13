@@ -1,5 +1,7 @@
 package io.ejekta.bountiful.content
 
+import com.mojang.serialization.Codec
+import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.content.board.BoardBlock
 import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
@@ -7,8 +9,20 @@ import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.data.Pool
 import io.ejekta.bountiful.decree.DecreeItem
 import io.ejekta.kambrik.registration.KambrikAutoRegistrar
+import net.minecraft.entity.ai.brain.Activity
+import net.minecraft.entity.ai.brain.MemoryModuleType
+import net.minecraft.entity.passive.VillagerEntity
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
+import net.minecraft.registry.Registries
+import net.minecraft.registry.RegistryKey
+import net.minecraft.registry.RegistryKeys
+import net.minecraft.registry.entry.RegistryEntry
+import net.minecraft.util.math.GlobalPos
+import net.minecraft.world.poi.PointOfInterestType
+import net.minecraft.world.poi.PointOfInterestTypes
+import java.util.*
+import java.util.function.BiPredicate
 
 object BountifulContent : KambrikAutoRegistrar {
 
@@ -35,5 +49,37 @@ object BountifulContent : KambrikAutoRegistrar {
     val BOARD_ENTITY = "board-be".forBlockEntity(BOARD, ::BoardBlockEntity)
 
     val BOARD_SCREEN_HANDLER = "board" forScreen ::BoardScreenHandler
+
+    private const val ID_NEAREST_BOARD = "nearest_bounty_board"
+
+    val MEM_MODULE_NEAREST_BOARD = ID_NEAREST_BOARD.forRegistration(
+        Registries.MEMORY_MODULE_TYPE,
+        MemoryModuleType(Optional.empty<Codec<GlobalPos>>())
+    ) as MemoryModuleType<GlobalPos>
+
+    val MEM_MODULE_RECENTLY_CHECKED_BOARD = "checked_board_recently".forRegistration(
+        Registries.MEMORY_MODULE_TYPE,
+        MemoryModuleType(Optional.of(Codec.BOOL))
+    ) as MemoryModuleType<Boolean>
+
+    val ACT_CHECK_BOARD = "check_bounty_board".forRegistration(
+        Registries.ACTIVITY,
+        Activity("check_bounty_board")
+    )
+
+    val POI_BOUNTY_BOARD = RegistryKey.of(RegistryKeys.POINT_OF_INTEREST_TYPE, Bountiful.id(ID_NEAREST_BOARD))
+
+
+
+    init {
+        val abc = VillagerEntity.POINTS_OF_INTEREST.toMutableMap()
+        val bio: BiPredicate<VillagerEntity, RegistryEntry<PointOfInterestType>> = BiPredicate { vill, poiEntry ->
+            poiEntry.matchesKey(POI_BOUNTY_BOARD)
+        }
+        abc[MEM_MODULE_NEAREST_BOARD] = bio
+        VillagerEntity.POINTS_OF_INTEREST = abc
+
+        PointOfInterestTypes.register(Registries.POINT_OF_INTEREST_TYPE, POI_BOUNTY_BOARD, setOf(BOARD.defaultState), 1, 1)
+    }
 
 }

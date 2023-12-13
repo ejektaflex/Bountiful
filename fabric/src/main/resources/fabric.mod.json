@@ -41,7 +41,7 @@
     ]
   },
   "mixins": [
-
+    "bountiful.mixins.json"
   ],
 
   "custom": {
