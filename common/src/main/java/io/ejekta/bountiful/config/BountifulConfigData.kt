@@ -186,8 +186,7 @@ class BountifulConfigData {
     }
 
     private fun onSave() {
-        BountifulIO.saveConfig()
-        BountifulIO.loadConfig()
+        BountifulIO.reloadConfig()
     }
 
 }

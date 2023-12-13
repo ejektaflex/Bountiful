@@ -36,7 +36,7 @@ object BountifulIO {
         }
     }
 
-    fun saveConfig() {
+    private fun saveConfig() {
         configFile.write(configData)
     }
 
@@ -44,7 +44,13 @@ object BountifulIO {
         configData = configFile.read()
     }
 
+    fun reloadConfig() {
+        saveConfig()
+        loadConfig()
+    }
+
     fun doContentReload(manager: ResourceManager) {
+        reloadConfig()
         contentLoaders.forEach {
             it.clearDestination()
             it.loadData(manager)

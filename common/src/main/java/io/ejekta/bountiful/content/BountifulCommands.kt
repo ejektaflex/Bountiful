@@ -109,6 +109,12 @@ object BountifulCommands {
                 }
             }
 
+            "config" {
+                "reload" runs {
+                    BountifulIO.reloadConfig()
+                }
+            }
+
         }
     }
 
