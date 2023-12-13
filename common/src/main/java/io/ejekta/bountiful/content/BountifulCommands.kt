@@ -112,6 +112,7 @@ object BountifulCommands {
             "config" {
                 "reload" runs {
                     BountifulIO.reloadConfig()
+                    source.sendMessage(Text.literal("Bountiful Config Reloaded!"))
                 }
             }
 
