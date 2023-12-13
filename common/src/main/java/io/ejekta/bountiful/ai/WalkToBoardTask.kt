@@ -68,6 +68,7 @@ class WalkToBoardTask(val speed: Float) :
             entity.brain.forget(BountifulContent.MEM_MODULE_NEAREST_BOARD)
             serverWorld.sendEntityStatus(entity, EntityStatuses.ADD_VILLAGER_HAPPY_PARTICLES)
             serverWorld.playSound(entity, entity.blockPos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 1f, 1f)
+            // Will only show for a second, but that's okay
             val itemStack = ItemStack(Items.FERN)
             entity.inventory.addStack(itemStack)
             entity.setStackInHand(Hand.MAIN_HAND, itemStack)

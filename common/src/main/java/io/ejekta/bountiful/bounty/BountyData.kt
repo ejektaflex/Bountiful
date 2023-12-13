@@ -4,6 +4,7 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.bounty.types.IBountyReward
 import io.ejekta.bountiful.config.JsonFormats
+import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.messages.OnBountyComplete
 import io.ejekta.kambrik.serial.ItemDataJson
 import kotlinx.serialization.Serializable
@@ -84,7 +85,9 @@ class BountyData {
         }
     }
 
-    fun tryCashIn(player: PlayerEntity, stack: ItemStack): Boolean {
+
+
+    fun tryCashIn(player: PlayerEntity, stack: ItemStack, boardEntity: BoardBlockEntity? = null): Boolean {
 
         if (BountyInfo[stack].timeLeft(player.world) <= 0) {
             player.sendMessage(Text.translatable("bountiful.bounty.expired"))
@@ -94,6 +97,7 @@ class BountyData {
         return if (hasFinishedAllObjectives(player)) {
             tryFinishObjectives(player)
             rewardPlayer(player)
+            boardEntity?.updateUponBountyCompletion(this)
             stack.decrement(stack.maxCount)
             true
         } else {

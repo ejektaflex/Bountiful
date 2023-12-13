@@ -13,6 +13,9 @@ import io.ejekta.bountiful.content.messages.ClipboardCopy
 import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.bountiful.decree.DecreeItem
 import io.ejekta.bountiful.decree.DecreeSpawnCondition
+import io.ejekta.bountiful.util.checkOnBoard
+import io.ejekta.bountiful.util.ensureMemoryModules
+import io.ejekta.bountiful.util.hackySetTaskTo
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.command.addCommand
 import io.ejekta.kambrik.command.kambrikCommand
@@ -183,112 +186,13 @@ object BountifulCommands {
 
                 println(brain)
 
-//                for ((actId, taskColl) in brain.tasks) {
-//                    println("Act ID: $actId")
-//                    for ((act, tasks) in taskColl) {
-//                        println("* Act: ${act.id}")
-//                        for (task in tasks) {
-//                            println("Task: ${task.name}, Status: ${task.status}")
-//                        }
-//                    }
-//                }
-
-
-                brain.doExclusively(Activity.WORK)
-
-                // Inject memory into memory map, else remembrance will fail
-                val memMM = villager.brain.memories as MutableMap
-                memMM[BountifulContent.MEM_MODULE_NEAREST_BOARD] = Optional.empty()
-                memMM[BountifulContent.MEM_MODULE_RECENTLY_CHECKED_BOARD] = Optional.empty()
-
-
-                villager.brain.remember(BountifulContent.MEM_MODULE_NEAREST_BOARD, GlobalPos.create(
-                    serverWorld.registryKey, nearestBB
-                ))
-
-                villager.brain.remember(BountifulContent.MEM_MODULE_RECENTLY_CHECKED_BOARD, false)
-
-//                for (task in brain.runningTasks) {
-//                    println("${task.name} - ${task.status}")
-//                }
-
-                val allTasks = brain.tasks.values.map { it.values }.flatten().flatten()
-
-                brain.stopAllTasks(serverWorld, villager)
-
-                for (task in allTasks) {
-                    //println("${task.name} - ${task.status}")
-                    if ("nearest_bounty_board" in task.name) {
-                        //println("Attempting HARD START of nearest board task!!!")
-                        //println(task::class.java)
-                        //println(task is SingleTickTask<*>)
-
-                        val qmo = brain.getOptionalMemory(BountifulContent.MEM_MODULE_NEAREST_BOARD)?.getOrNull()
-
-                        //println("Comp: ${serverWorld.registryKey}, $qmo, ${qmo?.dimension}")
-
-                        task.tryStarting(serverWorld, villager, serverWorld.time)
-                        println("Started?: ${task.status}")
-
-                        val stt = task as? SingleTickTask<VillagerEntity>
-
-                        val doot = stt?.trigger(serverWorld, villager, serverWorld.time)
-                        //println(doot)
-
-                    }
-
+                nearestBB?.let {
+                    villager.checkOnBoard(it)
                 }
 
                 for (task in brain.runningTasks) {
                     println("${task.name} - ${task.status}")
                 }
-
-                // Doing this will instantly change his walk target, but he will stop when it changes due to a different task
-//                brain.remember(MemoryModuleType.WALK_TARGET, WalkTarget(
-//                    nearestBB, 0.3f, 1
-//                ))
-
-                println(brain)
-
-//
-//                // Inject memory into memory map, else remembrance will fail
-//                val memMM = villager.brain.memories as MutableMap
-//                memMM[BountifulContent.MEM_MODULE_NEAREST_BOARD] = Optional.empty()
-//
-//                // Tell villager that when doing the activity, he should go to a bounty board
-//                brain.setTaskList(
-//                    BountifulContent.ACT_CHECK_BOARD, 0,
-//                    ImmutableList.of(
-//                        GoToIfNearbyTask.create(
-//                            BountifulContent.MEM_MODULE_NEAREST_BOARD,
-//                            0.4f, 40
-//                        )
-//                    ),
-//                    BountifulContent.MEM_MODULE_NEAREST_BOARD,
-//                )
-//
-//                // Tell villager to remember bounty board location
-//                brain.remember(BountifulContent.MEM_MODULE_NEAREST_BOARD, GlobalPos.create(
-//                    villager.world.registryKey,
-//                    nearestBB
-//                ))
-//
-//                // view Possible Activities?
-//
-//                brain.stopAllTasks(serverWorld, villager)
-//
-//                brain.coreActivities = emptySet()
-//                println(brain)
-//
-//                brain.doExclusively(BountifulContent.ACT_CHECK_BOARD)
-//
-//                brain.schedule = Schedule.EMPTY
-//                val actTime = brain.schedule.getActivityForTime((serverWorld.time % 24000L).toInt())
-//
-//                val hap = brain.hasActivity(BountifulContent.ACT_CHECK_BOARD)
-//                source.sendMessage(Text.literal("Hap Post?: $hap"))
-
-
 
             } else {
                 source.sendMessage(Text.literal("Villager was null!"))

@@ -1,6 +1,7 @@
 package io.ejekta.bountiful.content.board
 
 import io.ejekta.bountiful.Bountiful
+import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.config.BountifulIO
@@ -13,7 +14,10 @@ import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.decree.DecreeItem
 import io.ejekta.bountiful.decree.DecreeSpawnCondition
 import io.ejekta.bountiful.decree.DecreeSpawnRank
+import io.ejekta.bountiful.util.checkOnBoard
+import io.ejekta.bountiful.util.hackySetTaskTo
 import io.ejekta.bountiful.util.readOnlyCopy
+import io.ejekta.bountiful.util.ensureMemoryModules
 import io.ejekta.kambrik.ext.ksx.decodeFromStringTag
 import io.ejekta.kambrik.ext.ksx.encodeToStringTag
 import kotlinx.serialization.builtins.MapSerializer
@@ -21,6 +25,7 @@ import kotlinx.serialization.builtins.SetSerializer
 import kotlinx.serialization.builtins.serializer
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
+import net.minecraft.entity.passive.VillagerEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
@@ -28,7 +33,6 @@ import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtString
-import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.ScreenHandler
@@ -36,9 +40,10 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Box
 import net.minecraft.util.math.ChunkPos
+import net.minecraft.util.math.GlobalPos
 import net.minecraft.world.World
-import net.minecraft.world.poi.PointOfInterestType
 
 
 class BoardBlockEntity(pos: BlockPos, state: BlockState)
@@ -104,6 +109,24 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
                 }
             }
         }
+    }
+
+    private fun findNearestVillagers(range: Int): List<VillagerEntity> {
+        return world?.getEntitiesByClass(
+            VillagerEntity::class.java,
+            Box.of(pos.toCenterPos(), range / 2.0, range / 2.0, range / 2.0)
+        ) { true } ?: emptyList()
+    }
+
+    fun updateUponBountyCompletion(bountyData: BountyData) {
+        val serverWorld = world as? ServerWorld ?: return
+        val nearestVillagers = findNearestVillagers(32)
+        if (nearestVillagers.isEmpty()) {
+            println("No villagers nearby!")
+            return
+        }
+        val villager = nearestVillagers.first()
+        villager.checkOnBoard(pos)
     }
 
     private fun addBounty(slot: Int, stack: ItemStack) {

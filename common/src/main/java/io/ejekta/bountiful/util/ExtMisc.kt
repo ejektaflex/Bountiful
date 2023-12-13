@@ -1,7 +1,11 @@
 package io.ejekta.bountiful.util
 
 import io.ejekta.bountiful.bounty.BountyData
+import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyItem
+import net.minecraft.entity.ai.brain.Brain
+import net.minecraft.entity.ai.brain.MemoryModuleType
+import net.minecraft.entity.passive.VillagerEntity
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -10,9 +14,12 @@ import net.minecraft.registry.DynamicRegistryManager
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.GlobalPos
+import java.util.*
 import kotlin.random.Random
 
 fun randomSplit(num: Double, ways: Int): List<Double> {
@@ -124,8 +131,43 @@ fun ServerPlayerEntity.iterateBountyData(func: BountyData.() -> Boolean) {
     }
 }
 
+fun VillagerEntity.hackySetTaskTo(taskString: String) {
+    val serverWorld = world as? ServerWorld ?: return
+    val allTasks = brain.tasks.values.map { it.values }.flatten().flatten()
+    brain.stopAllTasks(serverWorld, this)
 
+    for (task in allTasks) {
+        if (taskString in task.name) {
+            task.tryStarting(serverWorld, this, serverWorld.time)
+            println("Started?: ${task.status}")
+        }
+    }
+}
 
+fun Brain<*>.ensureMemoryModules(memoryList: List<MemoryModuleType<*>>) {
+    val memMM = memories as MutableMap
+    for (item in memoryList) {
+        if (item !in memMM) {
+            memMM[item] = Optional.empty()
+        }
+    }
+}
+
+fun VillagerEntity.checkOnBoard(boardPos: BlockPos) {
+    // Inject memory into memory map, else remembrance will fail
+    brain.ensureMemoryModules(listOf(
+        BountifulContent.MEM_MODULE_NEAREST_BOARD,
+        BountifulContent.MEM_MODULE_RECENTLY_CHECKED_BOARD
+    ))
+    // Set up villager memory
+    brain.remember(
+        BountifulContent.MEM_MODULE_NEAREST_BOARD, GlobalPos.create(
+        world.registryKey, boardPos
+    ))
+    brain.remember(BountifulContent.MEM_MODULE_RECENTLY_CHECKED_BOARD, false)
+    // Attempt to set task to do this
+    hackySetTaskTo("nearest_bounty_board")
+}
 
 
 
