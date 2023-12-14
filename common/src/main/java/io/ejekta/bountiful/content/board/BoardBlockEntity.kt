@@ -16,6 +16,7 @@ import io.ejekta.bountiful.decree.DecreeItem
 import io.ejekta.bountiful.decree.DecreeSpawnCondition
 import io.ejekta.bountiful.decree.DecreeSpawnRank
 import io.ejekta.bountiful.util.checkOnBoard
+import io.ejekta.bountiful.util.hackyGiveTradeExperience
 import io.ejekta.bountiful.util.readOnlyCopy
 import io.ejekta.bountiful.util.weightedRandomIntBy
 import io.ejekta.kambrik.ext.ksx.decodeFromStringTag
@@ -49,7 +50,6 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.ChunkPos
-import net.minecraft.village.TradeOffer
 import net.minecraft.world.World
 import net.minecraft.world.poi.PointOfInterestStorage
 import net.minecraft.world.poi.PointOfInterestType
@@ -68,14 +68,13 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
     private val takenSerializer = MapSerializer(String.serializer(), SetSerializer(Int.serializer()))
 
     // Only need to calc this once per object, I don't see it changing often
-    val villageTag = Registries.POINT_OF_INTEREST_TYPE.streamTags().filter { it.id == Identifier("village") }.findFirst().getOrNull()
-
+    private val villageTag = Registries.POINT_OF_INTEREST_TYPE.streamTags().filter { it.id == Identifier("village") }.findFirst().getOrNull()
 
     fun maskFor(player: PlayerEntity): MutableSet<Int> {
         return takenMask.getOrPut(player.uuidAsString) { mutableSetOf() }
     }
 
-    fun clearMask(slot: Int) {
+    private fun clearMask(slot: Int) {
         // Clear mask because slot was updated
         takenMask.forEach { (_, mask) ->
             mask.removeIf { it == slot }
@@ -229,7 +228,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
                 ourWorld.time
             )
         }
-        
+
         //println("Free slots: $freeSlots")
 
         val chance = takenSlots.size - freeSlots.size
@@ -349,14 +348,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
             val toUse = stackSet.toList().shuffled().first()
             villagerEntity.equipStack(EquipmentSlot.MAINHAND, toUse)
             stackSet.clear()
-            (villagerEntity.world as ServerWorld).sendEntityStatus(villagerEntity, EntityStatuses.ADD_VILLAGER_HEART_PARTICLES)
 
-            // Give profession XP to villager
-            villagerEntity.trade(
-                TradeOffer(ItemStack.EMPTY, ItemStack.EMPTY, 1, 1, 1f).apply {
-                    rewardingPlayerExperience = false
-                }
-            )
+            villagerRewardForPickup(villagerEntity, (reputation / 5) + 1, EntityStatuses.ADD_VILLAGER_HEART_PARTICLES)
         } else {
             val randomProfSet = villagerPickups.keys.randomOrNull()
             if (randomProfSet != null && randomProfSet in villagerPickups.keys) {
@@ -367,9 +360,16 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
                     villagerEntity.equipStack(EquipmentSlot.MAINHAND, it)
                 }
                 newStackSet.clear()
-                (villagerEntity.world as ServerWorld).sendEntityStatus(villagerEntity, EntityStatuses.ADD_VILLAGER_HAPPY_PARTICLES)
             }
+            villagerRewardForPickup(villagerEntity, 1, EntityStatuses.ADD_VILLAGER_HAPPY_PARTICLES)
         }
+    }
+
+    // Reward a villager for pickup
+    private fun villagerRewardForPickup(villagerEntity: VillagerEntity, exp: Int, status: Byte) {
+        (villagerEntity.world as? ServerWorld)?.sendEntityStatus(villagerEntity, status)
+        villagerEntity.hackyGiveTradeExperience(exp)
+        villagerEntity.restock()
     }
 
     private fun findNearestVillagers(range: Int): List<VillagerEntity> {

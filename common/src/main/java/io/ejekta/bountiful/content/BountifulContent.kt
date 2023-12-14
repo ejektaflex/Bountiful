@@ -50,9 +50,7 @@ object BountifulContent : KambrikAutoRegistrar {
 
     val BOARD_SCREEN_HANDLER = "board" forScreen ::BoardScreenHandler
 
-    private const val ID_NEAREST_BOARD = "nearest_bounty_board"
-
-    val MEM_MODULE_NEAREST_BOARD = ID_NEAREST_BOARD.forRegistration(
+    val MEM_MODULE_NEAREST_BOARD = "nearest_bounty_board".forRegistration(
         Registries.MEMORY_MODULE_TYPE,
         MemoryModuleType(Optional.empty<Codec<GlobalPos>>())
     ) as MemoryModuleType<GlobalPos>

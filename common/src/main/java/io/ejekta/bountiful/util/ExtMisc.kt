@@ -19,6 +19,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.GlobalPos
+import net.minecraft.village.TradeOffer
 import java.util.*
 import kotlin.random.Random
 
@@ -150,6 +151,14 @@ fun VillagerEntity.checkOnBoard(boardPos: BlockPos) {
         BountifulContent.MEM_MODULE_NEAREST_BOARD, GlobalPos.create(
         world.registryKey, boardPos
     ))
+}
+
+fun VillagerEntity.hackyGiveTradeExperience(amt: Int) {
+    trade(
+        TradeOffer(ItemStack.EMPTY, ItemStack.EMPTY, 1, amt, 1f).apply {
+            rewardingPlayerExperience = false
+        }
+    )
 }
 
 
