@@ -191,9 +191,6 @@ object BountifulCommands {
 
                 val brain = villager.brain
 
-                val har = brain.hasActivity(BountifulContent.ACT_CHECK_BOARD)
-                source.sendMessage(Text.literal("Har Pre?: $har"))
-
                 val actTime = brain.schedule.getActivityForTime((serverWorld.time % 24000L).toInt())
 
                 source.sendMessage(Text.literal("Currently doing: ${actTime.id}"))

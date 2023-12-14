@@ -143,15 +143,13 @@ fun Brain<*>.ensureMemoryModules(memoryList: List<MemoryModuleType<*>>) {
 fun VillagerEntity.checkOnBoard(boardPos: BlockPos) {
     // Inject memory into memory map, else remembrance will fail
     brain.ensureMemoryModules(listOf(
-        BountifulContent.MEM_MODULE_NEAREST_BOARD,
-        BountifulContent.MEM_MODULE_RECENTLY_CHECKED_BOARD
+        BountifulContent.MEM_MODULE_NEAREST_BOARD
     ))
     // Set up villager memory
     brain.remember(
         BountifulContent.MEM_MODULE_NEAREST_BOARD, GlobalPos.create(
         world.registryKey, boardPos
     ))
-    brain.remember(BountifulContent.MEM_MODULE_RECENTLY_CHECKED_BOARD, false)
 }
 
 

@@ -17,6 +17,7 @@ import io.ejekta.bountiful.decree.DecreeSpawnCondition
 import io.ejekta.bountiful.decree.DecreeSpawnRank
 import io.ejekta.bountiful.util.checkOnBoard
 import io.ejekta.bountiful.util.readOnlyCopy
+import io.ejekta.bountiful.util.weightedRandomIntBy
 import io.ejekta.kambrik.ext.ksx.decodeFromStringTag
 import io.ejekta.kambrik.ext.ksx.encodeToStringTag
 import kotlinx.serialization.builtins.MapSerializer
@@ -74,6 +75,17 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
         return takenMask.getOrPut(player.uuidAsString) { mutableSetOf() }
     }
 
+    fun clearMask(slot: Int) {
+        // Clear mask because slot was updated
+        takenMask.forEach { (_, mask) ->
+            mask.removeIf { it == slot }
+        }
+    }
+
+    // Slot #, Age
+    private var bountyTimestamps = mutableMapOf<Int, Long>()
+    private val bountyStampSerializer = MapSerializer(Int.serializer(), Long.serializer())
+
     private var finishMap = mutableMapOf<String, Int>()
     private val finishSerializer = MapSerializer(String.serializer(), Int.serializer())
 
@@ -88,16 +100,28 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
     private val reputation: Int
         get() = levelData.first
 
-    private val recentCompletions = mutableMapOf<String, MutableSet<ItemStack>>()
+    private val takenSlots: Set<Int>
+        get() = BountyInventory.bountySlots.filter { !bounties.getStack(it).isEmpty }.toSet()
 
+    private val freeSlots: Set<Int>
+        get() = BountyInventory.bountySlots.toSet() - takenSlots
+
+    fun weightedBountySlot(): Int {
+        val worldTime = world?.time ?: return -1
+        return takenSlots.toList().weightedRandomIntBy {
+            val putOnBoard = bountyTimestamps[this] ?: 0L
+            (worldTime - putOnBoard).toInt() // this will be a problem if a bounty is left on the board for over 3.4 years (lol)
+        }
+    }
+
+    // Holds pickups for villagers, key is profession and value are items to pick up
+    private val villagerPickups = mutableMapOf<String, MutableSet<ItemStack>>()
 
     val numCompleted: Int
         get() = finishMap.values.sum()
 
-    fun incrementCompletedBounties(player: PlayerEntity) {
-        finishMap[player.uuidAsString] = finishMap.getOrPut(player.uuidAsString) {
-            0
-        } + 1
+    private fun incrementCompletedBounties(player: PlayerEntity) {
+        finishMap[player.uuidAsString] = finishMap.getOrPut(player.uuidAsString) { 0 } + 1
     }
 
     private fun getBoardDecrees(): Set<Decree> {
@@ -131,31 +155,47 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
     fun updateUponBountyCompletion(player: PlayerEntity, bountyData: BountyData) {
         // Tick completion upwards
         incrementCompletedBounties(player)
-        fillCompletions(bountyData)
-
+        // Fill pickups
+        villagerPickupPopulate(bountyData)
+        // Have a villager check on the board
         val villager = getBestVillager(bountyData)
         villager?.checkOnBoard(pos)
+    }
 
-        if (isNearVillage()) {
-            println("We are near a village, yippee!")
+    private fun addBountyToRandomSlot(stack: ItemStack) {
+        val slotNum = freeSlots.randomOrNull()
+        slotNum?.let {
+            addBounty(it, stack)
+        }
+    }
+
+    private fun randomlyPruneOldBounty() {
+        val slotNum = weightedBountySlot()
+        if (slotNum in BountyInventory.bountySlots) {
+            removeBounty(slotNum)
         }
     }
 
     private fun addBounty(slot: Int, stack: ItemStack) {
+        Bountiful.LOGGER.debug("Adding bounty to slot $slot")
         if (slot !in BountyInventory.bountySlots) return
+
+        // Update timestamps
+        world?.time?.let { bountyTimestamps[slot] = it }
 
         modifyTrackedGuiInvs {
             it.setStack(slot, stack.copy()) // All connected players get copies, so that taken bounties are instanced
         }
-
+        clearMask(slot)
         bounties.setStack(slot, stack)
     }
 
     fun removeBounty(slot: Int) {
+        Bountiful.LOGGER.debug("Removing bounty from slot $slot")
         modifyTrackedGuiInvs {
             it.removeStack(slot)
         }
-
+        clearMask(slot)
         bounties.removeStack(slot)
     }
 
@@ -180,39 +220,32 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
             return
         }
 
-        val slotToAddTo = BountyInventory.bountySlots.random()
+        val makeBounty: () -> ItemStack = {
+            BountyCreator.createBountyItem(
+                ourWorld,
+                pos,
+                getBoardDecrees(),
+                levelData.first.coerceIn(-30..30),
+                ourWorld.time
+            )
+        }
+        
+        //println("Free slots: $freeSlots")
 
-        // ~42% to remove none, ~28% to remove 1, ~28% to remove 2
-        val slotsToRemove = (0 until listOf(0, 0, 0, 1, 1, 2, 2).random()).map {
-            (BountyInventory.bountySlots - slotToAddTo).random()
+        val chance = takenSlots.size - freeSlots.size
+        // If there's more taken than free, prune
+        if (takenSlots.size >= 12) {
+            val randomNumPrunes = listOf(1, 1, 1, 1, 2, 2, 2).random()
+            (0 until randomNumPrunes).forEach { _ ->
+                randomlyPruneOldBounty()
+            }
         }
 
-        val commonBounty = BountyCreator.createBountyItem(
-            ourWorld,
-            pos,
-            getBoardDecrees(),
-            levelData.first.coerceIn(-30..30),
-            ourWorld.time
-        )
-
-        // Add to board
-        removeBounty(slotToAddTo)
-
-        if (commonBounty != null) {
-            addBounty(slotToAddTo, commonBounty)
-        } else {
-            Bountiful.LOGGER.warn("Cannot create a bounty for board with these decrees: ${getBoardDecrees().map { it.id }}")
-        }
-
-
-        // Clear mask because slot was updated
-        takenMask.forEach { (uuid, mask) ->
-            mask.removeIf { it == slotToAddTo || it in slotsToRemove }
-        }
-
-        // Remove from board
-        slotsToRemove.forEach { i ->
-            removeBounty(i)
+        if (freeSlots.size > 1) {
+            addBountyToRandomSlot(makeBounty())
+            if (freeSlots.size >= 18) {
+                addBountyToRandomSlot(makeBounty())
+            }
         }
 
         markDirty()
@@ -236,7 +269,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
 
     // Serialization
 
-    @Suppress("CAST_NEVER_SUCCEEDS")
     override fun readNbt(base: NbtCompound) {
         val decreeList = base.getCompound("decree_inv") ?: return
         val bountyList = base.getCompound("bounty_inv") ?: return
@@ -257,6 +289,11 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
             finishMap = JsonFormats.Hand.decodeFromStringTag(finishSerializer, doneMap as NbtString).toMutableMap()
         }
 
+        val timeStampMap = base.get("timestamps")
+        if (timeStampMap != null) {
+            bountyTimestamps = JsonFormats.Hand.decodeFromStringTag(bountyStampSerializer, timeStampMap as NbtString).toMutableMap()
+        }
+
         val takenData = base.get("taken")
         if (takenData != null) {
             takenMask = JsonFormats.Hand.decodeFromStringTag(takenSerializer, takenData as NbtString).map {
@@ -265,13 +302,14 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
         }
     }
 
-    @Suppress("CAST_NEVER_SUCCEEDS")
     override fun writeNbt(base: NbtCompound) {
         super.writeNbt(base)
 
-
         val doneMap = JsonFormats.Hand.encodeToStringTag(finishSerializer, finishMap)
         base.put("completed", doneMap)
+
+        val timeStampMap = JsonFormats.Hand.encodeToStringTag(bountyStampSerializer, bountyTimestamps)
+        base.put("timestamps", timeStampMap)
 
         base.put(
             "taken",
@@ -290,26 +328,25 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
 
     // Villager & Completion Logic
 
-    fun fillCompletions(bountyData: BountyData) {
+    private fun villagerPickupPopulate(bountyData: BountyData) {
         val stackMap = bountyData.objectives.filter { it.logic is BountyTypeItem }.map {
             BountyTypeItem.getItemStack(it) to it.getRelatedProfessions()
         }
         for ((stack, profs) in stackMap) {
             for (prof in profs) {
-                val stackSet = recentCompletions.getOrPut(prof) { mutableSetOf() }
+                val stackSet = villagerPickups.getOrPut(prof) { mutableSetOf() }
                 stackSet.add(stack)
             }
         }
     }
 
-    fun villagerPickupItem(villagerEntity: VillagerEntity) {
+    private fun villagerDoPickup(villagerEntity: VillagerEntity) {
         val prof = villagerEntity.villagerData.profession.id
-        val stackSet = recentCompletions.getOrPut(prof) { mutableSetOf() }
+        val stackSet = villagerPickups.getOrPut(prof) { mutableSetOf() }
         // Try pull from matching profession bucket
         if (stackSet.isNotEmpty()) {
-            println("Pulling from profession completion")
+            // Pulling from profession completion
             val toUse = stackSet.toList().shuffled().first()
-            println("Pulled $toUse")
             villagerEntity.equipStack(EquipmentSlot.MAINHAND, toUse)
             stackSet.clear()
             (villagerEntity.world as ServerWorld).sendEntityStatus(villagerEntity, EntityStatuses.ADD_VILLAGER_HEART_PARTICLES)
@@ -321,14 +358,12 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
                 }
             )
         } else {
-            val randomProfSet = recentCompletions.keys.randomOrNull()
-
-            if (randomProfSet != null && randomProfSet in recentCompletions.keys) {
-                println("Pulling from random completion")
-                val newStackSet = recentCompletions[randomProfSet] ?: return
+            val randomProfSet = villagerPickups.keys.randomOrNull()
+            if (randomProfSet != null && randomProfSet in villagerPickups.keys) {
+                // Pulling from random completion
+                val newStackSet = villagerPickups[randomProfSet] ?: return
                 val newToUse = newStackSet.toList().shuffled().firstOrNull()
                 newToUse?.let {
-                    println("Pulled $it")
                     villagerEntity.equipStack(EquipmentSlot.MAINHAND, it)
                 }
                 newStackSet.clear()
@@ -362,42 +397,36 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
         return false
     }
 
-    fun getBestVillager(bountyData: BountyData): VillagerEntity? {
-        val nearestVillagers = findNearestVillagers(32)
+    private fun getBestVillager(bountyData: BountyData): VillagerEntity? {
+        val nearestVillagers = findNearestVillagers(64)
         if (nearestVillagers.isEmpty()) {
-            println("No villagers nearby!")
             return null
         }
 
         val villagerProfessions = nearestVillagers.map { it.villagerData.profession.id }.toSet()
 
-        println("Profs: $villagerProfessions")
-
         val matchingProfs = bountyData.objectives.filter {
             it.getRelatedProfessions().intersect(villagerProfessions).isNotEmpty()
         }
 
-        var matchedUpVillager = false
         val villager = if (matchingProfs.isEmpty()) {
-            println("No matching profession, picking a random villager")
+            // No matching profession, picking a random villager
             nearestVillagers
         } else {
-            println("Matching professions, picking an entry we can use!")
+            // Matching professions, picking an entry we can use!
             val randomObj = matchingProfs.random()
-            matchedUpVillager = true
             nearestVillagers.filter {
                 it.villagerData.profession.id in randomObj.getRelatedProfessions()
             }
         }.random()
 
-        println("Found villager $villager")
         return villager
     }
 
     fun handleVillagerVisit(villagerEntity: VillagerEntity) {
-        println("A villager is visiting the Bounty Board!")
+        //println("A villager is visiting the Bounty Board!")
         val serverWorld = world as? ServerWorld ?: return
-        villagerPickupItem(villagerEntity)
+        villagerDoPickup(villagerEntity)
         serverWorld.playSound(villagerEntity, villagerEntity.blockPos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 1f, 1f)
     }
 
@@ -451,7 +480,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
             // Remove expired bounties every 100 ticks
             if (world.time % 100L == 4L) {
                 for (i in 0 until entity.bounties.size()) {
-                    var stack = entity.bounties.getStack(i)
+                    val stack = entity.bounties.getStack(i)
                     if (stack.item !is BountyItem) {
                         continue
                     }

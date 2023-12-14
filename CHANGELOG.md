@@ -15,6 +15,8 @@ old config files and datapacks that overwrote existing Bountiful data may not fu
 #### Gameplay
 - After turning in a bounty, a villager (preferably one who matches the profession of the items you sold them), if available, will walk up to the board and pick up their goods.
   - The villager will receive some trade XP for doing this - even more if their profession did match, and based on board reputation.
+- The way the board's bounties are refreshed has been updated - now, bounties that have been on the board the longest have the highest chances of being removed first.
+  - This should reduce the number of old bounties that 'happen' to stay on the board through dumb luck (or rather, misfortune)
 
 #### Configuration
 - Decrees now have three new, optional fields:

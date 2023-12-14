@@ -57,19 +57,7 @@ object BountifulContent : KambrikAutoRegistrar {
         MemoryModuleType(Optional.empty<Codec<GlobalPos>>())
     ) as MemoryModuleType<GlobalPos>
 
-    val MEM_MODULE_RECENTLY_CHECKED_BOARD = "checked_board_recently".forRegistration(
-        Registries.MEMORY_MODULE_TYPE,
-        MemoryModuleType(Optional.of(Codec.BOOL))
-    ) as MemoryModuleType<Boolean>
-
-    val ACT_CHECK_BOARD = "check_bounty_board".forRegistration(
-        Registries.ACTIVITY,
-        Activity("check_bounty_board")
-    )
-
-    val POI_BOUNTY_BOARD = RegistryKey.of(RegistryKeys.POINT_OF_INTEREST_TYPE, Bountiful.id(ID_NEAREST_BOARD))
-
-
+    val POI_BOUNTY_BOARD: RegistryKey<PointOfInterestType> = RegistryKey.of(RegistryKeys.POINT_OF_INTEREST_TYPE, Bountiful.id("bountyboard"))
 
     init {
         val abc = VillagerEntity.POINTS_OF_INTEREST.toMutableMap()

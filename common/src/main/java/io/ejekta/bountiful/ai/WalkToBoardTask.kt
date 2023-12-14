@@ -33,7 +33,6 @@ class WalkToBoardTask(val speed: Float) :
     }
 
     override fun shouldKeepRunning(serverWorld: ServerWorld?, entity: VillagerEntity?, l: Long): Boolean {
-        val checked = entity?.brain?.getOptionalMemory(BountifulContent.MEM_MODULE_RECENTLY_CHECKED_BOARD)?.getOrNull() ?: false
         val goalSpot = entity?.brain?.getOptionalMemory(BountifulContent.MEM_MODULE_NEAREST_BOARD)?.getOrNull()
 
         goalSpot?.let { globalPos ->
@@ -44,7 +43,7 @@ class WalkToBoardTask(val speed: Float) :
             }
         }
 
-        return !checked // run until checked
+        return true
     }
 
     override fun keepRunning(serverWorld: ServerWorld?, entity: VillagerEntity?, l: Long) {
@@ -63,7 +62,6 @@ class WalkToBoardTask(val speed: Float) :
 
         if (serverWorld != null && entity != null) {
             goalSpot?.let {
-                entity.brain.remember(BountifulContent.MEM_MODULE_RECENTLY_CHECKED_BOARD, true)
                 val boardEntity = serverWorld.getBlockEntity(it.pos, BountifulContent.BOARD_ENTITY).getOrNull()
                 boardEntity?.handleVillagerVisit(entity)
             }

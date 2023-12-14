@@ -28,7 +28,7 @@ class BountyCreator private constructor(
     private var data = BountyData()
     private var info = BountyInfo()
 
-    val stack: ItemStack? by lazy {
+    val stack: ItemStack by lazy {
         create()
         ItemStack(BountifulContent.BOUNTY_ITEM).apply {
             BountyData[this] = data
@@ -190,7 +190,7 @@ class BountyCreator private constructor(
             return 1 - (rep / 75.0)
         }
 
-        fun createBountyItem(world: ServerWorld, pos: BlockPos, decrees: Set<Decree>, rep: Int, startTime: Long = 0L): ItemStack? {
+        fun createBountyItem(world: ServerWorld, pos: BlockPos, decrees: Set<Decree>, rep: Int, startTime: Long = 0L): ItemStack {
             return BountyCreator(world, pos, decrees, rep.coerceIn(-30..30), startTime).stack
         }
 
