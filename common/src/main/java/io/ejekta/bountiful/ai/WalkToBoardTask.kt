@@ -38,7 +38,7 @@ class WalkToBoardTask(val speed: Float) :
 
         goalSpot?.let { globalPos ->
             val dist = entity.blockPos.toCenterPos().distanceTo(globalPos.pos.toCenterPos())
-            if (dist < 2) {
+            if (dist < 1.75) {
                 println("Close enough")
                 return false
             }
@@ -59,18 +59,15 @@ class WalkToBoardTask(val speed: Float) :
     }
 
     override fun finishRunning(serverWorld: ServerWorld?, entity: VillagerEntity?, l: Long) {
+        val goalSpot = entity?.brain?.getOptionalMemory(BountifulContent.MEM_MODULE_NEAREST_BOARD)?.getOrNull()
+
         if (serverWorld != null && entity != null) {
-            val optional = entity.brain.getOptionalRegisteredMemory(BountifulContent.MEM_MODULE_NEAREST_BOARD)
-            optional.ifPresent { pos: GlobalPos ->
+            goalSpot?.let {
                 entity.brain.remember(BountifulContent.MEM_MODULE_RECENTLY_CHECKED_BOARD, true)
+                val boardEntity = serverWorld.getBlockEntity(it.pos, BountifulContent.BOARD_ENTITY).getOrNull()
+                boardEntity?.handleVillagerVisit(entity)
             }
             entity.brain.forget(BountifulContent.MEM_MODULE_NEAREST_BOARD)
-            serverWorld.sendEntityStatus(entity, EntityStatuses.ADD_VILLAGER_HAPPY_PARTICLES)
-            serverWorld.playSound(entity, entity.blockPos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 1f, 1f)
-            // Will only show for a second, but that's okay
-            val itemStack = ItemStack(Items.FERN)
-            entity.inventory.addStack(itemStack)
-            entity.setStackInHand(Hand.MAIN_HAND, itemStack)
         }
     }
 

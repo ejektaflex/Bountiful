@@ -32,11 +32,11 @@ data class BountyDataEntry private constructor(
     var tracking: JsonObject = JsonObject(emptyMap()), // Used to track extra data, e.g. current progress if needed
     var critConditions: JsonObject? = null,
     var current: Int = 0, // Current progress
-    var relatedDecreeIds: List<String>? = null
+    var relatedDecreeIds: Set<String> = emptySet()
 ) {
 
-    fun getRelatedDecrees(): Set<Decree> {
-        return BountifulContent.getDecrees(relatedDecreeIds?.toSet() ?: emptySet())
+    private fun getRelatedDecrees(): Set<Decree> {
+        return BountifulContent.getDecrees(relatedDecreeIds)
     }
 
     fun getRelatedProfessions(): Set<String> {
@@ -85,11 +85,10 @@ data class BountyDataEntry private constructor(
             isMystery: Boolean = false,
             rarity: BountyRarity = BountyRarity.COMMON,
             tracking: JsonObject = JsonObject(emptyMap()),
-            critConditions: JsonObject? = null,
-            relatedDecrees: List<String>? = null
+            critConditions: JsonObject? = null
         ): BountyDataEntry {
             return BountyDataEntry(
-                id, type, content, amount, nbt, name, icon, isMystery, rarity, tracking, critConditions, relatedDecreeIds = relatedDecrees
+                id, type, content, amount, nbt, name, icon, isMystery, rarity, tracking, critConditions
             ).apply {
                 this.worth = worth
                 logic.setup(this, world, pos)

@@ -149,7 +149,7 @@ class BountyCreator private constructor(
             }
 
             val picked = pickObjective(unpicked, w)
-            val entry = picked.toEntry(world, pos, w)
+            val entry = picked.toEntry(world, pos, w, decrees.map { it.id }.toSet())
 
             // Add time based on entry
             info.timeToComplete += (picked.timeMult * entry.worth).toLong() * 7

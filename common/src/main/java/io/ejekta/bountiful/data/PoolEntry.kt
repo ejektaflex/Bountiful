@@ -91,7 +91,7 @@ class PoolEntry private constructor() {
         }
     }
 
-    fun toEntry(world: ServerWorld, pos: BlockPos, worth: Double? = null): BountyDataEntry {
+    fun toEntry(world: ServerWorld, pos: BlockPos, worth: Double? = null, usedDecs: Set<String>? = emptySet()): BountyDataEntry {
         val amt = amountAt(worth)
 
         val actualContent = if (type == BountyTypeRegistry.ITEM.id && content.startsWith("#")) {
@@ -121,9 +121,10 @@ class PoolEntry private constructor() {
             icon,
             isMystery = false,
             rarity = rarity,
-            critConditions = conditions,
-            relatedDecrees = protoDecrees.map { it.id }
-        )
+            critConditions = conditions
+        ).apply {
+            relatedDecreeIds = usedDecs ?: emptySet()
+        }
     }
 
     private fun amountAt(worth: Double? = null): Int {

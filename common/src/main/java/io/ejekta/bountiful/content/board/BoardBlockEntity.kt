@@ -23,12 +23,14 @@ import kotlinx.serialization.builtins.SetSerializer
 import kotlinx.serialization.builtins.serializer
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
+import net.minecraft.entity.EntityStatuses
 import net.minecraft.entity.passive.VillagerEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtString
 import net.minecraft.registry.Registries
@@ -38,7 +40,10 @@ import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
+import net.minecraft.sound.SoundCategory
+import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
+import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
@@ -144,20 +149,12 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
         return false
     }
 
-    fun updateUponBountyCompletion(player: PlayerEntity, bountyData: BountyData) {
-        // Tick completion upwards
-        incrementCompletedBounties(player)
-
+    fun getBestVillager(bountyData: BountyData): VillagerEntity? {
         val nearestVillagers = findNearestVillagers(32)
         if (nearestVillagers.isEmpty()) {
             println("No villagers nearby!")
-            return
+            return null
         }
-
-
-
-        // BountyDataEntry to List<Decree>
-        val decMap = bountyData.objectives.associateWith { it.getRelatedDecrees() }
 
         val villagerProfessions = nearestVillagers.map { it.villagerData.profession.id }.toSet()
 
@@ -181,8 +178,33 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
         }.random()
 
         println("Found villager $villager")
+        return villager
+    }
 
-        villager.checkOnBoard(pos)
+    fun handleVillagerVisit(villagerEntity: VillagerEntity) {
+        println("A villager is visiting the Bounty Board!")
+        val serverWorld = world as? ServerWorld ?: return
+        serverWorld.sendEntityStatus(villagerEntity, EntityStatuses.ADD_VILLAGER_HAPPY_PARTICLES)
+        serverWorld.playSound(villagerEntity, villagerEntity.blockPos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 1f, 1f)
+        // Will only show for a second, but that's okay
+        val itemStack = ItemStack(Items.FERN)
+        villagerEntity.inventory.addStack(itemStack)
+        villagerEntity.setStackInHand(Hand.MAIN_HAND, itemStack)
+
+        //villagerEntity.setStackInHand()
+
+    }
+
+//    fun villagerMatchesData(bountyData: BountyData): Boolean {
+//
+//    }
+
+    fun updateUponBountyCompletion(player: PlayerEntity, bountyData: BountyData) {
+        // Tick completion upwards
+        incrementCompletedBounties(player)
+
+        val villager = getBestVillager(bountyData)
+        villager?.checkOnBoard(pos)
 
         if (isNearVillage()) {
             println("We are near a village, yippee!")
