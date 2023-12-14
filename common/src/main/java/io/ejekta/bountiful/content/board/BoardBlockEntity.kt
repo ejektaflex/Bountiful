@@ -57,9 +57,7 @@ import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
 
-class BoardBlockEntity(pos: BlockPos, state: BlockState)
-    : BlockEntity(BountifulContent.BOARD_ENTITY, pos, state),
-    NamedScreenHandlerFactory {
+class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(BountifulContent.BOARD_ENTITY, pos, state), NamedScreenHandlerFactory {
 
     private val decrees = SimpleInventory(3)
     private val bounties = BountyInventory()
@@ -105,7 +103,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
     private val freeSlots: Set<Int>
         get() = BountyInventory.bountySlots.toSet() - takenSlots
 
-    fun weightedBountySlot(): Int {
+    private fun weightedBountySlot(): Int {
         val worldTime = world?.time ?: return -1
         return takenSlots.toList().weightedRandomIntBy {
             val putOnBoard = bountyTimestamps[this] ?: 0L
