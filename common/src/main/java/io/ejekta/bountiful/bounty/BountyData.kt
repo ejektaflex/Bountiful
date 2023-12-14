@@ -87,7 +87,7 @@ class BountyData {
 
 
 
-    fun tryCashIn(player: PlayerEntity, stack: ItemStack, boardEntity: BoardBlockEntity? = null): Boolean {
+    fun tryCashIn(player: PlayerEntity, stack: ItemStack): Boolean {
 
         if (BountyInfo[stack].timeLeft(player.world) <= 0) {
             player.sendMessage(Text.translatable("bountiful.bounty.expired"))
@@ -97,7 +97,6 @@ class BountyData {
         return if (hasFinishedAllObjectives(player)) {
             tryFinishObjectives(player)
             rewardPlayer(player)
-            boardEntity?.updateUponBountyCompletion(player, this)
             stack.decrement(stack.maxCount)
             true
         } else {

@@ -137,6 +137,7 @@ fun VillagerEntity.hackySetTaskTo(taskString: String) {
     brain.stopAllTasks(serverWorld, this)
 
     for (task in allTasks) {
+        println("TASKHERE: $task")
         if (taskString in task.name) {
             task.tryStarting(serverWorld, this, serverWorld.time)
             println("Started?: ${task.status}")

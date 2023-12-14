@@ -46,7 +46,6 @@ import net.minecraft.util.math.ChunkPos
 import net.minecraft.world.World
 import net.minecraft.world.poi.PointOfInterestStorage
 import net.minecraft.world.poi.PointOfInterestType
-import net.minecraft.world.poi.PointOfInterestTypes
 import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
@@ -86,7 +85,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
     val numCompleted: Int
         get() = finishMap.values.sum()
 
-    fun updateCompletedBounties(player: PlayerEntity) {
+    fun incrementCompletedBounties(player: PlayerEntity) {
         finishMap[player.uuidAsString] = finishMap.getOrPut(player.uuidAsString) {
             0
         } + 1
@@ -146,7 +145,9 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
     }
 
     fun updateUponBountyCompletion(player: PlayerEntity, bountyData: BountyData) {
-        val serverWorld = world as? ServerWorld ?: return
+        // Tick completion upwards
+        incrementCompletedBounties(player)
+
         val nearestVillagers = findNearestVillagers(32)
         if (nearestVillagers.isEmpty()) {
             println("No villagers nearby!")
