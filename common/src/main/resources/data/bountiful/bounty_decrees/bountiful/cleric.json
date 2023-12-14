@@ -1,4 +1,5 @@
 {
+	"linkedProfessions": ["cleric"],
 	"objectives": [
 		"cleric_objs",
 		"_all_objs"

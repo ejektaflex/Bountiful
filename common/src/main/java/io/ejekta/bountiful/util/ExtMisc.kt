@@ -131,20 +131,6 @@ fun ServerPlayerEntity.iterateBountyData(func: BountyData.() -> Boolean) {
     }
 }
 
-fun VillagerEntity.hackySetTaskTo(taskString: String) {
-    val serverWorld = world as? ServerWorld ?: return
-    val allTasks = brain.tasks.values.map { it.values }.flatten().flatten()
-    brain.stopAllTasks(serverWorld, this)
-
-    for (task in allTasks) {
-        println("TASKHERE: $task")
-        if (taskString in task.name) {
-            task.tryStarting(serverWorld, this, serverWorld.time)
-            println("Started?: ${task.status}")
-        }
-    }
-}
-
 fun Brain<*>.ensureMemoryModules(memoryList: List<MemoryModuleType<*>>) {
     val memMM = memories as MutableMap
     for (item in memoryList) {
@@ -166,8 +152,6 @@ fun VillagerEntity.checkOnBoard(boardPos: BlockPos) {
         world.registryKey, boardPos
     ))
     brain.remember(BountifulContent.MEM_MODULE_RECENTLY_CHECKED_BOARD, false)
-    // Attempt to set task to do this
-    hackySetTaskTo("nearest_bounty_board")
 }
 
 

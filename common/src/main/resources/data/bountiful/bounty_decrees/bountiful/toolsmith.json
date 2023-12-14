@@ -1,4 +1,5 @@
 {
+	"linkedProfessions": ["weaponsmith"],
 	"objectives": [
 		"toolsmith_objs",
 		"_all_objs",

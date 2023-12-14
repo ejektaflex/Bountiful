@@ -153,7 +153,35 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
             println("No villagers nearby!")
             return
         }
-        val villager = nearestVillagers.first()
+
+
+
+        // BountyDataEntry to List<Decree>
+        val decMap = bountyData.objectives.associateWith { it.getRelatedDecrees() }
+
+        val villagerProfessions = nearestVillagers.map { it.villagerData.profession.id }.toSet()
+
+        println("Profs: $villagerProfessions")
+
+        val matchingProfs = bountyData.objectives.filter {
+            it.getRelatedProfessions().intersect(villagerProfessions).isNotEmpty()
+        }
+
+        var matchedUpVillager = false
+        val villager = if (matchingProfs.isEmpty()) {
+            println("No matching profession, picking a random villager")
+            nearestVillagers
+        } else {
+            println("Matching professions, picking an entry we can use!")
+            val randomObj = matchingProfs.random()
+            matchedUpVillager = true
+            nearestVillagers.filter {
+                it.villagerData.profession.id in randomObj.getRelatedProfessions()
+            }
+        }.random()
+
+        println("Found villager $villager")
+
         villager.checkOnBoard(pos)
 
         if (isNearVillage()) {

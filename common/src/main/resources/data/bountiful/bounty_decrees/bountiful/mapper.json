@@ -1,4 +1,5 @@
 {
+	"linkedProfessions": ["cartographer"],
 	"objectives": [
 		"mapper_objs",
 		"_all_objs"

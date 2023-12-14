@@ -1,4 +1,5 @@
 {
+	"linkedProfessions": ["armorer"],
 	"objectives": [
 		"armorer_objs",
 		"_metal_objs",

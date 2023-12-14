@@ -1,4 +1,5 @@
 {
+	"linkedProfessions": ["shepherd"],
 	"objectives": [
 		"shepherd_objs",
 		"_all_objs"

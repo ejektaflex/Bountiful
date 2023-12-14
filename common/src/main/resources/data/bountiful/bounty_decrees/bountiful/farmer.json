@@ -1,4 +1,5 @@
 {
+	"linkedProfessions": ["farmer"],
 	"objectives": [
 		"farmer_objs",
 		"_all_objs"

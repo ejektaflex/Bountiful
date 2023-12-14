@@ -1,4 +1,5 @@
 {
+	"linkedProfessions": ["fletcher"],
 	"objectives": [
 		"fletcher_objs",
 		"_all_objs"

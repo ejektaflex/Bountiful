@@ -38,7 +38,6 @@ class WalkToBoardTask(val speed: Float) :
 
         goalSpot?.let { globalPos ->
             val dist = entity.blockPos.toCenterPos().distanceTo(globalPos.pos.toCenterPos())
-            println("Keep going?: $dist")
             if (dist < 2) {
                 println("Close enough")
                 return false

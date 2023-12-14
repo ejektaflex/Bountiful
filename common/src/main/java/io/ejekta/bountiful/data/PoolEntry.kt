@@ -6,6 +6,7 @@ import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.IBountyType
 import io.ejekta.bountiful.config.JsonFormats
+import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.util.getTagItemKey
 import io.ejekta.bountiful.util.getTagItems
 import io.ejekta.kambrik.ext.identifier
@@ -39,6 +40,12 @@ class PoolEntry private constructor() {
     var timeMult = 1.0
     var repRequired = 0.0
     private val forbids: MutableList<ForbiddenContent> = mutableListOf()
+
+    val protoPool: Pool?
+        get() = BountifulContent.Pools.find { it.id == id.substringBefore('.') }
+
+    val protoDecrees: List<Decree>
+        get() = protoPool?.usedInDecrees ?: emptyList()
 
     fun isValid(server: MinecraftServer): Boolean {
         return try {
@@ -114,7 +121,8 @@ class PoolEntry private constructor() {
             icon,
             isMystery = false,
             rarity = rarity,
-            critConditions = conditions
+            critConditions = conditions,
+            relatedDecrees = protoDecrees.map { it.id }
         )
     }
 

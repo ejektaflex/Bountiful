@@ -1,4 +1,5 @@
 {
+	"linkedProfessions": ["leatherworker"],
 	"objectives": [
 		"leatherer_objs",
 		"_all_objs"

@@ -1,6 +1,5 @@
 package io.ejekta.bountiful.content
 
-import com.google.common.collect.ImmutableList
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.context.CommandContext
 import io.ejekta.bountiful.Bountiful
@@ -14,9 +13,6 @@ import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.bountiful.decree.DecreeItem
 import io.ejekta.bountiful.decree.DecreeSpawnCondition
 import io.ejekta.bountiful.util.checkOnBoard
-import io.ejekta.bountiful.util.ensureMemoryModules
-import io.ejekta.bountiful.util.hackySetTaskTo
-import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.command.addCommand
 import io.ejekta.kambrik.command.kambrikCommand
 import io.ejekta.kambrik.command.requiresOp
@@ -28,12 +24,6 @@ import io.ejekta.kambrik.ext.math.toVec3d
 import io.ejekta.kambrik.text.sendMessage
 import net.minecraft.command.CommandRegistryAccess
 import net.minecraft.entity.ai.TargetPredicate
-import net.minecraft.entity.ai.brain.Activity
-import net.minecraft.entity.ai.brain.MemoryModuleType
-import net.minecraft.entity.ai.brain.Schedule
-import net.minecraft.entity.ai.brain.WalkTarget
-import net.minecraft.entity.ai.brain.task.GoToIfNearbyTask
-import net.minecraft.entity.ai.brain.task.SingleTickTask
 import net.minecraft.entity.passive.VillagerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.predicate.NumberRange
@@ -41,16 +31,13 @@ import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.ClickEvent
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
-import net.minecraft.util.math.GlobalPos
 import net.minecraft.world.poi.PointOfInterestStorage
 import net.minecraft.world.poi.PointOfInterestType
-import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 

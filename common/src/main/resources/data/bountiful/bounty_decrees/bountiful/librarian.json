@@ -1,4 +1,5 @@
 {
+	"linkedProfessions": ["librarian"],
 	"objectives": [
 		"librarian_objs",
 		"_all_objs"

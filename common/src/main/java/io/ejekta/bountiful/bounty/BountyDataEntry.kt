@@ -2,6 +2,8 @@ package io.ejekta.bountiful.bounty
 
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.IBountyType
+import io.ejekta.bountiful.content.BountifulContent
+import io.ejekta.bountiful.data.Decree
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -29,8 +31,17 @@ data class BountyDataEntry private constructor(
     var rarity: BountyRarity = BountyRarity.COMMON,
     var tracking: JsonObject = JsonObject(emptyMap()), // Used to track extra data, e.g. current progress if needed
     var critConditions: JsonObject? = null,
-    var current: Int = 0 // Current progress
+    var current: Int = 0, // Current progress
+    var relatedDecreeIds: List<String>? = null
 ) {
+
+    fun getRelatedDecrees(): Set<Decree> {
+        return BountifulContent.getDecrees(relatedDecreeIds?.toSet() ?: emptySet())
+    }
+
+    fun getRelatedProfessions(): Set<String> {
+        return getRelatedDecrees().map { it.linkedProfessions }.flatten().toSet()
+    }
 
     val translation: MutableText
         get() = Text.translatable("bountiful.entry.${id}")
@@ -74,10 +85,11 @@ data class BountyDataEntry private constructor(
             isMystery: Boolean = false,
             rarity: BountyRarity = BountyRarity.COMMON,
             tracking: JsonObject = JsonObject(emptyMap()),
-            critConditions: JsonObject? = null
+            critConditions: JsonObject? = null,
+            relatedDecrees: List<String>? = null
         ): BountyDataEntry {
             return BountyDataEntry(
-                id, type, content, amount, nbt, name, icon, isMystery, rarity, tracking, critConditions
+                id, type, content, amount, nbt, name, icon, isMystery, rarity, tracking, critConditions, relatedDecreeIds = relatedDecrees
             ).apply {
                 this.worth = worth
                 logic.setup(this, world, pos)

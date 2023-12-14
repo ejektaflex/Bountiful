@@ -1,4 +1,5 @@
 {
+	"linkedProfessions": ["fisherman"],
 	"objectives": [
 		"fisherman_objs",
 		"_all_objs"

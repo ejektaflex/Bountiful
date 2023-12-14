@@ -1,11 +1,13 @@
 package io.ejekta.bountiful.bounty
 
 import io.ejekta.bountiful.Bountiful
+import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.bounty.types.IBountyReward
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.messages.OnBountyComplete
+import io.ejekta.bountiful.data.Decree
 import io.ejekta.kambrik.serial.ItemDataJson
 import kotlinx.serialization.Serializable
 import net.minecraft.entity.player.PlayerEntity
@@ -22,6 +24,10 @@ class BountyData {
     val objectives = mutableListOf<BountyDataEntry>()
     val rewards = mutableListOf<BountyDataEntry>()
     private var pingComplete: Boolean = false
+
+    fun <T : IBountyObjective> objectivesOfType(type: T): List<BountyDataEntry> {
+        return objectives.filter { it.logic == type }
+    }
 
     private fun hasFinishedAllObjectives(player: PlayerEntity): Boolean {
         return objectives.all {

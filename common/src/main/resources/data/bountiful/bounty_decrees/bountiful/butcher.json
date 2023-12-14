@@ -1,4 +1,5 @@
 {
+	"linkedProfessions": ["butcher"],
 	"objectives": [
 		"butcher_objs",
 		"_all_objs"
