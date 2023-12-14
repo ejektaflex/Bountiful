@@ -97,7 +97,7 @@ class BountyData {
         return if (hasFinishedAllObjectives(player)) {
             tryFinishObjectives(player)
             rewardPlayer(player)
-            boardEntity?.updateUponBountyCompletion(this)
+            boardEntity?.updateUponBountyCompletion(player, this)
             stack.decrement(stack.maxCount)
             true
         } else {

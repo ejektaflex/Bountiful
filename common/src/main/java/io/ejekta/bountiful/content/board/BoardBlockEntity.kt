@@ -15,9 +15,7 @@ import io.ejekta.bountiful.decree.DecreeItem
 import io.ejekta.bountiful.decree.DecreeSpawnCondition
 import io.ejekta.bountiful.decree.DecreeSpawnRank
 import io.ejekta.bountiful.util.checkOnBoard
-import io.ejekta.bountiful.util.hackySetTaskTo
 import io.ejekta.bountiful.util.readOnlyCopy
-import io.ejekta.bountiful.util.ensureMemoryModules
 import io.ejekta.kambrik.ext.ksx.decodeFromStringTag
 import io.ejekta.kambrik.ext.ksx.encodeToStringTag
 import kotlinx.serialization.builtins.MapSerializer
@@ -33,17 +31,24 @@ import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtString
+import net.minecraft.registry.Registries
+import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text
+import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.ChunkPos
-import net.minecraft.util.math.GlobalPos
 import net.minecraft.world.World
+import net.minecraft.world.poi.PointOfInterestStorage
+import net.minecraft.world.poi.PointOfInterestType
+import net.minecraft.world.poi.PointOfInterestTypes
+import java.util.function.Predicate
+import kotlin.jvm.optionals.getOrNull
 
 
 class BoardBlockEntity(pos: BlockPos, state: BlockState)
@@ -55,6 +60,10 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
 
     private var takenMask = mutableMapOf<String, MutableSet<Int>>()
     private val takenSerializer = MapSerializer(String.serializer(), SetSerializer(Int.serializer()))
+
+    // Only need to calc this once per object, I don't see it changing often
+    val villageTag = Registries.POINT_OF_INTEREST_TYPE.streamTags().filter { it.id == Identifier("village") }.findFirst().getOrNull()
+
 
     fun maskFor(player: PlayerEntity): MutableSet<Int> {
         return takenMask.getOrPut(player.uuidAsString) { mutableSetOf() }
@@ -114,11 +123,29 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
     private fun findNearestVillagers(range: Int): List<VillagerEntity> {
         return world?.getEntitiesByClass(
             VillagerEntity::class.java,
-            Box.of(pos.toCenterPos(), range / 2.0, range / 2.0, range / 2.0)
+            Box.of(pos.toCenterPos(), range * 1.0, range * 1.0, range * 1.0)
         ) { true } ?: emptyList()
     }
 
-    fun updateUponBountyCompletion(bountyData: BountyData) {
+    // This may show false on clients because no serverworld for POIs, this should perhaps be a Property that gets sent instead
+    private fun isNearVillage(): Boolean {
+        val serverWorld = world as? ServerWorld ?: return false
+
+        val rep = Predicate<RegistryEntry<PointOfInterestType>> {
+            villageTag != null && it.isIn(villageTag)
+        }
+
+        val result = serverWorld.pointOfInterestStorage.getNearestTypeAndPosition(rep, pos, 256,
+            PointOfInterestStorage.OccupationStatus.ANY
+        ).getOrNull()
+
+        result?.let {
+            return it.second.getManhattanDistance(pos) < 128
+        }
+        return false
+    }
+
+    fun updateUponBountyCompletion(player: PlayerEntity, bountyData: BountyData) {
         val serverWorld = world as? ServerWorld ?: return
         val nearestVillagers = findNearestVillagers(32)
         if (nearestVillagers.isEmpty()) {
@@ -127,6 +154,10 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
         }
         val villager = nearestVillagers.first()
         villager.checkOnBoard(pos)
+
+        if (isNearVillage()) {
+            println("We are near a village, yippee!")
+        }
     }
 
     private fun addBounty(slot: Int, stack: ItemStack) {
