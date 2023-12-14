@@ -23,9 +23,11 @@ import io.ejekta.kambrik.ext.math.floor
 import io.ejekta.kambrik.ext.math.toVec3d
 import io.ejekta.kambrik.text.sendMessage
 import net.minecraft.command.CommandRegistryAccess
+import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.ai.TargetPredicate
 import net.minecraft.entity.passive.VillagerEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
 import net.minecraft.predicate.NumberRange
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.server.command.CommandManager
@@ -128,6 +130,31 @@ object BountifulCommands {
                 doThing(this)
             }
 
+            "hold" runs {
+                holdThing(this)
+            }
+
+        }
+    }
+
+    private fun holdThing(ctx: CommandContext<ServerCommandSource>) {
+        ctx.run {
+            val player = source.playerOrThrow
+            val villager = player.world.getClosestEntity(
+                VillagerEntity::class.java,
+                TargetPredicate.DEFAULT,
+                player,
+                player.x,
+                player.y,
+                player.z,
+                Box.of(player.pos, 100.0, 100.0, 100.0)
+            )
+
+            if (villager != null) {
+                val thing = ItemStack(Items.CLAY)
+//                villager.setStackInHand(Hand.MAIN_HAND, thing)
+                villager.equipStack(EquipmentSlot.MAINHAND, thing)
+            }
         }
     }
 

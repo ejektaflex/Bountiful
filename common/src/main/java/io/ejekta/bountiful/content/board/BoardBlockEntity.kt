@@ -4,6 +4,7 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.DecreeData
+import io.ejekta.bountiful.bounty.types.builtin.BountyTypeItem
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.BountifulContent
@@ -24,13 +25,13 @@ import kotlinx.serialization.builtins.serializer
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.EntityStatuses
+import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.passive.VillagerEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtString
 import net.minecraft.registry.Registries
@@ -43,11 +44,11 @@ import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
-import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.ChunkPos
+import net.minecraft.village.TradeOffer
 import net.minecraft.world.World
 import net.minecraft.world.poi.PointOfInterestStorage
 import net.minecraft.world.poi.PointOfInterestType
@@ -87,6 +88,9 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
     private val reputation: Int
         get() = levelData.first
 
+    private val recentCompletions = mutableMapOf<String, MutableSet<ItemStack>>()
+
+
     val numCompleted: Int
         get() = finishMap.values.sum()
 
@@ -124,84 +128,10 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
         }
     }
 
-    private fun findNearestVillagers(range: Int): List<VillagerEntity> {
-        return world?.getEntitiesByClass(
-            VillagerEntity::class.java,
-            Box.of(pos.toCenterPos(), range * 1.0, range * 1.0, range * 1.0)
-        ) { true } ?: emptyList()
-    }
-
-    // This may show false on clients because no serverworld for POIs, this should perhaps be a Property that gets sent instead
-    private fun isNearVillage(): Boolean {
-        val serverWorld = world as? ServerWorld ?: return false
-
-        val rep = Predicate<RegistryEntry<PointOfInterestType>> {
-            villageTag != null && it.isIn(villageTag)
-        }
-
-        val result = serverWorld.pointOfInterestStorage.getNearestTypeAndPosition(rep, pos, 256,
-            PointOfInterestStorage.OccupationStatus.ANY
-        ).getOrNull()
-
-        result?.let {
-            return it.second.getManhattanDistance(pos) < 128
-        }
-        return false
-    }
-
-    fun getBestVillager(bountyData: BountyData): VillagerEntity? {
-        val nearestVillagers = findNearestVillagers(32)
-        if (nearestVillagers.isEmpty()) {
-            println("No villagers nearby!")
-            return null
-        }
-
-        val villagerProfessions = nearestVillagers.map { it.villagerData.profession.id }.toSet()
-
-        println("Profs: $villagerProfessions")
-
-        val matchingProfs = bountyData.objectives.filter {
-            it.getRelatedProfessions().intersect(villagerProfessions).isNotEmpty()
-        }
-
-        var matchedUpVillager = false
-        val villager = if (matchingProfs.isEmpty()) {
-            println("No matching profession, picking a random villager")
-            nearestVillagers
-        } else {
-            println("Matching professions, picking an entry we can use!")
-            val randomObj = matchingProfs.random()
-            matchedUpVillager = true
-            nearestVillagers.filter {
-                it.villagerData.profession.id in randomObj.getRelatedProfessions()
-            }
-        }.random()
-
-        println("Found villager $villager")
-        return villager
-    }
-
-    fun handleVillagerVisit(villagerEntity: VillagerEntity) {
-        println("A villager is visiting the Bounty Board!")
-        val serverWorld = world as? ServerWorld ?: return
-        serverWorld.sendEntityStatus(villagerEntity, EntityStatuses.ADD_VILLAGER_HAPPY_PARTICLES)
-        serverWorld.playSound(villagerEntity, villagerEntity.blockPos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 1f, 1f)
-        // Will only show for a second, but that's okay
-        val itemStack = ItemStack(Items.FERN)
-        villagerEntity.inventory.addStack(itemStack)
-        villagerEntity.setStackInHand(Hand.MAIN_HAND, itemStack)
-
-        //villagerEntity.setStackInHand()
-
-    }
-
-//    fun villagerMatchesData(bountyData: BountyData): Boolean {
-//
-//    }
-
     fun updateUponBountyCompletion(player: PlayerEntity, bountyData: BountyData) {
         // Tick completion upwards
         incrementCompletedBounties(player)
+        fillCompletions(bountyData)
 
         val villager = getBestVillager(bountyData)
         villager?.checkOnBoard(pos)
@@ -296,13 +226,15 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
         return BoardInventory(pos, bounties.cloned(maskFor(player)), decrees)
     }
 
-
+    // Sync properties to show server values to client
 
     private val DoneProperty = object : PropertyDelegate {
         override fun get(index: Int) = numCompleted
         override fun set(index: Int, value: Int) {  }
         override fun size() = 1
     }
+
+    // Serialization
 
     @Suppress("CAST_NEVER_SUCCEEDS")
     override fun readNbt(base: NbtCompound) {
@@ -355,6 +287,120 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState)
         base.put("decree_inv", decreeList)
         base.put("bounty_inv", bountyList)
     }
+
+    // Villager & Completion Logic
+
+    fun fillCompletions(bountyData: BountyData) {
+        val stackMap = bountyData.objectives.filter { it.logic is BountyTypeItem }.map {
+            BountyTypeItem.getItemStack(it) to it.getRelatedProfessions()
+        }
+        for ((stack, profs) in stackMap) {
+            for (prof in profs) {
+                val stackSet = recentCompletions.getOrPut(prof) { mutableSetOf() }
+                stackSet.add(stack)
+            }
+        }
+    }
+
+    fun villagerPickupItem(villagerEntity: VillagerEntity) {
+        val prof = villagerEntity.villagerData.profession.id
+        val stackSet = recentCompletions.getOrPut(prof) { mutableSetOf() }
+        // Try pull from matching profession bucket
+        if (stackSet.isNotEmpty()) {
+            println("Pulling from profession completion")
+            val toUse = stackSet.toList().shuffled().first()
+            println("Pulled $toUse")
+            villagerEntity.equipStack(EquipmentSlot.MAINHAND, toUse)
+            stackSet.clear()
+            (villagerEntity.world as ServerWorld).sendEntityStatus(villagerEntity, EntityStatuses.ADD_VILLAGER_HEART_PARTICLES)
+
+            // Give profession XP to villager
+            villagerEntity.trade(
+                TradeOffer(ItemStack.EMPTY, ItemStack.EMPTY, 1, 1, 1f).apply {
+                    rewardingPlayerExperience = false
+                }
+            )
+        } else {
+            val randomProfSet = recentCompletions.keys.randomOrNull()
+
+            if (randomProfSet != null && randomProfSet in recentCompletions.keys) {
+                println("Pulling from random completion")
+                val newStackSet = recentCompletions[randomProfSet] ?: return
+                val newToUse = newStackSet.toList().shuffled().firstOrNull()
+                newToUse?.let {
+                    println("Pulled $it")
+                    villagerEntity.equipStack(EquipmentSlot.MAINHAND, it)
+                }
+                newStackSet.clear()
+                (villagerEntity.world as ServerWorld).sendEntityStatus(villagerEntity, EntityStatuses.ADD_VILLAGER_HAPPY_PARTICLES)
+            }
+        }
+    }
+
+    private fun findNearestVillagers(range: Int): List<VillagerEntity> {
+        return world?.getEntitiesByClass(
+            VillagerEntity::class.java,
+            Box.of(pos.toCenterPos(), range * 1.0, range * 1.0, range * 1.0)
+        ) { true } ?: emptyList()
+    }
+
+    // This may show false on clients because no serverworld for POIs, this should perhaps be a Property that gets sent instead
+    private fun isNearVillage(): Boolean {
+        val serverWorld = world as? ServerWorld ?: return false
+
+        val rep = Predicate<RegistryEntry<PointOfInterestType>> {
+            villageTag != null && it.isIn(villageTag)
+        }
+
+        val result = serverWorld.pointOfInterestStorage.getNearestTypeAndPosition(rep, pos, 256,
+            PointOfInterestStorage.OccupationStatus.ANY
+        ).getOrNull()
+
+        result?.let {
+            return it.second.getManhattanDistance(pos) < 128
+        }
+        return false
+    }
+
+    fun getBestVillager(bountyData: BountyData): VillagerEntity? {
+        val nearestVillagers = findNearestVillagers(32)
+        if (nearestVillagers.isEmpty()) {
+            println("No villagers nearby!")
+            return null
+        }
+
+        val villagerProfessions = nearestVillagers.map { it.villagerData.profession.id }.toSet()
+
+        println("Profs: $villagerProfessions")
+
+        val matchingProfs = bountyData.objectives.filter {
+            it.getRelatedProfessions().intersect(villagerProfessions).isNotEmpty()
+        }
+
+        var matchedUpVillager = false
+        val villager = if (matchingProfs.isEmpty()) {
+            println("No matching profession, picking a random villager")
+            nearestVillagers
+        } else {
+            println("Matching professions, picking an entry we can use!")
+            val randomObj = matchingProfs.random()
+            matchedUpVillager = true
+            nearestVillagers.filter {
+                it.villagerData.profession.id in randomObj.getRelatedProfessions()
+            }
+        }.random()
+
+        println("Found villager $villager")
+        return villager
+    }
+
+    fun handleVillagerVisit(villagerEntity: VillagerEntity) {
+        println("A villager is visiting the Bounty Board!")
+        val serverWorld = world as? ServerWorld ?: return
+        villagerPickupItem(villagerEntity)
+        serverWorld.playSound(villagerEntity, villagerEntity.blockPos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 1f, 1f)
+    }
+
 
     companion object {
 

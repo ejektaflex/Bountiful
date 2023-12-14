@@ -11,3 +11,4 @@ accessible field net/minecraft/entity/ai/brain/Brain memories Ljava/util/Map;
 accessible method net/minecraft/entity/ai/brain/Brain startTasks (Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/LivingEntity;)V
 accessible field net/minecraft/entity/ai/brain/Brain coreActivities Ljava/util/Set;
 accessible field net/minecraft/entity/ai/brain/Brain tasks Ljava/util/Map;
+accessible field net/minecraft/village/TradeOffer rewardingPlayerExperience Z
