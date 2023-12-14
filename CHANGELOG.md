@@ -6,13 +6,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [7.0.0] for 1.20.(4?) - Not Yet Released
 
-This is largely a Quality Of Life update, making it easier for modpack makers to configure Bountiful. As such,
+7.0.0 is a big immersion and quality of life update for Bountiful, adding new ways for the Bounty Board to interact with Villagers.
+A tweaked configuration system makes it easier for modpack makers to configure Bountiful. As such,
 old config files and datapacks that overwrote existing Bountiful data may not function correctly in this version.
 
 ### Added
-- Decrees now have two new, optional fields:
+
+#### Gameplay
+- After turning in a bounty, a villager (preferably one who matches the profession of the items you sold them), if available, will walk up to the board and pick up their goods.
+  - The villager will receive some trade XP for doing this - even more if their profession did match, and based on board reputation.
+
+#### Configuration
+- Decrees now have three new, optional fields:
   - `canSpawn` determines whether a bounty board can spawn with this Decree in it (default: true)
   - `canReveal` determines whether a blank Decree can be revealed to be this Decree when placed on the board (default: true)
+  - `canWanderBuy` determines whether this Decree can be found in the stocks of Wandering Traders (default: true)
+    - Currently, Wandering Trader stocks are only affected in the Fabric version.
 - Added a new config option, `board.canBreak`, that determines whether bounty boards can be broken (default: true)
 
 ### Changed
