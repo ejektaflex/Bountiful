@@ -7,6 +7,7 @@ import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.bounty.types.builtin.BountyTypeItem
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
+import io.ejekta.bountiful.content.BountifulTriggers
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyCreator
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
@@ -53,6 +54,7 @@ import net.minecraft.util.math.ChunkPos
 import net.minecraft.world.World
 import net.minecraft.world.poi.PointOfInterestStorage
 import net.minecraft.world.poi.PointOfInterestType
+import java.util.*
 import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
@@ -61,6 +63,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
     private val decrees = SimpleInventory(3)
     private val bounties = BountyInventory()
+
+    private var boardUUID = UUID.randomUUID()
 
     private var takenMask = mutableMapOf<String, MutableSet<Int>>()
     private val takenSerializer = MapSerializer(String.serializer(), SetSerializer(Int.serializer()))
@@ -150,6 +154,10 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     fun updateUponBountyCompletion(player: PlayerEntity, bountyData: BountyData) {
+        // Award advancement to player
+        (player as? ServerPlayerEntity)?.let {
+            BountifulTriggers.BOUNTY_COMPLETED.trigger(it, this, bountyData)
+        }
         // Tick completion upwards
         incrementCompletedBounties(player)
         // Fill pickups
@@ -270,6 +278,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         val decreeList = base.getCompound("decree_inv") ?: return
         val bountyList = base.getCompound("bounty_inv") ?: return
 
+        boardUUID = UUID.fromString(base.getString("boardId"))
+
         Inventories.readNbt(
             decreeList,
             decrees.stacks
@@ -301,6 +311,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
     override fun writeNbt(base: NbtCompound) {
         super.writeNbt(base)
+
+        base.putString("boardId", boardUUID.toString())
 
         val doneMap = JsonFormats.Hand.encodeToStringTag(finishSerializer, finishMap)
         base.put("completed", doneMap)

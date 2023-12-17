@@ -1,0 +1,30 @@
+{
+  "parent": "bountiful:bountiful/bounty_taken",
+  "criteria": {
+    "turn_in_bounty": {
+      "trigger": "bountiful:bounty_completed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "bountiful.advancement.bounty_complete.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:wooden_pickaxe",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "bountiful.advancement.bounty_complete.title"
+    }
+  },
+  "requirements": [
+    [
+      "turn_in_bounty"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

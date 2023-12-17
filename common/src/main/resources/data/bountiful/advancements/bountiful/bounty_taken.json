@@ -1,0 +1,36 @@
+{
+  "criteria": {
+    "take_a_bounty": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "bountiful:bounty"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "bountiful:textures/block/bountyboard_empty.png",
+    "description": {
+      "translate": "bountiful.advancement.bounty_taken.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "bountiful:bountyboard"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "bountiful.advancement.bounty_taken.title"
+    }
+  },
+  "requirements": [
+    ["take_a_bounty"]
+  ],
+  "sends_telemetry_event": false
+}

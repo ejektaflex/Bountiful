@@ -25,6 +25,7 @@ class BoardBountySlot(val inv: BoardInventory, index: Int, x: Int, y: Int) : Slo
                         null
                     }
                 }.filterNotNull()
+            // Add to mask
             for (newIndex in matchingMaskIndices) {
                 board.maskFor(player).add(newIndex)
             }
