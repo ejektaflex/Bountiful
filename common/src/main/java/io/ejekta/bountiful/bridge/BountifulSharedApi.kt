@@ -6,10 +6,10 @@ import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.content.BountifulContent
-import io.ejekta.bountiful.content.messages.ClipboardCopy
-import io.ejekta.bountiful.content.messages.OnBountyComplete
-import io.ejekta.bountiful.content.messages.SelectBounty
-import io.ejekta.bountiful.content.messages.UpdateBountyCriteriaObjective
+import io.ejekta.bountiful.messages.ClipboardCopy
+import io.ejekta.bountiful.messages.OnBountyComplete
+import io.ejekta.bountiful.messages.SelectBounty
+import io.ejekta.bountiful.messages.UpdateBountyCriteriaObjective
 import io.ejekta.bountiful.util.iterateBountyStacks
 import io.ejekta.kambrik.Kambrik
 import kotlinx.serialization.json.buildJsonObject

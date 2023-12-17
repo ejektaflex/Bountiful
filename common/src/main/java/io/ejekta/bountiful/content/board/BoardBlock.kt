@@ -3,7 +3,7 @@ package io.ejekta.bountiful.content.board
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.BountifulContent
-import io.ejekta.bountiful.content.BountyItem
+import io.ejekta.bountiful.content.item.BountyItem
 import net.minecraft.block.BlockEntityProvider
 import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState

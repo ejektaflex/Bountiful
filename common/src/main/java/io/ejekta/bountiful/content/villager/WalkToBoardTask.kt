@@ -1,23 +1,13 @@
-package io.ejekta.bountiful.ai
+package io.ejekta.bountiful.content.villager
 
 import com.google.common.collect.ImmutableMap
 import io.ejekta.bountiful.content.BountifulContent
-import net.minecraft.entity.EntityStatuses
-import net.minecraft.entity.EntityType
-import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.ai.brain.Activity
 import net.minecraft.entity.ai.brain.MemoryModuleState
 import net.minecraft.entity.ai.brain.task.LookTargetUtil
 import net.minecraft.entity.ai.brain.task.MultiTickTask
 import net.minecraft.entity.passive.VillagerEntity
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
-import net.minecraft.particle.ParticleTypes
 import net.minecraft.server.world.ServerWorld
-import net.minecraft.sound.SoundCategory
-import net.minecraft.sound.SoundEvents
-import net.minecraft.util.Hand
-import net.minecraft.util.math.GlobalPos
 import kotlin.jvm.optionals.getOrNull
 
 class WalkToBoardTask(val speed: Float) :

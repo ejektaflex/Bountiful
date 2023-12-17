@@ -1,4 +1,4 @@
-package io.ejekta.bountiful.content.messages
+package io.ejekta.bountiful.messages
 
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.kambrik.message.ClientMsg

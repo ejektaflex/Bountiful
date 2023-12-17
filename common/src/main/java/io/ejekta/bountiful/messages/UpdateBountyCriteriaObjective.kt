@@ -1,7 +1,7 @@
-package io.ejekta.bountiful.content.messages
+package io.ejekta.bountiful.messages
 
 import io.ejekta.bountiful.bounty.BountyData
-import io.ejekta.bountiful.content.BountyItem
+import io.ejekta.bountiful.content.item.BountyItem
 import io.ejekta.kambrik.message.ClientMsg
 import kotlinx.serialization.Serializable
 

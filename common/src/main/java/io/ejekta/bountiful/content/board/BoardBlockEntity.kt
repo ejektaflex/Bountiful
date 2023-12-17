@@ -9,10 +9,10 @@ import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyCreator
-import io.ejekta.bountiful.content.BountyItem
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
+import io.ejekta.bountiful.content.item.BountyItem
+import io.ejekta.bountiful.content.item.DecreeItem
 import io.ejekta.bountiful.data.Decree
-import io.ejekta.bountiful.decree.DecreeItem
 import io.ejekta.bountiful.decree.DecreeSpawnCondition
 import io.ejekta.bountiful.decree.DecreeSpawnRank
 import io.ejekta.bountiful.util.checkOnBoard
@@ -53,7 +53,6 @@ import net.minecraft.util.math.ChunkPos
 import net.minecraft.world.World
 import net.minecraft.world.poi.PointOfInterestStorage
 import net.minecraft.world.poi.PointOfInterestType
-import java.util.UUID
 import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 

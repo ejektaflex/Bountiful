@@ -1,4 +1,4 @@
-package io.ejekta.bountiful.content
+package io.ejekta.bountiful.content.item
 
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyInfo

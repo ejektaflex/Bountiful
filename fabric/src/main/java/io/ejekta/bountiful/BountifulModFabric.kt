@@ -5,7 +5,7 @@ import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.BountifulReloadListener
 import io.ejekta.bountiful.content.BountifulCommands
 import io.ejekta.bountiful.content.BountifulContent
-import io.ejekta.bountiful.content.DecreeTradeFactory
+import io.ejekta.bountiful.content.villager.DecreeTradeFactory
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.internal.registration.KambrikRegistrar
 import net.fabricmc.api.ModInitializer

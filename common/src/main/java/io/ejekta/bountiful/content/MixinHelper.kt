@@ -1,7 +1,7 @@
 package io.ejekta.bountiful.content
 
 import com.google.common.collect.ImmutableList
-import io.ejekta.bountiful.ai.WalkToBoardTask
+import io.ejekta.bountiful.content.villager.WalkToBoardTask
 import net.minecraft.entity.ai.brain.task.FindPointOfInterestTask
 import net.minecraft.entity.ai.brain.task.GoToIfNearbyTask
 import net.minecraft.entity.ai.brain.task.Task

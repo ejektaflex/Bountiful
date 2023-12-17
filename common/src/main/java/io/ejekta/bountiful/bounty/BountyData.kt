@@ -6,7 +6,7 @@ import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.bounty.types.IBountyReward
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.board.BoardBlockEntity
-import io.ejekta.bountiful.content.messages.OnBountyComplete
+import io.ejekta.bountiful.messages.OnBountyComplete
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.kambrik.serial.ItemDataJson
 import kotlinx.serialization.Serializable

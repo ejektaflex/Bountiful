@@ -5,11 +5,11 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.content.board.BoardBlock
 import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
+import io.ejekta.bountiful.content.item.BountyItem
+import io.ejekta.bountiful.content.item.DecreeItem
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.data.Pool
-import io.ejekta.bountiful.decree.DecreeItem
 import io.ejekta.kambrik.registration.KambrikAutoRegistrar
-import net.minecraft.entity.ai.brain.Activity
 import net.minecraft.entity.ai.brain.MemoryModuleType
 import net.minecraft.entity.passive.VillagerEntity
 import net.minecraft.item.BlockItem

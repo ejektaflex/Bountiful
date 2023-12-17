@@ -8,9 +8,9 @@ import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
-import io.ejekta.bountiful.content.messages.ClipboardCopy
+import io.ejekta.bountiful.content.item.DecreeItem
+import io.ejekta.bountiful.messages.ClipboardCopy
 import io.ejekta.bountiful.data.PoolEntry
-import io.ejekta.bountiful.decree.DecreeItem
 import io.ejekta.bountiful.decree.DecreeSpawnCondition
 import io.ejekta.bountiful.util.checkOnBoard
 import io.ejekta.kambrik.command.addCommand

@@ -11,12 +11,10 @@ import net.minecraft.util.Identifier
 
 
 class Bountiful {
-
     companion object {
         const val ID = "bountiful"
         fun id(str: String) = Identifier(ID, str)
         val LOGGER = Kambrik.Logging.createLogger(ID)
         val BOUNTY_LOGIC_REGISTRY_KEY: RegistryKey<Registry<IBountyType>> = RegistryKey.ofRegistry(id("logic_registry"))
     }
-
 }

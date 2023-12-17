@@ -1,7 +1,9 @@
-package io.ejekta.bountiful.decree
+package io.ejekta.bountiful.content.item
 
 import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.content.BountifulContent
+import io.ejekta.bountiful.decree.DecreeSpawnCondition
+import io.ejekta.bountiful.decree.DecreeSpawnRank
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
