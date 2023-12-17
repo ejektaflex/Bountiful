@@ -53,6 +53,7 @@ import net.minecraft.util.math.ChunkPos
 import net.minecraft.world.World
 import net.minecraft.world.poi.PointOfInterestStorage
 import net.minecraft.world.poi.PointOfInterestType
+import java.util.UUID
 import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 

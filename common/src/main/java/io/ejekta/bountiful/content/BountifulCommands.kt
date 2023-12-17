@@ -35,6 +35,7 @@ import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.ClickEvent
 import net.minecraft.text.Text
+import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
@@ -117,6 +118,13 @@ object BountifulCommands {
                     }
                     "dump" runs dumpData()
                 }
+                "check" {
+                    "entry" {
+                        argString("checkName") runs { checkName ->
+                            checkForEntry(checkName())
+                        }
+                    }
+                }
             }
 
             "config" {
@@ -127,13 +135,32 @@ object BountifulCommands {
             }
 
             "vill" runs {
-                doThing(this)
+                sendNearestVillagerToABoard(this)
             }
 
             "hold" runs {
                 holdThing(this)
             }
 
+        }
+    }
+
+    private fun CommandContext<ServerCommandSource>.checkForEntry(named: String) {
+        val found = BountifulContent.Pools.map {
+            it.items
+        }.flatten().filter {
+            it.id.substringAfter('.') == named
+        }
+        if (found.isNotEmpty()) {
+            source.sendMessage(Text.literal("Pool Entry Found! Exists in these pools: ").formatted(
+                Formatting.GREEN
+            ).append(
+                Text.literal("${found.map { it.protoPool?.id }}").formatted(Formatting.GOLD))
+            )
+        } else {
+            source.sendMessage(Text.literal("Pool Entry Not Found! Does not seem to exist in any pool.").formatted(
+                Formatting.RED
+            ))
         }
     }
 
@@ -158,7 +185,7 @@ object BountifulCommands {
         }
     }
 
-    private fun doThing(ctx: CommandContext<ServerCommandSource>) {
+    private fun sendNearestVillagerToABoard(ctx: CommandContext<ServerCommandSource>) {
         ctx.run {
             val player = source.playerOrThrow
             val villager = player.world.getClosestEntity(
