@@ -16,6 +16,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.loot.context.LootContextParameterSet
 import net.minecraft.loot.context.LootContextParameters
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
@@ -94,34 +95,27 @@ class BoardBlock : BlockWithEntity(
         hand: Hand,
         hit: BlockHitResult?
     ): ActionResult {
-
-        if (world?.isClient == false) {
-
-            if (!player.isSneaking) {
-
-                val holding = player.getStackInHand(hand)
+        (player as? ServerPlayerEntity)?.let {
+            if (!it.isSneaking) {
+                val holding = it.getStackInHand(hand)
 
                 if (holding.item is BountyItem) {
                     val data = BountyData[holding]
-                    val boardEntity = world.getBlockEntity(pos) as? BoardBlockEntity ?: return ActionResult.FAIL
-                    val success = data.tryCashIn(player, holding)
-
+                    val boardEntity = it.world.getBlockEntity(pos) as? BoardBlockEntity ?: return ActionResult.FAIL
+                    val success = data.tryCashIn(it, holding)
                     if (success) {
-                        boardEntity.updateUponBountyCompletion(player, data)
+                        boardEntity.updateUponBountyCompletion(it, data)
                         boardEntity.markDirty()
                         return ActionResult.CONSUME
                     }
-
                 } else {
                     val screenHandlerFactory = state!!.createScreenHandlerFactory(world, pos)
                     if (screenHandlerFactory != null) {
-                        player.openHandledScreen(screenHandlerFactory)
+                        it.openHandledScreen(screenHandlerFactory)
                         return ActionResult.success(true)
                     }
                 }
-
             }
-
         }
         return ActionResult.success(true)
     }
@@ -133,7 +127,7 @@ class BoardBlock : BlockWithEntity(
     companion object {
         const val BOUNTY_SIZE = 24
 
-        protected fun <T : BlockEntity?> boardTicker(
+        private fun <T : BlockEntity?> boardTicker(
             world: World,
             givenType: BlockEntityType<T>?,
             expectedType: BlockEntityType<out BoardBlockEntity?>?

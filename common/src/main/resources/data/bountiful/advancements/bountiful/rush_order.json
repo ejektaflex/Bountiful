@@ -1,0 +1,29 @@
+{
+  "parent": "bountiful:bountiful/bounty_complete",
+  "criteria": {
+    "finish_quick": {
+      "trigger": "bountiful:rush_order"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "bountiful.advancement.rush_order.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:clock"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "bountiful.advancement.rush_order.title"
+    }
+  },
+  "requirements": [
+    [
+      "finish_quick"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

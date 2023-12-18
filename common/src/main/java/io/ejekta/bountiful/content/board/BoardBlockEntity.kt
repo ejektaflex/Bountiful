@@ -153,18 +153,15 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         }
     }
 
-    fun updateUponBountyCompletion(player: PlayerEntity, bountyData: BountyData) {
+    fun updateUponBountyCompletion(player: ServerPlayerEntity, bountyData: BountyData) {
         // Award advancement to player
-        (player as? ServerPlayerEntity)?.let {
-            BountifulTriggers.BOUNTY_COMPLETED.trigger(it, this, bountyData)
-        }
+        BountifulTriggers.BOUNTY_COMPLETED.trigger(player)
         // Tick completion upwards
         incrementCompletedBounties(player)
         // Fill pickups
         villagerPickupPopulate(bountyData)
         // Have a villager check on the board
-        val villager = getBestVillager(bountyData)
-        villager?.checkOnBoard(pos)
+        getBestVillager(bountyData)?.checkOnBoard(pos)
     }
 
     private fun addBountyToRandomSlot(stack: ItemStack) {

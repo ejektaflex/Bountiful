@@ -1,10 +1,9 @@
 package io.ejekta.bountiful.content
 
 import io.ejekta.bountiful.Bountiful
-import io.ejekta.bountiful.advancement.OnBountyComplete
+import io.ejekta.bountiful.advancement.SimpleCriterion
 import net.minecraft.advancement.criterion.Criteria
 import net.minecraft.advancement.criterion.Criterion
-import net.minecraft.util.Identifier
 
 object BountifulTriggers {
 
@@ -12,11 +11,12 @@ object BountifulTriggers {
         println("Registering bountiful advancement criterion triggers")
     }
 
-    val BOUNTY_COMPLETED = registerTrigger(Bountiful.id("bounty_completed"), OnBountyComplete())
+    val BOUNTY_COMPLETED = registerTrigger("bounty_completed", SimpleCriterion())
+    val RUSH_ORDER = registerTrigger("rush_order", SimpleCriterion())
 
-    private fun <T : Criterion<*>> registerTrigger(id: Identifier, criterion: T): T {
+    private fun <T : Criterion<*>> registerTrigger(path: String, criterion: T): T {
         return criterion.apply {
-            Criteria.VALUES[id] = this
+            Criteria.VALUES[Bountiful.id(path)] = this
         }
     }
 }

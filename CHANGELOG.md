@@ -17,6 +17,7 @@ old config files and datapacks that overwrote existing Bountiful data may not fu
   - The villager will receive some trade XP for doing this - even more if their profession did match, and based on board reputation.
 - The way the board's bounties are refreshed has been updated - now, bounties that have been on the board the longest have the highest chances of being removed first.
   - This should reduce the number of old bounties that 'happen' to stay on the board through dumb luck (or rather, misfortune)
+- Added `TODO()` advancements, and an additional `TODO()` hidden advancements
 
 #### Configuration
 - Decrees now have three new, optional fields:
@@ -31,6 +32,7 @@ old config files and datapacks that overwrote existing Bountiful data may not fu
   - Hopefully this is a visually pleasing change, I will be looking at user feedback to see how it is received.
 - Much better handling and notification of possible config file errors via the log.
 - Reformatted the config, making it easier for users without ClothConfig to understand.
+- Updated translations. `TODO("Add new localization listing and authors)`
 
 ## [6.0.3] for 1.20.1 - 2023-07-17
 
