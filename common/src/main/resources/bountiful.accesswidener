@@ -16,3 +16,7 @@ accessible field net/minecraft/entity/ai/brain/Brain tasks Ljava/util/Map;
 accessible field net/minecraft/village/TradeOffer rewardingPlayerExperience Z
 # Criteria
 accessible field net/minecraft/advancement/criterion/Criteria VALUES Lcom/google/common/collect/BiMap;
+# Anvil
+accessible field net/minecraft/screen/ForgingScreenHandler output Lnet/minecraft/inventory/CraftingResultInventory;
+accessible field net/minecraft/screen/ForgingScreenHandler input Lnet/minecraft/inventory/Inventory;
+accessible field net/minecraft/screen/AnvilScreenHandler levelCost Lnet/minecraft/screen/Property;
