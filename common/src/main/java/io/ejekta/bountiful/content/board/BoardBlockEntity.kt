@@ -200,7 +200,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         bounties.setStack(slot, stack)
     }
 
-    fun removeBounty(slot: Int) {
+    private fun removeBounty(slot: Int) {
         Bountiful.LOGGER.debug("Removing bounty from slot $slot")
         modifyTrackedGuiInvs {
             it.removeStack(slot)
@@ -210,7 +210,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     // If the bounty board has never been used before (pristine), populate it
-    fun upkeepTryInitialPopulation() {
+    private fun upkeepTryInitialPopulation() {
         if (isPristine) {
             if (decrees.isEmpty) {
                 decrees.setStack((0..2).random(), DecreeItem.create(
@@ -224,8 +224,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         markDirty()
     }
 
+    // Set unset decrees
     private fun upkeepRevealDecrees() {
-        // Set unset decrees
         decrees.stacks.filter {
             it.item is DecreeItem // must be a decree and not null
         }.forEach { stack ->
@@ -240,8 +240,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         }
     }
 
-    // Remove expired bounties every 100 ticks
-
+    // Remove expired bounties
     private fun upkeepRemoveExpiredBounties() {
         serverWorld?.let {
             for (i in 0 until bounties.size()) {
@@ -273,9 +272,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             )
         }
 
-        //println("Free slots: $freeSlots")
-
-        val chance = takenSlots.size - freeSlots.size
         // If there's more taken than free, prune
         if (takenSlots.size >= 12) {
             val randomNumPrunes = listOf(1, 1, 1, 1, 2, 2, 2).random()
@@ -506,11 +502,11 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
                 entity.upkeepRevealDecrees()
             }
 
-            world.everySeconds(BountifulIO.configData.board.updateFrequencySecs, 13) {
+            world.everySeconds(BountifulIO.configData.board.updateFrequencySecs, 1) {
                 entity.randomlyUpdateBoard()
             }
 
-            world.everySeconds(5, 4) {
+            world.everySeconds(5, 2) {
                 entity.upkeepRemoveExpiredBounties()
             }
         }
