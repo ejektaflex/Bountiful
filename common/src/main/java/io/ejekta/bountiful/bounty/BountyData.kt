@@ -1,13 +1,10 @@
 package io.ejekta.bountiful.bounty
 
 import io.ejekta.bountiful.Bountiful
-import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.bounty.types.IBountyReward
 import io.ejekta.bountiful.config.JsonFormats
-import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.messages.OnBountyComplete
-import io.ejekta.bountiful.data.Decree
 import io.ejekta.kambrik.serial.ItemDataJson
 import kotlinx.serialization.Serializable
 import net.minecraft.entity.player.PlayerEntity
@@ -44,7 +41,7 @@ class BountyData {
     fun checkForCompletionAndAlert(player: PlayerEntity, stack: ItemStack): BountyData {
         val isDone = objectives.all {
             (it.logic as IBountyObjective).getProgress(it, player).isComplete()
-        } && BountyInfo[stack].timeLeft(player.world) > 0
+        } && BountyInfo[stack].timeLeftTicks(player.world) > 0
 
         if (isDone) {
 
@@ -95,7 +92,7 @@ class BountyData {
 
     fun tryCashIn(player: PlayerEntity, stack: ItemStack): Boolean {
 
-        if (BountyInfo[stack].timeLeft(player.world) <= 0) {
+        if (BountyInfo[stack].timeLeftTicks(player.world) <= 0) {
             player.sendMessage(Text.translatable("bountiful.bounty.expired"))
             return false
         }

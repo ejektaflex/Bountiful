@@ -10,6 +10,7 @@ import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.data.Pool
 import io.ejekta.bountiful.data.PoolEntry
+import io.ejekta.bountiful.util.GameTime
 import io.ejekta.bountiful.util.randomSplit
 import io.ejekta.bountiful.util.weightedRandomDblBy
 import net.minecraft.item.ItemStack
@@ -36,7 +37,7 @@ class BountyCreator private constructor(
         }
     }
 
-    fun create(tps: Int = 20): Pair<BountyData, BountyInfo> {
+    fun create(): Pair<BountyData, BountyInfo> {
         //data = BountyData()
 
         // Gen reward entries and max rarity
@@ -63,12 +64,12 @@ class BountyCreator private constructor(
         val objectives = genObjectives(
             totalRewardWorth * (1 + (BountifulIO.configData.bounty.objectiveDifficultyModifierPercent * 0.01)),
             rewardEntries,
-            tps
+            GameTime.TICK_RATE
         )
         data.objectives.addAll(objectives)
 
         info.timeStarted = startTime
-        info.timeToComplete += (750L * tps) + BountifulIO.configData.bounty.flatBonusTimePerBountyInSecs
+        info.timeToComplete += 750L + BountifulIO.configData.bounty.flatBonusTimePerBountyInSecs
 
 
         return data to info
@@ -153,7 +154,7 @@ class BountyCreator private constructor(
             val entry = picked.toEntry(world, pos, w, decrees.map { it.id }.toSet())
 
             // Add time based on entry
-            info.timeToComplete += (picked.timeMult * entry.worth * 0.35 * tps).toLong()
+            info.timeToComplete += (picked.timeMult * entry.worth * 0.35).toLong()
 
             // Append on a new worth to add obj for
             // if we still haven't fulfilled it

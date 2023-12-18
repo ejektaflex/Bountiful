@@ -16,10 +16,7 @@ import io.ejekta.bountiful.content.item.DecreeItem
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.decree.DecreeSpawnCondition
 import io.ejekta.bountiful.decree.DecreeSpawnRank
-import io.ejekta.bountiful.util.checkOnBoard
-import io.ejekta.bountiful.util.hackyGiveTradeExperience
-import io.ejekta.bountiful.util.readOnlyCopy
-import io.ejekta.bountiful.util.weightedRandomIntBy
+import io.ejekta.bountiful.util.*
 import io.ejekta.kambrik.ext.ksx.decodeFromStringTag
 import io.ejekta.kambrik.ext.ksx.encodeToStringTag
 import kotlinx.serialization.builtins.MapSerializer
@@ -64,7 +61,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     private val decrees = SimpleInventory(3)
     private val bounties = BountyInventory()
 
-    private var boardUUID = UUID.randomUUID()
+    private var boardUUID = UUID.randomUUID().toString()
 
     private var takenMask = mutableMapOf<String, MutableSet<Int>>()
     private val takenSerializer = MapSerializer(String.serializer(), SetSerializer(Int.serializer()))
@@ -100,6 +97,9 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
     private val reputation: Int
         get() = levelData.first
+
+    private val serverWorld: ServerWorld?
+        get() = world as? ServerWorld
 
     private val takenSlots: Set<Int>
         get() = BountyInventory.bountySlots.filter { !bounties.getStack(it).isEmpty }.toSet()
@@ -153,9 +153,17 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         }
     }
 
-    fun updateUponBountyCompletion(player: ServerPlayerEntity, bountyData: BountyData) {
+    fun updateUponBountyCompletion(player: ServerPlayerEntity, bountyData: BountyData, bountyInfo: BountyInfo) {
         // Award advancement to player
         BountifulTriggers.BOUNTY_COMPLETED.trigger(player)
+
+        // Award rush hour advancement
+        serverWorld?.let {
+            if (bountyInfo.timeLeftSecs(it) <= 60) {
+                BountifulTriggers.RUSH_ORDER.trigger(player)
+            }
+        }
+
         // Tick completion upwards
         incrementCompletedBounties(player)
         // Fill pickups
@@ -202,7 +210,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     // If the bounty board has never been used before (pristine), populate it
-    fun tryInitialPopulation() {
+    fun upkeepTryInitialPopulation() {
         if (isPristine) {
             if (decrees.isEmpty) {
                 decrees.setStack((0..2).random(), DecreeItem.create(
@@ -214,6 +222,39 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             }
         }
         markDirty()
+    }
+
+    private fun upkeepRevealDecrees() {
+        // Set unset decrees
+        decrees.stacks.filter {
+            it.item is DecreeItem // must be a decree and not null
+        }.forEach { stack ->
+            // Get revealable decrees
+            val revealable = BountifulContent.Decrees.filter(DecreeSpawnCondition.BOARD_REVEAL.spawnFunc).map { it.id }
+            DecreeData.edit(stack) {
+                if (ids.isEmpty()) {
+                    // Random populate
+                    DecreeSpawnRank.RANDOM.populateFunc(this, revealable)
+                }
+            }
+        }
+    }
+
+    // Remove expired bounties every 100 ticks
+
+    private fun upkeepRemoveExpiredBounties() {
+        serverWorld?.let {
+            for (i in 0 until bounties.size()) {
+                val stack = bounties.getStack(i)
+                if (stack.item !is BountyItem) {
+                    continue
+                }
+                val info = BountyInfo[stack]
+                if (info.timeLeftTicks(it) <= 0) {
+                    removeBounty(i)
+                }
+            }
+        }
     }
 
     private fun randomlyUpdateBoard() {
@@ -275,7 +316,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         val decreeList = base.getCompound("decree_inv") ?: return
         val bountyList = base.getCompound("bounty_inv") ?: return
 
-        boardUUID = UUID.fromString(base.getString("boardId"))
+        boardUUID = base.getString("boardId")
 
         Inventories.readNbt(
             decreeList,
@@ -309,7 +350,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     override fun writeNbt(base: NbtCompound) {
         super.writeNbt(base)
 
-        base.putString("boardId", boardUUID.toString())
+        base.putString("boardId", boardUUID)
 
         val doneMap = JsonFormats.Hand.encodeToStringTag(finishSerializer, finishMap)
         base.put("completed", doneMap)
@@ -459,45 +500,19 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         fun tick(world: World, pos: BlockPos, state: BlockState, entity: BoardBlockEntity) {
             if (world.isClient) return
 
-            entity.tryInitialPopulation()
+            entity.upkeepTryInitialPopulation()
 
-            // Set unset decrees every 20 ticks
-            if (world.time % 20L == 0L) {
-                entity.decrees.stacks.filter {
-                    it.item is DecreeItem // must be a decree and not null
-                }.forEach { stack ->
-                    // Get revealable decrees
-                    val revealable = BountifulContent.Decrees.filter(DecreeSpawnCondition.BOARD_REVEAL.spawnFunc).map { it.id }
-                    DecreeData.edit(stack) {
-                        if (ids.isEmpty()) {
-                            // Random populate
-                            DecreeSpawnRank.RANDOM.populateFunc(this, revealable)
-                        }
-                    }
-                }
+            world.everySeconds(1) {
+                entity.upkeepRevealDecrees()
             }
 
-            // Add & remove bounties according to update frequency
-            if ((world.time + 13L) % (20L * BountifulIO.configData.board.updateFrequency) == 0L) {
-                // Change bounty population
+            world.everySeconds(BountifulIO.configData.board.updateFrequencySecs, 13) {
                 entity.randomlyUpdateBoard()
             }
 
-
-            // Remove expired bounties every 100 ticks
-            if (world.time % 100L == 4L) {
-                for (i in 0 until entity.bounties.size()) {
-                    val stack = entity.bounties.getStack(i)
-                    if (stack.item !is BountyItem) {
-                        continue
-                    }
-                    val info = BountyInfo[stack]
-                    if (info.timeLeft(world) <= 0) {
-                        entity.removeBounty(i)
-                    }
-                }
+            world.everySeconds(5, 4) {
+                entity.upkeepRemoveExpiredBounties()
             }
-
         }
 
     }

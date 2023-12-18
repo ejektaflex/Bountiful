@@ -27,6 +27,9 @@ old config files and datapacks that overwrote existing Bountiful data may not fu
     - Currently, Wandering Trader stocks are only affected in the Fabric version.
 - Added a new config option, `board.canBreak`, that determines whether bounty boards can be broken (default: true)
 
+#### Technical
+- Bounty boards can now be found with `/locate poi bountiful:bountyboard`.
+
 ### Changed
 - The board layout for objectives and rewards is now centered, with an arrow dividing the objectives and rewards. 
   - Hopefully this is a visually pleasing change, I will be looking at user feedback to see how it is received.

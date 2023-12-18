@@ -12,7 +12,7 @@ class BountifulConfigData {
 
     @Serializable
     class BoardConfigData {
-        var updateFrequency: Int = 45
+        var updateFrequencySecs: Int = 45
         var villageGenFrequency: Int = 2
         var canBreak = true
     }
@@ -97,11 +97,11 @@ class BountifulConfigData {
         boardCat.addEntry(
             creator.startIntField(
                 textLiteral("Board Update Frequency"),
-                board.updateFrequency
+                board.updateFrequencySecs
             ).setDefaultValue(45).setTooltip(
                 Text.literal("How often (in seconds) new bounties are added/removed")
             ).setSaveConsumer {
-                board.updateFrequency = it
+                board.updateFrequencySecs = it
             }.build()
         )
 

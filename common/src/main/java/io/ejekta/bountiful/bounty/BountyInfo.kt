@@ -19,17 +19,21 @@ class BountyInfo(
     var timeToComplete: Long = -1L
 ) {
 
-    fun timeLeft(world: World): Long {
+    fun timeLeftTicks(world: World): Long {
         return when (BountifulIO.configData.bounty.shouldHaveTimersAndExpire) {
-            true -> max(timeStarted - world.time + timeToComplete, 0L)
+            true -> max(timeStarted - world.time + (timeToComplete * GameTime.TICK_RATE), 0L)
             false -> 1L
         }
+    }
+
+    fun timeLeftSecs(world: World): Long {
+        return timeLeftTicks(world) / GameTime.TICK_RATE
     }
 
     // ### Formatting ### //
 
     fun formattedTimeLeft(world: World): Text {
-        return GameTime.formatTimeExpirable(timeLeft(world) / 20)
+        return GameTime.formatTimeExpirable(timeLeftSecs(world))
     }
 
     fun genTooltip(fromData: BountyData, isServer: Boolean): List<MutableText> {

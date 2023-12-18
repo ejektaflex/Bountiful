@@ -1,6 +1,7 @@
 package io.ejekta.bountiful.content.board
 
 import io.ejekta.bountiful.bounty.BountyData
+import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.item.BountyItem
@@ -104,7 +105,7 @@ class BoardBlock : BlockWithEntity(
                     val boardEntity = it.world.getBlockEntity(pos) as? BoardBlockEntity ?: return ActionResult.FAIL
                     val success = data.tryCashIn(it, holding)
                     if (success) {
-                        boardEntity.updateUponBountyCompletion(it, data)
+                        boardEntity.updateUponBountyCompletion(it, data, BountyInfo[holding])
                         boardEntity.markDirty()
                         return ActionResult.CONSUME
                     }

@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.screen.slot.Slot
 import net.minecraft.server.network.ServerPlayerEntity
 
-class BoardBountySlot(val inv: BoardInventory, index: Int, x: Int, y: Int) : Slot(inv, index, x, y) {
+class BoardBountySlot(private val inv: BoardInventory, index: Int, x: Int, y: Int) : Slot(inv, index, x, y) {
     override fun canInsert(stack: ItemStack?): Boolean {
         return false
     }

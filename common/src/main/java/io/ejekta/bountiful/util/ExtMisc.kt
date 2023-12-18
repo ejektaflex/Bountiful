@@ -19,6 +19,7 @@ import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.GlobalPos
 import net.minecraft.village.TradeOffer
+import net.minecraft.world.World
 import java.util.*
 import kotlin.random.Random
 
@@ -41,6 +42,12 @@ fun <T : Any> List<T>.weightedRandomIntBy(func: T.() -> Int): T {
 fun <T : Any> List<T>.weightedRandomDblBy(func: T.() -> Double): T {
     val mapped = associate { it to func(it) }
     return mapped.weightedRandomDbl()
+}
+
+fun World.everySeconds(secs: Int, offset: Long = 0L, func: () -> Unit) {
+    if (((time + (secs * GameTime.TICK_RATE) + offset) % GameTime.TICK_RATE) == 0L) {
+        func()
+    }
 }
 
 fun <T : Any> Map<T, Int>.weightedRandomInt(): T {
