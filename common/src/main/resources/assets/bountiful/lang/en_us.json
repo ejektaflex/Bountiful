@@ -16,6 +16,8 @@
 	"bountiful.entry.cleric_obj_brew_swiftness": "Brew a basic Swiftness Potion",
 	"bountiful.entry.cleric_obj_cure_zombie_villager": "Cure a Zombie Villager",
 
+	"bountiful.ui.shorthand.minutes": "m",
+	"bountiful.ui.shorthand.seconds": "s",
 
 	"bountiful.decree": "Decree",
 	"bountiful.decrees": "Decrees",

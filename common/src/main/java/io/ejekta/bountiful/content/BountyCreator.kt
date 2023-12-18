@@ -36,7 +36,7 @@ class BountyCreator private constructor(
         }
     }
 
-    fun create(): Pair<BountyData, BountyInfo> {
+    fun create(tps: Int = 20): Pair<BountyData, BountyInfo> {
         //data = BountyData()
 
         // Gen reward entries and max rarity
@@ -62,12 +62,13 @@ class BountyCreator private constructor(
         // Gen objectives
         val objectives = genObjectives(
             totalRewardWorth * (1 + (BountifulIO.configData.bounty.objectiveDifficultyModifierPercent * 0.01)),
-            rewardEntries
+            rewardEntries,
+            tps
         )
         data.objectives.addAll(objectives)
 
         info.timeStarted = startTime
-        info.timeToComplete += 15000L + BountifulIO.configData.bounty.flatBonusTimePerBountyInTicks
+        info.timeToComplete += (750L * tps) + BountifulIO.configData.bounty.flatBonusTimePerBountyInSecs
 
 
         return data to info
@@ -124,7 +125,7 @@ class BountyCreator private constructor(
         }
     }
 
-    private fun genObjectives(worth: Double, rewardPools: List<PoolEntry>): List<BountyDataEntry> {
+    private fun genObjectives(worth: Double, rewardPools: List<PoolEntry>, tps: Int): List<BountyDataEntry> {
         // -30 = 150% / 1.5x needed, 30 = 50% / 0.5x needed
         // 1 - (rep / 60.0)
         val objNeededMult = getDiscount(rep)
@@ -152,7 +153,7 @@ class BountyCreator private constructor(
             val entry = picked.toEntry(world, pos, w, decrees.map { it.id }.toSet())
 
             // Add time based on entry
-            info.timeToComplete += (picked.timeMult * entry.worth).toLong() * 7
+            info.timeToComplete += (picked.timeMult * entry.worth * 0.35 * tps).toLong()
 
             // Append on a new worth to add obj for
             // if we still haven't fulfilled it

@@ -21,7 +21,7 @@ class BountifulConfigData {
 
     @Serializable
     class BountyConfigData {
-        var flatBonusTimePerBountyInTicks: Int = 0
+        var flatBonusTimePerBountyInSecs: Int = 0
         var shouldHaveTimersAndExpire = true
         var objectiveDifficultyModifierPercent = 0
         var maxNumRewards = 2
@@ -160,12 +160,12 @@ class BountifulConfigData {
         bountyCat.addEntry(
             creator.startIntSlider(
                 Text.literal("Bonus Time"),
-                bounty.flatBonusTimePerBountyInTicks,
-                0, 6000
+                bounty.flatBonusTimePerBountyInSecs,
+                0, 3600
             ).setDefaultValue(0).setTooltip(
-                Text.literal("How much bonus time is given to bounties, in ticks")
+                Text.literal("How much bonus time is given to bounties, in seconds")
             ).setSaveConsumer {
-                bounty.flatBonusTimePerBountyInTicks = it
+                bounty.flatBonusTimePerBountyInSecs = it
             }.build()
         )
 
