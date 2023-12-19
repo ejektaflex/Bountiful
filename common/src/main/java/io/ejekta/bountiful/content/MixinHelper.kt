@@ -41,8 +41,7 @@ object MixinHelper {
             val dataA = DecreeData[inA]
             val dataB = DecreeData[inB]
             val combined = dataA.copy().apply {
-                val newIds = dataB.ids.filter { it !in dataA.ids }
-                ids.addAll(newIds)
+                ids.addAll(dataB.ids)
             }
             val decreeProto = ItemStack(BountifulContent.DECREE_ITEM)
             DecreeData[decreeProto] = combined

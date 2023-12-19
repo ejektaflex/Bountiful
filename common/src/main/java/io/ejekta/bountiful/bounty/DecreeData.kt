@@ -11,7 +11,7 @@ import net.minecraft.world.World
 
 @Suppress("RemoveRedundantQualifierName")
 @Serializable
-data class DecreeData(val ids: MutableList<String> = mutableListOf(), val rank: Int = 1) {
+data class DecreeData(val ids: MutableSet<String> = mutableSetOf(), val rank: Int = 1) {
 
     fun tooltipInfo(world: World): List<Text> {
         return mutableListOf<Text>() + when (ids.isNotEmpty()) {

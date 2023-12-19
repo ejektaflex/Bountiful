@@ -1,0 +1,30 @@
+{
+  "parent": "bountiful:bountiful/bounty_taken",
+  "criteria": {
+    "fetch": {
+      "trigger": "bountiful:fetch_quest"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "bountiful.advancement.fetch_quest.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:wooden_pickaxe",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "bountiful.advancement.fetch_quest.title"
+    }
+  },
+  "requirements": [
+    [
+      "fetch"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

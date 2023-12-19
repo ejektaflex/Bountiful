@@ -30,6 +30,14 @@ class BountyInfo(
         return timeLeftTicks(world) / GameTime.TICK_RATE
     }
 
+    private fun timeTakenTicks(world: World): Long {
+        return world.time - timeStarted
+    }
+
+    fun timeTakenSecs(world: World): Long {
+        return timeTakenTicks(world) / GameTime.TICK_RATE
+    }
+
     // ### Formatting ### //
 
     fun formattedTimeLeft(world: World): Text {

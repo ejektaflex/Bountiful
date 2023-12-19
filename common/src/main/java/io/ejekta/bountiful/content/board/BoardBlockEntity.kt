@@ -159,8 +159,11 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
         // Award rush hour advancement
         serverWorld?.let {
-            if (bountyInfo.timeLeftSecs(it) <= 60) {
+            if (bountyInfo.timeTakenSecs(it) <= 60) {
                 BountifulTriggers.RUSH_ORDER.trigger(player)
+            }
+            if (bountyInfo.timeLeftSecs(it) <= 5) {
+                BountifulTriggers.PROCRASTINATOR.trigger(player)
             }
         }
 

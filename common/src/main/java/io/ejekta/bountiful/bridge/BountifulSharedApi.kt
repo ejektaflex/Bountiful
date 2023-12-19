@@ -6,6 +6,7 @@ import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.content.BountifulContent
+import io.ejekta.bountiful.content.BountifulTriggers
 import io.ejekta.bountiful.messages.ClipboardCopy
 import io.ejekta.bountiful.messages.OnBountyComplete
 import io.ejekta.bountiful.messages.SelectBounty
@@ -79,15 +80,24 @@ interface BountifulSharedApi {
             playerList.addAll(world.getPlayers { it.distanceTo(killedEntity) < 12f })
             (entity as? ServerPlayerEntity)?.let { playerList.add(it) }
 
+            var tamedKill = false
             if (entity is TameableEntity) {
                 val owner = entity.owner as? ServerPlayerEntity
-                owner?.let { playerList.add(it) }
+                owner?.let {
+                    playerList.add(it)
+                    tamedKill = true
+                }
             }
 
             (killedEntity.attacker as? ServerPlayerEntity)?.let { playerList.add(it) }
             (killedEntity.attacking as? ServerPlayerEntity)?.let { playerList.add(it) }
 
             playerList.toSet().forEach {
+                (entity as? TameableEntity)?.let { tameable ->
+                    if (tameable.owner ==  it) {
+                        BountifulTriggers.FETCH_QUEST.trigger(it)
+                    }
+                }
                 BountyTypeRegistry.ENTITY.incrementEntityBounties(it, killedEntity)
             }
         }

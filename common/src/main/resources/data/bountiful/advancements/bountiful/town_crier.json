@@ -1,0 +1,38 @@
+{
+  "parent": "bountiful:bountiful/bounty_taken",
+  "criteria": {
+    "find_a_decree": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "bountiful:decree"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "bountiful.advancement.town_crier.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "bountiful:decree"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "bountiful.advancement.town_crier.title"
+    }
+  },
+  "requirements": [
+    [
+      "find_a_decree"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

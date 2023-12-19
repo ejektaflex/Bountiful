@@ -8,7 +8,7 @@ import net.minecraft.predicate.entity.LootContextPredicate
 import net.minecraft.server.network.ServerPlayerEntity
 import java.util.*
 
-open class SimpleCriterion : AbstractCriterion<SimpleCriterion.Companion.FreeCondition>() {
+class SimpleCriterion : AbstractCriterion<SimpleCriterion.Companion.FreeCondition>() {
 
     override fun conditionsFromJson(
         obj: JsonObject,
