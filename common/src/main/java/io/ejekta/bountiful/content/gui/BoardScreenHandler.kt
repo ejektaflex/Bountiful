@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.screen.PropertyDelegate
+import net.minecraft.screen.slot.Slot
 import net.minecraft.util.math.BlockPos
 
 
@@ -48,7 +49,7 @@ class BoardScreenHandler @JvmOverloads constructor(
         inventory.onOpen(playerInventory.player)
         addProperties(doneProperty)
 
-        val boardInv = inventory as BoardInventory
+        val boardInv = inventory
 
         val bRows = 3
         val bCols = 7

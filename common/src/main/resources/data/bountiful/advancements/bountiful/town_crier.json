@@ -1,17 +1,8 @@
 {
   "parent": "bountiful:bountiful/bounty_taken",
   "criteria": {
-    "find_a_decree": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "bountiful:decree"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
+    "place_decree": {
+      "trigger": "bountiful:decree_placed"
     }
   },
   "display": {
@@ -31,7 +22,7 @@
   },
   "requirements": [
     [
-      "find_a_decree"
+      "place_decree"
     ]
   ],
   "sends_telemetry_event": false

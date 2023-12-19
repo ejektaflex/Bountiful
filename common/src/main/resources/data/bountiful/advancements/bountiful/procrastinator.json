@@ -1,5 +1,5 @@
 {
-  "parent": "bountiful:bountiful/bounty_taken",
+  "parent": "bountiful:bountiful/bounty_complete",
   "criteria": {
     "turn_in_close_call": {
       "trigger": "bountiful:procrastinator"
