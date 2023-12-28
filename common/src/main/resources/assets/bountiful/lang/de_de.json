@@ -69,10 +69,10 @@
 
 	"bountiful.bounty.type.entity.kills": "Erledigte Einheiten",
 
-	"bountiful.rarity.Common": "Gewöhnlich",
-	"bountiful.rarity.Uncommon": "Ungewöhnlich",
-	"bountiful.rarity.Rare": "Selten",
-	"bountiful.rarity.Epic": "Episch",
+	"bountiful.rarity.common": "Gewöhnliche",
+	"bountiful.rarity.uncommon": "Ungewöhnliche",
+	"bountiful.rarity.rare": "Seltene",
+	"bountiful.rarity.epic": "Epische",
 
 	"stat.bountiful.bounties_taken": "Angenommene Belohnungen",
 	"stat.bountiful.bounties_done": "Abgeschlossene Belohnungen (Gesamt)",
