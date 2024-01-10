@@ -50,9 +50,9 @@ interface BountifulSharedApi {
         )
 
         Kambrik.Message.registerServerMessage(
-            DecreePlaced.serializer(),
-            DecreePlaced::class,
-            Bountiful.id("decree_placed")
+            ServerPlayerStatus.serializer(),
+            ServerPlayerStatus::class,
+            Bountiful.id("player_status")
         )
     }
 

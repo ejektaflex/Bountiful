@@ -1,8 +1,12 @@
 package io.ejekta.bountiful.content.gui
 
+import io.ejekta.bountiful.bridge.Bountybridge
+import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.board.BoardInventory
+import io.ejekta.bountiful.messages.ServerPlayerStatus
 import io.ejekta.bountiful.util.readOnlyCopy
+import io.ejekta.kambrik.bridge.Kambridge
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.slot.Slot
@@ -32,6 +36,20 @@ class BoardBountySlot(private val inv: BoardInventory, index: Int, x: Int, y: In
         }
         super.onTakeItem(player, stack)
         return true
+    }
+
+    override fun onTakeItem(player: PlayerEntity, stack: ItemStack) {
+        if (Kambridge.isOnClient()) {
+            ServerPlayerStatus.Type.BOUNTY_TAKEN.sendToServer()
+        }
+        super.onTakeItem(player, stack)
+    }
+
+    override fun onQuickTransfer(newItem: ItemStack?, original: ItemStack?) {
+        if (Kambridge.isOnClient()) {
+            ServerPlayerStatus.Type.BOUNTY_TAKEN.sendToServer()
+        }
+        super.onQuickTransfer(newItem, original)
     }
 
 }

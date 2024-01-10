@@ -9,15 +9,22 @@ import io.ejekta.bountiful.content.item.BountyItem
 import io.ejekta.bountiful.content.item.DecreeItem
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.data.Pool
+import io.ejekta.kambrik.ext.register
 import io.ejekta.kambrik.registration.KambrikAutoRegistrar
+import net.minecraft.block.BlockState
 import net.minecraft.entity.ai.brain.MemoryModuleType
 import net.minecraft.entity.passive.VillagerEntity
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.entry.RegistryEntry
+import net.minecraft.stat.Stat
+import net.minecraft.stat.StatFormatter
+import net.minecraft.stat.Stats
+import net.minecraft.util.Identifier
 import net.minecraft.util.math.GlobalPos
 import net.minecraft.world.poi.PointOfInterestType
 import net.minecraft.world.poi.PointOfInterestTypes
@@ -59,17 +66,34 @@ object BountifulContent : KambrikAutoRegistrar {
         MemoryModuleType(Optional.empty<Codec<GlobalPos>>())
     ) as MemoryModuleType<GlobalPos>
 
-    val POI_BOUNTY_BOARD: RegistryKey<PointOfInterestType> = RegistryKey.of(RegistryKeys.POINT_OF_INTEREST_TYPE, Bountiful.id("bountyboard"))
+    val POI_BOUNTY_BOARD = "bountyboard".forVillagerPoi(MEM_MODULE_NEAREST_BOARD, setOf(BOARD.defaultState), 1, 1)
 
-    init {
-        val abc = VillagerEntity.POINTS_OF_INTEREST.toMutableMap()
-        val bio: BiPredicate<VillagerEntity, RegistryEntry<PointOfInterestType>> = BiPredicate { vill, poiEntry ->
-            poiEntry.matchesKey(POI_BOUNTY_BOARD)
+    object CustomStats {
+        private fun String.forStat(formatter: StatFormatter): Stat<*> {
+            //val statId = forRegistration(Registries.CUSTOM_STAT, Bountiful.id(this))
+            val statId = Bountiful.id(this)
+            Registry.register(Registries.CUSTOM_STAT, this, statId)
+            return Stats.CUSTOM.getOrCreateStat(statId, formatter)
         }
-        abc[MEM_MODULE_NEAREST_BOARD] = bio
-        VillagerEntity.POINTS_OF_INTEREST = abc
 
-        PointOfInterestTypes.register(Registries.POINT_OF_INTEREST_TYPE, POI_BOUNTY_BOARD, setOf(BOARD.defaultState), 1, 1)
+        private val simpleFormat = StatFormatter { "$it" }
+        val BOUNTIES_TAKEN = "bounties_taken".forStat(simpleFormat)
+        val BOUNTIES_COMPLETED = "bounties_done".forStat(simpleFormat)
     }
 
+    init {
+        CustomStats // yep
+    }
+
+    private fun String.forVillagerPoi(memModule: MemoryModuleType<GlobalPos>, stateSet: Set<BlockState>, tickets: Int, searchDistance: Int): RegistryKey<PointOfInterestType>? {
+        val registryKey = RegistryKey.of(RegistryKeys.POINT_OF_INTEREST_TYPE, Bountiful.id(this))
+        val poiMap = VillagerEntity.POINTS_OF_INTEREST.toMutableMap()
+        val bio: BiPredicate<VillagerEntity, RegistryEntry<PointOfInterestType>> = BiPredicate { vill, poiEntry ->
+            poiEntry.matchesKey(registryKey)
+        }
+        poiMap[memModule] = bio
+        VillagerEntity.POINTS_OF_INTEREST = poiMap
+        PointOfInterestTypes.register(Registries.POINT_OF_INTEREST_TYPE, registryKey, stateSet, tickets, searchDistance)
+        return registryKey
+    }
 }
