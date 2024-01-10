@@ -66,6 +66,9 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     private var takenMask = mutableMapOf<String, MutableSet<Int>>()
     private val takenSerializer = MapSerializer(String.serializer(), SetSerializer(Int.serializer()))
 
+    // Last time a bounty was added
+    private var lastUpdatedTime = 0L
+
     // Only need to calc this once per object, I don't see it changing often
     private val villageTag = Registries.POINT_OF_INTEREST_TYPE.streamTags().filter { it.id == Identifier("village") }.findFirst().getOrNull()
 
@@ -259,6 +262,20 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         }
     }
 
+    private fun upkeepBountyGeneration() {
+        val updateFrequencyTicks = BountifulIO.configData.board.updateFrequencySecs * GameTime.TICK_RATE
+        serverWorld?.let { sw ->
+            if (sw.time - lastUpdatedTime >= updateFrequencyTicks && updateFrequencyTicks > 0) {
+                val numUpdates = ((sw.time - lastUpdatedTime) / updateFrequencyTicks).coerceAtMost(BoardInventory.BOUNTY_SIZE.toLong())
+                // We are updating!
+                serverWorld?.time?.let { serverTime -> lastUpdatedTime = serverTime }
+                for (i in 0 until numUpdates) {
+                    randomlyUpdateBoard()
+                }
+            }
+        }
+    }
+
     private fun randomlyUpdateBoard() {
         val ourWorld = world as? ServerWorld ?: return
         if (decrees.isEmpty) {
@@ -316,6 +333,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         val bountyList = base.getCompound("bounty_inv") ?: return
 
         boardUUID = base.getString("boardId")
+        lastUpdatedTime = base.getLong("lastUpdated")
 
         Inventories.readNbt(
             decreeList,
@@ -350,6 +368,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         super.writeNbt(base)
 
         base.putString("boardId", boardUUID)
+
+        base.putLong("lastUpdated", lastUpdatedTime)
 
         val doneMap = JsonFormats.Hand.encodeToStringTag(finishSerializer, finishMap)
         base.put("completed", doneMap)
@@ -505,8 +525,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
                 entity.upkeepRevealDecrees()
             }
 
-            world.everySeconds(BountifulIO.configData.board.updateFrequencySecs, 1) {
-                entity.randomlyUpdateBoard()
+            world.everySeconds(1, 1) {
+                entity.upkeepBountyGeneration()
             }
 
             world.everySeconds(5, 2) {
