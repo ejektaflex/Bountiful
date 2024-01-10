@@ -68,4 +68,10 @@ class BoardInventory(
         return super.removeStack(slot)
     }
 
+    companion object {
+        const val BOUNTY_SIZE = 21
+        val BOUNTY_RANGE = 0 until BOUNTY_SIZE
+        val DECREE_RANGE = BOUNTY_SIZE until BOUNTY_SIZE + 3
+    }
+
 }

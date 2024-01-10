@@ -2,7 +2,7 @@ package io.ejekta.bountiful.content.board
 
 import net.minecraft.inventory.SimpleInventory
 
-class BountyInventory : SimpleInventory(SIZE) {
+class BountyInventory : SimpleInventory(BoardInventory.BOUNTY_SIZE) {
 
     fun cloned(mask: Set<Int>): BountyInventory {
         val newInv = BountyInventory()
@@ -16,10 +16,5 @@ class BountyInventory : SimpleInventory(SIZE) {
 
     fun clone(): BountyInventory {
         return cloned(setOf())
-    }
-
-    companion object {
-        const val SIZE = 21 // Number of bounty board slots
-        val bountySlots = 0 until SIZE
     }
 }

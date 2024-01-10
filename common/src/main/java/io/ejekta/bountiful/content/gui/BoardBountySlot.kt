@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.screen.slot.Slot
 import net.minecraft.server.network.ServerPlayerEntity
 
-class BoardBountySlot(private val inv: BoardInventory, index: Int, x: Int, y: Int) : Slot(inv, index, x, y) {
+class BoardBountySlot(private val inv: BoardInventory, val usingPlayer: PlayerEntity, index: Int, x: Int, y: Int) : Slot(inv, index, x, y) {
     override fun canInsert(stack: ItemStack?): Boolean {
         return false
     }
@@ -39,17 +39,10 @@ class BoardBountySlot(private val inv: BoardInventory, index: Int, x: Int, y: In
     }
 
     override fun onTakeItem(player: PlayerEntity, stack: ItemStack) {
-        if (Kambridge.isOnClient()) {
+        if (usingPlayer.server == null) {
             ServerPlayerStatus.Type.BOUNTY_TAKEN.sendToServer()
         }
         super.onTakeItem(player, stack)
-    }
-
-    override fun onQuickTransfer(newItem: ItemStack?, original: ItemStack?) {
-        if (Kambridge.isOnClient()) {
-            ServerPlayerStatus.Type.BOUNTY_TAKEN.sendToServer()
-        }
-        super.onQuickTransfer(newItem, original)
     }
 
 }

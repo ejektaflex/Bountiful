@@ -102,10 +102,10 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         get() = world as? ServerWorld
 
     private val takenSlots: Set<Int>
-        get() = BountyInventory.bountySlots.filter { !bounties.getStack(it).isEmpty }.toSet()
+        get() = BoardInventory.BOUNTY_RANGE.filter { !bounties.getStack(it).isEmpty }.toSet()
 
     private val freeSlots: Set<Int>
-        get() = BountyInventory.bountySlots.toSet() - takenSlots
+        get() = BoardInventory.BOUNTY_RANGE.toSet() - takenSlots
 
     private fun weightedBountySlot(): Int {
         val worldTime = world?.time ?: return -1
@@ -184,14 +184,14 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
     private fun randomlyPruneOldBounty() {
         val slotNum = weightedBountySlot()
-        if (slotNum in BountyInventory.bountySlots) {
+        if (slotNum in BoardInventory.BOUNTY_RANGE) {
             removeBounty(slotNum)
         }
     }
 
     private fun addBounty(slot: Int, stack: ItemStack) {
         Bountiful.LOGGER.debug("Adding bounty to slot $slot")
-        if (slot !in BountyInventory.bountySlots) return
+        if (slot !in BoardInventory.BOUNTY_RANGE) return
 
         // Update timestamps
         world?.time?.let { bountyTimestamps[slot] = it }
