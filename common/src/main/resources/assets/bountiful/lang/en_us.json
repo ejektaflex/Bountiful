@@ -1,5 +1,7 @@
 {
 
+	"bountiful.mod.name": "Bountiful",
+
 	"block.bountiful.bountyboard": "Bounty Board",
 
 	"itemGroup.bountiful": "Bountiful",
@@ -27,7 +29,6 @@
 	"bountiful.bounty.expired": "This bounty has expired.",
 	"bountiful.bounty.turnin": "Fullfill your bounty by right clicking on a bounty board.",
 
-	"bountiful.advancement.bounty_taken.title": "Work for Hire",
 	"bountiful.advancement.bounty_taken.desc": "Take a bounty from a bounty board",
 
 	"bountiful.advancement.bounty_complete.title": "Honest Pay for Honest Work",
@@ -46,7 +47,7 @@
 	"bountiful.advancement.royal_mandate.desc": "Put a decree in a bounty board",
 
 	"bountiful.advancement.fetch_quest.title": "Just a 'Fetch' Quest",
-	"bountiful.advancement.fetch_quest.desc": "Complete a bounty with the aid of a pet",
+	"bountiful.advancement.fetch_quest.desc": "Have a pet kill a mob for a bounty",
 
 	"bountiful.bounty": "Bounty",
 
