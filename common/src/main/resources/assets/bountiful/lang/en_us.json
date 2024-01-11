@@ -43,6 +43,12 @@
 	"bountiful.advancement.town_crier.title": "Town Crier",
 	"bountiful.advancement.town_crier.desc": "Put a decree on a bounty board",
 
+	"bountiful.advancement.printing_press.title": "Printing Press",
+	"bountiful.advancement.printing_press.desc": "Combine two Decrees at an anvil",
+
+	"bountiful.advancement.ninety_five_theses.title": "95 Theses",
+	"bountiful.advancement.ninety_five_theses.desc": "Put every type of Decree on a bounty board",
+
 	"bountiful.advancement.royal_mandate.title": "Royal Mandate",
 	"bountiful.advancement.royal_mandate.desc": "Put a decree in a bounty board",
 

@@ -13,8 +13,7 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "minecraft:wooden_pickaxe",
-      "nbt": "{Damage:0}"
+      "item": "minecraft:red_bed"
     },
     "show_toast": false,
     "title": {

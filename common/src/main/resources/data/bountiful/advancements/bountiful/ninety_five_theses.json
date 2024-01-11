@@ -1,0 +1,29 @@
+{
+  "parent": "bountiful:bountiful/printing_press",
+  "criteria": {
+    "place_decree": {
+      "trigger": "bountiful:decree_placed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "bountiful.advancement.ninety_five_theses.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "bountiful:decree"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "bountiful.advancement.ninety_five_theses.title"
+    }
+  },
+  "requirements": [
+    [
+      "place_decree"
+    ]
+  ],
+  "sends_telemetry_event": false
+}
