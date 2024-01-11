@@ -17,7 +17,6 @@ classes/
 .vscode
 .settings
 *.launch
-common/src/main/resources/data/bountiful/worldgen/processor_list
-common/src/main/resources/data/bountiful/bounty_pools
+
 fabric/src/main/resources/resourcepacks
 *.log

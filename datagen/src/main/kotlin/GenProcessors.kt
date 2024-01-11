@@ -21,7 +21,8 @@ fun extract(text: String, section: String, replaceBlock: String? = null): String
             replace("%%%%", replaceBlock)
         else
             this
-        }
+        }.replace(Regex("//.+"), "")
+
 }
 
 fun main() {

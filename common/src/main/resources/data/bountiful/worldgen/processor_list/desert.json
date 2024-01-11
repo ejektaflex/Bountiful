@@ -1,0 +1,41 @@
+
+{
+	"processors": [
+		{
+			"rules": [
+				
+				{
+					"output_state": {
+						"Name": "minecraft:chiseled_sandstone"
+					},
+					"input_predicate": {
+						"predicate_type": "minecraft:block_match",
+						"block": "minecraft:oak_planks"
+					},
+					"location_predicate": {
+						"predicate_type": "minecraft:always_true"
+					}
+				},
+				
+				{
+					"output_state": {
+						"Name": "minecraft:cut_sandstone_slab",
+						"Properties": { "type": "bottom", "waterlogged": "false" }
+					},
+					"input_predicate": {
+						"predicate_type": "minecraft:blockstate_match",
+						"block_state": {
+							"Name": "minecraft:oak_slab",
+							"Properties": { "type": "bottom", "waterlogged": "false" }
+						}
+					},
+					"location_predicate": {
+						"predicate_type": "minecraft:always_true"
+					}
+				}
+				
+			],
+			"processor_type": "minecraft:rule"
+		}
+	]
+}

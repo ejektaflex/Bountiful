@@ -71,54 +71,7 @@
 						"predicate_type": "minecraft:always_true"
 					}
 				},
-				{
-					"output_state": {
-						"Name": "%%%%",
-						"Properties": { "east": "true", "west": "true", "south": "false", "north": "false", "waterlogged": "false" }
-					},
-					"input_predicate": {
-						"predicate_type": "minecraft:blockstate_match",
-						"block_state": {
-							"Name": "minecraft:spruce_fence",
-							"Properties": { "east": "true", "west": "true", "south": "false", "north": "false", "waterlogged": "false" }
-						}
-					},
-					"location_predicate": {
-						"predicate_type": "minecraft:always_true"
-					}
-				},
-				{
-					"output_state": {
-						"Name": "%%%%",
-						"Properties": { "east": "false", "west": "false", "south": "true", "north": "true", "waterlogged": "false" }
-					},
-					"input_predicate": {
-						"predicate_type": "minecraft:blockstate_match",
-						"block_state": {
-							"Name": "minecraft:spruce_fence",
-							"Properties": { "east": "false", "west": "false", "south": "true", "north": "true", "waterlogged": "false" }
-						}
-					},
-					"location_predicate": {
-						"predicate_type": "minecraft:always_true"
-					}
-				},
-				{
-					"output_state": {
-						"Name": "%%%%",
-						"Properties": { "east": "true", "west": "false", "south": "false", "north": "false", "waterlogged": "false" }
-					},
-					"input_predicate": {
-						"predicate_type": "minecraft:blockstate_match",
-						"block_state": {
-							"Name": "minecraft:spruce_fence",
-							"Properties": { "east": "true", "west": "false", "south": "false", "north": "false", "waterlogged": "false" }
-						}
-					},
-					"location_predicate": {
-						"predicate_type": "minecraft:always_true"
-					}
-				},
+				// W
 				{
 					"output_state": {
 						"Name": "%%%%",
@@ -135,6 +88,7 @@
 						"predicate_type": "minecraft:always_true"
 					}
 				},
+				// S
 				{
 					"output_state": {
 						"Name": "%%%%",
@@ -151,6 +105,7 @@
 						"predicate_type": "minecraft:always_true"
 					}
 				},
+				// N
 				{
 					"output_state": {
 						"Name": "%%%%",
@@ -161,6 +116,91 @@
 						"block_state": {
 							"Name": "minecraft:spruce_fence",
 							"Properties": { "east": "false", "west": "false", "south": "false", "north": "true", "waterlogged": "false" }
+						}
+					},
+					"location_predicate": {
+						"predicate_type": "minecraft:always_true"
+					}
+				},
+				// E
+				{
+					"output_state": {
+						"Name": "%%%%",
+						"Properties": { "east": "true", "west": "false", "south": "false", "north": "false", "waterlogged": "false" }
+					},
+					"input_predicate": {
+						"predicate_type": "minecraft:blockstate_match",
+						"block_state": {
+							"Name": "minecraft:spruce_fence",
+							"Properties": { "east": "true", "west": "false", "south": "false", "north": "false", "waterlogged": "false" }
+						}
+					},
+					"location_predicate": {
+						"predicate_type": "minecraft:always_true"
+					}
+				},
+
+				{
+					"output_state": {
+						"Name": "%%%%",
+						"Properties": { "east": "false", "west": "true", "south": "false", "north": "true", "waterlogged": "false" }
+					},
+					"input_predicate": {
+						"predicate_type": "minecraft:blockstate_match",
+						"block_state": {
+							"Name": "minecraft:spruce_fence",
+							"Properties": { "east": "true", "west": "true", "south": "false", "north": "true", "waterlogged": "false" }
+						}
+					},
+					"location_predicate": {
+						"predicate_type": "minecraft:always_true"
+					}
+				},
+				// SW
+				{
+					"output_state": {
+						"Name": "%%%%",
+						"Properties": { "east": "false", "west": "true", "south": "true", "north": "false", "waterlogged": "false" }
+					},
+					"input_predicate": {
+						"predicate_type": "minecraft:blockstate_match",
+						"block_state": {
+							"Name": "minecraft:spruce_fence",
+							"Properties": { "east": "false", "west": "true", "south": "true", "north": "false", "waterlogged": "false" }
+						}
+					},
+					"location_predicate": {
+						"predicate_type": "minecraft:always_true"
+					}
+				},
+				// SE
+				{
+					"output_state": {
+						"Name": "%%%%",
+						"Properties": { "east": "true", "west": "false", "south": "true", "north": "false", "waterlogged": "false" }
+					},
+					"input_predicate": {
+						"predicate_type": "minecraft:blockstate_match",
+						"block_state": {
+							"Name": "minecraft:spruce_fence",
+							"Properties": { "east": "true", "west": "false", "south": "true", "north": "false", "waterlogged": "false" }
+						}
+					},
+					"location_predicate": {
+						"predicate_type": "minecraft:always_true"
+					}
+				},
+				// NE
+				{
+					"output_state": {
+						"Name": "%%%%",
+						"Properties": { "east": "true", "west": "false", "south": "false", "north": "true", "waterlogged": "false" }
+					},
+					"input_predicate": {
+						"predicate_type": "minecraft:blockstate_match",
+						"block_state": {
+							"Name": "minecraft:spruce_fence",
+							"Properties": { "east": "true", "west": "false", "south": "false", "north": "true", "waterlogged": "false" }
 						}
 					},
 					"location_predicate": {
