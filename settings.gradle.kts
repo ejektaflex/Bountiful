@@ -14,7 +14,7 @@ dependencyResolutionManagement {
         create("libs") {
 
             val Plugins = object {
-                val Architectury = "3.4.146" //=> https://maven.architectury.dev/architectury-plugin/architectury-plugin.gradle.plugin/
+                val Architectury = "3.4.151" //=> https://maven.architectury.dev/architectury-plugin/architectury-plugin.gradle.plugin/
                 val ArchLoom = "1.4-SNAPSHOT" //=> https://maven.architectury.dev/dev/architectury/architectury-loom/
                 val Shadow = "7.1.2"
             }
@@ -23,7 +23,7 @@ dependencyResolutionManagement {
                 val MC = "1.20.2"
                 // https://fabricmc.net/develop/
                 val Yarn = "build.4"
-                val FabricLoader = "0.14.23"
+                val FabricLoader = "0.15.3"
                 val FabricApi = "0.90.4"
                 val Forge = "48.0.31" //=> https://files.minecraftforge.net/net/minecraftforge/forge/
 

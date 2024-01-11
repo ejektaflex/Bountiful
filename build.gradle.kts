@@ -34,7 +34,7 @@ tasks {
         // Copy the outputs of the tasks...
         from(tasks)
         // ...into build/libs.
-        into(buildDir.resolve("libs"))
+        into(layout.buildDirectory.get().dir("libs"))
     }
 
     // Set up assemble to depend on the collectJars task, so it gets run on gradlew build.

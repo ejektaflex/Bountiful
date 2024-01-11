@@ -34,7 +34,6 @@ object MixinHelper {
     }
 
     fun modifyAnvilResults(handler: AnvilScreenHandler) {
-        println(handler)
         val inA = handler.input.getStack(0)
         val inB = handler.input.getStack(1)
         if (!inA.isEmpty && inA.item is DecreeItem && !inB.isEmpty && inB.item is DecreeItem) {
