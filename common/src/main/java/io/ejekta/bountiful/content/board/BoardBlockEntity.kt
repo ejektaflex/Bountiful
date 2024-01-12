@@ -67,7 +67,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     private val takenSerializer = MapSerializer(String.serializer(), SetSerializer(Int.serializer()))
 
     // Last time a bounty was added
-    private var lastUpdatedTime = 0L
+    private var lastUpdatedTime = serverWorld?.time ?: 0L
 
     // Only need to calc this once per object, I don't see it changing often
     private val villageTag = Registries.POINT_OF_INTEREST_TYPE.streamTags().filter { it.id == Identifier("village") }.findFirst().getOrNull()
@@ -179,8 +179,10 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     private fun addBountyToRandomSlot(stack: ItemStack) {
+        //println("FREE SLOTS: $freeSlots")
         val slotNum = freeSlots.randomOrNull()
         slotNum?.let {
+            //println("ADDING TO SLOT: $it")
             addBounty(it, stack)
         }
     }
@@ -193,7 +195,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     private fun addBounty(slot: Int, stack: ItemStack) {
-        Bountiful.LOGGER.debug("Adding bounty to slot $slot")
+        Bountiful.LOGGER.info("Adding bounty to slot $slot")
         if (slot !in BoardInventory.BOUNTY_RANGE) return
 
         // Update timestamps
@@ -216,16 +218,14 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     // If the bounty board has never been used before (pristine), populate it
-    private fun upkeepTryInitialPopulation() {
+    fun upkeepTryInitialPopulation() {
         if (isPristine) {
             if (decrees.isEmpty) {
                 decrees.setStack((0..2).random(), DecreeItem.create(
                     DecreeSpawnCondition.BOARD_SPAWN, 1, DecreeSpawnRank.CONSTANT
                 ))
             }
-            for (i in 0..5) {
-                randomlyUpdateBoard()
-            }
+            upkeepBountyGeneration()
         }
         markDirty()
     }
@@ -243,6 +243,21 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
                     DecreeSpawnRank.RANDOM.populateFunc(this, revealable)
                 }
             }
+        }
+    }
+
+    fun onUserPlacedDecree(player: ServerPlayerEntity, decStack: ItemStack) {
+        println("OnUserPlacedDecree: $player, $decStack")
+    }
+
+    fun checkUserPlacedAllDecrees(player: ServerPlayerEntity) {
+        println("Checking if $player has placed all decrees")
+        val decs = getBoardDecrees()
+        val allDecrees = decs.intersect(BountifulContent.Decrees.toSet()) == BountifulContent.Decrees.toSet()
+        println(BountifulContent.Decrees.toSet().minus(decs))
+        if (allDecrees) {
+            println("Yep, awarding..")
+            BountifulTriggers.ALL_DECREES_PLACED.trigger(player)
         }
     }
 
@@ -269,6 +284,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
                 val numUpdates = ((sw.time - lastUpdatedTime) / updateFrequencyTicks).coerceAtMost(BoardInventory.BOUNTY_SIZE.toLong())
                 // We are updating!
                 serverWorld?.time?.let { serverTime -> lastUpdatedTime = serverTime }
+                println("Upkeeping this many bounty updates: $numUpdates")
                 for (i in 0 until numUpdates) {
                     randomlyUpdateBoard()
                 }

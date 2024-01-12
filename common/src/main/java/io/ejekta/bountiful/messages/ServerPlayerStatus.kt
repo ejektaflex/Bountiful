@@ -3,6 +3,8 @@ package io.ejekta.bountiful.messages
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.kambrik.message.ServerMsg
 import io.ejekta.bountiful.content.BountifulTriggers
+import io.ejekta.bountiful.content.gui.BoardScreenHandler
+import io.ejekta.bountiful.util.currentBoardInteracting
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -15,6 +17,10 @@ class ServerPlayerStatus(private val statusType: Type) : ServerMsg() {
     enum class Type(val msgFunc: MsgContext.() -> Unit) {
         DECREE_PLACED({
             println("Decree placed by: $player")
+
+            // Do logic if a player placed all decrees on the board
+            player.currentBoardInteracting?.checkUserPlacedAllDecrees(player)
+
             BountifulTriggers.DECREE_PLACED.trigger(player)
         }),
         BOUNTY_TAKEN({

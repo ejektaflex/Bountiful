@@ -100,6 +100,10 @@ object BountifulCommands {
                             source.player?.giveItemStack(stack)
                         }
                     }
+                    "withall" runs {
+                        val stack = DecreeItem.createWithAllDecrees()
+                        source.player?.giveItemStack(stack)
+                    }
                 }
 
                 "bounty" {

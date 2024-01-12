@@ -16,6 +16,7 @@ object BountifulTriggers {
     val PROCRASTINATOR = registerTrigger("procrastinator", SimpleCriterion())
     val FETCH_QUEST = registerTrigger("fetch_quest", SimpleCriterion())
     val DECREE_PLACED = registerTrigger("decree_placed", SimpleCriterion())
+    val ALL_DECREES_PLACED = registerTrigger("all_decrees_placed", SimpleCriterion())
 
     private fun <T : Criterion<*>> registerTrigger(path: String, criterion: T): T {
         return criterion.apply {

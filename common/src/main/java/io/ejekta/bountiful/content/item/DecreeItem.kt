@@ -44,6 +44,11 @@ class DecreeItem : Item(
             return create(spawnableDecrees, ranked, spawnRank)
         }
 
+        fun createWithAllDecrees(): ItemStack {
+            val decIds = BountifulContent.Decrees.map { it.id }
+            return create(decIds, decIds.size)
+        }
+
         fun create(
             decIds: List<String>,
             ranked: Int = 1,

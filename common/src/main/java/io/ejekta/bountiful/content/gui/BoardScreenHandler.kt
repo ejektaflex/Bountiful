@@ -1,10 +1,16 @@
+@file:Suppress("OVERLOADS_WITHOUT_DEFAULT_ARGUMENTS")
+
 package io.ejekta.bountiful.content.gui
 
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.board.BoardBlock
 import io.ejekta.bountiful.content.board.BoardInventory
 import io.ejekta.bountiful.content.board.BountyInventory
+import io.ejekta.bountiful.content.item.BountyItem
+import io.ejekta.bountiful.content.item.DecreeItem
 import io.ejekta.bountiful.messages.ServerPlayerStatus
+import io.ejekta.bountiful.util.currentBoardInteracting
+import io.ejekta.kambrik.bridge.Kambridge
 import io.ejekta.kambrik.gui.screen.KambrikScreenHandler
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
@@ -12,6 +18,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.slot.Slot
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.math.BlockPos
 
 
@@ -40,24 +47,46 @@ class BoardScreenHandler @JvmOverloads constructor(
         return doneProperty.get(0)
     }
 
+    fun attemptInsert(stack: ItemStack, slotRange: IntRange, backwards: Boolean = false): ItemStack? {
+        return when (insertItem(stack, slotRange.first, slotRange.last + 1, backwards)) {
+            false -> null
+            true -> stack
+        }
+    }
+
     override fun quickMove(player: PlayerEntity, invSlot: Int): ItemStack {
-        if (player.server == null) {
-            if (invSlot in BoardInventory.BOUNTY_RANGE) {
-                ServerPlayerStatus.Type.BOUNTY_TAKEN.sendToServer()
-            } else {
-                if (invSlot > BoardInventory.DECREE_RANGE.last + 1) {
-                    if (getSlot(invSlot).stack.item == BountifulContent.DECREE_ITEM) {
-                        ServerPlayerStatus.Type.DECREE_PLACED.sendToServer()
+        if (player is ServerPlayerEntity) {
+            val stack = getSlot(invSlot).stack
+            when (invSlot) {
+                in BoardInventory.BOUNTY_RANGE -> {
+                    return attemptInsert(stack, BoardInventory.HOTBAR_RANGE) ?: attemptInsert(stack, BoardInventory.INVENTORY_RANGE) ?: ItemStack.EMPTY
+                }
+                in BoardInventory.DECREE_RANGE -> {
+                    return attemptInsert(stack, BoardInventory.HOTBAR_RANGE) ?: attemptInsert(stack, BoardInventory.INVENTORY_RANGE) ?: ItemStack.EMPTY
+                }
+                else -> {
+                    when (stack.item) {
+                        // If it's a decree in the inventory, try put in the decrees spot
+                        is DecreeItem -> {
+                            return attemptInsert(stack, BoardInventory.DECREE_RANGE, backwards = false) ?: ItemStack.EMPTY
+                        }
+                        // If it's a bounty already in the inventory, swap main and hotbar
+                        else -> {
+                            when (invSlot) {
+                                in BoardInventory.HOTBAR_RANGE -> {
+                                    return attemptInsert(stack, BoardInventory.INVENTORY_RANGE) ?: ItemStack.EMPTY
+                                }
+                                in BoardInventory.INVENTORY_RANGE -> {
+                                    return attemptInsert(stack, BoardInventory.HOTBAR_RANGE) ?: ItemStack.EMPTY
+                                }
+                            }
+                        }
                     }
-                } else {
-                    //println("Quick moved from decree area")
                 }
             }
         }
-        return super.quickMove(player, invSlot)
+        return ItemStack.EMPTY
     }
-
-
 
     //This constructor gets called from the BlockEntity on the server without calling the other constructor first, the server knows the inventory of the container
     //and can therefore directly provide it as an argument. This inventory will then be synced to the client.
@@ -83,13 +112,9 @@ class BoardScreenHandler @JvmOverloads constructor(
         // Bounties
         for (j in 0 until bRows) {
             for (k in 0 until bCols) {
-                // Welcome to jank! TODO do this in a better way for client<->server sync
                 addSlot(BoardBountySlot(inventory, playerInventory.player, k + j * bCols, 8 + k * bountySlotSize + adjustX, 18 + j * bountySlotSize + adjustY))
             }
         }
-
-        // Active Slot
-        addSlot(BoardBountySlot(inventory, playerInventory.player, -1, 216 + 500000, 31))
 
 
         // Decrees
@@ -100,13 +125,9 @@ class BoardScreenHandler @JvmOverloads constructor(
         //The player inventory
         makePlayerDefaultGrid(playerInventory, 181, 84)
 
-//        if (playerInventory.player !is ServerPlayerEntity) {
-//            println("Opened screen as client player, sending data")
-//            BoardDoneRequest(playerInventory.player.world.dimensionKey.value, boardInv.pos)
-//        }
 
-        //val pd = PropertyDelegate
-
+        // Active Slot
+        addSlot(BoardBountySlot(inventory, playerInventory.player, -1, 216 + 500000, 31))
     }
 }
 

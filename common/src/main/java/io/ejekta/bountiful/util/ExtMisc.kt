@@ -2,6 +2,8 @@ package io.ejekta.bountiful.util
 
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.content.BountifulContent
+import io.ejekta.bountiful.content.board.BoardBlockEntity
+import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.content.item.BountyItem
 import net.minecraft.entity.ai.brain.Brain
 import net.minecraft.entity.ai.brain.MemoryModuleType
@@ -166,6 +168,17 @@ fun VillagerEntity.hackyGiveTradeExperience(amt: Int) {
         }
     )
 }
+
+val ServerPlayerEntity.currentBoardInteracting: BoardBlockEntity?
+    get() {
+        val shPos = (currentScreenHandler as? BoardScreenHandler)?.inventory?.pos
+        shPos?.run {
+            serverWorld.getBlockEntity(this)?.let {
+                return (it as? BoardBlockEntity)
+            }
+        }
+        return null
+    }
 
 
 

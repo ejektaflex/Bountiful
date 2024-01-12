@@ -10,13 +10,13 @@ import net.minecraft.util.math.BlockPos
 
 class BoardInventory(
     val pos: BlockPos,
-    bountySrc: Inventory = BountyInventory(),
-    decreeSrc: Inventory = SimpleInventory(3)
+    val bountySrc: Inventory = BountyInventory(),
+    val decreeSrc: Inventory = SimpleInventory(3)
 ) : DoubleInventory(
     bountySrc,
     decreeSrc
 ) {
-    val selectedInv = SimpleInventory(1)
+    private val selectedInv = SimpleInventory(1)
 
     var selectedIndex: Int? = null
         private set
@@ -72,6 +72,9 @@ class BoardInventory(
         const val BOUNTY_SIZE = 21
         val BOUNTY_RANGE = 0 until BOUNTY_SIZE
         val DECREE_RANGE = BOUNTY_SIZE until BOUNTY_SIZE + 3
+        val INVENTORY_RANGE = 24..50
+        val HOTBAR_RANGE = 51..59
+        val ENTIRE_PLAYER_INV = 24..59
     }
 
 }

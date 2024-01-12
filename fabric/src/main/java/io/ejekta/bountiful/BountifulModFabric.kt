@@ -8,6 +8,7 @@ import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.villager.DecreeTradeFactory
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.internal.registration.KambrikRegistrar
+import kotlinx.serialization.json.JsonObject
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
