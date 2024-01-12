@@ -25,7 +25,10 @@ object BountifulForgeClient {
                 }
             }
         }
-        Bountybridge.registerItemDynamicTextures()
+        // ItemProperties data structures are not thread safe
+        evt.enqueueWork {
+            Bountybridge.registerItemDynamicTextures()
+        }
     }
 
     @SubscribeEvent
