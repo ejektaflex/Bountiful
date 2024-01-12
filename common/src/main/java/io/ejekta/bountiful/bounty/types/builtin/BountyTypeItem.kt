@@ -121,10 +121,14 @@ class BountyTypeItem : IBountyExchangeable {
             // Show enchanted book enchantments
             if (itemStack.item is EnchantedBookItem && Kambridge.isOnClient()) {
                 val enchantments = itemStack.getTooltip(MinecraftClient.getInstance().player, TooltipContext.BASIC).drop(1)
-                println(enchantments)
-                for (enchant in enchantments) {
-                    named = named.append(" (").append(enchant).append(")")
+                if (enchantments.isNotEmpty()) {
+                    named = named.append(" (")
+                    for (enchant in enchantments.dropLast(1)) {
+                        named = named.append(enchant).append(", ")
+                    }
+                    named = named.append(enchantments.last()).append(")")
                 }
+
             }
 
             return named
