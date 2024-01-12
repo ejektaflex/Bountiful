@@ -65,7 +65,11 @@ class BoardScreenHandler @JvmOverloads constructor(
 
             when (invSlot) {
                 in BoardInventory.BOUNTY_RANGE -> {
-                    return attemptInsert(stack, BoardInventory.HOTBAR_RANGE) ?: attemptInsert(stack, BoardInventory.INVENTORY_RANGE) ?: ItemStack.EMPTY
+                    val result = attemptInsert(stack, BoardInventory.HOTBAR_RANGE) ?: attemptInsert(stack, BoardInventory.INVENTORY_RANGE) ?: ItemStack.EMPTY
+                    if (result != ItemStack.EMPTY) {
+                        player.incrementStat(BountifulContent.CustomStats.BOUNTIES_TAKEN)
+                    }
+                    return result
                 }
                 in BoardInventory.DECREE_RANGE -> {
                     return attemptInsert(stack, BoardInventory.HOTBAR_RANGE) ?: attemptInsert(stack, BoardInventory.INVENTORY_RANGE) ?: ItemStack.EMPTY

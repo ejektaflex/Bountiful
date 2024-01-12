@@ -69,6 +69,7 @@ class BountyCreator private constructor(
         data.objectives.addAll(objectives)
 
         info.timeStarted = startTime
+        info.timePickedUp = startTime // just for now
         info.timeToComplete += 750L + BountifulIO.configData.bounty.flatBonusTimePerBountyInSecs
 
 

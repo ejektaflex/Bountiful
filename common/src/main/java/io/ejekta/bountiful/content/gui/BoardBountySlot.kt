@@ -44,8 +44,8 @@ class BoardBountySlot(private val inv: BoardInventory, val usingPlayer: PlayerEn
         if (stack.item is BountyItem) {
             BountyInfo.setPickedUp(stack, player.world.time)
         }
-        if (usingPlayer.server == null) {
-            ServerPlayerStatus.Type.BOUNTY_TAKEN.sendToServer()
+        if (usingPlayer is ServerPlayerEntity) {
+            usingPlayer.incrementStat(BountifulContent.CustomStats.BOUNTIES_TAKEN)
         }
         super.onTakeItem(player, stack)
     }

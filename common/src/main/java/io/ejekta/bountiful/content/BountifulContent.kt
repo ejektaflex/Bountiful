@@ -9,7 +9,6 @@ import io.ejekta.bountiful.content.item.BountyItem
 import io.ejekta.bountiful.content.item.DecreeItem
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.data.Pool
-import io.ejekta.kambrik.ext.register
 import io.ejekta.kambrik.registration.KambrikAutoRegistrar
 import net.minecraft.block.BlockState
 import net.minecraft.entity.ai.brain.MemoryModuleType
@@ -24,7 +23,6 @@ import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.stat.Stat
 import net.minecraft.stat.StatFormatter
 import net.minecraft.stat.Stats
-import net.minecraft.util.Identifier
 import net.minecraft.util.math.GlobalPos
 import net.minecraft.world.poi.PointOfInterestType
 import net.minecraft.world.poi.PointOfInterestTypes
@@ -79,7 +77,7 @@ object BountifulContent : KambrikAutoRegistrar {
         private val simpleFormat = StatFormatter { "$it" }
         val BOUNTIES_TAKEN = "bounties_taken".forStat(simpleFormat)
         val BOUNTIES_COMPLETED = "bounties_done".forStat(simpleFormat)
-        val BOUNTY_TIME_TAKEN = "bounty_time_taken".forStat(StatFormatter.TIME)
+        val BOUNTY_COMPLETION_TIME = "bounty_completion_time".forStat(StatFormatter.TIME)
     }
 
     init {

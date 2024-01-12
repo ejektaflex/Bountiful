@@ -33,7 +33,7 @@ class BountyInfo(
         return timeLeftTicks(world) / GameTime.TICK_RATE
     }
 
-    private fun timeTakenTicks(world: World): Long {
+    fun timeTakenTicks(world: World): Long {
         return world.time - timePickedUp
     }
 

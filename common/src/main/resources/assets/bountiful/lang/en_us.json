@@ -81,6 +81,7 @@
 
 	"stat.bountiful.bounties_taken": "Bounties Taken",
 	"stat.bountiful.bounties_done": "Bounties Completed (Total)",
+	"stat.bountiful.bounty_completion_time": "Bounty Completion Time (Total)",
 	"stat.bountiful.bounties_done_0": "Bounties Completed (Common)",
 	"stat.bountiful.bounties_done_1": "Bounties Completed (Uncommon)",
 	"stat.bountiful.bounties_done_2": "Bounties Completed (Rare)",
