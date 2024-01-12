@@ -79,6 +79,7 @@ object BountifulContent : KambrikAutoRegistrar {
         private val simpleFormat = StatFormatter { "$it" }
         val BOUNTIES_TAKEN = "bounties_taken".forStat(simpleFormat)
         val BOUNTIES_COMPLETED = "bounties_done".forStat(simpleFormat)
+        val BOUNTY_TIME_TAKEN = "bounty_time_taken".forStat(StatFormatter.TIME)
     }
 
     init {

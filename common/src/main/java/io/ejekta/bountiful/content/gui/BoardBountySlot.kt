@@ -1,9 +1,11 @@
 package io.ejekta.bountiful.content.gui
 
+import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bridge.Bountybridge
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.board.BoardInventory
+import io.ejekta.bountiful.content.item.BountyItem
 import io.ejekta.bountiful.messages.ServerPlayerStatus
 import io.ejekta.bountiful.util.readOnlyCopy
 import io.ejekta.kambrik.bridge.Kambridge
@@ -39,6 +41,9 @@ class BoardBountySlot(private val inv: BoardInventory, val usingPlayer: PlayerEn
     }
 
     override fun onTakeItem(player: PlayerEntity, stack: ItemStack) {
+        if (stack.item is BountyItem) {
+            BountyInfo.setPickedUp(stack, player.world.time)
+        }
         if (usingPlayer.server == null) {
             ServerPlayerStatus.Type.BOUNTY_TAKEN.sendToServer()
         }

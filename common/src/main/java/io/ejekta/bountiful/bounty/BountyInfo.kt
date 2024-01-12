@@ -6,6 +6,8 @@ import io.ejekta.bountiful.util.GameTime
 import io.ejekta.kambrik.serial.ItemDataJson
 import kotlinx.serialization.Serializable
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.item.TooltipContext
+import net.minecraft.item.ItemStack
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
@@ -16,7 +18,8 @@ import kotlin.math.max
 class BountyInfo(
     var rarity: BountyRarity = BountyRarity.COMMON,
     var timeStarted: Long = -1L,
-    var timeToComplete: Long = -1L
+    var timeToComplete: Long = -1L,
+    var timePickedUp: Long = -1L
 ) {
 
     fun timeLeftTicks(world: World): Long {
@@ -31,7 +34,7 @@ class BountyInfo(
     }
 
     private fun timeTakenTicks(world: World): Long {
-        return world.time - timeStarted
+        return world.time - timePickedUp
     }
 
     fun timeTakenSecs(world: World): Long {
@@ -44,7 +47,7 @@ class BountyInfo(
         return GameTime.formatTimeExpirable(timeLeftSecs(world))
     }
 
-    fun genTooltip(fromData: BountyData, isServer: Boolean): List<MutableText> {
+    fun genTooltip(fromData: BountyData, isServer: Boolean, context: TooltipContext): List<MutableText> {
         if (isServer) {
             return emptyList()
         }
@@ -58,6 +61,12 @@ class BountyInfo(
             addAll(fromData.rewards.map {
                 it.textSummary(player, false)
             })
+
+            if (context == TooltipContext.ADVANCED && BountifulIO.configData.client.advancedDebugTooltips) {
+                add(Text.literal(""))
+                add(Text.literal("Bountiful Debug Info:").formatted(Formatting.GOLD))
+                add(Text.literal("Taken: ${timeTakenSecs(player.world)}, Left: ${timeLeftSecs(player.world)}"))
+            }
         }
     }
 
@@ -66,6 +75,12 @@ class BountyInfo(
         override val identifier = Bountiful.id("bounty_info")
         override val ser = BountyInfo.serializer()
         override val default: () -> BountyInfo = { BountyInfo() }
+
+        fun setPickedUp(stack: ItemStack, time: Long) {
+            this[stack] = this[stack].apply {
+                timePickedUp = time
+            }
+        }
     }
 
 }

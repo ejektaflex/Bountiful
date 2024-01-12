@@ -32,6 +32,7 @@ class BountifulConfigData {
     @Serializable
     class ClientConfigData {
         var showCompletionToast = true
+        var advancedDebugTooltips = false
     }
 
     val client = ClientConfigData()
@@ -179,6 +180,17 @@ class BountifulConfigData {
                 Text.literal("Whether toast messages should appear upon bounty completion")
             ).setSaveConsumer {
                 client.showCompletionToast = it
+            }.build()
+        )
+
+        clientCat.addEntry(
+            creator.startBooleanToggle(
+                Text.literal("Advanced Debug Tooltips"),
+                client.advancedDebugTooltips
+            ).setDefaultValue(false).setTooltip(
+                Text.literal("Whether advanced tooltips should show debug information")
+            ).setSaveConsumer {
+                client.advancedDebugTooltips = it
             }.build()
         )
 

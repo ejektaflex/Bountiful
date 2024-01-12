@@ -160,6 +160,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         // Award advancement to player
         BountifulTriggers.BOUNTY_COMPLETED.trigger(player)
 
+        player.increaseStat(BountifulContent.CustomStats.BOUNTY_TIME_TAKEN, bountyInfo.timeTakenSecs(player.world).toInt())
+
         player.serverWorld.let {
             if (bountyInfo.timeTakenSecs(it) <= 60) {
                 BountifulTriggers.RUSH_ORDER.trigger(player)
