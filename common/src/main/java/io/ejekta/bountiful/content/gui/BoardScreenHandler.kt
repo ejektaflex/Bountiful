@@ -68,7 +68,11 @@ class BoardScreenHandler @JvmOverloads constructor(
                     when (stack.item) {
                         // If it's a decree in the inventory, try put in the decrees spot
                         is DecreeItem -> {
-                            return attemptInsert(stack, BoardInventory.DECREE_RANGE, backwards = false) ?: ItemStack.EMPTY
+                            return attemptInsert(stack, BoardInventory.DECREE_RANGE, backwards = false).also {
+                                if (it != null) {
+                                    player.currentBoardInteracting?.onUserPlacedDecree(player, stack)
+                                }
+                            } ?: ItemStack.EMPTY
                         }
                         // If it's a bounty already in the inventory, swap main and hotbar
                         else -> {

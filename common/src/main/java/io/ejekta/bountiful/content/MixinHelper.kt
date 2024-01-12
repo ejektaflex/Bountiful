@@ -8,9 +8,12 @@ import net.minecraft.entity.ai.brain.task.FindPointOfInterestTask
 import net.minecraft.entity.ai.brain.task.GoToIfNearbyTask
 import net.minecraft.entity.ai.brain.task.Task
 import net.minecraft.entity.passive.VillagerEntity
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.AnvilScreenHandler
 import net.minecraft.screen.ForgingScreenHandler
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.village.VillagerProfession
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
 import java.util.*
@@ -53,4 +56,16 @@ object MixinHelper {
             handler.output.setStack(0, decreeProto)
         }
     }
+
+    fun takeAnvilResults(playerEntity: PlayerEntity, stack: ItemStack, handler: AnvilScreenHandler) {
+        // This is really hacky; stack enters as the decree but count of 0, so getItem returns air unless we
+        // temporarily increment and then reset. Anvil never seems to use this variable, but we reset it just to be safe.
+        val currCount = stack.count
+        stack.increment(1)
+        if (stack.item is DecreeItem) {
+            (playerEntity as? ServerPlayerEntity)?.run { BountifulTriggers.PRINTING_PRESS.trigger(this) }
+        }
+        stack.count = currCount
+    }
+
 }

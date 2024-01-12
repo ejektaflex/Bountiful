@@ -164,7 +164,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             if (bountyInfo.timeTakenSecs(it) <= 60) {
                 BountifulTriggers.RUSH_ORDER.trigger(player)
             }
-            if (bountyInfo.timeLeftSecs(it) <= 5) {
+            if (bountyInfo.timeLeftSecs(it) <= 10) {
                 BountifulTriggers.PROCRASTINATOR.trigger(player)
             }
             player.incrementStat(BountifulContent.CustomStats.BOUNTIES_COMPLETED)
@@ -195,7 +195,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     private fun addBounty(slot: Int, stack: ItemStack) {
-        Bountiful.LOGGER.info("Adding bounty to slot $slot")
         if (slot !in BoardInventory.BOUNTY_RANGE) return
 
         // Update timestamps
@@ -209,7 +208,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     private fun removeBounty(slot: Int) {
-        Bountiful.LOGGER.debug("Removing bounty from slot $slot")
         modifyTrackedGuiInvs {
             it.removeStack(slot)
         }
@@ -247,16 +245,16 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     fun onUserPlacedDecree(player: ServerPlayerEntity, decStack: ItemStack) {
-        println("OnUserPlacedDecree: $player, $decStack")
+        checkUserPlacedAllDecrees(player, decStack)
     }
 
-    fun checkUserPlacedAllDecrees(player: ServerPlayerEntity) {
-        println("Checking if $player has placed all decrees")
-        val decs = getBoardDecrees()
-        val allDecrees = decs.intersect(BountifulContent.Decrees.toSet()) == BountifulContent.Decrees.toSet()
-        println(BountifulContent.Decrees.toSet().minus(decs))
+    private fun checkUserPlacedAllDecrees(player: ServerPlayerEntity, newStack: ItemStack) {
+        val newDecrees = DecreeData[newStack].ids
+        val decs = getBoardDecrees().map { it.id }.toSet() + newDecrees
+        val allDecreesSet = BountifulContent.Decrees.map { it.id }.toSet()
+        val allDecrees = decs.intersect(allDecreesSet) == allDecreesSet
+        println(allDecreesSet - decs)
         if (allDecrees) {
-            println("Yep, awarding..")
             BountifulTriggers.ALL_DECREES_PLACED.trigger(player)
         }
     }

@@ -18,8 +18,10 @@ accessible field net/minecraft/village/TradeOffer rewardingPlayerExperience Z
 accessible field net/minecraft/advancement/criterion/Criteria VALUES Lcom/google/common/collect/BiMap;
 # Anvil
 accessible field net/minecraft/screen/ForgingScreenHandler output Lnet/minecraft/inventory/CraftingResultInventory;
+accessible field net/minecraft/screen/ForgingScreenHandler player Lnet/minecraft/entity/player/PlayerEntity;
 accessible field net/minecraft/screen/ForgingScreenHandler input Lnet/minecraft/inventory/Inventory;
 accessible field net/minecraft/screen/AnvilScreenHandler levelCost Lnet/minecraft/screen/Property;
+accessible method net/minecraft/screen/AnvilScreenHandler canTakeOutput (Lnet/minecraft/entity/player/PlayerEntity;Z)Z
 # Stats
 accessible method net/minecraft/stat/Stats registerType (Ljava/lang/String;Lnet/minecraft/registry/Registry;)Lnet/minecraft/stat/StatType;
 accessible method net/minecraft/stat/Stats register (Ljava/lang/String;Lnet/minecraft/stat/StatFormatter;)Lnet/minecraft/util/Identifier;

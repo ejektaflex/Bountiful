@@ -1,6 +1,8 @@
 package io.ejekta.bountiful.mixin;
 
 import io.ejekta.bountiful.content.MixinHelper;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.screen.AnvilScreenHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,4 +15,10 @@ public class BountifulAnvilSHMixin {
     private void bo_makeCustomAnvilOutput(CallbackInfo ci) {
         MixinHelper.INSTANCE.modifyAnvilResults((AnvilScreenHandler) (Object) this);
     }
+
+    @Inject(method = "onTakeOutput", at = @At("HEAD"))
+    private void bo_takeCustomAnvilOutput(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
+        MixinHelper.INSTANCE.takeAnvilResults(player, stack, (AnvilScreenHandler) (Object) this);
+    }
+
 }

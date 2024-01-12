@@ -20,3 +20,5 @@ classes/
 
 fabric/src/main/resources/resourcepacks
 *.log
+fabric/src/generated
+common/src/generated

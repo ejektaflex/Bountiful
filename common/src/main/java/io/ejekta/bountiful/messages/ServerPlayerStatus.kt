@@ -19,7 +19,7 @@ class ServerPlayerStatus(private val statusType: Type) : ServerMsg() {
             println("Decree placed by: $player")
 
             // Do logic if a player placed all decrees on the board
-            player.currentBoardInteracting?.checkUserPlacedAllDecrees(player)
+            //player.currentBoardInteracting?.checkUserPlacedAllDecrees(player)
 
             BountifulTriggers.DECREE_PLACED.trigger(player)
         }),
