@@ -68,7 +68,6 @@ object BountifulContent : KambrikAutoRegistrar {
 
     object CustomStats {
         private fun String.forStat(formatter: StatFormatter): Stat<*> {
-            //val statId = forRegistration(Registries.CUSTOM_STAT, Bountiful.id(this))
             val statId = Bountiful.id(this)
             Registry.register(Registries.CUSTOM_STAT, this, statId)
             return Stats.CUSTOM.getOrCreateStat(statId, formatter)

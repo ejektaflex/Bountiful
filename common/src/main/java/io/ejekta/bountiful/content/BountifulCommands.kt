@@ -121,6 +121,14 @@ object BountifulCommands {
                         }
                     }
                     "dump" runs dumpData()
+
+                    "vill" runs {
+                        sendNearestVillagerToABoard(this)
+                    }
+
+                    "hold" runs {
+                        holdThing(this)
+                    }
                 }
                 "check" {
                     "entry" {
@@ -138,13 +146,6 @@ object BountifulCommands {
                 }
             }
 
-            "vill" runs {
-                sendNearestVillagerToABoard(this)
-            }
-
-            "hold" runs {
-                holdThing(this)
-            }
 
         }
     }
@@ -376,9 +377,8 @@ object BountifulCommands {
     private fun CommandContext<ServerCommandSource>.weights(rep: Int) {
         val cmd = kambrikCommand<ServerCommandSource> {
             try {
-
                 println("RARITY WEIGHTS:")
-                BountyRarity.values().forEach { rarity ->
+                BountyRarity.entries.forEach { rarity ->
                     println("${rarity.name}\t ${rarity.weightAdjustedFor(rep)}")
                 }
             } catch (e: Exception) {
@@ -405,6 +405,8 @@ object BountifulCommands {
                 Bountiful.LOGGER.info("    * [${item.type.path}] - ${item.id} - ${item.weightMult} - ${item.content}")
             }
         }
+
+        source.sendMessage(Text.literal("Bountiful's Decrees & Pools dumped to log."))
     }
 
 

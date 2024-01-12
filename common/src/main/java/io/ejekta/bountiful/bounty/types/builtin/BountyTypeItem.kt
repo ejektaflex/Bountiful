@@ -1,16 +1,20 @@
 package io.ejekta.bountiful.bounty.types.builtin
 
+import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.types.IBountyExchangeable
 import io.ejekta.bountiful.bounty.types.Progress
 import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.bountiful.util.getTagItemKey
 import io.ejekta.bountiful.util.getTagItems
+import io.ejekta.kambrik.bridge.Kambridge
 import io.ejekta.kambrik.ext.collect
 import io.ejekta.kambrik.ext.identifier
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.EnchantedBookItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
@@ -111,7 +115,19 @@ class BountyTypeItem : IBountyExchangeable {
         }
 
         fun getItemName(entry: BountyDataEntry): MutableText {
-            return getItem(entry).name.copy()
+            val itemStack = getItemStack(entry)
+            var named = itemStack.name.copy()
+
+            // Show enchanted book enchantments
+            if (itemStack.item is EnchantedBookItem && Kambridge.isOnClient()) {
+                val enchantments = itemStack.getTooltip(MinecraftClient.getInstance().player, TooltipContext.BASIC).drop(1)
+                println(enchantments)
+                for (enchant in enchantments) {
+                    named = named.append(" (").append(enchant).append(")")
+                }
+            }
+
+            return named
         }
     }
 

@@ -18,7 +18,10 @@ old config files and datapacks that overwrote existing Bountiful data may not fu
   - The villager will receive some trade XP for doing this - even more if their profession did match, and based on board reputation.
 - The way the board's bounties are refreshed has been updated - now, bounties that have been on the board the longest have the highest chances of being removed first.
   - This should reduce the number of old bounties that 'happen' to stay on the board through dumb luck (or rather, misfortune)
-- Added `TODO()` advancements, and an additional `TODO()` hidden advancements
+- Added `TODO()` advancements, and an additional `TODO()` hidden advancements.
+- The board will now appear to update in the time you've been gone even when the chunk is unloaded. It does this by playing catch-up when the chunk reloads.
+- Potions, Tipped Arrows and probably a few other items with dynamic names will now be displayed correctly in bounty tooltips.
+- Enchantments on enchanted books are now displayed in bounty tooltips.
 
 #### Configuration
 - Decrees now have three new, optional fields:

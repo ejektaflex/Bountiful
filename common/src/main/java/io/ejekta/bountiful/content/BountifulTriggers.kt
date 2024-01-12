@@ -8,7 +8,7 @@ import net.minecraft.advancement.criterion.Criterion
 object BountifulTriggers {
 
     init {
-        println("Registering bountiful advancement criterion triggers")
+        Bountiful.LOGGER.info("Registering bountiful advancement criterion triggers")
     }
 
     val BOUNTY_COMPLETED = registerTrigger("bounty_completed", SimpleCriterion())
