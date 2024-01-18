@@ -16,20 +16,20 @@ Bountiful adds bounty boards to the world.
 [[dependencies.bountiful]]
 modId = "forge"
 mandatory = true
-versionRange = "[47,)"
+versionRange = "[20.2.88,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.bountiful]]
 modId = "kambrik"
 mandatory = true
-versionRange = "[${kambrik_version}, ${kambrik_version}]"
+versionRange = "${kambrik_version}"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.bountiful]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[${minecraft_version},${minecraft_version}]"
+versionRange = "${minecraft_version}"
 ordering = "NONE"
 side = "BOTH"

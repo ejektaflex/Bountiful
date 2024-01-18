@@ -3,15 +3,18 @@ architectury {
     // Create the IDE launch configurations for this subproject.
     platformSetupLoomIde()
     // Set up Architectury for Forge.
-    forge()
+    neoForge()
 }
 
 loom {
-    forge {
-        //mixinConfig("bountiful.mixins.json")
-        accessWidenerPath.set(project(":common").file("src/main/resources/bountiful.accesswidener"))
-        convertAccessWideners.set(true)
-    }
+//    forge {
+//        //mixinConfig("bountiful.mixins.json")
+//        accessWidenerPath.set(project(":common").file("src/main/resources/bountiful.accesswidener"))
+//        convertAccessWideners.set(true)
+//    }
+//    developmentNeoForge {
+//
+//    }
 }
 
 repositories {
@@ -19,27 +22,29 @@ repositories {
     maven {
         name = "Kotlin for Forge"
         setUrl("https://thedarkcolour.github.io/KotlinForForge/")
+        content { includeGroup("thedarkcolour") }
     }
     maven("https://maven.shedaniel.me/") // Cloth Config
+    maven("https://maven.neoforged.net/releases/") // NeoForge
     mavenLocal()
     mavenCentral()
 }
 
 dependencies {
     // Add dependency on Forge. This is mainly used for generating the patched Minecraft jar with Forge classes.
-    forge(libs.forge)
+    neoForge(libs.neoforge)
 
     // Add Kotlin for Forge.
     // Based on their own instructions: https://github.com/thedarkcolour/KotlinForForge/blob/70385f5/thedarkcolour/kotlinforforge/gradle/kff-3.0.0.gradle
     implementation(libs.forge.adapter)
 
-    "developmentForge"(project(":common", configuration = "namedElements")) {
+    implementation(project(":common", configuration = "namedElements")) {
         isTransitive = false
     }
 
     // Bundle the transformed version of the common project in the mod.
     // The transformed version includes things like fixed refmaps.
-    shadowCommon(project(path = ":common", configuration = "transformProductionForge")) { isTransitive = false }
+    shadowCommon(project(path = ":common", configuration = "transformProductionNeoForge")) { isTransitive = false }
 
     //implementation("org.ow2.asm:asm-tree:9.4")
 

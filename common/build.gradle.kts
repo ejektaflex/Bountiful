@@ -3,7 +3,7 @@ plugins {
     kotlin("plugin.serialization") version libs.versions.ksx
 }
 
-architectury { common("fabric", "forge") }
+architectury { common("fabric", "neoforge") }
 
 loom { accessWidenerPath.set(file("src/main/resources/bountiful.accesswidener")) }
 

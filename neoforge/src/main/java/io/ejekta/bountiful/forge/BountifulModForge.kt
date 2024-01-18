@@ -1,7 +1,6 @@
 package io.ejekta.bountiful.forge
 
 import io.ejekta.bountiful.Bountiful
-import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.bridge.Bountybridge
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.BountifulIO.doContentReload
@@ -9,25 +8,21 @@ import io.ejekta.bountiful.content.BountifulCommands
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.internal.registration.KambrikRegistrar
-import net.minecraft.item.ItemGroup
-import net.minecraft.item.ItemGroups
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
 import net.minecraft.resource.SynchronousResourceReloader
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.Identifier
-import net.minecraftforge.event.AddReloadListenerEvent
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent
-import net.minecraftforge.event.RegisterCommandsEvent
-import net.minecraftforge.event.entity.living.LivingDeathEvent
-import net.minecraftforge.event.server.ServerStartingEvent
-import net.minecraftforge.eventbus.api.SubscribeEvent
-import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.registries.RegisterEvent
-import thedarkcolour.kotlinforforge.forge.FORGE_BUS
-import thedarkcolour.kotlinforforge.forge.MOD_BUS
-import thedarkcolour.kotlinforforge.forge.MOD_CONTEXT
-import thedarkcolour.kotlinforforge.forge.runForDist
+import net.neoforged.bus.api.SubscribeEvent
+import net.neoforged.fml.common.Mod
+import net.neoforged.neoforge.event.AddReloadListenerEvent
+import net.neoforged.neoforge.event.RegisterCommandsEvent
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent
+import net.neoforged.neoforge.event.server.ServerStartingEvent
+import net.neoforged.neoforge.registries.RegisterEvent
+import thedarkcolour.kotlinforforge.neoforge.forge.FORGE_BUS
+import thedarkcolour.kotlinforforge.neoforge.forge.MOD_CONTEXT
+import thedarkcolour.kotlinforforge.neoforge.forge.runForDist
 
 @Mod("bountiful")
 class BountifulModForge {
