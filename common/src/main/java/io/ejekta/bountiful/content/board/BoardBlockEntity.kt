@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.content.board
 
+import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.DecreeData
@@ -42,6 +43,7 @@ import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
+import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
@@ -52,6 +54,7 @@ import net.minecraft.world.poi.PointOfInterestType
 import java.util.*
 import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
+import kotlin.random.Random
 
 
 class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(BountifulContent.BOARD_ENTITY, pos, state), NamedScreenHandlerFactory {
@@ -159,6 +162,15 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         BountifulContent.Triggers.BOUNTY_COMPLETED.trigger(player)
 
         player.increaseStat(BountifulContent.CustomStats.BOUNTY_COMPLETION_TIME, bountyInfo.timeTakenTicks(player.world).toInt())
+
+        // Nightly message
+        if (Bountiful.nightly) {
+            player.sendMessageToClient(
+                Text.literal("This is a Nightly build of Bountiful. Distribution (including modpacks) is not allowed. Please report issues in the Discord!")
+                    .formatted(Formatting.GOLD),
+                false
+            )
+        }
 
         player.serverWorld.let {
             if (bountyInfo.timeTakenSecs(it) <= 60) {
