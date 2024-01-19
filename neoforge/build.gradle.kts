@@ -38,7 +38,7 @@ dependencies {
     // Based on their own instructions: https://github.com/thedarkcolour/KotlinForForge/blob/70385f5/thedarkcolour/kotlinforforge/gradle/kff-3.0.0.gradle
     implementation(libs.forge.adapter)
 
-    implementation(project(":common", configuration = "namedElements")) {
+    "developmentNeoForge"(project(":common", configuration = "namedElements")) {
         isTransitive = false
     }
 
@@ -48,7 +48,7 @@ dependencies {
 
     //implementation("org.ow2.asm:asm-tree:9.4")
 
-    modImplementation(libs.mod.dep.cloth.config.forge)
+    //modImplementation(libs.mod.dep.cloth.config.forge)
     modImplementation(libs.kambrik.forge) {
         isTransitive = false
     }

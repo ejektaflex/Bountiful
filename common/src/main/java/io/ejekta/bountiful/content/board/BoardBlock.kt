@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.content.board
 
+import com.mojang.serialization.MapCodec
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.config.BountifulIO
@@ -86,6 +87,10 @@ class BoardBlock : BlockWithEntity(
         } else {
             0.0f
         }
+    }
+
+    override fun getCodec(): MapCodec<out BlockWithEntity> {
+        return createCodec { bfs -> BoardBlock() }
     }
 
     override fun onUse(

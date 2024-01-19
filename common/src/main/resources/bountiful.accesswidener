@@ -1,7 +1,6 @@
 accessWidener   v2  named
 accessible method net/minecraft/screen/ScreenHandlerType register (Ljava/lang/String;Lnet/minecraft/screen/ScreenHandlerType$Factory;)Lnet/minecraft/screen/ScreenHandlerType;
 accessible method net/minecraft/client/item/ModelPredicateProviderRegistry register (Lnet/minecraft/item/Item;Lnet/minecraft/util/Identifier;Lnet/minecraft/client/item/ClampedModelPredicateProvider;)V
-accessible field net/minecraft/inventory/SimpleInventory stacks Lnet/minecraft/util/collection/DefaultedList;
 accessible method net/minecraft/entity/ai/brain/Activity <init> (Ljava/lang/String;)V
 # AI Locations
 accessible field net/minecraft/entity/passive/VillagerEntity POINTS_OF_INTEREST Ljava/util/Map;
@@ -14,8 +13,6 @@ accessible method net/minecraft/entity/ai/brain/Brain startTasks (Lnet/minecraft
 accessible field net/minecraft/entity/ai/brain/Brain coreActivities Ljava/util/Set;
 accessible field net/minecraft/entity/ai/brain/Brain tasks Ljava/util/Map;
 accessible field net/minecraft/village/TradeOffer rewardingPlayerExperience Z
-# Criteria
-accessible field net/minecraft/advancement/criterion/Criteria VALUES Lcom/google/common/collect/BiMap;
 # Anvil
 accessible field net/minecraft/screen/ForgingScreenHandler output Lnet/minecraft/inventory/CraftingResultInventory;
 accessible field net/minecraft/screen/ForgingScreenHandler player Lnet/minecraft/entity/player/PlayerEntity;

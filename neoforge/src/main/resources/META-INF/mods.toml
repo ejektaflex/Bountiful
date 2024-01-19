@@ -14,22 +14,22 @@ Bountiful adds bounty boards to the world.
 #logoFile = ""
 
 [[dependencies.bountiful]]
-modId = "forge"
-mandatory = true
+modId = "neoforge"
+type="required"
 versionRange = "[20.2.88,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.bountiful]]
 modId = "kambrik"
-mandatory = true
+type="required"
 versionRange = "${kambrik_version}"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.bountiful]]
 modId = "minecraft"
-mandatory = true
+type="required"
 versionRange = "${minecraft_version}"
 ordering = "NONE"
 side = "BOTH"

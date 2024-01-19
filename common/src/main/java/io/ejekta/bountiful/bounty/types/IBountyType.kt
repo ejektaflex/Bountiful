@@ -2,8 +2,6 @@ package io.ejekta.bountiful.bounty.types
 
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.data.PoolEntry
-import io.ejekta.kambrik.text.textLiteral
-import io.ejekta.kambrik.text.textTranslate
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.world.ServerWorld
@@ -29,8 +27,8 @@ interface IBountyType {
 
     fun getDescription(entry: BountyDataEntry): MutableText {
         return entry.name?.let {
-            textLiteral(it)
-        } ?: textTranslate(entry.id, "no_fallback")
+            Text.literal(it)
+        } ?: Text.translatable(entry.id)
     }
 
     // ### Helpers ###

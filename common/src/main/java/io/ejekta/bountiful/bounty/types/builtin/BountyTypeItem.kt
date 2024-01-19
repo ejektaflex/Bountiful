@@ -78,7 +78,7 @@ class BountyTypeItem : IBountyExchangeable {
         return false
     }
 
-    override fun giveReward(entry: BountyDataEntry, player: PlayerEntity): Boolean {
+    override fun giveReward(entry: BountyDataEntry, player: PlayerEntity) {
         val item = getItem(entry)
         val toGive = (0 until entry.amount).chunked(item.maxCount).map { it.size }
 
@@ -94,8 +94,6 @@ class BountyTypeItem : IBountyExchangeable {
                 player.world.spawnEntity(stackEntity)
             }
         }
-
-        return true
     }
 
     companion object {

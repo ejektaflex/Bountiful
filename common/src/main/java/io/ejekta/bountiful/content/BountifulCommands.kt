@@ -210,7 +210,9 @@ object BountifulCommands {
                 val serverWorld = player.serverWorld
 
                 val rep: (RegistryEntry<PointOfInterestType>) -> Boolean = { registryEntry ->
-                    registryEntry.matchesKey(BountifulContent.POI_BOUNTY_BOARD)
+                    //registryEntry.matchesKey(BountifulContent.POI_BOUNTY_BOARD)
+                    //TODO
+                    false
                 }
 
                 val nearestBB = serverWorld.pointOfInterestStorage.getNearestPosition(

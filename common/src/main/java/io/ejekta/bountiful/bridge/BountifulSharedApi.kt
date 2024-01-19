@@ -6,7 +6,6 @@ import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.content.BountifulContent
-import io.ejekta.bountiful.content.BountifulTriggers
 import io.ejekta.bountiful.messages.*
 import io.ejekta.bountiful.util.iterateBountyStacks
 import io.ejekta.kambrik.Kambrik
@@ -98,7 +97,7 @@ interface BountifulSharedApi {
             playerList.toSet().forEach {
                 (entity as? TameableEntity)?.let { tameable ->
                     if (tameable.owner ==  it) {
-                        BountifulTriggers.FETCH_QUEST.trigger(it)
+                        BountifulContent.Triggers.FETCH_QUEST.trigger(it)
                     }
                 }
                 BountyTypeRegistry.ENTITY.incrementEntityBounties(it, killedEntity)

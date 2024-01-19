@@ -10,6 +10,8 @@ import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.ModLoadingContext
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent
 import net.neoforged.neoforge.client.ConfigScreenHandler
+import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent
+import net.neoforged.neoforge.client.event.ScreenEvent
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent
 
 object BountifulForgeClient {

@@ -6,7 +6,6 @@ import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.bounty.types.builtin.BountyTypeItem
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
-import io.ejekta.bountiful.content.BountifulTriggers
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyCreator
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
@@ -157,16 +156,17 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
     fun updateUponBountyCompletion(player: ServerPlayerEntity, bountyData: BountyData, bountyInfo: BountyInfo) {
         // Award advancement to player
-        BountifulTriggers.BOUNTY_COMPLETED.trigger(player)
+        BountifulContent.Triggers.BOUNTY_COMPLETED.trigger(player)
 
         player.increaseStat(BountifulContent.CustomStats.BOUNTY_COMPLETION_TIME, bountyInfo.timeTakenTicks(player.world).toInt())
 
         player.serverWorld.let {
             if (bountyInfo.timeTakenSecs(it) <= 60) {
-                BountifulTriggers.RUSH_ORDER.trigger(player)
+                BountifulContent.Triggers.RUSH_ORDER.trigger(player)
+
             }
             if (bountyInfo.timeLeftSecs(it) <= 10) {
-                BountifulTriggers.PROCRASTINATOR.trigger(player)
+                BountifulContent.Triggers.PROCRASTINATOR.trigger(player)
             }
             player.incrementStat(BountifulContent.CustomStats.BOUNTIES_COMPLETED)
         }
@@ -231,7 +231,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
     // Set unset decrees
     private fun upkeepRevealDecrees() {
-        decrees.stacks.filter {
+        decrees.getHeldStacks().filter {
             it.item is DecreeItem // must be a decree and not null
         }.forEach { stack ->
             // Get revealable decrees
@@ -256,7 +256,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         val allDecrees = decs.intersect(allDecreesSet) == allDecreesSet
         println(allDecreesSet - decs)
         if (allDecrees) {
-            BountifulTriggers.ALL_DECREES_PLACED.trigger(player)
+            BountifulContent.Triggers.ALL_DECREES_PLACED.trigger(player)
         }
     }
 
@@ -352,12 +352,12 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
         Inventories.readNbt(
             decreeList,
-            decrees.stacks
+            decrees.getHeldStacks()
         )
 
         Inventories.readNbt(
             bountyList,
-            bounties.stacks
+            bounties.getHeldStacks()
         )
 
         val doneMap = base.get("completed")

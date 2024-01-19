@@ -63,7 +63,7 @@ object MixinHelper {
         val currCount = stack.count
         stack.increment(1)
         if (stack.item is DecreeItem) {
-            (playerEntity as? ServerPlayerEntity)?.run { BountifulTriggers.PRINTING_PRESS.trigger(this) }
+            (playerEntity as? ServerPlayerEntity)?.run { BountifulContent.Triggers.PRINTING_PRESS.trigger(this) }
         }
         stack.count = currCount
     }

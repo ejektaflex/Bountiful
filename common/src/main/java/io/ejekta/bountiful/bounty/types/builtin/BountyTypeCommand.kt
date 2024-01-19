@@ -27,14 +27,14 @@ class BountyTypeCommand : IBountyReward {
         return listOf(getDescription(entry))
     }
 
-    override fun giveReward(entry: BountyDataEntry, player: PlayerEntity): Boolean {
-        val server = player.server ?: return false
+    override fun giveReward(entry: BountyDataEntry, player: PlayerEntity) {
+        val server = player.server ?: return
         val replacedCmd = entry.content
             .replace("%BOUNTY_AMOUNT%", entry.amount.toString())
-            .replace("%PLAYER_NAME%", player.entityName)
+            .replace("%PLAYER_NAME%", player.nameForScoreboard)
             .replace("%PLAYER_NAME_RANDOM", server.playerNames.random())
             .replace("%PLAYER_POSITION%", "${player.pos.x} ${player.pos.y} ${player.pos.z}")
-        return server.commandManager.executeWithPrefix(server.commandSource, replacedCmd) > 0
+        server.commandManager.executeWithPrefix(server.commandSource, replacedCmd)
     }
 
 }

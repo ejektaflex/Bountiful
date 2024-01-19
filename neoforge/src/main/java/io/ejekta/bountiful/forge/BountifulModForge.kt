@@ -8,6 +8,8 @@ import io.ejekta.bountiful.content.BountifulCommands
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.internal.registration.KambrikRegistrar
+import net.minecraft.block.MapColor
+import net.minecraft.item.Item
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
 import net.minecraft.resource.SynchronousResourceReloader
@@ -19,10 +21,13 @@ import net.neoforged.neoforge.event.AddReloadListenerEvent
 import net.neoforged.neoforge.event.RegisterCommandsEvent
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent
 import net.neoforged.neoforge.event.server.ServerStartingEvent
+import net.neoforged.neoforge.registries.DeferredRegister
 import net.neoforged.neoforge.registries.RegisterEvent
 import thedarkcolour.kotlinforforge.neoforge.forge.FORGE_BUS
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_CONTEXT
 import thedarkcolour.kotlinforforge.neoforge.forge.runForDist
+import java.util.function.Supplier
+
 
 @Mod("bountiful")
 class BountifulModForge {
@@ -36,7 +41,9 @@ class BountifulModForge {
         FORGE_BUS.addListener(this::onEntityKilled)
         FORGE_BUS.addListener(this::onServerStarting)
 
-        MOD_CONTEXT.getKEventBus().register(this)
+        val content = BountifulContent
+
+        MOD_CONTEXT.getKEventBus().register(Companion)
 
         runForDist(
             clientTarget = {
@@ -80,11 +87,18 @@ class BountifulModForge {
         BountifulCommands.register(evt.dispatcher, evt.buildContext, evt.commandSelection)
     }
 
-    @SubscribeEvent
-    fun registerRegistryContent(evt: RegisterEvent) {
-        KambrikRegistrar[BountifulContent].content.forEach { entry ->
-            @Suppress("UNCHECKED_CAST")
-            evt.register(entry.registry.key as RegistryKey<out Registry<Any>>, Identifier(BountifulContent.getId(), entry.itemId)) { entry.item }
+    companion object {
+        @JvmStatic
+        @SubscribeEvent
+        fun registerRegistryContent(evt: RegisterEvent) {
+            println("Registering content!")
+
+
+            KambrikRegistrar[BountifulContent].content.forEach { entry ->
+                evt.register(entry.registry.key as RegistryKey<out Registry<Any>>) {
+                    it.register(Identifier(BountifulContent.getId(), entry.itemId), entry.item.value!!)
+                }
+            }
         }
     }
 
