@@ -6,6 +6,7 @@ import io.ejekta.bountiful.client.widgets.BountyLongButton
 import io.ejekta.bountiful.content.BountyCreator
 import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
+import io.ejekta.kambrik.gui.draw.KGui
 import io.ejekta.kambrik.gui.draw.widgets.KListWidget
 import io.ejekta.kambrik.gui.draw.widgets.KScrollbarVertical
 import io.ejekta.kambrik.gui.screen.KambrikHandledScreen
@@ -49,74 +50,77 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
         attachScrollbar(scroller)
     }
 
-    val fgGui = kambrikGui {
-        val levelData = BoardBlockEntity.levelProgress(boardHandler.getTotalNumComplete())
-        val percentDone = (levelData.second.toDouble() / levelData.third * 100).toInt()
+    fun drawGui(): KGui {
+        return kambrikGui {
+            val levelData = BoardBlockEntity.levelProgress(boardHandler.getTotalNumComplete())
+            val percentDone = (levelData.second.toDouble() / levelData.third * 100).toInt()
 
-        // Selection highlight on selected stack
-        if (!ItemStack.areEqual(boardHandler.inventory.selected(), ItemStack.EMPTY)) {
-            boardHandler.inventory.selectedIndex?.let {
-                offset(179 + ((it % 7) * 18), 16 + ((it / 7) * 18)) {
-                    img(SELECTOR, 20, 20)
-                    offset(2, 2) {
-                        area(16, 16) {
-                            rect(0x0, 0x88)
+            // Selection highlight on selected stack
+            if (!ItemStack.areEqual(boardHandler.inventory.selected(), ItemStack.EMPTY)) {
+                boardHandler.inventory.selectedIndex?.let {
+                    offset(179 + ((it % 7) * 18), 16 + ((it / 7) * 18)) {
+                        img(SELECTOR, 20, 20)
+                        offset(2, 2) {
+                            area(16, 16) {
+                                rect(0x0, 0x88)
+                            }
                         }
                     }
                 }
             }
-        }
 
-        // Reputation Bar (background, foreground, label)
-        offset(204, 75) {
-            img(XP_BG, 102, 5)
-            img(XP_FG, percentDone + 1, 5, x = 1)
-            textCentered(-16, -2) {
-                color(0xabff7a)
-                addLiteral(levelData.first.toString()) {
-                    format(BountyRarity.forReputation(levelData.first).color)
+            // Reputation Bar (background, foreground, label)
+            offset(204, 75) {
+                img(XP_BG, 102, 5)
+                img(XP_FG, percentDone + 1, 5, x = 1)
+                textCentered(-16, -2) {
+                    color(0xabff7a)
+                    addLiteral(levelData.first.toString()) {
+                        format(BountyRarity.forReputation(levelData.first).color)
+                    }
                 }
-            }
-            offset(-28, -2) {
-                if (isHovered(18, 8)) {
-                    val repColor = BountyRarity.forReputation(levelData.first).color
-                    tooltip {
-                        addLiteral("Reputation ") {
-                            color(0xabff7a)
-                            addLiteral("(${levelData.first})") {
-                                format(repColor)
+                offset(-28, -2) {
+                    if (isHovered(18, 8)) {
+                        val repColor = BountyRarity.forReputation(levelData.first).color
+                        tooltip {
+                            addLiteral("Reputation ") {
+                                color(0xabff7a)
+                                addLiteral("(${levelData.first})") {
+                                    format(repColor)
+                                }
                             }
-                        }
-                        addLiteral(" (Discount: ") {
-                            color(0xabff7a)
-                            addLiteral("%.1f".format((1 - BountyCreator.getDiscount(levelData.first)) * 100) + "%") {
-                                format(repColor)
+                            addLiteral(" (Discount: ") {
+                                color(0xabff7a)
+                                addLiteral("%.1f".format((1 - BountyCreator.getDiscount(levelData.first)) * 100) + "%") {
+                                    format(repColor)
+                                }
+                                addLiteral(")")
                             }
-                            addLiteral(")")
                         }
                     }
                 }
             }
-        }
 
-        // GUI Title
-        textCentered(titleX - 53, titleY + 1) {
-            color = 0xEADAB5
-            add(title)
-        }
-
-        // Button list and scroll bar
-        widget(buttonList, 5, 18)
-        if (validButtons.isEmpty()) {
-            textCentered(85, 78) {
+            // GUI Title
+            textCentered(titleX - 53, titleY + 1) {
                 color = 0xEADAB5
-                addLiteral("It's Empty! Check back soon!")
+                add(title)
             }
-        } else {
-            widget(scroller, 166, 18)
-        }
 
+            // Button list and scroll bar
+            widget(buttonList, 5, 18)
+            if (validButtons.isEmpty()) {
+                textCentered(85, 78) {
+                    color = 0xEADAB5
+                    addLiteral("It's Empty! Check back soon!")
+                }
+            } else {
+                widget(scroller, 166, 18)
+            }
+        }
     }
+
+    val fgGui = drawGui()
 
     override fun onDrawBackground(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         // do nothing

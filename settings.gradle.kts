@@ -43,7 +43,7 @@ dependencyResolutionManagement {
 
             val Mods = object {
                 val Cloth = "13.0.121" // => https://modrinth.com/mod/cloth-config/versions
-                val ModMenu = "8.0.0" // => https://modrinth.com/mod/modmenu/versions
+                val ModMenu = "9.0.0" // => https://modrinth.com/mod/modmenu/versions
             }
 
             // Versions

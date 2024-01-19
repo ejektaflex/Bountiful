@@ -52,6 +52,7 @@ dependencies {
 
 tasks {
 
+    // Remaps AW to AT
     remapJar {
         atAccessWideners.add("bountiful.accesswidener")
     }
