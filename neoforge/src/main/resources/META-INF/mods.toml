@@ -13,6 +13,9 @@ Bountiful adds bounty boards to the world.
 '''
 #logoFile = ""
 
+[[mixins]]
+config = "bountiful.mixins.json"
+
 [[dependencies.bountiful]]
 modId = "neoforge"
 type="required"

@@ -7,14 +7,10 @@ architectury {
 }
 
 loom {
-//    forge {
-//        //mixinConfig("bountiful.mixins.json")
-//        accessWidenerPath.set(project(":common").file("src/main/resources/bountiful.accesswidener"))
-//        convertAccessWideners.set(true)
-//    }
-//    developmentNeoForge {
-//
-//    }
+    neoForge {
+        accessWidenerPath.set(project(":common").file("src/main/resources/bountiful.accesswidener"))
+        //convertAccessWideners.set(true)
+    }
 }
 
 repositories {
@@ -55,6 +51,10 @@ dependencies {
 }
 
 tasks {
+
+    remapJar {
+        atAccessWideners.add("bountiful.accesswidener")
+    }
 
     processResources {
         // Mark that this task depends on the project version,

@@ -92,6 +92,7 @@ class BountifulModForge {
         @SubscribeEvent
         fun registerRegistryContent(evt: RegisterEvent) {
             println("Registering content!")
+            println(evt.registry.key.registry)
 
 
             KambrikRegistrar[BountifulContent].content.forEach { entry ->
