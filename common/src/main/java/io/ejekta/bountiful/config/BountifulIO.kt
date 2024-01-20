@@ -98,6 +98,13 @@ object BountifulIO {
             } else if (rewards.isEmpty()) {
                 Bountiful.LOGGER.warn("Decree '$id' has one or more Reward Pools, but they are all empty!")
             }
+
+            invalidPools.let {
+                if (it.isNotEmpty()) {
+                    Bountiful.LOGGER.warn("Decree '$id' references these pools, which do not exist: $it")
+                }
+            }
+
         }
     )
 

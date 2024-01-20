@@ -26,6 +26,9 @@ data class Decree(
             BountifulContent.Pools.find { it.id == id }
         }
 
+    val invalidPools: List<String>
+        get() = allPoolIds.groupBy { id -> BountifulContent.Pools.find { it.id == id } }[null] ?: emptyList()
+
     val allPoolIds: Set<String>
         get() = objectives + rewards
 
