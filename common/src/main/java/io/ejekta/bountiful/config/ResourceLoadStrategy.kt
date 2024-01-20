@@ -20,7 +20,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
 
     private fun decode(identifier: Identifier, fileText: String, newId: String): T? {
         return try {
-            JsonFormats.Hand.decodeFromString(decoder, fileText).apply {
+            JsonFormats.DataPack.decodeFromString(decoder, fileText).apply {
                 id = newId
 
                 // Set up pool, if it's a pool

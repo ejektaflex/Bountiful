@@ -27,7 +27,7 @@ data class Pool(
 
         for ((key, value) in content) {
             if (value != null) {
-                val pe = JsonFormats.Hand.decodeFromString(PoolEntry.serializer(), value.toString()).apply {
+                val pe = JsonFormats.Config.decodeFromString(PoolEntry.serializer(), value.toString()).apply {
                     this.id = "${this@Pool.id}.$key"
                 }
                 // Don't insert entries with no type set

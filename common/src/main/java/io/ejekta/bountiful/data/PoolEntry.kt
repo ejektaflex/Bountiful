@@ -173,7 +173,7 @@ class PoolEntry private constructor() {
     companion object {
         fun fromKudzu(kv: KudzuVine): PoolEntry {
             @Suppress("RemoveRedundantQualifierName")
-            return JsonFormats.Hand.decodeFromString(PoolEntry.serializer(), kv.toString())
+            return JsonFormats.BlockEntity.decodeFromString(PoolEntry.serializer(), kv.toString())
         }
 
         // With encodeDefaults = false, we need a separate constructor

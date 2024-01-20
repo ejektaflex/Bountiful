@@ -375,17 +375,17 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         val doneMap = base.get("completed")
         //println("Done map is: $doneMap")
         if (doneMap != null) {
-            finishMap = JsonFormats.Hand.decodeFromStringTag(finishSerializer, doneMap as NbtString).toMutableMap()
+            finishMap = JsonFormats.BlockEntity.decodeFromStringTag(finishSerializer, doneMap as NbtString).toMutableMap()
         }
 
         val timeStampMap = base.get("timestamps")
         if (timeStampMap != null) {
-            bountyTimestamps = JsonFormats.Hand.decodeFromStringTag(bountyStampSerializer, timeStampMap as NbtString).toMutableMap()
+            bountyTimestamps = JsonFormats.BlockEntity.decodeFromStringTag(bountyStampSerializer, timeStampMap as NbtString).toMutableMap()
         }
 
         val takenData = base.get("taken")
         if (takenData != null) {
-            takenMask = JsonFormats.Hand.decodeFromStringTag(takenSerializer, takenData as NbtString).map {
+            takenMask = JsonFormats.BlockEntity.decodeFromStringTag(takenSerializer, takenData as NbtString).map {
                 it.key to it.value.toMutableSet()
             }.toMap().toMutableMap()
         }
@@ -398,15 +398,15 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
         base.putLong("lastUpdated", lastUpdatedTime)
 
-        val doneMap = JsonFormats.Hand.encodeToStringTag(finishSerializer, finishMap)
+        val doneMap = JsonFormats.BlockEntity.encodeToStringTag(finishSerializer, finishMap)
         base.put("completed", doneMap)
 
-        val timeStampMap = JsonFormats.Hand.encodeToStringTag(bountyStampSerializer, bountyTimestamps)
+        val timeStampMap = JsonFormats.BlockEntity.encodeToStringTag(bountyStampSerializer, bountyTimestamps)
         base.put("timestamps", timeStampMap)
 
         base.put(
             "taken",
-            JsonFormats.Hand.encodeToStringTag(takenSerializer, takenMask)
+            JsonFormats.BlockEntity.encodeToStringTag(takenSerializer, takenMask)
         )
 
         val decreeList = NbtCompound()

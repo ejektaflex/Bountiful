@@ -18,7 +18,7 @@ object BountifulIO {
     private val configFile = KambrikConfigFile(
         rootFolder,
         "bountiful.json",
-        JsonFormats.DataPack,
+        JsonFormats.Config,
         KambrikParseFailMode.LEAVE,
         BountifulConfigData.serializer()
     ) { BountifulConfigData() }
@@ -31,7 +31,7 @@ object BountifulIO {
     fun getPoolFile(poolName: String): KambrikConfigFile<Pool> {
         return KambrikConfigFile(
             poolConfigs,
-            "$poolName.json", JsonFormats.Hand, KambrikParseFailMode.LEAVE, Pool.serializer()) {
+            "$poolName.json", JsonFormats.Config, KambrikParseFailMode.LEAVE, Pool.serializer()) {
             Pool().apply { setup(poolName) }
         }
     }
