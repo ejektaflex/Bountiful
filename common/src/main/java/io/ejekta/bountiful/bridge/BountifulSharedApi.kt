@@ -146,4 +146,6 @@ interface BountifulSharedApi {
         }
     }
 
+    fun registerCompostables()
+
 }

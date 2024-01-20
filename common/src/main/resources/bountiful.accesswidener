@@ -22,3 +22,5 @@ accessible method net/minecraft/screen/AnvilScreenHandler canTakeOutput (Lnet/mi
 # Stats
 accessible method net/minecraft/stat/Stats registerType (Ljava/lang/String;Lnet/minecraft/registry/Registry;)Lnet/minecraft/stat/StatType;
 accessible method net/minecraft/stat/Stats register (Ljava/lang/String;Lnet/minecraft/stat/StatFormatter;)Lnet/minecraft/util/Identifier;
+# Composter
+accessible method net/minecraft/block/ComposterBlock registerCompostableItem (FLnet/minecraft/item/ItemConvertible;)V

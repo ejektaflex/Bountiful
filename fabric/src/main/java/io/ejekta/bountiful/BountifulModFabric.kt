@@ -64,8 +64,7 @@ class BountifulModFabric : ModInitializer {
 
         CommandRegistrationCallback.EVENT.register(CommandRegistrationCallback(BountifulCommands::register))
 
-        CompostingChanceRegistry.INSTANCE.add({ BountifulContent.BOUNTY_ITEM }, 0.5f)
-        CompostingChanceRegistry.INSTANCE.add({ BountifulContent.DECREE_ITEM }, 0.85f)
+        Bountybridge.registerCompostables()
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register { e ->
             e.add(BountifulContent.DECREE_ITEM)

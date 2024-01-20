@@ -8,6 +8,7 @@ import io.ejekta.bountiful.content.BountifulCommands
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.internal.registration.KambrikRegistrar
+import net.minecraft.block.ComposterBlock
 import net.minecraft.block.MapColor
 import net.minecraft.item.Item
 import net.minecraft.registry.Registry
@@ -17,6 +18,7 @@ import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.Identifier
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.Mod
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
 import net.neoforged.neoforge.event.AddReloadListenerEvent
 import net.neoforged.neoforge.event.RegisterCommandsEvent
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent
@@ -44,6 +46,8 @@ class BountifulModForge {
         val content = BountifulContent
 
         MOD_CONTEXT.getKEventBus().register(Companion)
+        //MOD_CONTEXT.getKEventBus().register(this::commonSetup)
+
 
         runForDist(
             clientTarget = {
@@ -63,6 +67,7 @@ class BountifulModForge {
             }
         }
     }
+
 
     private fun onServerStarting(evt: ServerStartingEvent) {
         listOf("plains", "savanna", "snowy", "taiga", "desert").forEach { villageType ->
@@ -91,14 +96,19 @@ class BountifulModForge {
         @JvmStatic
         @SubscribeEvent
         fun registerRegistryContent(evt: RegisterEvent) {
-            println("Registering content!")
-            println(evt.registry.key.registry)
-
-
             KambrikRegistrar[BountifulContent].content.forEach { entry ->
                 evt.register(entry.registry.key as RegistryKey<out Registry<Any>>) {
                     it.register(Identifier(BountifulContent.getId(), entry.itemId), entry.item.value!!)
                 }
+            }
+        }
+
+        @JvmStatic
+        @SubscribeEvent
+        private fun commonSetup(evt: FMLCommonSetupEvent) {
+            println("COMMON HAPPENING")
+            evt.enqueueWork {
+                Bountybridge.registerCompostables()
             }
         }
     }

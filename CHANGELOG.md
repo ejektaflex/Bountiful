@@ -32,7 +32,8 @@ old config files and datapacks that overwrote existing Bountiful data may not fu
     - Currently, Wandering Trader stocks are only affected in the Fabric version.
 - Added a new config option, `board.canBreak`, that determines whether bounty boards can be broken (default: true)
 - Added a new config option, `bounty.allowDecreeMixing` (default: true)
-  - When enabled, will pull randomly from all Decrees on a board when creating a bounty. When disabled, it will pull from only one Decree at random when creating a bounty.
+  - When enabled, will pull randomly from all Decrees on a board when creating a bounty. 
+  - When disabled, it will pull from only one Decree at random when creating a bounty.
 
 ### Changed
 - The board layout for objectives and rewards is now centered, with an arrow dividing the objectives and rewards. 
