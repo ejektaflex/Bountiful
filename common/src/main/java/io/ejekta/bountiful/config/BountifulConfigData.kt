@@ -24,6 +24,7 @@ class BountifulConfigData {
         var flatBonusTimePerBountyInSecs: Int = 0
         var shouldHaveTimersAndExpire = true
         var objectiveDifficultyModifierPercent = 0
+        var allowDecreeMixing = true
         var maxNumRewards = 2
     }
 
@@ -141,6 +142,17 @@ class BountifulConfigData {
                 bounty.objectiveDifficultyModifierPercent = it
             }.setTextGetter {
                 textLiteral("$it% Change")
+            }.build()
+        )
+
+        bountyCat.addEntry(
+            creator.startBooleanToggle(
+                Text.literal("Allow Decree Mixing"),
+                bounty.allowDecreeMixing
+            ).setDefaultValue(true).setTooltip(
+                Text.literal("Whether all board decrees are considered when generating a bounty")
+            ).setSaveConsumer {
+                bounty.allowDecreeMixing = it
             }.build()
         )
 

@@ -4,11 +4,12 @@ import io.ejekta.kambrik.Kambrik
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 
+@OptIn(ExperimentalSerializationApi::class)
 object JsonFormats {
     val DataPack = Json {
         serializersModule = Kambrik.Serial.DefaultSerializers
-        encodeDefaults = true
         prettyPrint = true
+        allowTrailingComma = true
     }
     val BlockEntity = Json {
         serializersModule = Kambrik.Serial.DefaultSerializers
@@ -17,10 +18,10 @@ object JsonFormats {
         serializersModule = Kambrik.Serial.DefaultSerializers
         prettyPrint = true
     }
-    @OptIn(ExperimentalSerializationApi::class)
     val Config = Json {
         serializersModule = Kambrik.Serial.DefaultSerializers
+        encodeDefaults = true
         prettyPrint = true
-        allowTrailingComma = true // remove inexperienced JSON user footguns
+        allowTrailingComma = true
     }
 }

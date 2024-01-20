@@ -310,10 +310,17 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         }
 
         val makeBounty: () -> ItemStack = {
+            val usableDecrees = getBoardDecrees().let { decSet ->
+                if (BountifulIO.configData.bounty.allowDecreeMixing) {
+                    decSet
+                } else {
+                    setOfNotNull(decSet.randomOrNull())
+                }
+            }
             BountyCreator.createBountyItem(
                 ourWorld,
                 pos,
-                getBoardDecrees(),
+                usableDecrees,
                 levelData.first.coerceIn(-30..30),
                 ourWorld.time
             )

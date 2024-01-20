@@ -16,6 +16,7 @@ old config files and datapacks that overwrote existing Bountiful data may not fu
 - Added processor lists, so that bounty boards can generate with a different look, depending on which village it generates in.
 - After turning in a bounty, a villager (preferably one who matches the profession of the items you sold them), if available, will walk up to the board and pick up their goods.
   - The villager will receive some trade XP for doing this - even more if their profession did match, and based on board reputation.
+  - If the villager is currently busy, this will happen once they are free.
 - The way the board's bounties are refreshed has been updated - now, bounties that have been on the board the longest have the highest chances of being removed first.
   - This should reduce the number of old bounties that 'happen' to stay on the board through dumb luck (or rather, misfortune)
 - Added `TODO()` advancements, and an additional `TODO()` hidden advancements.
@@ -30,9 +31,8 @@ old config files and datapacks that overwrote existing Bountiful data may not fu
   - `canWanderBuy` determines whether this Decree can be found in the stocks of Wandering Traders (default: true)
     - Currently, Wandering Trader stocks are only affected in the Fabric version.
 - Added a new config option, `board.canBreak`, that determines whether bounty boards can be broken (default: true)
-
-#### Technical
-- Bounty boards can now be found with `/locate poi bountiful:bountyboard`.
+- Added a new config option, `bounty.allowDecreeMixing` (default: true)
+  - When enabled, will pull randomly from all Decrees on a board when creating a bounty. When disabled, it will pull from only one Decree at random when creating a bounty.
 
 ### Changed
 - The board layout for objectives and rewards is now centered, with an arrow dividing the objectives and rewards. 
@@ -40,6 +40,10 @@ old config files and datapacks that overwrote existing Bountiful data may not fu
 - Much better handling and notification of possible config file errors via the log.
 - Reformatted the config, making it easier for users without ClothConfig to understand.
 - Updated translations. `TODO("Add new localization listing and authors)`
+
+### Fixed
+- Fixed an extremely rare crash on Forge when loading dynamic textures and the user has hundreds of mods
+- Fixed shift-clicking of items between slots on the bounty board
 
 ## [6.0.3] for 1.20.1 - 2023-07-17
 

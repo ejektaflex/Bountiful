@@ -139,10 +139,10 @@ object BountifulCommands {
                 }
             }
 
-            "config" {
+            "settings" {
                 "reload" runs {
-                    BountifulIO.reloadConfig()
-                    source.sendMessage(Text.literal("Bountiful Config Reloaded!"))
+                    BountifulIO.loadConfig()
+                    source.sendMessage(Text.literal("Bountiful Settings Reloaded!"))
                 }
             }
 
