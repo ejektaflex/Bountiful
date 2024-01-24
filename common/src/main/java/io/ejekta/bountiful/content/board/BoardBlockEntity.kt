@@ -295,7 +295,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
                 val numUpdates = ((sw.time - lastUpdatedTime) / updateFrequencyTicks).coerceAtMost(BoardInventory.BOUNTY_SIZE.toLong())
                 // We are updating!
                 serverWorld?.time?.let { serverTime -> lastUpdatedTime = serverTime }
-                println("Upkeeping this many bounty updates: $numUpdates")
                 for (i in 0 until numUpdates) {
                     randomlyUpdateBoard()
                 }

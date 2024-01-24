@@ -148,4 +148,8 @@ interface BountifulSharedApi {
 
     fun registerCompostables()
 
+    fun getClassLoader(): ClassLoader {
+        return Bountybridge.Companion::class.java.classLoader
+    }
+
 }

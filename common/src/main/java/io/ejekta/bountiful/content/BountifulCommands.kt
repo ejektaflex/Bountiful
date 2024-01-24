@@ -6,6 +6,7 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
+import io.ejekta.bountiful.bridge.Bountybridge
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.item.DecreeItem
@@ -31,6 +32,7 @@ import net.minecraft.item.Items
 import net.minecraft.predicate.NumberRange
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.server.command.CommandManager
+import net.minecraft.server.command.GameRuleCommand
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.ClickEvent
@@ -39,8 +41,10 @@ import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
+import net.minecraft.world.level.storage.LevelStorage
 import net.minecraft.world.poi.PointOfInterestStorage
 import net.minecraft.world.poi.PointOfInterestType
+import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 
@@ -120,6 +124,7 @@ object BountifulCommands {
                             weights(rep())
                         }
                     }
+
                     "dump" runs dumpData()
 
                     "vill" runs {
@@ -137,6 +142,14 @@ object BountifulCommands {
                         }
                     }
                 }
+
+                "configToDataPack" {
+                    argString("packFileName") { resName ->
+                        argString("packDescInQuotes") runs { resDesc ->
+                            checkResource(resName(), resDesc())
+                        }
+                    }
+                }
             }
 
             "settings" {
@@ -146,8 +159,32 @@ object BountifulCommands {
                 }
             }
 
-
         }
+    }
+
+    private fun CommandContext<ServerCommandSource>.checkResource(named: String, described: String) {
+        println("Doing resource test.")
+
+        try {
+            BountifulIO.exportDataPack(named, described)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            source.sendMessage(Text.literal("Data pack creation failed!"))
+        }
+
+
+//        Thread.getAllStackTraces().keySet() //Get all active threads
+//            .stream()
+//            .map(thread -> thread.getContextClassLoader()) //Get the classloader of the thread (may be null)
+//        .filter(Objects::nonNull) //Filter out every null object from the stream
+//            .toList()
+
+
+        //println("Res: $res")
+
+        //val lines = res?.readAllBytes()
+
+        //println(lines)
     }
 
     private fun CommandContext<ServerCommandSource>.checkForEntry(named: String) {

@@ -1,6 +1,7 @@
 package io.ejekta.bountiful.config
 
 import io.ejekta.bountiful.Bountiful
+import io.ejekta.bountiful.bridge.Bountybridge
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.data.Pool
@@ -8,8 +9,16 @@ import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.ext.jvm.ensured
 import io.ejekta.kambrikx.file.KambrikConfigFile
 import io.ejekta.kambrikx.file.KambrikParseFailMode
+import net.minecraft.SharedConstants
 import net.minecraft.resource.ResourceManager
+import net.minecraft.resource.ResourceType
+import java.nio.file.Files
+import java.nio.file.Path
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
+import kotlin.io.path.*
 import kotlin.math.min
+
 
 object BountifulIO {
 
@@ -66,6 +75,8 @@ object BountifulIO {
             // If the pool isn't being used, that's usually problematic
             if (usedInDecrees.isEmpty()) {
 
+
+
                 val poolAssoc = BountifulContent.Pools.filter { it.usedInDecrees.isNotEmpty() }.associateBy { it.id.toSet() }
                 val poolQuery = id.toSet()
 
@@ -107,5 +118,101 @@ object BountifulIO {
 
         }
     )
+
+
+    @OptIn(ExperimentalPathApi::class)
+    fun exportDataPack(named: String, description: String) {
+        val tmpSpot = rootFolder.resolve("tmp_pack")
+
+        val dataSpot = tmpSpot.resolve("data").resolve(Bountiful.ID)
+
+        // Folder copying
+
+        val poolSpot = dataSpot.resolve(poolConfigs.fileName).resolve(Bountiful.ID)
+
+        poolConfigs.copyToRecursively(poolSpot.createParentDirectories(), { src, target, e ->
+            OnErrorResult.TERMINATE
+        }, followLinks = false)
+
+        val decreeSpot = dataSpot.resolve(decreeConfigs.fileName).resolve(Bountiful.ID).apply {
+            toFile().mkdirs()
+        }
+
+        decreeConfigs.copyToRecursively(decreeSpot.createParentDirectories(), { src, target, e ->
+            OnErrorResult.TERMINATE
+        }, followLinks = false)
+
+        // Pack Icon copying
+
+        val bbImg = Bountybridge.getClassLoader().getResourceAsStream("assets/bountiful/textures/block/bountyboard.png")
+
+        val data = bbImg?.readAllBytes()
+
+        println("Data: $data")
+
+        data?.let {
+            tmpSpot.resolve("pack.png").apply {
+                deleteIfExists()
+                writeBytes(it)
+            }
+        }
+
+        // mcmeta creation
+
+        val resVersion = SharedConstants.getGameVersion().getResourceVersion(ResourceType.SERVER_DATA)
+
+        tmpSpot.resolve("pack.mcmeta").writeLines(listOf(
+            "{",
+            "\t\"pack\": {",
+            "\t\t\"pack_format\": $resVersion,",
+            "\t\t\"description\": \"$description\"",
+            "\t}",
+            "}"
+        ))
+
+        // Zip name sanitation
+
+        val zipName = named
+            .replace(Regex("\\W+"), "")
+
+        if (zipName.isBlank()) {
+            throw Exception("Zip name (after removing non-file characters) is blank!")
+        }
+
+        // Final zip
+
+        zipToPath(
+            rootFolder.resolve("exportedPacks").createParentDirectories().resolve("$zipName.zip"),
+            tmpSpot
+        )
+
+        // Delete tmp data
+
+        tmpSpot.let {
+            if (it.exists()) {
+                it.deleteRecursively()
+            }
+        }
+
+    }
+
+    @OptIn(ExperimentalPathApi::class)
+    private fun zipToPath(destPath: Path, srcPath: Path) {
+        ZipOutputStream(Files.newOutputStream(destPath)).use { zs ->
+            for (item in srcPath.walk(PathWalkOption.BREADTH_FIRST)) {
+                if (!item.isDirectory()) {
+                    val ze = ZipEntry(srcPath.relativize(item).toString())
+                    try {
+                        zs.putNextEntry(ze)
+                        Files.copy(item, zs)
+                        zs.closeEntry()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        }
+    }
+
 
 }

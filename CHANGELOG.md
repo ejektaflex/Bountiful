@@ -23,6 +23,7 @@ old config files and datapacks that overwrote existing Bountiful data may not fu
 - The board will now appear to update in the time you've been gone even when the chunk is unloaded. It does this by playing catch-up when the chunk reloads.
 - Potions, Tipped Arrows and probably a few other items with dynamic names will now be displayed correctly in bounty tooltips.
 - Enchantments on enchanted books are now displayed in bounty tooltips.
+- Decrees and Bounties can now be composted in NeoForge (previously a Fabric-only feature)
 
 #### Configuration
 - Decrees now have three new, optional fields:
@@ -104,6 +105,8 @@ develop for both Fabric and Forge at the same time, releasing for both platforms
 - Added compat for new mods such as Tech Reborn, Xtra Arrows and Villager Hats
 - Did a minor balance pass, adding a few rewards where applicable to several pools
 - Added a new Decree called the Inventor Decree, used for redstone and tech mod related items
+- Added a new command, `/bo util configToDataPack`, which converts the current Bountiful config data into a data pack.
+  - It takes two parameters, the pack file name and the pack description
 
 ### Changed
 - Non-core data now loads from built-in resource packs
@@ -117,6 +120,9 @@ develop for both Fabric and Forge at the same time, releasing for both platforms
 
 ### Fixed
 - Fixed rare situation where bounties with unmet dependencies could be partially, but not fully completed
+
+### Known Issues
+- `/bo util configToDataPack` will not work correctly if the data file is nested (e.g. `bounty_decrees/xyz_folder/my_decree`)
 
 ## [Fabric-4.1.1] for 1.19.3 - 2022-03-02
 
