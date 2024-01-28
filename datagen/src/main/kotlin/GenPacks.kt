@@ -62,7 +62,7 @@ fun createFabricPack(from: File) {
         writeText("""
         {
             "pack": {
-                "pack_format": 15,
+                "pack_format": 26,
                 "description": "Adds $newName Compatibility to Bountiful"
             }
         }

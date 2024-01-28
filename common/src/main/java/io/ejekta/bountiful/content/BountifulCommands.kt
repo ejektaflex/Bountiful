@@ -6,7 +6,6 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
-import io.ejekta.bountiful.bridge.Bountybridge
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.item.DecreeItem
@@ -14,10 +13,7 @@ import io.ejekta.bountiful.messages.ClipboardCopy
 import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.bountiful.decree.DecreeSpawnCondition
 import io.ejekta.bountiful.util.checkOnBoard
-import io.ejekta.kambrik.command.addCommand
-import io.ejekta.kambrik.command.kambrikCommand
-import io.ejekta.kambrik.command.requiresOp
-import io.ejekta.kambrik.command.suggestionListTooltipped
+import io.ejekta.kambrik.command.*
 import io.ejekta.kambrik.command.types.PlayerCommand
 import io.ejekta.kambrik.ext.identifier
 import io.ejekta.kambrik.ext.math.floor
@@ -32,7 +28,6 @@ import net.minecraft.item.Items
 import net.minecraft.predicate.NumberRange
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.server.command.CommandManager
-import net.minecraft.server.command.GameRuleCommand
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.ClickEvent
@@ -41,10 +36,8 @@ import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
-import net.minecraft.world.level.storage.LevelStorage
 import net.minecraft.world.poi.PointOfInterestStorage
 import net.minecraft.world.poi.PointOfInterestType
-import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 
@@ -63,7 +56,7 @@ object BountifulCommands {
 
             val pools = suggestionListTooltipped {
                 BountifulContent.Pools.map { pool ->
-                    var trans = pool.usedInDecrees.map { it.translation }
+                    val trans = pool.usedInDecrees.map { it.translation }
                     val translation = if (trans.isEmpty()) {
                         Text.literal("None")
                     } else {
@@ -79,6 +72,12 @@ object BountifulCommands {
                 BountifulContent.Decrees.map { decree ->
                     decree.id to decree.translation
                 }
+            }
+
+            val poolEntrySuggestions = suggestionList {
+                BountifulContent.Pools.map {
+                    it.items.map { pe -> pe.id }
+                }.flatten().sorted()
             }
 
             // /bo hand
@@ -118,6 +117,13 @@ object BountifulCommands {
             }
 
             "util" {
+                "settings" {
+                    "reload" runs {
+                        BountifulIO.loadConfig()
+                        source.sendMessage(Text.literal("Bountiful Settings Reloaded!"))
+                    }
+                }
+
                 "debug" {
                     "weights" {
                         argInt("rep", -30..30) runs { rep ->
@@ -127,17 +133,20 @@ object BountifulCommands {
 
                     "dump" runs dumpData()
 
-                    "vill" runs {
-                        sendNearestVillagerToABoard(this)
-                    }
+                    "dev" {
+                        "vill" runs {
+                            sendNearestVillagerToABoard(this)
+                        }
 
-                    "hold" runs {
-                        holdThing(this)
+                        "hold" runs {
+                            holdThing(this)
+                        }
                     }
                 }
+
                 "check" {
                     "entry" {
-                        argString("checkName") runs { checkName ->
+                        argString("checkName", items = poolEntrySuggestions) runs { checkName ->
                             checkForEntry(checkName())
                         }
                     }
@@ -146,63 +155,57 @@ object BountifulCommands {
                 "configToDataPack" {
                     argString("packFileName") { resName ->
                         argString("packDescInQuotes") runs { resDesc ->
-                            checkResource(resName(), resDesc())
+                            exportToPack(resName(), resDesc())
                         }
                     }
                 }
             }
 
-            "settings" {
-                "reload" runs {
-                    BountifulIO.loadConfig()
-                    source.sendMessage(Text.literal("Bountiful Settings Reloaded!"))
-                }
-            }
-
         }
     }
 
-    private fun CommandContext<ServerCommandSource>.checkResource(named: String, described: String) {
-        println("Doing resource test.")
-
+    private fun CommandContext<ServerCommandSource>.exportToPack(named: String, described: String) {
         try {
             BountifulIO.exportDataPack(named, described)
+            source.sendMessage(Text.literal("Data pack exported successfully. You can find it in the config folder.")
+                .formatted(Formatting.GREEN)
+            )
         } catch (e: Exception) {
             e.printStackTrace()
             source.sendMessage(Text.literal("Data pack creation failed!"))
         }
-
-
-//        Thread.getAllStackTraces().keySet() //Get all active threads
-//            .stream()
-//            .map(thread -> thread.getContextClassLoader()) //Get the classloader of the thread (may be null)
-//        .filter(Objects::nonNull) //Filter out every null object from the stream
-//            .toList()
-
-
-        //println("Res: $res")
-
-        //val lines = res?.readAllBytes()
-
-        //println(lines)
     }
 
     private fun CommandContext<ServerCommandSource>.checkForEntry(named: String) {
         val found = BountifulContent.Pools.map {
             it.items
-        }.flatten().filter {
-            it.id.substringAfter('.') == named
+        }.flatten().find {
+            it.id == named
         }
-        if (found.isNotEmpty()) {
-            source.sendMessage(Text.literal("Pool Entry Found! Exists in these pools: ").formatted(
+        if (found != null) {
+            source.sendMessage(Text.literal("Pool Entries with id '$named' Found!").formatted(
                 Formatting.GREEN
-            ).append(
-                Text.literal("${found.map { it.protoPool?.id }}").formatted(Formatting.GOLD))
-            )
-        } else {
-            source.sendMessage(Text.literal("Pool Entry Not Found! Does not seem to exist in any pool.").formatted(
-                Formatting.RED
             ))
+
+            source.sendMessage(Text.literal("* Exists in these pools: ").append(
+                Text.literal("${found.protoPool?.id}").formatted(Formatting.GOLD))
+            )
+
+            val decs = found.protoPool?.usedInDecrees?.map { it.id }?.sorted() ?: emptyList()
+
+            source.sendMessage(Text.literal("* Exists in these decrees: ").append(
+                Text.literal("$decs").formatted(Formatting.GOLD)
+            ))
+
+
+            if (!found.isValid(source.server)) {
+                source.sendError(
+                    Text.literal("* Error: Entry ${found.id} seemingly failed validation for some reason.")
+                )
+            }
+
+        } else {
+            source.sendError(Text.literal("Pool Entry Not Found! Does not seem to exist in any pool."))
         }
     }
 
