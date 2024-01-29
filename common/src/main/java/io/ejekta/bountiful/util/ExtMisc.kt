@@ -15,7 +15,10 @@ import net.minecraft.nbt.NbtCompound
 import net.minecraft.registry.DynamicRegistryManager
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.TagKey
+import net.minecraft.screen.ScreenHandlerFactory
+import net.minecraft.screen.SimpleNamedScreenHandlerFactory
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
@@ -147,6 +150,14 @@ fun Brain<*>.ensureMemoryModules(memoryList: List<MemoryModuleType<*>>) {
             memMM[item] = Optional.empty()
         }
     }
+}
+
+fun ServerPlayerEntity.openHandledScreenSimple(screenName: Text, handlerFactory: ScreenHandlerFactory): OptionalInt {
+    return openHandledScreen(
+        SimpleNamedScreenHandlerFactory(
+            handlerFactory, screenName
+        )
+    )
 }
 
 fun VillagerEntity.checkOnBoard(boardPos: BlockPos) {

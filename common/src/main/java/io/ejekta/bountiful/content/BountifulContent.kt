@@ -5,6 +5,7 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.advancement.SimpleCriterion
 import io.ejekta.bountiful.content.board.BoardBlock
 import io.ejekta.bountiful.content.board.BoardBlockEntity
+import io.ejekta.bountiful.content.gui.AnalyzerScreenHandler
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.content.item.BountyItem
 import io.ejekta.bountiful.content.item.DecreeItem
@@ -55,6 +56,8 @@ object BountifulContent : KambrikAutoRegistrar {
     val BOARD_ENTITY by "board-be".forBlockEntity(BOARD, ::BoardBlockEntity)
 
     val BOARD_SCREEN_HANDLER by "board" forScreen ::BoardScreenHandler
+
+    val ANALYZER_SCREEN_HANDLER by "analyzer" forScreen ::AnalyzerScreenHandler
 
     val MEM_MODULE_NEAREST_BOARD_INSTANCE = "nearest_bounty_board".forRegistration(
         Registries.MEMORY_MODULE_TYPE

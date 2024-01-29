@@ -51,7 +51,7 @@ interface BountifulSharedApi {
         Kambrik.Message.registerServerMessage(
             ServerPlayerStatus.serializer(),
             ServerPlayerStatus::class,
-            Bountiful.id("player_status")
+            Bountiful.id("server_player_status")
         )
     }
 
@@ -73,28 +73,31 @@ interface BountifulSharedApi {
             UpdateBountyCriteriaObjective::class,
             Bountiful.id("update_bounty_criteria")
         )
+
+        Kambrik.Message.registerClientMessage(
+            ClientPlayerStatus.serializer(),
+            ClientPlayerStatus::class,
+            Bountiful.id("client_player_status")
+        )
     }
 
     fun handleEntityKills(world: ServerWorld, entity: Entity, killedEntity: LivingEntity) {
         if (entity is LivingEntity) {
-            val playerList = mutableListOf<ServerPlayerEntity>()
-            playerList.addAll(world.getPlayers { it.distanceTo(entity) < 12f })
-            playerList.addAll(world.getPlayers { it.distanceTo(killedEntity) < 12f })
+            val playerList = mutableSetOf<ServerPlayerEntity>()
+            playerList.addAll(world.getPlayers { it.distanceTo(entity) < 12f || it.distanceTo(killedEntity) < 12f })
             (entity as? ServerPlayerEntity)?.let { playerList.add(it) }
 
-            var tamedKill = false
             if (entity is TameableEntity) {
                 val owner = entity.owner as? ServerPlayerEntity
                 owner?.let {
                     playerList.add(it)
-                    tamedKill = true
                 }
             }
 
             (killedEntity.attacker as? ServerPlayerEntity)?.let { playerList.add(it) }
             (killedEntity.attacking as? ServerPlayerEntity)?.let { playerList.add(it) }
 
-            playerList.toSet().forEach {
+            playerList.forEach {
                 (entity as? TameableEntity)?.let { tameable ->
                     if (tameable.owner ==  it) {
                         BountifulContent.Triggers.FETCH_QUEST.trigger(it)

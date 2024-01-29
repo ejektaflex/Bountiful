@@ -1,6 +1,7 @@
 package io.ejekta.bountiful.forge
 
 import io.ejekta.bountiful.bridge.Bountybridge
+import io.ejekta.bountiful.client.AnalyzerScreen
 import io.ejekta.bountiful.client.BoardScreen
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.BountifulContent
@@ -19,6 +20,7 @@ object BountifulForgeClient {
     @JvmStatic
     fun initClient(evt: FMLClientSetupEvent) {
         HandledScreens.register(BountifulContent.BOARD_SCREEN_HANDLER, ::BoardScreen)
+        HandledScreens.register(BountifulContent.ANALYZER_SCREEN_HANDLER, ::AnalyzerScreen)
         // Register config screen
         if (Bountybridge.isModLoaded("cloth_config")) {
             evt.enqueueWork {

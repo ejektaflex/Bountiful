@@ -8,11 +8,13 @@ import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.JsonFormats
+import io.ejekta.bountiful.content.gui.AnalyzerScreenHandler
 import io.ejekta.bountiful.content.item.DecreeItem
-import io.ejekta.bountiful.messages.ClipboardCopy
 import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.bountiful.decree.DecreeSpawnCondition
+import io.ejekta.bountiful.messages.ClipboardCopy
 import io.ejekta.bountiful.util.checkOnBoard
+import io.ejekta.bountiful.util.openHandledScreenSimple
 import io.ejekta.kambrik.command.*
 import io.ejekta.kambrik.command.types.PlayerCommand
 import io.ejekta.kambrik.ext.identifier
@@ -23,10 +25,16 @@ import net.minecraft.command.CommandRegistryAccess
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.ai.TargetPredicate
 import net.minecraft.entity.passive.VillagerEntity
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.predicate.NumberRange
 import net.minecraft.registry.entry.RegistryEntry
+import net.minecraft.screen.MerchantScreenHandler
+import net.minecraft.screen.ScreenHandler
+import net.minecraft.screen.SimpleNamedScreenHandlerFactory
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
@@ -38,6 +46,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.world.poi.PointOfInterestStorage
 import net.minecraft.world.poi.PointOfInterestType
+import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 
@@ -140,6 +149,22 @@ object BountifulCommands {
 
                         "hold" runs {
                             holdThing(this)
+                        }
+
+                        "analyzer" runs {
+                            try {
+                                source.playerOrThrow
+
+                                source.player?.run {
+                                    openHandledScreenSimple(Text.literal("Analyzer!")) { syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity ->
+                                        AnalyzerScreenHandler(syncId, playerInventory, SimpleInventory(AnalyzerScreenHandler.SIZE))
+                                    }
+                                }
+
+                                //ClientPlayerStatus.Type.OPEN_ANALYZER.sendToClient(source.playerOrThrow)
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
                         }
                     }
                 }
