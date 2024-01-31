@@ -57,7 +57,7 @@ class AnalyzerScreenHandler @JvmOverloads constructor(
         }
 
         //The player inventory
-        makePlayerDefaultGrid(playerInventory, 181, 84)
+        makePlayerDefaultGrid(playerInventory, 0, 84)
 
     }
 

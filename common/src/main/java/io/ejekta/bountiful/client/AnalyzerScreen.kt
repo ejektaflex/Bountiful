@@ -2,6 +2,7 @@ package io.ejekta.bountiful.client
 
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyRarity
+import io.ejekta.bountiful.client.widgets.AnalyzerPoolWidget
 import io.ejekta.bountiful.client.widgets.BountyLongButton
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyCreator
@@ -30,8 +31,8 @@ class AnalyzerScreen(handler: ScreenHandler, inventory: PlayerInventory, title: 
 ) {
 
     init {
-        backgroundWidth = 348
-        backgroundHeight = 165
+        backgroundWidth = 172
+        backgroundHeight = 160
     }
 
     private val bgGui = kambrikGui {
@@ -40,38 +41,18 @@ class AnalyzerScreen(handler: ScreenHandler, inventory: PlayerInventory, title: 
 
     // TODO make a class for this that caches and displays data for one pool only!
 
-    val dec = BountifulContent.Decrees.find { it.id == "cleric" }!!
+    val dec = BountifulContent.Decrees.find { it.id == "butcher" }!!
 
-    val objPools = dec.objectivePools
-
-    val ourPool = objPools.first().also { println("First pool is: ${it.id}") }
-
-    val maxWorth = ourPool.items.maxOf { it.amount.max * it.unitWorth }
-
-    val numPixels = 60
-
-    // If the worth goes to 10,000 but pixels are 30, then each pixel is 333.33 in value
-    val binWidth = maxWorth / numPixels
-
-    val stepMap = mutableMapOf<Int, MutableSet<PoolEntry>>()
-
-    init {
-        for (pe in ourPool) {
-            for (step in pe.worthSteps) {
-                val binNum = (step / binWidth).toInt()
-                val bin = stepMap.getOrPut(binNum) { mutableSetOf() }
-                bin.add(pe)
-            }
+    private val overallMaxWorth = dec.rewardPools.maxOf { pool ->
+        pool.items.maxOf {
+            println("${it.id}: ${it.amount.max * it.unitWorth}")
+            it.amount.max * it.unitWorth
         }
     }
 
-    val stepMax = stepMap.maxOf { it.value.size }
-
-    val stepColors = stepMap.map {
-        // 1.0 -> green (0.333), 0.0 -> red (0.0)
-        val amt = it.value.size.toDouble() / stepMax
-        it.key to Color.getHSBColor(amt.toFloat() * 0.333f, 1f, 1f).rgb
-    }.toMap()
+    val poolWidgets = dec.objectivePools.map {
+        AnalyzerPoolWidget(it, overallMaxWorth)
+    }
 
     private fun drawGui(): KGui {
         return kambrikGui {
@@ -82,13 +63,12 @@ class AnalyzerScreen(handler: ScreenHandler, inventory: PlayerInventory, title: 
                     addLiteral("Hello There!")
                 }
 
-                // TODO also put one long hover segment on top that dynamically displays tooltip of the hovered segment
-                // TODO this is much more performant than separate hover sections for each pixel
-
                 offset(0, 20) {
-                    for (i in 0 until numPixels) {
-                        //rect(i * 2, 0, 2, 2, 0x88 * (stepMap[i] ?: emptySet()).size)
-                        rect(i * 2, 0, 2, 2, stepColors[i] ?: 0x0)
+                    for (i in poolWidgets.indices) {
+                        val currWid = poolWidgets[i]
+                        offset(0, i * currWid.height) {
+                            widget(currWid)
+                        }
                     }
                 }
             }
