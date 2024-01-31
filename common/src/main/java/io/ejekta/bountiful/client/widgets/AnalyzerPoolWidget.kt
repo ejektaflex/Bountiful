@@ -9,16 +9,16 @@ import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import java.awt.Color
 
-class AnalyzerPoolWidget(pool: Pool, maxWorth: Double) : KWidget {
-
-    val pixSize = 10 // width and pixSize must divide evenly, probably
+class AnalyzerPoolWidget(val pool: Pool, maxWorth: Double, val pixSize: Int) : KWidget {
     override val height: Int
-        get() = pixSize
+        get() = 8
 
     override val width: Int
-        get() = 120
+        get() = 140
 
-    val numPixels = width / pixSize
+    val leftBarWidth = 20
+
+    val numPixels = (width - leftBarWidth) / pixSize
 
     val binWidth = maxWorth / numPixels
 
@@ -42,14 +42,32 @@ class AnalyzerPoolWidget(pool: Pool, maxWorth: Double) : KWidget {
         it.key to Color.getHSBColor(amt.toFloat() * 0.333f, 1f, 1f).rgb
     }.toMap()
 
+    val poolHue = (pool.id.sumOf { it.code } % 255) / 255f
+
+    val poolBlockColor = Color.getHSBColor(poolHue, 0.6f, 0.6f).rgb
+
     override fun onDraw(area: KGuiDsl.AreaDsl) {
-        val currX = area.dsl.ctx.absX()
+
         area.dsl {
-            for (i in 0 until numPixels) {
-                //rect(i * 2, 0, 2, 2, 0x88 * (stepMap[i] ?: emptySet()).size)
-                rect(i * pixSize, 0, pixSize, pixSize, stepColors[i] ?: 0x0)
+
+            area(leftBarWidth, height) {
+                rect(poolBlockColor)
+                onHover {
+                    tooltip {
+                        addLiteral("Pool: ${pool.id}")
+                    }
+                }
             }
-            area(width, height) {
+
+            area(leftBarWidth, 0,width - leftBarWidth, height) {
+
+                for (i in 0 until numPixels) {
+                    //rect(i * 2, 0, 2, 2, 0x88 * (stepMap[i] ?: emptySet()).size)
+                    rect(i * pixSize, 0, pixSize, height, stepColors[i] ?: 0x0)
+                }
+
+                val currX = area.dsl.ctx.absX()
+
                 onHover {
                     val pixBin = (mouseX - currX) / pixSize
                     val res = stepMap[pixBin] ?: emptySet()
@@ -75,6 +93,9 @@ class AnalyzerPoolWidget(pool: Pool, maxWorth: Double) : KWidget {
 
                     tooltip(texts)
                 }
+            }
+            area(width, height) {
+
             }
         }
     }
