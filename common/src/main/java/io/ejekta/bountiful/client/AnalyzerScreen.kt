@@ -3,10 +3,12 @@ package io.ejekta.bountiful.client
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.client.widgets.BountyLongButton
+import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyCreator
 import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.gui.AnalyzerScreenHandler
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
+import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.kambrik.gui.draw.KGui
 import io.ejekta.kambrik.gui.draw.widgets.KListWidget
 import io.ejekta.kambrik.gui.draw.widgets.KScrollbarVertical
@@ -17,7 +19,10 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
+import net.minecraft.util.Colors
 import net.minecraft.util.Identifier
+import java.awt.Color
+import kotlin.math.ceil
 
 
 class AnalyzerScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Text) : KambrikHandledScreen<ScreenHandler>(
@@ -33,21 +38,40 @@ class AnalyzerScreen(handler: ScreenHandler, inventory: PlayerInventory, title: 
         //img(TEXTURE, 349, 166)
     }
 
+    // TODO make a class for this that caches and displays data for one pool only!
 
-//    private val validButtons: List<BountyLongButton>
-//        get() = buttons.filter { it.getBountyData().objectives.isNotEmpty() }
+    val dec = BountifulContent.Decrees.find { it.id == "cleric" }!!
 
-    //private val scroller = KScrollbarVertical(140, 6, 27, SCROLLER, 0x0)
+    val objPools = dec.objectivePools
 
-//    private val buttonList = KListWidget(
-//        { validButtons }, 160, 20, 7, KListWidget.Orientation.VERTICAL, KListWidget.Mode.SINGLE,
-//        { listWidget, item, selected ->
-//            widget(item)
-//        }
-//    ).apply {
-//        reactor.canPassThrough = { true }
-//        attachScrollbar(scroller)
-//    }
+    val ourPool = objPools.first().also { println("First pool is: ${it.id}") }
+
+    val maxWorth = ourPool.items.maxOf { it.amount.max * it.unitWorth }
+
+    val numPixels = 60
+
+    // If the worth goes to 10,000 but pixels are 30, then each pixel is 333.33 in value
+    val binWidth = maxWorth / numPixels
+
+    val stepMap = mutableMapOf<Int, MutableSet<PoolEntry>>()
+
+    init {
+        for (pe in ourPool) {
+            for (step in pe.worthSteps) {
+                val binNum = (step / binWidth).toInt()
+                val bin = stepMap.getOrPut(binNum) { mutableSetOf() }
+                bin.add(pe)
+            }
+        }
+    }
+
+    val stepMax = stepMap.maxOf { it.value.size }
+
+    val stepColors = stepMap.map {
+        // 1.0 -> green (0.333), 0.0 -> red (0.0)
+        val amt = it.value.size.toDouble() / stepMax
+        it.key to Color.getHSBColor(amt.toFloat() * 0.333f, 1f, 1f).rgb
+    }.toMap()
 
     private fun drawGui(): KGui {
         return kambrikGui {
@@ -56,6 +80,16 @@ class AnalyzerScreen(handler: ScreenHandler, inventory: PlayerInventory, title: 
                 rect(0x888888)
                 text(0, 0) {
                     addLiteral("Hello There!")
+                }
+
+                // TODO also put one long hover segment on top that dynamically displays tooltip of the hovered segment
+                // TODO this is much more performant than separate hover sections for each pixel
+
+                offset(0, 20) {
+                    for (i in 0 until numPixels) {
+                        //rect(i * 2, 0, 2, 2, 0x88 * (stepMap[i] ?: emptySet()).size)
+                        rect(i * 2, 0, 2, 2, stepColors[i] ?: 0x0)
+                    }
                 }
             }
         }
