@@ -9,9 +9,9 @@ import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import java.awt.Color
 
-class AnalyzerPoolWidget(val pool: Pool, maxWorth: Double, val pixSize: Int) : KWidget {
+class AnalyzerPoolWidget(val pool: Pool, maxWorth: Double, val pixSize: Int, val inHeight: Int) : KWidget {
     override val height: Int
-        get() = 8
+        get() = inHeight
 
     override val width: Int
         get() = 140
@@ -84,7 +84,7 @@ class AnalyzerPoolWidget(val pool: Pool, maxWorth: Double, val pixSize: Int) : K
 
                     for (item in res) {
                         texts.add(
-                            Text.literal(item.id).formatted(Formatting.GREEN)
+                            Text.literal(item.id.substringAfter("${pool.id}.")).formatted(Formatting.GREEN)
                                 .append(
                                     Text.literal(" (${item.content})").formatted(item.rarity.color)
                                 )

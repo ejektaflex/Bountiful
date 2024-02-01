@@ -30,7 +30,7 @@ class AnalyzerScreenHandler @JvmOverloads constructor(
     }
 
     override fun onClosed(player: PlayerEntity) {
-        // TODO return slots to player, right? We don't want them to lose these items forever.
+        // return slot item to player, right? We don't want them to lose these items forever.
         val leftover = inventory.removeStack(0)
         player.inventory.insertStack(leftover)
         inventory.onClose(player)

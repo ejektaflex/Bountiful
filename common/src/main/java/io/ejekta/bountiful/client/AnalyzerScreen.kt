@@ -10,6 +10,8 @@ import io.ejekta.bountiful.content.BountyCreator
 import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.gui.AnalyzerScreenHandler
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
+import io.ejekta.bountiful.data.Decree
+import io.ejekta.bountiful.data.Pool
 import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.kambrik.gui.draw.KGui
 import io.ejekta.kambrik.gui.draw.reactor.MouseReactor
@@ -57,6 +59,20 @@ class AnalyzerScreen(handler: ScreenHandler, inventory: PlayerInventory, title: 
 
     private var poolWidgets = listOf<AnalyzerPoolWidget>()
 
+    enum class Mode(val symbol: String) {
+        OBJ("O"),
+        REW("R")
+    }
+
+    var showMode = Mode.OBJ
+
+    val modeClicker = MouseReactor().apply {
+        onClickDown = { relX: Int, relY: Int, button: Int ->
+            showMode = Mode.entries[(showMode.ordinal + 1) % Mode.entries.size]
+            refreshWidgets()
+        }
+    }
+
     fun refreshWidgets() {
 
         println("Refreshing widgets")
@@ -67,22 +83,18 @@ class AnalyzerScreen(handler: ScreenHandler, inventory: PlayerInventory, title: 
 
         val decrees = di.ids.mapNotNull { BountifulContent.Decrees.find { d -> d.id == it } }
 
-        val allPools = decrees.map { it.objectivePools }.flatten().toSet().toList()
+        val allPools = decrees.map {
+            if (showMode == Mode.OBJ) it.objectivePools else it.rewardPools
+        }.flatten().toSet().toList()
 
         poolWidgets = allPools.map {
-            AnalyzerPoolWidget(it, overallMaxWorth, scanResolution)
+            //val heightBuff = if (it == allPools.last()) (64 - 64/allPools.size) else 0
+            AnalyzerPoolWidget(it, overallMaxWorth, scanResolution, 64 / allPools.size + 0)
         }.sortedBy {
             it.pool.id
         }
 
     }
-
-//    val mouseReact = MouseReactor().apply {
-//        onClickDown = { relX, relY, button ->
-//            scanResolution = (scanResolution - 1).coerceIn(1..20)
-//            refreshWidgets()
-//        }
-//    }
 
     // 18x43
     private val scroller = KScrollbarVertical(43, 18, 8, SCROLLER, 0x0)
@@ -91,9 +103,23 @@ class AnalyzerScreen(handler: ScreenHandler, inventory: PlayerInventory, title: 
         return kambrikGui {
 
             area(backgroundWidth, backgroundHeight) {
-                //rect(0x888888)
                 text(7, 6) {
                     addLiteral("Decree Analyzer")
+                }
+
+                area(152, 6, 18, 9) {
+                    rect(0x0)
+                    reactWith(modeClicker)
+                    offset(9, 1) {
+                        textCentered {
+                            addLiteral(showMode.symbol)
+                        }
+                    }
+                    onHover {
+                        tooltip {
+                            addLiteral("Click to change mode (Current: ${showMode})")
+                        }
+                    }
                 }
 
                 offset(9, 17) {
