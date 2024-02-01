@@ -1,9 +1,8 @@
 package io.ejekta.bountiful.messages
 
 import io.ejekta.bountiful.Bountiful
-import io.ejekta.bountiful.content.BountifulContent
+import io.ejekta.bountiful.client.AnalyzerScreen
 import io.ejekta.kambrik.message.ClientMsg
-import io.ejekta.kambrik.message.ServerMsg
 import kotlinx.serialization.Serializable
 import net.minecraft.server.network.ServerPlayerEntity
 
@@ -15,10 +14,15 @@ class ClientPlayerStatus(private val statusType: Type) : ClientMsg() {
     }
 
     enum class Type(val msgFunc: MsgContext.() -> Unit) {
-        OPEN_ANALYZER({
+        UPDATE_ANALYZER({
             val player = client.player
             Bountiful.LOGGER.info("Analyzer request received by: $player")
+            val analyzerScreen = (client.currentScreen as? AnalyzerScreen)
 
+            analyzerScreen?.let {
+                println("Got analyzer")
+                it.refreshWidgets()
+            }
         })
         ;
 

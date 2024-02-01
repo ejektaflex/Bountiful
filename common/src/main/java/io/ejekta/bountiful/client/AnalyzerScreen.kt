@@ -2,6 +2,7 @@ package io.ejekta.bountiful.client
 
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyRarity
+import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.client.widgets.AnalyzerPoolWidget
 import io.ejekta.bountiful.client.widgets.BountyLongButton
 import io.ejekta.bountiful.content.BountifulContent
@@ -32,7 +33,7 @@ class AnalyzerScreen(handler: ScreenHandler, inventory: PlayerInventory, title: 
     handler, inventory, title
 ) {
 
-    var scanResolution = 4
+    private var scanResolution = 1
 
     init {
         backgroundWidth = 177
@@ -57,9 +58,23 @@ class AnalyzerScreen(handler: ScreenHandler, inventory: PlayerInventory, title: 
     private var poolWidgets = listOf<AnalyzerPoolWidget>()
 
     fun refreshWidgets() {
-        poolWidgets = dec.objectivePools.map {
+
+        println("Refreshing widgets")
+
+        val doot = (screenHandler as? AnalyzerScreenHandler) ?: return
+
+        val di = DecreeData[doot.inventory.getStack(0)]
+
+        val decrees = di.ids.mapNotNull { BountifulContent.Decrees.find { d -> d.id == it } }
+
+        val allPools = decrees.map { it.objectivePools }.flatten().toSet().toList()
+
+        poolWidgets = allPools.map {
             AnalyzerPoolWidget(it, overallMaxWorth, scanResolution)
+        }.sortedBy {
+            it.pool.id
         }
+
     }
 
 //    val mouseReact = MouseReactor().apply {
@@ -72,10 +87,6 @@ class AnalyzerScreen(handler: ScreenHandler, inventory: PlayerInventory, title: 
     // 18x43
     private val scroller = KScrollbarVertical(43, 18, 8, SCROLLER, 0x0)
 
-    init {
-        refreshWidgets()
-    }
-
     private fun drawGui(): KGui {
         return kambrikGui {
 
@@ -85,7 +96,7 @@ class AnalyzerScreen(handler: ScreenHandler, inventory: PlayerInventory, title: 
                     addLiteral("Decree Analyzer")
                 }
 
-                offset(30, 17) {
+                offset(9, 17) {
                     for (i in poolWidgets.indices) {
                         val currWid = poolWidgets[i]
                         offset(0, i * currWid.height) {
@@ -94,7 +105,7 @@ class AnalyzerScreen(handler: ScreenHandler, inventory: PlayerInventory, title: 
                     }
                 }
 
-                offset(9, 38) {
+                offset(152, 38) {
                     area(18, 43) {
                         //reactWith(mouseReact)
                         widget(scroller)

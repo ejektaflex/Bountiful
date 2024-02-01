@@ -31,6 +31,8 @@ class AnalyzerScreenHandler @JvmOverloads constructor(
 
     override fun onClosed(player: PlayerEntity) {
         // TODO return slots to player, right? We don't want them to lose these items forever.
+        val leftover = inventory.removeStack(0)
+        player.inventory.insertStack(leftover)
         inventory.onClose(player)
     }
 
@@ -42,19 +44,7 @@ class AnalyzerScreenHandler @JvmOverloads constructor(
         checkSize(inventory, SIZE)
         inventory.onOpen(playerInventory.player)
 
-        val bRows = 1
-        val bCols = SIZE
-
-        val slotSize = 18
-        val adjustX = 173
-        val adjustY = 0
-
-        // Bounties
-        for (j in 0 until bRows) {
-            for (k in 0 until bCols) {
-                addSlot(Slot(inventory, k + j * bCols, 8 + k * slotSize + adjustX, 18 + j * slotSize + adjustY))
-            }
-        }
+        addSlot(AnalyzerDecreeSlot(inventory,  playerInventory.player, 0, 153, 18))
 
         //The player inventory
         makePlayerDefaultGrid(playerInventory, 9, 85)
@@ -62,7 +52,7 @@ class AnalyzerScreenHandler @JvmOverloads constructor(
     }
 
     companion object {
-        const val SIZE = 6
+        const val SIZE = 1
     }
 }
 
