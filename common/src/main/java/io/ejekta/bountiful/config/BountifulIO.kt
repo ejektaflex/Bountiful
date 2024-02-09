@@ -116,6 +116,27 @@ object BountifulIO {
                 }
             }
 
+            val worstCaseRewNum = configData.bounty.maxNumRewards
+
+            val topRewards = allRewardEntries.run {
+                sortedBy { -it.maxWorth }.take(worstCaseRewNum.coerceAtMost(size))
+            }
+
+            val topObjectives = allObjectiveEntries.run {
+                sortedBy { -it.maxWorth }.take(worstCaseRewNum.coerceAtMost(size))
+            }
+
+            val rewWorstWorth = topRewards.sumOf { it.maxWorth }
+            val objWorstWorth = topObjectives.sumOf { it.maxWorth }
+
+            // If the top X number of objs can't meet the worth of the top X rewards, warn the user
+            if (objWorstWorth < rewWorstWorth * 0.9) {
+                Bountiful.LOGGER.warn("Decree '$id' top value rewards cannot be matched with equivalent objectives.")
+                Bountiful.LOGGER.warn("This will result in uneven bounties. Consider adding more high value objectives or lowering the value of your rewards.")
+                Bountiful.LOGGER.warn("* Top Rewards: ${topRewards.joinToString(", ") { "${it.id} (${it.maxWorth})" }} total up to: $rewWorstWorth")
+                Bountiful.LOGGER.warn("* Top Objs: ${topObjectives.joinToString(", ") { "${it.id} (${it.maxWorth})" }} total up to: $objWorstWorth")
+            }
+
         }
     )
 

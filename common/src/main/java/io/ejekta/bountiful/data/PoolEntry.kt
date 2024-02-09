@@ -75,6 +75,9 @@ class PoolEntry private constructor() {
     val worthSteps: List<Double>
         get() = (amount.min..amount.max).map { it * unitWorth }
 
+    val maxWorth: Double
+        get() = amount.max * unitWorth
+
     fun save(format: Json = JsonFormats.DataPack) = format.encodeToString(serializer(), this)
 
     private fun getRelatedItems(world: ServerWorld): List<Item>? {

@@ -26,6 +26,11 @@ data class Decree(
             BountifulContent.Pools.find { it.id == id }
         }
 
+    val rewardPools: List<Pool>
+        get() = rewards.mapNotNull { id ->
+            BountifulContent.Pools.find { it.id == id }
+        }
+
     val invalidPools: List<String>
         get() = allPoolIds.groupBy { id -> BountifulContent.Pools.find { it.id == id } }[null] ?: emptyList()
 
@@ -35,10 +40,11 @@ data class Decree(
     val translation: MutableText
         get() = Text.translatable("bountiful.decree.$id.name")
 
-    val rewardPools: List<Pool>
-        get() = rewards.mapNotNull { id ->
-            BountifulContent.Pools.find { it.id == id }
-        }
+    val allObjectiveEntries: List<PoolEntry>
+        get() = objectivePools.map { it.items }.flatten()
+
+    val allRewardEntries: List<PoolEntry>
+        get() = rewardPools.map { it.items }.flatten()
 
     override fun merged(other: Decree): Decree {
         return Decree(
