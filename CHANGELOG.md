@@ -24,6 +24,7 @@ old config files and datapacks that overwrote existing Bountiful data may not fu
 - Potions, Tipped Arrows and probably a few other items with dynamic names will now be displayed correctly in bounty tooltips.
 - Enchantments on enchanted books are now displayed in bounty tooltips.
 - Decrees and Bounties can now be composted in NeoForge (previously a Fabric-only feature)
+- Decrees will now show up rarely in the list of trades offered by Wandering Traders
 
 #### Configuration
 - Decrees now have three new, optional fields:
@@ -35,6 +36,14 @@ old config files and datapacks that overwrote existing Bountiful data may not fu
 - Added a new config option, `bounty.allowDecreeMixing` (default: true)
   - When enabled, will pull randomly from all Decrees on a board when creating a bounty. 
   - When disabled, it will pull from only one Decree at random when creating a bounty.
+- Added a new config option, `bounty.reverseMatchingAlgorithm` (default: false).
+  - By default, Bountiful picks rewards randomly and then picks a number of objectives that total up to the same value as the rewards.
+  - If enabled, the reverse happens: Bountiful picks objectives randomly then finds rewards that total up to the same value as the objectives.
+  - This also means that, effectively, `maxNumRewards` suddenly limits the number of objectives instead, and `objectiveDifficultyModifierPercent` suddenly affects how good of rewards you get instead.
+- Added a new modpack maker tool, the Decree Analyzer. It can be accessed via `/bo util analyzer`
+  - This new tool allows users to find 'holes' Decrees, where rewards might not have suitable objectives and vice-versa.
+- Added warning log messages to help notify the user when their config data seems erroneous.
+- Added a new command, `/bo util configToDataPack [packFileName] [packDescInQuotes]` that creates a datapack from Bountiful's current config folder. It gets placed into the config folder as `[packFileName].zip`
 
 ### Changed
 - The board layout for objectives and rewards is now centered, with an arrow dividing the objectives and rewards. 
@@ -42,10 +51,13 @@ old config files and datapacks that overwrote existing Bountiful data may not fu
 - Much better handling and notification of possible config file errors via the log.
 - Reformatted the config, making it easier for users without ClothConfig to understand.
 - Updated translations. `TODO("Add new localization listing and authors)`
+- The Forge release distribution has been changed to NeoForge for the foreseeable future.
+  - We may re-evaluate this in the future, but for right now, it seems to be the trend.
 
 ### Fixed
 - Fixed an extremely rare crash on Forge when loading dynamic textures and the user has hundreds of mods
 - Fixed shift-clicking of items between slots on the bounty board
+- Fixed an issue where boards might show that they are receiving a discount higher than the max of 40% (purely cosmetic)
 
 ## [6.0.3] for 1.20.1 - 2023-07-17
 

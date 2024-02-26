@@ -86,7 +86,6 @@ object BountifulContent : KambrikAutoRegistrar {
 
 
     init {
-        println("BountifulContent being created")
         CustomStats // yep
         Triggers
     }
