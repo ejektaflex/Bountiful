@@ -26,6 +26,7 @@ class BountifulConfigData {
         var objectiveDifficultyModifierPercent = 0
         var allowDecreeMixing = true
         var maxNumRewards = 2
+        var reverseMatchingAlgorithm = false
     }
 
     val bounty = BountyConfigData()
@@ -167,6 +168,17 @@ class BountifulConfigData {
                 bounty.maxNumRewards = it
             }.setTextGetter {
                 textLiteral("$it Rewards")
+            }.build()
+        )
+
+        bountyCat.addEntry(
+            creator.startBooleanToggle(
+                Text.literal("Reverse Entry Matching Algorithm"),
+                bounty.reverseMatchingAlgorithm
+            ).setDefaultValue(false).setTooltip(
+                Text.literal("Setting this to true reverses the generation algorithm")
+            ).setSaveConsumer {
+                bounty.reverseMatchingAlgorithm = it
             }.build()
         )
 

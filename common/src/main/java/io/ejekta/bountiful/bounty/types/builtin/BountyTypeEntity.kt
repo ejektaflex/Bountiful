@@ -36,7 +36,7 @@ class BountyTypeEntity : IBountyObjective {
             ).formatted(progress.color).append(
                 progress.neededText.colored(Formatting.WHITE)
             )
-            false -> error("Cannot have an entity (${entry.content}) as a reward.")
+            false -> Text.literal("ERR: Cannot have an entity (${entry.content}) as a reward.")
         }
     }
 
