@@ -5,7 +5,9 @@ import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.DecreeData
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
+import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.BountifulContent
+import io.ejekta.bountiful.content.villager.DecreeTradeFactory
 import io.ejekta.bountiful.messages.*
 import io.ejekta.bountiful.util.iterateBountyStacks
 import io.ejekta.kambrik.Kambrik
@@ -17,8 +19,16 @@ import net.minecraft.client.item.ModelPredicateProviderRegistry
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.passive.TameableEntity
+import net.minecraft.item.Item
+import net.minecraft.item.ItemGroup
+import net.minecraft.item.ItemGroups
+import net.minecraft.registry.RegistryKey
+import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
+import net.minecraft.util.Identifier
+import net.minecraft.village.TradeOffer
+import net.minecraft.village.TradeOffers
 
 interface BountifulSharedApi {
 
@@ -81,6 +91,19 @@ interface BountifulSharedApi {
         )
     }
 
+    fun registerJigsawPieces(server: MinecraftServer) {
+        listOf("plains", "savanna", "snowy", "taiga", "desert").forEach { villageType ->
+            Bountiful.LOGGER.info("Registering Bounty Board Jigsaw Piece for Village Type: $villageType")
+            Kambrik.Structure.addToStructurePool(
+                server,
+                Identifier("bountiful:village/common/bounty_gazebo"),
+                Identifier("minecraft:village/$villageType/houses"),
+                Identifier("bountiful:$villageType"),
+                BountifulIO.configData.board.villageGenFrequency
+            )
+        }
+    }
+
     fun handleEntityKills(world: ServerWorld, entity: Entity, killedEntity: LivingEntity) {
         if (entity is LivingEntity) {
             val playerList = mutableSetOf<ServerPlayerEntity>()
@@ -106,6 +129,16 @@ interface BountifulSharedApi {
                 BountyTypeRegistry.ENTITY.incrementEntityBounties(it, killedEntity)
             }
         }
+    }
+
+    fun getItemGroups(): Map<RegistryKey<ItemGroup>, List<() -> Item>> {
+        return mapOf(
+            ItemGroups.FUNCTIONAL to listOf({ BountifulContent.BOARD_ITEM }, { BountifulContent.DECREE_ITEM }),
+        )
+    }
+
+    fun modifyTradeList(list: MutableList<TradeOffers.Factory>) {
+        list.add(DecreeTradeFactory())
     }
 
     // Update Criterion bounties

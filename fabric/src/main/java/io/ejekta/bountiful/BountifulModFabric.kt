@@ -72,16 +72,7 @@ class BountifulModFabric : ModInitializer {
         }
 
         ServerLifecycleEvents.SERVER_STARTING.register(ServerLifecycleEvents.ServerStarting { server ->
-            listOf("plains", "savanna", "snowy", "taiga", "desert").forEach { villageType ->
-                Bountiful.LOGGER.info("Registering Bounty Board Jigsaw Piece for Village Type: $villageType")
-                Kambrik.Structure.addToStructurePool(
-                    server,
-                    Identifier("bountiful:village/common/bounty_gazebo"),
-                    Identifier("minecraft:village/$villageType/houses"),
-                    Identifier("bountiful:$villageType"),
-                    BountifulIO.configData.board.villageGenFrequency
-                )
-            }
+            Bountybridge.registerJigsawPieces(server)
         })
 
         // Increment entity bounties for all players within 12 blocks of the player and all players within 12 blocks of the mob
@@ -89,22 +80,23 @@ class BountifulModFabric : ModInitializer {
             Bountybridge.handleEntityKills(world, entity, killedEntity)
         })
 
-        val decreeTrades = DecreeTradeFactory()
-
         TradeOfferHelper.registerWanderingTraderOffers(1) {
-            it.add(decreeTrades)
+            Bountybridge.modifyTradeList(it)
         }
 
         TradeOfferHelper.registerRebalancedWanderingTraderOffers {
             it.pool(
-                Bountiful.id("merchant_trade_offers"), 1, decreeTrades
+                Bountiful.id("merchant_trade_offers"), 1, DecreeTradeFactory()
             )
         }
 
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(ItemGroupEvents.ModifyEntries {
-            it.add(BountifulContent.BOARD_ITEM)
-            it.add(BountifulContent.DECREE_ITEM)
-        })
+        for ((group, items) in Bountybridge.getItemGroups()) {
+            ItemGroupEvents.modifyEntriesEvent(group).register(ItemGroupEvents.ModifyEntries {
+                for (item in items) {
+                    it.add(item)
+                }
+            })
+        }
 
         Bountybridge.registerCriterionStuff()
     }

@@ -38,9 +38,11 @@ object BountifulForgeClient {
     @SubscribeEvent
     @JvmStatic
     fun onItemGroups(evt: BuildCreativeModeTabContentsEvent) {
-        if (evt.tabKey == ItemGroups.FUNCTIONAL) {
-            evt.add { BountifulContent.BOARD_ITEM }
-            evt.add { BountifulContent.DECREE_ITEM }
+        val items = Bountybridge.getItemGroups()[evt.tabKey]
+        items?.let {
+            for (item in items) {
+                evt.add(item)
+            }
         }
     }
 
