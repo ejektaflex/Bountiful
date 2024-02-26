@@ -133,6 +133,22 @@ object BountifulCommands {
                     }
                 }
 
+                "analyzer" runs {
+                    try {
+                        source.playerOrThrow
+
+                        source.player?.run {
+                            openHandledScreenSimple(Text.literal("Analyzer!")) { syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity ->
+                                AnalyzerScreenHandler(syncId, playerInventory, SimpleInventory(AnalyzerScreenHandler.SIZE))
+                            }
+                        }
+
+                        //ClientPlayerStatus.Type.OPEN_ANALYZER.sendToClient(source.playerOrThrow)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+
                 "debug" {
                     "weights" {
                         argInt("rep", -30..30) runs { rep ->
@@ -149,22 +165,6 @@ object BountifulCommands {
 
                         "hold" runs {
                             holdThing(this)
-                        }
-
-                        "analyzer" runs {
-                            try {
-                                source.playerOrThrow
-
-                                source.player?.run {
-                                    openHandledScreenSimple(Text.literal("Analyzer!")) { syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity ->
-                                        AnalyzerScreenHandler(syncId, playerInventory, SimpleInventory(AnalyzerScreenHandler.SIZE))
-                                    }
-                                }
-
-                                //ClientPlayerStatus.Type.OPEN_ANALYZER.sendToClient(source.playerOrThrow)
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
                         }
                     }
                 }

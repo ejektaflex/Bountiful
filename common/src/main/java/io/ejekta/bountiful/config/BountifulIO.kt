@@ -160,6 +160,7 @@ object BountifulIO {
         }
 
         decreeConfigs.copyToRecursively(decreeSpot.createParentDirectories(), { src, target, e ->
+            e.printStackTrace()
             OnErrorResult.TERMINATE
         }, followLinks = false)
 
