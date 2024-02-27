@@ -19,19 +19,18 @@ old config files and datapacks that overwrote existing Bountiful data may not fu
   - If the villager is currently busy, this will happen once they are free.
 - The way the board's bounties are refreshed has been updated - now, bounties that have been on the board the longest have the highest chances of being removed first.
   - This should reduce the number of old bounties that 'happen' to stay on the board through dumb luck (or rather, misfortune)
-- Added `TODO()` advancements, and an additional `TODO()` hidden advancements.
+- Added advancements! There are now `7` advancements.
 - The board will now appear to update in the time you've been gone even when the chunk is unloaded. It does this by playing catch-up when the chunk reloads.
 - Potions, Tipped Arrows and probably a few other items with dynamic names will now be displayed correctly in bounty tooltips.
 - Enchantments on enchanted books are now displayed in bounty tooltips.
-- Decrees and Bounties can now be composted in NeoForge (previously a Fabric-only feature)
-- Decrees will now show up rarely in the list of trades offered by Wandering Traders
+- Decrees and Bounties can now be composted in NeoForge (previously a Fabric-only feature), bringing seemingly full parity between Fabric and NeoForge versions.
+- Decrees will now show up rarely in the list of trades offered by Wandering Traders.
 
 #### Configuration
 - Decrees now have three new, optional fields:
   - `canSpawn` determines whether a bounty board can spawn with this Decree in it (default: true)
   - `canReveal` determines whether a blank Decree can be revealed to be this Decree when placed on the board (default: true)
   - `canWanderBuy` determines whether this Decree can be found in the stocks of Wandering Traders (default: true)
-    - Currently, Wandering Trader stocks are only affected in the Fabric version.
 - Added a new config option, `board.canBreak`, that determines whether bounty boards can be broken (default: true)
 - Added a new config option, `bounty.allowDecreeMixing` (default: true)
   - When enabled, will pull randomly from all Decrees on a board when creating a bounty. 
@@ -43,7 +42,7 @@ old config files and datapacks that overwrote existing Bountiful data may not fu
 - Added a new modpack maker tool, the Decree Analyzer. It can be accessed via `/bo util analyzer`
   - This new tool allows users to find 'holes' Decrees, where rewards might not have suitable objectives and vice-versa.
 - Added warning log messages to help notify the user when their config data seems erroneous.
-- Added a new command, `/bo util configToDataPack [packFileName] [packDescInQuotes]` that creates a datapack from Bountiful's current config folder. It gets placed into the config folder as `[packFileName].zip`
+- Added a new command, `/bo util configToDataPack [packFileName] [packDescInQuotes]` that creates a datapack from Bountiful's current config folder. It gets placed into the config folder as `[packFileName].zip`.
 
 ### Changed
 - The board layout for objectives and rewards is now centered, with an arrow dividing the objectives and rewards. 
@@ -65,8 +64,8 @@ old config files and datapacks that overwrote existing Bountiful data may not fu
 - Implemented the new item group system, so that items will once again show up in creative tabs, as well as in JEI.
 - Added Numismatic Overhaul compat for Fabric.
 - Updated translations.
-- Added a default single localization override for Decrees
-- Allow mob deaths from pets to count towards entity objectives
+- Added a default single localization override for Decrees.
+- Allow mob deaths from pets to count towards entity objectives.
 
 ### Fixed
 - Fixed the "missing ops" cosmetic issue upon world load.
