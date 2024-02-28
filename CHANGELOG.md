@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) as closely as it can.
 
-## [7.0.0] for 1.20.(4?) - Not Yet Released
+## [7.0.0] for 1.20.4 - 2024-02-27
 
 7.0.0 is a big immersion and quality of life update for Bountiful, adding new ways for the Bounty Board to interact with Villagers.
 A tweaked configuration system makes it easier for modpack makers to configure Bountiful. As such,
@@ -19,7 +19,7 @@ old config files and datapacks that overwrote existing Bountiful data may not fu
   - If the villager is currently busy, this will happen once they are free.
 - The way the board's bounties are refreshed has been updated - now, bounties that have been on the board the longest have the highest chances of being removed first.
   - This should reduce the number of old bounties that 'happen' to stay on the board through dumb luck (or rather, misfortune)
-- Added advancements! There are now `7` advancements.
+- Added advancements! There are now `8` advancements.
 - The board will now appear to update in the time you've been gone even when the chunk is unloaded. It does this by playing catch-up when the chunk reloads.
 - Potions, Tipped Arrows and probably a few other items with dynamic names will now be displayed correctly in bounty tooltips.
 - Enchantments on enchanted books are now displayed in bounty tooltips.
