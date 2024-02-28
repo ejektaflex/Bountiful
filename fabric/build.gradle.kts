@@ -13,7 +13,12 @@ val generatedResources = file("src/generated/resources")
 // The path to the AW file in the common subproject.
 val accessWidenerFile = project(":common").file("src/main/resources/bountiful.accesswidener")
 
-loom { accessWidenerPath.set(accessWidenerFile) }
+loom {
+    accessWidenerPath.set(accessWidenerFile)
+    mixin {
+        defaultRefmapName.set("Bountiful-common-refmap.json")
+    }
+}
 
 // Mark the AW generated resource directory as a source directory for the resources of the "main" source set.
 sourceSets {

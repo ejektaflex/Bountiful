@@ -59,9 +59,10 @@ old config files and datapacks that overwrote existing Bountiful data may not fu
   - We may re-evaluate this in the future, but for right now, it seems to be the trend.
 
 ### Fixed
-- Fixed an extremely rare crash on Forge when loading dynamic textures and the user has hundreds of mods
-- Fixed shift-clicking of items between slots on the bounty board
+- Fixed an extremely rare crash on (Neo)Forge when loading dynamic textures and the user has hundreds of mods
+- Fixed shift-clicking of items between slots on the Bounty Board
 - Fixed an issue where boards might show that they are receiving a discount higher than the max of 40% (purely cosmetic)
+- Fixed an issue where dragging the scrollbar on the Bounty Board did not work
 
 ## [6.0.3] for 1.20.1 - 2023-07-17
 
