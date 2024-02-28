@@ -4,20 +4,21 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.client.AnalyzerScreen
 import io.ejekta.kambrik.message.ClientMsg
 import kotlinx.serialization.Serializable
+import net.minecraft.client.MinecraftClient
 import net.minecraft.server.network.ServerPlayerEntity
 
 @Serializable
 class ClientPlayerStatus(private val statusType: Type) : ClientMsg() {
 
-    override fun onClientReceived(ctx: MsgContext) {
-        statusType.msgFunc(ctx)
+    override fun onClientReceived() {
+        statusType.msgFunc()
     }
 
-    enum class Type(val msgFunc: MsgContext.() -> Unit) {
+    enum class Type(val msgFunc: () -> Unit) {
         UPDATE_ANALYZER({
-            val player = client.player
+            val player = MinecraftClient.getInstance().player
             Bountiful.LOGGER.info("Analyzer request received by: $player")
-            val analyzerScreen = (client.currentScreen as? AnalyzerScreen)
+            val analyzerScreen = (MinecraftClient.getInstance().currentScreen as? AnalyzerScreen)
 
             analyzerScreen?.let {
                 println("Got analyzer")
@@ -27,7 +28,7 @@ class ClientPlayerStatus(private val statusType: Type) : ClientMsg() {
         ;
 
         fun sendToClient(player: ServerPlayerEntity) {
-            println("Sending $this to server..")
+            Bountiful.LOGGER.debug("Sending $this to server..")
             ClientPlayerStatus(this).sendToClient(player)
         }
     }

@@ -27,6 +27,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDeathEvent
 import net.neoforged.neoforge.event.server.ServerStartingEvent
 import net.neoforged.neoforge.event.village.VillagerTradesEvent
 import net.neoforged.neoforge.event.village.WandererTradesEvent
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent
 import net.neoforged.neoforge.registries.DeferredRegister
 import net.neoforged.neoforge.registries.RegisterEvent
 import thedarkcolour.kotlinforforge.neoforge.forge.FORGE_BUS
@@ -38,6 +39,8 @@ import java.util.function.Supplier
 @Mod("bountiful")
 class BountifulModForge {
     init {
+
+        Bountiful.LOGGER.info("Registering Network Messages..")
 
         Bountybridge.registerServerMessages()
         Bountybridge.registerClientMessages()
@@ -107,6 +110,7 @@ class BountifulModForge {
                 Bountybridge.registerCompostables()
             }
         }
+
     }
 
 }

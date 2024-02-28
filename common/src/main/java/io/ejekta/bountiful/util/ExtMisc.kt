@@ -5,6 +5,8 @@ import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.content.item.BountyItem
+import io.ejekta.kambrik.message.ClientMsg
+import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.ai.brain.Brain
 import net.minecraft.entity.ai.brain.MemoryModuleType
 import net.minecraft.entity.passive.VillagerEntity
@@ -33,6 +35,9 @@ fun randomSplit(num: Double, ways: Int): List<Double> {
     val sum = bits.sum()
     return bits.map { (it / sum) * num }
 }
+
+val ClientMsg.ctx: MinecraftClient
+    get() = MinecraftClient.getInstance()
 
 val Inventory.readOnlyCopy: DefaultedList<ItemStack>
     get() = DefaultedList.ofSize(size(), ItemStack.EMPTY).apply {

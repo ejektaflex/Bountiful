@@ -1,10 +1,10 @@
 package io.ejekta.bountiful.messages
 
 import io.ejekta.bountiful.config.BountifulIO
+import io.ejekta.bountiful.util.ctx
 import io.ejekta.kambrik.message.ClientMsg
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.toast.SystemToast
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.sound.SoundEvent
@@ -16,25 +16,22 @@ class OnBountyComplete(
     private val volume: Float,
     private val pitch: Float
 ) : ClientMsg() {
-    override fun onClientReceived(ctx: MsgContext) {
-        runLocally(ctx.client.player!!)
+    override fun onClientReceived() {
+        runLocally(ctx.player!!)
     }
 
     fun runLocally(player: PlayerEntity) {
-        val mc = MinecraftClient.getInstance()
-
         // Don't show toasts when in an inventory (to prevent toast spam when moving items related to bounties)
-        if (mc.currentScreen == null && BountifulIO.configData.client.showCompletionToast) {
+        if (ctx.currentScreen == null && BountifulIO.configData.client.showCompletionToast) {
             player.playSound(soundEvent, volume, pitch)
-            mc.toastManager.add(
+            ctx.toastManager.add(
                 SystemToast.create(
-                    mc,
+                    ctx,
                     SystemToast.Type.PERIODIC_NOTIFICATION,
                     Text.literal("Bounty Complete!"),
                     Text.literal("Turn in at a Bounty Board!")
                 )
             )
         }
-
     }
 }
