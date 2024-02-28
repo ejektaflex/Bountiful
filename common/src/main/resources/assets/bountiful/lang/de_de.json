@@ -1,0 +1,89 @@
+{
+	"block.bountiful.bountyboard": "Belohnungstafel",
+
+	"itemGroup.bountiful": "Bountiful",
+
+	"bountiful.entry.shepherd_objs.wool_wildcard": "Beliebige Wolle",
+	"bountiful.entry.fletcher_objs.planks": "Beliebige Holzbretter",
+	"bountiful.entry.fletcher_objs.logs": "Beliebiger Holzstamm",
+	"bountiful.entry.shepherd_objs.bed_wildcard": "Beliebiges Bett",
+	"bountiful.entry.fisherman_objs.any_boat": "Beliebiges Boot",
+	"bountiful.entry.mapper_objs.candles": "Beliebige Kerze",
+	"bountiful.entry.shepherd_objs.banner_wildcard": "Beliebiges Banner",
+
+	"bountiful.entry.fisherman_obj_catch_ench_book": "Verzauberte Bücher angeln",
+	"bountiful.entry.cleric_obj_brew_swiftness": "Einen einfachen Trank der Schnelligkeit brauen",
+	"bountiful.entry.cleric_obj_cure_zombie_villager": "Einen Zombie-Dorfbewohner heilen",
+
+	"bountiful.ui.shorthand.minutes": "Min",
+	"bountiful.ui.shorthand.seconds": "Sek",
+
+	"bountiful.decree": "Dekret",
+	"bountiful.decrees": "Dekrete",
+	"bountiful.decree.invalid": "Ungültiges Dekret",
+	"bountiful.decree.notset": "Bring dies zu einer Belohnungstafel!",
+
+	"bountiful.bounty.expired": "Diese Belohnung ist abgelaufen.",
+	"bountiful.bounty.turnin": "Erfülle deine Belohnung, indem du mit der rechten Maustaste auf eine Belohnungstafel klickst.",
+
+	"bountiful.advancement.bounty_taken.title": "Auftragsarbeit",
+	"bountiful.advancement.bounty_taken.desc": "Nimm eine Belohnung von einer Belohnungstafel an",
+
+	"bountiful.advancement.bounty_complete.title": "Ehrlicher Lohn für ehrliche Arbeit",
+	"bountiful.advancement.bounty_complete.desc": "Erfülle eine Belohnung!",
+
+	"bountiful.advancement.rush_order.title": "Expresslieferung",
+	"bountiful.advancement.rush_order.desc": "Erfülle eine Belohnung in weniger als einer Minute",
+
+	"bountiful.advancement.procrastinator.title": "Meister des Aufschiebens",
+	"bountiful.advancement.procrastinator.desc": "Erfülle eine Belohnung mit weniger als fünf Sekunden verbleibender Zeit",
+
+	"bountiful.advancement.town_crier.title": "Stadtschreier",
+	"bountiful.advancement.town_crier.desc": "Platziere ein Dekret auf einer Belohnungstafel",
+
+	"bountiful.advancement.royal_mandate.title": "Königliches Mandat",
+	"bountiful.advancement.royal_mandate.desc": "Platziere ein Dekret in einer Belohnungstafel",
+
+	"bountiful.advancement.fetch_quest.title": "Nur eine 'Hol' Quest",
+	"bountiful.advancement.fetch_quest.desc": "Erfülle eine Belohnung mit Hilfe eines Begleittiers",
+
+	"bountiful.bounty": "Belohnung",
+
+	"bountiful.decree.armorer.name": "Rüstungsschmieden",
+	"bountiful.decree.butcher.name": "Schlachten",
+	"bountiful.decree.chef.name": "Kochzutaten",
+	"bountiful.decree.cleric.name": "Zutaten für Kleriker",
+	"bountiful.decree.farmer.name": "Landwirtschaft",
+	"bountiful.decree.fisherman.name": "Angeln",
+	"bountiful.decree.fletcher.name": "Pfeilherstellung",
+	"bountiful.decree.hunting.name": "Monsterjagd",
+	"bountiful.decree.inventor.name": "Erfindungen",
+	"bountiful.decree.leatherer.name": "Lederverarbeitung",
+	"bountiful.decree.librarian.name": "Bibliothekar",
+	"bountiful.decree.mapper.name": "Kartografie",
+	"bountiful.decree.mason.name": "Maurerarbeiten",
+	"bountiful.decree.shepherd.name": "Schäferei",
+	"bountiful.decree.tinker.name": "Bastelei",
+	"bountiful.decree.toolsmith.name": "Werkzeugherstellung",
+	"bountiful.decree.invalid_decree.name": "Ungültiges Dekret",
+
+	"bountiful.bounty.type.entity.kills": "Erledigte Einheiten",
+
+	"bountiful.rarity.common": "Gewöhnliche",
+	"bountiful.rarity.uncommon": "Ungewöhnliche",
+	"bountiful.rarity.rare": "Seltene",
+	"bountiful.rarity.epic": "Epische",
+
+	"stat.bountiful.bounties_taken": "Angenommene Belohnungen",
+	"stat.bountiful.bounties_done": "Abgeschlossene Belohnungen (Gesamt)",
+	"stat.bountiful.bounties_done_0": "Abgeschlossene Belohnungen (Gewöhnlich)",
+	"stat.bountiful.bounties_done_1": "Abgeschlossene Belohnungen (Ungewöhnlich)",
+	"stat.bountiful.bounties_done_2": "Abgeschlossene Belohnungen (Selten)",
+	"stat.bountiful.bounties_done_3": "Abgeschlossene Belohnungen (Episch)",
+
+	"bountiful.tooltip.time": "Zeit bis zur Fertigstellung",
+	"bountiful.tooltip.required": "Benötigt",
+	"bountiful.tooltip.rewards": "Belohnungen",
+	"bountiful.tooltip.expired": "Abgelaufen",
+	"bountiful.tooltip.requirements": "Anforderungen nicht erfüllt."
+}
