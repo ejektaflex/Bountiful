@@ -26,7 +26,6 @@ dependencyResolutionManagement {
                 val FabricLoader = "0.15.3"
                 val FabricApi = "0.93.1"
                 val NeoForge = "20.4.114-beta" //=> https://projects.neoforged.net/neoforged/neoforge
-
             }
 
             val Ejekta = object {
@@ -50,7 +49,7 @@ dependencyResolutionManagement {
 
             val ejektaGroup = "io.ejekta"
             val modPackage = "bountiful"
-            val modVersion = "7.0.0"
+            val modVersion = "7.0.1"
 
             version("org", ejektaGroup)
             version("pkg", "$ejektaGroup.$modPackage")

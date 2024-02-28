@@ -113,6 +113,7 @@ subprojects {
                 inputFile.set(named<ShadowJar>("shadowJar").flatMap { it.archiveFile })
                 dependsOn("shadowJar")
                 archiveClassifier.set(project.name)
+
             }
             "jar"(Jar::class) { archiveClassifier.set("dev") }
         }

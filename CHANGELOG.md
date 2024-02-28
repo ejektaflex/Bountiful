@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) as closely as it can.
 
+## [7.0.1] for 1.20.4 - 2024-02-28
+
+### Fixed
+- Fixed a crash on startup when using Fabric, caused by an unlinked refmap.
+
 ## [7.0.0] for 1.20.4 - 2024-02-27
 
 7.0.0 is a big immersion and quality of life update for Bountiful, adding new ways for the Bounty Board to interact with Villagers.
