@@ -1,6 +1,5 @@
 package io.ejekta.bountiful.bounty.types.builtin
 
-import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyDataEntry
 import io.ejekta.bountiful.bounty.types.IBountyExchangeable
 import io.ejekta.bountiful.bounty.types.Progress
@@ -12,6 +11,7 @@ import io.ejekta.kambrik.ext.collect
 import io.ejekta.kambrik.ext.identifier
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.item.TooltipContext
+import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.EnchantedBookItem
@@ -23,6 +23,7 @@ import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
+import kotlin.jvm.optionals.getOrNull
 
 
 class BountyTypeItem : IBountyExchangeable {
@@ -118,15 +119,15 @@ class BountyTypeItem : IBountyExchangeable {
 
             // Show enchanted book enchantments
             if (itemStack.item is EnchantedBookItem && Kambridge.isOnClient()) {
-                val enchantments = itemStack.getTooltip(MinecraftClient.getInstance().player, TooltipContext.BASIC).drop(1)
-                if (enchantments.isNotEmpty()) {
-                    named = named.append(" (")
-                    for (enchant in enchantments.dropLast(1)) {
-                        named = named.append(enchant).append(", ")
-                    }
-                    named = named.append(enchantments.last()).append(")")
-                }
+                val enchants = EnchantmentHelper.get(itemStack).toList()
 
+                if (enchants.isNotEmpty()) {
+                    named = named.append(" (")
+                    for ((enchant, level) in enchants.dropLast(1)) {
+                        named = named.append(enchant.getName(level)).append(", ")
+                    }
+                    named = named.append(enchants.last().run { first.getName(second) }).append(")")
+                }
             }
 
             return named
