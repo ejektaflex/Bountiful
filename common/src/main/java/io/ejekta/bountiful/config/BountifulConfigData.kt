@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.config
 
+import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.kambrik.text.textLiteral
 import kotlinx.serialization.Serializable
 import me.shedaniel.clothconfig2.api.ConfigBuilder
@@ -27,6 +28,7 @@ class BountifulConfigData {
         var allowDecreeMixing = true
         var maxNumRewards = 2
         var reverseMatchingAlgorithm = false
+        var matchCountPreference = PoolEntry.EntryRange(1, 2)
     }
 
     val bounty = BountyConfigData()

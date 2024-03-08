@@ -153,7 +153,9 @@ class BountyCreator private constructor(
         val fillerNeededMult = getDiscount(rep)
 
         val worthNeeded = if (rewardsFirst) worth * fillerNeededMult else worth / fillerNeededMult // When reversed, generated rewards should be that mult amount bigger by dividing
-        val numFillers = (1..2).random()
+
+        val numFillers = BountifulIO.configData.bounty.matchCountPreference.pick()
+
         val toReturn = mutableListOf<BountyDataEntry>()
 
         val fills = getAllPossibleFillers(initialPools)
