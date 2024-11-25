@@ -1,7 +1,9 @@
 package io.ejekta.bountiful.config
 
-import codec
+import com.mojang.serialization.JsonOps
 import io.ejekta.kambrik.Kambrik
+import io.ejekta.percale.contextualCodec
+import io.ejekta.percale.reverse.PercaleJson
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
@@ -15,10 +17,10 @@ object JsonFormats {
 
     val MojangSerializer = SerializersModule {
         include(Kambrik.Serial.DefaultSerializers)
-        codec(Identifier.CODEC)
-        codec(NbtCompound.CODEC)
-        codec(Vec3d.CODEC)
-        codec(BlockPos.CODEC)
+        //contextualCodec(Identifier.CODEC)
+        //contextualCodec(NbtCompound.CODEC)
+        //contextualCodec(Vec3d.CODEC)
+        //contextualCodec(BlockPos.CODEC)
     }
 
     val DataPack = Json {
@@ -33,10 +35,10 @@ object JsonFormats {
         serializersModule = MojangSerializer
         prettyPrint = true
     }
-    val Config = Json {
+    val Config = PercaleJson(JsonOps.INSTANCE, Json {
         serializersModule = MojangSerializer
         encodeDefaults = true
         prettyPrint = true
         allowTrailingComma = true
-    }
+    })
 }

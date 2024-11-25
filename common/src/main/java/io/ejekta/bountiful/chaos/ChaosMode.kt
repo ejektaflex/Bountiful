@@ -12,7 +12,7 @@ class ChaosMode {
     private val chaosFile = KambrikConfigFile(
         rootFolder,
         "bountiful-chaos.json",
-        JsonFormats.Config,
+        JsonFormats.Config.json,
         KambrikParseFailMode.LEAVE,
         BountifulChaosData.serializer()
     ) { BountifulChaosData() }
@@ -20,7 +20,7 @@ class ChaosMode {
     private val chaosFileInfo = KambrikConfigFile(
         rootFolder,
         "bountiful-chaos-info.json",
-        JsonFormats.Config,
+        JsonFormats.Config.json,
         KambrikParseFailMode.LEAVE,
         BountifulChaosInfo.serializer()
     ) { BountifulChaosInfo() }

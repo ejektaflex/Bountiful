@@ -5,7 +5,6 @@ import io.ejekta.bountiful.bounty.types.IBountyReward
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.messages.OnBountyComplete
-import io.ejekta.kambrik.component.ComponentDelegate
 import net.minecraft.client.MinecraftClient
 import net.minecraft.component.ComponentType
 import net.minecraft.entity.player.PlayerEntity
@@ -18,8 +17,6 @@ import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 
 class BountyStack(val stack: ItemStack) {
-
-    private fun <C : Any?> component(type: ComponentType<C>) = ComponentDelegate(stack, type)
 
     var completion: Map<BountyDataEntry, Int>
         get() {

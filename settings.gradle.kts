@@ -29,8 +29,8 @@ dependencyResolutionManagement {
             }
 
             val Ejekta = object {
-                val Kambrik = "8.0.0"
-                val KambrikSnapshot = true
+                val Kambrik = "8.0.0.0011"
+                val KambrikSnapshot = false
             }
 
             val Kotlin = object {
@@ -84,7 +84,7 @@ dependencyResolutionManagement {
 
             // Self Dependencies
 
-            val kambrikDepSuffix = "${Ejekta.Kambrik}+${Platform.MC}${if (Ejekta.KambrikSnapshot) ".SNAPSHOT+" else null}"
+            val kambrikDepSuffix = "${Ejekta.Kambrik}+${Platform.MC}${if (Ejekta.KambrikSnapshot) ".SNAPSHOT+" else ""}"
 
             val kambrikCommon = "kambrik-common"
             library(kambrikCommon, "$ejektaGroup:$kambrikCommon:$kambrikDepSuffix")

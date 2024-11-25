@@ -374,7 +374,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         Inventories.readNbt(
             bountyList,
             bounties.heldStacks,
-            serverWorld!!.registryManager
+            serverWorld?.registryManager
         )
 
         val doneMap = base.get("completed")
