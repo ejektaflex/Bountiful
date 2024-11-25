@@ -30,6 +30,7 @@ class BoardScreenHandler @JvmOverloads constructor(
 
     override fun onClosed(player: PlayerEntity?) {
         inventory.onClose(player)
+        super.onClosed(player) // handle cursor stack
     }
 
     fun getTotalNumComplete(): Int {

@@ -108,7 +108,7 @@ class PoolEntry private constructor() {
             pos,
             type,
             actualContent,
-            amountAt(worth),
+            amt,
             amt * unitWorth,
             nbt,
             name,

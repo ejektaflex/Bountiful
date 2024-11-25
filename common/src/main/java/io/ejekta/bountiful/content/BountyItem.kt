@@ -4,6 +4,7 @@ import io.ejekta.bountiful.bounty.BountyData
 import io.ejekta.bountiful.bounty.BountyInfo
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.config.BountifulIO
+import io.ejekta.kambrik.bridge.Kambridge
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.Item
@@ -19,7 +20,9 @@ class BountyItem : Item(
 ) {
 
     override fun getName(stack: ItemStack): Text {
-        // TODO this may be sided
+        if (Kambridge.isOnServer()) {
+            return Text.empty()
+        }
         val info = BountyInfo[stack]
         var text = Text.translatable(info.rarity.name.lowercase()
             // Capitalizing
