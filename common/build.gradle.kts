@@ -28,7 +28,7 @@ dependencies {
     compileOnly("io.github.llamalad7:mixinextras-common:0.3.5")
     annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.5")
 
-    implementation("io.ejekta.percale:percale-common:${project.property("percale_version")}")
+    implementation("io.ejekta.kambrik:kambrik-common:${project.property("kambrik_version")}")
 
     implementation(kotlin("reflect"))
 }

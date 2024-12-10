@@ -20,10 +20,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
-    // Jar-in-Jar Percale
-
-    modImplementation("io.ejekta.percale:percale-fabric:${percale_version}")
-    include("io.ejekta.percale:percale-fabric:${percale_version}")
+    modImplementation("io.ejekta.kambrik:kambrik-fabric:${kambrik_version}")
 
     modRuntimeOnly "com.terraformersmc:modmenu:${mod_menu_version}"
     modImplementation "net.fabricmc:fabric-language-kotlin:1.12.3+kotlin.2.0.21"

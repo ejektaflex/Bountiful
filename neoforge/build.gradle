@@ -13,10 +13,7 @@ repositories {
 
 dependencies {
     implementation("thedarkcolour:kotlinforforge-neoforge:${forgelike_adapter_version}")
-
-    // Jar-in-Jar Percale
-    implementation("io.ejekta.percale:percale-neoforge:${percale_version}")
-    jarJar("io.ejekta.percale:percale-neoforge:${percale_version}")
+    implementation("io.ejekta.kambrik:kambrik-neoforge:${kambrik_version}")
 }
 
 neoForge {

@@ -24,8 +24,9 @@ dependencies {
 }
 
 tasks.named('compileJava', JavaCompile) {
-    dependsOn(configurations.commonJava)
-    source(configurations.commonJava)
+//    dependsOn(configurations.commonJava)
+//    source(configurations.commonJava)
+    enabled = false // we don't have any Java classes in this project
 }
 
 //tasks.named('compileKotlin', org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask.class) {

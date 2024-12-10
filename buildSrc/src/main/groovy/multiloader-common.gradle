@@ -4,7 +4,7 @@ plugins {
 }
 
 base {
-    archivesName = "${mod_id}-${project.name}-${minecraft_version}"
+    archivesName = "${mod_id}-${project.name}"
 }
 
 java {
@@ -100,7 +100,6 @@ processResources {
             "forge_loader_version_range": forge_loader_version_range,
             'credits'                      : credits,
             'java_version'                 : java_version,
-            'forgelike_adapter_version'    : forgelike_adapter_version,
             'forgelike_adapter_version_range' : forgelike_adapter_version_range
     ]
 

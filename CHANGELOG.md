@@ -86,6 +86,14 @@ old config files and datapacks that overwrote existing Bountiful data may not fu
 ### Known Issues
 - `/bo util configToDataPack` will not work correctly if the data file is nested (e.g. `bounty_decrees/xyz_folder/my_decree`)
 
+## [6.0.4] for 1.20.1 - 2024-11-25
+
+### Fixed
+Numerous small bug fixes were backported from 1.20.4, including:
+* A small fix for incorrect objective count being generated to match rewards in specific conditions
+* Other mods with bad sidedness will no longer cause a crash when attempting to read our item names on the server side
+* Items are no longer voided when an item is on your cursor and the bounty board gui is closed
+
 ## [6.0.3] for 1.20.1 - 2023-07-17
 
 ### Added
