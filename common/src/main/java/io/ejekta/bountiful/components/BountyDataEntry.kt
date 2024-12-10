@@ -42,7 +42,7 @@ data class BountyDataEntry(
     }
 
     val translation: MutableComponent
-        get() = Text.translatable("bountiful.entry.${id}")
+        get() = Component.translatable("bountiful.entry.${id}")
 
     val logic: IBountyType
         get() = BountyTypeRegistry[logicId]!!

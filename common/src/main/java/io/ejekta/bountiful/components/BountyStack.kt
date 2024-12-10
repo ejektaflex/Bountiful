@@ -92,7 +92,7 @@ class BountyStack(val stack: ItemStack) {
 
     fun tryCashIn(player: Player): Boolean {
         if (info.timeLeftTicks(player.world) <= 0) {
-            player.sendMessage(Text.translatable("bountiful.bounty.expired"))
+            player.sendMessage(Component.translatable("bountiful.bounty.expired"))
             return false
         }
         return if (hasFinishedObjectives(player)) {
@@ -101,7 +101,7 @@ class BountyStack(val stack: ItemStack) {
             stack.decrement(stack.maxCount)
             true
         } else {
-            player.sendMessage(Text.translatable("bountiful.tooltip.requirements"), false)
+            player.sendMessage(Component.translatable("bountiful.tooltip.requirements"), false)
             false
         }
     }
@@ -131,11 +131,11 @@ class BountyStack(val stack: ItemStack) {
         }
         val player = MinecraftClient.getInstance().player!!
         return buildList {
-            add(Text.translatable("bountiful.tooltip.required").formatted(ChatFormatting.GOLD).append(":"))
+            add(Component.translatable("bountiful.tooltip.required").formatted(ChatFormatting.GOLD).append(":"))
             addAll(objs.map {
                 it.textOnBounty(player, true, progressOf(it))
             })
-            add(Text.translatable("bountiful.tooltip.rewards").formatted(ChatFormatting.GOLD).append(":"))
+            add(Component.translatable("bountiful.tooltip.rewards").formatted(ChatFormatting.GOLD).append(":"))
             addAll(rews.map {
                 it.textOnBounty(player, false, progressOf(it))
             })

@@ -38,7 +38,7 @@ data class Decree(
         get() = objectives + rewards
 
     val translation: MutableComponent
-        get() = Text.translatable("bountiful.decree.$id.name")
+        get() = Component.translatable("bountiful.decree.$id.name")
 
     val allObjectiveEntries: List<PoolEntry>
         get() = objectivePools.map { it.items }.flatten()

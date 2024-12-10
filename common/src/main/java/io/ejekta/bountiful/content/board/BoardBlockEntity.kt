@@ -374,7 +374,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         Inventories.readNbt(
             bountyList,
             bounties.heldStacks,
-            serverWorld?.registryManager
+            serverWorld?.registryAccess()
         )
 
         val doneMap = base.get("completed")
@@ -575,7 +575,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     override fun getDisplayName(): Text {
-        return Text.translatable(cachedState.block.translationKey)
+        return Component.translatable(cachedState.block.translationKey)
     }
 
 }

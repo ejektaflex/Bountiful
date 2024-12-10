@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
 import net.minecraft.item.Item
 import net.minecraft.server.MinecraftServer
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.Item
 
 @Serializable
 class BountifulChaosMatching(
@@ -25,7 +26,7 @@ class BountifulChaosMatching(
         }
 
         val matchedTag = tag.keys.sorted().firstOrNull {
-            item in getTagItems(server.registryManager, getTagItemKey(it))
+            item in getTagItems(server.registryAccess(), getTagItemKey(it))
         }
         if (matchedTag != null) {
             return tag[matchedTag]!!

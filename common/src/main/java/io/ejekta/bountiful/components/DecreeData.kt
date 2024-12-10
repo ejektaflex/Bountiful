@@ -18,13 +18,13 @@ data class DecreeData(val ids: Set<String> = setOf(), val rank: Int = 1) {
                     val toText = if (dec?.name != null) {
                         Component.literal(dec.name)
                     } else {
-                        Text.translatable("${Bountiful.ID}.decree.$it.name")
+                        Component.translatable("${Bountiful.ID}.decree.$it.name")
                     }
                     toText.formatted(ChatFormatting.GOLD)
                 }
             }
             false -> {
-                listOf(Text.translatable("bountiful.decree.notset"))
+                listOf(Component.translatable("bountiful.decree.notset"))
             }
         }
     }

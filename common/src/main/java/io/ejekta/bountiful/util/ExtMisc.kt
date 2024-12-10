@@ -7,6 +7,8 @@ import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.content.item.BountyItem
 import io.ejekta.kambrik.message.KambrikMsg
 import net.minecraft.client.MinecraftClient
+import net.minecraft.core.Registry
+import net.minecraft.core.RegistryAccess
 import net.minecraft.entity.ai.brain.Brain
 import net.minecraft.entity.ai.brain.MemoryModuleType
 import net.minecraft.entity.passive.VillagerEntity
@@ -18,11 +20,13 @@ import net.minecraft.nbt.NbtCompound
 import net.minecraft.registry.DynamicRegistryManager
 import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.TagKey
+import net.minecraft.resources.ResourceKey
 import net.minecraft.screen.ScreenHandlerFactory
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory
 import net.minecraft.server.network.ServerPlayer
 import net.minecraft.text.Text
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.MinecraftServer
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.GlobalPos
@@ -30,7 +34,21 @@ import net.minecraft.village.TradeOffer
 import net.minecraft.village.TradedItem
 import net.minecraft.world.World
 import java.util.*
+import kotlin.jvm.optionals.getOrNull
 import kotlin.random.Random
+
+operator fun <T> MinecraftServer.get(regResourceKey: ResourceKey<Registry<T>>): Registry<T> {
+    return registryAccess().registry(regResourceKey).get()
+}
+
+operator fun <T> RegistryAccess.get(regResourceKey: ResourceKey<Registry<T>>): Registry<T> {
+    return registry(regResourceKey).get()
+}
+
+fun <T : Any> Registry<T>.getNullable(rl: ResourceLocation): T? {
+    return getOptional(rl).getOrNull()
+}
+
 
 fun randomSplit(num: Double, ways: Int): List<Double> {
     val bits = (0 until ways).map { Random.nextDouble() }

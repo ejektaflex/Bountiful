@@ -21,7 +21,7 @@ class DecreeItem : Item(
     override fun getTranslationKey() = "bountiful.decree"
 
     override fun getName(stack: ItemStack?): Text {
-        return Text.translatable(translationKey).formatted(ChatFormatting.DARK_PURPLE)
+        return Component.translatable(translationKey).formatted(ChatFormatting.DARK_PURPLE)
     }
 
     override fun appendTooltip(

@@ -22,10 +22,10 @@ class BountyItem : Item(
 
     override fun getName(stack: ItemStack): Text {
         if (Kambridge.isOnServer()) {
-            return Text.translatable("bountiful.bounty")
+            return Component.translatable("bountiful.bounty")
         }
         val info = BountyStack(stack).info
-        var text = Text.translatable(info.rarity.name.lowercase()
+        var text = Component.translatable(info.rarity.name.lowercase()
             // Capitalizing
             .replaceFirstChar {
                 if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
