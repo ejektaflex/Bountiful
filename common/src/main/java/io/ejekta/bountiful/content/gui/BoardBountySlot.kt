@@ -6,18 +6,18 @@ import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.board.BoardInventory
 import io.ejekta.bountiful.content.item.BountyItem
 import io.ejekta.bountiful.util.readOnlyCopy
-import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.player.Player
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.slot.Slot
-import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.network.ServerPlayer
 
-class BoardBountySlot(private val inv: BoardInventory, val usingPlayer: PlayerEntity, index: Int, x: Int, y: Int) : Slot(inv, index, x, y) {
+class BoardBountySlot(private val inv: BoardInventory, val usingPlayer: Player, index: Int, x: Int, y: Int) : Slot(inv, index, x, y) {
     override fun canInsert(stack: ItemStack?): Boolean {
         return false
     }
 
-    override fun canTakeItems(player: PlayerEntity): Boolean {
-        if (player is ServerPlayerEntity) {
+    override fun canTakeItems(player: Player): Boolean {
+        if (player is ServerPlayer) {
             val board = player.world.getBlockEntity(inv.pos) as? BoardBlockEntity ?: return false
             // Mask all matching bounties
             val matchingMaskIndices = board.fullInventoryCopy().readOnlyCopy
@@ -37,11 +37,11 @@ class BoardBountySlot(private val inv: BoardInventory, val usingPlayer: PlayerEn
         return true
     }
 
-    override fun onTakeItem(player: PlayerEntity, stack: ItemStack) {
+    override fun onTakeItem(player: Player, stack: ItemStack) {
         if (stack.item is BountyItem) {
             BountyStack(stack).setPickedUp(player.world.time)
         }
-        if (usingPlayer is ServerPlayerEntity) {
+        if (usingPlayer is ServerPlayer) {
             usingPlayer.incrementStat(BountifulContent.CustomStats.BOUNTIES_TAKEN)
         }
         super.onTakeItem(player, stack)

@@ -6,7 +6,7 @@ import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.kambrik.bridge.Kambridge
 import net.minecraft.client.MinecraftClient
-import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.player.Player
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.tooltip.TooltipType
@@ -31,20 +31,20 @@ class BountyItem : Item(
                 if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
             } + " Bounty ").formatted(info.rarity.color)
         if (info.rarity == BountyRarity.LEGENDARY) {
-            text = text.formatted(Formatting.BOLD)
+            text = text.formatted(ChatFormatting.BOLD)
         }
         if (BountifulIO.configData.bounty.shouldHaveTimersAndExpire) {
             text = text.append(
-                Text.literal("(")
+                Component.literal("(")
                     .append(info.formattedTimeLeft(MinecraftClient.getInstance().world!!))
-                    .append(Text.literal(")"))
-                    .formatted(Formatting.WHITE)
+                    .append(Component.literal(")"))
+                    .formatted(ChatFormatting.WHITE)
             )
         }
         return text
     }
 
-    fun tryCashIn(player: PlayerEntity, stack: ItemStack): Boolean {
+    fun tryCashIn(player: Player, stack: ItemStack): Boolean {
         return BountyStack(stack).tryCashIn(player)
     }
 

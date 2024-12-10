@@ -13,11 +13,11 @@ import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.player.Player
 import net.minecraft.item.ItemStack
 import net.minecraft.loot.context.LootContextParameterSet
 import net.minecraft.loot.context.LootContextParameters
-import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.network.ServerPlayer
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.Hand
 import net.minecraft.util.ItemActionResult
@@ -79,7 +79,7 @@ class BoardBlock : BlockWithEntity(
     // Refuse to break the block if the config disallows it
     override fun calcBlockBreakingDelta(
         state: BlockState?,
-        player: PlayerEntity?,
+        player: Player?,
         world: BlockView?,
         pos: BlockPos?
     ): Float {
@@ -99,11 +99,11 @@ class BoardBlock : BlockWithEntity(
         state: BlockState?,
         world: World?,
         pos: BlockPos?,
-        player: PlayerEntity?,
+        player: Player?,
         hand: Hand?,
         hit: BlockHitResult?
     ): ItemActionResult {
-        (player as? ServerPlayerEntity)?.let {
+        (player as? ServerPlayer)?.let {
             if (!it.isSneaking) {
                 val holding = it.getStackInHand(hand)
 

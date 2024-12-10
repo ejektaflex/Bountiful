@@ -16,11 +16,11 @@ data class DecreeData(val ids: Set<String> = setOf(), val rank: Int = 1) {
                 ids.map {
                     val dec = BountifulContent.Decrees.firstOrNull { d -> d.id == it }
                     val toText = if (dec?.name != null) {
-                        Text.literal(dec.name)
+                        Component.literal(dec.name)
                     } else {
                         Text.translatable("${Bountiful.ID}.decree.$it.name")
                     }
-                    toText.formatted(Formatting.GOLD)
+                    toText.formatted(ChatFormatting.GOLD)
                 }
             }
             false -> {

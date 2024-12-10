@@ -16,7 +16,7 @@ import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
 import net.minecraft.resource.SynchronousResourceReloader
 import net.minecraft.server.world.ServerWorld
-import net.minecraft.util.Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.WanderingTraderManager
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.Mod
@@ -98,7 +98,7 @@ class BountifulModForge {
         fun registerRegistryContent(evt: RegisterEvent) {
             KambrikRegistrar[BountifulContent].content.forEach { entry ->
                 evt.register(entry.registry.key as RegistryKey<out Registry<Any>>) {
-                    it.register(Identifier.of(BountifulContent.getId(), entry.itemId), entry.item.value!!)
+                    it.register(ResourceLocation.parse(BountifulContent.getId(), entry.itemId), entry.item.value!!)
                 }
             }
         }

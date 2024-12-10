@@ -22,7 +22,6 @@ repositories {
 }
 
 dependencies {
-
     compileOnly("org.spongepowered:mixin:0.8.5")
     // fabric and neoforge both bundle mixinextras, so it is safe to use it in common
     compileOnly("io.github.llamalad7:mixinextras-common:0.3.5")

@@ -6,7 +6,7 @@ import io.ejekta.kambrik.message.KambrikMsg
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import net.minecraft.client.toast.SystemToast
-import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.player.Player
 import net.minecraft.network.packet.CustomPayload
 import net.minecraft.sound.SoundEvent
 import net.minecraft.text.Text
@@ -21,7 +21,7 @@ data class OnBountyComplete(
         runLocally(ctx.player!!)
     }
 
-    fun runLocally(player: PlayerEntity) {
+    fun runLocally(player: Player) {
         // Don't show toasts when in an inventory (to prevent toast spam when moving items related to bounties)
         if (ctx.currentScreen == null && BountifulIO.configData.client.showCompletionToast) {
             player.playSound(soundEvent, volume, pitch)
@@ -29,8 +29,8 @@ data class OnBountyComplete(
                 SystemToast.create(
                     ctx,
                     SystemToast.Type.PERIODIC_NOTIFICATION,
-                    Text.literal("Bounty Complete!"),
-                    Text.literal("Turn in at a Bounty Board!")
+                    Component.literal("Bounty Complete!"),
+                    Component.literal("Turn in at a Bounty Board!")
                 )
             )
         }

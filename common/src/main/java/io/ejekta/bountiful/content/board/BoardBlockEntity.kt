@@ -24,7 +24,7 @@ import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.EntityStatuses
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.passive.VillagerEntity
-import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.player.Player
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SimpleInventory
@@ -37,13 +37,13 @@ import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.ScreenHandler
-import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.network.ServerPlayer
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
-import net.minecraft.util.Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.ChunkPos
@@ -69,9 +69,9 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     private var lastUpdatedTime = serverWorld?.time ?: 0L
 
     // Only need to calc this once per object, I don't see it changing often
-    private val villageTag = Registries.POINT_OF_INTEREST_TYPE.streamTags().filter { it.id == Identifier.of("village") }.findFirst().getOrNull()
+    private val villageTag = Registries.POINT_OF_INTEREST_TYPE.streamTags().filter { it.id == ResourceLocation.parse("village") }.findFirst().getOrNull()
 
-    fun maskFor(player: PlayerEntity): MutableSet<Int> {
+    fun maskFor(player: Player): MutableSet<Int> {
         return takenMask.getOrPut(player.uuidAsString) { mutableSetOf() }
     }
 
@@ -123,7 +123,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     val numCompleted: Int
         get() = finishMap.values.sum()
 
-    private fun incrementCompletedBounties(player: PlayerEntity) {
+    private fun incrementCompletedBounties(player: Player) {
         finishMap[player.uuidAsString] = finishMap.getOrPut(player.uuidAsString) { 0 } + 1
     }
 
@@ -137,7 +137,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         )
     }
 
-    private fun getPlayersTrackingUs(): List<ServerPlayerEntity> {
+    private fun getPlayersTrackingUs(): List<ServerPlayer> {
         return (world as? ServerWorld)?.chunkManager?.chunkLoadingManager?.getPlayersWatchingChunk(ChunkPos(pos)) ?: emptyList()
     }
 
@@ -155,7 +155,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         }
     }
 
-    fun updateUponBountyCompletion(player: ServerPlayerEntity, holding: BountyStack) {
+    fun updateUponBountyCompletion(player: ServerPlayer, holding: BountyStack) {
         // Award advancement to player
         BountifulContent.Triggers.BOUNTY_COMPLETED.trigger(player)
 
@@ -164,8 +164,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         // Nightly message
         if (Bountiful.nightly) {
             player.sendMessageToClient(
-                Text.literal("This is a Nightly build of Bountiful. Distribution (including modpacks) is not allowed. Please report issues in the Discord!")
-                    .formatted(Formatting.GOLD),
+                Component.literal("This is a Nightly build of Bountiful. Distribution (including modpacks) is not allowed. Please report issues in the Discord!")
+                    .formatted(ChatFormatting.GOLD),
                 false
             )
         }
@@ -255,11 +255,11 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         }
     }
 
-    fun onUserPlacedDecree(player: ServerPlayerEntity, decStack: ItemStack) {
+    fun onUserPlacedDecree(player: ServerPlayer, decStack: ItemStack) {
         checkUserPlacedAllDecrees(player, decStack)
     }
 
-    private fun checkUserPlacedAllDecrees(player: ServerPlayerEntity, newStack: ItemStack) {
+    private fun checkUserPlacedAllDecrees(player: ServerPlayer, newStack: ItemStack) {
         val newDecrees = newStack[BountifulContent.DECREE_DATA]!!.ids
         val decs = getBoardDecrees().map { it.id }.toSet() + newDecrees
         val allDecreesSet = BountifulContent.Decrees.map { it.id }.toSet()
@@ -344,7 +344,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         return BoardInventory(pos, bounties.clone(), decrees)
     }
 
-    private fun getMaskedInventory(player: PlayerEntity): BoardInventory {
+    private fun getMaskedInventory(player: Player): BoardInventory {
         return BoardInventory(pos, bounties.cloned(maskFor(player)), decrees)
     }
 
@@ -568,7 +568,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
     }
 
-    override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
+    override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: Player): ScreenHandler {
         //We provide *this* to the screenHandler as our class Implements Inventory
         //Only the Server has the Inventory at the start, this will be synced to the client in the ScreenHandler
         return BoardScreenHandler(syncId, playerInventory, getMaskedInventory(player), DoneProperty)

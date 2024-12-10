@@ -20,9 +20,9 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.screen.ScreenHandlerFactory
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory
-import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.network.ServerPlayer
 import net.minecraft.text.Text
-import net.minecraft.util.Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.GlobalPos
@@ -117,7 +117,7 @@ fun NbtCompound.getBlockPos(key: String): BlockPos {
     }
 }
 
-fun getTagItemKey(id: Identifier): TagKey<Item> = TagKey.of(Registries.ITEM.key, id)
+fun getTagItemKey(id: ResourceLocation): TagKey<Item> = TagKey.of(Registries.ITEM.key, id)
 
 fun getTagItems(reg: DynamicRegistryManager, tagKey: TagKey<Item>): List<Item> {
     return getRegistryTags(reg, tagKey)
@@ -138,7 +138,7 @@ fun <T> getRegistryTags(reg: DynamicRegistryManager, tagKey: TagKey<T>): List<T>
 val KambrikMsg.ctx: MinecraftClient
     get() = MinecraftClient.getInstance()
 
-fun ServerPlayerEntity.iterateBountyStacks(func: BountyStack.() -> Unit) {
+fun ServerPlayer.iterateBountyStacks(func: BountyStack.() -> Unit) {
     inventory.main.filter {
         it.item is BountyItem
     }.map { BountyStack(it) }.forEach(func)
@@ -153,7 +153,7 @@ fun Brain<*>.ensureMemoryModules(memoryList: List<MemoryModuleType<*>>) {
     }
 }
 
-fun ServerPlayerEntity.openHandledScreenSimple(screenName: Text, handlerFactory: ScreenHandlerFactory): OptionalInt {
+fun ServerPlayer.openHandledScreenSimple(screenName: Text, handlerFactory: ScreenHandlerFactory): OptionalInt {
     return openHandledScreen(
         SimpleNamedScreenHandlerFactory(
             handlerFactory, screenName
@@ -179,7 +179,7 @@ fun VillagerEntity.hackyGiveTradeExperience(amt: Int) {
     )
 }
 
-val ServerPlayerEntity.currentBoardInteracting: BoardBlockEntity?
+val ServerPlayer.currentBoardInteracting: BoardBlockEntity?
     get() {
         val shPos = (currentScreenHandler as? BoardScreenHandler)?.inventory?.pos
         shPos?.run {

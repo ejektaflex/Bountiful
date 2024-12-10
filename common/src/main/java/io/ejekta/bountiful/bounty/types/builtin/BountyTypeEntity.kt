@@ -5,44 +5,44 @@ import io.ejekta.bountiful.components.BountyDataEntry
 import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.bountiful.util.iterateBountyStacks
 import io.ejekta.kambrik.ext.identifier
-import net.minecraft.entity.EntityType
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.registry.Registries
+import net.minecraft.ChatFormatting
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.MutableText
-import net.minecraft.text.Text
-import net.minecraft.util.Formatting
-import net.minecraft.util.Identifier
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player
 
 
 class BountyTypeEntity : IBountyObjective {
 
-    override val id: Identifier = Identifier.of("entity")
+    override val id: ResourceLocation = ResourceLocation.parse("entity")
 
     override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {
-        val id = getEntityType(Identifier.of(entry.content)).identifier
-        return id == Identifier.of(entry.content)
+        val id = getEntityType(ResourceLocation.parse(entry.content)).identifier
+        return id == ResourceLocation.parse(entry.content)
     }
 
-    override fun textOnBounty(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity, current: Int): MutableText {
+    override fun textOnBounty(entry: BountyDataEntry, isObj: Boolean, player: Player, current: Int): MutableComponent {
         val progress = getProgress(entry, player, current)
         return when (isObj) {
-            true -> Text.literal("Kill ").append(
-                getEntityType(entry).name.copy()
-            ).formatted(progress.color).append(
-                progress.neededText.colored(Formatting.WHITE)
+            true -> Component.literal("Kill ").append(
+                getEntityType(entry).description.copy()
+            ).withStyle(progress.color).append(
+                progress.neededText.colored(ChatFormatting.WHITE)
             )
-            false -> Text.literal("ERR: Cannot have an entity (${entry.content}) as a reward.")
+            false -> Component.literal("ERR: Cannot have an entity (${entry.content}) as a reward.")
         }
     }
 
-    override fun textOnBoardSidebar(entry: BountyDataEntry, player: PlayerEntity): List<Text> {
-        return listOf(getEntityType(entry).name)
+    override fun textOnBoardSidebar(entry: BountyDataEntry, player: Player): List<Component> {
+        return listOf(getEntityType(entry).description)
     }
 
-    fun incrementEntityBounties(playerEntity: ServerPlayerEntity, killedEntity: LivingEntity) {
+    fun incrementEntityBounties(playerEntity: ServerPlayer, killedEntity: LivingEntity) {
         // The player cannot kill themselves (arrow, potion, etc) to complete a bounty
         if (playerEntity == killedEntity) {
             return
@@ -67,11 +67,11 @@ class BountyTypeEntity : IBountyObjective {
 
     companion object {
         fun getEntityType(entry: BountyDataEntry): EntityType<*> {
-            return getEntityType(Identifier.of(entry.content))
+            return getEntityType(ResourceLocation.parse(entry.content))
         }
 
-        fun getEntityType(id: Identifier): EntityType<*> {
-            return Registries.ENTITY_TYPE.get(id)
+        fun getEntityType(id: ResourceLocation): EntityType<*> {
+            return BuiltInRegistries.ENTITY_TYPE.get(id)
         }
     }
 

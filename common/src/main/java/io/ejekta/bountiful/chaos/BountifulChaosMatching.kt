@@ -7,11 +7,11 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import net.minecraft.item.Item
 import net.minecraft.server.MinecraftServer
-import net.minecraft.util.Identifier
+import net.minecraft.resources.ResourceLocation
 
 @Serializable
 class BountifulChaosMatching(
-    val tag: MutableMap<@Contextual Identifier, Double> = mutableMapOf(),
+    val tag: MutableMap<@Contextual ResourceLocation, Double> = mutableMapOf(),
     val regex: MutableMap<String, Double> = mutableMapOf(),
     val ignoreRegex: MutableMap<String, Boolean> = mutableMapOf()
 ) {

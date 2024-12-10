@@ -16,7 +16,7 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
-import net.minecraft.util.Identifier
+import net.minecraft.resources.ResourceLocation
 
 
 class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Text) :
@@ -145,9 +145,9 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
     companion object {
         private val TEXTURE = Bountiful.id("board_bg")
         private val SELECTOR = Bountiful.id("selector")
-        private val SCROLLER = Identifier.of("container/villager/scroller")
-        private val XP_FG = Identifier.of("container/villager/experience_bar_current")
-        private val XP_BG = Identifier.of("container/villager/experience_bar_background")
+        private val SCROLLER = ResourceLocation.parse("container/villager/scroller")
+        private val XP_FG = ResourceLocation.parse("container/villager/experience_bar_current")
+        private val XP_BG = ResourceLocation.parse("container/villager/experience_bar_background")
     }
 }
 

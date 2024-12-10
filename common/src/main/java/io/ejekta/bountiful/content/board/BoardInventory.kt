@@ -1,6 +1,6 @@
 package io.ejekta.bountiful.content.board
 
-import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.player.Player
 import net.minecraft.inventory.DoubleInventory
 import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SimpleInventory
@@ -41,7 +41,7 @@ class BoardInventory(
         }
     }
 
-    override fun canPlayerUse(player: PlayerEntity) = true
+    override fun canPlayerUse(player: Player) = true
 
     // Get selected inv stack if slot index is -1
     override fun getStack(slot: Int): ItemStack {

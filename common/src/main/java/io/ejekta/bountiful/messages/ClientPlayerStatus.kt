@@ -6,7 +6,7 @@ import io.ejekta.kambrik.message.KambrikMsg
 import kotlinx.serialization.Serializable
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.CustomPayload
-import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.network.ServerPlayer
 
 @Serializable
 class ClientPlayerStatus(private val statusType: Type) : KambrikMsg() {
@@ -28,7 +28,7 @@ class ClientPlayerStatus(private val statusType: Type) : KambrikMsg() {
         })
         ;
 
-        fun sendToClient(player: ServerPlayerEntity) {
+        fun sendToClient(player: ServerPlayer) {
             Bountiful.LOGGER.debug("Sending $this to server..")
             ClientPlayerStatus(this).sendToClient(player)
         }

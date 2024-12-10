@@ -13,13 +13,13 @@ import io.ejekta.bountiful.messages.ServerPlayerStatus
 import io.ejekta.bountiful.util.currentBoardInteracting
 import io.ejekta.kambrik.bridge.Kambridge
 import io.ejekta.kambrik.gui.screen.KambrikScreenHandler
-import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.player.Player
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.slot.Slot
-import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.network.ServerPlayer
 import net.minecraft.util.math.BlockPos
 
 
@@ -36,11 +36,11 @@ class BoardScreenHandler @JvmOverloads constructor(
         BoardInventory(BlockPos.ORIGIN), ArrayPropertyDelegate(1)
     )
 
-    override fun canUse(player: PlayerEntity): Boolean {
+    override fun canUse(player: Player): Boolean {
         return inventory.canPlayerUse(player)
     }
 
-    override fun onClosed(player: PlayerEntity?) {
+    override fun onClosed(player: Player?) {
         inventory.onClose(player)
         super.onClosed(player) // handle cursor stack
     }
@@ -56,8 +56,8 @@ class BoardScreenHandler @JvmOverloads constructor(
         }
     }
 
-    override fun quickMove(player: PlayerEntity, invSlot: Int): ItemStack {
-        if (player is ServerPlayerEntity) {
+    override fun quickMove(player: Player, invSlot: Int): ItemStack {
+        if (player is ServerPlayer) {
             val stack = getSlot(invSlot).stack
 
             if (stack.item is BountyItem) {

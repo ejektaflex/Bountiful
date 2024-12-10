@@ -158,9 +158,9 @@ class AnalyzerScreen(handler: ScreenHandler, inventory: PlayerInventory, title: 
         private val TEXTURE = Bountiful.id("analyzer_bg")
         private val SCROLLER = Bountiful.id("analyzer_scroller")
 //        private val SELECTOR = Bountiful.id("selector")
-//        private val SCROLLER = Identifier.of("container/villager/scroller")
-//        private val XP_FG = Identifier.of("container/villager/experience_bar_current")
-//        private val XP_BG = Identifier.of("container/villager/experience_bar_background")
+//        private val SCROLLER = ResourceLocation.parse("container/villager/scroller")
+//        private val XP_FG = ResourceLocation.parse("container/villager/experience_bar_current")
+//        private val XP_BG = ResourceLocation.parse("container/villager/experience_bar_background")
     }
 }
 

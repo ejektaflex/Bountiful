@@ -7,7 +7,7 @@ object GameTime {
 
     fun formatTimeExpirable(secs: Long): Text {
         return if (secs <= 0) {
-            Text.translatable("bountiful.tooltip.expired").formatted(Formatting.RED)
+            Text.translatable("bountiful.tooltip.expired").formatted(ChatFormatting.RED)
         } else {
             formatTickTime(secs)
         }
@@ -17,11 +17,11 @@ object GameTime {
         val min = secs / 60
         val sec = secs % 60
         return if (min <= 0) {
-            Text.literal("$sec").append(Text.translatable("bountiful.ui.shorthand.seconds"))
+            Component.literal("$sec").append(Text.translatable("bountiful.ui.shorthand.seconds"))
         } else {
-            Text.literal("$min").append(
+            Component.literal("$min").append(
                 Text.translatable("bountiful.ui.shorthand.minutes")
-            ).append(Text.literal(" $sec"))
+            ).append(Component.literal(" $sec"))
                 .append(Text.translatable("bountiful.ui.shorthand.seconds"))
         }
     }

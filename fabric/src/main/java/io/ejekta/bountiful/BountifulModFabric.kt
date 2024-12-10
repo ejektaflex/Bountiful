@@ -23,7 +23,7 @@ import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.item.ItemGroups
 import net.minecraft.resource.ResourceType
 import net.minecraft.text.Text
-import net.minecraft.util.Identifier
+import net.minecraft.resources.ResourceLocation
 
 class BountifulModFabric : ModInitializer {
 
@@ -45,9 +45,9 @@ class BountifulModFabric : ModInitializer {
             if (FabricLoader.getInstance().isModLoaded(it)) {
                 val modContainer = FabricLoader.getInstance().getModContainer(it).get()
                 ResourceManagerHelper.registerBuiltinResourcePack(
-                    Identifier.of(Bountiful.ID, "compat-$it"),
+                    ResourceLocation.parse(Bountiful.ID, "compat-$it"),
                     ourContainer,
-                    Text.literal("${ourContainer.metadata.name} - ${modContainer.metadata.name} Compat"),
+                    Component.literal("${ourContainer.metadata.name} - ${modContainer.metadata.name} Compat"),
                     ResourcePackActivationType.DEFAULT_ENABLED
                 )
             }

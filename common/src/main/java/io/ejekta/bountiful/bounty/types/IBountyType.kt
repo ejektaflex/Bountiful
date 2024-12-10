@@ -2,27 +2,27 @@ package io.ejekta.bountiful.bounty.types
 
 import io.ejekta.bountiful.components.BountyDataEntry
 import io.ejekta.bountiful.data.PoolEntry
-import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.ChatFormatting
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
-import net.minecraft.text.MutableText
-import net.minecraft.text.Text
-import net.minecraft.util.Formatting
-import net.minecraft.util.Identifier
+import net.minecraft.world.entity.player.Player
 
 interface IBountyType {
 
-    val id: Identifier
+    val id: ResourceLocation
 
-    fun textOnBounty(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity, current: Int): MutableText
+    fun textOnBounty(entry: BountyDataEntry, isObj: Boolean, player: Player, current: Int): MutableComponent
 
-    fun textOnBoardSidebar(entry: BountyDataEntry, player: PlayerEntity): List<Text>
+    fun textOnBoardSidebar(entry: BountyDataEntry, player: Player): List<Component>
 
     fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean
 
-    fun getDescription(entry: BountyDataEntry): MutableText {
+    fun getDescription(entry: BountyDataEntry): MutableComponent {
         return entry.name?.let {
-            Text.literal(it)
-        } ?: Text.translatable(entry.id)
+            Component.literal(it)
+        } ?: Component.translatable(entry.id)
     }
 
     // ### Helpers ###
@@ -30,21 +30,21 @@ interface IBountyType {
     val Pair<Int, Int>.isDone: Boolean
         get() = first == second
 
-    val Pair<Int, Int>.color: Formatting
-        get() = if (isDone) Formatting.GREEN else Formatting.RED
+    val Pair<Int, Int>.color: ChatFormatting
+        get() = if (isDone) ChatFormatting.GREEN else ChatFormatting.RED
 
-    fun Text.colored(progress: Pair<Int, Int>): MutableText {
-        return copy().formatted(progress.color)
+    fun Component.colored(progress: Pair<Int, Int>): MutableComponent {
+        return copy().colored(progress.color)
     }
 
-    fun Text.colored(formatting: Formatting): MutableText {
-        return copy().formatted(formatting)
+    fun Component.colored(formatting: ChatFormatting): MutableComponent {
+        return copy().withStyle(formatting)
     }
 
     val Pair<Int, Int>.needed
-        get() = Text.literal(" ($first/$second)")
+        get() = Component.literal(" ($first/$second)")
 
     val Pair<Int, Int>.giving
-        get() = Text.literal("${second}x ")
+        get() = Component.literal("${second}x ")
 
 }

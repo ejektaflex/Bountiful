@@ -20,7 +20,7 @@ import net.minecraft.item.Item
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.world.ServerWorld
-import net.minecraft.util.Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.math.BlockPos
 import kotlin.math.abs
 import kotlin.math.ceil
@@ -29,11 +29,11 @@ import kotlin.math.min
 
 @Serializable
 class PoolEntry private constructor() {
-    var type: @Contextual Identifier = Identifier.of(Bountiful.ID, "null_pool")
+    var type: @Contextual ResourceLocation = ResourceLocation.parse(Bountiful.ID, "null_pool")
     var rarity = BountyRarity.COMMON
     var content = "Nope"
     var name: String? = null
-    private var icon: @Contextual Identifier? = null
+    private var icon: @Contextual ResourceLocation? = null
     var amount = EntryRange(-1, -1)
     var unitWorth = -1000.0
     var weightMult = 1.0
@@ -83,11 +83,11 @@ class PoolEntry private constructor() {
     private fun getRelatedItems(world: ServerWorld): List<Item>? {
         return when (type) {
             BountyTypeRegistry.ITEM.id -> {
-                val tagId = Identifier.of(content.substringAfter("#"))
+                val tagId = ResourceLocation.parse(content.substringAfter("#"))
                 getTagItems(world.registryManager, getTagItemKey(tagId))
             }
             BountyTypeRegistry.ITEM_TAG.id -> {
-                val tagId = Identifier.of(content)
+                val tagId = ResourceLocation.parse(content)
                 getTagItems(world.registryManager, getTagItemKey(tagId))
             }
             else -> null
@@ -98,7 +98,7 @@ class PoolEntry private constructor() {
         val amt = amountAt(worth)
 
         val actualContent = if (type == BountyTypeRegistry.ITEM.id && content.startsWith("#")) {
-            val tagId = Identifier.of(content.substringAfter("#"))
+            val tagId = ResourceLocation.parse(content.substringAfter("#"))
             val items = getTagItems(world.registryManager, getTagItemKey(tagId))
             if (items.isEmpty()){
                 Bountiful.LOGGER.warn("A pool entry tag has an empty list! $content")
@@ -172,7 +172,7 @@ class PoolEntry private constructor() {
     }
 
     @Serializable
-    class ForbiddenContent(val type: @Contextual Identifier, val content: String)
+    class ForbiddenContent(val type: @Contextual ResourceLocation, val content: String)
 
     companion object {
         fun fromKudzu(kv: KudzuVine): PoolEntry {

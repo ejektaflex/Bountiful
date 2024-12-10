@@ -21,7 +21,7 @@ import net.minecraft.entity.SpawnGroup
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.registry.Registries
-import net.minecraft.util.Identifier
+import net.minecraft.resources.ResourceLocation
 
 class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget {
 
@@ -151,7 +151,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
     }
 
     companion object {
-        val BUTTON = Identifier.of("widget/button")
+        val BUTTON = ResourceLocation.parse("widget/button")
         val ARROW = Bountiful.id("arrow")
 
         const val ButtonWidth = 160

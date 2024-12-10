@@ -13,7 +13,7 @@ import net.minecraft.recipe.RecipeEntry
 import net.minecraft.recipe.RecipeManager
 import net.minecraft.registry.Registries
 import net.minecraft.server.MinecraftServer
-import net.minecraft.util.Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Rarity
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
@@ -23,8 +23,8 @@ class DepthSolver(val server: MinecraftServer, val data: BountifulChaosData, val
     private val recipeManager: RecipeManager = server.recipeManager
     private val regManager = server.registryManager
 
-    private val terminators = mutableSetOf<Identifier>()
-    private val deps = mutableMapOf<Identifier, MutableSet<Identifier>>()
+    private val terminators = mutableSetOf<ResourceLocation>()
+    private val deps = mutableMapOf<ResourceLocation, MutableSet<ResourceLocation>>()
 
     // Final cost map
     private val costMap = mutableMapOf<Item, Double>()

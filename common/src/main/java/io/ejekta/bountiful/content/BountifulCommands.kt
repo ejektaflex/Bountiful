@@ -27,7 +27,7 @@ import net.minecraft.command.CommandRegistryAccess
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.ai.TargetPredicate
 import net.minecraft.entity.passive.VillagerEntity
-import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.player.Player
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
@@ -40,11 +40,11 @@ import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
-import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.network.ServerPlayer
 import net.minecraft.text.ClickEvent
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
-import net.minecraft.util.Identifier
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.world.poi.PointOfInterestStorage
@@ -70,7 +70,7 @@ object BountifulCommands {
                 BountifulContent.Pools.map { pool ->
                     val trans = pool.usedInDecrees.map { it.translation }
                     val translation = if (trans.isEmpty()) {
-                        Text.literal("None")
+                        Component.literal("None")
                     } else {
                         trans.reduce { acc, decree ->
                             acc.append(", ").append(decree)
@@ -132,7 +132,7 @@ object BountifulCommands {
                 "settings" {
                     "reload" runs {
                         BountifulIO.loadConfig()
-                        source.sendMessage(Text.literal("Bountiful Settings Reloaded!"))
+                        source.sendMessage(Component.literal("Bountiful Settings Reloaded!"))
                     }
                 }
 
@@ -141,7 +141,7 @@ object BountifulCommands {
                         source.playerOrThrow
 
                         source.player?.run {
-                            openHandledScreenSimple(Text.literal("Analyzer!")) { syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity ->
+                            openHandledScreenSimple(Component.literal("Analyzer!")) { syncId: Int, playerInventory: PlayerInventory, player: Player ->
                                 AnalyzerScreenHandler(syncId, playerInventory, SimpleInventory(AnalyzerScreenHandler.SIZE))
                             }
                         }
@@ -195,12 +195,12 @@ object BountifulCommands {
     private fun CommandContext<ServerCommandSource>.exportToPack(named: String, described: String) {
         try {
             BountifulIO.exportDataPack(named, described)
-            source.sendMessage(Text.literal("Data pack exported successfully. You can find it in the config folder.")
-                .formatted(Formatting.GREEN)
+            source.sendMessage(Component.literal("Data pack exported successfully. You can find it in the config folder.")
+                .formatted(ChatFormatting.GREEN)
             )
         } catch (e: Exception) {
             e.printStackTrace()
-            source.sendMessage(Text.literal("Data pack creation failed!"))
+            source.sendMessage(Component.literal("Data pack creation failed!"))
         }
     }
 
@@ -211,29 +211,29 @@ object BountifulCommands {
             it.id == named
         }
         if (found != null) {
-            source.sendMessage(Text.literal("Pool Entries with id '$named' Found!").formatted(
-                Formatting.GREEN
+            source.sendMessage(Component.literal("Pool Entries with id '$named' Found!").formatted(
+                ChatFormatting.GREEN
             ))
 
-            source.sendMessage(Text.literal("* Exists in these pools: ").append(
-                Text.literal("${found.protoPool?.id}").formatted(Formatting.GOLD))
+            source.sendMessage(Component.literal("* Exists in these pools: ").append(
+                Component.literal("${found.protoPool?.id}").formatted(ChatFormatting.GOLD))
             )
 
             val decs = found.protoPool?.usedInDecrees?.map { it.id }?.sorted() ?: emptyList()
 
-            source.sendMessage(Text.literal("* Exists in these decrees: ").append(
-                Text.literal("$decs").formatted(Formatting.GOLD)
+            source.sendMessage(Component.literal("* Exists in these decrees: ").append(
+                Component.literal("$decs").formatted(ChatFormatting.GOLD)
             ))
 
 
             if (!found.isValid(source.server)) {
                 source.sendError(
-                    Text.literal("* Error: Entry ${found.id} seemingly failed validation for some reason.")
+                    Component.literal("* Error: Entry ${found.id} seemingly failed validation for some reason.")
                 )
             }
 
         } else {
-            source.sendError(Text.literal("Pool Entry Not Found! Does not seem to exist in any pool."))
+            source.sendError(Component.literal("Pool Entry Not Found! Does not seem to exist in any pool."))
         }
     }
 
@@ -271,7 +271,7 @@ object BountifulCommands {
                 Box.of(player.pos, 100.0, 100.0, 100.0)
             )
             if (villager != null) {
-                source.sendMessage(Text.literal("Found villager at: ${villager.pos} - ${villager.pos.distanceTo(player.pos)}"))
+                source.sendMessage(Component.literal("Found villager at: ${villager.pos} - ${villager.pos.distanceTo(player.pos)}"))
 
                 //player.serverWorld.pointOfInterestStorage.add()
 
@@ -288,14 +288,14 @@ object BountifulCommands {
                 ).getOrNull()
 
                 if (nearestBB != null) {
-                    source.sendMessage(Text.literal("Found BB at: $nearestBB - ${nearestBB.toVec3d().distanceTo(player.pos)}"))
+                    source.sendMessage(Component.literal("Found BB at: $nearestBB - ${nearestBB.toVec3d().distanceTo(player.pos)}"))
                 }
 
                 val brain = villager.brain
 
                 val actTime = brain.schedule.getActivityForTime((serverWorld.time % 24000L).toInt())
 
-                source.sendMessage(Text.literal("Currently doing: ${actTime.id}"))
+                source.sendMessage(Component.literal("Currently doing: ${actTime.id}"))
 
                 println(brain)
 
@@ -308,7 +308,7 @@ object BountifulCommands {
                 }
 
             } else {
-                source.sendMessage(Text.literal("Villager was null!"))
+                source.sendMessage(Component.literal("Villager was null!"))
             }
         }
     }
@@ -341,7 +341,7 @@ object BountifulCommands {
     ) {
         val cmd = kambrikCommand<ServerCommandSource> {
             if (amt.min.getOrNull() == null || amt.max.getOrNull() == null) {
-                source.sendError(Text.literal("Amount Range must have a minimum and maximum value!"))
+                source.sendError(Component.literal("Amount Range must have a minimum and maximum value!"))
                 return@kambrikCommand
             }
 
@@ -351,7 +351,7 @@ object BountifulCommands {
     }
 
     private fun addToPool(
-        player: ServerPlayerEntity,
+        player: ServerPlayer,
         inAmount: IntRange? = null,
         inUnitWorth: Int? = null,
         poolName: String,
@@ -401,7 +401,7 @@ object BountifulCommands {
     private fun CommandContext<ServerCommandSource>.addEntityToPool(
         inAmount: IntRange? = null,
         inUnitWorth: Int? = null,
-        entityId: Identifier,
+        entityId: ResourceLocation,
         poolName: String
     ) {
         val cmd = kambrikCommand<ServerCommandSource> {
@@ -475,7 +475,7 @@ object BountifulCommands {
             }
         }
 
-        source.sendMessage(Text.literal("Bountiful's Decrees & Pools dumped to log."))
+        source.sendMessage(Component.literal("Bountiful's Decrees & Pools dumped to log."))
     }
 
 

@@ -9,79 +9,89 @@ import io.ejekta.bountiful.util.getTagItems
 import io.ejekta.kambrik.bridge.Kambridge
 import io.ejekta.kambrik.ext.collect
 import io.ejekta.kambrik.ext.identifier
+import net.minecraft.ChatFormatting
 import net.minecraft.client.MinecraftClient
+import net.minecraft.core.Registry
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.ItemEntity
-import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.player.Player
 import net.minecraft.item.EnchantedBookItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.registry.Registries
 import net.minecraft.server.MinecraftServer
-import net.minecraft.text.MutableText
+import net.minecraft.text.MutableComponent
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
-import net.minecraft.util.Identifier
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.TooltipFlag
 import kotlin.jvm.optionals.getOrNull
 
 
 class BountyTypeItem : IBountyExchangeable {
 
-    override val id: Identifier = Identifier.of("item")
+    override val id: ResourceLocation = ResourceLocation.parse("item")
 
     override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {
         return if (entry.content.startsWith("#")) {
-            getTagItems(server.registryManager, getTagItemKey(
-                Identifier.of(entry.content.substringAfter("#"))
+            getTagItems(server.registryAccess(), getTagItemKey(
+                ResourceLocation.parse(entry.content.substringAfter("#"))
             )).isNotEmpty()
         } else {
-            val id = getItem(Identifier.of(entry.content)).identifier
-            id == Identifier.of(entry.content)
+            val id = getItem(ResourceLocation.parse(entry.content)).identifier
+            id == ResourceLocation.parse(entry.content)
         }
     }
 
-    private fun getCurrentStacks(entry: BountyDataEntry, player: PlayerEntity): Map<ItemStack, Int> {
-        return player.inventory.main.collect(entry.amount) {
+    private fun getCurrentStacks(entry: BountyDataEntry, player: Player): Map<ItemStack, Int> {
+        return player.inventory.items.collect(entry.amount) {
             identifier.toString() == entry.content
         }
     }
 
-    override fun textOnBounty(entry: BountyDataEntry, isObj: Boolean, player: PlayerEntity, current: Int): MutableText {
+    override fun textOnBounty(entry: BountyDataEntry, isObj: Boolean, player: Player, current: Int): MutableComponent {
         val progress = getProgress(entry, player, current)
         val itemName = getItemName(entry)
         return when (isObj) {
-            true -> itemName.formatted(progress.color).append(progress.neededText.colored(Formatting.WHITE))
+            true -> itemName.withStyle(progress.color).append(progress.neededText.colored(ChatFormatting.WHITE))
             false -> progress.givingText.append(itemName.colored(entry.rarity.color))
         }
     }
 
-    override fun textOnBoardSidebar(entry: BountyDataEntry, player: PlayerEntity): List<Text> {
-        return getItemStack(entry).getTooltip(Item.TooltipContext.DEFAULT, player, TooltipType.BASIC)
+    override fun textOnBoardSidebar(entry: BountyDataEntry, player: Player): List<Component> {
+        return getItemStack(entry).getTooltipLines(Item.TooltipContext.EMPTY, player, TooltipFlag.NORMAL)
     }
 
-    override fun getProgress(entry: BountyDataEntry, player: PlayerEntity, current: Int): Progress {
+    override fun getProgress(entry: BountyDataEntry, player: Player, current: Int): Progress {
         return Progress(getCurrentStacks(entry, player).values.sum(), entry.amount)
     }
 
-    override fun getNewCurrent(entry: BountyDataEntry, player: PlayerEntity, current: Int): Int {
+    override fun getNewCurrent(entry: BountyDataEntry, player: Player, current: Int): Int {
         return getCurrentStacks(entry, player).values.sum()
     }
 
-    override fun consumeObjectives(entry: BountyDataEntry, player: PlayerEntity, current: Int): Boolean {
+    override fun consumeObjectives(entry: BountyDataEntry, player: Player, current: Int): Boolean {
         val currStacks = getCurrentStacks(entry, player)
         if (currStacks.values.sum() >= entry.amount) {
             currStacks.forEach { (stack, toShrink) ->
-                stack.decrement(toShrink)
+                stack.shrink(toShrink)
             }
             return true
         }
         return false
     }
 
-    override fun giveReward(entry: BountyDataEntry, player: PlayerEntity) {
+    override fun giveReward(entry: BountyDataEntry, player: Player) {
         val item = getItem(entry)
-        val toGive = (0 until entry.amount).chunked(item.maxCount).map { it.size }
+        val toGive = (0 until entry.amount).chunked(item.defaultMaxStackSize).map { it.size }
 
         for (amtToGive in toGive) {
             val stack = ItemStack(item, amtToGive).apply {
@@ -89,22 +99,23 @@ class BountyTypeItem : IBountyExchangeable {
                 //nbt = entry.nbt
             }
             // Try give directly to player, otherwise drop at feet
-            if (!player.giveItemStack(stack)) {
-                val stackEntity = ItemEntity(player.world, player.pos.x, player.pos.y, player.pos.z, stack).apply {
-                    setPickupDelay(0)
+            if (!player.addItem(stack)) {
+                val pos = player.position()
+                val stackEntity = ItemEntity(player.level(), pos.x, pos.y, pos.z, stack).apply {
+                    setPickUpDelay(0)
                 }
-                player.world.spawnEntity(stackEntity)
+                player.level().addFreshEntity(stackEntity)
             }
         }
     }
 
     companion object {
         fun getItem(entry: BountyDataEntry): Item {
-            return getItem(Identifier.of(entry.content))
+            return getItem(ResourceLocation.parse(entry.content))
         }
 
-        fun getItem(id: Identifier): Item {
-            return Registries.ITEM.get(id)
+        fun getItem(id: ResourceLocation): Item {
+            return BuiltInRegistries.ITEM.get(id)
         }
 
         fun getItemStack(entry: BountyDataEntry): ItemStack {
@@ -115,9 +126,9 @@ class BountyTypeItem : IBountyExchangeable {
             }
         }
 
-        fun getItemName(entry: BountyDataEntry): MutableText {
+        fun getItemName(entry: BountyDataEntry): MutableComponent {
             val itemStack = getItemStack(entry)
-            var named = itemStack.name.copy()
+            val named = itemStack.displayName.copy()
 
             // TODO reimplement
             // Show enchanted book enchantments

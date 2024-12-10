@@ -3,9 +3,9 @@ package io.ejekta.bountiful.data
 import io.ejekta.bountiful.content.BountifulContent
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import net.minecraft.text.MutableText
+import net.minecraft.text.MutableComponent
 import net.minecraft.text.Text
-import net.minecraft.util.Identifier
+import net.minecraft.resources.ResourceLocation
 
 @Serializable
 data class Decree(
@@ -37,7 +37,7 @@ data class Decree(
     val allPoolIds: Set<String>
         get() = objectives + rewards
 
-    val translation: MutableText
+    val translation: MutableComponent
         get() = Text.translatable("bountiful.decree.$id.name")
 
     val allObjectiveEntries: List<PoolEntry>
