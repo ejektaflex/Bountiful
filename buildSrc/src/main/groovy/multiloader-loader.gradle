@@ -1,0 +1,58 @@
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+    id 'multiloader-common'
+}
+
+configurations {
+    commonJava{
+        canBeResolved = true
+    }
+    commonResources{
+        canBeResolved = true
+    }
+}
+
+dependencies {
+    compileOnly(project(':common')) {
+        capabilities {
+            requireCapability "$group:$mod_id"
+        }
+    }
+    commonJava project(path: ':common', configuration: 'commonJava')
+    commonResources project(path: ':common', configuration: 'commonResources')
+}
+
+tasks.named('compileJava', JavaCompile) {
+    dependsOn(configurations.commonJava)
+    source(configurations.commonJava)
+}
+
+//tasks.named('compileKotlin', org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask.class) {
+//    //dependsOn(configurations.commonJava)
+//    //source(configurations.commonJava)
+//}
+
+processResources {
+    dependsOn(configurations.commonResources)
+    from(configurations.commonResources)
+    duplicatesStrategy(DuplicatesStrategy.WARN)
+}
+
+compileKotlin {
+    //source(project(":commonClient").sourceSets.main.allSource)
+    source(project(":common").sourceSets.main.allSource)
+    //compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
+}
+
+tasks.named('javadoc', Javadoc).configure {
+    dependsOn(configurations.commonJava)
+    source(configurations.commonJava)
+}
+
+tasks.named('sourcesJar', Jar) {
+    dependsOn(configurations.commonJava)
+    from(configurations.commonJava)
+    dependsOn(configurations.commonResources)
+    from(configurations.commonResources)
+}
