@@ -1,7 +1,7 @@
 package io.ejekta.bountiful.components
 
 import io.ejekta.bountiful.content.BountifulContent
-import net.minecraft.item.ItemStack
+import net.minecraft.world.item.ItemStack
 
 class DecreeStack(val stack: ItemStack) {
     var ids: Set<String>

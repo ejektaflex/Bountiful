@@ -1,34 +1,33 @@
 package io.ejekta.bountiful.client
 
 import io.ejekta.bountiful.Bountiful
-import io.ejekta.bountiful.components.DecreeData
 import io.ejekta.bountiful.client.widgets.AnalyzerPoolWidget
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.gui.AnalyzerScreenHandler
 import io.ejekta.kambrik.gui.draw.KGui
 import io.ejekta.kambrik.gui.draw.reactor.MouseReactor
 import io.ejekta.kambrik.gui.draw.widgets.KScrollbarVertical
-import io.ejekta.kambrik.gui.screen.KambrikHandledScreen
-import net.minecraft.client.gui.DrawContext
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.screen.ScreenHandler
-import net.minecraft.text.Text
+import io.ejekta.kambrik.gui.screen.KambrikContainerScreen
+import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.network.chat.Component
+import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.inventory.AbstractContainerMenu
 import kotlin.math.roundToInt
 
 
-class AnalyzerScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Text) : KambrikHandledScreen<ScreenHandler>(
+class AnalyzerScreen(handler: AbstractContainerMenu, inventory: Inventory, title: Component) : KambrikContainerScreen<AbstractContainerMenu>(
     handler, inventory, title
 ) {
 
     private var scanResolution = 1
 
     init {
-        backgroundWidth = 177
-        backgroundHeight = 167
+        imageWidth = 177
+        imageHeight = 167
     }
 
     private val bgGui = kambrikGui {
-        img(TEXTURE, backgroundWidth, backgroundHeight)
+        img(TEXTURE, imageWidth, imageHeight)
     }
 
     val dec = BountifulContent.Decrees.find { it.id == "fletcher" }!!
@@ -60,9 +59,10 @@ class AnalyzerScreen(handler: ScreenHandler, inventory: PlayerInventory, title: 
 
         println("Refreshing widgets")
 
-        val doot = (screenHandler as? AnalyzerScreenHandler) ?: return
 
-        val di = doot.inventory.getStack(0)[BountifulContent.DECREE_DATA] ?: return
+        val doot = (menu as? AnalyzerScreenHandler) ?: return
+
+        val di = doot.container.getItem(0)[BountifulContent.DECREE_DATA] ?: return
 
         val decrees = di.ids.mapNotNull { BountifulContent.Decrees.find { d -> d.id == it } }
 
@@ -85,7 +85,7 @@ class AnalyzerScreen(handler: ScreenHandler, inventory: PlayerInventory, title: 
     private fun drawGui(): KGui {
         return kambrikGui {
 
-            area(backgroundWidth, backgroundHeight) {
+            area(imageWidth, imageHeight) {
                 text(7, 6) {
                     addLiteral("Decree Analyzer")
                 }
@@ -138,16 +138,16 @@ class AnalyzerScreen(handler: ScreenHandler, inventory: PlayerInventory, title: 
 
     private val fgGui = drawGui()
 
-    override fun onDrawBackground(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun onDrawBackground(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         // do nothing
     }
 
-    override fun onDrawForeground(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun onDrawForeground(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         fgGui.draw(context, mouseX, mouseY, delta)
     }
 
-    override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
-        bgGui.draw(context, mouseX, mouseY, delta)
+    override fun renderBg(pGuiGraphics: GuiGraphics, pPartialTick: Float, pMouseX: Int, pMouseY: Int) {
+        bgGui.draw(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
     }
 
     override fun init() {
@@ -158,9 +158,9 @@ class AnalyzerScreen(handler: ScreenHandler, inventory: PlayerInventory, title: 
         private val TEXTURE = Bountiful.id("analyzer_bg")
         private val SCROLLER = Bountiful.id("analyzer_scroller")
 //        private val SELECTOR = Bountiful.id("selector")
-//        private val SCROLLER = Identifier.of("container/villager/scroller")
-//        private val XP_FG = Identifier.of("container/villager/experience_bar_current")
-//        private val XP_BG = Identifier.of("container/villager/experience_bar_background")
+//        private val SCROLLER = ResourceLocation.parse("container/villager/scroller")
+//        private val XP_FG = ResourceLocation.parse("container/villager/experience_bar_current")
+//        private val XP_BG = ResourceLocation.parse("container/villager/experience_bar_background")
     }
 }
 

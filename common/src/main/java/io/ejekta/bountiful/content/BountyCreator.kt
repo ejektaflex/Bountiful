@@ -13,18 +13,18 @@ import io.ejekta.bountiful.data.Pool
 import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.bountiful.util.randomSplit
 import io.ejekta.bountiful.util.weightedRandomDblBy
-import net.minecraft.item.ItemStack
-import net.minecraft.server.world.ServerWorld
-import net.minecraft.util.math.BlockPos
+import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.item.ItemStack
 import kotlin.math.ceil
 
 class BountyCreator private constructor(
-    private val world: ServerWorld,
+    private val world: ServerLevel,
     private val pos: BlockPos,
     private val decrees: Set<Decree>,
     private val rep: Int
 ) {
-    private val startTime: Long = world.time
+    private val startTime: Long = world.gameTime
 
     // Handle matching algorithm direction
     private val rewardsFirst = !BountifulIO.configData.bounty.reverseMatchingAlgorithm
@@ -222,7 +222,7 @@ class BountyCreator private constructor(
             return 1 - (rep.coerceIn(-30..30) / 75.0)
         }
 
-        fun createBountyItem(world: ServerWorld, pos: BlockPos, decrees: Set<Decree>, rep: Int): ItemStack {
+        fun createBountyItem(world: ServerLevel, pos: BlockPos, decrees: Set<Decree>, rep: Int): ItemStack {
             return BountyCreator(world, pos, decrees, rep.coerceIn(-30..30)).stack
         }
 
@@ -230,7 +230,7 @@ class BountyCreator private constructor(
             return decrees.map(creationType.poolGetter).flatten().toSet()
         }
 
-        private fun getInitialFor(decrees: Set<Decree>, world: ServerWorld, creationType: CreationType): Set<PoolEntry> {
+        private fun getInitialFor(decrees: Set<Decree>, world: ServerLevel, creationType: CreationType): Set<PoolEntry> {
             return getPoolsFor(decrees, creationType).asSequence().map { it.items }.flatten().filter(creationType.itemFilter).mapNotNull {
                 val entryIsValid = it.isValid(world.server)
                 if (!entryIsValid) {

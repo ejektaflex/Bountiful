@@ -9,19 +9,19 @@ import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.util.getTagItemKey
 import io.ejekta.bountiful.util.getTagItems
-import io.ejekta.kambrik.ext.identifier
+import io.ejekta.kambrik.ext.id
 import io.ejekta.kudzu.KudzuVine
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
-import net.minecraft.item.Item
-import net.minecraft.nbt.NbtCompound
+import net.minecraft.core.BlockPos
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
-import net.minecraft.server.world.ServerWorld
-import net.minecraft.util.Identifier
-import net.minecraft.util.math.BlockPos
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.item.Item
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.max
@@ -29,11 +29,11 @@ import kotlin.math.min
 
 @Serializable
 class PoolEntry private constructor() {
-    var type: @Contextual Identifier = Identifier.of(Bountiful.ID, "null_pool")
+    var type: @Contextual ResourceLocation = ResourceLocation.fromNamespaceAndPath(Bountiful.ID, "null_pool")
     var rarity = BountyRarity.COMMON
     var content = "Nope"
     var name: String? = null
-    private var icon: @Contextual Identifier? = null
+    private var icon: @Contextual ResourceLocation? = null
     var amount = EntryRange(-1, -1)
     var unitWorth = -1000.0
     var weightMult = 1.0
@@ -70,7 +70,7 @@ class PoolEntry private constructor() {
 
     var mystery: Boolean = false
 
-    var nbt: @Contextual NbtCompound? = null
+    var nbt: @Contextual CompoundTag? = null
 
     val worthSteps: List<Double>
         get() = (amount.min..amount.max).map { it * unitWorth }
@@ -80,31 +80,31 @@ class PoolEntry private constructor() {
 
     fun save(format: Json = JsonFormats.DataPack) = format.encodeToString(serializer(), this)
 
-    private fun getRelatedItems(world: ServerWorld): List<Item>? {
+    private fun getRelatedItems(world: ServerLevel): List<Item>? {
         return when (type) {
             BountyTypeRegistry.ITEM.id -> {
-                val tagId = Identifier.of(content.substringAfter("#"))
-                getTagItems(world.registryManager, getTagItemKey(tagId))
+                val tagId = ResourceLocation.parse(content.substringAfter("#"))
+                getTagItems(world.registryAccess(), getTagItemKey(tagId))
             }
             BountyTypeRegistry.ITEM_TAG.id -> {
-                val tagId = Identifier.of(content)
-                getTagItems(world.registryManager, getTagItemKey(tagId))
+                val tagId = ResourceLocation.parse(content)
+                getTagItems(world.registryAccess(), getTagItemKey(tagId))
             }
             else -> null
         }
     }
 
-    fun toEntry(world: ServerWorld, pos: BlockPos, worth: Double? = null, usedDecs: Set<String>? = emptySet()): BountyDataEntry {
+    fun toEntry(world: ServerLevel, pos: BlockPos, worth: Double? = null, usedDecs: Set<String>? = emptySet()): BountyDataEntry {
         val amt = amountAt(worth)
 
         val actualContent = if (type == BountyTypeRegistry.ITEM.id && content.startsWith("#")) {
-            val tagId = Identifier.of(content.substringAfter("#"))
-            val items = getTagItems(world.registryManager, getTagItemKey(tagId))
+            val tagId = ResourceLocation.parse(content.substringAfter("#"))
+            val items = getTagItems(world.registryAccess(), getTagItemKey(tagId))
             if (items.isEmpty()){
                 Bountiful.LOGGER.warn("A pool entry tag has an empty list! $content")
                 "minecraft:air"
             } else {
-                items.random().identifier.toString()
+                items.random().id.toString()
             }
         } else {
             content
@@ -152,16 +152,16 @@ class PoolEntry private constructor() {
         }
     }
 
-    fun forbids(world: ServerWorld, entry: PoolEntry): Boolean {
+    fun forbids(world: ServerLevel, entry: PoolEntry): Boolean {
         val related = getRelatedItems(world)
         return forbids.any {
             it.type == entry.type && it.content == entry.content
         } || (!related.isNullOrEmpty()
-                    && related.any { it.identifier.toString() == entry.content }
+                    && related.any { it.id.toString() == entry.content }
                 )
     }
 
-    fun forbidsAny(world: ServerWorld, entries: List<PoolEntry>): Boolean {
+    fun forbidsAny(world: ServerLevel, entries: List<PoolEntry>): Boolean {
         return entries.any { forbids(world, it) }
     }
 
@@ -172,7 +172,7 @@ class PoolEntry private constructor() {
     }
 
     @Serializable
-    class ForbiddenContent(val type: @Contextual Identifier, val content: String)
+    class ForbiddenContent(val type: @Contextual ResourceLocation, val content: String)
 
     companion object {
         fun fromKudzu(kv: KudzuVine): PoolEntry {

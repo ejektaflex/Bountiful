@@ -8,27 +8,26 @@ import io.ejekta.bountiful.data.Decree
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.text.MutableText
-import net.minecraft.text.Text
-import net.minecraft.util.Formatting
-import net.minecraft.util.Identifier
+import net.minecraft.ChatFormatting
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.player.Player
 
 // Tracks the status of a given bounty
 @Serializable @JvmRecord
 data class BountyDataEntry(
     val id: String,
-    val logicId: @Contextual Identifier,
+    val logicId: @Contextual ResourceLocation,
     val content: String,
     val amount: Int,
     val worth: Int,
-    val nbt: @Contextual NbtCompound? = null,
+    val nbt: @Contextual CompoundTag? = null,
     val name: String? = null,
-    val icon: @Contextual Identifier? = null,
+    val icon: @Contextual ResourceLocation? = null,
     val isMystery: Boolean = false,
     val rarity: BountyRarity = BountyRarity.COMMON,
-    val tracking: JsonObject = JsonObject(emptyMap()), // Used to track extra data, e.g. current progress if needed
     val critConditions: JsonObject? = null,
     val relatedDecreeIds: Set<String> = emptySet()
 ) {
@@ -41,8 +40,8 @@ data class BountyDataEntry(
         return getRelatedDecrees().map { it.linkedProfessions }.flatten().toSet()
     }
 
-    val translation: MutableText
-        get() = Text.translatable("bountiful.entry.${id}")
+    val translation: MutableComponent
+        get() = Component.translatable("bountiful.entry.${id}")
 
     val logic: IBountyType
         get() = BountyTypeRegistry[logicId]!!
@@ -51,14 +50,14 @@ data class BountyDataEntry(
         return "BDE[type=$logic, content=$content, amount=$amount, isNbtNull=${nbt == null}, name=$name, mystery=$isMystery]"
     }
 
-    fun textOnBoardSidebar(player: PlayerEntity): List<Text> {
+    fun textOnBoardSidebar(player: Player): List<Component> {
         return logic.textOnBoardSidebar(this, player)
     }
 
-    fun textOnBounty(player: PlayerEntity, isObj: Boolean, current: Int): MutableText {
+    fun textOnBounty(player: Player, isObj: Boolean, current: Int): MutableComponent {
         return when (isMystery) {
-            true -> Text.literal("???").formatted(Formatting.BOLD).append(
-                Text.literal("x$amount").formatted(Formatting.WHITE)
+            true -> Component.literal("???").withStyle(ChatFormatting.BOLD).append(
+                Component.literal("x$amount").withStyle(ChatFormatting.WHITE)
             )
             false -> logic.textOnBounty(this, isObj, player, current)
         }

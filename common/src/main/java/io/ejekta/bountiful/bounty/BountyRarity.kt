@@ -1,15 +1,15 @@
 package io.ejekta.bountiful.bounty
 
-import net.minecraft.util.Formatting
+import net.minecraft.ChatFormatting
 import kotlin.math.max
 import kotlin.math.pow
 
-enum class BountyRarity(val color: Formatting, val weight: Int, val repTier: Int) {
-    COMMON(Formatting.WHITE, 1024, -30),
-    UNCOMMON(Formatting.AQUA, 512, 5),
-    RARE(Formatting.YELLOW, 256, 15),
-    EPIC(Formatting.LIGHT_PURPLE, 128, 25),
-    LEGENDARY(Formatting.GOLD, 6, 30);
+enum class BountyRarity(val color: ChatFormatting, val weight: Int, val repTier: Int) {
+    COMMON(ChatFormatting.WHITE, 1024, -30),
+    UNCOMMON(ChatFormatting.AQUA, 512, 5),
+    RARE(ChatFormatting.YELLOW, 256, 15),
+    EPIC(ChatFormatting.LIGHT_PURPLE, 128, 25),
+    LEGENDARY(ChatFormatting.GOLD, 6, 30);
 
     private fun weightAdjustedFor(currRarity: BountyRarity): Double {
         return weight.toDouble() / (rarityWeightScaling.pow(max(currRarity.ordinal - ordinal, 0)))

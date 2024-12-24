@@ -5,16 +5,15 @@ import io.ejekta.bountiful.bounty.types.IBountyReward
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.messages.OnBountyComplete
-import net.minecraft.client.MinecraftClient
-import net.minecraft.component.ComponentType
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipType
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.sound.SoundEvents
-import net.minecraft.text.MutableText
-import net.minecraft.text.Text
-import net.minecraft.util.Formatting
+import net.minecraft.ChatFormatting
+import net.minecraft.client.Minecraft
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.TooltipFlag
 
 class BountyStack(val stack: ItemStack) {
 
@@ -57,31 +56,31 @@ class BountyStack(val stack: ItemStack) {
 
     // Objectives
 
-    private fun hasFinishedObjectives(player: PlayerEntity): Boolean {
+    private fun hasFinishedObjectives(player: Player): Boolean {
         return objs.all {
             (it.logic as IBountyObjective).getProgress(it, player, progressOf(it)).isComplete()
         }
     }
 
-    private fun consumeObjectives(player: PlayerEntity): Boolean {
+    private fun consumeObjectives(player: Player): Boolean {
         return objs.all {
             (it.logic as IBountyObjective).consumeObjectives(it, player, progressOf(it))
         }
     }
 
-    private fun isDone(player: PlayerEntity): Boolean {
+    private fun isDone(player: Player): Boolean {
         return objs.all {
             (it.logic as IBountyObjective).getProgress(it, player, progressOf(it)).isComplete()
-        } && ((info.timeLeftTicks(player.world)) > 0)
+        } && ((info.timeLeftTicks(player.level())) > 0)
     }
 
     // Rewards
-    private fun rewardPlayer(player: PlayerEntity) {
+    private fun rewardPlayer(player: Player) {
         // Play XP pickup sound
-        player.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
+        player.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, 1f, 1f)
 
         // Give XP to player
-        player.addExperience(rews.sumOf { (it.rarity.ordinal) * 2 + 1 })
+        player.giveExperiencePoints(rews.sumOf { (it.rarity.ordinal) * 2 + 1 })
 
         for (reward in rews) {
             (reward.logic as IBountyReward).giveReward(reward, player)
@@ -90,29 +89,29 @@ class BountyStack(val stack: ItemStack) {
 
     // Awarding
 
-    fun tryCashIn(player: PlayerEntity): Boolean {
-        if (info.timeLeftTicks(player.world) <= 0) {
-            player.sendMessage(Text.translatable("bountiful.bounty.expired"))
+    fun tryCashIn(player: Player): Boolean {
+        if (info.timeLeftTicks(player.level()) <= 0) {
+            player.displayClientMessage(Component.translatable("bountiful.bounty.expired"), false)
             return false
         }
         return if (hasFinishedObjectives(player)) {
             consumeObjectives(player)
             rewardPlayer(player)
-            stack.decrement(stack.maxCount)
+            stack.shrink(stack.maxStackSize)
             true
         } else {
-            player.sendMessage(Text.translatable("bountiful.tooltip.requirements"), false)
+            player.displayClientMessage(Component.translatable("bountiful.tooltip.requirements"), false)
             false
         }
     }
 
-    fun checkForCompletionAndAlert(player: PlayerEntity) {
+    fun checkForCompletionAndAlert(player: Player) {
         if (isDone(player)) {
             if (!ping) {
                 ping = true
-                val playAction = OnBountyComplete(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
+                val playAction = OnBountyComplete(SoundEvents.EXPERIENCE_ORB_PICKUP, 1f, 1f)
 
-                if (player is ServerPlayerEntity) {
+                if (player is ServerPlayer) {
                     playAction.sendToClient(player)
                 } else {
                     playAction.runLocally(player)
@@ -125,25 +124,24 @@ class BountyStack(val stack: ItemStack) {
         }
     }
 
-    fun genTooltip(isServer: Boolean, type: TooltipType): List<MutableText> {
+    fun genTooltip(isServer: Boolean, flag: TooltipFlag): List<MutableComponent> {
         if (isServer) {
             return emptyList()
         }
-        val player = MinecraftClient.getInstance().player!!
+        val player = Minecraft.getInstance().player!!
         return buildList {
-            add(Text.translatable("bountiful.tooltip.required").formatted(Formatting.GOLD).append(":"))
+            add(Component.translatable("bountiful.tooltip.required").withStyle(ChatFormatting.GOLD).append(":"))
             addAll(objs.map {
                 it.textOnBounty(player, true, progressOf(it))
             })
-            add(Text.translatable("bountiful.tooltip.rewards").formatted(Formatting.GOLD).append(":"))
+            add(Component.translatable("bountiful.tooltip.rewards").withStyle(ChatFormatting.GOLD).append(":"))
             addAll(rews.map {
                 it.textOnBounty(player, false, progressOf(it))
             })
-
-            if (type == TooltipType.ADVANCED && BountifulIO.configData.client.advancedDebugTooltips) {
-                add(Text.literal(""))
-                add(Text.literal("Bountiful Debug Info:").formatted(Formatting.GOLD))
-                add(Text.literal("Taken: ${info.timeTakenSecs(player.world)}, Left: ${info.timeLeftSecs(player.world)}"))
+            if (flag == TooltipFlag.ADVANCED && BountifulIO.configData.client.advancedDebugTooltips) {
+                add(Component.literal(""))
+                add(Component.literal("Bountiful Debug Info:").withStyle(ChatFormatting.GOLD))
+                add(Component.literal("Taken: ${info.timeTakenSecs(player.level())}, Left: ${info.timeLeftSecs(player.level())}"))
             }
         }
     }

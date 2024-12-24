@@ -1,16 +1,15 @@
-package com.example.recipe
+package io.ejekta.bountiful.recipe
 
-import com.example.recipe.RecursiveRecipeParser.Companion.getStackOrPut
-import com.example.recipe.RecursiveRecipeParser.Companion.stackKey
-import io.ejekta.kambrik.ext.identifier
-import net.minecraft.item.ItemStack
-import net.minecraft.recipe.Ingredient
-import net.minecraft.recipe.RecipeType
+import io.ejekta.bountiful.recipe.RecursiveRecipeParser.Companion.stackKey
+import io.ejekta.kambrik.ext.id
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.item.crafting.RecipeType
 
 class Solveable(val ingredients: List<Ingredient>, val makes: Int, val type: RecipeType<*>) {
     fun solve(parser: RecursiveRecipeParser, seen: MutableSet<ItemStack>, deep: Int): Int? {
         val routes = ingredients.map { ingr ->
-            val staks = ingr.matchingStacks.toList().filter { parser.visited.stackKey(it) !in seen }
+            val staks = ingr.items.toList().filter { parser.visited.stackKey(it) !in seen }
 
             if (staks.isEmpty()) {
                 return null
@@ -35,7 +34,7 @@ class Solveable(val ingredients: List<Ingredient>, val makes: Int, val type: Rec
 
     override fun toString(): String {
         return "Solveable(ingredients=${ingredients.map { 
-            ingredient -> ingredient.matchingStacks.map { it.identifier }.joinToString("/") 
+            ingredient -> ingredient.items.map { it.id }.joinToString("/") 
         }}, makes=$makes, type=$type)"
     }
 

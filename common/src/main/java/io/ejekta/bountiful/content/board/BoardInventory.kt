@@ -1,71 +1,72 @@
 package io.ejekta.bountiful.content.board
 
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.inventory.DoubleInventory
-import net.minecraft.inventory.Inventory
-import net.minecraft.inventory.SimpleInventory
-import net.minecraft.item.ItemStack
-import net.minecraft.util.math.BlockPos
+import net.minecraft.core.BlockPos
+import net.minecraft.world.CompoundContainer
+import net.minecraft.world.Container
+import net.minecraft.world.SimpleContainer
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 
 
 class BoardInventory(
     val pos: BlockPos,
-    val bountySrc: Inventory = BountyInventory(),
-    val decreeSrc: Inventory = SimpleInventory(3)
-) : DoubleInventory(
+    val bountySrc: Container = BountyInventory(),
+    val decreeSrc: Container = SimpleContainer(3)
+) : CompoundContainer(
     bountySrc,
     decreeSrc
 ) {
-    private val selectedInv = SimpleInventory(1)
+    private val selectedInv = SimpleContainer(1)
 
     var selectedIndex: Int? = null
         private set
 
-    fun selected(): ItemStack = getStack(selectedIndex ?: -1)
+    fun selected(): ItemStack = getItem(selectedIndex ?: -1)
 
     fun select(index: Int) {
         selectedIndex = index
-        setStack(-1, getStack(index))
+        setItem(-1, getItem(index))
     }
 
-    override fun isValid(slot: Int, stack: ItemStack?): Boolean {
+    override fun canPlaceItem(slot: Int, stack: ItemStack): Boolean {
         println("Validity check")
-        return slot < 0 || super.isValid(slot, stack)
+        return slot < 0 || super.canPlaceItem(slot, stack)
     }
 
-    override fun removeStack(slot: Int, amount: Int): ItemStack {
+    override fun removeItem(slot: Int, amount: Int): ItemStack {
         return if (slot < 0) {
-            selectedInv.removeStack(0)
+            selectedInv.removeItemNoUpdate(0)
         } else {
-            super.removeStack(slot, amount)
+            super.removeItem(slot, amount)
         }
     }
 
-    override fun canPlayerUse(player: PlayerEntity) = true
+    // "can player use"
+    override fun stillValid(player: Player) = true
 
     // Get selected inv stack if slot index is -1
-    override fun getStack(slot: Int): ItemStack {
+    override fun getItem(slot: Int): ItemStack {
         return if (slot < 0) {
-            selectedInv.getStack(0)
+            selectedInv.getItem(0)
         } else {
-            super.getStack(slot)
+            super.getItem(slot)
         }
     }
 
-    override fun setStack(slot: Int, stack: ItemStack?) {
+    override fun setItem(slot: Int, stack: ItemStack) {
         if (slot < 0) {
-            selectedInv.setStack(0, stack)
+            selectedInv.setItem(0, stack)
         } else {
-            super.setStack(slot, stack)
+            super.setItem(slot, stack)
         }
     }
 
-    override fun removeStack(slot: Int): ItemStack {
+    override fun removeItemNoUpdate(slot: Int): ItemStack {
         if (slot == selectedIndex) {
-            selectedInv.clear()
+            selectedInv.clearContent()
             selectedIndex = null
         }
-        return super.removeStack(slot)
+        return super.removeItemNoUpdate(slot)
     }
 
     companion object {

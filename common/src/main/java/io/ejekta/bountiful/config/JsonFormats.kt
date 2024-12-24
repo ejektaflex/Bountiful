@@ -2,22 +2,17 @@ package io.ejekta.bountiful.config
 
 import com.mojang.serialization.JsonOps
 import io.ejekta.kambrik.Kambrik
-import io.ejekta.percale.contextualCodec
 import io.ejekta.percale.reverse.PercaleJson
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.util.Identifier
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Vec3d
 
 @OptIn(ExperimentalSerializationApi::class)
 object JsonFormats {
 
     val MojangSerializer = SerializersModule {
         include(Kambrik.Serial.DefaultSerializers)
-        //contextualCodec(Identifier.CODEC)
+        //contextualCodec(ResourceLocation.CODEC)
         //contextualCodec(NbtCompound.CODEC)
         //contextualCodec(Vec3d.CODEC)
         //contextualCodec(BlockPos.CODEC)

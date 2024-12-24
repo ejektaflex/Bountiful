@@ -6,31 +6,44 @@ import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.content.item.BountyItem
 import io.ejekta.kambrik.message.KambrikMsg
-import net.minecraft.client.MinecraftClient
-import net.minecraft.entity.ai.brain.Brain
-import net.minecraft.entity.ai.brain.MemoryModuleType
-import net.minecraft.entity.passive.VillagerEntity
-import net.minecraft.inventory.Inventory
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.registry.DynamicRegistryManager
-import net.minecraft.registry.Registries
-import net.minecraft.registry.tag.TagKey
-import net.minecraft.screen.ScreenHandlerFactory
-import net.minecraft.screen.SimpleNamedScreenHandlerFactory
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.Text
-import net.minecraft.util.Identifier
-import net.minecraft.util.collection.DefaultedList
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.GlobalPos
-import net.minecraft.village.TradeOffer
-import net.minecraft.village.TradedItem
-import net.minecraft.world.World
+import net.minecraft.client.Minecraft
+import net.minecraft.core.*
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.MinecraftServer
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.tags.TagKey
+import net.minecraft.world.Container
+import net.minecraft.world.SimpleMenuProvider
+import net.minecraft.world.entity.ai.Brain
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.npc.Villager
+import net.minecraft.world.inventory.MenuConstructor
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.item.trading.ItemCost
+import net.minecraft.world.item.trading.MerchantOffer
+import net.minecraft.world.level.Level
 import java.util.*
+import kotlin.jvm.optionals.getOrNull
 import kotlin.random.Random
+
+operator fun <T> MinecraftServer.get(regResourceKey: ResourceKey<Registry<T>>): Registry<T> {
+    return registryAccess().registry(regResourceKey).get()
+}
+
+operator fun <T> RegistryAccess.get(regResourceKey: ResourceKey<out Registry<T>>): Registry<T> {
+    return registry(regResourceKey).get()
+}
+
+fun <T : Any> Registry<T>.getNullable(rl: ResourceLocation): T? {
+    return getOptional(rl).getOrNull()
+}
+
 
 fun randomSplit(num: Double, ways: Int): List<Double> {
     val bits = (0 until ways).map { Random.nextDouble() }
@@ -38,9 +51,9 @@ fun randomSplit(num: Double, ways: Int): List<Double> {
     return bits.map { (it / sum) * num }
 }
 
-val Inventory.readOnlyCopy: DefaultedList<ItemStack>
-    get() = DefaultedList.ofSize(size(), ItemStack.EMPTY).apply {
-        (0 until size()).forEach { i -> this[i] = getStack(i) }
+val Container.readOnlyCopy: NonNullList<ItemStack>
+    get() = NonNullList.withSize(containerSize, ItemStack.EMPTY).apply {
+        (0 until containerSize).forEach { i -> this[i] = getItem(i) }
     }
 
 fun <T : Any> List<T>.weightedRandomIntBy(func: T.() -> Int): T {
@@ -53,8 +66,8 @@ fun <T : Any> List<T>.weightedRandomDblBy(func: T.() -> Double): T {
     return mapped.weightedRandomDbl()
 }
 
-fun World.everySeconds(secs: Int, offset: Long = 0L, func: () -> Unit) {
-    if (((time + (secs * GameTime.TICK_RATE) + offset) % GameTime.TICK_RATE) == 0L) {
+fun Level.everySeconds(secs: Int, offset: Long = 0L, func: () -> Unit) {
+    if (((gameTime + (secs * GameTime.TICK_RATE) + offset) % GameTime.TICK_RATE) == 0L) {
         func()
     }
 }
@@ -95,8 +108,8 @@ fun <T : Any> Map<T, Double>.weightedRandomDbl(): T {
     return keys.last()
 }
 
-fun NbtCompound.putBlockPos(key: String, pos: BlockPos) {
-    val posNbt = NbtCompound().apply {
+fun CompoundTag.putBlockPos(key: String, pos: BlockPos) {
+    val posNbt = CompoundTag().apply {
         putInt("x", pos.x)
         putInt("y", pos.y)
         putInt("z", pos.z)
@@ -104,7 +117,7 @@ fun NbtCompound.putBlockPos(key: String, pos: BlockPos) {
     put(key, posNbt)
 }
 
-fun NbtCompound.getBlockPos(key: String): BlockPos {
+fun CompoundTag.getBlockPos(key: String): BlockPos {
     val tag = getCompound(key)
     return try {
         BlockPos(
@@ -113,19 +126,19 @@ fun NbtCompound.getBlockPos(key: String): BlockPos {
             tag.getInt("z")
         )
     } catch (e: Exception) {
-        BlockPos.ORIGIN
+        BlockPos.ZERO
     }
 }
 
-fun getTagItemKey(id: Identifier): TagKey<Item> = TagKey.of(Registries.ITEM.key, id)
+fun getTagItemKey(id: ResourceLocation): TagKey<Item> = TagKey.create(BuiltInRegistries.ITEM.key(), id)
 
-fun getTagItems(reg: DynamicRegistryManager, tagKey: TagKey<Item>): List<Item> {
+fun getTagItems(reg: RegistryAccess, tagKey: TagKey<Item>): List<Item> {
     return getRegistryTags(reg, tagKey)
 }
 
-fun <T> getRegistryTags(reg: DynamicRegistryManager, tagKey: TagKey<T>): List<T> {
+fun <T : Any> getRegistryTags(reg: RegistryAccess, tagKey: TagKey<T>): List<T> {
     val typedReg = reg[tagKey.registry] ?: return emptyList()
-    val streamed = typedReg.streamTagsAndEntries().filter {
+    val streamed = typedReg.tags.filter {
         tagKey == it.first
     }.map {
         it.second.toList().map { re ->
@@ -135,11 +148,11 @@ fun <T> getRegistryTags(reg: DynamicRegistryManager, tagKey: TagKey<T>): List<T>
     return streamed
 }
 
-val KambrikMsg.ctx: MinecraftClient
-    get() = MinecraftClient.getInstance()
+val KambrikMsg.ctx: Minecraft
+    get() = Minecraft.getInstance()
 
-fun ServerPlayerEntity.iterateBountyStacks(func: BountyStack.() -> Unit) {
-    inventory.main.filter {
+fun ServerPlayer.iterateBountyStacks(func: BountyStack.() -> Unit) {
+    inventory.items.filter {
         it.item is BountyItem
     }.map { BountyStack(it) }.forEach(func)
 }
@@ -153,37 +166,31 @@ fun Brain<*>.ensureMemoryModules(memoryList: List<MemoryModuleType<*>>) {
     }
 }
 
-fun ServerPlayerEntity.openHandledScreenSimple(screenName: Text, handlerFactory: ScreenHandlerFactory): OptionalInt {
-    return openHandledScreen(
-        SimpleNamedScreenHandlerFactory(
-            handlerFactory, screenName
-        )
-    )
+fun ServerPlayer.openSimpleMenu(screenName: Component, handlerFactory: MenuConstructor): OptionalInt {
+    return openMenu(SimpleMenuProvider(handlerFactory, screenName))
 }
 
-fun VillagerEntity.checkOnBoard(boardPos: BlockPos) {
+fun Villager.checkOnBoard(boardPos: BlockPos) {
     // Inject memory into memory map, else remembrance will fail
     brain.ensureMemoryModules(listOf(
         BountifulContent.MEM_MODULE_NEAREST_BOARD
     ))
     // Set up villager memory
-    brain.remember(
-        BountifulContent.MEM_MODULE_NEAREST_BOARD, GlobalPos.create(
-        world.registryKey, boardPos
+    brain.setMemory(
+        BountifulContent.MEM_MODULE_NEAREST_BOARD, GlobalPos.of(
+        level().dimension(), boardPos
     ))
 }
 
-fun VillagerEntity.hackyGiveTradeExperience(amt: Int) {
-    trade(
-        TradeOffer(TradedItem(Items.AIR), ItemStack.EMPTY, 1, amt, 1f)
-    )
+fun Villager.hackyGiveTradeExperience(amt: Int) {
+    notifyTrade(MerchantOffer(ItemCost(Items.AIR), ItemStack.EMPTY, 1, amt, 1f))
 }
 
-val ServerPlayerEntity.currentBoardInteracting: BoardBlockEntity?
+val ServerPlayer.currentBoardInteracting: BoardBlockEntity?
     get() {
-        val shPos = (currentScreenHandler as? BoardScreenHandler)?.inventory?.pos
+        val shPos = (containerMenu as? BoardScreenHandler)?.container?.pos
         shPos?.run {
-            serverWorld.getBlockEntity(this)?.let {
+            serverLevel().getBlockEntity(this)?.let {
                 return (it as? BoardBlockEntity)
             }
         }

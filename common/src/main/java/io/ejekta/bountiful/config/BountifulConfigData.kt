@@ -6,9 +6,9 @@ import io.ejekta.kambrik.text.textLiteral
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import me.shedaniel.clothconfig2.api.ConfigBuilder
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gui.screen.Screen
-import net.minecraft.text.Text
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.screens.Screen
+import net.minecraft.network.chat.Component
 
 @Serializable
 class BountifulConfigData {
@@ -67,17 +67,17 @@ class BountifulConfigData {
 
     fun buildScreen(): Screen {
         val builder = ConfigBuilder.create()
-            .setParentScreen(MinecraftClient.getInstance().currentScreen)
-            .setTitle(Text.literal("Bountiful"))
+            .setParentScreen(Minecraft.getInstance().screen)
+            .setTitle(Component.literal("Bountiful"))
             .setSavingRunnable(::onSave)
 
         val creator = builder.entryBuilder()
 
-        val generalCat = builder.getOrCreateCategory(Text.literal("General"))
+        val generalCat = builder.getOrCreateCategory(Component.literal("General"))
 
         generalCat.addEntry(
             creator.startStrList(
-                Text.literal("Excluded data paths"),
+                Component.literal("Excluded data paths"),
                 general.dataPackExclusions
             ).setDefaultValue {
                 listOf(
@@ -86,10 +86,10 @@ class BountifulConfigData {
                     "bounty_decrees/other/*"
                 )
             }.setTooltip(
-                Text.literal("A list of data paths that should be excluded from loading")
+                Component.literal("A list of data paths that should be excluded from loading")
             ).setSaveConsumer {
                 general.dataPackExclusions = it
-            }.setAddButtonTooltip(Text.literal("Adds a new exclusion rule. "))
+            }.setAddButtonTooltip(Component.literal("Adds a new exclusion rule. "))
                 .build()
         )
 
@@ -110,27 +110,27 @@ class BountifulConfigData {
         )
 
 
-        val boardCat = builder.getOrCreateCategory(Text.literal("General - Board"))
+        val boardCat = builder.getOrCreateCategory(Component.literal("General - Board"))
 
         boardCat.addEntry(
             creator.startIntField(
                 textLiteral("Board Update Frequency"),
                 board.updateFrequencySecs
             ).setDefaultValue(45).setTooltip(
-                Text.literal("How often (in seconds) new bounties are added/removed")
+                Component.literal("How often (in seconds) new bounties are added/removed")
             ).setSaveConsumer {
                 board.updateFrequencySecs = it
             }.build()
         )
 
-        val bountyCat = builder.getOrCreateCategory(Text.literal("General - Bounty"))
+        val bountyCat = builder.getOrCreateCategory(Component.literal("General - Bounty"))
 
         bountyCat.addEntry(
             creator.startBooleanToggle(
-                Text.literal("Expiry Timers"),
+                Component.literal("Expiry Timers"),
                 bounty.shouldHaveTimersAndExpire
             ).setDefaultValue(true).setTooltip(
-                Text.literal("Whether bounties should have a timer and expire")
+                Component.literal("Whether bounties should have a timer and expire")
             ).setSaveConsumer {
                 bounty.shouldHaveTimersAndExpire = it
             }.build()
@@ -138,10 +138,10 @@ class BountifulConfigData {
 
         bountyCat.addEntry(
             creator.startBooleanToggle(
-                Text.literal("Breakable Boards"),
+                Component.literal("Breakable Boards"),
                 board.canBreak
             ).setDefaultValue(true).setTooltip(
-                Text.literal("Whether boards should be breakable or not")
+                Component.literal("Whether boards should be breakable or not")
             ).setSaveConsumer {
                 board.canBreak = it
             }.build()
@@ -149,11 +149,11 @@ class BountifulConfigData {
 
         bountyCat.addEntry(
             creator.startIntSlider(
-                Text.literal("Objective Requirement Multiplier"),
+                Component.literal("Objective Requirement Multiplier"),
                 bounty.objectiveDifficultyModifierPercent,
                 -50, 100
             ).setDefaultValue(0).setTooltip(
-                Text.literal("Makes new bounties this percent more/less expensive, objective-wise")
+                Component.literal("Makes new bounties this percent more/less expensive, objective-wise")
             ).setSaveConsumer {
                 bounty.objectiveDifficultyModifierPercent = it
             }.setTextGetter {
@@ -163,10 +163,10 @@ class BountifulConfigData {
 
         bountyCat.addEntry(
             creator.startBooleanToggle(
-                Text.literal("Allow Decree Mixing"),
+                Component.literal("Allow Decree Mixing"),
                 bounty.allowDecreeMixing
             ).setDefaultValue(true).setTooltip(
-                Text.literal("Whether all board decrees are considered when generating a bounty")
+                Component.literal("Whether all board decrees are considered when generating a bounty")
             ).setSaveConsumer {
                 bounty.allowDecreeMixing = it
             }.build()
@@ -174,11 +174,11 @@ class BountifulConfigData {
 
         bountyCat.addEntry(
             creator.startIntSlider(
-                Text.literal("Max Number of Rewards"),
+                Component.literal("Max Number of Rewards"),
                 bounty.maxNumRewards,
                 1, 4
             ).setDefaultValue(2).setTooltip(
-                Text.literal("Determines the max number of rewards that will be in a bounty")
+                Component.literal("Determines the max number of rewards that will be in a bounty")
             ).setSaveConsumer {
                 bounty.maxNumRewards = it
             }.setTextGetter {
@@ -188,10 +188,10 @@ class BountifulConfigData {
 
         bountyCat.addEntry(
             creator.startBooleanToggle(
-                Text.literal("Reverse Entry Matching Algorithm"),
+                Component.literal("Reverse Entry Matching Algorithm"),
                 bounty.reverseMatchingAlgorithm
             ).setDefaultValue(false).setTooltip(
-                Text.literal("Setting this to true reverses the generation algorithm")
+                Component.literal("Setting this to true reverses the generation algorithm")
             ).setSaveConsumer {
                 bounty.reverseMatchingAlgorithm = it
             }.build()
@@ -199,24 +199,24 @@ class BountifulConfigData {
 
         bountyCat.addEntry(
             creator.startIntSlider(
-                Text.literal("Bonus Time"),
+                Component.literal("Bonus Time"),
                 bounty.flatBonusTimePerBountyInSecs,
                 0, 3600
             ).setDefaultValue(0).setTooltip(
-                Text.literal("How much bonus time is given to bounties, in seconds")
+                Component.literal("How much bonus time is given to bounties, in seconds")
             ).setSaveConsumer {
                 bounty.flatBonusTimePerBountyInSecs = it
             }.build()
         )
 
-        val clientCat = builder.getOrCreateCategory(Text.literal("Client"))
+        val clientCat = builder.getOrCreateCategory(Component.literal("Client"))
 
         clientCat.addEntry(
             creator.startBooleanToggle(
-                Text.literal("Completion Toast Messages"),
+                Component.literal("Completion Toast Messages"),
                 client.showCompletionToast
             ).setDefaultValue(true).setTooltip(
-                Text.literal("Whether toast messages should appear upon bounty completion")
+                Component.literal("Whether toast messages should appear upon bounty completion")
             ).setSaveConsumer {
                 client.showCompletionToast = it
             }.build()
@@ -224,23 +224,23 @@ class BountifulConfigData {
 
         clientCat.addEntry(
             creator.startBooleanToggle(
-                Text.literal("Advanced Debug Tooltips"),
+                Component.literal("Advanced Debug Tooltips"),
                 client.advancedDebugTooltips
             ).setDefaultValue(false).setTooltip(
-                Text.literal("Whether advanced tooltips should show debug information")
+                Component.literal("Whether advanced tooltips should show debug information")
             ).setSaveConsumer {
                 client.advancedDebugTooltips = it
             }.build()
         )
 
-        val chaosCat = builder.getOrCreateCategory(Text.literal("Chaos Mode"))
+        val chaosCat = builder.getOrCreateCategory(Component.literal("Chaos Mode"))
 
         chaosCat.addEntry(
             creator.startBooleanToggle(
-                Text.literal("Enable Chaos Mode (Experimental)"),
+                Component.literal("Enable Chaos Mode (Experimental)"),
                 chaos.enabled
             ).setDefaultValue(false).setTooltip(
-                Text.literal("Whether chaos mode is enabled. Will override all base and config data.")
+                Component.literal("Whether chaos mode is enabled. Will override all base and config data.")
             ).setSaveConsumer {
                 chaos.enabled = it
                 chaosMode = if (it) {

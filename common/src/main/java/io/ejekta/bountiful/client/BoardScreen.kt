@@ -10,24 +10,24 @@ import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.kambrik.gui.draw.KGui
 import io.ejekta.kambrik.gui.draw.widgets.KListWidget
 import io.ejekta.kambrik.gui.draw.widgets.KScrollbarVertical
-import io.ejekta.kambrik.gui.screen.KambrikHandledScreen
-import net.minecraft.client.gui.DrawContext
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.item.ItemStack
-import net.minecraft.screen.ScreenHandler
-import net.minecraft.text.Text
-import net.minecraft.util.Identifier
+import io.ejekta.kambrik.gui.screen.KambrikContainerScreen
+import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.inventory.AbstractContainerMenu
+import net.minecraft.world.item.ItemStack
 
 
-class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Text) :
-    KambrikHandledScreen<ScreenHandler>(handler, inventory, title) {
+class BoardScreen(handler: AbstractContainerMenu, inventory: Inventory, title: Component) :
+    KambrikContainerScreen<AbstractContainerMenu>(handler, inventory, title) {
 
     val boardHandler: BoardScreenHandler
-        get() = handler as BoardScreenHandler
+        get() = menu as BoardScreenHandler
 
     init {
-        backgroundWidth = 348
-        backgroundHeight = 165
+        imageWidth = 348
+        imageHeight = 165
     }
 
     private val bgGui = kambrikGui {
@@ -59,8 +59,8 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
             val percentDone = (levelData.second.toDouble() / levelData.third * 100).toInt()
 
             // Selection highlight on selected stack
-            if (!ItemStack.areEqual(boardHandler.inventory.selected(), ItemStack.EMPTY)) {
-                boardHandler.inventory.selectedIndex?.let {
+            if (!ItemStack.matches(boardHandler.container.selected(), ItemStack.EMPTY)) {
+                boardHandler.container.selectedIndex?.let {
                     offset(179 + ((it % 7) * 18), 16 + ((it / 7) * 18)) {
                         img(SELECTOR, 20, 20)
                         offset(2, 2) {
@@ -105,7 +105,7 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
             }
 
             // GUI Title
-            textCentered(titleX - 53, titleY + 1) {
+            textCentered(titleLabelX - 53, titleLabelY + 1) {
                 color = 0xEADAB5
                 add(title)
             }
@@ -125,29 +125,29 @@ class BoardScreen(handler: ScreenHandler, inventory: PlayerInventory, title: Tex
 
     val fgGui = drawGui()
 
-    override fun onDrawBackground(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun onDrawBackground(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         // do nothing
     }
 
-    override fun onDrawForeground(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun onDrawForeground(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         fgGui.draw(context, mouseX, mouseY, delta)
     }
 
-    override fun drawBackground(context: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
-        bgGui.draw(context, mouseX, mouseY, delta)
+    override fun renderBg(pGuiGraphics: GuiGraphics, pPartialTick: Float, pMouseX: Int, pMouseY: Int) {
+        bgGui.draw(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
     }
 
     override fun init() {
         super.init()
-        titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2
+        titleLabelX = (imageWidth - font.width(title)) / 2
     }
 
     companion object {
         private val TEXTURE = Bountiful.id("board_bg")
         private val SELECTOR = Bountiful.id("selector")
-        private val SCROLLER = Identifier.of("container/villager/scroller")
-        private val XP_FG = Identifier.of("container/villager/experience_bar_current")
-        private val XP_BG = Identifier.of("container/villager/experience_bar_background")
+        private val SCROLLER = ResourceLocation.parse("container/villager/scroller")
+        private val XP_FG = ResourceLocation.parse("container/villager/experience_bar_current")
+        private val XP_BG = ResourceLocation.parse("container/villager/experience_bar_background")
     }
 }
 

@@ -1,18 +1,16 @@
 package io.ejekta.bountiful.content
 
 import com.google.common.collect.ImmutableList
-import io.ejekta.bountiful.components.DecreeData
 import io.ejekta.bountiful.content.item.DecreeItem
 import io.ejekta.bountiful.content.villager.WalkToBoardTask
-import net.minecraft.entity.ai.brain.task.Task
-import net.minecraft.entity.passive.VillagerEntity
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.ItemStack
-import net.minecraft.screen.AnvilScreenHandler
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.village.VillagerProfession
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.ai.behavior.BehaviorControl
+import net.minecraft.world.entity.npc.Villager
+import net.minecraft.world.entity.npc.VillagerProfession
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.inventory.AnvilMenu
+import net.minecraft.world.item.ItemStack
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
-import java.util.*
 import com.mojang.datafixers.util.Pair as MojangPair
 
 object MixinHelper {
@@ -20,7 +18,7 @@ object MixinHelper {
     fun injectNewTasks(
         profession: VillagerProfession,
         speed: Float,
-        cir: CallbackInfoReturnable<ImmutableList<MojangPair<Int, out Task<in VillagerEntity?>?>>>
+        cir: CallbackInfoReturnable<ImmutableList<MojangPair<Int, out BehaviorControl<in Villager?>?>>>
     ) {
         val options = cir.returnValue.toMutableList()
         options.add(
@@ -32,9 +30,9 @@ object MixinHelper {
         cir.setReturnValue(ImmutableList.copyOf(options))
     }
 
-    fun modifyAnvilResults(handler: AnvilScreenHandler) {
-        val inA = handler.input.getStack(0)
-        val inB = handler.input.getStack(1)
+    fun modifyAnvilResults(handler: AnvilMenu) {
+        val inA = handler.inputSlots.getItem(0)
+        val inB = handler.inputSlots.getItem(1)
         if (!inA.isEmpty && inA.item is DecreeItem && !inB.isEmpty && inB.item is DecreeItem) {
             val dataA = inA[BountifulContent.DECREE_DATA] ?: return
             val dataB = inB[BountifulContent.DECREE_DATA] ?: return
@@ -46,18 +44,18 @@ object MixinHelper {
             val combined = dataA.copy(ids = dataA.ids + dataB.ids)
             val decreeProto = ItemStack(BountifulContent.DECREE_ITEM)
             decreeProto[BountifulContent.DECREE_DATA] = combined
-            handler.levelCost.set(combined.ids.size * 3 - 1)
-            handler.output.setStack(0, decreeProto)
+            handler.cost.set(combined.ids.size * 3 - 1)
+            handler.resultSlots.setItem(0, decreeProto)
         }
     }
 
-    fun takeAnvilResults(playerEntity: PlayerEntity, stack: ItemStack, handler: AnvilScreenHandler) {
+    fun takeAnvilResults(playerEntity: Player, stack: ItemStack, handler: AnvilMenu) {
         // This is really hacky; stack enters as the decree but count of 0, so getItem returns air unless we
         // temporarily increment and then reset. Anvil never seems to use this variable, but we reset it just to be safe.
         val currCount = stack.count
-        stack.increment(1)
+        stack.grow(1)
         if (stack.item is DecreeItem) {
-            (playerEntity as? ServerPlayerEntity)?.run { BountifulContent.Triggers.PRINTING_PRESS.trigger(this) }
+            (playerEntity as? ServerPlayer)?.run { BountifulContent.Triggers.PRINTING_PRESS.trigger(this) }
         }
         stack.count = currCount
     }

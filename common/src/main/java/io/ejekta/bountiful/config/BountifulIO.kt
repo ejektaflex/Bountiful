@@ -10,8 +10,8 @@ import io.ejekta.kambrik.ext.jvm.ensured
 import io.ejekta.kambrikx.file.KambrikConfigFile
 import io.ejekta.kambrikx.file.KambrikParseFailMode
 import net.minecraft.SharedConstants
-import net.minecraft.resource.ResourceManager
-import net.minecraft.resource.ResourceType
+import net.minecraft.server.packs.PackType
+import net.minecraft.server.packs.resources.ResourceManager
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.zip.ZipEntry
@@ -181,7 +181,7 @@ object BountifulIO {
 
         // mcmeta creation
 
-        val resVersion = SharedConstants.getGameVersion().getResourceVersion(ResourceType.SERVER_DATA)
+        val resVersion = SharedConstants.getCurrentVersion().getPackVersion(PackType.SERVER_DATA)
 
         tmpSpot.resolve("pack.mcmeta").writeLines(listOf(
             "{",

@@ -2,12 +2,13 @@
 	"required": true,
 	"minVersion": "0.8",
 	"package": "io.ejekta.bountiful.mixin",
-	"compatibilityLevel": "JAVA_8",
+	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"BountifulAnvilSHMixin",
+		"BountifulAnvilMenuMixin",
 		"BountifulTaskMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
-	}
+	},
+	"refmap": "bountiful.refmap.json"
 }

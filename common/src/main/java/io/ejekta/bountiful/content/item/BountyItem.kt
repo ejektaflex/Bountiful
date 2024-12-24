@@ -3,63 +3,60 @@ package io.ejekta.bountiful.content.item
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.components.BountyStack
 import io.ejekta.bountiful.config.BountifulIO
-import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.kambrik.bridge.Kambridge
-import net.minecraft.client.MinecraftClient
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipType
-import net.minecraft.server.world.ServerWorld
-import net.minecraft.text.Text
-import net.minecraft.util.Formatting
-import net.minecraft.world.World
+import net.minecraft.ChatFormatting
+import net.minecraft.client.Minecraft
+import net.minecraft.network.chat.Component
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.TooltipFlag
 import java.util.*
 
 class BountyItem : Item(
-    Settings().maxCount(1).fireproof()
+    Properties().stacksTo(1).fireResistant()
 ) {
 
-    override fun getName(stack: ItemStack): Text {
+    override fun getName(stack: ItemStack): Component {
         if (Kambridge.isOnServer()) {
-            return Text.translatable("bountiful.bounty")
+            return Component.translatable("bountiful.bounty")
         }
         val info = BountyStack(stack).info
-        var text = Text.translatable(info.rarity.name.lowercase()
+        var text = Component.translatable(info.rarity.name.lowercase()
             // Capitalizing
             .replaceFirstChar {
                 if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
-            } + " Bounty ").formatted(info.rarity.color)
+            } + " Bounty ").withStyle(info.rarity.color)
         if (info.rarity == BountyRarity.LEGENDARY) {
-            text = text.formatted(Formatting.BOLD)
+            text = text.withStyle(ChatFormatting.BOLD)
         }
         if (BountifulIO.configData.bounty.shouldHaveTimersAndExpire) {
             text = text.append(
-                Text.literal("(")
-                    .append(info.formattedTimeLeft(MinecraftClient.getInstance().world!!))
-                    .append(Text.literal(")"))
-                    .formatted(Formatting.WHITE)
+                Component.literal("(")
+                    .append(info.formattedTimeLeft(Minecraft.getInstance().level!!))
+                    .append(Component.literal(")"))
+                    .withStyle(ChatFormatting.WHITE)
             )
         }
         return text
     }
 
-    fun tryCashIn(player: PlayerEntity, stack: ItemStack): Boolean {
+    fun tryCashIn(player: Player, stack: ItemStack): Boolean {
         return BountyStack(stack).tryCashIn(player)
     }
 
-    override fun appendTooltip(
-        stack: ItemStack,
-        context: TooltipContext,
-        tooltip: MutableList<Text>?,
-        type: TooltipType
+    override fun appendHoverText(
+        pStack: ItemStack,
+        pContext: TooltipContext,
+        pTooltipComponents: MutableList<Component>,
+        pTooltipFlag: TooltipFlag
     ) {
         if (Kambridge.isOnServer()) {
             return
         }
-        val tips = BountyStack(stack).genTooltip(Kambridge.isOnServer(), type)
-        tooltip?.addAll(tips)
-        super.appendTooltip(stack, context, tooltip, type)
+        val tips = BountyStack(pStack).genTooltip(Kambridge.isOnServer(), pTooltipFlag)
+        pTooltipComponents.addAll(tips)
+        super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag)
     }
 
 }

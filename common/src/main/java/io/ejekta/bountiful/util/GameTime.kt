@@ -1,28 +1,28 @@
 package io.ejekta.bountiful.util
 
-import net.minecraft.text.Text
-import net.minecraft.util.Formatting
+import net.minecraft.ChatFormatting
+import net.minecraft.network.chat.Component
 
 object GameTime {
 
-    fun formatTimeExpirable(secs: Long): Text {
+    fun formatTimeExpirable(secs: Long): Component {
         return if (secs <= 0) {
-            Text.translatable("bountiful.tooltip.expired").formatted(Formatting.RED)
+            Component.translatable("bountiful.tooltip.expired").withStyle(ChatFormatting.RED)
         } else {
             formatTickTime(secs)
         }
     }
 
-    private fun formatTickTime(secs: Long): Text {
+    private fun formatTickTime(secs: Long): Component {
         val min = secs / 60
         val sec = secs % 60
         return if (min <= 0) {
-            Text.literal("$sec").append(Text.translatable("bountiful.ui.shorthand.seconds"))
+            Component.literal("$sec").append(Component.translatable("bountiful.ui.shorthand.seconds"))
         } else {
-            Text.literal("$min").append(
-                Text.translatable("bountiful.ui.shorthand.minutes")
-            ).append(Text.literal(" $sec"))
-                .append(Text.translatable("bountiful.ui.shorthand.seconds"))
+            Component.literal("$min").append(
+                Component.translatable("bountiful.ui.shorthand.minutes")
+            ).append(Component.literal(" $sec"))
+                .append(Component.translatable("bountiful.ui.shorthand.seconds"))
         }
     }
 

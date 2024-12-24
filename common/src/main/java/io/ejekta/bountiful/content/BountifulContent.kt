@@ -1,6 +1,7 @@
 package io.ejekta.bountiful.content
 
 import com.mojang.serialization.Codec
+import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.advancement.SimpleCriterion
 import io.ejekta.bountiful.components.*
 import io.ejekta.bountiful.config.JsonFormats
@@ -13,14 +14,21 @@ import io.ejekta.bountiful.content.item.DecreeItem
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.data.Pool
 import io.ejekta.kambrik.registration.KambrikAutoRegistrar
-import net.minecraft.component.DataComponentTypes
-import net.minecraft.entity.ai.brain.MemoryModuleType
-import net.minecraft.item.BlockItem
-import net.minecraft.item.Item
-import net.minecraft.registry.Registries
-import net.minecraft.stat.StatFormatter
-import net.minecraft.util.math.GlobalPos
+import net.minecraft.core.GlobalPos
+import net.minecraft.core.Holder
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceKey
+import net.minecraft.stats.StatFormatter
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.village.poi.PoiType
+import net.minecraft.world.entity.ai.village.poi.PoiTypes
+import net.minecraft.world.entity.npc.Villager
+import net.minecraft.world.item.BlockItem
+import net.minecraft.world.item.Item
+import net.minecraft.world.level.block.state.BlockState
 import java.util.*
+import java.util.function.BiPredicate
 
 object BountifulContent : KambrikAutoRegistrar {
 
@@ -42,7 +50,7 @@ object BountifulContent : KambrikAutoRegistrar {
 
     val BOARD = "bountyboard" forBlock { BoardBlock() }
 
-    val BOARD_ITEM by "bountyboard" forItem { BlockItem(BOARD.value, Item.Settings().maxCount(1).fireproof()) }
+    val BOARD_ITEM by "bountyboard" forItem { BlockItem(BOARD.value, Item.Properties().stacksTo(1).fireResistant()) }
 
     val BOARD_ENTITY by "board-be".forBlockEntity(BOARD, ::BoardBlockEntity)
 
@@ -51,7 +59,7 @@ object BountifulContent : KambrikAutoRegistrar {
     val ANALYZER_SCREEN_HANDLER by "analyzer" forScreen ::AnalyzerScreenHandler
 
     val MEM_MODULE_NEAREST_BOARD_INSTANCE = "nearest_bounty_board".forRegistration(
-        Registries.MEMORY_MODULE_TYPE
+        BuiltInRegistries.MEMORY_MODULE_TYPE
     ) { MemoryModuleType(Optional.empty<Codec<GlobalPos>>()) } as Lazy<MemoryModuleType<GlobalPos>>
 
     val MEM_MODULE_NEAREST_BOARD by MEM_MODULE_NEAREST_BOARD_INSTANCE
@@ -73,13 +81,13 @@ object BountifulContent : KambrikAutoRegistrar {
     }
 
     object Triggers {
-        val BOUNTY_COMPLETED by "bounty_completed".forCriterion { SimpleCriterion() }
-        val RUSH_ORDER by "rush_order".forCriterion { SimpleCriterion() }
-        val PROCRASTINATOR by "procrastinator".forCriterion { SimpleCriterion() }
-        val FETCH_QUEST by "fetch_quest".forCriterion { SimpleCriterion() }
-        val DECREE_PLACED by "decree_placed".forCriterion { SimpleCriterion() }
-        val ALL_DECREES_PLACED by "all_decrees_placed".forCriterion { SimpleCriterion() }
-        val PRINTING_PRESS by "printing_press".forCriterion { SimpleCriterion() }
+        val BOUNTY_COMPLETED by "bounty_completed".forCriterionTrigger { SimpleCriterion() }
+        val RUSH_ORDER by "rush_order".forCriterionTrigger { SimpleCriterion() }
+        val PROCRASTINATOR by "procrastinator".forCriterionTrigger { SimpleCriterion() }
+        val FETCH_QUEST by "fetch_quest".forCriterionTrigger { SimpleCriterion() }
+        val DECREE_PLACED by "decree_placed".forCriterionTrigger { SimpleCriterion() }
+        val ALL_DECREES_PLACED by "all_decrees_placed".forCriterionTrigger { SimpleCriterion() }
+        val PRINTING_PRESS by "printing_press".forCriterionTrigger { SimpleCriterion() }
     }
 
 
@@ -88,17 +96,18 @@ object BountifulContent : KambrikAutoRegistrar {
         Triggers
     }
 
-//    private fun String.forVillagerPoi(memModule: Lazy<MemoryModuleType<GlobalPos>>, stateSet: Set<BlockState>, tickets: Int, searchDistance: Int): RegistryKey<PointOfInterestType>? {
-//        val registryKey = RegistryKey.of(RegistryKeys.POINT_OF_INTEREST_TYPE, Bountiful.id(this))
-//        val poiMap = VillagerEntity.POINTS_OF_INTEREST.toMutableMap()
-//        val bio: BiPredicate<VillagerEntity, RegistryEntry<PointOfInterestType>> = BiPredicate { vill, poiEntry ->
-//            poiEntry.matchesKey(registryKey)
-//        }
-//        poiMap[memModule.value] = bio
-//        VillagerEntity.POINTS_OF_INTEREST = poiMap
-//        PointOfInterestTypes.register(Registries.POINT_OF_INTEREST_TYPE, registryKey, stateSet, tickets, searchDistance)
-//        return registryKey
-//    }
+    private fun String.forVillagerPoi(memModule: Lazy<MemoryModuleType<GlobalPos>>, stateSet: Set<BlockState>, tickets: Int, searchDistance: Int): ResourceKey<PoiType>? {
+        val registryKey = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, Bountiful.id(this))
+        val poiMap = Villager.POI_MEMORIES.toMutableMap()
+        val bio: BiPredicate<Villager, Holder<PoiType>> = BiPredicate { vill, poiType ->
+            poiType.`is`(registryKey)
+        }
+        poiMap[memModule.value] = bio
+        // The following two lines need an AW/AT
+        Villager.POI_MEMORIES = poiMap
+        PoiTypes.register(BuiltInRegistries.POINT_OF_INTEREST_TYPE, registryKey, stateSet, tickets, searchDistance)
+        return registryKey
+    }
 //
 //    private fun String.forSimplePoi(memModule: Lazy<MemoryModuleType<GlobalPos>>)
 

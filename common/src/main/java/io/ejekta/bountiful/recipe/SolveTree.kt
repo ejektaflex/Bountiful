@@ -1,7 +1,7 @@
-package com.example.recipe
+package io.ejekta.bountiful.recipe
 
-import net.minecraft.item.ItemStack
-import net.minecraft.recipe.RecipeType
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.crafting.RecipeType
 
 class SolveTree(
     val value: ItemStack,

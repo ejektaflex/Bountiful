@@ -2,17 +2,10 @@ package io.ejekta.bountiful.components
 
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.config.BountifulIO
-import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.util.GameTime
 import kotlinx.serialization.Serializable
-import net.minecraft.client.MinecraftClient
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipType
-import net.minecraft.text.MutableText
-import net.minecraft.text.Text
-import net.minecraft.util.Formatting
-import net.minecraft.world.World
+import net.minecraft.network.chat.Component
+import net.minecraft.world.level.Level
 import kotlin.math.max
 
 @Serializable @JvmRecord
@@ -23,34 +16,33 @@ data class BountyInfo(
     val timePickedUp: Long
 ) {
 
-    fun timeLeftTicks(world: World): Long {
+    fun timeLeftTicks(level: Level): Long {
         return when (BountifulIO.configData.bounty.shouldHaveTimersAndExpire) {
-            true -> max(timeStarted - world.time + (timeToComplete * GameTime.TICK_RATE), 0L)
+            true -> max(timeStarted - level.gameTime + (timeToComplete * GameTime.TICK_RATE), 0L)
             false -> 1L
         }
     }
 
-    fun timeLeftSecs(world: World): Long {
-        return timeLeftTicks(world) / GameTime.TICK_RATE
+    fun timeLeftSecs(level: Level): Long {
+        return timeLeftTicks(level) / GameTime.TICK_RATE
     }
 
-    fun timeTakenTicks(world: World): Long {
-        return world.time - timePickedUp
+    fun timeTakenTicks(level: Level): Long {
+        return level.gameTime - timePickedUp
     }
 
-    fun timeTakenSecs(world: World): Long {
-        return timeTakenTicks(world) / GameTime.TICK_RATE
+    fun timeTakenSecs(level: Level): Long {
+        return timeTakenTicks(level) / GameTime.TICK_RATE
     }
 
     // ### Formatting ### //
 
-    fun formattedTimeLeft(world: World): Text {
-        return GameTime.formatTimeExpirable(timeLeftSecs(world))
+    fun formattedTimeLeft(level: Level): Component {
+        return GameTime.formatTimeExpirable(timeLeftSecs(level))
     }
 
     companion object {
         val EMPTY = BountyInfo(BountyRarity.COMMON, -1L, -1L, -1L)
     }
-
 
 }

@@ -2,16 +2,16 @@ package io.ejekta.bountiful
 
 import io.ejekta.bountiful.bounty.types.IBountyType
 import io.ejekta.kambrik.Kambrik
-import net.minecraft.registry.Registry
-import net.minecraft.registry.RegistryKey
-import net.minecraft.util.Identifier
+import net.minecraft.core.Registry
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
 
 class Bountiful {
     companion object {
         const val ID = "bountiful"
         const val nightly = false
-        fun id(str: String) = Identifier.of(ID, str)
+        fun id(str: String) = ResourceLocation.fromNamespaceAndPath(ID, str)
         val LOGGER = Kambrik.Logging.createLogger(ID)
-        val BOUNTY_LOGIC_REGISTRY_KEY: RegistryKey<Registry<IBountyType>> = RegistryKey.ofRegistry(id("logic_registry"))
+        val BOUNTY_LOGIC_REGISTRY_KEY: ResourceKey<Registry<IBountyType>> = ResourceKey.createRegistryKey(id("logic_registry"))
     }
 }

@@ -14,14 +14,14 @@ import io.ejekta.kambrik.gui.draw.KGuiDsl
 import io.ejekta.kambrik.gui.draw.KWidget
 import io.ejekta.kambrik.gui.draw.reactor.MouseReactor
 import io.ejekta.kambrik.text.textLiteral
-import net.minecraft.client.MinecraftClient
-import net.minecraft.entity.EntityType
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.SpawnGroup
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
-import net.minecraft.registry.Registries
-import net.minecraft.util.Identifier
+import net.minecraft.client.Minecraft
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.MobCategory
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 
 class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget {
 
@@ -29,13 +29,13 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
     override val height: Int = ButtonHeight
 
     fun getStack(): ItemStack {
-        return parent.boardHandler.inventory.getStack(bountyIndex)
+        return parent.boardHandler.container.getItem(bountyIndex)
     }
 
     private val reactor = MouseReactor().apply {
         onClickDown = { relX, relY, button ->
-            parent.boardHandler.inventory.select(bountyIndex)
-            SelectBounty(bountyIndex, MinecraftClient.getInstance().player!!.uuidAsString).sendToServer()
+            parent.boardHandler.container.select(bountyIndex)
+            SelectBounty(bountyIndex, Minecraft.getInstance().player!!.stringUUID).sendToServer()
         }
     }
 
@@ -51,8 +51,8 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
                 dsl { itemStackIcon(stack, x, y) }
             }
             BountyTypeRegistry.ITEM_TAG.id -> {
-                val world = MinecraftClient.getInstance().world ?: return
-                val frameTime = (world.time / 30L).toInt()
+                val world = Minecraft.getInstance().level ?: return
+                val frameTime = (world.gameTime / 30L).toInt()
                 val options = BountyTypeItemTag.getItems(world, entry).map { ItemStack(it) }.takeUnless { it.isEmpty() } ?: return
                 val frame = frameTime % options.size
                 dsl {
@@ -62,7 +62,8 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
             BountyTypeRegistry.ENTITY.id -> {
                 val entityType = BountyTypeEntity.getEntityType(entry)
 
-                if (entityType.spawnGroup != SpawnGroup.CREATURE && entityType.spawnGroup != SpawnGroup.MONSTER) {
+                // We need to limit to living entities if at all possible, just a sanity check
+                if (entityType.category != MobCategory.CREATURE && entityType.category != MobCategory.MONSTER) {
                     return
                 }
 
@@ -83,7 +84,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
     private fun renderEntry(dsl: KGuiDsl, entry: BountyDataEntry, x: Int, y: Int, isReward: Boolean = false) {
 
         if (entry.icon != null) {
-            val itemForIcon = Registries.ITEM.get(entry.icon)
+            val itemForIcon = BuiltInRegistries.ITEM.get(entry.icon)
             dsl { itemStackIcon(ItemStack(itemForIcon), x, y) }
         } else {
             renderEntryBasedOnLogic(dsl, entry, x, y, isReward)
@@ -93,24 +94,24 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
         dsl {
             val textToShow = textLiteral(entry.amount.toString()) {
                 color = if (isReward) {
-                    entry.rarity.color.colorValue ?: 0xFFFFFF
+                    entry.rarity.color.color ?: 0xFFFFFF
                 } else {
                     0xFFFFFF
                 }
             }
-            val tr = MinecraftClient.getInstance().textRenderer
-            textImmediate(x + 17 - tr.getWidth(textToShow.string) * 2, y + 9, textToShow)
+            val tr = Minecraft.getInstance().font
+            textImmediate(x + 17 - tr.width(textToShow.string) * 2, y + 9, textToShow)
         }
         // Entry tooltip
         dsl {
             onHover(x, y, 18, 18) {
-                tooltip(entry.textOnBoardSidebar(MinecraftClient.getInstance().player!!))
+                tooltip(entry.textOnBoardSidebar(Minecraft.getInstance().player!!))
             }
         }
     }
 
     private fun isSelected(): Boolean {
-        return ItemStack.areEqual(parent.boardHandler.inventory.getStack(-1), parent.boardHandler.inventory.getStack(bountyIndex))
+        return ItemStack.matches(parent.boardHandler.container.getItem(-1), parent.boardHandler.container.getItem(bountyIndex))
     }
 
     override fun onDraw(area: KGuiDsl.AreaDsl) {
@@ -151,7 +152,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
     }
 
     companion object {
-        val BUTTON = Identifier.of("widget/button")
+        val BUTTON = ResourceLocation.parse("widget/button")
         val ARROW = Bountiful.id("arrow")
 
         const val ButtonWidth = 160

@@ -5,11 +5,10 @@ import io.ejekta.bountiful.util.ctx
 import io.ejekta.kambrik.message.KambrikMsg
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import net.minecraft.client.toast.SystemToast
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.network.packet.CustomPayload
-import net.minecraft.sound.SoundEvent
-import net.minecraft.text.Text
+import net.minecraft.client.gui.components.toasts.SystemToast
+import net.minecraft.network.chat.Component
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.world.entity.player.Player
 
 @Serializable
 data class OnBountyComplete(
@@ -21,24 +20,18 @@ data class OnBountyComplete(
         runLocally(ctx.player!!)
     }
 
-    fun runLocally(player: PlayerEntity) {
+    fun runLocally(player: Player) {
         // Don't show toasts when in an inventory (to prevent toast spam when moving items related to bounties)
-        if (ctx.currentScreen == null && BountifulIO.configData.client.showCompletionToast) {
+        if (ctx.screen == null && BountifulIO.configData.client.showCompletionToast) {
             player.playSound(soundEvent, volume, pitch)
-            ctx.toastManager.add(
-                SystemToast.create(
-                    ctx,
-                    SystemToast.Type.PERIODIC_NOTIFICATION,
-                    Text.literal("Bounty Complete!"),
-                    Text.literal("Turn in at a Bounty Board!")
-                )
+
+            ctx.toasts.addToast(
+                SystemToast(
+                    SystemToast.SystemToastId.PERIODIC_NOTIFICATION,
+                    Component.translatable("bounty.toast.complete"), // Bounty Complete!
+                    Component.translatable("bounty.toast.complete.desc") // Turn in at a Bounty Board!
+                    )
             )
         }
-    }
-
-    override fun getId(): CustomPayload.Id<OnBountyComplete> = ID
-
-    companion object {
-        val ID = CustomPayload.id<OnBountyComplete>("bounty_complete")
     }
 }

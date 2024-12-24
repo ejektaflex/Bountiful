@@ -4,9 +4,9 @@ import io.ejekta.bountiful.data.Pool
 import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.kambrik.gui.draw.KGuiDsl
 import io.ejekta.kambrik.gui.draw.KWidget
-import net.minecraft.text.MutableText
-import net.minecraft.text.Text
-import net.minecraft.util.Formatting
+import net.minecraft.ChatFormatting
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import java.awt.Color
 
 class AnalyzerPoolWidget(val pool: Pool, maxWorth: Double, val pixSize: Int, val inHeight: Int) : KWidget {
@@ -72,21 +72,21 @@ class AnalyzerPoolWidget(val pool: Pool, maxWorth: Double, val pixSize: Int, val
                     val pixBin = (mouseX - currX) / pixSize
                     val res = stepMap[pixBin] ?: emptySet()
 
-                    val texts = mutableListOf<MutableText>()
+                    val texts = mutableListOf<MutableComponent>()
 
                     val worthLow = pixBin * binWidth
                     val worthHigh = (pixBin + 1) * binWidth
 
                     texts.add(
-                        Text.literal("Entries at worth range ${worthLow.toInt()}-${worthHigh.toInt()}: ${res.size}")
-                            .formatted(Formatting.GOLD)
+                        Component.literal("Entries at worth range ${worthLow.toInt()}-${worthHigh.toInt()}: ${res.size}")
+                            .withStyle(ChatFormatting.GOLD)
                     )
 
                     for (item in res) {
                         texts.add(
-                            Text.literal(item.id.substringAfter("${pool.id}.")).formatted(Formatting.GREEN)
+                            Component.literal(item.id.substringAfter("${pool.id}.")).withStyle(ChatFormatting.GREEN)
                                 .append(
-                                    Text.literal(" (${item.content})").formatted(item.rarity.color)
+                                    Component.literal(" (${item.content})").withStyle(item.rarity.color)
                                 )
                         )
                     }

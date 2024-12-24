@@ -2,31 +2,32 @@ package io.ejekta.bountiful.content.villager
 
 import com.google.common.collect.ImmutableMap
 import io.ejekta.bountiful.content.BountifulContent
-import net.minecraft.entity.ai.brain.Activity
-import net.minecraft.entity.ai.brain.MemoryModuleState
-import net.minecraft.entity.ai.brain.task.LookTargetUtil
-import net.minecraft.entity.ai.brain.task.MultiTickTask
-import net.minecraft.entity.passive.VillagerEntity
-import net.minecraft.server.world.ServerWorld
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.entity.ai.behavior.Behavior
+import net.minecraft.world.entity.ai.behavior.BehaviorUtils
+import net.minecraft.world.entity.ai.memory.MemoryStatus
+import net.minecraft.world.entity.npc.Villager
+import net.minecraft.world.entity.schedule.Activity
 import kotlin.jvm.optionals.getOrNull
 
 class WalkToBoardTask(val speed: Float) :
-    MultiTickTask<VillagerEntity?>(
+    Behavior<Villager?>(
         ImmutableMap.of(
             BountifulContent.MEM_MODULE_NEAREST_BOARD,
-            MemoryModuleState.VALUE_PRESENT
+            MemoryStatus.VALUE_PRESENT
         ), 1200
     ) {
-    override fun shouldRun(serverWorld: ServerWorld, villagerEntity: VillagerEntity?): Boolean {
-        return villagerEntity?.brain?.firstPossibleNonCoreActivity?.map { activity: Activity -> activity === Activity.IDLE || activity === Activity.WORK || activity === Activity.PLAY }
-            ?.orElse(true) ?: true
+    override fun checkExtraStartConditions(serverWorld: ServerLevel, villagerEntity: Villager?): Boolean {
+        return villagerEntity?.brain?.activeNonCoreActivity?.map {
+            activity: Activity -> activity === Activity.IDLE || activity === Activity.WORK || activity === Activity.PLAY
+        }?.orElse(true) ?: true
     }
 
-    override fun shouldKeepRunning(serverWorld: ServerWorld?, entity: VillagerEntity?, l: Long): Boolean {
-        val goalSpot = entity?.brain?.getOptionalMemory(BountifulContent.MEM_MODULE_NEAREST_BOARD)?.getOrNull()
+    override fun canStillUse(serverWorld: ServerLevel?, entity: Villager?, l: Long): Boolean {
+        val goalSpot = entity?.brain?.getMemoryInternal(BountifulContent.MEM_MODULE_NEAREST_BOARD)?.getOrNull()
 
         goalSpot?.let { globalPos ->
-            val dist = entity.blockPos.toCenterPos().distanceTo(globalPos.pos.toCenterPos())
+            val dist = entity.blockPosition().center.distanceTo(globalPos.pos.center)
             if (dist < 1.75) {
                 println("Close enough")
                 return false
@@ -36,11 +37,11 @@ class WalkToBoardTask(val speed: Float) :
         return true
     }
 
-    override fun keepRunning(serverWorld: ServerWorld?, entity: VillagerEntity?, l: Long) {
+    override fun tick(serverWorld: ServerLevel?, entity: Villager?, l: Long) {
         if (serverWorld != null && entity != null) {
-            val memPos = entity.brain.getOptionalRegisteredMemory(BountifulContent.MEM_MODULE_NEAREST_BOARD).getOrNull()?.pos
+            val memPos = entity.brain.getMemory(BountifulContent.MEM_MODULE_NEAREST_BOARD).getOrNull()?.pos
             memPos?.let {
-                LookTargetUtil.walkTowards(
+                BehaviorUtils.setWalkAndLookTargetMemories(
                     entity, it,
                     speed, 1
                 )
@@ -48,15 +49,15 @@ class WalkToBoardTask(val speed: Float) :
         }
     }
 
-    override fun finishRunning(serverWorld: ServerWorld?, entity: VillagerEntity?, l: Long) {
-        val goalSpot = entity?.brain?.getOptionalMemory(BountifulContent.MEM_MODULE_NEAREST_BOARD)?.getOrNull()
+    override fun stop(serverWorld: ServerLevel?, entity: Villager?, l: Long) {
+        val goalSpot = entity?.brain?.getMemoryInternal(BountifulContent.MEM_MODULE_NEAREST_BOARD)?.getOrNull()
 
         if (serverWorld != null && entity != null) {
             goalSpot?.let {
                 val boardEntity = serverWorld.getBlockEntity(it.pos, BountifulContent.BOARD_ENTITY).getOrNull()
                 boardEntity?.handleVillagerVisit(entity)
             }
-            entity.brain.forget(BountifulContent.MEM_MODULE_NEAREST_BOARD)
+            entity.brain.eraseMemory(BountifulContent.MEM_MODULE_NEAREST_BOARD)
         }
     }
 
@@ -65,6 +66,5 @@ class WalkToBoardTask(val speed: Float) :
 
     companion object {
         private const val RUN_TIME = 1200
-
     }
 }

@@ -2,10 +2,10 @@ package io.ejekta.bountiful.config
 
 import io.ejekta.bountiful.Bountiful
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
-import net.minecraft.resource.ResourceManager
+import net.minecraft.server.packs.resources.ResourceManager
 
 object BountifulReloadListener : SimpleSynchronousResourceReloadListener {
-    override fun reload(manager: ResourceManager) {
+    override fun onResourceManagerReload(manager: ResourceManager) {
         BountifulIO.doContentReload(manager)
     }
 

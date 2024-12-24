@@ -3,44 +3,44 @@
 package io.ejekta.bountiful.content.gui
 
 import io.ejekta.bountiful.content.BountifulContent
-import io.ejekta.kambrik.gui.screen.KambrikScreenHandler
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.inventory.SimpleInventory
-import net.minecraft.item.ItemStack
+import io.ejekta.kambrik.gui.screen.KambrikContainerMenu
+import net.minecraft.world.SimpleContainer
+import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 
 
 class AnalyzerScreenHandler @JvmOverloads constructor(
     syncId: Int,
-    playerInventory: PlayerInventory,
-    override var inventory: SimpleInventory
-) : KambrikScreenHandler<AnalyzerScreenHandler, SimpleInventory>(BountifulContent.ANALYZER_SCREEN_HANDLER, syncId) {
+    playerInventory: Inventory,
+    override var container: SimpleContainer
+) : KambrikContainerMenu<AnalyzerScreenHandler, SimpleContainer>(BountifulContent.ANALYZER_SCREEN_HANDLER, syncId) {
 
-    constructor(syncId: Int, playerInventory: PlayerInventory) : this(syncId, playerInventory,
-        SimpleInventory(SIZE)
+    constructor(syncId: Int, playerInventory: Inventory) : this(syncId, playerInventory,
+        SimpleContainer(SIZE)
     )
 
-    override fun canUse(player: PlayerEntity): Boolean {
-        return inventory.canPlayerUse(player)
+    override fun stillValid(player: Player): Boolean {
+        return container.stillValid(player)
     }
 
-    override fun onClosed(player: PlayerEntity) {
+    override fun removed(player: Player) {
         // return slot item to player, right? We don't want them to lose these items forever.
-        val leftover = inventory.removeStack(0)
-        player.inventory.offerOrDrop(leftover)
-        inventory.onClose(player)
-        super.onClosed(player)
+        val leftover = container.removeItemNoUpdate(0)
+        player.inventory.placeItemBackInInventory(leftover)
+        container.stopOpen(player)
+        super.removed(player)
     }
 
-    override fun quickMove(player: PlayerEntity, invSlot: Int): ItemStack {
+    override fun quickMoveStack(pPlayer: Player, invSlot: Int): ItemStack {
         return ItemStack.EMPTY
     }
 
     init {
-        checkSize(inventory, SIZE)
-        inventory.onOpen(playerInventory.player)
+        checkContainerSize(container, SIZE)
+        container.startOpen(playerInventory.player)
 
-        addSlot(AnalyzerDecreeSlot(inventory,  playerInventory.player, 0, 153, 18))
+        addSlot(AnalyzerDecreeSlot(container,  playerInventory.player, 0, 153, 18))
 
         //The player inventory
         makePlayerDefaultGrid(playerInventory, 9, 85)

@@ -5,51 +5,48 @@ import io.ejekta.bountiful.components.BountyStack
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.item.BountyItem
-import net.minecraft.block.BlockEntityProvider
-import net.minecraft.block.BlockRenderType
-import net.minecraft.block.BlockState
-import net.minecraft.block.BlockWithEntity
-import net.minecraft.block.entity.BlockEntity
-import net.minecraft.block.entity.BlockEntityTicker
-import net.minecraft.block.entity.BlockEntityType
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.ItemStack
-import net.minecraft.loot.context.LootContextParameterSet
-import net.minecraft.loot.context.LootContextParameters
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.sound.BlockSoundGroup
-import net.minecraft.util.Hand
-import net.minecraft.util.ItemActionResult
-import net.minecraft.util.hit.BlockHitResult
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.BlockView
-import net.minecraft.world.World
+import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.ItemInteractionResult
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.BaseEntityBlock
+import net.minecraft.world.level.block.EntityBlock
+import net.minecraft.world.level.block.RenderShape
+import net.minecraft.world.level.block.SoundType
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityTicker
+import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.storage.loot.LootParams
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams
+import net.minecraft.world.phys.BlockHitResult
 
 
-class BoardBlock : BlockWithEntity(
-    Settings.create().sounds(BlockSoundGroup.WOOD).hardness(3f).resistance(3600000f)
-), BlockEntityProvider {
+class BoardBlock : BaseEntityBlock(
+    Properties.of().sound(SoundType.WOOD).destroyTime(3f).explosionResistance(3600000f)
+), EntityBlock {
 
-    override fun getRenderType(state: BlockState?): BlockRenderType {
-        return BlockRenderType.MODEL
+    override fun getRenderShape(state: BlockState): RenderShape {
+        return RenderShape.MODEL
     }
 
     override fun <T : BlockEntity> getTicker(
-        world: World,
+        level: Level,
         state: BlockState?,
         type: BlockEntityType<T>
     ): BlockEntityTicker<T>? {
-        return boardTicker(world, type, BountifulContent.BOARD_ENTITY)
+        return boardTicker(level, type, BountifulContent.BOARD_ENTITY)
     }
 
-    override fun getDroppedStacks(
-        state: BlockState,
-        builder: LootContextParameterSet.Builder
-    ): MutableList<ItemStack> {
-        val blockEntity = builder.get(LootContextParameters.BLOCK_ENTITY) ?: return mutableListOf()
+    override fun getDrops(pState: BlockState, pParams: LootParams.Builder): MutableList<ItemStack> {
+        val blockEntity = pParams.getParameter(LootContextParams.BLOCK_ENTITY) ?: return mutableListOf()
         if (blockEntity.type == BountifulContent.BOARD_ENTITY) {
-            return super.getDroppedStacks(state, builder).map {
+            return super.getDrops(pState, pParams).map {
                 // TODO reimplement stack dropping for the board correctly
                 it//.also { blockEntity.setStackNbt(it) }
             }.toMutableList()
@@ -57,15 +54,15 @@ class BoardBlock : BlockWithEntity(
         return mutableListOf()
     }
 
-    override fun onPlaced(
-        world: World?,
+    override fun setPlacedBy(
+        world: Level?,
         pos: BlockPos?,
         state: BlockState?,
         placer: LivingEntity?,
         itemStack: ItemStack?
     ) {
-        super.onPlaced(world, pos, state, placer, itemStack)
-        if (world != null && pos != null && itemStack != null && !world.isClient) {
+        super.setPlacedBy(world, pos, state, placer, itemStack)
+        if (world != null && pos != null && itemStack != null && !world.isClientSide) {
             val blockEntity = world.getBlockEntity(pos, BountifulContent.BOARD_ENTITY)
             blockEntity.ifPresent {
                 // TODO reimplement board placing correctly
@@ -77,58 +74,59 @@ class BoardBlock : BlockWithEntity(
     }
 
     // Refuse to break the block if the config disallows it
-    override fun calcBlockBreakingDelta(
+    override fun getDestroyProgress(
         state: BlockState?,
-        player: PlayerEntity?,
-        world: BlockView?,
+        player: Player?,
+        world: BlockGetter?,
         pos: BlockPos?
     ): Float {
         return if (BountifulIO.configData.board.canBreak) {
-            super.calcBlockBreakingDelta(state, player, world, pos)
+            super.getDestroyProgress(state, player, world, pos)
         } else {
             0.0f
         }
     }
 
-    override fun getCodec(): MapCodec<out BlockWithEntity> {
-        return createCodec { bfs -> BoardBlock() }
+    override fun codec(): MapCodec<out BaseEntityBlock> {
+        return simpleCodec { _ -> BoardBlock() }
     }
 
-    override fun onUseWithItem(
+    override fun useItemOn(
         stack: ItemStack?,
         state: BlockState?,
-        world: World?,
-        pos: BlockPos?,
-        player: PlayerEntity?,
-        hand: Hand?,
+        world: Level,
+        pos: BlockPos,
+        player: Player?,
+        hand: InteractionHand,
         hit: BlockHitResult?
-    ): ItemActionResult {
-        (player as? ServerPlayerEntity)?.let {
-            if (!it.isSneaking) {
-                val holding = it.getStackInHand(hand)
+    ): ItemInteractionResult {
+        (player as? ServerPlayer)?.let {
+            if (!it.isShiftKeyDown) {
+                val holding = it.getItemInHand(hand)
 
                 if (holding.item is BountyItem) {
                     //val data = BountyData[holding]
-                    val boardEntity = it.world.getBlockEntity(pos) as? BoardBlockEntity ?: return ItemActionResult.FAIL
+                    val boardEntity = it.level().getBlockEntity(pos) as? BoardBlockEntity ?: return ItemInteractionResult.FAIL
                     val success = (holding.item as BountyItem).tryCashIn(it, holding)
                     if (success) {
                         boardEntity.updateUponBountyCompletion(it, BountyStack(holding))
-                        boardEntity.markDirty()
-                        return ItemActionResult.CONSUME
+                        boardEntity.setChanged()
+                        return ItemInteractionResult.CONSUME
                     }
                 } else {
-                    val screenHandlerFactory = state!!.createScreenHandlerFactory(world, pos)
-                    if (screenHandlerFactory != null) {
-                        it.openHandledScreen(screenHandlerFactory)
-                        return ItemActionResult.success(true)
+                    val menu = state!!.getMenuProvider(world, pos)
+
+                    if (menu != null) {
+                        it.openMenu(menu)
+                        return ItemInteractionResult.sidedSuccess(true)
                     }
                 }
             }
         }
-        return ItemActionResult.success(true)
+        return ItemInteractionResult.sidedSuccess(true)
     }
 
-    override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {
+    override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {
         return BoardBlockEntity(pos, state)
     }
 
@@ -136,15 +134,15 @@ class BoardBlock : BlockWithEntity(
         const val BOUNTY_SIZE = 24
 
         private fun <T : BlockEntity?> boardTicker(
-            world: World,
+            level: Level,
             givenType: BlockEntityType<T>?,
             expectedType: BlockEntityType<out BoardBlockEntity?>?
         ): BlockEntityTicker<T>? {
             //return world.isClient ? null : AbstractFurnaceBlock.validateTicker(givenType, expectedType, AbstractFurnaceBlockEntity::tick);
-            return if (world.isClient) {
+            return if (level.isClientSide) {
                 null
             } else {
-                validateTicker(givenType, expectedType, BoardBlockEntity::tick)
+                createTickerHelper(givenType, expectedType, BoardBlockEntity::tick)
             }
         }
     }

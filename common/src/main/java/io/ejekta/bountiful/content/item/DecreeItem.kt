@@ -1,43 +1,41 @@
 package io.ejekta.bountiful.content.item
 
-import io.ejekta.bountiful.components.BountyStack
-import io.ejekta.bountiful.components.DecreeData
 import io.ejekta.bountiful.components.DecreeStack
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.decree.DecreeSpawnCondition
 import io.ejekta.bountiful.decree.DecreeSpawnRank
 import io.ejekta.kambrik.bridge.Kambridge
-import net.minecraft.client.MinecraftClient
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipType
-import net.minecraft.text.Text
-import net.minecraft.util.Formatting
+import net.minecraft.ChatFormatting
+import net.minecraft.client.Minecraft
+import net.minecraft.network.chat.Component
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.TooltipFlag
 
 class DecreeItem : Item(
-    Settings().maxCount(1).fireproof()
+    Properties().stacksTo(1).fireResistant()
 ) {
 
-    override fun getTranslationKey() = "bountiful.decree"
+    override fun getDescriptionId() = "bountiful.decree"
 
-    override fun getName(stack: ItemStack?): Text {
-        return Text.translatable(translationKey).formatted(Formatting.DARK_PURPLE)
+    override fun getName(stack: ItemStack): Component {
+        return Component.translatable(descriptionId).withStyle(ChatFormatting.DARK_PURPLE)
     }
 
-    override fun appendTooltip(
-        stack: ItemStack?,
-        context: TooltipContext,
-        tooltip: MutableList<Text>,
-        type: TooltipType?
+    override fun appendHoverText(
+        pStack: ItemStack,
+        pContext: TooltipContext,
+        pTooltipComponents: MutableList<Component>,
+        pTooltipFlag: TooltipFlag
     ) {
         if (Kambridge.isOnServer()) {
             return
         }
-        if (stack != null) {
-            val data = stack[BountifulContent.DECREE_DATA]?.tooltipInfo(MinecraftClient.getInstance().world!!)
-            tooltip.addAll(data ?: emptySet())
+        if (pStack != null) {
+            val data = pStack[BountifulContent.DECREE_DATA]?.tooltipInfo(Minecraft.getInstance().level!!)
+            pTooltipComponents.addAll(data ?: emptySet())
         }
-        super.appendTooltip(stack, context, tooltip, type)
+        super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag)
     }
 
     companion object {

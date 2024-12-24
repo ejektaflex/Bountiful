@@ -6,43 +6,40 @@ import io.ejekta.bountiful.components.BountyStack
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.board.BoardBlock
 import io.ejekta.bountiful.content.board.BoardInventory
-import io.ejekta.bountiful.content.board.BountyInventory
 import io.ejekta.bountiful.content.item.BountyItem
 import io.ejekta.bountiful.content.item.DecreeItem
-import io.ejekta.bountiful.messages.ServerPlayerStatus
 import io.ejekta.bountiful.util.currentBoardInteracting
-import io.ejekta.kambrik.bridge.Kambridge
-import io.ejekta.kambrik.gui.screen.KambrikScreenHandler
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.item.ItemStack
-import net.minecraft.screen.ArrayPropertyDelegate
-import net.minecraft.screen.PropertyDelegate
-import net.minecraft.screen.slot.Slot
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.util.math.BlockPos
+import io.ejekta.kambrik.gui.screen.KambrikContainerMenu
+import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.inventory.ContainerData
+import net.minecraft.world.inventory.SimpleContainerData
+import net.minecraft.world.item.ItemStack
 
 
 class BoardScreenHandler @JvmOverloads constructor(
     syncId: Int,
-    playerInventory: PlayerInventory,
-    override var inventory: BoardInventory,
-    doneProp: PropertyDelegate
-) : KambrikScreenHandler<BoardScreenHandler, BoardInventory>(BountifulContent.BOARD_SCREEN_HANDLER, syncId) {
-
+    playerInventory: Inventory,
+    override var container: BoardInventory,
+    doneProp: ContainerData
+) : KambrikContainerMenu<BoardScreenHandler, BoardInventory>(BountifulContent.BOARD_SCREEN_HANDLER, syncId) {
     private val doneProperty = doneProp
 
-    constructor(syncId: Int, playerInventory: PlayerInventory) : this(syncId, playerInventory,
-        BoardInventory(BlockPos.ORIGIN), ArrayPropertyDelegate(1)
+    constructor(syncId: Int, playerInventory: Inventory) : this(syncId, playerInventory,
+        BoardInventory(BlockPos.ZERO), SimpleContainerData(1)
     )
 
-    override fun canUse(player: PlayerEntity): Boolean {
-        return inventory.canPlayerUse(player)
+    // 'Can use'
+    override fun stillValid(player: Player): Boolean {
+        return container.stillValid(player)
     }
 
-    override fun onClosed(player: PlayerEntity?) {
-        inventory.onClose(player)
-        super.onClosed(player) // handle cursor stack
+
+    override fun removed(player: Player) {
+        container.stopOpen(player)
+        super.removed(player) // handle cursor stack
     }
 
     fun getTotalNumComplete(): Int {
@@ -50,25 +47,25 @@ class BoardScreenHandler @JvmOverloads constructor(
     }
 
     fun attemptInsert(stack: ItemStack, slotRange: IntRange, backwards: Boolean = false): ItemStack? {
-        return when (insertItem(stack, slotRange.first, slotRange.last + 1, backwards)) {
+        return when (moveItemStackTo(stack, slotRange.first, slotRange.last + 1, backwards)) {
             false -> null
             true -> stack
         }
     }
 
-    override fun quickMove(player: PlayerEntity, invSlot: Int): ItemStack {
-        if (player is ServerPlayerEntity) {
-            val stack = getSlot(invSlot).stack
+    override fun quickMoveStack(pPlayer: Player, invSlot: Int): ItemStack {
+        if (pPlayer is ServerPlayer) {
+            val stack = getSlot(invSlot).item
 
             if (stack.item is BountyItem) {
-                BountyStack(stack).setPickedUp(player.world.time)
+                BountyStack(stack).setPickedUp(pPlayer.level().gameTime)
             }
 
             when (invSlot) {
                 in BoardInventory.BOUNTY_RANGE -> {
                     val result = attemptInsert(stack, BoardInventory.HOTBAR_RANGE) ?: attemptInsert(stack, BoardInventory.INVENTORY_RANGE) ?: ItemStack.EMPTY
                     if (result != ItemStack.EMPTY) {
-                        player.incrementStat(BountifulContent.CustomStats.BOUNTIES_TAKEN)
+                        pPlayer.awardStat(BountifulContent.CustomStats.BOUNTIES_TAKEN)
                     }
                     return result
                 }
@@ -81,7 +78,7 @@ class BoardScreenHandler @JvmOverloads constructor(
                         is DecreeItem -> {
                             return attemptInsert(stack, BoardInventory.DECREE_RANGE, backwards = false).also {
                                 if (it != null) {
-                                    player.currentBoardInteracting?.onUserPlacedDecree(player, stack)
+                                    pPlayer.currentBoardInteracting?.onUserPlacedDecree(pPlayer, stack)
                                 }
                             } ?: ItemStack.EMPTY
                         }
@@ -109,13 +106,13 @@ class BoardScreenHandler @JvmOverloads constructor(
     //The client will call the other constructor with an empty Inventory and the screenHandler will automatically
     //sync this empty inventory with the inventory on the server.
     init {
-        checkSize(inventory, BoardBlock.BOUNTY_SIZE)
+        checkContainerSize(container, BoardBlock.BOUNTY_SIZE)
         //this.inventory = inventory
         //some inventories do custom logic when a player opens it.
-        inventory.onOpen(playerInventory.player)
-        addProperties(doneProperty)
+        container.startOpen(playerInventory.player)
+        addDataSlots(doneProperty)
 
-        val boardInv = inventory
+        val boardInv = container
 
         val bRows = 3
         val bCols = 7
@@ -127,14 +124,13 @@ class BoardScreenHandler @JvmOverloads constructor(
         // Bounties
         for (j in 0 until bRows) {
             for (k in 0 until bCols) {
-                addSlot(BoardBountySlot(inventory, playerInventory.player, k + j * bCols, 8 + k * bountySlotSize + adjustX, 18 + j * bountySlotSize + adjustY))
+                addSlot(BoardBountySlot(container, playerInventory.player, k + j * bCols, 8 + k * bountySlotSize + adjustX, 18 + j * bountySlotSize + adjustY))
             }
         }
 
-
         // Decrees
         for (j in 0 until 3) {
-            addSlot(BoardDecreeSlot(boardInv, playerInventory.player, inventory.size() - 3 + j, 317, 18 + (j * 18)))
+            addSlot(BoardDecreeSlot(boardInv, playerInventory.player, container.containerSize - 3 + j, 317, 18 + (j * 18)))
         }
 
         //The player inventory
@@ -142,7 +138,7 @@ class BoardScreenHandler @JvmOverloads constructor(
 
 
         // Active Slot
-        addSlot(BoardBountySlot(inventory, playerInventory.player, -1, 216 + 500000, 31))
+        addSlot(BoardBountySlot(container, playerInventory.player, -1, 216 + 500000, 31))
     }
 }
 
