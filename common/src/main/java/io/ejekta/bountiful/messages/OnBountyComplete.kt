@@ -8,11 +8,11 @@ import kotlinx.serialization.Serializable
 import net.minecraft.client.gui.components.toasts.SystemToast
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.player.Player
 
 @Serializable
 data class OnBountyComplete(
-    private val soundEvent: @Contextual SoundEvent,
     private val volume: Float,
     private val pitch: Float
 ) : KambrikMsg() {
@@ -23,7 +23,7 @@ data class OnBountyComplete(
     fun runLocally(player: Player) {
         // Don't show toasts when in an inventory (to prevent toast spam when moving items related to bounties)
         if (ctx.screen == null && BountifulIO.configData.client.showCompletionToast) {
-            player.playSound(soundEvent, volume, pitch)
+            player.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, volume, pitch)
 
             ctx.toasts.addToast(
                 SystemToast(

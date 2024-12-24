@@ -109,7 +109,7 @@ class BountyStack(val stack: ItemStack) {
         if (isDone(player)) {
             if (!ping) {
                 ping = true
-                val playAction = OnBountyComplete(SoundEvents.EXPERIENCE_ORB_PICKUP, 1f, 1f)
+                val playAction = OnBountyComplete(1f, 1f)
 
                 if (player is ServerPlayer) {
                     playAction.sendToClient(player)

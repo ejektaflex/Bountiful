@@ -119,6 +119,9 @@ class BoardScreen(handler: AbstractContainerMenu, inventory: Inventory, title: C
                 }
             } else {
                 widget(scroller, 166, 18)
+                area(scroller.width, scroller.height) {
+                    rect(0xb86f50, 0x48) // tint the scroller
+                }
             }
         }
     }
@@ -126,15 +129,11 @@ class BoardScreen(handler: AbstractContainerMenu, inventory: Inventory, title: C
     val fgGui = drawGui()
 
     override fun onDrawBackground(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
-        // do nothing
+        bgGui.draw(context, mouseX, mouseY, delta)
     }
 
     override fun onDrawForeground(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         fgGui.draw(context, mouseX, mouseY, delta)
-    }
-
-    override fun renderBg(pGuiGraphics: GuiGraphics, pPartialTick: Float, pMouseX: Int, pMouseY: Int) {
-        bgGui.draw(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
     }
 
     override fun init() {
