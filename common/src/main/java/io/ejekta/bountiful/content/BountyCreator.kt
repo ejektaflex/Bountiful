@@ -26,12 +26,14 @@ class BountyCreator private constructor(
 ) {
     private val startTime: Long = world.gameTime
 
+    data class ValuedEntry(val dataEntry: BountyDataEntry, val worth: Double)
+
     // Handle matching algorithm direction
     private val rewardsFirst = !BountifulIO.configData.bounty.reverseMatchingAlgorithm
 
 
-    internal val objectives = mutableListOf<BountyDataEntry>()
-    internal val rewards = mutableListOf<BountyDataEntry>()
+    internal val objectives = mutableListOf<ValuedEntry>()
+    internal val rewards = mutableListOf<ValuedEntry>()
 
     private var infoRarity = BountyRarity.COMMON
     private var infoTimeStarted = -1L
@@ -41,7 +43,7 @@ class BountyCreator private constructor(
     enum class CreationType(
         val named: String,
         val poolGetter: (Decree) -> List<Pool>,
-        val dataGetter: (BountyCreator) -> MutableList<BountyDataEntry>,
+        val dataGetter: (BountyCreator) -> MutableList<ValuedEntry>,
         val itemFilter: (PoolEntry) -> Boolean
     ) {
         REW("reward", { it.rewardPools }, { it.rewards }, { it.typeLogic is IBountyReward }),
@@ -58,8 +60,8 @@ class BountyCreator private constructor(
     val stack: ItemStack by lazy {
         create()
         ItemStack(BountifulContent.BOUNTY_ITEM).apply {
-            this[BountifulContent.BOUNTY_OBJS] = BountyEntries(objectives)
-            this[BountifulContent.BOUNTY_REWS] = BountyEntries(rewards)
+            this[BountifulContent.BOUNTY_OBJS] = BountyEntries(objectives.map { it.dataEntry })
+            this[BountifulContent.BOUNTY_REWS] = BountyEntries(rewards.map { it.dataEntry })
             this[BountifulContent.BOUNTY_INFO] = BountyInfo(
                 infoRarity,
                 infoTimeStarted,
@@ -103,7 +105,7 @@ class BountyCreator private constructor(
         infoTimeToComplete += 750L + BountifulIO.configData.bounty.flatBonusTimePerBountyInSecs
     }
 
-    private fun genInitial(entries: List<PoolEntry>): List<BountyDataEntry> {
+    private fun genInitial(entries: List<PoolEntry>): List<ValuedEntry> {
         return entries.map { it.toEntry(world, pos) }
     }
 
@@ -140,7 +142,7 @@ class BountyCreator private constructor(
 
     private fun getAllPossibleFillers(initialPools: List<PoolEntry>): List<PoolEntry> {
         return getEntriesFor(decrees, getCreation(false)).filter {
-            it.content !in getCreation(true).dataGetter(this).map { item -> item.content }
+            it.content !in getCreation(true).dataGetter(this).map { item -> item.dataEntry.content }
         }.filter { entry ->
             // obj entry can not be in any reward forbidlist
             // no rew entry can be in this obj entry's forbidlist either
@@ -154,7 +156,7 @@ class BountyCreator private constructor(
         }
     }
 
-    private fun genFillers(worth: Double, initialPools: List<PoolEntry>): List<BountyDataEntry> {
+    private fun genFillers(worth: Double, initialPools: List<PoolEntry>): List<ValuedEntry> {
         // -30 = 150% / 1.5x needed, 30 = 50% / 0.5x needed
         // 1 - (rep / 60.0)
         val fillerNeededMult = getDiscount(rep)
@@ -163,7 +165,7 @@ class BountyCreator private constructor(
 
         val numFillers = BountifulIO.configData.bounty.matchCountPreference.pick()
 
-        val toReturn = mutableListOf<BountyDataEntry>()
+        val toReturn = mutableListOf<ValuedEntry>()
 
         val fills = getAllPossibleFillers(initialPools)
 
@@ -172,7 +174,7 @@ class BountyCreator private constructor(
         while (worthGroups.isNotEmpty()) {
             val w = worthGroups.removeAt(0)
 
-            val alreadyPicked = toReturn.map { it.content }
+            val alreadyPicked = toReturn.map { it.dataEntry.content }
             val unpicked = fills.filter { it.content !in alreadyPicked }
 
             if (unpicked.isEmpty()) {

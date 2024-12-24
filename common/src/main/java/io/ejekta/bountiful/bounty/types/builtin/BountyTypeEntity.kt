@@ -48,7 +48,7 @@ class BountyTypeEntity : IBountyObjective {
             return
         }
         playerEntity.iterateBountyStacks {
-            val entityObjs = objs.filter { it.logicId == this@BountyTypeEntity.id }
+            val entityObjs = objs.filter { it.logic.id == this@BountyTypeEntity.id }
             if (entityObjs.isNotEmpty()) {
                 var changes = false
                 for (obj in entityObjs) {

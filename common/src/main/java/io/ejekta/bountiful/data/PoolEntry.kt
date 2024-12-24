@@ -7,6 +7,7 @@ import io.ejekta.bountiful.bounty.types.IBountyType
 import io.ejekta.bountiful.components.BountyDataEntry
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.BountifulContent
+import io.ejekta.bountiful.content.BountyCreator
 import io.ejekta.bountiful.util.getTagItemKey
 import io.ejekta.bountiful.util.getTagItems
 import io.ejekta.kambrik.ext.id
@@ -70,7 +71,7 @@ class PoolEntry private constructor() {
 
     var mystery: Boolean = false
 
-    var nbt: @Contextual CompoundTag? = null
+    //var nbt: @Contextual CompoundTag? = null
 
     val worthSteps: List<Double>
         get() = (amount.min..amount.max).map { it * unitWorth }
@@ -94,7 +95,8 @@ class PoolEntry private constructor() {
         }
     }
 
-    fun toEntry(world: ServerLevel, pos: BlockPos, worth: Double? = null, usedDecs: Set<String>? = emptySet()): BountyDataEntry {
+
+    fun toEntry(world: ServerLevel, pos: BlockPos, worth: Double? = null, usedDecs: Set<String>? = emptySet()): BountyCreator.ValuedEntry {
         val amt = amountAt(worth)
 
         val actualContent = if (type == BountyTypeRegistry.ITEM.id && content.startsWith("#")) {
@@ -112,23 +114,17 @@ class PoolEntry private constructor() {
 
         val totWorth = amt * unitWorth
 
-        return BountyDataEntry(
+        val entry = BountyDataEntry(
             id,
-            type,
-            actualContent,
-            amt,
-            totWorth.toInt(),
-            nbt,
-            name,
-            icon,
-            isMystery = false,
-            rarity = rarity,
-            critConditions = conditions
-        ).apply {
-            //logic.setup(this, world, pos)
-            // TODO set related decree ids
-            //relatedDecreeIds = usedDecs ?: emptySet()
-        }
+            BountyDataEntry.pack(false, rarity, type, amt),
+            content = actualContent,
+            name = name,
+            icon = icon,
+            critConditions = conditions,
+            // TODO remember no more related decree ids here, need to get dynamically
+        )
+
+        return BountyCreator.ValuedEntry(entry, totWorth)
     }
 
     private fun amountAt(worth: Double? = null): Int {

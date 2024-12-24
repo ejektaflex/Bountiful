@@ -12,4 +12,20 @@ object BountyTypeRegistry : MappedRegistry<IBountyType>(Bountiful.BOUNTY_LOGIC_R
     val ITEM_TAG = BountyTypeItemTag().apply { register(id, this) }
     val COMMAND = BountyTypeCommand().apply { register(id, this) }
     val CRITERIA = BountyTypeCriteria().apply { register(id, this) }
+
+    private val idMap by lazy {
+        associate { it ->
+            val intId = getId(it)
+            intId to it
+        }
+    }
+
+    fun fromIntId(id: Int): IBountyType {
+        return idMap[id]!!
+    }
+
+    fun toIntId(type: IBountyType): Int {
+        return getId(type)
+    }
+
 }
