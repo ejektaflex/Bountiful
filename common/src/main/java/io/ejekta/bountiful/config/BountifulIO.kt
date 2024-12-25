@@ -71,11 +71,12 @@ object BountifulIO {
     }
 
     private val contentLoaders = listOf(
-        ResourceLoadStrategy("Pool Loader", "bounty_pools", poolConfigs, Pool.serializer(), BountifulContent.Pools) {
+        ResourceLoadStrategy("Pool Loader", "bounty_pools", poolConfigs, Pool.serializer(),
+            onClear = { BountifulContent.populatePools(emptyList()) },
+            onComplete = { BountifulContent.populatePools(it) },
+        ) {
             // If the pool isn't being used, that's usually problematic
             if (usedInDecrees.isEmpty()) {
-
-
 
                 val poolAssoc = BountifulContent.Pools.filter { it.usedInDecrees.isNotEmpty() }.associateBy { it.id.toSet() }
                 val poolQuery = id.toSet()
@@ -97,7 +98,10 @@ object BountifulIO {
                 Bountiful.LOGGER.warn("* NOTE: This data will not show up in game until one of the above fixes is made.")
             }
         },
-        ResourceLoadStrategy("Decree Loader", "bounty_decrees", decreeConfigs, Decree.serializer(), BountifulContent.Decrees) {
+        ResourceLoadStrategy("Decree Loader", "bounty_decrees", decreeConfigs, Decree.serializer(),
+            onClear = { BountifulContent.Decrees.clear() },
+            onComplete = { BountifulContent.Decrees.addAll(it) }
+        ) {
             if (objectivePools.isEmpty()) {
                 Bountiful.LOGGER.warn("Decree '$id' has no Objective Pools! This is probably a configuration error.")
             } else if (objectives.isEmpty()) {

@@ -13,6 +13,7 @@ import io.ejekta.bountiful.content.item.BountyItem
 import io.ejekta.bountiful.content.item.DecreeItem
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.data.Pool
+import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.kambrik.registration.KambrikAutoRegistrar
 import net.minecraft.core.GlobalPos
 import net.minecraft.core.Holder
@@ -32,11 +33,36 @@ import java.util.function.BiPredicate
 
 object BountifulContent : KambrikAutoRegistrar {
 
+    override fun beforeRegistration() {
+        println("Doing Bountiful reg")
+    }
+
+    override fun afterRegistration() {
+        println("Did Bountiful reg")
+    }
+
     override fun getId() = "bountiful"
+
+    init {
+        println("BC has loaded")
+    }
 
     val Decrees = mutableListOf<Decree>()
 
-    val Pools = mutableListOf<Pool>()
+    var Pools = listOf<Pool>()
+        private set
+
+    var PoolMap = mapOf<String, Pool>()
+        private set
+
+    var PoolEntryMap = mapOf<String, PoolEntry>()
+        private set
+
+    internal fun populatePools(newPools: List<Pool>) {
+        Pools = newPools
+        PoolMap = Pools.associateBy { it.id }
+        PoolEntryMap = Pools.map { it.items }.flatten().associateBy { it.id }
+    }
 
     fun getDecrees(ids: Set<String>): Set<Decree> {
         return ids.mapNotNull { id ->

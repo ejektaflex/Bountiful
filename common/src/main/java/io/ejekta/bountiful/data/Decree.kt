@@ -21,16 +21,16 @@ data class Decree(
 
     val objectivePools: List<Pool>
         get() = objectives.mapNotNull { id ->
-            BountifulContent.Pools.find { it.id == id }
+            BountifulContent.PoolMap[id]
         }
 
     val rewardPools: List<Pool>
         get() = rewards.mapNotNull { id ->
-            BountifulContent.Pools.find { it.id == id }
+            BountifulContent.PoolMap[id]
         }
 
     val invalidPools: List<String>
-        get() = allPoolIds.groupBy { id -> BountifulContent.Pools.find { it.id == id } }[null] ?: emptyList()
+        get() = allPoolIds.groupBy { id -> BountifulContent.PoolMap[id] }[null] ?: emptyList()
 
     val allPoolIds: Set<String>
         get() = objectives + rewards

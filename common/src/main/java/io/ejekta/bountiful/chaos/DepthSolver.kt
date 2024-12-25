@@ -196,7 +196,7 @@ class DepthSolver(val server: MinecraftServer, val data: BountifulChaosData, val
     fun sendToRegistries() {
         Bountiful.LOGGER.debug("Sending chaos data to Bountiful registries..")
 
-        BountifulContent.Pools.clear()
+        BountifulContent.populatePools(emptyList())
         BountifulContent.Decrees.clear()
 
         val poolId = "chaos"
@@ -233,7 +233,7 @@ class DepthSolver(val server: MinecraftServer, val data: BountifulChaosData, val
 
         val decree = Decree(poolId, mutableSetOf(poolId), mutableSetOf(poolId))
         BountifulContent.Decrees.add(decree)
-        BountifulContent.Pools.add(pool)
+        BountifulContent.populatePools(listOf(pool))
     }
 
 }

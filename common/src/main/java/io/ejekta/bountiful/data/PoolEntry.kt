@@ -18,7 +18,6 @@ import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import net.minecraft.core.BlockPos
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
@@ -34,7 +33,8 @@ class PoolEntry private constructor() {
     var rarity = BountyRarity.COMMON
     var content = "Nope"
     var name: String? = null
-    private var icon: @Contextual ResourceLocation? = null
+    var icon: @Contextual ResourceLocation? = null
+        private set
     var amount = EntryRange(-1, -1)
     var unitWorth = -1000.0
     var weightMult = 1.0
@@ -42,8 +42,9 @@ class PoolEntry private constructor() {
     var repRequired = 0.0
     private val forbids: MutableList<ForbiddenContent> = mutableListOf()
 
+    // TODO will this fail if the user's resource file has a '.' in it?
     val protoPool: Pool?
-        get() = BountifulContent.Pools.find { it.id == id.substringBefore('.') }
+        get() = BountifulContent.PoolMap[id.substringBefore('.')]
 
     val protoDecrees: List<Decree>
         get() = protoPool?.usedInDecrees ?: emptyList()
@@ -116,10 +117,9 @@ class PoolEntry private constructor() {
 
         val entry = BountyDataEntry(
             id,
-            BountyDataEntry.pack(false, rarity, type, amt),
+            BountyDataEntry.packFlags(false, rarity, type, amt),
             content = actualContent,
             name = name,
-            icon = icon,
             critConditions = conditions,
             // TODO remember no more related decree ids here, need to get dynamically
         )

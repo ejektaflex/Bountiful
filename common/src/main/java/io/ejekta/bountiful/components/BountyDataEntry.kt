@@ -5,44 +5,41 @@ import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.IBountyType
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.data.Decree
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 import net.minecraft.ChatFormatting
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.ItemStack
 
 // Tracks the status of a given bounty
-@Serializable @JvmRecord
+@Serializable
 data class BountyDataEntry(
     val id: String,
     val flags: Int,
     val content: String,
-    val nbt: @Contextual CompoundTag? = null, // TODO change to 'data'
     val name: String? = null,
-    val icon: @Contextual ResourceLocation? = null, // TODO remove
     val critConditions: JsonObject? = null, // TODO merge into 'data'
-    val relatedDecreeIds: Set<String> = emptySet() // TODO remove
 ) {
 
-    val isMystery: Boolean
-        get() = flags.toUInt().getUnsafeBits(31, 1) == 1u
+    // Icon will be local to clients rather than stored in items for net performance
+    val icon: ResourceLocation? by lazy {
+        BountifulContent.PoolEntryMap[id]?.icon
+    }
 
-    val rarity: BountyRarity
-        get() = BountyRarity.entries[flags.toUInt().getUnsafeBits(28, 3).toInt()]
+    val isMystery: Boolean by lazy { flags.toUInt().getUnsafeBits(31, 1) == 1u }
 
-    val logic: IBountyType
-        get() = BountyTypeRegistry.fromIntId(flags.toUInt().getUnsafeBits(24, 4).toInt())
+    val rarity: BountyRarity by lazy { BountyRarity.entries[flags.toUInt().getUnsafeBits(28, 3).toInt()] }
 
-    val amount: Int
-        get() = flags.toUInt().getUnsafeBits(0, 24).toInt()
+    val logic: IBountyType by lazy { BountyTypeRegistry.fromIntId(flags.toUInt().getUnsafeBits(24, 4).toInt()) }
+
+    val amount: Int by lazy { flags.toUInt().getUnsafeBits(0, 24).toInt() }
 
     private fun getRelatedDecrees(): Set<Decree> {
-        return BountifulContent.getDecrees(relatedDecreeIds)
+        return emptySet()
+        // TODO grab based on id
+        //return BountifulContent.getDecrees(relatedDecreeIds)
     }
 
     fun getRelatedProfessions(): Set<String> {
@@ -54,7 +51,7 @@ data class BountyDataEntry(
 
 
     override fun toString(): String {
-        return "BDE[type=$logic, content=$content, amount=$amount, isNbtNull=${nbt == null}, name=$name, mystery=$isMystery]"
+        return "BDE[type=$logic, content=$content, amount=$amount, name=$name, mystery=$isMystery]"
     }
 
     fun textOnBoardSidebar(player: Player): List<Component> {
@@ -73,7 +70,7 @@ data class BountyDataEntry(
     @Suppress("NOTHING_TO_INLINE")
     companion object {
 
-        fun pack(inMystery: Boolean, inRarity: BountyRarity, inLogic: ResourceLocation, inAmt: Int): Int {
+        fun packFlags(inMystery: Boolean, inRarity: BountyRarity, inLogic: ResourceLocation, inAmt: Int): Int {
             val mysteryNum = 0u.putUnsafeBits(31, if (inMystery) 1u else 0u)
             val rarityNum = 0u.putUnsafeBits(28, inRarity.ordinal.toUInt())
             val logicNumSigned = BountyTypeRegistry.toIntId(BountyTypeRegistry.get(inLogic)!!)

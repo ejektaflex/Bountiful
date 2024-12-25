@@ -14,9 +14,12 @@ class ResourceLoadStrategy<T : IMerge<T>>(
     private val folderName: String,
     private val configPath: Path,
     private val decoder: DeserializationStrategy<T>,
-    private val destination: MutableList<T>,
+    private val onClear: () -> Unit,
+    private val onComplete: (List<T>) -> Unit,
     private val postLintFunc: T.() -> Unit
 ) {
+
+    val loadedData = mutableListOf<T>()
 
     private fun decode(identifier: ResourceLocation, fileText: String, newId: String): T? {
         return try {
@@ -64,7 +67,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
     }
 
     private fun completeLoadOf(data: T) {
-        destination.add(data)
+        loadedData.add(data)
         loadedLocations += data.id
     }
 
@@ -118,10 +121,12 @@ class ResourceLoadStrategy<T : IMerge<T>>(
 
         }
         loadUnloadedFiles()
+
+        onComplete(loadedData)
     }
 
     fun lint() {
-        for (item in destination) {
+        for (item in loadedData) {
             item.postLintFunc()
         }
     }
@@ -176,8 +181,9 @@ class ResourceLoadStrategy<T : IMerge<T>>(
     }
 
     fun clearDestination() {
+        onClear()
         loadedLocations.clear()
-        destination.clear()
+        loadedData.clear()
     }
 
     companion object {

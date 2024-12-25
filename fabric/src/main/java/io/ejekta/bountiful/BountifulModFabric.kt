@@ -51,9 +51,10 @@ class BountifulModFabric : ModInitializer {
     }
 
     override fun onInitialize() {
-        Bountiful.LOGGER.info("Common init")
+        Bountiful.LOGGER.info("Bountiful Common init")
         BountifulIO.loadConfig()
-        KambrikRegistrar.doRegistrationsFor(Bountiful.ID)
+
+        KambrikRegistrar.doRegistrationsFor(BountifulContent)
 
         Bountybridge.registerServerMessages()
         Bountybridge.registerClientMessages()
