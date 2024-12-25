@@ -3,15 +3,24 @@ package io.ejekta.bountiful.components
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.IBountyType
+import io.ejekta.bountiful.config.BountifulIO
+import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.data.Decree
+import io.ejekta.percale.reverse.GsonObjectSerializer
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.jsonObject
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Player
+
+typealias GsonObject = com.google.gson.JsonObject
+
 
 // Tracks the status of a given bounty
 @Serializable
@@ -20,12 +29,17 @@ data class BountyDataEntry(
     val flags: Int,
     val content: String,
     val name: String? = null,
-    val critConditions: JsonObject? = null, // TODO merge into 'data'
+    //val data: @Contextual GsonObject? = null
 ) {
 
-    // Icon will be local to clients rather than stored in items for net performance
+    // Icon is local (to the client) rather than stored in items for net performance
     val icon: ResourceLocation? by lazy {
         BountifulContent.PoolEntryMap[id]?.icon
+    }
+
+    // Criteria is local (to the server) - why store in the item when it's only evaluated on the server?
+    val criteriaJson: GsonObject? by lazy {
+        BountifulContent.PoolEntryMap[id]?.conditions
     }
 
     val isMystery: Boolean by lazy { flags.toUInt().getUnsafeBits(31, 1) == 1u }

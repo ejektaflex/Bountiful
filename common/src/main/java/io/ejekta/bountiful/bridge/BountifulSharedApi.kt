@@ -1,7 +1,11 @@
 package io.ejekta.bountiful.bridge
 
+import com.google.gson.JsonElement
+import com.google.gson.JsonNull
+import com.google.gson.JsonPrimitive
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
+import io.ejekta.bountiful.components.GsonObject
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.villager.DecreeTradeFactory
@@ -117,17 +121,21 @@ interface BountifulSharedApi {
             if (trigger !is PlayerTrigger && trigger !is EnterBlockTrigger) {
                 player.iterateBountyStacks {
 
-                    val triggerObjs = objs.filter { it.critConditions != null }.takeIf { it.isNotEmpty() } ?: emptyList()
+                    val triggerObjs = objs.filter { it.criteriaJson != null }.takeIf { it.isNotEmpty() } ?: emptyList()
 
                     for (obj in triggerObjs) {
 
                         val result = Kambrik.Criterion.testAgainst(
                             trigger,
-                            Kambrik.Criterion.createCriterionConditionsFromJson(
-                                buildJsonObject {
-                                    put("trigger", obj.content)
-                                    put("conditions", obj.critConditions ?: buildJsonObject {  })
+                            Kambrik.Criterion.createCriterionConditionsFromGson(
+                                GsonObject().apply {
+                                    add("trigger", JsonPrimitive(obj.content))
+                                    add("conditions", obj.criteriaJson ?: JsonNull.INSTANCE)
                                 }
+//                                buildJsonObject {
+//                                    put("trigger", obj.content)
+//                                    put("conditions", obj.criteriaJson ?: buildJsonObject {  })
+//                                }
                             ) ?: continue,
                             predicate
                         )

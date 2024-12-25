@@ -5,6 +5,7 @@ import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.IBountyType
 import io.ejekta.bountiful.components.BountyDataEntry
+import io.ejekta.bountiful.components.GsonObject
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyCreator
@@ -68,7 +69,8 @@ class PoolEntry private constructor() {
     val typeLogic: IBountyType?
         get() = BountyTypeRegistry[type]
 
-    val conditions: JsonObject? = null
+
+    val conditions: @Contextual GsonObject? = null
 
     var mystery: Boolean = false
 
@@ -120,7 +122,7 @@ class PoolEntry private constructor() {
             BountyDataEntry.packFlags(false, rarity, type, amt),
             content = actualContent,
             name = name,
-            critConditions = conditions,
+            //data = conditions,
             // TODO remember no more related decree ids here, need to get dynamically
         )
 

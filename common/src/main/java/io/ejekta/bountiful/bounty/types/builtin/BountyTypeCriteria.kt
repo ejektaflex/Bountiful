@@ -23,7 +23,7 @@ class BountyTypeCriteria : IBountyObjective {
     override fun textOnBounty(entry: BountyDataEntry, isObj: Boolean, player: Player, current: Int): MutableComponent {
         val progress = getProgress(entry, player, current)
         val textSum = if (entry.name != null) Component.literal(entry.name) else entry.translation
-        return textSum.withColor(progress.color.id).append(progress.neededText.withColor(ChatFormatting.WHITE.id))
+        return textSum.colored(progress.color).append(progress.neededText.colored(ChatFormatting.WHITE))
     }
 
     override fun textOnBoardSidebar(entry: BountyDataEntry, player: Player): List<Component> {

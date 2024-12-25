@@ -33,19 +33,7 @@ import java.util.function.BiPredicate
 
 object BountifulContent : KambrikAutoRegistrar {
 
-    override fun beforeRegistration() {
-        println("Doing Bountiful reg")
-    }
-
-    override fun afterRegistration() {
-        println("Did Bountiful reg")
-    }
-
     override fun getId() = "bountiful"
-
-    init {
-        println("BC has loaded")
-    }
 
     val Decrees = mutableListOf<Decree>()
 
