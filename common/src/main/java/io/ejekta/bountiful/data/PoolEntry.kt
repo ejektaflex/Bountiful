@@ -71,6 +71,7 @@ class PoolEntry private constructor() {
 
 
     val conditions: @Contextual GsonObject? = null
+    val components: @Contextual GsonObject? = null
 
     var mystery: Boolean = false
 
@@ -122,6 +123,7 @@ class PoolEntry private constructor() {
             BountyDataEntry.packFlags(false, rarity, type, amt),
             content = actualContent,
             name = name,
+            data = conditions
             //data = conditions,
             // TODO remember no more related decree ids here, need to get dynamically
         )

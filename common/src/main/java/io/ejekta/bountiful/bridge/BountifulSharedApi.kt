@@ -120,11 +120,9 @@ interface BountifulSharedApi {
         Kambrik.Criterion.subscribe { player, trigger, predicate ->
             if (trigger !is PlayerTrigger && trigger !is EnterBlockTrigger) {
                 player.iterateBountyStacks {
-
                     val triggerObjs = objs.filter { it.criteriaJson != null }.takeIf { it.isNotEmpty() } ?: emptyList()
 
                     for (obj in triggerObjs) {
-
                         val result = Kambrik.Criterion.testAgainst(
                             trigger,
                             Kambrik.Criterion.createCriterionConditionsFromGson(
@@ -132,10 +130,6 @@ interface BountifulSharedApi {
                                     add("trigger", JsonPrimitive(obj.content))
                                     add("conditions", obj.criteriaJson ?: JsonNull.INSTANCE)
                                 }
-//                                buildJsonObject {
-//                                    put("trigger", obj.content)
-//                                    put("conditions", obj.criteriaJson ?: buildJsonObject {  })
-//                                }
                             ) ?: continue,
                             predicate
                         )

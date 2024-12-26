@@ -1,18 +1,13 @@
 package io.ejekta.bountiful.components
 
+import com.google.gson.JsonPrimitive
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.IBountyType
-import io.ejekta.bountiful.config.BountifulIO
-import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.data.Decree
-import io.ejekta.percale.reverse.GsonObjectSerializer
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.jsonObject
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
@@ -20,6 +15,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Player
 
 typealias GsonObject = com.google.gson.JsonObject
+typealias GsonElement = com.google.gson.JsonElement
 
 
 // Tracks the status of a given bounty
@@ -29,8 +25,13 @@ data class BountyDataEntry(
     val flags: Int,
     val content: String,
     val name: String? = null,
-    //val data: @Contextual GsonObject? = null
+    var data: @Contextual GsonObject? = null,
 ) {
+
+//    // Force non-null data for serial testing
+//    init {
+//        data?.addProperty("a", "b")
+//    }
 
     // Icon is local (to the client) rather than stored in items for net performance
     val icon: ResourceLocation? by lazy {
@@ -89,7 +90,7 @@ data class BountyDataEntry(
             val rarityNum = 0u.putUnsafeBits(28, inRarity.ordinal.toUInt())
             val logicNumSigned = BountyTypeRegistry.toIntId(BountyTypeRegistry.get(inLogic)!!)
             val logicNum = 0u.putUnsafeBits(24, logicNumSigned.toUInt())
-            val amtNum = 0u.putUnsafeBits(0, inAmt.toUInt())
+            val amtNum = 0u.putUnsafeBits(0, inAmt.toUInt()) // 24 bit uint max is safe
             return (mysteryNum + rarityNum + logicNum + amtNum).toInt()
         }
 
