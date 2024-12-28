@@ -218,14 +218,19 @@ class BountyCreator private constructor(
     }
 
     companion object {
-
-        // cap rep discount at 30/75, or 40%
+        // discount is 40% at rep 30, approaches 66% as you increase beyond 30 towards infinity
+        // bounties needed to get rep as a function f(x), where input x is rep:
+        // f(x) = 0.1*(x^2) + 1.5x
         fun getDiscount(rep: Int): Double {
-            return 1 - (rep.coerceIn(-30..30) / 75.0)
+            val baseDiscount = (rep.coerceIn(-30..30) / 75.0) //=> 30 levels * 1.33% = 40%
+            val hiTier = (if (rep > 30) {
+                (rep - 30) / (rep - 30 + 80.0) // number added at the end determines how fast we approach 66%
+            } else { 0.0 }) * ((2 / 3.0) - 0.4) // forever approaching 66% discount
+            return 1 - (baseDiscount + hiTier)
         }
 
         fun createBountyItem(world: ServerLevel, pos: BlockPos, decrees: Set<Decree>, rep: Int): ItemStack {
-            return BountyCreator(world, pos, decrees, rep.coerceIn(-30..30)).stack
+            return BountyCreator(world, pos, decrees, rep).stack
         }
 
         fun getPoolsFor(decrees: Set<Decree>, creationType: CreationType): Set<Pool> {
