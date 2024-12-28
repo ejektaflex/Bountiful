@@ -2,6 +2,7 @@ package io.ejekta.bountiful.content
 
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.context.CommandContext
+import com.mojang.serialization.JsonOps
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
@@ -27,10 +28,13 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
+import net.minecraft.nbt.NbtOps
 import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.RegistryOps
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.ai.targeting.TargetingConditions
@@ -311,12 +315,13 @@ object BountifulCommands {
 
         val newPoolEntry = PoolEntry.create().apply {
             content = held.item.id.toString()
-            // TODO load components and such from pool entries correctly?
-            //nbt = if (it.mainHandStack == ItemStack.EMPTY) null else held.nbt
+            val regOps = RegistryOps.create(JsonOps.INSTANCE, source.level.registryAccess())
+            val result = ItemStack.CODEC.encodeStart(regOps, held).resultOrPartial().getOrNull()?.asJsonObject
+            components = result?.get("components")?.asJsonObject
         }
 
         try {
-            val saved = newPoolEntry.save(JsonFormats.Hand)
+            val saved = newPoolEntry.save()
             it.let {
                 it.sendSystemMessage(Component.literal(saved))
                 ClipboardCopy(saved).sendToClient(it)

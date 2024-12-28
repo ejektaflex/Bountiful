@@ -4,6 +4,8 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.IBountyType
+import io.ejekta.bountiful.bounty.types.builtin.BountyTypeCriteria
+import io.ejekta.bountiful.bounty.types.builtin.BountyTypeItem
 import io.ejekta.bountiful.components.BountyDataEntry
 import io.ejekta.bountiful.components.GsonObject
 import io.ejekta.bountiful.config.JsonFormats
@@ -71,7 +73,7 @@ class PoolEntry private constructor() {
 
 
     val conditions: @Contextual GsonObject? = null
-    val components: @Contextual GsonObject? = null
+    var components: @Contextual GsonObject? = null
 
     var mystery: Boolean = false
 
@@ -83,7 +85,9 @@ class PoolEntry private constructor() {
     val maxWorth: Double
         get() = amount.max * unitWorth
 
-    fun save(format: Json = JsonFormats.DataPack) = format.encodeToString(serializer(), this)
+    fun save(): String {
+        return JsonFormats.Hand.dynamicEncodeToString(this, serializer())
+    }
 
     private fun getRelatedItems(world: ServerLevel): List<Item>? {
         return when (type) {
@@ -123,7 +127,11 @@ class PoolEntry private constructor() {
             BountyDataEntry.packFlags(false, rarity, type, amt),
             content = actualContent,
             name = name,
-            data = conditions
+            data = when (typeLogic) {
+                is BountyTypeCriteria -> conditions
+                is BountyTypeItem -> components
+                else -> null
+            }
             //data = conditions,
             // TODO remember no more related decree ids here, need to get dynamically
         )

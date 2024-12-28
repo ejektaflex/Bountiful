@@ -49,10 +49,11 @@ object JsonFormats {
     val BlockEntity = Json {
         serializersModule = MojangSerializer
     }
-    val Hand = Json {
+    val Hand = PercaleJson(JsonOps.INSTANCE, Json {
         serializersModule = MojangSerializer
+        encodeDefaults = false
         prettyPrint = true
-    }
+    })
     val Config = PercaleJson(JsonOps.INSTANCE, Json {
         serializersModule = MojangSerializer
         encodeDefaults = true

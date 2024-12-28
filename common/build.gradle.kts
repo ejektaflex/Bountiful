@@ -34,8 +34,12 @@ dependencies {
     // https://mvnrepository.com/artifact/me.shedaniel.cloth/cloth-config-neoforge
     implementation("me.shedaniel.cloth:cloth-config-neoforge:${project.property("cloth_config_version")}")
 
-    implementation("io.ejekta.kambrik:kambrik-common:${project.property("kambrik_version")}")
-    implementation("io.ejekta.percale:percale-common:${project.property("percale_version")}")
+    implementation("io.ejekta.kambrik:kambrik-common:${project.property("kambrik_version")}") {
+        isTransitive = false
+    }
+    implementation("io.ejekta.percale:percale-neoforge:${project.property("percale_version")}") {
+        isTransitive = false
+    }
 
     implementation(kotlin("reflect"))
 }
