@@ -37,7 +37,7 @@ class BountyStack(val stack: ItemStack) {
         set(value) { stack[BountifulContent.BOUNTY_REWS] = BountyEntries(value) }
 
     var ping: Boolean
-        get() = stack[BountifulContent.BOUNTY_PING]?.complete ?: false
+        get() = stack[BountifulContent.BOUNTY_PING]?.complete == true
         set(value) { stack[BountifulContent.BOUNTY_PING] = BountyPing(value) }
 
     fun progressOf(entry: BountyDataEntry): Int {
@@ -48,6 +48,11 @@ class BountyStack(val stack: ItemStack) {
         completion = completion.toMutableMap().apply {
             this[entry] = (this[entry] ?: 0) + 1
         }
+    }
+
+    fun advance(objId: String) {
+        val compKey = completion.keys.find { it.id == objId }
+        compKey?.let { advance(it) }
     }
 
     fun setPickedUp(time: Long) {

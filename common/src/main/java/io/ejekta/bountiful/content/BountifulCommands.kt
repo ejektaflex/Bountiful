@@ -118,7 +118,7 @@ object BountifulCommands {
                 }
 
                 "bounty" {
-                    argInt("rep", -30..30) runs { rep ->
+                    argInt("rep", -30..1024) runs { rep ->
                         genBounty(rep()).run(this)
                     }
                 }
@@ -150,7 +150,7 @@ object BountifulCommands {
 
                 "debug" {
                     "weights" {
-                        argInt("rep", -30..30) runs { rep ->
+                        argInt("rep", -30..1024) runs { rep ->
                             weights(rep())
                         }
                     }
@@ -444,10 +444,13 @@ object BountifulCommands {
     private fun CommandContext<CommandSourceStack>.weights(rep: Int) {
         val cmd = kambrikCommand<CommandSourceStack> {
             try {
-                println("RARITY WEIGHTS:")
+                Bountiful.LOGGER.info("RARITY WEIGHTS:")
+                Bountiful.LOGGER.info("===============")
                 BountyRarity.entries.forEach { rarity ->
-                    println("${rarity.name}\t ${rarity.weightAdjustedFor(rep)}")
+                    Bountiful.LOGGER.info("${rarity.name}\t ${rarity.weightAdjustedFor(rep)}")
                 }
+                Bountiful.LOGGER.info("Done.")
+                Bountiful.LOGGER.info("DISCOUNT %: ${(1 - BountyCreator.getDiscount(rep)) * 100}")
             } catch (e: Exception) {
                 e.printStackTrace()
             }

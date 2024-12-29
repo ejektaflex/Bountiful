@@ -28,11 +28,6 @@ data class BountyDataEntry(
     var data: @Contextual GsonObject? = null,
 ) {
 
-//    // Force non-null data for serial testing
-//    init {
-//        data?.addProperty("a", "b")
-//    }
-
     // Icon is local (to the client) rather than stored in items for net performance
     val icon: ResourceLocation? by lazy {
         BountifulContent.PoolEntryMap[id]?.icon
@@ -63,7 +58,6 @@ data class BountyDataEntry(
 
     val translation: MutableComponent
         get() = Component.translatable("bountiful.entry.${id}")
-
 
     override fun toString(): String {
         return "BDE[type=$logic, content=$content, amount=$amount, name=$name, mystery=$isMystery]"
