@@ -71,7 +71,6 @@ class PoolEntry private constructor() {
     val typeLogic: IBountyType?
         get() = BountyTypeRegistry[type]
 
-
     val conditions: @Contextual GsonObject? = null
     var components: @Contextual GsonObject? = null
 
@@ -132,7 +131,6 @@ class PoolEntry private constructor() {
                 is BountyTypeItem -> components
                 else -> null
             }
-            //data = conditions,
             // TODO remember no more related decree ids here, need to get dynamically
         )
 

@@ -46,7 +46,11 @@
                 "max": 3
             },
             "unitWorth": 550,
-            "nbt": "{Potion:\"minecraft:healing\"}"
+            "components": {
+                "minecraft:potion_contents": {
+                    "potion": "minecraft:healing"
+                }
+            }
         },
 
         "potion_fire_resist": {
@@ -57,7 +61,11 @@
                 "max": 1
             },
             "unitWorth": 600,
-            "nbt": "{Potion:\"minecraft:fire_resistance\"}"
+            "components": {
+                "minecraft:potion_contents": {
+                    "potion": "minecraft:fire_resistance"
+                }
+            }
         },
 
         "ench_book_unbreaking": {
@@ -68,7 +76,13 @@
                 "max": 2
             },
             "unitWorth": 1500,
-            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:unbreaking\"}]}"
+            "components": {
+                "minecraft:stored_enchantments": {
+                    "levels": {
+                        "minecraft:unbreaking": 1
+                    }
+                }
+            }
         },
 
         "glowstone": {
@@ -113,7 +127,11 @@
                 "max": 2
             },
             "unitWorth": 2000,
-            "nbt": "{Potion:\"minecraft:luck\"}"
+            "components": {
+                "minecraft:potion_contents": {
+                    "potion": "minecraft:luck"
+                }
+            }
         },
 
         "xp_bottle": {
@@ -147,7 +165,13 @@
                 "max": 1
             },
             "unitWorth": 5500,
-            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:mending\"}]}"
+            "components": {
+                "minecraft:stored_enchantments": {
+                    "levels": {
+                        "minecraft:mending": 1
+                    }
+                }
+            }
         }
 
 	}

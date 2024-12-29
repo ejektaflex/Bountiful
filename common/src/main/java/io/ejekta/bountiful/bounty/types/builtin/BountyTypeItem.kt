@@ -1,24 +1,35 @@
 package io.ejekta.bountiful.bounty.types.builtin
 
+import com.google.gson.JsonObject
+import com.mojang.serialization.JsonOps
 import io.ejekta.bountiful.bounty.types.IBountyExchangeable
 import io.ejekta.bountiful.bounty.types.Progress
 import io.ejekta.bountiful.components.BountyDataEntry
 import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.bountiful.util.getTagItemKey
 import io.ejekta.bountiful.util.getTagItems
+import io.ejekta.kambrik.bridge.Kambridge
 import io.ejekta.kambrik.ext.collect
 import io.ejekta.kambrik.ext.id
+import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.ChatFormatting
+import net.minecraft.core.RegistryAccess
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.RegistryOps
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.EnchantedBookItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.item.enchantment.EnchantmentHelper
+import kotlin.jvm.optionals.getOrNull
 
 
 class BountyTypeItem : IBountyExchangeable {
@@ -44,7 +55,7 @@ class BountyTypeItem : IBountyExchangeable {
 
     override fun textOnBounty(entry: BountyDataEntry, isObj: Boolean, player: Player, current: Int): MutableComponent {
         val progress = getProgress(entry, player, current)
-        val itemName = getItemName(entry)
+        val itemName = getItemName(entry, player.level().registryAccess())
         return when (isObj) {
             true -> itemName.withStyle(progress.color).append(progress.neededText.colored(ChatFormatting.WHITE))
             false -> progress.givingText.append(itemName.colored(entry.rarity.color))
@@ -52,7 +63,7 @@ class BountyTypeItem : IBountyExchangeable {
     }
 
     override fun textOnBoardSidebar(entry: BountyDataEntry, player: Player): List<Component> {
-        return getItemStack(entry).getTooltipLines(Item.TooltipContext.EMPTY, player, TooltipFlag.NORMAL)
+        return getItemStack(entry, player.level().registryAccess()).getTooltipLines(Item.TooltipContext.EMPTY, player, TooltipFlag.NORMAL)
     }
 
     override fun getProgress(entry: BountyDataEntry, player: Player, current: Int): Progress {
@@ -103,31 +114,39 @@ class BountyTypeItem : IBountyExchangeable {
             return BuiltInRegistries.ITEM.get(id)
         }
 
-        fun getItemStack(entry: BountyDataEntry): ItemStack {
+        fun getItemStack(entry: BountyDataEntry, access: RegistryAccess): ItemStack {
             val item = getItem(entry)
-            return ItemStack(item).apply {
-                // TODO give itemstack NBT rewards
-                //entry.nbt?.let { this.nbt = it }
+            val regOps = RegistryOps.create(JsonOps.INSTANCE, access)
+
+            val built = JsonObject().apply {
+                addProperty("id", item.id.toString())
+                addProperty("count", entry.amount)
+                add("components", entry.data)
             }
+            val itemDone = ItemStack.CODEC.decode(regOps, built).result()
+            return itemDone.getOrNull()?.first ?: ItemStack(Items.STICK)
         }
 
-        fun getItemName(entry: BountyDataEntry): MutableComponent {
-            val itemStack = getItemStack(entry)
-            val named = itemStack.displayName.copy()
+        fun getItemName(entry: BountyDataEntry, access: RegistryAccess): MutableComponent {
+            val itemStack = getItemStack(entry, access)
+            var named = itemStack.displayName.copy()
 
             // TODO reimplement
             // Show enchanted book enchantments
-//            if (itemStack.item is EnchantedBookItem && Kambridge.isOnClient()) {
-//                val enchants = EnchantmentHelper.get(itemStack).toList()
-//
-//                if (enchants.isNotEmpty()) {
-//                    named = named.append(" (")
-//                    for ((enchant, level) in enchants.dropLast(1)) {
-//                        named = named.append(enchant.getName(level)).append(", ")
-//                    }
-//                    named = named.append(enchants.last().run { first.getName(second) }).append(")")
-//                }
-//            }
+            if (itemStack.item is EnchantedBookItem && Kambridge.isOnClient()) {
+                val enchants = EnchantmentHelper.getEnchantmentsForCrafting(itemStack)
+
+                if (enchants.size() > 0) {
+                    named = named.append(" (")
+                    
+                    val allEnchantsComponent = enchants.keySet().toList().sortedBy {
+                        it.value().description().toString()
+                    }.map { it.value().description }.reduce { a, b ->
+                        textLiteral().append(a).append(", ").append(b)
+                    }
+                    named = named.append(allEnchantsComponent).append(")")
+                }
+            }
 
             return named
         }

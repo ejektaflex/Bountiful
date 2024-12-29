@@ -45,7 +45,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
                 dsl { itemStackIcon(ItemStack(Items.COMMAND_BLOCK), x, y + 1) }
             }
             BountyTypeRegistry.ITEM.id -> {
-                val stack = BountyTypeItem.getItemStack(entry).apply {
+                val stack = BountyTypeItem.getItemStack(entry, Minecraft.getInstance().level!!.registryAccess()).apply {
                     count = entry.amount
                 }
                 dsl { itemStackIcon(stack, x, y) }

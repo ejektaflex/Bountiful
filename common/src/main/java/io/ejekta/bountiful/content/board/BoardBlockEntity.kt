@@ -429,8 +429,10 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     // Villager & Completion Logic
 
     private fun villagerPickupPopulate(objectives: List<BountyDataEntry>) {
-        val stackMap = objectives.filter { it.logic is BountyTypeItem }.map {
-            BountyTypeItem.getItemStack(it) to it.getRelatedProfessions()
+        val stackMap = objectives.filter { it.logic is BountyTypeItem }.mapNotNull { entry ->
+            serverWorld?.let {
+                BountyTypeItem.getItemStack(entry, serverWorld?.registryAccess()!!) to entry.getRelatedProfessions()
+            }
         }
         for ((stack, profs) in stackMap) {
             for (prof in profs) {

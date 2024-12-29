@@ -51,7 +51,13 @@
                 "max": 1
             },
             "unitWorth": 1500,
-            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:lure\"}]}"
+            "components": {
+                "minecraft:stored_enchantments": {
+                    "levels": {
+                        "minecraft:lure": 1
+                    }
+                }
+            }
         },
 
         "ench_book_luck_sea": {
@@ -63,7 +69,13 @@
                 "max": 1
             },
             "unitWorth": 1500,
-            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:luck_of_the_sea\"}]}"
+            "components": {
+                "minecraft:stored_enchantments": {
+                    "levels": {
+                        "minecraft:luck_of_the_sea": 1
+                    }
+                }
+            }
         },
 
         "ench_book_unbreaking": {
@@ -75,7 +87,13 @@
                 "max": 1
             },
             "unitWorth": 1500.0,
-            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:unbreaking\"}]}"
+            "components": {
+                "minecraft:stored_enchantments": {
+                    "levels": {
+                        "minecraft:unbreaking": 1
+                    }
+                }
+            }
         },
 
         "saddle": {

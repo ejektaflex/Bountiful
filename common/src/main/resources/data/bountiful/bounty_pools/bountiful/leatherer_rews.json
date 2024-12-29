@@ -10,7 +10,6 @@
                 "max": 1
             },
             "unitWorth": 1200,
-            "nbt": "{Damage:0}",
             "forbids": [
                 {
                     "type": "item",
@@ -27,7 +26,6 @@
                 "max": 1
             },
             "unitWorth": 1050,
-            "nbt": "{Damage:0}",
             "forbids": [
                 {
                     "type": "item",
@@ -44,7 +42,6 @@
                 "max": 1
             },
             "unitWorth": 750,
-            "nbt": "{Damage:0}",
             "forbids": [
                 {
                     "type": "item",
@@ -62,7 +59,6 @@
                 "max": 1
             },
             "unitWorth": 1250,
-            "nbt": "{Damage:0}",
             "forbids": [
                 {
                     "type": "item",
@@ -79,7 +75,6 @@
                 "max": 1
             },
             "unitWorth": 600,
-            "nbt": "{Damage:0}",
             "forbids": [
                 {
                     "type": "item",
