@@ -5,7 +5,6 @@ import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.bounty.types.IBountyReward
 import io.ejekta.bountiful.components.BountyDataEntry
-import io.ejekta.bountiful.components.BountyEntries
 import io.ejekta.bountiful.components.BountyInfo
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.data.Decree
@@ -60,8 +59,8 @@ class BountyCreator private constructor(
     val stack: ItemStack by lazy {
         create()
         ItemStack(BountifulContent.BOUNTY_ITEM).apply {
-            this[BountifulContent.BOUNTY_OBJS] = BountyEntries(objectives.map { it.dataEntry })
-            this[BountifulContent.BOUNTY_REWS] = BountyEntries(rewards.map { it.dataEntry })
+            this[BountifulContent.BOUNTY_OBJS] = objectives.map { it.dataEntry }
+            this[BountifulContent.BOUNTY_REWS] = rewards.map { it.dataEntry }
             this[BountifulContent.BOUNTY_INFO] = BountyInfo(
                 infoRarity,
                 infoTimeStarted,

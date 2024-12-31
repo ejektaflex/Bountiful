@@ -29,8 +29,6 @@ data class DecreeData(val ids: Set<String> = setOf(), val rank: Int = 1) {
         }
     }
 
-
-
     companion object {
         val EMPTY = DecreeData()
 

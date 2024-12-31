@@ -15,6 +15,8 @@ import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.data.Pool
 import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.kambrik.registration.KambrikAutoRegistrar
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.serializer
 import net.minecraft.core.GlobalPos
 import net.minecraft.core.Holder
 import net.minecraft.core.registries.BuiltInRegistries
@@ -81,9 +83,9 @@ object BountifulContent : KambrikAutoRegistrar {
     //val POI_BOUNTY_BOARD = "bountyboard".forVillagerPoi(MEM_MODULE_NEAREST_BOARD_INSTANCE, setOf(BOARD.value.defaultState), 1, 1)
 
     val BOUNTY_INFO by "bounty_info".forComponent(BountyInfo.serializer())
-    val BOUNTY_PING by "bounty_ping".forComponent(BountyPing.serializer())
-    val BOUNTY_OBJS by "objects".forComponent(BountyEntries.serializer(), JsonFormats.MojangSerializer)
-    val BOUNTY_REWS by "rewards".forComponent(BountyEntries.serializer(), JsonFormats.MojangSerializer)
+    val BOUNTY_PING by "bounty_ping".forComponent(Boolean.serializer())
+    val BOUNTY_OBJS by "objects".forComponent(ListSerializer(BountyDataEntry.serializer()), JsonFormats.MojangSerializer)
+    val BOUNTY_REWS by "rewards".forComponent(ListSerializer(BountyDataEntry.serializer()), JsonFormats.MojangSerializer)
     val BOUNTY_COMPLETION by "completion".forComponent(BountyCompletion.serializer())
     val DECREE_DATA by "decree_data".forComponent(DecreeData.serializer())
 

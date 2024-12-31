@@ -7,7 +7,6 @@ import io.ejekta.bountiful.bounty.types.builtin.BountyTypeItem
 import io.ejekta.bountiful.bounty.types.builtin.BountyTypeItemTag
 import io.ejekta.bountiful.client.BoardScreen
 import io.ejekta.bountiful.components.BountyDataEntry
-import io.ejekta.bountiful.components.BountyEntries
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.messages.SelectBounty
 import io.ejekta.kambrik.gui.draw.KGuiDsl
@@ -160,12 +159,12 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
         const val ArrowWidth = 20
         const val BountyZoneSize = (ButtonWidth - ArrowWidth) / 2
 
-        fun KGuiDsl.renderEntries(entries: BountyEntries, renderFunc: KGuiDsl.(rx: Int, ry: Int, e: BountyDataEntry) -> Unit) {
-            for (i in entries.entries.indices) {
-                val spaceDiff = BountyZoneSize - (entries.entries.size * 18)
+        fun KGuiDsl.renderEntries(entries: List<BountyDataEntry>, renderFunc: KGuiDsl.(rx: Int, ry: Int, e: BountyDataEntry) -> Unit) {
+            for (i in entries.indices) {
+                val spaceDiff = BountyZoneSize - (entries.size * 18)
                 val spaceStart = spaceDiff / 2
                 renderFunc(
-                    (spaceStart + (i * 18)), 1, entries.entries[i]
+                    (spaceStart + (i * 18)), 1, entries[i]
                 )
             }
         }

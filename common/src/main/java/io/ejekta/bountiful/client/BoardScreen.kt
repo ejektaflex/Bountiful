@@ -38,7 +38,7 @@ class BoardScreen(handler: AbstractContainerMenu, inventory: Inventory, title: C
 
     private val validButtons: List<BountyLongButton>
         get() = buttons.filter {
-            (it.getStack()[BountifulContent.BOUNTY_OBJS]?.entries ?: emptyList()).isNotEmpty()
+            (it.getStack()[BountifulContent.BOUNTY_OBJS] ?: emptyList()).isNotEmpty()
         }
 
     private val scroller = KScrollbarVertical(140, 6, 27, SCROLLER, 0x0)

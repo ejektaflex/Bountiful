@@ -29,16 +29,16 @@ class BountyStack(val stack: ItemStack) {
         set(value) { stack[BountifulContent.BOUNTY_INFO] = value }
 
     var objs: List<BountyDataEntry>
-        get() = stack[BountifulContent.BOUNTY_OBJS]?.entries ?: emptyList()
-        set(value) { stack[BountifulContent.BOUNTY_OBJS] = BountyEntries(value) }
+        get() = stack[BountifulContent.BOUNTY_OBJS] ?: emptyList()
+        set(value) { stack[BountifulContent.BOUNTY_OBJS] = value }
 
     var rews: List<BountyDataEntry>
-        get() = stack[BountifulContent.BOUNTY_REWS]?.entries ?: emptyList()
-        set(value) { stack[BountifulContent.BOUNTY_REWS] = BountyEntries(value) }
+        get() = stack[BountifulContent.BOUNTY_REWS] ?: emptyList()
+        set(value) { stack[BountifulContent.BOUNTY_REWS] = value }
 
     var ping: Boolean
-        get() = stack[BountifulContent.BOUNTY_PING]?.complete == true
-        set(value) { stack[BountifulContent.BOUNTY_PING] = BountyPing(value) }
+        get() = stack[BountifulContent.BOUNTY_PING] == true
+        set(value) { stack[BountifulContent.BOUNTY_PING] = value }
 
     fun progressOf(entry: BountyDataEntry): Int {
         return completion[entry] ?: 0
