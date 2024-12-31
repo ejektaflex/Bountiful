@@ -40,7 +40,10 @@ data class BountyDataEntry(
 
     val isMystery: Boolean by lazy { flags.toUInt().getUnsafeBits(31, 1) == 1u }
 
-    val rarity: BountyRarity by lazy { BountyRarity.entries[flags.toUInt().getUnsafeBits(28, 3).toInt()] }
+    val rarity: BountyRarity by lazy {
+        val rareFlag = flags.toUInt().getUnsafeBits(28, 3).toInt()
+        BountyRarity.entries[rareFlag]
+    }
 
     val logic: IBountyType by lazy { BountyTypeRegistry.fromIntId(flags.toUInt().getUnsafeBits(24, 4).toInt()) }
 
@@ -67,11 +70,11 @@ data class BountyDataEntry(
         return logic.textOnBoardSidebar(this, player)
     }
 
-    fun textOnBounty(player: Player, isObj: Boolean, current: Int): MutableComponent {
+    fun textOnBounty(player: Player, isObj: Boolean, current: Int): List<MutableComponent> {
         return when (isMystery) {
-            true -> Component.literal("???").withStyle(ChatFormatting.BOLD).append(
+            true -> listOf( Component.literal("???").withStyle(ChatFormatting.BOLD).append(
                 Component.literal("x$amount").withStyle(ChatFormatting.WHITE)
-            )
+            ) )
             false -> logic.textOnBounty(this, isObj, player, current)
         }
     }
@@ -90,7 +93,7 @@ data class BountyDataEntry(
 
         // Warning: these can overflow and do not do bounds checking
         inline fun UInt.getUnsafeBits(index: Int, size: Int): UInt {
-            return ((this shr index) and (UInt.MAX_VALUE shr (index + size)))
+            return ((this shr index) and (UInt.MAX_VALUE shr (UInt.SIZE_BITS - size)))
         }
 
         inline fun UInt.putUnsafeBits(index: Int, value: UInt): UInt {

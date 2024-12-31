@@ -26,9 +26,9 @@ class BountyTypeEntity : IBountyObjective {
         return id == ResourceLocation.parse(entry.content)
     }
 
-    override fun textOnBounty(entry: BountyDataEntry, isObj: Boolean, player: Player, current: Int): MutableComponent {
+    override fun textOnBounty(entry: BountyDataEntry, isObj: Boolean, player: Player, current: Int): List<MutableComponent> {
         val progress = getProgress(entry, player, current)
-        return when (isObj) {
+        val result = when (isObj) {
             true -> Component.literal("Kill ").append(
                 getEntityType(entry).description.copy()
             ).withStyle(progress.color).append(
@@ -36,6 +36,7 @@ class BountyTypeEntity : IBountyObjective {
             )
             false -> Component.literal("ERR: Cannot have an entity (${entry.content}) as a reward.")
         }
+        return listOf(result)
     }
 
     override fun textOnBoardSidebar(entry: BountyDataEntry, player: Player): List<Component> {

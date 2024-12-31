@@ -38,13 +38,14 @@ class BountyTypeItemTag : IBountyObjective {
         }
     }
 
-    override fun textOnBounty(entry: BountyDataEntry, isObj: Boolean, player: Player, current: Int): MutableComponent {
+    override fun textOnBounty(entry: BountyDataEntry, isObj: Boolean, player: Player, current: Int): List<MutableComponent> {
         val progress = getProgress(entry, player, current)
         val title = if (entry.name != null) Component.literal(entry.name) else entry.translation
-        return when (isObj) {
+        val result = when (isObj) {
             true -> title.copy().withStyle(progress.color).append(progress.neededText.colored(ChatFormatting.WHITE))
             false -> progress.givingText.append(title.colored(entry.rarity.color))
         }
+        return listOf(result)
     }
 
     override fun textOnBoardSidebar(entry: BountyDataEntry, player: Player): List<Component> {

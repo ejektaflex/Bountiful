@@ -53,13 +53,15 @@ class BountyTypeItem : IBountyExchangeable {
         }
     }
 
-    override fun textOnBounty(entry: BountyDataEntry, isObj: Boolean, player: Player, current: Int): MutableComponent {
+    override fun textOnBounty(entry: BountyDataEntry, isObj: Boolean, player: Player, current: Int): List<MutableComponent> {
         val progress = getProgress(entry, player, current)
         val itemName = getItemName(entry, player.level().registryAccess())
-        return when (isObj) {
-            true -> itemName.withStyle(progress.color).append(progress.neededText.colored(ChatFormatting.WHITE))
-            false -> progress.givingText.append(itemName.colored(entry.rarity.color))
+        val itemLine = itemName[0].copy()
+        val result = when (isObj) {
+            true -> itemLine.withStyle(progress.color).append(progress.neededText.colored(ChatFormatting.WHITE))
+            false -> progress.givingText.append(itemLine.colored(entry.rarity.color))
         }
+        return listOf(result) + itemName.drop(1)
     }
 
     override fun textOnBoardSidebar(entry: BountyDataEntry, player: Player): List<Component> {
@@ -127,24 +129,19 @@ class BountyTypeItem : IBountyExchangeable {
             return itemDone.getOrNull()?.first ?: ItemStack(Items.STICK)
         }
 
-        fun getItemName(entry: BountyDataEntry, access: RegistryAccess): MutableComponent {
+        fun getItemName(entry: BountyDataEntry, access: RegistryAccess): List<MutableComponent> {
             val itemStack = getItemStack(entry, access)
-            var named = itemStack.displayName.copy()
+            var named = mutableListOf(itemStack.displayName.copy())
 
-            // TODO reimplement
-            // Show enchanted book enchantments
             if (itemStack.item is EnchantedBookItem && Kambridge.isOnClient()) {
+                val lines = itemStack.getTooltipLines(Item.TooltipContext.of(access), null, TooltipFlag.NORMAL)
                 val enchants = EnchantmentHelper.getEnchantmentsForCrafting(itemStack)
-
-                if (enchants.size() > 0) {
-                    named = named.append(" (")
-                    
-                    val allEnchantsComponent = enchants.keySet().toList().sortedBy {
-                        it.value().description().toString()
-                    }.map { it.value().description }.reduce { a, b ->
-                        textLiteral().append(a).append(", ").append(b)
+                if (enchants.size() > 0 && lines.size > 1) {
+                    val allEnchantsComponent = lines.drop(1).map { it }.map {
+                        textLiteral("* ").append(it).withStyle(ChatFormatting.DARK_GRAY)
                     }
-                    named = named.append(allEnchantsComponent).append(")")
+
+                    named.addAll(allEnchantsComponent)
                 }
             }
 

@@ -81,7 +81,8 @@ class BountyCreator private constructor(
             return
         }
 
-        infoRarity = initialEntries.maxOf { it.rarity }
+        val infoRarityOrdinal = initialEntries.maxOf { it.rarity.ordinal }
+        infoRarity = BountyRarity.entries[infoRarityOrdinal]
 
         // Gen rewards and total worth
         val initialPicks = genInitial(initialEntries)

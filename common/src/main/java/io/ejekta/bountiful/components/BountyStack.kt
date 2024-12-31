@@ -138,11 +138,11 @@ class BountyStack(val stack: ItemStack) {
             add(Component.translatable("bountiful.tooltip.required").withStyle(ChatFormatting.GOLD).append(":"))
             addAll(objs.map {
                 it.textOnBounty(player, true, progressOf(it))
-            })
+            }.flatten())
             add(Component.translatable("bountiful.tooltip.rewards").withStyle(ChatFormatting.GOLD).append(":"))
             addAll(rews.map {
                 it.textOnBounty(player, false, progressOf(it))
-            })
+            }.flatten())
             if (flag == TooltipFlag.ADVANCED && BountifulIO.configData.client.advancedDebugTooltips) {
                 add(Component.literal(""))
                 add(Component.literal("Bountiful Debug Info:").withStyle(ChatFormatting.GOLD))

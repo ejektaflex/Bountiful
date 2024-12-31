@@ -13,7 +13,7 @@ sealed interface IBountyType {
 
     val id: ResourceLocation
 
-    fun textOnBounty(entry: BountyDataEntry, isObj: Boolean, player: Player, current: Int): MutableComponent
+    fun textOnBounty(entry: BountyDataEntry, isObj: Boolean, player: Player, current: Int): List<MutableComponent>
 
     fun textOnBoardSidebar(entry: BountyDataEntry, player: Player): List<Component>
 
