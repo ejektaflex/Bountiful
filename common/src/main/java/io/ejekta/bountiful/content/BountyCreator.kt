@@ -38,6 +38,7 @@ class BountyCreator private constructor(
     private var infoTimeStarted = -1L
     private var infoTimePickedUp = -1L
     private var infoTimeToComplete = -1L
+    private var infoTargetRatio: Double? = null
 
     enum class CreationType(
         val named: String,
@@ -61,11 +62,18 @@ class BountyCreator private constructor(
         ItemStack(BountifulContent.BOUNTY_ITEM).apply {
             this[BountifulContent.BOUNTY_OBJS] = objectives.map { it.dataEntry }
             this[BountifulContent.BOUNTY_REWS] = rewards.map { it.dataEntry }
+
+            val objWorths = if (Bountiful.packMode) objectives.map { it.worth.toInt() } else null
+            val rewWorths = if (Bountiful.packMode) rewards.map { it.worth.toInt() } else null
+
             this[BountifulContent.BOUNTY_INFO] = BountyInfo(
                 infoRarity,
                 infoTimeStarted,
                 infoTimeToComplete,
-                infoTimePickedUp
+                infoTimePickedUp,
+                objWorths = objWorths,
+                rewWorths = rewWorths,
+                targetRatio = if (Bountiful.packMode) infoTargetRatio else null
             )
         }
     }
@@ -160,6 +168,7 @@ class BountyCreator private constructor(
         // -30 = 150% / 1.5x needed, 30 = 50% / 0.5x needed
         // 1 - (rep / 60.0)
         val fillerNeededMult = getDiscount(rep)
+        infoTargetRatio = fillerNeededMult
 
         val worthNeeded = if (rewardsFirst) worth * fillerNeededMult else worth / fillerNeededMult // When reversed, generated rewards should be that mult amount bigger by dividing
 

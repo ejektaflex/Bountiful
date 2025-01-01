@@ -22,6 +22,7 @@ import io.ejekta.kambrik.ext.id
 import io.ejekta.kambrik.ext.math.floor
 import io.ejekta.kambrik.ext.math.toVec3
 import io.ejekta.kambrik.text.sendMessage
+import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.ChatFormatting
 import net.minecraft.commands.CommandBuildContext
 import net.minecraft.commands.CommandSourceStack
@@ -148,6 +149,11 @@ object BountifulCommands {
                     }
                 }
 
+                "packmode" runs {
+                    Bountiful.packMode = true
+                    source.sendSystemMessage(textLiteral("Pack Mode enabled."))
+                }
+
                 "debug" {
                     "weights" {
                         argInt("rep", -30..1024) runs { rep ->
@@ -157,15 +163,18 @@ object BountifulCommands {
 
                     "dump" runs dumpData()
 
-                    "dev" {
-                        "vill" runs {
-                            sendNearestVillagerToABoard(this)
-                        }
+                    if (Bountiful.nightly) {
+                        "dev" {
+                            "vill" runs {
+                                sendNearestVillagerToABoard(this)
+                            }
 
-                        "hold" runs {
-                            holdThing(this)
+                            "hold" runs {
+                                holdThing(this)
+                            }
                         }
                     }
+
                 }
 
                 "check" {

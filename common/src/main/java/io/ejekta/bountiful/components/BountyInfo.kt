@@ -13,7 +13,10 @@ data class BountyInfo(
     val rarity: BountyRarity,
     val timeStarted: Long,
     val timeToComplete: Long,
-    val timePickedUp: Long
+    val timePickedUp: Long,
+    val objWorths: List<Int>? = null,
+    val rewWorths: List<Int>? = null,
+    val targetRatio: Double? = null // based on discount and obj modifier
 ) {
 
     fun timeLeftTicks(level: Level): Long {

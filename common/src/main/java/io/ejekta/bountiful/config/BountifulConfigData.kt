@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.config
 
+import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.chaos.ChaosMode
 import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.kambrik.text.textLiteral
@@ -109,6 +110,16 @@ class BountifulConfigData {
                 .build()
         )
 
+        generalCat.addEntry(
+            creator.startBooleanToggle(
+                Component.literal("Pack Mode (Does not Save)"),
+                Bountiful.packMode
+            ).setDefaultValue(false).setTooltip(
+                Component.literal("Turns on Modpack Dev mode for Bountiful. Is not saved.")
+            ).setSaveConsumer {
+                Bountiful.packMode = it
+            }.build()
+        )
 
         val boardCat = builder.getOrCreateCategory(Component.literal("General - Board"))
 
@@ -219,17 +230,6 @@ class BountifulConfigData {
                 Component.literal("Whether toast messages should appear upon bounty completion")
             ).setSaveConsumer {
                 client.showCompletionToast = it
-            }.build()
-        )
-
-        clientCat.addEntry(
-            creator.startBooleanToggle(
-                Component.literal("Advanced Debug Tooltips"),
-                client.advancedDebugTooltips
-            ).setDefaultValue(false).setTooltip(
-                Component.literal("Whether advanced tooltips should show debug information")
-            ).setSaveConsumer {
-                client.advancedDebugTooltips = it
             }.build()
         )
 

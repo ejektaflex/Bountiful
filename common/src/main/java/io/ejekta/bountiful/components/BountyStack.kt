@@ -1,10 +1,13 @@
 package io.ejekta.bountiful.components
 
+import com.ibm.icu.math.BigDecimal
+import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.bounty.types.IBountyReward
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.messages.OnBountyComplete
+import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
@@ -14,6 +17,7 @@ import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
+import java.math.RoundingMode
 
 class BountyStack(val stack: ItemStack) {
 
@@ -143,10 +147,61 @@ class BountyStack(val stack: ItemStack) {
             addAll(rews.map {
                 it.textOnBounty(player, false, progressOf(it))
             }.flatten())
-            if (flag == TooltipFlag.ADVANCED && BountifulIO.configData.client.advancedDebugTooltips) {
-                add(Component.literal(""))
+            if (flag == TooltipFlag.ADVANCED && Bountiful.packMode) {
                 add(Component.literal("Bountiful Debug Info:").withStyle(ChatFormatting.GOLD))
-                add(Component.literal("Taken: ${info.timeTakenSecs(player.level())}, Left: ${info.timeLeftSecs(player.level())}"))
+                add(
+                    textLiteral("Time (Took:Left): ") {
+                        format(ChatFormatting.DARK_GRAY)
+                        addLiteral("${info.timeTakenSecs(player.level())}") {
+                            format(ChatFormatting.GRAY)
+                        }
+                        addLiteral(":")
+                        addLiteral("${info.timeLeftSecs(player.level())}") {
+                            format(ChatFormatting.GRAY)
+                        }
+                    }
+                )
+                if (info.targetRatio != null) {
+                    val objW = info.objWorths
+                    val rewW = info.rewWorths
+                    val worthRatio = ((objW?.sum() ?: 0) / (rewW?.sum()?.toDouble() ?: Double.MAX_VALUE))
+                    objW?.let { add(textLiteral("Obj Worths: ") {
+                        format(ChatFormatting.DARK_GRAY)
+                        addLiteral(it.toString()) {
+                            format(ChatFormatting.GRAY)
+                        }
+                        addLiteral(", Sum: ")
+                        addLiteral(it.sum().toString()) {
+                            format(ChatFormatting.GRAY)
+                        }
+                    }) }
+                    rewW?.let { add(textLiteral("Rew Worths: ") {
+                        format(ChatFormatting.DARK_GRAY)
+                        addLiteral(it.toString()) {
+                            format(ChatFormatting.GRAY)
+                        }
+                        addLiteral(", Sum: ")
+                        addLiteral(it.sum().toString()) {
+                            format(ChatFormatting.GRAY)
+                        }
+                    }) }
+                    add(textLiteral("Worth Ratio (Expt:Actl): ") {
+                        format(ChatFormatting.DARK_GRAY)
+                        addLiteral("%.2f".format(info.targetRatio)) {
+                            format(ChatFormatting.GRAY)
+                        }
+                        addLiteral(":")
+                        addLiteral("%.2f".format(worthRatio)) {
+                            format(ChatFormatting.GRAY)
+                        }
+                    })
+                    add(textLiteral("Flags: ") {
+                        format(ChatFormatting.DARK_GRAY)
+                        addLiteral("TODO") {
+                            format(ChatFormatting.GRAY)
+                        }
+                    })
+                }
             }
         }
     }
