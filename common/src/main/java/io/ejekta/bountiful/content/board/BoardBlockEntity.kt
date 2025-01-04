@@ -16,8 +16,8 @@ import io.ejekta.bountiful.decree.DecreeSpawnRank
 import io.ejekta.bountiful.util.*
 import io.ejekta.kambrik.ext.ksx.decodeFromStringTag
 import io.ejekta.kambrik.ext.ksx.encodeToStringTag
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.MapSerializer
-import kotlinx.serialization.builtins.SetSerializer
 import kotlinx.serialization.builtins.serializer
 import net.minecraft.ChatFormatting
 import net.minecraft.core.BlockPos
@@ -51,7 +51,6 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.AABB
-import java.util.*
 import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
@@ -61,43 +60,39 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     private val decrees = SimpleContainer(3)
     private val bounties = BountyInventory()
 
-    private var boardUUID = UUID.randomUUID().toString()
-
-    private var takenMask = mutableMapOf<String, MutableSet<Int>>()
-    private val takenSerializer = MapSerializer(String.serializer(), SetSerializer(Int.serializer()))
-
     // Last time a bounty was added
     private var lastUpdatedTime = serverWorld?.gameTime ?: 0L
 
     // Only need to calc this once per object, I don't see it changing often
     private val villageTag = TagKey.create(BuiltInRegistries.POINT_OF_INTEREST_TYPE.key(),ResourceLocation.parse("village"))
 
+    private operator fun get(player: Player): PlayerBoardData {
+        return playerData.getOrPut(player.stringUUID) { PlayerBoardData.empty() }
+    }
 
     fun maskFor(player: Player): MutableSet<Int> {
-        return takenMask.getOrPut(player.stringUUID) { mutableSetOf() }
+        return this[player].taken
     }
 
     private fun clearMask(slot: Int) {
         // Clear mask because slot was updated
-        takenMask.forEach { (_, mask) ->
-            mask.removeIf { it == slot }
+        playerData.forEach { (_, data) ->
+            data.taken.removeIf { it == slot }
         }
     }
 
     // Slot #, Age
     private var bountyTimestamps = mutableMapOf<Int, Long>()
-    private val bountyStampSerializer = MapSerializer(Int.serializer(), Long.serializer())
 
-    private var finishMap = mutableMapOf<String, Int>()
-    private val finishSerializer = MapSerializer(String.serializer(), Int.serializer())
+    private var playerData = mutableMapOf<String, PlayerBoardData>()
 
     // Whether this board has even been initialized/given starting data
     private val isPristine: Boolean
-        get() = bounties.isEmpty && finishMap.keys.isEmpty() && takenMask.keys.isEmpty()
+        get() = bounties.isEmpty && playerData.keys.isEmpty()
 
     // Calculated level, progress to next, point of next level
     private val levelData: Triple<Int, Int, Int>
-        get() = levelProgress(finishMap.values.sum())
+        get() = levelProgress(playerData.values.sumOf { it.done })
 
     private val reputation: Int
         get() = levelData.first
@@ -123,10 +118,13 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     private val villagerPickups = mutableMapOf<String, MutableSet<ItemStack>>()
 
     val numCompleted: Int
-        get() = finishMap.values.sum()
+        get() = playerData.values.sumOf { it.done }
 
-    private fun incrementCompletedBounties(player: Player) {
-        finishMap[player.stringUUID] = finishMap.getOrPut(player.stringUUID) { 0 } + 1
+    private fun incrementCompletedBounties(player: Player, timeTakenTicks: Long) {
+        playerData.getOrPut(player.stringUUID) { PlayerBoardData.empty() }.apply {
+            done += 1
+            totalTime += timeTakenTicks
+        }
     }
 
     private fun getBoardDecrees(): Set<Decree> {
@@ -172,7 +170,10 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             )
         }
 
-        player.serverLevel().let {
+        val level = player.serverLevel()
+        val timeTaken = holding.info.timeTakenTicks(level)
+
+        level.let {
             if (holding.info.timeTakenSecs(it) <= 60) {
                 BountifulContent.Triggers.RUSH_ORDER.trigger(player)
 
@@ -184,7 +185,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         }
 
         // Tick completion upwards
-        incrementCompletedBounties(player)
+        incrementCompletedBounties(player, timeTaken)
         // Fill pickups
         villagerPickupPopulate(holding.objs)
         // Have a villager check on the board
@@ -266,7 +267,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         val decs = getBoardDecrees().map { it.id }.toSet() + newDecrees
         val allDecreesSet = BountifulContent.Decrees.map { it.id }.toSet()
         val allDecrees = decs.intersect(allDecreesSet) == allDecreesSet
-        println(allDecreesSet - decs)
+        Bountiful.LOGGER.trace(allDecreesSet - decs)
         if (allDecrees) {
             BountifulContent.Triggers.ALL_DECREES_PLACED.trigger(player)
         }
@@ -364,7 +365,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         val decreeList = base.getCompound("decree_inv") ?: return
         val bountyList = base.getCompound("bounty_inv") ?: return
 
-        boardUUID = base.getString("boardId")
         lastUpdatedTime = base.getLong("lastUpdated")
 
         ContainerHelper.loadAllItems(
@@ -380,9 +380,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         )
 
         val doneMap = base.get("completed")
-        //println("Done map is: $doneMap")
         if (doneMap != null) {
-            finishMap = JsonFormats.BlockEntity.decodeFromStringTag(finishSerializer, doneMap as StringTag).toMutableMap()
+            playerData = JsonFormats.BlockEntity.decodeFromStringTag(playerDataSerializer, doneMap as StringTag).toMutableMap()
         }
 
         val timeStampMap = base.get("timestamps")
@@ -392,8 +391,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
         val takenData = base.get("taken")
         if (takenData != null) {
-            takenMask = JsonFormats.BlockEntity.decodeFromStringTag(takenSerializer, takenData as StringTag).map {
-                it.key to it.value.toMutableSet()
+            playerData = JsonFormats.BlockEntity.decodeFromStringTag(playerDataSerializer, takenData as StringTag).map {
+                it.key to it.value
             }.toMap().toMutableMap()
         }
     }
@@ -401,20 +400,15 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     override fun saveAdditional(base: CompoundTag, registryLookup: HolderLookup.Provider) {
         super.saveAdditional(base, registryLookup)
 
-        base.putString("boardId", boardUUID)
-
         base.putLong("lastUpdated", lastUpdatedTime)
 
-        val doneMap = JsonFormats.BlockEntity.encodeToStringTag(finishSerializer, finishMap)
+        val doneMap = JsonFormats.BlockEntity.encodeToStringTag(playerDataSerializer, playerData)
         base.put("completed", doneMap)
 
         val timeStampMap = JsonFormats.BlockEntity.encodeToStringTag(bountyStampSerializer, bountyTimestamps)
         base.put("timestamps", timeStampMap)
 
-        base.put(
-            "taken",
-            JsonFormats.BlockEntity.encodeToStringTag(takenSerializer, takenMask)
-        )
+        base.put("taken", JsonFormats.BlockEntity.encodeToStringTag(playerDataSerializer, playerData))
 
         val decreeList = CompoundTag()
         ContainerHelper.saveAllItems(decreeList, decrees.readOnlyCopy, registryLookup)
@@ -535,6 +529,16 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
 
     companion object {
+
+        @Serializable
+        internal data class PlayerBoardData(var done: Int, var totalTime: Long, val taken: MutableSet<Int>) {
+            companion object {
+                fun empty() = PlayerBoardData(0, 0L, mutableSetOf())
+            }
+        }
+
+        private val bountyStampSerializer = MapSerializer(Int.serializer(), Long.serializer())
+        private val playerDataSerializer = MapSerializer(String.serializer(), PlayerBoardData.serializer())
 
         fun levelProgress(done: Int, per: Int = 2): Triple<Int, Int, Int> {
             var doneAcc = done
