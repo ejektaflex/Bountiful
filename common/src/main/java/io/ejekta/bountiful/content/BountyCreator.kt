@@ -30,7 +30,6 @@ class BountyCreator private constructor(
     // Handle matching algorithm direction
     private val rewardsFirst = !BountifulIO.configData.bounty.reverseMatchingAlgorithm
 
-
     internal val objectives = mutableListOf<ValuedEntry>()
     internal val rewards = mutableListOf<ValuedEntry>()
 

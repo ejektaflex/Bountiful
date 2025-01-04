@@ -9,6 +9,7 @@ import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.bountiful.util.get
 import io.ejekta.bountiful.util.getNullable
 import io.ejekta.kambrik.ext.id
+import kotlinx.serialization.Serializable
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
@@ -30,7 +31,9 @@ class DepthSolver(val server: MinecraftServer, val data: BountifulChaosData, val
 
     // Final cost map
     private val costMap = mutableMapOf<Item, Double>()
+    private val pathLenMap = mutableMapOf<Item, Int>()
     private val matchCosts = mutableMapOf<Item, Double>()
+    private val ignoreSet = mutableSetOf<Item>()
 
     fun costOf(item: Item): Double? {
         return costMap[item] ?: matchCosts[item]
@@ -43,9 +46,13 @@ class DepthSolver(val server: MinecraftServer, val data: BountifulChaosData, val
 
         for (item in server[Registries.ITEM]) {
             val matchCost = data.matching.matchCost(item, server)
-            if (matchCost != null && !data.matching.isIgnored(item)) {
-                Bountiful.LOGGER.debug("Adding match cost: ${item.id}")
-                matchCosts[item] = matchCost
+            if (matchCost != null) {
+                if (!data.matching.isIgnored(item)) {
+                    Bountiful.LOGGER.debug("Adding match cost: ${item.id}")
+                    matchCosts[item] = matchCost
+                } else {
+                    ignoreSet.add(item)
+                }
             }
         }
 
@@ -69,8 +76,11 @@ class DepthSolver(val server: MinecraftServer, val data: BountifulChaosData, val
         it.value.getResultItem(regManager).item
     }
 
+    @JvmRecord
+    data class SolveResult(val amt: Double, val path: List<ItemStack>)
+
     // Attempts to solve for stack cost.
-    fun solveFor(stack: ItemStack, path: List<ItemStack>): Double? {
+    fun solveFor(stack: ItemStack, path: List<ItemStack>): SolveResult? {
         val recipes = stack.recipes
 
         // If no recipe exists, it is a terminator.
@@ -86,7 +96,7 @@ class DepthSolver(val server: MinecraftServer, val data: BountifulChaosData, val
         val recipeCosts = mutableListOf<Double>()
 
         for (recipe in recipes) {
-            val inputCounts = recipe.inItemSets.flatten().groupBy { it.item }.map { it.key to it.value.sumOf { stack -> stack.count } }.toMap()
+            //val inputCounts = recipe.inItemSets.flatten().groupBy { it.item }.map { it.key to it.value.sumOf { stack -> stack.count } }.toMap()
 
             var ingredientRunningCost = 0.0
 
@@ -112,7 +122,7 @@ class DepthSolver(val server: MinecraftServer, val data: BountifulChaosData, val
                         // No calculated cost. Can we iteratively find one?
                         val solvedCost = solveFor(option, path + stack)
                         if (solvedCost != null) {
-                            ingredientRunningCost += solvedCost * option.count
+                            ingredientRunningCost += solvedCost.amt * option.count
                             numUnsolvedIngredients -= 1
                             break
                         }
@@ -138,32 +148,42 @@ class DepthSolver(val server: MinecraftServer, val data: BountifulChaosData, val
         // Of all calculated recipe costs, find the minimum
         finalCost?.let {
             costMap[stack.item] = it
+            pathLenMap[stack.item] = path.size // may not accurately reflect path len?
         }
 
-        return finalCost
+        return finalCost?.let { SolveResult(it, path) }
     }
 
     fun solveRequiredRecipes() {
         var unsolved = 0
+        val unsolvedList = mutableListOf<Item>()
+        val allItemSet = mutableSetOf<Item>()
         for (item in regManager.registry(Registries.ITEM).get()) {
+            allItemSet.add(item)
             // If there exists a recipe for it, solve it
             if (item in stackLookup.keys) {
                 val didSolve = solveFor(ItemStack(item), emptyList())
                 if (didSolve == null && data.required[item.id!!] == null) {
                     unsolved += 1
+                    unsolvedList.add(item)
                 }
             } else {
                 unsolved += 1
+                unsolvedList.add(item)
             }
         }
-        info.unsolved = unsolved
+
+        info.redundant = matchCosts.keys.map { it.id!! }.sorted().toMutableList()
+        info.unsolvedList = (allItemSet.filter { !data.matching.isIgnored(it) }.toSet() - matchCosts.keys - costMap.keys).map { it.id!! }.toList().sorted()
+
+        println("hi")
+        //info.unsolvedList = unsolvedList.map { it.id!! }.sorted() - info.redundant
     }
 
     fun syncConfig() {
 
         Bountiful.LOGGER.debug("Syncing Chaos Config...")
 
-        info.redundant = matchCosts.keys.map { it.id!! }.sorted().toMutableList()
 
         // Remove redundant required items
         for ((id, amt) in data.required.toList()) {
@@ -181,10 +201,12 @@ class DepthSolver(val server: MinecraftServer, val data: BountifulChaosData, val
         // Reset JSON file ordering (this is a bit hacky)
         data.required = data.required.toList().sortedBy { it.first.toString() }.toMap().toMutableMap()
         // Update dependency numbering
-        info.deps = deps.map { it.key to it.value.size }.sortedBy { -it.second }.toMap().toMutableMap()
+        //info.deps = deps.map { it.key to it.value.size }.sortedBy { -it.second }.toMap().toMutableMap()
+        info.deps = deps.map { it.key to it.value }.toMap().toSortedMap()
 
         for (item in regManager[Registries.ITEM].sortedBy { it.id }) {
-            if (costOf(item) == null && item.id !in info.redundant && !data.matching.isIgnored(item)) {
+            val isIgnored = data.matching.isIgnored(item)
+            if (costOf(item) == null && item.id !in info.redundant && !isIgnored) {
                 data.optional[item.id!!] = null
             } else {
                 data.optional.remove(item.id)
@@ -203,7 +225,7 @@ class DepthSolver(val server: MinecraftServer, val data: BountifulChaosData, val
         val pool = Pool(poolId)
 
         for (item in regManager[Registries.ITEM].sortedBy { it.id }) {
-            println("Item: ${item.id.toString().padEnd(50)} - ${costOf(item)}")
+            println("Item: ${item.id.toString().padEnd(50)} - ${costOf(item).toString().padEnd(16)} - ${pathLenMap[item]}")
             val realCost = costOf(item) ?: continue
             val stack = ItemStack(item)
             val realAmtMax = stack.maxStackSize

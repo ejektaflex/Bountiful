@@ -52,17 +52,25 @@ class PoolEntry private constructor() {
     val protoDecrees: List<Decree>
         get() = protoPool?.usedInDecrees ?: emptyList()
 
+    @Transient var isValidCache: Boolean? = null
+
     fun isValid(server: MinecraftServer): Boolean {
-        return try {
-            val bountyType = BountyTypeRegistry[type]
-            if (bountyType == null) {
-                Bountiful.LOGGER.warn("Bounty Pool Entry has Invalid Type: (${id} - ${content}) details: ${save()}")
-                return false
+        if (isValidCache != null) {
+            return isValidCache!!
+        } else {
+            isValidCache = try {
+                val bountyType = BountyTypeRegistry[type]
+                if (bountyType == null) {
+                    Bountiful.LOGGER.warn("Bounty Pool Entry has Invalid Type: (${id} - ${content}) details: ${save()}")
+                    return false
+                }
+                bountyType.isValid(this, server)
+            } catch (e: Exception) {
+                Bountiful.LOGGER.warn("Bounty Pool Entry Invalid: (${id} - ${content}) details: ${save()}")
+                false
+            }.also {
+                return it
             }
-            bountyType.isValid(this, server)
-        } catch (e: Exception) {
-            Bountiful.LOGGER.warn("Bounty Pool Entry Invalid: (${id} - ${content}) details: ${save()}")
-            false
         }
     }
 
@@ -88,20 +96,27 @@ class PoolEntry private constructor() {
         return JsonFormats.Hand.dynamicEncodeToString(this, serializer())
     }
 
-    private fun getRelatedItems(world: ServerLevel): List<Item>? {
-        return when (type) {
-            BountyTypeRegistry.ITEM.id -> {
-                val tagId = ResourceLocation.parse(content.substringAfter("#"))
-                getTagItems(world.registryAccess(), getTagItemKey(tagId))
-            }
-            BountyTypeRegistry.ITEM_TAG.id -> {
-                val tagId = ResourceLocation.parse(content)
-                getTagItems(world.registryAccess(), getTagItemKey(tagId))
-            }
-            else -> null
-        }
-    }
+    @Transient
+    private var relatedItemCache: List<Item>? = null
 
+    private fun getRelatedItems(world: ServerLevel): List<Item>? {
+        if (relatedItemCache != null) {
+            return relatedItemCache
+        } else {
+            relatedItemCache = when (type) {
+                BountyTypeRegistry.ITEM.id -> {
+                    val tagId = ResourceLocation.parse(content.substringAfter("#"))
+                    getTagItems(world.registryAccess(), getTagItemKey(tagId))
+                }
+                BountyTypeRegistry.ITEM_TAG.id -> {
+                    val tagId = ResourceLocation.parse(content)
+                    getTagItems(world.registryAccess(), getTagItemKey(tagId))
+                }
+                else -> emptyList()
+            }
+        }
+        return relatedItemCache
+    }
 
     fun toEntry(world: ServerLevel, pos: BlockPos, worth: Double? = null, usedDecs: Set<String>? = emptySet()): BountyCreator.ValuedEntry {
         val amt = amountAt(worth)
