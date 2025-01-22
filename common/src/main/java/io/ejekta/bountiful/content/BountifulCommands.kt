@@ -135,15 +135,9 @@ object BountifulCommands {
 
                 "analyzer" runs {
                     try {
-                        source.playerOrException
-
-                        source.player?.run {
-                            openSimpleMenu(Component.literal("Analyzer!")) { syncId: Int, playerInventory: Inventory, player: Player ->
-                                AnalyzerScreenHandler(syncId, playerInventory, SimpleContainer(AnalyzerScreenHandler.SIZE))
-                            }
+                        source.player?.openSimpleMenu(Component.literal("Analyzer!")) { syncId: Int, playerInventory: Inventory, player: Player ->
+                            AnalyzerScreenHandler(syncId, playerInventory, SimpleContainer(AnalyzerScreenHandler.SIZE))
                         }
-
-                        //ClientPlayerStatus.Type.OPEN_ANALYZER.sendToClient(source.playerOrThrow)
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -163,6 +157,7 @@ object BountifulCommands {
 
                     "dump" runs dumpData()
 
+                    @Suppress("KotlinConstantConditions")
                     if (Bountiful.nightly) {
                         "dev" {
                             "vill" runs {
@@ -229,7 +224,6 @@ object BountifulCommands {
             source.sendSystemMessage(Component.literal("* Exists in these decrees: ").append(
                 Component.literal("$decs").withStyle(ChatFormatting.GOLD)
             ))
-
 
             if (!found.isValid(source.server)) {
                 source.sendFailure(
