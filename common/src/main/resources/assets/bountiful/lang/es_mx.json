@@ -1,0 +1,86 @@
+{
+	"block.bountiful.bountyboard": "Tablero de Recompensas",
+
+	"itemGroup.bountiful": "Bountyful",
+
+	"bountiful.entry.shepherd_obj_wool_wildcard": "Cualquier Lana",
+	"bountiful.entry.fletcher_obj_planks": "Cualquier Tabla",
+	"bountiful.entry.fletcher_obj_logs": "Cualquier Tronco",
+	"bountiful.entry.shepherd_obj_bed_wildcard": "Cualquier Cama",
+	"bountiful.entry.fisherman_obj_any_boat": "Cualquier Barco",
+	"bountiful.entry.mapper_obj_candles": "Cualquier Vela",
+	"bountiful.entry.shepherd_obj_banner_wildcard": "Cualquier Estandarte",
+
+	"bountiful.entry.fisherman_obj_catch_ench_book": "Pescar Libros Encantados",
+	"bountiful.entry.cleric_obj_brew_swiftness": "Preparar una Poción de Velocidad básica",
+	"bountiful.entry.cleric_obj_cure_zombie_villager": "Curar a un Aldeano Zombi",
+
+	"bountiful.decree": "Decreto",
+	"bountiful.decrees": "Decretos",
+	"bountiful.decree.invalid": "Decreto Inválido",
+	"bountiful.decree.notset": "¡Llévalo a un Tablero de Recompensas!",
+
+	"bountiful.bounty.expired": "Esta recompensa ha expirado.",
+	"bountiful.bounty.turnin": "Cumple tu recompensa haciendo clic derecho en un tablero de recompensas.",
+
+	"bountiful.advancement.bounty_taken.title": "Work for Hire",
+	"bountiful.advancement.bounty_taken.desc": "Toma una recompensa de un tablero de recompensas",
+
+	"bountiful.advancement.bounty_complete.title": "Honest Pay for Honest Work",
+	"bountiful.advancement.bounty_complete.desc": "¡Completa una recompensa!",
+
+	"bountiful.advancement.rush_order.title": "Rush Order Delivery",
+	"bountiful.advancement.rush_order.desc": "Completa una recompensa en menos de un minuto",
+
+	"bountiful.advancement.procrastinator.title": "Master Procrastinator",
+	"bountiful.advancement.procrastinator.desc": "Completa una recompensa con menos de cinco segundos restantes",
+
+	"bountiful.advancement.town_crier.title": "El lloron del pueblo",
+	"bountiful.advancement.town_crier.desc": "¡Obtén un decreto!",
+
+	"bountiful.advancement.royal_mandate.title": "Royal Mandate",
+	"bountiful.advancement.royal_mandate.desc": "Pon un decreto en un tablero de recompensas",
+
+	"bountiful.bounty": "Recompensa",
+
+	"bountiful.decree.armorer.name": "Armería",
+	"bountiful.decree.butcher.name": "Carnicería",
+	"bountiful.decree.chef.name": "Suministros de Chef",
+	"bountiful.decree.cleric.name": "Suministros de Clérigo",
+	"bountiful.decree.farmer.name": "Agricultura",
+	"bountiful.decree.fisherman.name": "Pesca",
+	"bountiful.decree.fletcher.name": "Flechería",
+	"bountiful.decree.hunting.name": "Caza de Monstruos",
+	"bountiful.decree.inventor.name": "Inventos",
+	"bountiful.decree.leatherer.name": "Curtiduría",
+	"bountiful.decree.librarian.name": "Bibliotecario",
+	"bountiful.decree.mapper.name": "Cartografía",
+	"bountiful.decree.mason.name": "Mampostería",
+	"bountiful.decree.shepherd.name": "Pastoreo",
+	"bountiful.decree.tinker.name": "Chisporroteo",
+	"bountiful.decree.toolsmith.name": "Herramientas",
+	"bountiful.decree.invalid_decree.name": "Decreto Inválido",
+
+	"bountiful.bounty.type.entity.kills": "Muertes",
+
+	"bountiful.bounty.type.experience.levels": "Niveles de Experiencia",
+	"bountiful.bounty.type.experience.points": "Puntos de Experiencia",
+
+	"bountiful.rarity.Common": "Común",
+	"bountiful.rarity.Uncommon": "Poco Común",
+	"bountiful.rarity.Rare": "Raro",
+	"bountiful.rarity.Epic": "Épico",
+
+	"stat.bountiful.bounties_taken": "Recompensas Tomadas",
+	"stat.bountiful.bounties_done": "Recompensas Completadas (Total)",
+	"stat.bountiful.bounties_done_0": "Recompensas Completadas (Común)",
+	"stat.bountiful.bounties_done_1": "Recompensas Completadas (Poco Común)",
+	"stat.bountiful.bounties_done_2": "Recompensas Completadas (Raro)",
+	"stat.bountiful.bounties_done_3": "Recompensas Completadas (Épico)",
+
+	"bountiful.tooltip.time": "Tiempo para Completar",
+	"bountiful.tooltip.required": "Requerido",
+	"bountiful.tooltip.rewards": "Recompensas",
+	"bountiful.tooltip.expired": "Expirado",
+	"bountiful.tooltip.requirements": "Requisitos no cumplidos."
+}
