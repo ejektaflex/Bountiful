@@ -31,6 +31,13 @@
             },
             "unitWorth": 1500,
             "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:protection\"}]}",
+            "components": {
+                "minecraft:stored_enchantments": {
+                    "levels": {
+                        "minecraft:protection": 1
+                    }
+                }
+            },
             "weightMult": 0.2
         },
 
@@ -42,7 +49,13 @@
                 "max": 1
             },
             "unitWorth": 1500,
-            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:feather_falling\"}]}",
+            "components": {
+                "minecraft:stored_enchantments": {
+                    "levels": {
+                        "minecraft:feather_falling": 1
+                    }
+                }
+            },
             "weightMult": 0.2
         },
 
@@ -54,7 +67,13 @@
                 "max": 1
             },
             "unitWorth": 1500,
-            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:respiration\"}]}",
+            "components": {
+                "minecraft:stored_enchantments": {
+                    "levels": {
+                        "minecraft:respiration": 1
+                    }
+                }
+            },
             "weightMult": 0.2
         },
 
@@ -66,7 +85,13 @@
                 "max": 1
             },
             "unitWorth": 1500,
-            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:thorns\"}]}",
+            "components": {
+                "minecraft:stored_enchantments": {
+                    "levels": {
+                        "minecraft:thorns": 1
+                    }
+                }
+            },
             "weightMult": 0.2
         },
 
@@ -78,7 +103,13 @@
                 "max": 1
             },
             "unitWorth": 1500.0,
-            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:depth_strider\"}]}",
+            "components": {
+                "minecraft:stored_enchantments": {
+                    "levels": {
+                        "minecraft:depth_strider": 1
+                    }
+                }
+            },
             "weightMult": 0.2
         },
 
@@ -90,7 +121,13 @@
                 "max": 1
             },
             "unitWorth": 1500.0,
-            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:sharpness\"}]}",
+            "components": {
+                "minecraft:stored_enchantments": {
+                    "levels": {
+                        "minecraft:sharpness": 1
+                    }
+                }
+            },
             "weightMult": 0.2
         },
 
@@ -103,7 +140,13 @@
                 "max": 1
             },
             "unitWorth": 1500.0,
-            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:frost_walker\"}]}",
+            "components": {
+                "minecraft:stored_enchantments": {
+                    "levels": {
+                        "minecraft:frost_walker": 1
+                    }
+                }
+            },
             "weightMult": 0.2
         },
 

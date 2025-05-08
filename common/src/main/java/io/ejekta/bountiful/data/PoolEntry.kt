@@ -138,8 +138,10 @@ class PoolEntry private constructor() {
 
         val entry = BountyDataEntry(
             id,
-            BountyDataEntry.packFlags(false, rarity, type, amt),
             content = actualContent,
+            rarity,
+            type.toString(),
+            amt,
             name = name,
             data = when (typeLogic) {
                 is BountyTypeCriteria -> conditions

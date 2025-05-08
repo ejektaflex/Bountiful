@@ -3,10 +3,13 @@ package io.ejekta.bountiful.components
 import com.google.gson.JsonPrimitive
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
+import io.ejekta.bountiful.bounty.types.IBountyReward
 import io.ejekta.bountiful.bounty.types.IBountyType
+import io.ejekta.bountiful.bounty.types.builtin.BountyTypeCommand
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.data.Decree
 import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
@@ -22,8 +25,10 @@ typealias GsonElement = com.google.gson.JsonElement
 @Serializable
 data class BountyDataEntry(
     val id: String,
-    val flags: Int,
     val content: String,
+    val rarity: BountyRarity = BountyRarity.COMMON,
+    val logicName: String = "item",
+    val amount: Int = -99,
     val name: String? = null,
     var data: @Contextual GsonObject? = null,
 ) {
@@ -38,16 +43,9 @@ data class BountyDataEntry(
         BountifulContent.PoolEntryMap[id]?.conditions
     }
 
-    val isMystery: Boolean by lazy { flags.toUInt().getUnsafeBits(31, 1) == 1u }
+    val isMystery: Boolean = false
 
-    val rarity: BountyRarity by lazy {
-        val rareFlag = flags.toUInt().getUnsafeBits(28, 3).toInt()
-        BountyRarity.entries[rareFlag]
-    }
-
-    val logic: IBountyType by lazy { BountyTypeRegistry.fromIntId(flags.toUInt().getUnsafeBits(24, 4).toInt()) }
-
-    val amount: Int by lazy { flags.toUInt().getUnsafeBits(0, 24).toInt() }
+    val logic: IBountyType = BountyTypeRegistry.get(ResourceLocation.parse(logicName))!!
 
     private fun getRelatedDecrees(): Set<Decree> {
         return emptySet()
@@ -73,33 +71,10 @@ data class BountyDataEntry(
     fun textOnBounty(player: Player, isObj: Boolean, current: Int): List<MutableComponent> {
         return when (isMystery) {
             true -> listOf( Component.literal("???").withStyle(ChatFormatting.BOLD).append(
-                Component.literal("x$amount").withStyle(ChatFormatting.WHITE)
+                Component.literal("x$amount").withStyle(rarity.color)
             ) )
             false -> logic.textOnBounty(this, isObj, player, current)
         }
-    }
-
-    @Suppress("NOTHING_TO_INLINE")
-    companion object {
-
-        fun packFlags(inMystery: Boolean, inRarity: BountyRarity, inLogic: ResourceLocation, inAmt: Int): Int {
-            val mysteryNum = 0u.putUnsafeBits(31, if (inMystery) 1u else 0u)
-            val rarityNum = 0u.putUnsafeBits(28, inRarity.ordinal.toUInt())
-            val logicNumSigned = BountyTypeRegistry.toIntId(BountyTypeRegistry.get(inLogic)!!)
-            val logicNum = 0u.putUnsafeBits(24, logicNumSigned.toUInt())
-            val amtNum = 0u.putUnsafeBits(0, inAmt.toUInt()) // 24 bit uint max is safe
-            return (mysteryNum + rarityNum + logicNum + amtNum).toInt()
-        }
-
-        // Warning: these can overflow and do not do bounds checking
-        inline fun UInt.getUnsafeBits(index: Int, size: Int): UInt {
-            return ((this shr index) and (UInt.MAX_VALUE shr (UInt.SIZE_BITS - size)))
-        }
-
-        inline fun UInt.putUnsafeBits(index: Int, value: UInt): UInt {
-            return this + (value shl index)
-        }
-
     }
 
 }

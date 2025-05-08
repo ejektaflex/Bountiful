@@ -121,7 +121,7 @@
         "scute": {
             "type": "item",
 			"rarity": "RARE",
-            "content": "minecraft:scute",
+            "content": "minecraft:turtle_scute",
             "amount": {
                 "min": 2,
                 "max": 6

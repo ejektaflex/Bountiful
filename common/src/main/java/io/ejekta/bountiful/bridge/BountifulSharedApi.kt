@@ -1,22 +1,24 @@
 package io.ejekta.bountiful.bridge
 
-import com.google.gson.JsonElement
 import com.google.gson.JsonNull
+import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
+import com.mojang.serialization.JsonOps
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
-import io.ejekta.bountiful.components.GsonObject
 import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.villager.DecreeTradeFactory
 import io.ejekta.bountiful.messages.*
 import io.ejekta.bountiful.util.iterateBountyStacks
 import io.ejekta.kambrik.Kambrik
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
+import net.minecraft.advancements.Criterion
 import net.minecraft.advancements.critereon.EnterBlockTrigger
 import net.minecraft.advancements.critereon.PlayerTrigger
+import net.minecraft.advancements.critereon.SimpleCriterionTrigger
 import net.minecraft.client.renderer.item.ItemProperties
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.resources.RegistryOps
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
@@ -29,6 +31,9 @@ import net.minecraft.world.entity.npc.VillagerTrades
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.CreativeModeTabs
 import net.minecraft.world.item.Item
+import kotlin.jvm.optionals.getOrNull
+
+typealias GsonObject = JsonObject
 
 interface BountifulSharedApi {
 
@@ -123,16 +128,40 @@ interface BountifulSharedApi {
                     val triggerObjs = objs.filter { it.criteriaJson != null }.takeIf { it.isNotEmpty() } ?: emptyList()
 
                     for (obj in triggerObjs) {
-                        val result = Kambrik.Criterion.testAgainst(
-                            trigger,
-                            Kambrik.Criterion.createCriterionConditionsFromGson(
-                                GsonObject().apply {
-                                    add("trigger", JsonPrimitive(obj.content))
-                                    add("conditions", obj.criteriaJson ?: JsonNull.INSTANCE)
-                                }
-                            ) ?: continue,
-                            predicate
-                        )
+
+                        // Find the trigger in the registry
+                        val objTrigger = BuiltInRegistries.TRIGGER_TYPES.getOptional(ResourceLocation.parse(obj.content)).getOrNull()
+                        // If it cannot be found, or is different from the 'launching' trigger, skip evaluation
+                        if (objTrigger == null || objTrigger::class != trigger::class) {
+                            continue
+                        }
+
+                        val regOps = RegistryOps.create(JsonOps.INSTANCE, player.server.registryAccess())
+
+                        // TODO on resource reload, re-'compile' each JSON block only once with the server and avoid this cost
+                        val gs = GsonObject().apply {
+                            add("trigger", JsonPrimitive(obj.content))
+                            add("conditions", obj.criteriaJson ?: JsonNull.INSTANCE)
+                        }
+
+                        val decoded = Criterion.CODEC.decode(regOps, gs)
+
+                        val resulting = decoded.result().getOrNull()
+
+                        if (resulting == null) {
+                            Bountiful.LOGGER.warn("Failed to parse Criteria objective '${obj.id}': ${decoded.resultOrPartial()}")
+                            continue
+                        }
+
+                        val triggerInstance = resulting.first.triggerInstance
+                        val castTriggerInstance = triggerInstance as? SimpleCriterionTrigger.SimpleInstance
+
+                        if (triggerInstance == null) {
+                            Bountiful.LOGGER.error("Could not parse trigger instance for obj '${obj.id}'")
+                            continue
+                        }
+
+                        val result = predicate.test(castTriggerInstance!!)
 
                         if (result) {
                             advance(obj)

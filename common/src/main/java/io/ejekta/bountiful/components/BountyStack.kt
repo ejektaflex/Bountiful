@@ -73,13 +73,13 @@ class BountyStack(val stack: ItemStack) {
 
     private fun consumeObjectives(player: Player): Boolean {
         return objs.all {
-            (it.logic as IBountyObjective).consumeObjectives(it, player, progressOf(it))
+            (it.logic as? IBountyObjective)?.consumeObjectives(it, player, progressOf(it)) == true
         }
     }
 
     private fun isDone(player: Player): Boolean {
         return objs.all {
-            (it.logic as IBountyObjective).getProgress(it, player, progressOf(it)).isComplete()
+            (it.logic as? IBountyObjective)?.getProgress(it, player, progressOf(it))?.isComplete() == true
         } && ((info.timeLeftTicks(player.level())) > 0)
     }
 
