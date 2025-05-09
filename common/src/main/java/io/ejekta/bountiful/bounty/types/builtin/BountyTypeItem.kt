@@ -2,8 +2,10 @@ package io.ejekta.bountiful.bounty.types.builtin
 
 import com.google.gson.JsonObject
 import com.mojang.serialization.JsonOps
+import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.types.IBountyExchangeable
 import io.ejekta.bountiful.bounty.types.Progress
+import io.ejekta.bountiful.bridge.GsonObject
 import io.ejekta.bountiful.components.BountyDataEntry
 import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.bountiful.util.getTagItemKey
@@ -15,6 +17,7 @@ import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.ChatFormatting
 import net.minecraft.core.RegistryAccess
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.nbt.NbtOps
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.RegistryOps
@@ -92,10 +95,31 @@ class BountyTypeItem : IBountyExchangeable {
         val toGive = (0 until entry.amount).chunked(item.defaultMaxStackSize).map { it.size }
 
         for (amtToGive in toGive) {
-            val stack = ItemStack(item, amtToGive).apply {
-                // TODO give itemstack NBT rewards
-                //nbt = entry.nbt
+
+            val stack = when (val componentData = entry.data) {
+                null -> {
+                    ItemStack(item, amtToGive)
+                }
+                else -> {
+                    val gson = GsonObject().apply {
+                        addProperty("id",  item.id.toString())
+                        addProperty("count", amtToGive)
+                        add("components", componentData)
+                    }
+
+                    val ops = RegistryOps.create(JsonOps.INSTANCE, player.registryAccess())
+                    val stackResult = ItemStack.CODEC.decode(ops, gson)
+                    val result = stackResult.result().getOrNull()
+
+                    if (result == null) {
+                        Bountiful.LOGGER.warn("Decoding item to give resulted in null")
+                        continue
+                    }
+
+                    result.first
+                }
             }
+
             // Try give directly to player, otherwise drop at feet
             if (!player.addItem(stack)) {
                 val pos = player.position()

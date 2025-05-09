@@ -164,7 +164,9 @@ interface BountifulSharedApi {
                         val result = predicate.test(castTriggerInstance!!)
 
                         if (result) {
+                            // Advance on server
                             advance(obj)
+                            // Send advance to client
                             UpdateCriteriaObjective(player.inventory.findSlotMatchingItem(stack), obj.id).sendToClient(player)
                         }
                     }
