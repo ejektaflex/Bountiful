@@ -120,7 +120,7 @@ object BountifulIO {
                 }
             }
 
-            val worstCaseRewNum = configData.bounty.maxNumRewards
+            val worstCaseRewNum = configData.bounty.maxNumInitial
 
             val topRewards = allRewardEntries.run {
                 sortedBy { -it.maxWorth }.take(worstCaseRewNum.coerceAtMost(size))

@@ -29,7 +29,7 @@ class BountifulConfigData {
         var shouldHaveTimersAndExpire = true
         var objectiveDifficultyModifierPercent = 0
         var allowDecreeMixing = true
-        var maxNumRewards = 2
+        var maxNumInitial = 2
         var reverseMatchingAlgorithm = false
         var matchCountPreference = PoolEntry.EntryRange(1, 2)
     }
@@ -186,12 +186,12 @@ class BountifulConfigData {
         bountyCat.addEntry(
             creator.startIntSlider(
                 Component.literal("Max Number of Rewards"),
-                bounty.maxNumRewards,
+                bounty.maxNumInitial,
                 1, 4
             ).setDefaultValue(2).setTooltip(
                 Component.literal("Determines the max number of rewards that will be in a bounty")
             ).setSaveConsumer {
-                bounty.maxNumRewards = it
+                bounty.maxNumInitial = it
             }.setTextGetter {
                 textLiteral("$it Rewards")
             }.build()

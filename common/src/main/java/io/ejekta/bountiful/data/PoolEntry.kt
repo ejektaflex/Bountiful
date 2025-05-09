@@ -1,5 +1,8 @@
 package io.ejekta.bountiful.data
 
+import com.google.gson.JsonArray
+import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
@@ -18,9 +21,8 @@ import io.ejekta.kudzu.KudzuVine
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonObject
 import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
@@ -29,6 +31,8 @@ import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.streams.asSequence
+import kotlin.streams.toList
 
 @Serializable
 class PoolEntry private constructor() {
@@ -71,6 +75,68 @@ class PoolEntry private constructor() {
             }.also {
                 return it
             }
+        }
+    }
+
+    var biomes: @Contextual JsonElement? = null
+
+    @Transient var validBiomeCache: Set<String>? = null
+
+    fun checkValidBiome(world: ServerLevel, biomeId: String): Boolean {
+        if (biomes == null) {
+            return true
+        }
+        if (validBiomeCache == null) {
+            validBiomeCache = genBiomeCache(world)
+        }
+        return biomeId in validBiomeCache!!
+    }
+
+    fun getRawBiomeList(element: JsonElement): List<String> {
+        if (element is JsonPrimitive) {
+            if ((element as JsonPrimitive).isString) {
+                val foundBiomeId = element!!.asString
+                return listOf(foundBiomeId)
+            } else {
+                Bountiful.LOGGER.warn("Biomes is defined for pool entry ${id}, but it is not a valid type")
+            }
+        } else if (element is JsonArray) {
+            return element.asJsonArray.mapNotNull {
+                if ((it as? JsonPrimitive)?.isString == true) {
+                    (it as JsonPrimitive).asString
+                } else {
+                    null
+                }
+            }
+        } else {
+            Bountiful.LOGGER.warn("Biomes is defined for pool entry ${id}, but it is not an ingestible type")
+        }
+        return emptyList()
+    }
+
+    fun genBiomeCache(world: ServerLevel): Set<String> {
+        if (biomes == null) {
+            return emptySet()
+        }
+
+        val retSet = mutableSetOf<String>()
+
+        val regBiomes = world.registryAccess().registry(Registries.BIOME).get()
+
+        val ourBiomeList = getRawBiomeList(biomes!!).groupBy { it.startsWith("#") }
+        val biomeListRawNames = (ourBiomeList[false] ?: emptyList()).toSet()
+        val biomeListTagNames = (ourBiomeList[true] ?: emptyList()).toSet()
+
+        regBiomes.asLookup().listElements().forEach {
+            val loc = it.key().location().toString()
+            val tags = it.tags().map { tk -> "#${tk.location}" }.toList().toSet()
+            if (loc in biomeListRawNames || biomeListTagNames.intersect(tags).isNotEmpty()) {
+                retSet.add(loc)
+            }
+        }
+
+        return retSet.also {
+            println("Generated biome cache for '${id}' which is: $it")
         }
     }
 

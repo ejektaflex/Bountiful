@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation
 class Bountiful {
     companion object {
         const val ID = "bountiful"
-        const val nightly = false
+        const val nightly = true
         var packMode = false
         fun id(str: String) = ResourceLocation.fromNamespaceAndPath(ID, str)
         val LOGGER = Kambrik.Logging.createLogger(ID)

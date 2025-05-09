@@ -63,7 +63,7 @@
   "depends": {
     "fabricloader": ">=0.14.21",
     "fabric": "*",
-    "minecraft": "${minecraft_version}",
+    "minecraft": ">=1.21 <=1.21.1",
     "kambrik": ">=${kambrik_version}"
   },
   "suggests": {

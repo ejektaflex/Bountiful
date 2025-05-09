@@ -1,14 +1,17 @@
 # Bountiful
 
 Fabric:
-[![](http://cf.way2muchnoise.eu/versions/bountiful-fabric.svg)](https://minecraft.curseforge.com/projects/bountiful-fabric) [![](http://cf.way2muchnoise.eu/full_bountiful-fabric_downloads.svg)](https://minecraft.curseforge.com/projects/bountiful-fabric/files)
+[![](http://cf.way2muchnoise.eu/versions/bountiful-fabric.svg)](https://www.curseforge.com/minecraft/mc-mods/bountiful-fabric) [![](http://cf.way2muchnoise.eu/full_bountiful-fabric_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/bountiful-fabric/files)
 
 Forge:
-[![](http://cf.way2muchnoise.eu/versions/bountiful.svg)](https://minecraft.curseforge.com/projects/bountiful) [![](http://cf.way2muchnoise.eu/full_bountiful_downloads.svg)](https://minecraft.curseforge.com/projects/bountiful/files)
+[![](http://cf.way2muchnoise.eu/versions/bountiful.svg)](https://www.curseforge.com/minecraft/mc-mods/bountiful) [![](http://cf.way2muchnoise.eu/full_bountiful_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/bountiful/files)
+
+Modrinth:
+[![Modrinth Downloads](https://img.shields.io/modrinth/dt/bountiful?style=flat&label=Modrinth)](https://modrinth.com/mod/bountiful)
 
 A mod that adds bounty boards to Minecraft.
 
-[Forge](https://minecraft.curseforge.com/projects/bountiful) | [Fabric](https://minecraft.curseforge.com/projects/bountiful-fabric) | [GitHub](https://github.com/ejektaflex/Bountiful)
+[Forge](https://minecraft.curseforge.com/projects/bountiful) | [Fabric](https://minecraft.curseforge.com/projects/bountiful-fabric) | [Modrinth](https://modrinth.com/mod/bountiful) | [GitHub](https://github.com/ejektaflex/Bountiful)
 
 ### Language Localization
 [![Crowdin](https://badges.crowdin.net/bountiful/localized.svg)](https://crowdin.com/project/bountiful)
