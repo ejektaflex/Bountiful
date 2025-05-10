@@ -60,7 +60,11 @@
                 "max": 8
             },
             "unitWorth": 100,
-            "nbt": "{Potion:\"minecraft:water\"}"
+            "components": {
+                "minecraft:potion_contents": {
+                    "potion": "minecraft:water"
+                }
+            }
         },
 
         "potion_awkward": {
@@ -71,7 +75,11 @@
                 "max": 6
             },
             "unitWorth": 200,
-            "nbt": "{Potion:\"minecraft:awkward\"}"
+            "components": {
+                "minecraft:potion_contents": {
+                    "potion": "minecraft:awkward"
+                }
+            }
         },
 
         "rabbit_foot": {

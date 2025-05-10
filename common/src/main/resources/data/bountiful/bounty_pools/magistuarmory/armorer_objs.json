@@ -1,0 +1,41 @@
+{
+    "requires": ["magistuarmory"],
+    "content": {
+        "ma_steel_chain": {
+            "type": "minecraft:item",
+            "content": "magistuarmory:steel_chain",
+            "unitWorth": 200.0,
+            "amount": {
+                "min": 3,
+                "max": 16
+            }
+        },
+        "ma_chain_plate": {
+            "type": "minecraft:item",
+            "content": "magistuarmory:steel_chainmail",
+            "unitWorth": 500.0,
+            "amount": {
+                "min": 2,
+                "max": 8
+            }
+        },
+        "ma_leather_strip": {
+            "type": "minecraft:item",
+            "content": "magistuarmory:leather_strip",
+            "unitWorth": 66.0,
+            "amount": {
+                "min": 2,
+                "max": 12
+            }
+        },
+        "ma_steel_plate": {
+            "type": "minecraft:item",
+            "content": "magistuarmory:steel_plate",
+            "unitWorth": 1000.0,
+            "amount": {
+                "min": 1,
+                "max": 6
+            }
+        }
+    }
+}

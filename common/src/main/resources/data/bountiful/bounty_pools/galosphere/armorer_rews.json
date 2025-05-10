@@ -1,0 +1,85 @@
+{
+    "requires": ["galosphere"],
+	"content": {
+        "galo_silver_helm": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "galosphere:sterling_helmet",
+            "unitWorth": 1500.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "galosphere:silver_ingot"
+                }
+            ]
+        },
+        "galo_silver_chest": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "galosphere:sterling_chestplate",
+            "unitWorth": 2500,
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "galosphere:silver_ingot"
+                }
+            ]
+        },
+        "galo_silver_legs": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "galosphere:sterling_leggings",
+            "unitWorth": 1750.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "galosphere:silver_ingot"
+                }
+            ]
+        },
+        "galo_silver_boots": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "galosphere:sterling_boots",
+            "unitWorth": 2000.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "galosphere:silver_ingot"
+                }
+            ]
+        },
+        "galo_silver_horse_armor": {
+            "type": "minecraft:item",
+            "rarity": "RARE",
+            "content": "galosphere:sterling_horse_armor",
+            "unitWorth": 3500.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "galosphere:silver_ingot"
+                }
+            ]
+        }
+	}
+}

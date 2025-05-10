@@ -1,0 +1,54 @@
+{
+    "requires": ["supplementaries"],
+    "content": {
+        "supp_altimeter": {
+            "type": "minecraft:item",
+            "content": "supplementaries:altimeter",
+            "unitWorth": 4000.0,
+            "amount": {
+                "min": 1,
+                "max": 2
+            }
+        },
+        "supp_bubb": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "supplementaries:bubble_blower",
+            "unitWorth": 1400.0,
+            "amount": {
+                "min": 1,
+                "max": 3
+            },
+            "components": {
+                "supplementaries:charges": 200
+            }
+        },
+        "supp_pulley": {
+            "type": "minecraft:item",
+            "content": "supplementaries:pulley_block",
+            "unitWorth": 1200.0,
+            "amount": {
+                "min": 1,
+                "max": 10
+            }
+        },
+        "supp_faucet": {
+            "type": "minecraft:item",
+            "content": "supplementaries:faucet",
+            "unitWorth": 4000.0,
+            "amount": {
+                "min": 1,
+                "max": 6
+            }
+        },
+        "supp_bellows": {
+            "type": "minecraft:item",
+            "content": "supplementaries:bellows",
+            "unitWorth": 650.0,
+            "amount": {
+                "min": 1,
+                "max": 6
+            }
+        }
+    }
+}

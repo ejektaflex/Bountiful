@@ -1,0 +1,34 @@
+{
+    "requires": ["refinedstorage"],
+    "content": {
+        "refi_basic_proc": {
+            "type": "minecraft:item",
+            "content": "refinedstorage:basic_processor",
+            "unitWorth": 2000.0,
+            "amount": {
+                "min": 1,
+                "max": 4
+            }
+        },
+        "refi_impr_proc": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "refinedstorage:improved_processor",
+            "unitWorth": 2400.0,
+            "amount": {
+                "min": 1,
+                "max": 3
+            }
+        },
+        "refi_adv_proc": {
+            "type": "minecraft:item",
+            "rarity": "EPIC",
+            "content": "refinedstorage:advanced_processor",
+            "unitWorth": 4000.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        }
+    }
+}

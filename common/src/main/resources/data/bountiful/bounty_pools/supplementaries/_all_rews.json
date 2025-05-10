@@ -1,0 +1,24 @@
+{
+    "requires": ["supplementaries"],
+    "content": {
+        "supp_popper": {
+            "type": "minecraft:item",
+            "content": "supplementaries:confetti_popper",
+            "unitWorth": 300.0,
+            "amount": {
+                "min": 3,
+                "max": 12
+            }
+        },
+        "supp_safe": {
+            "type": "minecraft:item",
+            "rarity": "LEGENDARY",
+            "content": "supplementaries:safe",
+            "unitWorth": 12000.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        }
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "requires": ["villagerhats"],
+    "content": {
+        "vill_sheephat": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "villagerhats:shepherd_hat",
+            "unitWorth": 1100.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        }
+    }
+}

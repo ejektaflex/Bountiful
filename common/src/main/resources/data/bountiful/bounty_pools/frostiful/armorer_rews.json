@@ -1,0 +1,65 @@
+{
+    "requires": ["frostiful"],
+    "content": {
+        "frost_helm_padded": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "frostiful:fur_padded_chainmail_helmet",
+            "unitWorth": 3750.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "weightMult": 0.1,
+            "biomes": ["#frostiful:is_climate/cold", "#frostiful:is_climate/freezing"]
+        },
+        "frost_chest_padded": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "frostiful:fur_padded_chainmail_chestplate",
+            "unitWorth": 6000.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "weightMult": 0.1,
+            "biomes": ["#frostiful:is_climate/cold", "#frostiful:is_climate/freezing"]
+        },
+        "frost_legs_padded": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "frostiful:fur_padded_chainmail_leggings",
+            "unitWorth": 5250.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "weightMult": 0.1,
+            "biomes": ["#frostiful:is_climate/cold", "#frostiful:is_climate/freezing"]
+        },
+        "frost_boots_padded": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "frostiful:fur_padded_chainmail_boots",
+            "unitWorth": 3000.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "weightMult": 0.1,
+            "biomes": ["#frostiful:is_climate/cold", "#frostiful:is_climate/freezing"]
+        },
+        "frost_skates_padded": {
+            "type": "minecraft:item",
+            "rarity": "RARE",
+            "content": "frostiful:armored_ice_skates",
+            "unitWorth": 3000.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "weightMult": 0.4,
+            "biomes": ["#frostiful:is_climate/cold", "#frostiful:is_climate/freezing"]
+        }
+    }
+}

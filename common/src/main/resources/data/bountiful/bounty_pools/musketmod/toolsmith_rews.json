@@ -1,0 +1,54 @@
+{
+    "requires": ["musketmod"],
+    "content": {
+        "mmod_pistol": {
+            "type": "minecraft:item",
+            "content": "musketmod:pistol",
+            "unitWorth": 2250,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        },
+        "mmod_rifle": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "musketmod:musket",
+            "unitWorth": 3250,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        },
+        "mmod_blunder": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "musketmod:blunderbuss",
+            "unitWorth": 3250,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        },
+        "mmod_rifle_scoped": {
+            "type": "minecraft:item",
+            "rarity": "RARE",
+            "content": "musketmod:musket_with_scope",
+            "unitWorth": 4000.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        },
+        "mmod_rifle_bayonet": {
+            "type": "minecraft:item",
+            "rarity": "RARE",
+            "content": "musketmod:musket_with_bayonet",
+            "unitWorth": 5000.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        }
+    }
+}

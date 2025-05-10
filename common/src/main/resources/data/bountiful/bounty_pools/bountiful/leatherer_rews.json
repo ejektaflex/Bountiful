@@ -62,7 +62,7 @@
             "forbids": [
                 {
                     "type": "item",
-                    "content": "minecraft:scute"
+                    "content": "minecraft:turtle_scute"
                 }
             ]
         },

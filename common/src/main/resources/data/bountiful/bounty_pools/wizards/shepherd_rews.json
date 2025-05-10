@@ -1,0 +1,45 @@
+{
+    "requires": ["wizards"],
+    "content": {
+        "wiz_hat": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "wizards:wizard_robe_head",
+            "unitWorth": 1000.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        },
+        "wiz_robe": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "wizards:wizard_robe_chest",
+            "unitWorth": 1800.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        },
+        "wiz_legs": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "wizards:wizard_robe_legs",
+            "unitWorth": 1200.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        },
+        "wiz_boots": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "wizards:wizard_robe_feet",
+            "unitWorth": 800.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        }
+    }
+}

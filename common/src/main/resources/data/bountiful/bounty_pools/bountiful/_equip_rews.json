@@ -9,7 +9,6 @@
 				"max": 1
 			},
 			"unitWorth": 1000,
-			"nbt": "{Damage:0}",
 			"forbids": [
 				{
 					"type": "item",

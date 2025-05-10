@@ -1,0 +1,35 @@
+{
+    "requires": ["supplementaries"],
+    "content": {
+        "wind_vane": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "supplementaries:wind_vane",
+            "unitWorth": 3250.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        },
+        "supp_cannon": {
+            "type": "minecraft:item",
+            "rarity": "RARE",
+            "content": "supplementaries:cannon",
+            "unitWorth": 6000.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        },
+        "supp_illuminator": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "supplementaries:redstone_illuminator",
+            "unitWorth": 1400.0,
+            "amount": {
+                "min": 1,
+                "max": 4
+            }
+        }
+    }
+}

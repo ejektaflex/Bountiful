@@ -1,0 +1,52 @@
+{
+    "requires": ["tide"],
+    "content": {
+        "tide_iron_hook": {
+            "type": "minecraft:item",
+            "content": "tide:iron_fishing_hook",
+            "unitWorth": 3100.0,
+            "amount": {
+                "min": 1,
+                "max": 8
+            }
+        },
+        "tide_lava_hook": {
+            "type": "minecraft:item",
+            "content": "tide:lavaproof_fishing_hook",
+            "unitWorth": 3750.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        },
+        "tide_line_braid": {
+            "type": "minecraft:item",
+            "content": "tide:braided_line",
+            "unitWorth": 350.0,
+            "amount": {
+                "min": 1,
+                "max": 3
+            }
+        },
+        "tide_line_reinforced": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "tide:reinforced_line",
+            "unitWorth": 2100.0,
+            "amount": {
+                "min": 1,
+                "max": 2
+            }
+        },
+        "tide_line_lucky": {
+            "type": "minecraft:item",
+            "rarity": "RARE",
+            "content": "tide:fortune_line",
+            "unitWorth": 2600.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        }
+    }
+}

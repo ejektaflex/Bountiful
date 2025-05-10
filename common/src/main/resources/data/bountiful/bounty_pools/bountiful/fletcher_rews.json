@@ -42,7 +42,13 @@
                 "max": 1
             },
             "unitWorth": 1500,
-            "nbt": "{RepairCost:1,Damage:0,Enchantments:[{lvl:1s,id:\"minecraft:power\"}]}"
+            "components": {
+                "minecraft:enchantments": {
+                    "levels": {
+                        "minecraft:power": 1
+                    }
+                }
+            }
         },
 
         "ench_book_flame": {
@@ -54,7 +60,13 @@
                 "max": 1
             },
             "unitWorth": 1500,
-            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:flame\"}]}"
+            "components": {
+                "minecraft:stored_enchantments": {
+                    "levels": {
+                        "minecraft:flame": 1
+                    }
+                }
+            }
         },
 
         "tipped_arrow_heals": {
@@ -66,18 +78,26 @@
                 "max": 10
             },
             "unitWorth": 400,
-            "nbt": "{Potion:\"minecraft:strong_healing\"}"
+            "components": {
+                "minecraft:potion_contents": {
+                    "potion": "minecraft:strong_healing"
+                }
+            }
         },
 
         "tipped_arrow_weakness": {
-            "type": "item",
+            "type": "minecraft:item",
             "content": "minecraft:tipped_arrow",
+            "unitWorth": 400.0,
             "amount": {
                 "min": 2,
                 "max": 8
             },
-            "unitWorth": 400.0,
-            "nbt": "{Potion:\"minecraft:weakness\"}"
+            "components": {
+                "minecraft:potion_contents": {
+                    "potion": "minecraft:weakness"
+                }
+            }
         },
 
         "spectral_arrow": {
@@ -100,7 +120,13 @@
                 "max": 1
             },
             "unitWorth": 1500.0,
-            "nbt": "{Damage:0,RepairCost:1,Enchantments:[{lvl:1s,id:\"minecraft:infinity\"}]}"
+            "components": {
+                "minecraft:stored_enchantments": {
+                    "levels": {
+                        "minecraft:infinity": 1
+                    }
+                }
+            }
         }
 
     }

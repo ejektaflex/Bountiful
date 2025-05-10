@@ -10,7 +10,6 @@
                 "max": 1
             },
             "unitWorth": 4000,
-            "nbt": "{Damage:0}",
             "forbids": [
                 {
                     "type": "item",
@@ -27,7 +26,6 @@
                 "max": 1
             },
             "unitWorth": 6400,
-            "nbt": "{Damage:0}",
             "forbids": [
                 {
                     "type": "item",
@@ -44,7 +42,6 @@
                 "max": 1
             },
             "unitWorth": 5600,
-            "nbt": "{Damage:0}",
             "forbids": [
                 {
                     "type": "item",
@@ -61,7 +58,6 @@
                 "max": 1
             },
             "unitWorth": 3200,
-            "nbt": "{Damage:0}",
             "forbids": [
                 {
                     "type": "item",
@@ -90,7 +86,6 @@
                 "max": 1
             },
             "unitWorth": 4200,
-            "nbt": "{Damage:0}",
             "forbids": [
                 {
                     "type": "item",
@@ -108,7 +103,6 @@
                 "max": 1
             },
             "unitWorth": 2400,
-            "nbt": "{Damage:0}",
             "forbids": [
                 {
                     "type": "item",
@@ -125,8 +119,7 @@
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 6250,
-            "nbt": "{Damage:0}"
+            "unitWorth": 6250
         },
 
         "gold_chest": {
@@ -137,8 +130,7 @@
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 10000,
-            "nbt": "{Damage:0}"
+            "unitWorth": 10000
         },
 
         "gold_legs": {
@@ -149,8 +141,7 @@
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 8750,
-            "nbt": "{Damage:0}"
+            "unitWorth": 8750
         },
 
         "gold_boots": {
@@ -161,8 +152,7 @@
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 5000,
-            "nbt": "{Damage:0}"
+            "unitWorth": 5000
         },
 
         "gold_horse_armor": {
@@ -220,7 +210,6 @@
                 "max": 1
             },
             "unitWorth": 20000,
-            "nbt": "{Damage:0}",
             "forbids": [
                 {
                     "type": "item",
@@ -239,7 +228,6 @@
                 "max": 1
             },
             "unitWorth": 32000,
-            "nbt": "{Damage:0}",
             "forbids": [
                 {
                     "type": "item",
@@ -258,7 +246,6 @@
                 "max": 1
             },
             "unitWorth": 28000,
-            "nbt": "{Damage:0}",
             "forbids": [
                 {
                     "type": "item",
@@ -277,7 +264,6 @@
                 "max": 1
             },
             "unitWorth": 16000,
-            "nbt": "{Damage:0}",
             "forbids": [
                 {
                     "type": "item",
@@ -296,7 +282,6 @@
                 "max": 1
             },
             "unitWorth": 30000,
-            "nbt": "{Damage:0}",
             "forbids": [
                 {
                     "type": "item",
@@ -315,7 +300,6 @@
                 "max": 1
             },
             "unitWorth": 48000,
-            "nbt": "{Damage:0}",
             "forbids": [
                 {
                     "type": "item",
@@ -334,7 +318,6 @@
                 "max": 1
             },
             "unitWorth": 42000,
-            "nbt": "{Damage:0}",
             "forbids": [
                 {
                     "type": "item",
@@ -353,7 +336,6 @@
                 "max": 1
             },
             "unitWorth": 24000,
-            "nbt": "{Damage:0}",
             "forbids": [
                 {
                     "type": "item",

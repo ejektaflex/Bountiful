@@ -1,0 +1,14 @@
+{
+    "requires": ["supplementaries"],
+    "content": {
+        "supp_pancake": {
+            "type": "minecraft:item",
+            "content": "supplementaries:pancake",
+            "unitWorth": 350.0,
+            "amount": {
+                "min": 2,
+                "max": 8
+            }
+        }
+    }
+}

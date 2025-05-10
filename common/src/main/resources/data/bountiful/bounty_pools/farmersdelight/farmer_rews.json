@@ -1,0 +1,24 @@
+{
+    "requires": ["farmersdelight"],
+    "content": {
+        "deli_horse_feed": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "farmersdelight:horse_feed",
+            "unitWorth": 1600.0,
+            "amount": {
+                "min": 1,
+                "max": 6
+            }
+        },
+        "deli_dog_food": {
+            "type": "minecraft:item",
+            "content": "farmersdelight:dog_food",
+            "unitWorth": 900.0,
+            "amount": {
+                "min": 2,
+                "max": 12
+            }
+        }
+    }
+}

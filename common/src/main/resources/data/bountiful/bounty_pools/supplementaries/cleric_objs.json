@@ -1,0 +1,25 @@
+{
+    "requires": ["supplementaries"],
+    "content": {
+        "supp_lumi_bottle": {
+            "type": "minecraft:item",
+            "rarity": "RARE",
+            "content": "supplementaries:lumisene_bottle",
+            "unitWorth": 750.0,
+            "amount": {
+                "min": 1,
+                "max": 5
+            }
+        },
+        "supp_statue": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "supplementaries:statue",
+            "unitWorth": 400.0,
+            "amount": {
+                "min": 1,
+                "max": 6
+            }
+        }
+    }
+}

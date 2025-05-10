@@ -1,0 +1,32 @@
+{
+    "requires": ["supplementaries"],
+    "content": {
+        "supp_rope": {
+            "type": "minecraft:item",
+            "content": "supplementaries:rope",
+            "unitWorth": 150.0,
+            "amount": {
+                "min": 2,
+                "max": 16
+            }
+        },
+        "supp_bottle": {
+            "type": "minecraft:item",
+            "content": "supplementaries:jar",
+            "unitWorth": 1400.0,
+            "amount": {
+                "min": 1,
+                "max": 4
+            }
+        },
+        "supp_sack": {
+            "type": "minecraft:item",
+            "content": "supplementaries:sack",
+            "unitWorth": 350.0,
+            "amount": {
+                "min": 2,
+                "max": 16
+            }
+        }
+    }
+}

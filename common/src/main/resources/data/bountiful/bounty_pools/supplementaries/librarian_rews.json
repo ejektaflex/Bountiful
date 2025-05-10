@@ -1,0 +1,55 @@
+{
+    "requires": ["supplementaries"],
+    "content": {
+        "supp_clock": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "supplementaries:clock_block",
+            "unitWorth": 4000.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        },
+        "supp_globe": {
+            "type": "minecraft:item",
+            "rarity": "EPIC",
+            "content": "supplementaries:globe",
+            "unitWorth": 100.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        },
+        "supp_cage": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "supplementaries:cage",
+            "unitWorth": 3200.0,
+            "amount": {
+                "min": 1,
+                "max": 3
+            }
+        },
+        "supp_hourglass": {
+            "type": "minecraft:item",
+            "rarity": "RARE",
+            "content": "supplementaries:hourglass",
+            "unitWorth": 3750.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        },
+        "supp_ant_ink": {
+            "type": "minecraft:item",
+            "rarity": "RARE",
+            "content": "supplementaries:antique_ink",
+            "unitWorth": 3500.0,
+            "amount": {
+                "min": 1,
+                "max": 2
+            }
+        }
+    }
+}

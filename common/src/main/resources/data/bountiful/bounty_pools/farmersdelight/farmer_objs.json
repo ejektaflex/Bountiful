@@ -1,0 +1,59 @@
+{
+    "requires": ["farmersdelight"],
+    "content": {
+        "deli_straw": {
+            "type": "minecraft:item",
+            "content": "farmersdelight:straw",
+            "unitWorth": 50.0,
+            "amount": {
+                "min": 4,
+                "max": 64
+            }
+        },
+        "deli_crate_cabbage": {
+            "type": "minecraft:item",
+            "content": "farmersdelight:cabbage_crate",
+            "unitWorth": 540.0,
+            "amount": {
+                "min": 1,
+                "max": 20
+            }
+        },
+        "deli_crate_tomato": {
+            "type": "minecraft:item",
+            "content": "farmersdelight:tomato_crate",
+            "unitWorth": 500.0,
+            "amount": {
+                "min": 1,
+                "max": 20
+            }
+        },
+        "deli_crate_onion": {
+            "type": "minecraft:item",
+            "content": "farmersdelight:onion_crate",
+            "unitWorth": 540.0,
+            "amount": {
+                "min": 1,
+                "max": 20
+            }
+        },
+        "deli_crate_beetroot": {
+            "type": "minecraft:item",
+            "content": "farmersdelight:beetroot_crate",
+            "unitWorth": 585.0,
+            "amount": {
+                "min": 1,
+                "max": 18
+            }
+        },
+        "deli_crate_ricebag": {
+            "type": "minecraft:item",
+            "content": "farmersdelight:rice_bag",
+            "unitWorth": 400.0,
+            "amount": {
+                "min": 1,
+                "max": 22
+            }
+        }
+    }
+}

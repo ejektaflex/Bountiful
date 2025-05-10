@@ -1,0 +1,14 @@
+{
+    "requires": ["galosphere"],
+    "content": {
+        "galo_silver_expl": {
+            "type": "minecraft:item",
+            "content": "galosphere:silver_bomb",
+            "unitWorth": 3000.0,
+            "amount": {
+                "min": 1,
+                "max": 6
+            }
+        }
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "requires": ["villagerhats"],
+    "content": {
+        "vill_fishhat": {
+            "type": "minecraft:item",
+            "rarity": "UNCOMMON",
+            "content": "villagerhats:fisherman_hat",
+            "unitWorth": 1300.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        }
+    }
+}

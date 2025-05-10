@@ -1,0 +1,45 @@
+{
+    "requires": ["frostiful"],
+    "content": {
+        "frost_tuft_polar": {
+            "type": "minecraft:item",
+            "content": "frostiful:polar_bear_fur_tuft",
+            "unitWorth": 100.0,
+            "amount": {
+                "min": 2,
+                "max": 8
+            },
+            "biomes": ["#frostiful:is_climate/cold", "#frostiful:is_climate/freezing"]
+        },
+        "frost_tuft_wolf": {
+            "type": "minecraft:item",
+            "content": "frostiful:wolf_fur_tuft",
+            "unitWorth": 100.0,
+            "amount": {
+                "min": 2,
+                "max": 8
+            },
+            "biomes": ["#frostiful:is_climate/cold", "#frostiful:is_climate/freezing"]
+        },
+        "frost_tuft_ocelot": {
+            "type": "minecraft:item",
+            "content": "frostiful:ocelot_fur_tuft",
+            "unitWorth": 100.0,
+            "amount": {
+                "min": 1,
+                "max": 6
+            },
+            "biomes": ["#frostiful:is_climate/cold", "#frostiful:is_climate/freezing"]
+        },
+        "frost_tuft_padded": {
+            "type": "minecraft:item",
+            "content": "frostiful:fur_padding",
+            "unitWorth": 100.0,
+            "amount": {
+                "min": 2,
+                "max": 16
+            },
+            "biomes": ["#frostiful:is_climate/cold", "#frostiful:is_climate/freezing"]
+        }
+    }
+}

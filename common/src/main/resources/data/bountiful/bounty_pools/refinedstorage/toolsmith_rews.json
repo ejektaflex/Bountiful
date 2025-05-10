@@ -1,0 +1,14 @@
+{
+    "requires": ["refinedstorage"],
+    "content": {
+        "refi_wrench": {
+            "type": "minecraft:item",
+            "content": "refinedstorage:wrench",
+            "unitWorth": 6500.0,
+            "amount": {
+                "min": 1,
+                "max": 1
+            }
+        }
+    }
+}

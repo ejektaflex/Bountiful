@@ -1,0 +1,23 @@
+{
+    "requires": ["refinedstorage"],
+    "content": {
+        "refi_silicon": {
+            "type": "minecraft:item",
+            "content": "refinedstorage:silicon",
+            "unitWorth": 450.0,
+            "amount": {
+                "min": 3,
+                "max": 24
+            }
+        },
+        "refi_machine_case": {
+            "type": "minecraft:item",
+            "content": "refinedstorage:machine_casing",
+            "unitWorth": 7000.0,
+            "amount": {
+                "min": 1,
+                "max": 4
+            }
+        }
+    }
+}

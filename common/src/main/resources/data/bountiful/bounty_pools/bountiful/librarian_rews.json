@@ -30,7 +30,6 @@
                 "max": 1
             },
             "unitWorth": 1500,
-            "nbt": "{StoredEnchantments:[{lvl:1s,id:\"minecraft:protection\"}]}",
             "components": {
                 "minecraft:stored_enchantments": {
                     "levels": {

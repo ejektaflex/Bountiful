@@ -1,0 +1,41 @@
+{
+    "requires": ["farmersdelight"],
+    "content": {
+        "deli_flint": {
+            "type": "minecraft:item",
+            "content": "farmersdelight:flint_knife",
+            "unitWorth": 250.0,
+            "amount": {
+                "min": 1,
+                "max": 6
+            }
+        },
+        "deli_burger": {
+            "type": "minecraft:item",
+            "content": "farmersdelight:hamburger",
+            "unitWorth": 350.0,
+            "amount": {
+                "min": 1,
+                "max": 4
+            }
+        },
+        "deli_bacon_sandy": {
+            "type": "minecraft:item",
+            "content": "farmersdelight:bacon_sandwich",
+            "unitWorth": 340.0,
+            "amount": {
+                "min": 1,
+                "max": 5
+            }
+        },
+        "deli_stuffed_potato": {
+            "type": "minecraft:item",
+            "content": "farmersdelight:stuffed_potato",
+            "unitWorth": 250.0,
+            "amount": {
+                "min": 1,
+                "max": 8
+            }
+        }
+    }
+}

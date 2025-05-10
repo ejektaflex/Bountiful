@@ -1,0 +1,32 @@
+{
+    "requires": ["farmersdelight"],
+    "content": {
+        "deli_bark": {
+            "type": "minecraft:item",
+            "content": "farmersdelight:tree_bark",
+            "unitWorth": 50.0,
+            "amount": {
+                "min": 1,
+                "max": 24
+            }
+        },
+        "deli_cutting_board": {
+            "type": "minecraft:item",
+            "content": "farmersdelight:cutting_board",
+            "unitWorth": 600.0,
+            "amount": {
+                "min": 1,
+                "max": 2
+            }
+        },
+        "deli_tatami_full": {
+            "type": "minecraft:item",
+            "content": "farmersdelight:full_tatami_mat",
+            "unitWorth": 100.0,
+            "amount": {
+                "min": 1,
+                "max": 16
+            }
+        }
+    }
+}

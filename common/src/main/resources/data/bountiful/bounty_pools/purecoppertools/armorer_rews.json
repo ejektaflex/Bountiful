@@ -1,0 +1,65 @@
+{
+    "requires": ["purecoppertools"],
+    "content": {
+        "puco_helm": {
+            "type": "minecraft:item",
+            "content": "purecoppertools:copper_helmet",
+            "unitWorth": 4000,
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:copper_ingot"
+                }
+            ]
+        },
+        "puco_chest": {
+            "type": "minecraft:item",
+            "content": "purecoppertools:copper_chestplate",
+            "unitWorth": 6400,
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:copper_ingot"
+                }
+            ]
+        },
+        "puco_legs": {
+            "type": "minecraft:item",
+            "content": "purecoppertools:copper_leggings",
+            "unitWorth": 5600,
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:copper_ingot"
+                }
+            ]
+        },
+        "puco_boots": {
+            "type": "minecraft:item",
+            "content": "purecoppertools:copper_boots",
+            "unitWorth": 3200,
+            "amount": {
+                "min": 1,
+                "max": 1
+            },
+            "forbids": [
+                {
+                    "type": "item",
+                    "content": "minecraft:copper_ingot"
+                }
+            ]
+        }
+    }
+}
