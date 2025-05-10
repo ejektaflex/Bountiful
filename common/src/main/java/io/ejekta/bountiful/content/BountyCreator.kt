@@ -39,6 +39,10 @@ class BountyCreator private constructor(
     private var infoTimeToComplete = -1L
     private var infoTargetRatio: Double? = null
 
+    private val currBiomeId by lazy {
+        world.getBiome(pos).registeredName
+    }
+
     enum class CreationType(
         val named: String,
         val poolGetter: (Decree) -> List<Pool>,
@@ -91,7 +95,7 @@ class BountyCreator private constructor(
         infoRarity = BountyRarity.entries[infoRarityOrdinal]
 
         // Gen rewards and total worth
-        val initialPicks = genInitial(initialEntries)
+        val initialPicks = genInitialValuedEntries(initialEntries)
         val totalInitialWorth = initialPicks.sumOf { it.worth }
         getCreation(true).dataGetter(this).addAll(initialPicks)
 
@@ -101,7 +105,7 @@ class BountyCreator private constructor(
         }
 
         // Gen filler
-        val fillerPicks = genFillers(
+        val fillerPicks = genFillerEntries(
             totalInitialWorth * (1 + (BountifulIO.configData.bounty.objectiveDifficultyModifierPercent * 0.01)),
             initialEntries
         )
@@ -112,12 +116,12 @@ class BountyCreator private constructor(
         infoTimeToComplete += 750L + BountifulIO.configData.bounty.flatBonusTimePerBountyInSecs
     }
 
-    private fun genInitial(entries: List<PoolEntry>): List<ValuedEntry> {
+    private fun genInitialValuedEntries(entries: List<PoolEntry>): List<ValuedEntry> {
         return entries.map { it.toEntry(world, pos) }
     }
 
     private fun genInitialEntries(): List<PoolEntry> {
-        val initials = getInitialFor(decrees, world, pos, getCreation(true))
+        val initials = getInitialFor(decrees, world, pos, currBiomeId, getCreation(true))
 
         if (initials.isEmpty()) {
             return emptyList()
@@ -159,11 +163,12 @@ class BountyCreator private constructor(
             if (!entryIsValid) {
                 Bountiful.LOGGER.warn("Bountiful ${getCreation(false).name} pool entry is not valid!: ${it.id}")
             }
-            it.takeIf { entryIsValid } // Only use valid pool entries
+            val isValidBiome = it.checkValidBiome(world, currBiomeId)
+            it.takeIf { entryIsValid && isValidBiome } // Only use valid pool entries
         }
     }
 
-    private fun genFillers(worth: Double, initialPools: List<PoolEntry>): List<ValuedEntry> {
+    private fun genFillerEntries(worth: Double, initialPools: List<PoolEntry>): List<ValuedEntry> {
         // -30 = 150% / 1.5x needed, 30 = 50% / 0.5x needed
         // 1 - (rep / 60.0)
         val fillerNeededMult = getDiscount(rep)
@@ -245,18 +250,14 @@ class BountyCreator private constructor(
             return decrees.map(creationType.poolGetter).flatten().toSet()
         }
 
-        private fun getInitialFor(decrees: Set<Decree>, world: ServerLevel, pos: BlockPos, creationType: CreationType): Set<PoolEntry> {
-
-            // todo remove a few of these lines
-            val currBiome = world.getBiome(pos)
-            val currBiomeName = currBiome.registeredName
+        private fun getInitialFor(decrees: Set<Decree>, world: ServerLevel, pos: BlockPos, biomeId: String, creationType: CreationType): Set<PoolEntry> {
 
             return getPoolsFor(decrees, creationType).asSequence().map { it.items }.flatten().filter(creationType.itemFilter).mapNotNull {
                 val entryIsValid = it.isValid(world.server)
                 if (!entryIsValid) {
                     Bountiful.LOGGER.warn("Bountiful reward pool entry is not valid!: ${it.id}")
                 }
-                val isValidBiome = it.checkValidBiome(world, currBiomeName)
+                val isValidBiome = it.checkValidBiome(world, biomeId)
                 it.takeIf { entryIsValid && isValidBiome } // Only use valid pool entries
             }.toSet()
         }
