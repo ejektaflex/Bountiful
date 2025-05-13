@@ -258,6 +258,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     fun onUserPlacedDecree(player: ServerPlayer, decStack: ItemStack) {
+        BountifulContent.Triggers.DECREE_PLACED.trigger(player)
         checkUserPlacedAllDecrees(player, decStack)
     }
 
@@ -268,6 +269,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         val allDecrees = decs.intersect(allDecreesSet) == allDecreesSet
         Bountiful.LOGGER.trace(allDecreesSet - decs)
         if (allDecrees) {
+            Bountiful.LOGGER.info("User $player placed all possible decrees")
             BountifulContent.Triggers.ALL_DECREES_PLACED.trigger(player)
         }
     }

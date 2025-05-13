@@ -46,11 +46,23 @@ class BoardScreenHandler @JvmOverloads constructor(
         return doneProperty.get(0)
     }
 
-    fun attemptInsert(stack: ItemStack, slotRange: IntRange, backwards: Boolean = false): ItemStack? {
-        return when (moveItemStackTo(stack, slotRange.first, slotRange.last + 1, backwards)) {
-            false -> null
-            true -> stack
+    fun attemptInsert(stack: ItemStack, slotRange: IntRange): ItemStack? {
+        return moveStackToEmptySlot(stack, slotRange)
+    }
+
+    // Returns the moved itemstack, if it was moved. Else returns null. Does not do size/capacity checks
+    fun moveStackToEmptySlot(stack: ItemStack, slotRange: IntRange): ItemStack? {
+        for (slotIndex in slotRange) {
+            val slot = slots[slotIndex]
+            val slotStack = slot.item
+            if (slotStack.isEmpty && slot.mayPlace(stack)) {
+                val sizeToSet = stack.maxStackSize
+                slot.setByPlayer(stack.split(stack.count.coerceAtMost(sizeToSet)))
+                slot.setChanged()
+                return slot.item
+            }
         }
+        return null
     }
 
     override fun quickMoveStack(pPlayer: Player, invSlot: Int): ItemStack {
@@ -76,7 +88,7 @@ class BoardScreenHandler @JvmOverloads constructor(
                     when (stack.item) {
                         // If it's a decree in the inventory, try put in the decrees spot
                         is DecreeItem -> {
-                            return attemptInsert(stack, BoardInventory.DECREE_RANGE, backwards = false).also {
+                            return attemptInsert(stack, BoardInventory.DECREE_RANGE).also {
                                 if (it != null) {
                                     pPlayer.currentBoardInteracting?.onUserPlacedDecree(pPlayer, stack)
                                 }
