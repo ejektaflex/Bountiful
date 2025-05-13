@@ -27,11 +27,12 @@ class BountifulConfigData {
     class BountyConfigData {
         var flatBonusTimePerBountyInSecs: Int = 0
         var shouldHaveTimersAndExpire = true
-        var objectiveDifficultyModifierPercent = 0
+        var fillerDifficultyModifierPercent = 0
         var allowDecreeMixing = true
-        var maxNumInitial = 2
         var reverseMatchingAlgorithm = false
-        var matchCountPreference = PoolEntry.EntryRange(1, 2)
+        var initialCountPreference = PoolEntry.EntryRange(1, 2)
+        var fillerCountPreference = PoolEntry.EntryRange(1, 2)
+        var fillerCurrencyPool: String? = null
     }
 
     val bounty = BountyConfigData()
@@ -46,7 +47,7 @@ class BountifulConfigData {
 
     @Serializable
     class GeneralConfigData {
-        var dataPackExclusions = listOf(
+        var dataPathsToExclude = listOf(
             "bounty_pools/bountiful/example_pool",
             "bounty_pools/*/another_example",
             "bounty_decrees/other/*"
@@ -79,7 +80,7 @@ class BountifulConfigData {
         generalCat.addEntry(
             creator.startStrList(
                 Component.literal("Excluded data paths"),
-                general.dataPackExclusions
+                general.dataPathsToExclude
             ).setDefaultValue {
                 listOf(
                     "bounty_pools/bountiful/example_pool",
@@ -89,7 +90,7 @@ class BountifulConfigData {
             }.setTooltip(
                 Component.literal("A list of data paths that should be excluded from loading")
             ).setSaveConsumer {
-                general.dataPackExclusions = it
+                general.dataPathsToExclude = it
             }.setAddButtonTooltip(Component.literal("Adds a new exclusion rule. "))
                 .build()
         )
@@ -161,12 +162,12 @@ class BountifulConfigData {
         bountyCat.addEntry(
             creator.startIntSlider(
                 Component.literal("Objective Requirement Multiplier"),
-                bounty.objectiveDifficultyModifierPercent,
+                bounty.fillerDifficultyModifierPercent,
                 -50, 100
             ).setDefaultValue(0).setTooltip(
                 Component.literal("Makes new bounties this percent more/less expensive, objective-wise")
             ).setSaveConsumer {
-                bounty.objectiveDifficultyModifierPercent = it
+                bounty.fillerDifficultyModifierPercent = it
             }.setTextGetter {
                 textLiteral("$it% Change")
             }.build()
@@ -186,12 +187,12 @@ class BountifulConfigData {
         bountyCat.addEntry(
             creator.startIntSlider(
                 Component.literal("Max Number of Rewards"),
-                bounty.maxNumInitial,
+                bounty.initialCountPreference.max,
                 1, 4
             ).setDefaultValue(2).setTooltip(
                 Component.literal("Determines the max number of rewards that will be in a bounty")
             ).setSaveConsumer {
-                bounty.maxNumInitial = it
+                bounty.initialCountPreference = PoolEntry.EntryRange(bounty.initialCountPreference.min, it)
             }.setTextGetter {
                 textLiteral("$it Rewards")
             }.build()

@@ -1,0 +1,32 @@
+{
+	"currency": true,
+	"content": {
+		"curr_penny": {
+			"type": "minecraft:item",
+			"content": "minecraft:copper_ingot",
+			"unitWorth": 1.0,
+			"amount": {
+				"min": 1,
+				"max": 99
+			}
+		},
+		"curr_dollar": {
+			"type": "minecraft:item",
+			"content": "minecraft:iron_ingot",
+			"unitWorth": 100.0,
+			"amount": {
+				"min": 1,
+				"max": 99
+			}
+		},
+		"curr_hund_dollars": {
+			"type": "minecraft:item",
+			"content": "minecraft:gold_ingot",
+			"unitWorth": 10000.0,
+			"amount": {
+				"min": 1,
+				"max": 100
+			}
+		}
+	}
+}

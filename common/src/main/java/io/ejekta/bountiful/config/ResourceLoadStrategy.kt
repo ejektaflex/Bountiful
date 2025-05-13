@@ -137,7 +137,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
         }.filter {
             val str = it.key.path.substringBefore(".json")
             val idreg = "([A-Za-z_/]+)"
-            val regexes = !BountifulIO.configData.general.dataPackExclusions.map { exc ->
+            val regexes = !BountifulIO.configData.general.dataPathsToExclude.map { exc ->
                 Regex(
                     exc.replace(Regex("[*]"), idreg)
                 )

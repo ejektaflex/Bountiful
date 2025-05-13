@@ -29,6 +29,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.item.Item
 import kotlin.math.abs
 import kotlin.math.ceil
+import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.streams.asSequence
@@ -136,7 +137,7 @@ class PoolEntry private constructor() {
         }
 
         return retSet.also {
-            println("Generated biome cache for '${id}' which is: $it")
+            Bountiful.LOGGER.info("Generated biome cache for '${id}' which is: $it")
         }
     }
 
@@ -157,6 +158,9 @@ class PoolEntry private constructor() {
 
     val maxWorth: Double
         get() = amount.max * unitWorth
+
+    val minWorth: Double
+        get() = amount.min * unitWorth
 
     fun save(): String {
         return JsonFormats.Hand.dynamicEncodeToString(this, serializer())
@@ -184,8 +188,14 @@ class PoolEntry private constructor() {
         return relatedItemCache
     }
 
-    fun toEntry(world: ServerLevel, pos: BlockPos, worth: Double? = null, usedDecs: Set<String>? = emptySet()): BountyCreator.ValuedEntry {
-        val amt = amountAt(worth)
+    fun toEntry(
+        world: ServerLevel,
+        pos: BlockPos,
+        worth: Double? = null,
+        usedDecs: Set<String>? = emptySet(),
+        isCurrency: Boolean = false
+    ): BountyCreator.ValuedEntry {
+        val amt = amountAt(worth, isCurrency)
 
         val actualContent = if (type == BountyTypeRegistry.ITEM.id && content.startsWith("#")) {
             val tagId = ResourceLocation.parse(content.substringAfter("#"))
@@ -220,9 +230,14 @@ class PoolEntry private constructor() {
         return BountyCreator.ValuedEntry(entry, totWorth)
     }
 
-    private fun amountAt(worth: Double? = null): Int {
+    private fun amountAt(worth: Double? = null, isCurrency: Boolean = false): Int {
         val toGive = if (worth != null) {
-            max(1, ceil(worth.toDouble() / unitWorth).toInt())
+            if (!isCurrency) {
+                max(1, ceil(worth.toDouble() / unitWorth).toInt())
+            } else {
+                // Currency should always round down
+                max(1, floor(worth.toDouble() / unitWorth).toInt())
+            }
         } else {
             amount.pick()
         }.coerceIn(amount.min..amount.max) // Clamp amount into amount range

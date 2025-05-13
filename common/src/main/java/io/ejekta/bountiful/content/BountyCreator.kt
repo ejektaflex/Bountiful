@@ -81,7 +81,7 @@ class BountyCreator private constructor(
         }
     }
 
-    fun create() {
+    private fun create() {
         // Gen reward entries and max rarity
         val initialEntries = genInitialEntries()
 
@@ -106,7 +106,7 @@ class BountyCreator private constructor(
 
         // Gen filler
         val fillerPicks = genFillerEntries(
-            totalInitialWorth * (1 + (BountifulIO.configData.bounty.objectiveDifficultyModifierPercent * 0.01)),
+            totalInitialWorth * (1 + (BountifulIO.configData.bounty.fillerDifficultyModifierPercent * 0.01)),
             initialEntries
         )
         getCreation(false).dataGetter(this).addAll(fillerPicks)
@@ -128,7 +128,7 @@ class BountyCreator private constructor(
         }
 
         // Num rewards to give
-        val numInitials = (1..BountifulIO.configData.bounty.maxNumInitial).random()
+        val numInitials = BountifulIO.configData.bounty.initialCountPreference.pick()
         val toReturn = mutableListOf<PoolEntry>()
 
         for (i in 0 until numInitials) {
@@ -176,13 +176,38 @@ class BountyCreator private constructor(
 
         val worthNeeded = if (rewardsFirst) worth * fillerNeededMult else worth / fillerNeededMult // When reversed, generated rewards should be that mult amount bigger by dividing
 
-        val numFillers = BountifulIO.configData.bounty.matchCountPreference.pick()
+        val numFillers = BountifulIO.configData.bounty.fillerCountPreference.pick()
 
         val toReturn = mutableListOf<ValuedEntry>()
 
-        val fills = getAllPossibleFillers(initialPools)
+        var fills = listOf<PoolEntry>()
 
-        val worthGroups = randomSplit(worthNeeded, numFillers).toMutableList()
+        val doGreedy = BountifulIO.configData.bounty.fillerCurrencyPool?.let {
+            val currPool = BountifulContent.PoolMap[it]
+            if (currPool == null) {
+                Bountiful.LOGGER.warn("A currency pool is configured, but does not point to a valid loaded pool!")
+                return@let false
+            }
+            if (!currPool.currency) {
+                Bountiful.LOGGER.warn("Pool '${currPool.id} must have 'currency' set to true to be used as a currency!")
+                return@let false
+            }
+            return@let true
+        } ?: false
+
+        fills = if (doGreedy) {
+            BountifulContent.PoolMap[BountifulIO.configData.bounty.fillerCurrencyPool]!!.items.toList()
+        } else {
+            getAllPossibleFillers(initialPools)
+        }
+
+        val worthGroups = if (doGreedy) {
+            mutableListOf(worthNeeded)
+        } else {
+            randomSplit(worthNeeded, numFillers).toMutableList()
+        }
+
+        val targetPct = if (doGreedy) 0.95 else 0.5
 
         while (worthGroups.isNotEmpty()) {
             val w = worthGroups.removeAt(0)
@@ -195,8 +220,9 @@ class BountyCreator private constructor(
                 break
             }
 
-            val picked = pickFiller(unpicked, w)
-            val entry = picked.toEntry(world, pos, w, decrees.map { it.id }.toSet())
+            val picked = pickFiller(unpicked, w, greedy = doGreedy) ?: break
+
+            val entry = picked.toEntry(world, pos, w, decrees.map { it.id }.toSet(), isCurrency = doGreedy)
 
             // Add time based on entry
             infoTimeToComplete += (picked.timeMult * entry.worth * 0.35).toLong()
@@ -204,7 +230,7 @@ class BountyCreator private constructor(
             // Append on a new worth to add obj for
             // if we still haven't fulfilled it
             // think of this as the "emergency foot-shooting escape plan"
-            if (entry.worth < w * 0.5) {
+            if (entry.worth < w * targetPct) {
                 worthGroups.add(w - entry.worth)
             }
 
@@ -214,8 +240,14 @@ class BountyCreator private constructor(
         return toReturn
     }
 
-    private fun pickFiller(fillers: List<PoolEntry>, worth: Double): PoolEntry {
+    private fun pickFiller(fillers: List<PoolEntry>, worth: Double, greedy: Boolean = false): PoolEntry? {
         val variance = 0.25
+
+        // Return the biggest currency item we can represent this item with
+        if (greedy) {
+            return fillers.filter { it.minWorth <= worth }.maxByOrNull { it.minWorth }
+        }
+
         val inVariance = getFillersWithinVariance(fillers, worth, variance)
 
         // Picks a random pool within the variance. If none exist, get the objective with the closest worth distance.
@@ -224,7 +256,7 @@ class BountyCreator private constructor(
                 weightMult * rarity.weightAdjustedFor(rep)
             }
         } else {
-            fillers.minByOrNull { it.worthDistanceFrom(worth) }!!
+            fillers.minByOrNull { it.worthDistanceFrom(worth) }
         }
 
         return picked

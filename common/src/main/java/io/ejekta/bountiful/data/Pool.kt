@@ -17,7 +17,8 @@ data class Pool(
     val weightMult: Double = 1.0,
     override val replace: Boolean = false,
     override val requires: MutableList<String> = mutableListOf(),
-    val content: MutableMap<String, JsonObject?> = mutableMapOf()
+    val content: MutableMap<String, JsonObject?> = mutableMapOf(),
+    val currency: Boolean = false
 ) : IMerge<Pool> {
 
     val items: MutableList<PoolEntry> = mutableListOf()

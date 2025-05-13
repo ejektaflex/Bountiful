@@ -76,7 +76,7 @@ object BountifulIO {
             onComplete = { BountifulContent.populatePools(it) },
         ) {
             // If the pool isn't being used, that's usually problematic
-            if (usedInDecrees.isEmpty()) {
+            if (usedInDecrees.isEmpty() && !currency) {
 
                 val poolAssoc = BountifulContent.Pools.filter { it.usedInDecrees.isNotEmpty() }.associateBy { it.id.toSet() }
                 val poolQuery = id.toSet()
@@ -120,7 +120,7 @@ object BountifulIO {
                 }
             }
 
-            val worstCaseRewNum = configData.bounty.maxNumInitial
+            val worstCaseRewNum = configData.bounty.initialCountPreference.max
 
             val topRewards = allRewardEntries.run {
                 sortedBy { -it.maxWorth }.take(worstCaseRewNum.coerceAtMost(size))
