@@ -106,7 +106,6 @@ class BountyStack(val stack: ItemStack) {
         return if (hasFinishedObjectives(player)) {
             consumeObjectives(player)
             rewardPlayer(player)
-            stack.shrink(stack.maxStackSize)
             true
         } else {
             player.displayClientMessage(Component.translatable("bountiful.tooltip.requirements"), false)

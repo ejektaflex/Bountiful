@@ -1,5 +1,6 @@
 {
 	"type": "minecraft:crafting_shaped",
+	"category": "misc",
 	"pattern": [
 		"PLP", "ADA", "PLP"
 	],
@@ -10,6 +11,7 @@
 		"D": {"item": "minecraft:diamond"}
 	},
 	"result": {
+		"count": 1,
 		"item": "bountiful:bountyboard"
 	}
 }

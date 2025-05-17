@@ -1,0 +1,17 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"category": "misc",
+	"pattern": [
+		"PLP", "ADA", "PLP"
+	],
+	"key": {
+		"P": {"item": "minecraft:oak_planks"},
+		"L": {"item": "minecraft:oak_log"},
+		"A": {"item": "minecraft:paper"},
+		"D": {"item": "minecraft:diamond"}
+	},
+	"result": {
+		"count": 1,
+		"id": "bountiful:bountyboard"
+	}
+}

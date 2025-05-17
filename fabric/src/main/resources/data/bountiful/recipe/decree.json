@@ -1,5 +1,6 @@
 {
 	"type": "minecraft:crafting_shaped",
+	"category": "misc",
 	"pattern": [
 		"PS ",
 		"SGS",
@@ -12,6 +13,7 @@
 		"D": {"item": "minecraft:purple_dye"}
 	},
 	"result": {
+		"count": 1,
 		"item": "bountiful:decree"
 	}
 }

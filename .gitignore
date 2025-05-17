@@ -24,3 +24,4 @@ run
 runs
 logs
 .kotlin/errors
+.kotlin/sessions

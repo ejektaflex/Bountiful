@@ -1,28 +1,28 @@
 {
   "parent": "bountiful:bountiful/bounty_complete",
   "criteria": {
-    "finish_quick": {
-      "trigger": "bountiful:rush_order"
+    "turn_in_close_call": {
+      "trigger": "bountiful:procrastinator"
     }
   },
   "display": {
     "announce_to_chat": true,
     "description": {
-      "translate": "bountiful.advancement.rush_order.desc"
+      "translate": "bountiful.advancement.procrastinator.desc"
     },
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "minecraft:clock"
+      "id": "minecraft:red_bed"
     },
     "show_toast": false,
     "title": {
-      "translate": "bountiful.advancement.rush_order.title"
+      "translate": "bountiful.advancement.procrastinator.title"
     }
   },
   "requirements": [
     [
-      "finish_quick"
+      "turn_in_close_call"
     ]
   ],
   "sends_telemetry_event": false

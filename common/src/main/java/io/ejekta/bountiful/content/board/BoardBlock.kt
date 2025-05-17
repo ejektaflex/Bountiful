@@ -110,6 +110,7 @@ class BoardBlock : BaseEntityBlock(
                     val success = (holding.item as BountyItem).tryCashIn(it, holding)
                     if (success) {
                         boardEntity.updateUponBountyCompletion(it, BountyStack(holding))
+                        holding.shrink(holding.maxStackSize) // delete bounty only after updating completion
                         boardEntity.setChanged()
                         return ItemInteractionResult.CONSUME
                     }

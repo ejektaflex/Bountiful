@@ -1,28 +1,28 @@
 {
   "parent": "bountiful:bountiful/bounty_taken",
   "criteria": {
-    "place_decree": {
-      "trigger": "bountiful:decree_placed"
+    "fetch": {
+      "trigger": "bountiful:fetch_quest"
     }
   },
   "display": {
     "announce_to_chat": true,
     "description": {
-      "translate": "bountiful.advancement.town_crier.desc"
+      "translate": "bountiful.advancement.fetch_quest.desc"
     },
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "bountiful:decree"
+      "id": "minecraft:bone"
     },
     "show_toast": false,
     "title": {
-      "translate": "bountiful.advancement.town_crier.title"
+      "translate": "bountiful.advancement.fetch_quest.title"
     }
   },
   "requirements": [
     [
-      "place_decree"
+      "fetch"
     ]
   ],
   "sends_telemetry_event": false

@@ -22,7 +22,7 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "bountiful:bountyboard"
+      "id": "bountiful:bountyboard"
     },
     "show_toast": true,
     "title": {
