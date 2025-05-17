@@ -263,6 +263,9 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     private fun checkUserPlacedAllDecrees(player: ServerPlayer, newStack: ItemStack) {
+        if (newStack.count == 0) {
+            return
+        }
         val newDecrees = newStack[BountifulContent.DECREE_DATA]!!.ids
         val decs = getBoardDecrees().map { it.id }.toSet() + newDecrees
         val allDecreesSet = BountifulContent.Decrees.map { it.id }.toSet()

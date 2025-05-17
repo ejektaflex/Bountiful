@@ -90,7 +90,7 @@ class BoardScreenHandler @JvmOverloads constructor(
                         is DecreeItem -> {
                             return attemptInsert(stack, BoardInventory.DECREE_RANGE).also {
                                 if (it != null) {
-                                    pPlayer.currentBoardInteracting?.onUserPlacedDecree(pPlayer, stack)
+                                    pPlayer.currentBoardInteracting?.onUserPlacedDecree(pPlayer, it)
                                 }
                             } ?: ItemStack.EMPTY
                         }
