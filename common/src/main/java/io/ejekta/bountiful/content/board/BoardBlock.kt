@@ -6,12 +6,15 @@ import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.item.BountyItem
 import net.minecraft.core.BlockPos
+import net.minecraft.core.component.DataComponents
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.BaseEntityBlock
@@ -46,10 +49,16 @@ class BoardBlock : BaseEntityBlock(
     override fun getDrops(pState: BlockState, pParams: LootParams.Builder): MutableList<ItemStack> {
         val blockEntity = pParams.getParameter(LootContextParams.BLOCK_ENTITY) ?: return mutableListOf()
         if (blockEntity.type == BountifulContent.BOARD_ENTITY) {
-            return super.getDrops(pState, pParams).map {
-                // TODO reimplement stack dropping for the board correctly
-                it//.also { blockEntity.setStackNbt(it) }
-            }.toMutableList()
+            return mutableListOf(ItemStack(BountifulContent.BOARD_ITEM).let {
+                if (it.item == BountifulContent.BOARD_ITEM) {
+                    it.apply {
+                        val regAcc = blockEntity.level?.registryAccess()
+                        this.set(DataComponents.CUSTOM_DATA, CustomData.of(blockEntity.saveCustomOnly(regAcc)))
+                    }
+                } else {
+                    it
+                }
+            })
         }
         return mutableListOf()
     }
@@ -65,10 +74,11 @@ class BoardBlock : BaseEntityBlock(
         if (world != null && pos != null && itemStack != null && !world.isClientSide) {
             val blockEntity = world.getBlockEntity(pos, BountifulContent.BOARD_ENTITY)
             blockEntity.ifPresent {
-                // TODO reimplement board placing correctly
-//                val itemNbt = itemStack.nbt ?: return@ifPresent
-//                it.readNbt(itemNbt)
-//                it.markDirty()
+                val oldTag = itemStack.get(DataComponents.CUSTOM_DATA)?.copyTag()
+                oldTag?.let { old ->
+                    it.loadCustomOnly(old, world.registryAccess())
+                    it.setChanged()
+                }
             }
         }
     }
