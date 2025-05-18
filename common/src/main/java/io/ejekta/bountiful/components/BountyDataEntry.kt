@@ -57,8 +57,12 @@ data class BountyDataEntry(
         return getRelatedDecrees().map { it.linkedProfessions }.flatten().toSet()
     }
 
+    fun contentToTranslationKey(): String {
+        return content.replace(":", ".").replace("/", ".")
+    }
+
     val translation: MutableComponent
-        get() = Component.translatable("bountiful.entry.${id}")
+        get() = Component.translatable("tag.item.${contentToTranslationKey()}")
 
     override fun toString(): String {
         return "BDE[type=$logic, content=$content, amount=$amount, name=$name, mystery=$isMystery]"
