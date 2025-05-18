@@ -155,7 +155,7 @@ class BountyTypeItem : IBountyExchangeable {
 
         fun getItemName(entry: BountyDataEntry, access: RegistryAccess): List<MutableComponent> {
             val itemStack = getItemStack(entry, access)
-            var named = mutableListOf(itemStack.displayName.copy())
+            var named = mutableListOf(itemStack.hoverName.copy())
 
             if (itemStack.item is EnchantedBookItem && Kambridge.isOnClient()) {
                 val lines = itemStack.getTooltipLines(Item.TooltipContext.of(access), null, TooltipFlag.NORMAL)
