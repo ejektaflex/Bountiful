@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.bounty.types.builtin
 
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.mojang.serialization.JsonOps
 import io.ejekta.bountiful.Bountiful
@@ -8,6 +9,7 @@ import io.ejekta.bountiful.bounty.types.Progress
 import io.ejekta.bountiful.bridge.GsonObject
 import io.ejekta.bountiful.components.BountyDataEntry
 import io.ejekta.bountiful.data.PoolEntry
+import io.ejekta.bountiful.util.asComponentJson
 import io.ejekta.bountiful.util.getTagItemKey
 import io.ejekta.bountiful.util.getTagItems
 import io.ejekta.kambrik.bridge.Kambridge
@@ -16,6 +18,7 @@ import io.ejekta.kambrik.ext.id
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.ChatFormatting
 import net.minecraft.core.RegistryAccess
+import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.NbtOps
 import net.minecraft.network.chat.Component
@@ -50,9 +53,54 @@ class BountyTypeItem : IBountyExchangeable {
         }
     }
 
+    private fun isSubset(sub: JsonElement?, sup: JsonElement?): Boolean {
+        if (sub == null || sup == null) return false
+        if (sub == sup) return true
+
+        return when {
+            sub.isJsonObject && sup.isJsonObject -> {
+                val subObj = sub.asJsonObject
+                val supObj = sup.asJsonObject
+                subObj.entrySet().all { (key, subValue) ->
+                    supObj.has(key) && isSubset(subValue, supObj[key])
+                }
+            }
+
+            sub.isJsonArray && sup.isJsonArray -> {
+                val subArr = sub.asJsonArray
+                val supArr = sup.asJsonArray
+                subArr.size() <= supArr.size() &&
+                        (0 until subArr.size()).all { i -> isSubset(subArr[i], supArr[i]) }
+            }
+
+            else -> sub == sup
+        }
+    }
+
     private fun getCurrentStacks(entry: BountyDataEntry, player: Player): Map<ItemStack, Int> {
         return player.inventory.items.collect(entry.amount) {
-            id.toString() == entry.content
+            val sameId = id.toString() == entry.content
+            if (entry.data == null) {
+                return@collect sameId // only do id check
+            } else if (!sameId) {
+                return@collect false // failed id check
+            }
+
+            val itemJson = asComponentJson(player.registryAccess())
+            val reqJson = entry.data!!
+
+            // If component requirements is empty, then of course it matches
+            if (reqJson?.keySet()?.isEmpty() == true) {
+                return@collect true
+            }
+
+            val subset = isSubset(reqJson, itemJson)
+
+            println("A: $itemJson")
+            println("B: $reqJson")
+            println("SUB: $subset")
+
+            subset
         }
     }
 
@@ -155,17 +203,19 @@ class BountyTypeItem : IBountyExchangeable {
 
         fun getItemName(entry: BountyDataEntry, access: RegistryAccess): List<MutableComponent> {
             val itemStack = getItemStack(entry, access)
-            var named = mutableListOf(itemStack.hoverName.copy())
+            var named = mutableListOf<MutableComponent>(itemStack.hoverName.copy())
 
-            if (itemStack.item is EnchantedBookItem && Kambridge.isOnClient()) {
-                val lines = itemStack.getTooltipLines(Item.TooltipContext.of(access), null, TooltipFlag.NORMAL)
-                val enchants = EnchantmentHelper.getEnchantmentsForCrafting(itemStack)
-                if (enchants.size() > 0 && lines.size > 1) {
-                    val allEnchantsComponent = lines.drop(1).map { it }.map {
-                        textLiteral("* ").append(it).withStyle(ChatFormatting.DARK_GRAY)
+            if (itemStack.item is EnchantedBookItem || itemStack.item.isEnchantable(itemStack) && Kambridge.isOnClient()) {
+                var extra = mutableListOf<MutableComponent>()
+                val enchantComponent = itemStack.get(DataComponents.ENCHANTMENTS).takeUnless { it?.isEmpty == true } ?: itemStack.get(DataComponents.STORED_ENCHANTMENTS)
+                enchantComponent?.let { ec ->
+                    val extraCast = extra as MutableList<Component>
+                    ec.addToTooltip(Item.TooltipContext.of(access), extraCast::add, TooltipFlag.NORMAL)
+                    for (extraTip in extra) {
+                        named.add(
+                            textLiteral("* ").append(extraTip)
+                        )
                     }
-
-                    named.addAll(allEnchantsComponent)
                 }
             }
 

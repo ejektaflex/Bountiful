@@ -14,6 +14,7 @@ import io.ejekta.bountiful.content.item.DecreeItem
 import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.bountiful.decree.DecreeSpawnCondition
 import io.ejekta.bountiful.messages.ClipboardCopy
+import io.ejekta.bountiful.util.asComponentJson
 import io.ejekta.bountiful.util.checkOnBoard
 import io.ejekta.bountiful.util.openSimpleMenu
 import io.ejekta.kambrik.command.*
@@ -318,9 +319,7 @@ object BountifulCommands {
 
         val newPoolEntry = PoolEntry.create().apply {
             content = held.item.id.toString()
-            val regOps = RegistryOps.create(JsonOps.INSTANCE, source.level.registryAccess())
-            val result = ItemStack.CODEC.encodeStart(regOps, held).resultOrPartial().getOrNull()?.asJsonObject
-            components = result?.get("components")?.asJsonObject
+            components = held.asComponentJson(source.level.registryAccess())
         }
 
         try {

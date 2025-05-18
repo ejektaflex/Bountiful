@@ -1,16 +1,20 @@
 package io.ejekta.bountiful.util
 
+import com.google.gson.JsonObject
+import com.mojang.serialization.JsonOps
 import io.ejekta.bountiful.components.BountyStack
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import io.ejekta.bountiful.content.item.BountyItem
 import io.ejekta.kambrik.message.KambrikMsg
+import kotlinx.serialization.json.JsonElement
 import net.minecraft.client.Minecraft
 import net.minecraft.core.*
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.RegistryOps
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
@@ -44,6 +48,11 @@ fun <T : Any> Registry<T>.getNullable(rl: ResourceLocation): T? {
     return getOptional(rl).getOrNull()
 }
 
+fun ItemStack.asComponentJson(lookup: HolderLookup.Provider): JsonObject? {
+    val regOps = RegistryOps.create(JsonOps.INSTANCE, lookup)
+    val result = ItemStack.CODEC.encodeStart(regOps, this).resultOrPartial().getOrNull()?.asJsonObject
+    return result?.get("components")?.asJsonObject
+}
 
 fun randomSplit(num: Double, ways: Int): List<Double> {
     val bits = (0 until ways).map { Random.nextDouble() }
