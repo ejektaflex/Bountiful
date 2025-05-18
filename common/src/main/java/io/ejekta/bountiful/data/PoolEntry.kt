@@ -4,6 +4,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
 import io.ejekta.bountiful.Bountiful
+import io.ejekta.bountiful.Bountiful.Companion.logAndWarn
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.IBountyType
@@ -63,19 +64,36 @@ class PoolEntry private constructor() {
         if (isValidCache != null) {
             return isValidCache!!
         } else {
-            isValidCache = try {
+            val problems = mutableListOf<String>()
+            try {
                 val bountyType = BountyTypeRegistry[type]
+
                 if (bountyType == null) {
-                    Bountiful.LOGGER.warn("Bounty Pool Entry has Invalid Type: (${id} - ${content}) details: ${save()}")
-                    return false
+                    problems.add("* entry has invalid type: (${id} - ${content}) details: ${save()}")
+                } else if (!bountyType!!.isValid(this, server)) {
+                    problems.add("* entry failed type validation: (${id} - ${content}) details: ${save()}")
                 }
-                bountyType.isValid(this, server)
+                if (unitWorth <= 0) {
+                    problems.add("* unitWorth of '$id' is a non-positive amount: $unitWorth")
+                }
+                if (amount.min > amount.max) {
+                    problems.add("* Amount range min for '$id' is bigger than maximum: $amount")
+                }
             } catch (e: Exception) {
-                Bountiful.LOGGER.warn("Bounty Pool Entry Invalid: (${id} - ${content}) details: ${save()}")
-                false
-            }.also {
-                return it
+                problems.add("Bounty Pool Entry Invalid: (${id} - ${content}) details: ${e.message}")
+
             }
+            
+            isValidCache = problems.isEmpty()
+
+            if (isValidCache != true) {
+                server.logAndWarn("Bountiful reward pool entry is not valid!: $id")
+                for (problem in problems) {
+                    server.logAndWarn(problem)
+                }
+            }
+
+            return isValidCache!!
         }
     }
 
@@ -93,13 +111,13 @@ class PoolEntry private constructor() {
         return biomeId in validBiomeCache!!
     }
 
-    fun getRawBiomeList(element: JsonElement): List<String> {
+    fun getRawBiomeList(element: JsonElement, server: MinecraftServer): List<String> {
         if (element is JsonPrimitive) {
             if ((element as JsonPrimitive).isString) {
                 val foundBiomeId = element!!.asString
                 return listOf(foundBiomeId)
             } else {
-                Bountiful.LOGGER.warn("Biomes is defined for pool entry ${id}, but it is not a valid type")
+                server.logAndWarn("Biomes is defined for pool entry ${id}, but it is not a valid type")
             }
         } else if (element is JsonArray) {
             return element.asJsonArray.mapNotNull {
@@ -110,7 +128,7 @@ class PoolEntry private constructor() {
                 }
             }
         } else {
-            Bountiful.LOGGER.warn("Biomes is defined for pool entry ${id}, but it is not an ingestible type")
+            server.logAndWarn("Biomes is defined for pool entry ${id}, but it is not an ingestible type")
         }
         return emptyList()
     }
@@ -124,7 +142,7 @@ class PoolEntry private constructor() {
 
         val regBiomes = world.registryAccess().registry(Registries.BIOME).get()
 
-        val ourBiomeList = getRawBiomeList(biomes!!).groupBy { it.startsWith("#") }
+        val ourBiomeList = getRawBiomeList(biomes!!, world.server).groupBy { it.startsWith("#") }
         val biomeListRawNames = (ourBiomeList[false] ?: emptyList()).toSet()
         val biomeListTagNames = (ourBiomeList[true] ?: emptyList()).toSet()
 
@@ -201,7 +219,7 @@ class PoolEntry private constructor() {
             val tagId = ResourceLocation.parse(content.substringAfter("#"))
             val items = getTagItems(world.registryAccess(), getTagItemKey(tagId))
             if (items.isEmpty()){
-                Bountiful.LOGGER.warn("A pool entry tag has an empty list! $content")
+                world.server.logAndWarn("A pool entry tag has an empty list! $content")
                 "minecraft:air"
             } else {
                 items.random().id.toString()

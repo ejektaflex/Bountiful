@@ -160,9 +160,6 @@ class BountyCreator private constructor(
             !entry.forbidsAny(world, initialPools) && !initialPools.any { it.forbids(world, entry) }
         }.mapNotNull {
             val entryIsValid = it.isValid(world.server)
-            if (!entryIsValid) {
-                Bountiful.LOGGER.warn("Bountiful ${getCreation(false).name} pool entry is not valid!: ${it.id}")
-            }
             val isValidBiome = it.checkValidBiome(world, currBiomeId)
             it.takeIf { entryIsValid && isValidBiome } // Only use valid pool entries
         }
@@ -286,9 +283,6 @@ class BountyCreator private constructor(
 
             return getPoolsFor(decrees, creationType).asSequence().map { it.items }.flatten().filter(creationType.itemFilter).mapNotNull {
                 val entryIsValid = it.isValid(world.server)
-                if (!entryIsValid) {
-                    Bountiful.LOGGER.warn("Bountiful reward pool entry is not valid!: ${it.id}")
-                }
                 val isValidBiome = it.checkValidBiome(world, biomeId)
                 it.takeIf { entryIsValid && isValidBiome } // Only use valid pool entries
             }.toSet()
