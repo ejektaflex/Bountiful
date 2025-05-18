@@ -1,5 +1,7 @@
 package io.ejekta.bountiful.client.widgets
 
+import com.mojang.blaze3d.vertex.ByteBufferBuilder
+import com.mojang.blaze3d.vertex.PoseStack
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.bounty.types.builtin.BountyTypeEntity
@@ -14,6 +16,7 @@ import io.ejekta.kambrik.gui.draw.KWidget
 import io.ejekta.kambrik.gui.draw.reactor.MouseReactor
 import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.EntityType
@@ -99,7 +102,17 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
                 }
             }
             val tr = Minecraft.getInstance().font
-            textImmediate(x + 17 - tr.width(textToShow.string) * 2, y + 9, textToShow)
+            context.pose().pushPose()
+            context.pose().translate(0f, 0f, 200f)
+            context.drawString(
+                tr,
+                textToShow,
+                (ctx.absX(x) + 18 - tr.width(textToShow)),
+                ctx.absY(y) + 10,
+                0xFFFFFF,
+                true
+            )
+            context.pose().popPose()
         }
         // Entry tooltip
         dsl {
