@@ -94,13 +94,7 @@ class BountyTypeItem : IBountyExchangeable {
                 return@collect true
             }
 
-            val subset = isSubset(reqJson, itemJson)
-
-            println("A: $itemJson")
-            println("B: $reqJson")
-            println("SUB: $subset")
-
-            subset
+            return@collect isSubset(reqJson, itemJson)
         }
     }
 
