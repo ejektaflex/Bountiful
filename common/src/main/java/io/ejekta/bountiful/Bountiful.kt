@@ -1,6 +1,7 @@
 package io.ejekta.bountiful
 
 import io.ejekta.bountiful.bounty.types.IBountyType
+import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.kambrik.Kambrik
 import io.ejekta.kambrik.text.broadcastSystemMessage
 import io.ejekta.kambrik.text.sendMessage
@@ -10,6 +11,7 @@ import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
+import kotlin.io.path.appendLines
 
 class Bountiful {
     companion object {
@@ -19,29 +21,21 @@ class Bountiful {
         fun id(str: String) = ResourceLocation.fromNamespaceAndPath(ID, str)
         val LOGGER = Kambrik.Logging.createLogger(ID)
 
-        fun MinecraftServer.logAndWarn(str: String) {
+        fun logAndWarn(str: String) {
             LOGGER.warn(str)
-            if (packMode) {
-                playerList.players.forEach { player ->
-                    player.sendSystemMessage(
-                        textLiteral("Warning: $str").withStyle(ChatFormatting.GOLD)
-                    )
-                }
-            }
+            BountifulIO.errFile.appendText("WRN: $str\n")
         }
 
-        fun MinecraftServer.logAndError(str: String) {
-            LOGGER.warn(str)
-            if (packMode) {
-                sendSystemMessage(
-                    textLiteral("Error: $str").withStyle(ChatFormatting.RED)
-                )
-                sendSystemMessage(
-                    textLiteral("See log for details.").withStyle(ChatFormatting.RED)
-                )
-            }
+        fun logAndError(str: String) {
+            LOGGER.error(str)
+            BountifulIO.errFile.appendText("ERR: $str\n")
         }
 
         val BOUNTY_LOGIC_REGISTRY_KEY: ResourceKey<Registry<IBountyType>> = ResourceKey.createRegistryKey(id("logic_registry"))
+
+
+        init {
+            BountifulIO.emptyErrFile()
+        }
     }
 }

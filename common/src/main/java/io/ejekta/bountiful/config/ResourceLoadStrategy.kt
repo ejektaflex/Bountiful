@@ -21,18 +21,23 @@ class ResourceLoadStrategy<T : IMerge<T>>(
 
     val loadedData = mutableListOf<T>()
 
-    private fun decode(identifier: ResourceLocation, fileText: String, newId: String): T? {
+    private fun decode(identifier: ResourceLocation, fileText: String, newId: String, isData: Boolean): T? {
         return try {
             JsonFormats.DataPack.decodeFromString(decoder, fileText).apply {
                 id = newId
-
                 // Set up pool, if it's a pool
                 if (this is Pool) {
                     setup(newId)
                 }
             }
         } catch (e: Exception) {
-            Bountiful.LOGGER.error("Could not decode file with ${this::class.simpleName}, given id '$newId' in folder '$folderName' on id $identifier")
+            Bountiful.logAndError("Could not decode ${if (isData) "data" else "config"} file id '$newId' in folder '$folderName' on id '$identifier'")
+            e.message?.let {
+                Bountiful.logAndError("Decoding Error Details:\n" + it.split('\n').map {
+                    line -> "* $line"
+                }.joinToString("\n"))
+                Bountiful.logAndError("Ensure that your JSON is valid and try again.")
+            }
             e.printStackTrace()
             null
         }
@@ -56,12 +61,12 @@ class ResourceLoadStrategy<T : IMerge<T>>(
 
         // Make sure the user doesn't have more than one file that matches the ID, otherwise tell them
         if (found.size > 1) {
-            Bountiful.LOGGER.error("More than one config file in '$configPath' has the name name! This will result in unexpected behaviour!")
+            Bountiful.logAndError("More than one config file in '$configPath' has the name name! This will result in unexpected behaviour!")
             for (f in found) {
-                Bountiful.LOGGER.error("* ${f.path}")
+                Bountiful.logAndError("* ${f.path}")
             }
-            Bountiful.LOGGER.error("Using this one, since we found it first:")
-            Bountiful.LOGGER.error("* ${toUse.path}")
+            Bountiful.logAndError("Using this one, since we found it first:")
+            Bountiful.logAndError("* ${toUse.path}")
         }
         return toUse
     }
@@ -154,14 +159,14 @@ class ResourceLoadStrategy<T : IMerge<T>>(
         if (file.exists()) {
             Bountiful.LOGGER.info("Reading config file: ${file.absolutePath}")
             val fileContent = file.readText()
-            return decode(id, fileContent, file.nameWithoutExtension)
+            return decode(id, fileContent, file.nameWithoutExtension, false)
         }
         return null
     }
 
     private fun loadResource(id: ResourceLocation, manager: ResourceManager): T? {
         val resourceContent = manager.read(id)
-        return decode(id, resourceContent, id.fileName())
+        return decode(id, resourceContent, id.fileName(), true)
     }
 
     private fun loadUnloadedFiles() {

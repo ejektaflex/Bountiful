@@ -83,13 +83,13 @@ class PoolEntry private constructor() {
                 problems.add("Bounty Pool Entry Invalid: (${id} - ${content}) details: ${e.message}")
 
             }
-            
+
             isValidCache = problems.isEmpty()
 
             if (isValidCache != true) {
-                server.logAndWarn("Bountiful reward pool entry is not valid!: $id")
+                Bountiful.logAndWarn("Bountiful reward pool entry is not valid!: $id")
                 for (problem in problems) {
-                    server.logAndWarn(problem)
+                    Bountiful.logAndWarn(problem)
                 }
             }
 
@@ -117,7 +117,7 @@ class PoolEntry private constructor() {
                 val foundBiomeId = element!!.asString
                 return listOf(foundBiomeId)
             } else {
-                server.logAndWarn("Biomes is defined for pool entry ${id}, but it is not a valid type")
+                Bountiful.logAndWarn("Biomes is defined for pool entry ${id}, but it is not a valid type")
             }
         } else if (element is JsonArray) {
             return element.asJsonArray.mapNotNull {
@@ -128,7 +128,7 @@ class PoolEntry private constructor() {
                 }
             }
         } else {
-            server.logAndWarn("Biomes is defined for pool entry ${id}, but it is not an ingestible type")
+            Bountiful.logAndWarn("Biomes is defined for pool entry ${id}, but it is not an ingestible type")
         }
         return emptyList()
     }
@@ -219,7 +219,7 @@ class PoolEntry private constructor() {
             val tagId = ResourceLocation.parse(content.substringAfter("#"))
             val items = getTagItems(world.registryAccess(), getTagItemKey(tagId))
             if (items.isEmpty()){
-                world.server.logAndWarn("A pool entry tag has an empty list! $content")
+                Bountiful.logAndWarn("A pool entry tag has an empty list! ($id - $content)")
                 "minecraft:air"
             } else {
                 items.random().id.toString()

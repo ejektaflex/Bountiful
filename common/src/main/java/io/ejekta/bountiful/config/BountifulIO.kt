@@ -12,6 +12,7 @@ import io.ejekta.kambrikx.file.KambrikParseFailMode
 import net.minecraft.SharedConstants
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.ResourceManager
+import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.zip.ZipEntry
@@ -31,6 +32,24 @@ object BountifulIO {
         KambrikParseFailMode.LEAVE,
         BountifulConfigData.serializer()
     ) { BountifulConfigData() }
+
+    private fun errFileDef(): File {
+        return rootFolder.toFile().resolve("errors.log")
+    }
+
+    val errFile: File
+        get() {
+            return errFileDef().apply {
+                if (!exists()) {
+                    parentFile.mkdirs()
+                    createNewFile()
+                }
+            }
+        }
+
+    fun emptyErrFile() {
+        errFileDef().takeUnless { !it.exists() }?.writeText("")
+    }
 
     var configData = configFile.read()
 
@@ -59,6 +78,7 @@ object BountifulIO {
     }
 
     fun doContentReload(manager: ResourceManager) {
+        emptyErrFile()
         reloadConfig()
         contentLoaders.forEach {
             it.clearDestination()
@@ -87,15 +107,15 @@ object BountifulIO {
                     it.key.intersect(poolQuery).size >= min(poolQuery.size, it.key.size) - 2
                 }
 
-                Bountiful.LOGGER.warn("Pool '$id' has been loaded, but is not attached to any existing data! This is probably a configuration error.")
-                Bountiful.LOGGER.warn("* If you intended to add this data to an existing Pool, please use an existing Pool name instead of '$id'.")
+                Bountiful.logAndWarn("Pool '$id' has been loaded, but is not attached to any existing data! This is probably a configuration error.")
+                Bountiful.logAndWarn("* If you intended to add this data to an existing Pool, please use an existing Pool name instead of '$id'.")
 
                 bestFit?.let {
-                    Bountiful.LOGGER.warn("  * Did you mean to use the pool name '${it.value.id}' instead of '$id'?")
+                    Bountiful.logAndWarn("  * Did you mean to use the pool name '${it.value.id}' instead of '$id'?")
                 }
 
-                Bountiful.LOGGER.warn("* Otherwise, please add '$id' to a Decree.")
-                Bountiful.LOGGER.warn("* NOTE: This data will not show up in game until one of the above fixes is made.")
+                Bountiful.logAndWarn("* Otherwise, please add '$id' to a Decree.")
+                Bountiful.logAndWarn("* NOTE: This data will not show up in game until one of the above fixes is made.")
             }
         },
         ResourceLoadStrategy("Decree Loader", "bounty_decrees", decreeConfigs, Decree.serializer(),
@@ -103,20 +123,20 @@ object BountifulIO {
             onComplete = { BountifulContent.Decrees.addAll(it) }
         ) {
             if (objectivePools.isEmpty()) {
-                Bountiful.LOGGER.warn("Decree '$id' has no Objective Pools! This is probably a configuration error.")
+                Bountiful.logAndWarn("Decree '$id' has no Objective Pools! This is probably a configuration error.")
             } else if (objectives.isEmpty()) {
-                Bountiful.LOGGER.warn("Decree '$id' has one or more Objective Pools, but they are all empty!")
+                Bountiful.logAndWarn("Decree '$id' has one or more Objective Pools, but they are all empty!")
             }
 
             if (rewardPools.isEmpty()) {
-                Bountiful.LOGGER.warn("Decree '$id' has no Reward Pools! This is probably a configuration error.")
+                Bountiful.logAndWarn("Decree '$id' has no Reward Pools! This is probably a configuration error.")
             } else if (rewards.isEmpty()) {
-                Bountiful.LOGGER.warn("Decree '$id' has one or more Reward Pools, but they are all empty!")
+                Bountiful.logAndWarn("Decree '$id' has one or more Reward Pools, but they are all empty!")
             }
 
             invalidPools.let {
                 if (it.isNotEmpty()) {
-                    Bountiful.LOGGER.warn("Decree '$id' references these pools, which do not exist: $it")
+                    Bountiful.logAndWarn("Decree '$id' references these pools, which do not exist: $it")
                 }
             }
 
@@ -135,10 +155,10 @@ object BountifulIO {
 
             // If the top X number of objs can't meet the worth of the top X rewards, warn the user
             if (objWorstWorth < rewWorstWorth * 0.9) {
-                Bountiful.LOGGER.warn("Decree '$id' top value rewards cannot be matched with equivalent objectives.")
-                Bountiful.LOGGER.warn("This will result in uneven bounties. Consider adding more high value objectives or lowering the value of your rewards.")
-                Bountiful.LOGGER.warn("* Top Rewards: ${topRewards.joinToString(", ") { "${it.id} (${it.maxWorth})" }} total up to: $rewWorstWorth")
-                Bountiful.LOGGER.warn("* Top Objs: ${topObjectives.joinToString(", ") { "${it.id} (${it.maxWorth})" }} total up to: $objWorstWorth")
+                Bountiful.logAndWarn("Decree '$id' top value rewards cannot be matched with equivalent objectives.")
+                Bountiful.logAndWarn("This will result in uneven bounties. Consider adding more high value objectives or lowering the value of your rewards.")
+                Bountiful.logAndWarn("* Top Rewards: ${topRewards.joinToString(", ") { "${it.id} (${it.maxWorth})" }} total up to: $rewWorstWorth")
+                Bountiful.logAndWarn("* Top Objs: ${topObjectives.joinToString(", ") { "${it.id} (${it.maxWorth})" }} total up to: $objWorstWorth")
             }
 
         }
