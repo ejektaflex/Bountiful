@@ -11,6 +11,7 @@ import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
+import kotlin.collections.mapIndexed
 import kotlin.io.path.appendLines
 
 class Bountiful {
@@ -21,14 +22,18 @@ class Bountiful {
         fun id(str: String) = ResourceLocation.fromNamespaceAndPath(ID, str)
         val LOGGER = Kambrik.Logging.createLogger(ID)
 
-        fun logAndWarn(str: String) {
-            LOGGER.warn(str)
-            BountifulIO.errFile.appendText("WRN: $str\n")
+        fun logAndWarn(vararg strs: String) {
+            val finStr = strs.mapIndexed { i, str -> if (i > 0) "* $str" else str }.joinToString("\n")
+            LOGGER.warn(finStr)
+            BountifulIO.errFile.appendText("WRN: $finStr\n")
         }
 
-        fun logAndError(str: String) {
-            LOGGER.error(str)
-            BountifulIO.errFile.appendText("ERR: $str\n")
+        fun logAndWarn(strs: List<String>) = logAndWarn(*strs.toTypedArray())
+
+        fun logAndError(vararg strs: String) {
+            val finStr = strs.mapIndexed { i, str -> if (i > 0) "* $str" else str }.joinToString("\n")
+            LOGGER.error(finStr)
+            BountifulIO.errFile.appendText("ERR: $finStr\n")
         }
 
         val BOUNTY_LOGIC_REGISTRY_KEY: ResourceKey<Registry<IBountyType>> = ResourceKey.createRegistryKey(id("logic_registry"))

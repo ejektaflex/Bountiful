@@ -107,15 +107,19 @@ object BountifulIO {
                     it.key.intersect(poolQuery).size >= min(poolQuery.size, it.key.size) - 2
                 }
 
-                Bountiful.logAndWarn("Pool '$id' has been loaded, but is not attached to any existing data! This is probably a configuration error.")
-                Bountiful.logAndWarn("* If you intended to add this data to an existing Pool, please use an existing Pool name instead of '$id'.")
+                val warnings = mutableListOf(
+                    "Pool '$id' has been loaded, but is not attached to any existing data! This is probably a configuration error.",
+                    "If you intended to add this data to an existing Pool, please use an existing Pool name instead of '$id'."
+                )
 
                 bestFit?.let {
-                    Bountiful.logAndWarn("  * Did you mean to use the pool name '${it.value.id}' instead of '$id'?")
+                    warnings.add("Did you mean to use the pool name '${it.value.id}' instead of '$id'?")
                 }
 
-                Bountiful.logAndWarn("* Otherwise, please add '$id' to a Decree.")
-                Bountiful.logAndWarn("* NOTE: This data will not show up in game until one of the above fixes is made.")
+                warnings.add("Otherwise, please add '$id' to a Decree.")
+                warnings.add("NOTE: This data will not show up in game until one of the above fixes is made.")
+
+                Bountiful.logAndWarn(warnings)
             }
         },
         ResourceLoadStrategy("Decree Loader", "bounty_decrees", decreeConfigs, Decree.serializer(),
@@ -140,14 +144,12 @@ object BountifulIO {
                 }
             }
 
-            val worstCaseRewNum = configData.bounty.initialCountPreference.max
-
             val topRewards = allRewardEntries.run {
-                sortedBy { -it.maxWorth }.take(worstCaseRewNum.coerceAtMost(size))
+                sortedBy { -it.maxWorth }.take(configData.bounty.initialCountPreference.max.coerceAtMost(size))
             }
 
             val topObjectives = allObjectiveEntries.run {
-                sortedBy { -it.maxWorth }.take(worstCaseRewNum.coerceAtMost(size))
+                sortedBy { -it.maxWorth }.take(configData.bounty.fillerCountPreference.min.coerceAtLeast(1))
             }
 
             val rewWorstWorth = topRewards.sumOf { it.maxWorth }
@@ -155,10 +157,11 @@ object BountifulIO {
 
             // If the top X number of objs can't meet the worth of the top X rewards, warn the user
             if (objWorstWorth < rewWorstWorth * 0.9) {
-                Bountiful.logAndWarn("Decree '$id' top value rewards cannot be matched with equivalent objectives.")
-                Bountiful.logAndWarn("This will result in uneven bounties. Consider adding more high value objectives or lowering the value of your rewards.")
-                Bountiful.logAndWarn("* Top Rewards: ${topRewards.joinToString(", ") { "${it.id} (${it.maxWorth})" }} total up to: $rewWorstWorth")
-                Bountiful.logAndWarn("* Top Objs: ${topObjectives.joinToString(", ") { "${it.id} (${it.maxWorth})" }} total up to: $objWorstWorth")
+                Bountiful.logAndWarn(
+                    "Decree '$id' top value rewards cannot be matched with equivalent objectives. This will result in uneven bounties. Consider adding more high value objectives or lowering the value of your rewards.",
+                    "Top Rewards: ${topRewards.joinToString(", ") { "${it.id} (${it.maxWorth})" }} total up to: $rewWorstWorth",
+                    "Top Objs: ${topObjectives.joinToString(", ") { "${it.id} (${it.maxWorth})" }} total up to: $objWorstWorth"
+                )
             }
 
         }
