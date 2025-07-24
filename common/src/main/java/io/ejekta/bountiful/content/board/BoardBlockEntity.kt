@@ -294,7 +294,12 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     private fun upkeepBountyGeneration() {
-        val updateFrequencyTicks = BountifulIO.configData.board.updateFrequencySecs * GameTime.TICK_RATE
+        // When packmode is enabled, always update each second
+        val updateFrequencyTicks = if (Bountiful.packMode) {
+            20
+        } else {
+            BountifulIO.configData.board.updateFrequencySecs * GameTime.TICK_RATE
+        }
         serverWorld?.let { sw ->
             if (sw.gameTime - lastUpdatedTime >= updateFrequencyTicks && updateFrequencyTicks > 0) {
                 val numUpdates = ((sw.gameTime - lastUpdatedTime) / updateFrequencyTicks).coerceAtMost(BoardInventory.BOUNTY_SIZE.toLong())

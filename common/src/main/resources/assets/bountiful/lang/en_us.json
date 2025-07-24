@@ -6,13 +6,8 @@
 
 	"itemGroup.bountiful": "Bountiful",
 
-	"bountiful.entry.shepherd_objs.wool_wildcard": "Any Wool",
-	"bountiful.entry.fletcher_objs.planks": "Any Planks",
-	"bountiful.entry.fletcher_objs.logs": "Any Log",
-	"bountiful.entry.shepherd_objs.bed_wildcard": "Any Bed",
-	"bountiful.entry.fisherman_objs.any_boat": "Any Boat",
-	"bountiful.entry.mapper_objs.candles": "Any Candle",
-	"bountiful.entry.shepherd_objs.banner_wildcard": "Any Banner",
+	"bountiful.toast.complete": "Bounty Complete!",
+	"bountiful.toast.complete.desc": "Turn in at a Bounty Board!",
 
 	"bountiful.entry.fisherman_obj_catch_ench_book": "Fish up Enchanted Books",
 	"bountiful.entry.cleric_objs.brew_swiftness": "Brew a basic Swiftness Potion",
@@ -20,6 +15,9 @@
 
 	"bountiful.ui.shorthand.minutes": "m",
 	"bountiful.ui.shorthand.seconds": "s",
+	"bountiful.ui.discount": "Discount",
+	"bountiful.ui.reputation": "Reputation",
+	"bountiful.ui.empty": "It's Empty! Check back soon!",
 
 	"bountiful.decree": "Decree",
 	"bountiful.decrees": "Decrees",
@@ -72,6 +70,7 @@
 	"bountiful.decree.toolsmith.name": "Toolsmithing",
 	"bountiful.decree.chaos.name": "Chaos Mode",
 
+	"bountiful.bounty.type.entity.kill": "Kill",
 	"bountiful.bounty.type.entity.kills": "Kills",
 
 	"bountiful.rarity.Common": "Common",

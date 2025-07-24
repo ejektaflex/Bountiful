@@ -86,18 +86,21 @@ class BoardScreen(handler: AbstractContainerMenu, inventory: Inventory, title: C
                     if (isHovered(18, 8)) {
                         val repColor = BountyRarity.forReputation(levelData.first).color
                         tooltip {
-                            addLiteral("Reputation ") {
+                            addTranslate("bountiful.ui.reputation", "Reputation") {
                                 color(0xabff7a)
-                                addLiteral("(${levelData.first})") {
+                                addLiteral(" (${levelData.first}) ") {
                                     format(repColor)
                                 }
                             }
-                            addLiteral(" (Discount: ") {
+                            addLiteral("(") {
                                 color(0xabff7a)
-                                addLiteral("%.1f".format((1 - BountyCreator.getDiscount(levelData.first)) * 100) + "%") {
-                                    format(repColor)
+                                addTranslate("bountiful.ui.discount", "Discount") {
+                                    addLiteral(": ")
+                                    addLiteral("%.1f".format((1 - BountyCreator.getDiscount(levelData.first)) * 100) + "%") {
+                                        format(repColor)
+                                    }
+                                    addLiteral(")")
                                 }
-                                addLiteral(")")
                             }
                         }
                     }
@@ -115,7 +118,7 @@ class BoardScreen(handler: AbstractContainerMenu, inventory: Inventory, title: C
             if (validButtons.isEmpty()) {
                 textCentered(85, 78) {
                     color = 0xEADAB5
-                    addLiteral("It's Empty! Check back soon!")
+                    addTranslate("bountiful.ui.empty", "It's Empty! Check back soon!")
                 }
             } else {
                 widget(scroller, 166, 18)

@@ -28,8 +28,8 @@ data class OnBountyComplete(
             ctx.toasts.addToast(
                 SystemToast(
                     SystemToast.SystemToastId.PERIODIC_NOTIFICATION,
-                    Component.translatable("bounty.toast.complete"), // Bounty Complete!
-                    Component.translatable("bounty.toast.complete.desc") // Turn in at a Bounty Board!
+                    Component.translatable("bountiful.toast.complete"), // Bounty Complete!
+                    Component.translatable("bountiful.toast.complete.desc") // Turn in at a Bounty Board!
                     )
             )
         }

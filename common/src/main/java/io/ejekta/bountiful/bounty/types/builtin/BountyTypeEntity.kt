@@ -29,7 +29,7 @@ class BountyTypeEntity : IBountyObjective {
     override fun textOnBounty(entry: BountyDataEntry, isObj: Boolean, player: Player, current: Int): List<MutableComponent> {
         val progress = getProgress(entry, player, current)
         val result = when (isObj) {
-            true -> Component.literal("Kill ").append(
+            true -> Component.translatable("bountiful.bounty.type.entity.kill").append(" ").append(
                 getEntityType(entry).description.copy()
             ).withStyle(progress.color).append(
                 progress.neededText.colored(ChatFormatting.WHITE)

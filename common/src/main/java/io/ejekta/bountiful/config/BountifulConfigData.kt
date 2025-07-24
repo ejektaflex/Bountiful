@@ -70,7 +70,7 @@ class BountifulConfigData {
     fun buildScreen(): Screen {
         val builder = ConfigBuilder.create()
             .setParentScreen(Minecraft.getInstance().screen)
-            .setTitle(Component.literal("Bountiful"))
+            .setTitle(Component.translatable("bountiful.mod.name"))
             .setSavingRunnable(::onSave)
 
         val creator = builder.entryBuilder()
