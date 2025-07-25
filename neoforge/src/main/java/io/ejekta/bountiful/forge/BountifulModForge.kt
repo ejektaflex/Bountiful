@@ -2,22 +2,15 @@ package io.ejekta.bountiful.forge
 
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bridge.Bountybridge
-import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.BountifulIO.doContentReload
 import io.ejekta.bountiful.content.BountifulCommands
 import io.ejekta.bountiful.content.BountifulContent
-import io.ejekta.kambrik.Kambrik
-import io.ejekta.kambrik.internal.registration.KambrikRegistrar
-import net.minecraft.block.ComposterBlock
-import net.minecraft.block.MapColor
-import net.minecraft.entity.passive.WanderingTraderEntity
-import net.minecraft.item.Item
-import net.minecraft.registry.Registry
-import net.minecraft.registry.RegistryKey
-import net.minecraft.resource.SynchronousResourceReloader
-import net.minecraft.server.world.ServerWorld
+import io.ejekta.kambrik.registration.KambrikRegistrar
+import net.minecraft.core.Registry
+import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.WanderingTraderManager
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.packs.resources.PreparableReloadListener
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
@@ -25,15 +18,12 @@ import net.neoforged.neoforge.event.AddReloadListenerEvent
 import net.neoforged.neoforge.event.RegisterCommandsEvent
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent
 import net.neoforged.neoforge.event.server.ServerStartingEvent
-import net.neoforged.neoforge.event.village.VillagerTradesEvent
 import net.neoforged.neoforge.event.village.WandererTradesEvent
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent
-import net.neoforged.neoforge.registries.DeferredRegister
 import net.neoforged.neoforge.registries.RegisterEvent
 import thedarkcolour.kotlinforforge.neoforge.forge.FORGE_BUS
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_CONTEXT
 import thedarkcolour.kotlinforforge.neoforge.forge.runForDist
-import java.util.function.Supplier
+import java.util.concurrent.CompletableFuture
 
 
 @Mod("bountiful")
@@ -51,7 +41,7 @@ class BountifulModForge {
         FORGE_BUS.addListener(this::onServerStarting)
         FORGE_BUS.addListener(this::changeTrades)
 
-        val content = BountifulContent
+        val content = BountifulContent // trigger init
 
         MOD_CONTEXT.getKEventBus().register(Companion)
 
@@ -60,15 +50,15 @@ class BountifulModForge {
                 MOD_CONTEXT.getKEventBus().register(BountifulForgeClient::class.java)
             },
             serverTarget = {
-
+                // no-op, nothing specific here
             }
         )
         Bountybridge.registerCriterionStuff()
     }
 
     private fun onEntityKilled(evt: LivingDeathEvent) {
-        evt.source.attacker?.let { attacker ->
-            (evt.entity.world as? ServerWorld)?.let { serverWorld ->
+        evt.source.entity?.let { attacker ->
+            (evt.entity.level() as? ServerLevel)?.let { serverWorld ->
                 Bountybridge.handleEntityKills(serverWorld, attacker, evt.entity)
             }
         }
@@ -79,8 +69,10 @@ class BountifulModForge {
     }
 
     private fun onGameReload(evt: AddReloadListenerEvent) {
-        evt.addListener(SynchronousResourceReloader { manager ->
-            doContentReload(manager)
+        evt.addListener(PreparableReloadListener { prepBarrier, resourceManager, pfa, pfb, ea, eb ->
+            return@PreparableReloadListener CompletableFuture.supplyAsync {
+                doContentReload(resourceManager) as Void // ew gross
+            }
         })
     }
 
@@ -97,8 +89,8 @@ class BountifulModForge {
         @SubscribeEvent
         fun registerRegistryContent(evt: RegisterEvent) {
             KambrikRegistrar[BountifulContent].content.forEach { entry ->
-                evt.register(entry.registry.key as RegistryKey<out Registry<Any>>) {
-                    it.register(ResourceLocation.parse(BountifulContent.getId(), entry.itemId), entry.item.value!!)
+                evt.register(entry.registry.key() as ResourceKey<out Registry<Any>>) {
+                    it.register(ResourceLocation.fromNamespaceAndPath(BountifulContent.getId(), entry.itemId), entry.item.value!!)
                 }
             }
         }

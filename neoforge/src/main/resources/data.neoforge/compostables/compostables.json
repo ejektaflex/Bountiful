@@ -1,0 +1,12 @@
+{
+	"compostables": [
+		{
+			"item": "bountiful:bounty",
+			"chance": 0.5
+		},
+		{
+			"item": "bountiful:decree",
+			"chance": 0.85
+		}
+	]
+}

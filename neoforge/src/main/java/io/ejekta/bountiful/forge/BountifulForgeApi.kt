@@ -1,8 +1,6 @@
 package io.ejekta.bountiful.forge
 
 import io.ejekta.bountiful.bridge.BountifulSharedApi
-import io.ejekta.bountiful.content.BountifulContent
-import net.minecraft.block.ComposterBlock
 import net.neoforged.fml.ModList
 
 class BountifulForgeApi : BountifulSharedApi {
@@ -11,7 +9,6 @@ class BountifulForgeApi : BountifulSharedApi {
     }
 
     override fun registerCompostables() {
-        ComposterBlock.registerCompostableItem(0.5f) { BountifulContent.BOUNTY_ITEM }
-        ComposterBlock.registerCompostableItem(0.85f) { BountifulContent.DECREE_ITEM }
+        // no-op (now JSON data-driven in NeoForge in 1.21)
     }
 }
