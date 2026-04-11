@@ -18,7 +18,6 @@ import net.fabricmc.fabric.api.resource.ResourcePackActivationType
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.network.chat.Component
 import net.minecraft.server.packs.PackType
-import net.minecraft.world.item.CreativeModeTabs
 
 class BountifulModFabric : ModInitializer {
 
@@ -64,11 +63,6 @@ class BountifulModFabric : ModInitializer {
         CommandRegistrationCallback.EVENT.register(CommandRegistrationCallback(BountifulCommands::register))
 
         Bountybridge.registerCompostables()
-
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register { e ->
-            e.accept(BountifulContent.DECREE_ITEM)
-            e.accept(BountifulContent.BOARD_ITEM)
-        }
 
         ServerLifecycleEvents.SERVER_STARTING.register(ServerLifecycleEvents.ServerStarting { server ->
             Bountybridge.registerJigsawPieces(server)

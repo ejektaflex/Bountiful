@@ -136,7 +136,7 @@ class BountyStack(val stack: ItemStack) {
         if (isServer) {
             return emptyList()
         }
-        val player = Minecraft.getInstance().player!!
+        val player = Minecraft.getInstance().player ?: return emptyList()
         return buildList {
             add(Component.translatable("bountiful.tooltip.required").withStyle(ChatFormatting.GOLD).append(":"))
             addAll(objs.map {

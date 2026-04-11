@@ -28,6 +28,7 @@ class BountyItem : Item(
         if (Kambridge.isOnServer()) {
             return Component.translatable("bountiful.bounty")
         }
+        val clientLevel = Minecraft.getInstance().level
         val info = BountyStack(stack).info
         var text = Component.translatable(info.rarity.name.lowercase()
             // Capitalizing
@@ -37,10 +38,10 @@ class BountyItem : Item(
         if (info.rarity == BountyRarity.LEGENDARY) {
             text = text.withStyle(ChatFormatting.BOLD)
         }
-        if (BountifulIO.configData.bounty.shouldHaveTimersAndExpire) {
+        if (BountifulIO.configData.bounty.shouldHaveTimersAndExpire && clientLevel != null) {
             text = text.append(
                 Component.literal("(")
-                    .append(info.formattedTimeLeft(Minecraft.getInstance().level!!))
+                    .append(info.formattedTimeLeft(clientLevel))
                     .append(Component.literal(")"))
                     .withStyle(ChatFormatting.WHITE)
             )

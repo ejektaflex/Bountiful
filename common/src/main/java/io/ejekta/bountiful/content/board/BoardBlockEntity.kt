@@ -88,7 +88,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
     // Whether this board has even been initialized/given starting data
     private val isPristine: Boolean
-        get() = bounties.isEmpty && playerData.keys.isEmpty()
+        get() = decrees.isEmpty && bounties.isEmpty && playerData.isEmpty()
 
     // Calculated level, progress to next, point of next level
     private val levelData: Triple<Int, Int, Int>
@@ -388,21 +388,14 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             registryLookup
         )
 
-        val doneMap = base.get("completed")
-        if (doneMap != null) {
-            playerData = JsonFormats.BlockEntity.decodeFromStringTag(playerDataSerializer, doneMap as StringTag).toMutableMap()
+        val playerDataMap = base.get("completed")
+        if (playerDataMap != null) {
+            playerData = JsonFormats.BlockEntity.decodeFromStringTag(playerDataSerializer, playerDataMap as StringTag).toMutableMap()
         }
 
         val timeStampMap = base.get("timestamps")
         if (timeStampMap != null) {
             bountyTimestamps = JsonFormats.BlockEntity.decodeFromStringTag(bountyStampSerializer, timeStampMap as StringTag).toMutableMap()
-        }
-
-        val takenData = base.get("taken")
-        if (takenData != null) {
-            playerData = JsonFormats.BlockEntity.decodeFromStringTag(playerDataSerializer, takenData as StringTag).map {
-                it.key to it.value
-            }.toMap().toMutableMap()
         }
     }
 
@@ -416,8 +409,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
         val timeStampMap = JsonFormats.BlockEntity.encodeToStringTag(bountyStampSerializer, bountyTimestamps)
         base.put("timestamps", timeStampMap)
-
-        base.put("taken", JsonFormats.BlockEntity.encodeToStringTag(playerDataSerializer, playerData))
 
         val decreeList = CompoundTag()
         ContainerHelper.saveAllItems(decreeList, decrees.readOnlyCopy, registryLookup)
