@@ -40,8 +40,8 @@ dependencies {
 loom {
     mods {
         "${mod_id}" {
-            sourceSet sourceSets.main
             sourceSet sourceSets.gametest
+            sourceSet sourceSets.main
         }
     }
     runs {
@@ -62,8 +62,17 @@ tasks.named('compileGametestKotlin') {
 }
 
 tasks.named('processGametestResources') {
+    dependsOn(tasks.named('processResources'))
     from(project(':common').file('src/gametest/resources'))
     duplicatesStrategy = DuplicatesStrategy.WARN
+    doLast {
+        def mainMetadata = new JsonSlurper().parse(file("$buildDir/resources/main/fabric.mod.json")) as Map
+        def entrypoints = new LinkedHashMap(mainMetadata.entrypoints as Map)
+        entrypoints['fabric-gametest'] = ['io.ejekta.bountiful.test.BountifulFabricGameTest']
+        def gametestMetadata = new LinkedHashMap(mainMetadata)
+        gametestMetadata.entrypoints = entrypoints
+        file("${destinationDir}/fabric.mod.json").text = JsonOutput.prettyPrint(JsonOutput.toJson(gametestMetadata))
+    }
 }
 
 def productionFabricModJson = layout.buildDirectory.file('generated/production-metadata/fabric.mod.json')
@@ -71,15 +80,9 @@ def productionFabricModJson = layout.buildDirectory.file('generated/production-m
 tasks.register('writeProductionFabricModJson') {
     outputs.file(productionFabricModJson)
     doLast {
-        def metadata = new JsonSlurper().parse(file('src/main/resources/fabric.mod.json')) as Map
-        def entrypoints = new LinkedHashMap(metadata.entrypoints as Map)
-        entrypoints.remove('fabric-gametest')
-        def productionMetadata = new LinkedHashMap(metadata)
-        productionMetadata.entrypoints = entrypoints
-
         def outputFile = productionFabricModJson.get().asFile
         outputFile.parentFile.mkdirs()
-        outputFile.text = JsonOutput.prettyPrint(JsonOutput.toJson(productionMetadata))
+        outputFile.text = file('src/main/resources/fabric.mod.json').text
     }
 }
 

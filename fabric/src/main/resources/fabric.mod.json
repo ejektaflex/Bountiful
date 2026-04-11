@@ -32,9 +32,6 @@
     "client": [
       "io.ejekta.bountiful.client.BountifulClient"
     ],
-    "fabric-gametest": [
-      "io.ejekta.bountiful.test.BountifulFabricGameTest"
-    ],
     "modmenu": [
       "io.ejekta.bountiful.config.BountifulModMenu"
     ],
