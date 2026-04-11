@@ -1,0 +1,3 @@
+[submodule "build-logic"]
+	path = build-logic
+	url = ../build-logic
