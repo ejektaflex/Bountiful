@@ -17,6 +17,7 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
 import net.neoforged.neoforge.event.AddReloadListenerEvent
 import net.neoforged.neoforge.event.RegisterCommandsEvent
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent
+import net.neoforged.neoforge.event.server.ServerAboutToStartEvent
 import net.neoforged.neoforge.event.server.ServerStartingEvent
 import net.neoforged.neoforge.event.village.WandererTradesEvent
 import net.neoforged.neoforge.registries.RegisterEvent
@@ -64,15 +65,18 @@ class BountifulModForge {
         }
     }
 
-    private fun onServerStarting(evt: ServerStartingEvent) {
+    private fun onServerStarting(evt: ServerAboutToStartEvent) {
         Bountybridge.registerJigsawPieces(evt.server)
     }
 
     private fun onGameReload(evt: AddReloadListenerEvent) {
         evt.addListener(PreparableReloadListener { prepBarrier, resourceManager, pfa, pfb, ea, eb ->
-            return@PreparableReloadListener CompletableFuture.supplyAsync {
-                doContentReload(resourceManager) as Void // ew gross
-            }
+            return@PreparableReloadListener prepBarrier.wait(
+                CompletableFuture.supplyAsync({
+                    doContentReload(resourceManager)
+                    null
+                }, eb).get()
+            )
         })
     }
 

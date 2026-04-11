@@ -40,7 +40,6 @@ class BountifulConfigData {
     @Serializable
     class ClientConfigData {
         var showCompletionToast = true
-        var advancedDebugTooltips = false
     }
 
     val client = ClientConfigData()
@@ -55,13 +54,13 @@ class BountifulConfigData {
     }
 
     @Serializable
-    class ChaosConfigData {
+    class DebugConfigData {
         var enabled = false
     }
 
-    val chaos = ChaosConfigData()
+    val dbg = DebugConfigData()
 
-    @Transient var chaosMode: ChaosMode? = if (chaos.enabled) {
+    @Transient var chaosMode: ChaosMode? = if (dbg.enabled) {
         ChaosMode()
     } else null
 
@@ -95,7 +94,32 @@ class BountifulConfigData {
                 .build()
         )
 
-        generalCat.addEntry(
+        val boardCat = builder.getOrCreateCategory(Component.literal("General - Board"))
+
+
+        boardCat.addEntry(
+            creator.startBooleanToggle(
+                Component.literal("Breakable Boards"),
+                board.canBreak
+            ).setDefaultValue(true).setTooltip(
+                Component.literal("Whether boards should be breakable or not")
+            ).setSaveConsumer {
+                board.canBreak = it
+            }.build()
+        )
+
+        boardCat.addEntry(
+            creator.startIntField(
+                textLiteral("Board Update Frequency"),
+                board.updateFrequencySecs
+            ).setDefaultValue(45).setTooltip(
+                Component.literal("How often (in seconds) new bounties are added/removed")
+            ).setSaveConsumer {
+                board.updateFrequencySecs = it
+            }.build()
+        )
+
+        boardCat.addEntry(
             creator.startIntSlider(
                 textLiteral("Board Gen Frequency in Villages"),
                 board.villageGenFrequency,
@@ -111,30 +135,6 @@ class BountifulConfigData {
                 .build()
         )
 
-        generalCat.addEntry(
-            creator.startBooleanToggle(
-                Component.literal("Pack Mode (Does not Save)"),
-                Bountiful.packMode
-            ).setDefaultValue(false).setTooltip(
-                Component.literal("Turns on Modpack Dev mode for Bountiful. Is not saved.")
-            ).setSaveConsumer {
-                Bountiful.packMode = it
-            }.build()
-        )
-
-        val boardCat = builder.getOrCreateCategory(Component.literal("General - Board"))
-
-        boardCat.addEntry(
-            creator.startIntField(
-                textLiteral("Board Update Frequency"),
-                board.updateFrequencySecs
-            ).setDefaultValue(45).setTooltip(
-                Component.literal("How often (in seconds) new bounties are added/removed")
-            ).setSaveConsumer {
-                board.updateFrequencySecs = it
-            }.build()
-        )
-
         val bountyCat = builder.getOrCreateCategory(Component.literal("General - Bounty"))
 
         bountyCat.addEntry(
@@ -145,17 +145,6 @@ class BountifulConfigData {
                 Component.literal("Whether bounties should have a timer and expire")
             ).setSaveConsumer {
                 bounty.shouldHaveTimersAndExpire = it
-            }.build()
-        )
-
-        bountyCat.addEntry(
-            creator.startBooleanToggle(
-                Component.literal("Breakable Boards"),
-                board.canBreak
-            ).setDefaultValue(true).setTooltip(
-                Component.literal("Whether boards should be breakable or not")
-            ).setSaveConsumer {
-                board.canBreak = it
             }.build()
         )
 
@@ -234,21 +223,32 @@ class BountifulConfigData {
             }.build()
         )
 
-        val chaosCat = builder.getOrCreateCategory(Component.literal("Chaos Mode"))
+        val debugCat = builder.getOrCreateCategory(Component.literal("Debug"))
 
-        chaosCat.addEntry(
+        debugCat.addEntry(
             creator.startBooleanToggle(
                 Component.literal("Enable Chaos Mode (Experimental)"),
-                chaos.enabled
+                dbg.enabled
             ).setDefaultValue(false).setTooltip(
                 Component.literal("Whether chaos mode is enabled. Will override all base and config data.")
             ).setSaveConsumer {
-                chaos.enabled = it
+                dbg.enabled = it
                 chaosMode = if (it) {
                     chaosMode ?: ChaosMode()
                 } else {
                     null
                 }
+            }.build()
+        )
+
+        debugCat.addEntry(
+            creator.startBooleanToggle(
+                Component.literal("Pack Mode (Does not Save)"),
+                Bountiful.packMode
+            ).setDefaultValue(false).setTooltip(
+                Component.literal("Turns on Modpack Dev mode for Bountiful. Is not saved.")
+            ).setSaveConsumer {
+                Bountiful.packMode = it
             }.build()
         )
 

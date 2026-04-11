@@ -1,19 +1,14 @@
 package io.ejekta.bountiful.config
 
-import com.mojang.serialization.Codec
 import com.mojang.serialization.JsonOps
 import io.ejekta.kambrik.Kambrik
-import io.ejekta.percale.contextualCodec
-import io.ejekta.percale.reverse.*
+import io.ejekta.percale.reverse.PercaleJson
+import io.ejekta.percale.reverse.toSerializer
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.contextual
-import net.minecraft.nbt.StringTag
 import net.minecraft.util.ExtraCodecs
 
 typealias GsonElement = com.google.gson.JsonElement

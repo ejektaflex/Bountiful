@@ -4,6 +4,7 @@ import io.ejekta.bountiful.bridge.Bountybridge
 import io.ejekta.bountiful.client.AnalyzerScreen
 import io.ejekta.bountiful.client.BoardScreen
 import io.ejekta.bountiful.config.BountifulIO
+import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.gui.AnalyzerScreenHandler
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
 import net.minecraft.client.gui.screens.MenuScreens
@@ -39,18 +40,13 @@ object BountifulForgeClient {
     @JvmStatic
     @SubscribeEvent
     fun onRegisterClientComponents(event: RegisterMenuScreensEvent) {
+        println("REGISTERING MENU SCREENS BO")
         event.register(
-            MenuType(
-                MenuType.MenuSupplier(::BoardScreenHandler),
-                FeatureFlagSet.of()
-            ),
+            BountifulContent.BOARD_SCREEN_HANDLER,
             MenuScreens.ScreenConstructor(::BoardScreen)
         )
         event.register(
-            MenuType(
-                MenuType.MenuSupplier(::AnalyzerScreenHandler),
-                FeatureFlagSet.of()
-            ),
+            BountifulContent.ANALYZER_SCREEN_HANDLER,
             MenuScreens.ScreenConstructor(::AnalyzerScreen)
         )
     }

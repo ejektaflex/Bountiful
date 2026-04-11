@@ -9,11 +9,17 @@ repositories {
         name = 'Kotlin for Forge'
         url = 'https://thedarkcolour.github.io/KotlinForForge/'
     }
+    maven {
+        name = "Architectury Maven"
+        url = uri("https://maven.architectury.dev/")
+    }
 }
 
 dependencies {
     implementation("thedarkcolour:kotlinforforge-neoforge:${forgelike_adapter_version}")
     implementation("io.ejekta.kambrik:kambrik-neoforge:${kambrik_version}")
+    implementation("io.ejekta.percale:percale-neoforge:${percale_version}")
+    implementation("me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}")
 }
 
 neoForge {
@@ -32,15 +38,9 @@ neoForge {
             systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
             ideName = "NeoForge ${it.name.capitalize()} (${project.path})" // Unify the run config names with fabric
         }
-        client {
-            client()
-        }
-        data {
-            data()
-        }
-        server {
-            server()
-        }
+        client { client() }
+        data { data() }
+        server { server() }
     }
     mods {
         "${mod_id}" {
