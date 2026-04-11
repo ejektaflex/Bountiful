@@ -48,7 +48,7 @@ object BountifulContent : KambrikAutoRegistrar {
     var PoolEntryMap = mapOf<String, PoolEntry>()
         private set
 
-    internal fun populatePools(newPools: List<Pool>) {
+    fun populatePools(newPools: List<Pool>) {
         Pools = newPools
         PoolMap = Pools.associateBy { it.id }
         PoolEntryMap = Pools.map { it.items }.flatten().associateBy { it.id }

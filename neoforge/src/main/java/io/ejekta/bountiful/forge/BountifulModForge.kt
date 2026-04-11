@@ -106,7 +106,6 @@ class BountifulModForge {
                 Bountybridge.registerCompostables()
             }
         }
-
     }
 
 }

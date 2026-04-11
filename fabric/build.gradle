@@ -2,6 +2,26 @@ plugins {
     id 'multiloader-fabric'
 }
 
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+sourceSets {
+    gametest {
+        java.srcDir('src/gametest/java')
+        resources.srcDir('src/gametest/resources')
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath + sourceSets.main.runtimeClasspath + configurations.testCompileClasspath
+        runtimeClasspath += output + compileClasspath + sourceSets.main.runtimeClasspath
+    }
+}
+
+configurations {
+    gametestCompileOnly.extendsFrom(compileOnly)
+    gametestImplementation.extendsFrom(implementation)
+    gametestImplementation.extendsFrom(testImplementation)
+    gametestRuntimeOnly.extendsFrom(runtimeOnly)
+    gametestRuntimeOnly.extendsFrom(testRuntimeOnly)
+}
+
 repositories {
     mavenLocal()
     maven {
@@ -15,4 +35,62 @@ dependencies {
     modImplementation("io.ejekta.percale:percale-fabric:${percale_version}")
     modImplementation("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}")
     modImplementation "com.terraformersmc:modmenu:${mod_menu_version}"
+}
+
+loom {
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.gametest
+        }
+    }
+    runs {
+        gameTestServer {
+            server()
+            source sourceSets.gametest
+            setConfigName('Fabric Game Test Server')
+            ideConfigGenerated(true)
+            runDir('runs/gametest')
+            vmArg('-Dfabric-api.gametest=true')
+            vmArg("-Dfabric-api.gametest.report-file=${file("$buildDir/reports/game_test/results.xml").absolutePath}")
+        }
+    }
+}
+
+tasks.named('compileGametestKotlin') {
+    source(project(':common').fileTree('src/gametest/java'))
+}
+
+tasks.named('processGametestResources') {
+    from(project(':common').file('src/gametest/resources'))
+    duplicatesStrategy = DuplicatesStrategy.WARN
+}
+
+def productionFabricModJson = layout.buildDirectory.file('generated/production-metadata/fabric.mod.json')
+
+tasks.register('writeProductionFabricModJson') {
+    outputs.file(productionFabricModJson)
+    doLast {
+        def metadata = new JsonSlurper().parse(file('src/main/resources/fabric.mod.json')) as Map
+        def entrypoints = new LinkedHashMap(metadata.entrypoints as Map)
+        entrypoints.remove('fabric-gametest')
+        def productionMetadata = new LinkedHashMap(metadata)
+        productionMetadata.entrypoints = entrypoints
+
+        def outputFile = productionFabricModJson.get().asFile
+        outputFile.parentFile.mkdirs()
+        outputFile.text = JsonOutput.prettyPrint(JsonOutput.toJson(productionMetadata))
+    }
+}
+
+tasks.named('jar') {
+    dependsOn(tasks.named('writeProductionFabricModJson'))
+    exclude('fabric.mod.json')
+    from(productionFabricModJson) {
+        rename { 'fabric.mod.json' }
+    }
+}
+
+tasks.named('runGameTestServer') {
+    dependsOn(tasks.named('gametestClasses'))
 }

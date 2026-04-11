@@ -2,6 +2,23 @@ plugins {
     id 'multiloader-neoforge'
 }
 
+sourceSets {
+    gametest {
+        java.srcDir('src/gametest/java')
+        resources.srcDir('src/gametest/resources')
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath + sourceSets.main.runtimeClasspath + configurations.testCompileClasspath
+        runtimeClasspath += output + compileClasspath + sourceSets.main.runtimeClasspath
+    }
+}
+
+configurations {
+    gametestCompileOnly.extendsFrom(compileOnly)
+    gametestImplementation.extendsFrom(implementation)
+    gametestImplementation.extendsFrom(testImplementation)
+    gametestRuntimeOnly.extendsFrom(runtimeOnly)
+    gametestRuntimeOnly.extendsFrom(testRuntimeOnly)
+}
+
 repositories {
     mavenLocal()
     maven {
@@ -14,4 +31,34 @@ dependencies {
     implementation("io.ejekta.kambrik:kambrik-neoforge:${kambrik_version}")
     implementation("io.ejekta.percale:percale-neoforge:${percale_version}")
     implementation("me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}")
+}
+
+neoForge {
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.gametest
+        }
+    }
+    runs {
+        gameTestServer {
+            type = "gameTestServer"
+            gameDirectory = project.layout.projectDirectory.dir('runs/gametest')
+            systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
+            ideName = "NeoForge GameTest Server (${project.path})"
+        }
+    }
+}
+
+tasks.named('compileGametestKotlin') {
+    source(project(':common').fileTree('src/gametest/java'))
+}
+
+tasks.named('processGametestResources') {
+    from(project(':common').file('src/gametest/resources'))
+    duplicatesStrategy = DuplicatesStrategy.WARN
+}
+
+tasks.named('runGameTestServer') {
+    dependsOn(tasks.named('gametestClasses'))
 }
