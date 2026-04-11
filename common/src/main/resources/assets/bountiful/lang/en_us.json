@@ -86,6 +86,14 @@
 	"stat.bountiful.bounties_done_2": "Bounties Completed (Rare)",
 	"stat.bountiful.bounties_done_3": "Bounties Completed (Epic)",
 
+	"tag.item.minecraft.banners": "Banners",
+	"tag.item.minecraft.beds": "Beds",
+	"tag.item.minecraft.boats": "Boats",
+	"tag.item.minecraft.candles": "Candles",
+	"tag.item.minecraft.logs": "Logs",
+	"tag.item.minecraft.planks": "Planks",
+	"tag.item.minecraft.wool": "Wool",
+
 	"bountiful.tooltip.time": "Time To Complete",
 	"bountiful.tooltip.required": "Required",
 	"bountiful.tooltip.rewards": "Rewards",

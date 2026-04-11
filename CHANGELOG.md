@@ -6,6 +6,26 @@ and this project loosely adheres to [Semantic Versioning](https://semver.org/spe
 
 ## [8.0.0] for 1.21 - [UNRELEASED]
 
+This was a rather significant update and a long time coming. Sorry that it took so long. 
+I wrote and released Percale, a sort of Kotlin serializer that works with DynamicOps. 
+I also rewrote a large chunk of Bountiful to use Minecraft's new component system.
+
+
+### Added
+- Added currency pool support. Pool makers can now mark a pool as `"currency": true` and assign denominations
+  via `unitWorth`. Setting `bounty.fillerCurrencyPool` in the config to that pool's ID causes rewards to be
+  paid out greedily in those denominations (largest coins first), rather than as random items. A
+  `currency_example.json` pool is included as a reference.
+- Enchanted items and enchanted books now show their enchantments in bounty tooltips.
+- Pool entries can now be restricted to specific biomes via a `"biomes"` field, accepting a biome ID, a list
+  of IDs, or biome tags prefixed with `#`. Entries will only appear when the bounty board is in a matching biome.
+- Reputation no longer has a cap, just diminishing returns.
+
+### Changed
+- Item tag objectives now use the common `tag.item.*` translation key format with a generated fallback name,
+  rather than relying on platform-provided translations. Translations for all built-in item tags are included —
+  please report any tags that appear without a proper name.
+
 ## [7.0.3] for 1.20.4 - 2024-06-30
 
 ### Added

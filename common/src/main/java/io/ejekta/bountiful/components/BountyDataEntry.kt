@@ -62,7 +62,14 @@ data class BountyDataEntry(
     }
 
     val translation: MutableComponent
-        get() = Component.translatable("tag.item.${contentToTranslationKey()}")
+        get() {
+            val key = "tag.item.${contentToTranslationKey()}"
+            val fallback = content.substringAfter(":")
+                .split("/")
+                .reversed()
+                .joinToString(" ") { it.replaceFirstChar(Char::uppercaseChar) }
+            return Component.translatableWithFallback(key, fallback)
+        }
 
     override fun toString(): String {
         return "BDE[type=$logic, content=$content, amount=$amount, name=$name, mystery=$isMystery]"
