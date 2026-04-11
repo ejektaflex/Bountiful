@@ -2,13 +2,11 @@ package io.ejekta.bountiful.content
 
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.context.CommandContext
-import com.mojang.serialization.JsonOps
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
 import io.ejekta.bountiful.components.BountyStack
 import io.ejekta.bountiful.config.BountifulIO
-import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.gui.AnalyzerScreenHandler
 import io.ejekta.bountiful.content.item.DecreeItem
 import io.ejekta.bountiful.data.PoolEntry
@@ -22,21 +20,18 @@ import io.ejekta.kambrik.command.types.PlayerCommand
 import io.ejekta.kambrik.ext.id
 import io.ejekta.kambrik.ext.math.floor
 import io.ejekta.kambrik.ext.math.toVec3
-import io.ejekta.kambrik.text.sendMessage
-import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.ChatFormatting
 import net.minecraft.commands.CommandBuildContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
-import net.minecraft.nbt.NbtOps
 import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.RegistryOps
+import net.minecraft.network.chat.HoverEvent
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.ai.targeting.TargetingConditions
@@ -50,8 +45,9 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.phys.AABB
 import kotlin.jvm.optionals.getOrNull
 
-
 object BountifulCommands {
+
+    private fun tr(path: String, vararg args: Any): MutableComponent = Component.translatable("bountiful.command.$path", *args)
 
     fun register(
         dispatcher: CommandDispatcher<CommandSourceStack>,
@@ -68,7 +64,7 @@ object BountifulCommands {
                 BountifulContent.Pools.map { pool ->
                     val trans = pool.usedInDecrees.map { it.translation }
                     val translation = if (trans.isEmpty()) {
-                        Component.literal("None")
+                        tr("none")
                     } else {
                         trans.reduce { acc, decree ->
                             acc.append(", ").append(decree)
@@ -90,15 +86,11 @@ object BountifulCommands {
                 }.flatten().sorted()
             }
 
-            // /bo hand
-            // /bo hand complete
             "hand" {
                 this runs hand()
                 "complete" runs complete()
             }
 
-            // /bo gen decree (decType)
-            // /bo gen bounty (rep_level)
             "gen" {
                 "decree" {
                     "type" {
@@ -130,13 +122,13 @@ object BountifulCommands {
                 "settings" {
                     "reload" runs {
                         BountifulIO.loadConfig()
-                        source.sendSystemMessage(Component.literal("Bountiful Settings Reloaded!"))
+                        source.sendSystemMessage(tr("settings_reloaded"))
                     }
                 }
 
                 "analyzer" runs {
                     try {
-                        source.player?.openSimpleMenu(Component.literal("Analyzer!")) { syncId: Int, playerInventory: Inventory, player: Player ->
+                        source.player?.openSimpleMenu(tr("analyzer.title")) { syncId: Int, playerInventory: Inventory, player: Player ->
                             AnalyzerScreenHandler(syncId, playerInventory, SimpleContainer(AnalyzerScreenHandler.SIZE))
                         }
                     } catch (e: Exception) {
@@ -146,7 +138,7 @@ object BountifulCommands {
 
                 "packmode" runs {
                     Bountiful.packMode = true
-                    source.sendSystemMessage(textLiteral("Pack Mode enabled."))
+                    source.sendSystemMessage(tr("packmode_enabled"))
                 }
 
                 "debug" {
@@ -196,12 +188,10 @@ object BountifulCommands {
     private fun CommandContext<CommandSourceStack>.exportToPack(named: String, described: String) {
         try {
             BountifulIO.exportDataPack(named, described)
-            source.sendSystemMessage(Component.literal("Data pack exported successfully. You can find it in the config folder.")
-                .withStyle(ChatFormatting.GREEN)
-            )
+            source.sendSystemMessage(tr("export.success").withStyle(ChatFormatting.GREEN))
         } catch (e: Exception) {
             e.printStackTrace()
-            source.sendSystemMessage(Component.literal("Data pack creation failed!"))
+            source.sendSystemMessage(tr("export.failed"))
         }
     }
 
@@ -212,28 +202,27 @@ object BountifulCommands {
             it.id == named
         }
         if (found != null) {
-            source.sendSystemMessage(Component.literal("Pool Entries with id '$named' Found!").withStyle(
-                ChatFormatting.GREEN
-            ))
+            source.sendSystemMessage(tr("check_entry.found", named).withStyle(ChatFormatting.GREEN))
 
-            source.sendSystemMessage(Component.literal("* Exists in these pools: ").append(
-                Component.literal("${found.protoPool?.id}").withStyle(ChatFormatting.GOLD))
+            source.sendSystemMessage(
+                tr("check_entry.pools").append(
+                    Component.literal("${found.protoPool?.id}").withStyle(ChatFormatting.GOLD)
+                )
             )
 
             val decs = found.protoPool?.usedInDecrees?.map { it.id }?.sorted() ?: emptyList()
 
-            source.sendSystemMessage(Component.literal("* Exists in these decrees: ").append(
-                Component.literal("$decs").withStyle(ChatFormatting.GOLD)
-            ))
+            source.sendSystemMessage(
+                tr("check_entry.decrees").append(
+                    Component.literal("$decs").withStyle(ChatFormatting.GOLD)
+                )
+            )
 
             if (!found.isValid(source.server)) {
-                source.sendFailure(
-                    Component.literal("* Error: Entry ${found.id} seemingly failed validation for some reason.")
-                )
+                source.sendFailure(tr("check_entry.invalid", found.id))
             }
-
         } else {
-            source.sendFailure(Component.literal("Pool Entry Not Found! Does not seem to exist in any pool."))
+            source.sendFailure(tr("check_entry.not_found"))
         }
     }
 
@@ -252,7 +241,6 @@ object BountifulCommands {
 
             if (villager != null) {
                 val thing = ItemStack(Items.CLAY)
-//                villager.setStackInHand(Hand.MAIN_HAND, thing)
                 villager.setItemSlot(EquipmentSlot.MAINHAND, thing)
             }
         }
@@ -271,32 +259,30 @@ object BountifulCommands {
                 AABB.ofSize(player.position(), 100.0, 100.0, 100.0)
             )
             if (villager != null) {
-                source.sendSystemMessage(Component.literal("Found villager at: ${villager.position()} - ${villager.position().distanceTo(player.position())}"))
-
-                //player.serverWorld.pointOfInterestStorage.add()
+                source.sendSystemMessage(
+                    tr("debug.found_villager", villager.position(), villager.position().distanceTo(player.position()))
+                )
 
                 val serverWorld = player.serverLevel()
 
-                val rep: (Holder<PoiType>) -> Boolean = { registryEntry ->
-                    //registryEntry.matchesKey(BountifulContent.POI_BOUNTY_BOARD)
-                    //TODO ? was like this in 1.20.4
+                val rep: (Holder<PoiType>) -> Boolean = {
                     false
                 }
 
-                //serverWorld.poiManager.findClosest()
                 val nearestBB = serverWorld.poiManager.findClosest(
                     rep, player.blockPosition(), 32, PoiManager.Occupancy.ANY
                 ).getOrNull()
 
                 if (nearestBB != null) {
-                    source.sendSystemMessage(Component.literal("Found BB at: $nearestBB - ${nearestBB.toVec3().distanceTo(player.position())}"))
+                    source.sendSystemMessage(
+                        tr("debug.found_board", nearestBB, nearestBB.toVec3().distanceTo(player.position()))
+                    )
                 }
 
                 val brain = villager.brain
-
                 val actTime = brain.schedule.getActivityAt((serverWorld.gameTime % 24000L).toInt())
 
-                source.sendSystemMessage(Component.literal("Currently doing: ${actTime.name}"))
+                source.sendSystemMessage(tr("debug.current_activity", actTime.name))
 
                 println(brain)
 
@@ -307,9 +293,8 @@ object BountifulCommands {
                 for (task in brain.runningBehaviors) {
                     println("${task.debugString()} - ${task.status}")
                 }
-
             } else {
-                source.sendSystemMessage(Component.literal("Villager was null!"))
+                source.sendSystemMessage(tr("debug.villager_null"))
             }
         }
     }
@@ -324,31 +309,13 @@ object BountifulCommands {
 
         try {
             val saved = newPoolEntry.save()
-            it.let {
-                it.sendSystemMessage(Component.literal(saved))
-                ClipboardCopy(saved).sendToClient(it)
-            }
+            it.sendSystemMessage(Component.literal(saved))
+            ClipboardCopy(saved).sendToClient(it)
         } catch (e: Exception) {
             e.printStackTrace()
         }
         1
     }
-
-//    private fun CommandContext<CommandSourceStack>.addToPoolCommand(
-//        amt: NumberRange.IntRange,
-//        inWorth: Int,
-//        func: (amount: IntRange, worth: Int) -> Unit = { a, w -> }
-//    ) {
-//        val cmd = kambrikCommand<CommandSourceStack> {
-//            if (amt.min.getOrNull() == null || amt.max.getOrNull() == null) {
-//                source.sendFailure(Component.literal("Amount Range must have a minimum and maximum value!"))
-//                return@kambrikCommand
-//            }
-//
-//            func(amt.min.get()..amt.max.get(), inWorth)
-//        }
-//        cmd.run(this)
-//    }
 
     private fun addToPool(
         player: ServerPlayer,
@@ -367,21 +334,22 @@ object BountifulCommands {
         }.apply(poolFunc)
 
         if (poolName.trim() != "") {
-
             val file = BountifulIO.getPoolFile(poolName).apply {
                 ensureExistence()
                 edit { items.add(newPoolEntry) }
             }.getOrCreateFile()
 
-            player.sendMessage("Content added.")
-            player.sendMessage("Edit §6'config/bountiful/bounty_pools/$poolName.json'§r to edit details.") {
-                clickEvent = ClickEvent(ClickEvent.Action.OPEN_FILE, file.absolutePath)
-                onHoverShowText { addLiteral("Click to open file '${file.name}'") }
-            }
+            player.sendSystemMessage(tr("add_to_pool.content_added"))
+            player.sendSystemMessage(
+                tr("add_to_pool.edit_file", "config/bountiful/bounty_pools/$poolName.json").copy().apply {
+                    style = style
+                        .withClickEvent(ClickEvent(ClickEvent.Action.OPEN_FILE, file.absolutePath))
+                        .withHoverEvent(HoverEvent(HoverEvent.Action.SHOW_TEXT, tr("add_to_pool.open_file", file.name)))
+                }
+            )
         } else {
-            player.sendMessage("Invalid pool name!")
+            player.sendSystemMessage(tr("add_to_pool.invalid_pool_name"))
         }
-
     }
 
     private fun CommandContext<CommandSourceStack>.addHandToPool(inAmount: IntRange? = null, inUnitWorth: Int? = null, poolName: String) {
@@ -390,8 +358,6 @@ object BountifulCommands {
 
             addToPool(it, inAmount, inUnitWorth, poolName) {
                 content = held.id.toString()
-                // TODO setting of nbt/components with hand command
-                //nbt = held.nbt
             }
             1
         }
@@ -478,8 +444,6 @@ object BountifulCommands {
             }
         }
 
-        source.sendSystemMessage(Component.literal("Bountiful's Decrees & Pools dumped to log."))
+        source.sendSystemMessage(tr("dumped_to_log"))
     }
-
-
 }

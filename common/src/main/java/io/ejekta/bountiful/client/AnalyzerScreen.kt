@@ -87,7 +87,7 @@ class AnalyzerScreen(handler: AbstractContainerMenu, inventory: Inventory, title
 
             area(imageWidth, imageHeight) {
                 text(7, 6) {
-                    addLiteral("Decree Analyzer")
+                    add(Component.translatable("bountiful.analyzer.title"))
                 }
 
                 area(152, 6, 18, 9) {
@@ -100,7 +100,7 @@ class AnalyzerScreen(handler: AbstractContainerMenu, inventory: Inventory, title
                     }
                     onHover {
                         tooltip {
-                            addLiteral("Click to change mode (Current: ${showMode})")
+                            add(Component.translatable("bountiful.analyzer.mode.tooltip", showMode.symbol))
                         }
                     }
                 }
@@ -120,7 +120,7 @@ class AnalyzerScreen(handler: AbstractContainerMenu, inventory: Inventory, title
                         widget(scroller)
                         if (!scroller.reactor.isDragging) {
                             onHover {
-                                tooltip { addLiteral("Sample Resolution") }
+                                tooltip { add(Component.translatable("bountiful.analyzer.sample_resolution")) }
                             }
                         } else {
                             val resolutions = listOf(1, 2, 3, 4, 5, 6, 8, 10, 12, 15)

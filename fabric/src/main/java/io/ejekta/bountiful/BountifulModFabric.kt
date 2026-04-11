@@ -41,7 +41,7 @@ class BountifulModFabric : ModInitializer {
                 ResourceManagerHelper.registerBuiltinResourcePack(
                     Bountiful.id("compat-$it"),
                     ourContainer,
-                    Component.literal("${ourContainer.metadata.name} - ${modContainer.metadata.name} Compat"),
+                    Component.translatable("bountiful.compat.resource_pack", ourContainer.metadata.name, modContainer.metadata.name),
                     ResourcePackActivationType.DEFAULT_ENABLED
                 )
             }

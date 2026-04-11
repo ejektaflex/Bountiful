@@ -164,7 +164,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         // Nightly message
         if (Bountiful.nightly) {
             player.sendSystemMessage(
-                Component.literal("This is a Nightly build of Bountiful. Please do not distribute it in modpacks. Please report issues in the Discord!")
+                Component.translatable("bountiful.nightly.warning")
                     .withStyle(ChatFormatting.GOLD)
             )
         }

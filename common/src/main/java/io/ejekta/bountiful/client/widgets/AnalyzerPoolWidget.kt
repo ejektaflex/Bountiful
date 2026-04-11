@@ -54,7 +54,7 @@ class AnalyzerPoolWidget(val pool: Pool, maxWorth: Double, val pixSize: Int, val
                 rect(poolBlockColor)
                 onHover {
                     tooltip {
-                        addLiteral("Pool: ${pool.id}")
+                        add(Component.translatable("bountiful.analyzer.pool", pool.id))
                     }
                 }
             }
@@ -78,7 +78,7 @@ class AnalyzerPoolWidget(val pool: Pool, maxWorth: Double, val pixSize: Int, val
                     val worthHigh = (pixBin + 1) * binWidth
 
                     texts.add(
-                        Component.literal("Entries at worth range ${worthLow.toInt()}-${worthHigh.toInt()}: ${res.size}")
+                        Component.translatable("bountiful.analyzer.entries_at_worth_range", worthLow.toInt(), worthHigh.toInt(), res.size)
                             .withStyle(ChatFormatting.GOLD)
                     )
 
