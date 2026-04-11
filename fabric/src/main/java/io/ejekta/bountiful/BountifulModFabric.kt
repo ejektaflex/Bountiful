@@ -56,7 +56,7 @@ class BountifulModFabric : ModInitializer {
         KambrikRegistrar.doRegistrationsFor(BountifulContent)
 
         Bountybridge.registerServerMessages()
-        if (FabricLoader.getInstance().environmentType != net.fabricmc.api.EnvType.SERVER) {
+        if (FabricLoader.getInstance().environmentType == net.fabricmc.api.EnvType.SERVER) {
             Bountybridge.registerClientMessages()
         }
 

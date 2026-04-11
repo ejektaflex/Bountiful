@@ -121,9 +121,11 @@ class BoardScreen(handler: AbstractContainerMenu, inventory: Inventory, title: C
                     addTranslate("bountiful.ui.empty", "It's Empty! Check back soon!")
                 }
             } else {
-                widget(scroller, 166, 18)
-                area(scroller.width, scroller.height) {
-                    rect(0xb86f50, 0x48) // tint the scroller
+                offset(166, 18) {
+                    widget(scroller)
+                    area(scroller.width, scroller.height) {
+                        rect(0xb86f50, 0x48) // tint the scroller
+                    }
                 }
             }
         }

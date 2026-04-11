@@ -17,7 +17,7 @@ import kotlin.io.path.appendLines
 class Bountiful {
     companion object {
         const val ID = "bountiful"
-        const val nightly = true
+        const val nightly = false
         var packMode = false
         fun id(str: String) = ResourceLocation.fromNamespaceAndPath(ID, str)
         val LOGGER = Kambrik.Logging.createLogger(ID)

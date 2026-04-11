@@ -236,7 +236,9 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
                     DecreeSpawnCondition.BOARD_SPAWN, 1, DecreeSpawnRank.CONSTANT
                 ))
             }
-            upkeepBountyGeneration()
+            repeat(5) {
+                randomlyUpdateBoard()
+            }
         }
         setChanged()
     }

@@ -23,7 +23,7 @@ configurations {
 }
 
 repositories {
-    mavenLocal()
+//    mavenLocal()
     maven {
         name = "Architectury Maven"
         url = uri("https://maven.architectury.dev/")
@@ -31,9 +31,21 @@ repositories {
 }
 
 dependencies {
-    modImplementation("io.ejekta.kambrik:kambrik-fabric:${kambrik_version}")
-    modImplementation("io.ejekta.percale:percale-fabric:${percale_version}")
-    modImplementation("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}")
+    def localKambrikFabric = rootProject.file("../Kambrik/fabric/build/libs/kambrik-fabric-${kambrik_version}.jar")
+    if (localKambrikFabric.exists()) {
+        modImplementation(files(localKambrikFabric))
+    } else {
+        modImplementation("io.ejekta.kambrik:kambrik-fabric:${kambrik_version}")
+    }
+
+    def localPercaleFabric = rootProject.file("../Percale/fabric/build/libs/percale-fabric-${percale_version}.jar")
+    if (localPercaleFabric.exists()) {
+        modImplementation(files(localPercaleFabric))
+    } else {
+        modImplementation("io.ejekta.percale:percale-fabric:${percale_version}")
+    }
+    modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}")
+    modLocalRuntime("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}")
     modImplementation "com.terraformersmc:modmenu:${mod_menu_version}"
 }
 
@@ -75,22 +87,11 @@ tasks.named('processGametestResources') {
     }
 }
 
-def productionFabricModJson = layout.buildDirectory.file('generated/production-metadata/fabric.mod.json')
-
-tasks.register('writeProductionFabricModJson') {
-    outputs.file(productionFabricModJson)
-    doLast {
-        def outputFile = productionFabricModJson.get().asFile
-        outputFile.parentFile.mkdirs()
-        outputFile.text = file('src/main/resources/fabric.mod.json').text
-    }
-}
-
-tasks.named('jar') {
-    dependsOn(tasks.named('writeProductionFabricModJson'))
-    exclude('fabric.mod.json')
-    from(productionFabricModJson) {
-        rename { 'fabric.mod.json' }
+tasks.named('jar', Jar) {
+    dependsOn(tasks.named('processResources'))
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    from("$buildDir/resources/main") {
+        include('fabric.mod.json')
     }
 }
 
