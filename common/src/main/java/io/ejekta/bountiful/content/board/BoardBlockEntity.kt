@@ -27,7 +27,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
@@ -40,7 +40,7 @@ import net.minecraft.world.entity.EntityEvent
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.ai.village.poi.PoiManager
 import net.minecraft.world.entity.ai.village.poi.PoiType
-import net.minecraft.world.entity.npc.Villager
+import net.minecraft.world.entity.npc.villager.Villager
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.AbstractContainerMenu
@@ -50,6 +50,8 @@ import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.phys.AABB
 import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
@@ -64,7 +66,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     private var lastUpdatedTime = serverWorld?.gameTime ?: 0L
 
     // Only need to calc this once per object, I don't see it changing often
-    private val villageTag = TagKey.create(BuiltInRegistries.POINT_OF_INTEREST_TYPE.key(),ResourceLocation.parse("village"))
+    private val villageTag = TagKey.create(BuiltInRegistries.POINT_OF_INTEREST_TYPE.key(), Identifier.parse("village"))
 
     private operator fun get(player: Player): PlayerBoardData {
         return playerData.getOrPut(player.stringUUID) { PlayerBoardData.empty() }
@@ -138,7 +140,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     private fun getPlayersTrackingUs(): List<ServerPlayer> {
-        return (level as? ServerLevel)?.chunkSource?.chunkMap?.getPlayers(ChunkPos(blockPos), false).orEmpty()
+        return (level as? ServerLevel)?.chunkSource?.chunkMap?.getPlayers(ChunkPos.containing(blockPos), false).orEmpty()
     }
 
     private fun modifyTrackedGuiInvs(func: (inv: BoardInventory) -> Unit) {
@@ -169,7 +171,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             )
         }
 
-        val level = player.serverLevel()
+        val level = player.level()
         val timeTaken = holding.info.timeTakenTicks(level)
 
         level.let {
@@ -372,54 +374,40 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
     // Serialization
 
-    override fun loadAdditional(base: CompoundTag, registryLookup: HolderLookup.Provider) {
-        val decreeList = base.getCompound("decree_inv") ?: return
-        val bountyList = base.getCompound("bounty_inv") ?: return
+    override fun loadAdditional(input: ValueInput) {
+        val decreeList = input.childOrEmpty("decree_inv")
+        val bountyList = input.childOrEmpty("bounty_inv")
 
-        lastUpdatedTime = base.getLong("lastUpdated")
+        lastUpdatedTime = input.getLongOr("lastUpdated", 0L)
 
-        ContainerHelper.loadAllItems(
-            decreeList,
-            decrees.items,
-            registryLookup
-        )
+        ContainerHelper.loadAllItems(decreeList, decrees.items)
+        ContainerHelper.loadAllItems(bountyList, bounties.items)
 
-        ContainerHelper.loadAllItems(
-            bountyList,
-            bounties.items,
-            registryLookup
-        )
-
-        val playerDataMap = base.get("completed")
-        if (playerDataMap != null) {
-            playerData = JsonFormats.BlockEntity.decodeFromStringTag(playerDataSerializer, playerDataMap as StringTag).toMutableMap()
+        input.getString("completed").ifPresent { str ->
+            playerData = JsonFormats.BlockEntity.decodeFromStringTag(playerDataSerializer, StringTag.valueOf(str)).toMutableMap()
         }
 
-        val timeStampMap = base.get("timestamps")
-        if (timeStampMap != null) {
-            bountyTimestamps = JsonFormats.BlockEntity.decodeFromStringTag(bountyStampSerializer, timeStampMap as StringTag).toMutableMap()
+        input.getString("timestamps").ifPresent { str ->
+            bountyTimestamps = JsonFormats.BlockEntity.decodeFromStringTag(bountyStampSerializer, StringTag.valueOf(str)).toMutableMap()
         }
     }
 
-    override fun saveAdditional(base: CompoundTag, registryLookup: HolderLookup.Provider) {
-        super.saveAdditional(base, registryLookup)
+    override fun saveAdditional(output: ValueOutput) {
+        super.saveAdditional(output)
 
-        base.putLong("lastUpdated", lastUpdatedTime)
+        output.putLong("lastUpdated", lastUpdatedTime)
 
         val doneMap = JsonFormats.BlockEntity.encodeToStringTag(playerDataSerializer, playerData)
-        base.put("completed", doneMap)
+        output.putString("completed", doneMap.value())
 
         val timeStampMap = JsonFormats.BlockEntity.encodeToStringTag(bountyStampSerializer, bountyTimestamps)
-        base.put("timestamps", timeStampMap)
+        output.putString("timestamps", timeStampMap.value())
 
-        val decreeList = CompoundTag()
-        ContainerHelper.saveAllItems(decreeList, decrees.readOnlyCopy, registryLookup)
+        val decreeList = output.child("decree_inv")
+        ContainerHelper.saveAllItems(decreeList, decrees.readOnlyCopy)
 
-        val bountyList = CompoundTag()
-        ContainerHelper.saveAllItems(bountyList, bounties.readOnlyCopy, registryLookup)
-
-        base.put("decree_inv", decreeList)
-        base.put("bounty_inv", bountyList)
+        val bountyList = output.child("bounty_inv")
+        ContainerHelper.saveAllItems(bountyList, bounties.readOnlyCopy)
     }
 
     // Villager & Completion Logic
@@ -427,7 +415,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     private fun villagerPickupPopulate(objectives: List<BountyDataEntry>) {
         val stackMap = objectives.filter { it.logic is BountyTypeItem }.mapNotNull { entry ->
             serverWorld?.let {
-                BountyTypeItem.getItemStack(entry, serverWorld?.registryAccess()!!) to entry.getRelatedProfessions()
+                BountyTypeItem.getItemStack(entry, it.registryAccess()) to entry.getRelatedProfessions()
             }
         }
         for ((stack, profs) in stackMap) {
@@ -439,8 +427,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     private fun villagerDoPickup(villagerEntity: Villager) {
-        val prof = BuiltInRegistries.VILLAGER_PROFESSION.getKey(villagerEntity.villagerData.profession)
-        val stackSet = villagerPickups.getOrPut(prof.toString()) { mutableSetOf() }
+        val profKey = villagerEntity.villagerData.profession.unwrapKey().map { it.identifier().toString() }.orElse("minecraft:none")
+        val stackSet = villagerPickups.getOrPut(profKey) { mutableSetOf() }
         // Try pull from matching profession bucket
         if (stackSet.isNotEmpty()) {
             // Pulling from profession completion
@@ -502,7 +490,9 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             return null
         }
 
-        val villagerProfessions = nearestVillagers.map { it.villagerData.profession.name }.toSet()
+        val villagerProfessions = nearestVillagers.mapNotNull {
+            it.villagerData.profession.unwrapKey().map { key -> key.identifier().toString() }.orElse(null)
+        }.toSet()
 
         val matchingProfs = objectives.filter {
             it.getRelatedProfessions().intersect(villagerProfessions).isNotEmpty()
@@ -515,7 +505,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             // Matching professions, picking an entry we can use!
             val randomObj = matchingProfs.random()
             nearestVillagers.filter {
-                it.villagerData.profession.name in randomObj.getRelatedProfessions()
+                it.villagerData.profession.unwrapKey().map { key -> key.identifier().toString() }
+                    .orElse("") in randomObj.getRelatedProfessions()
             }
         }.random()
 

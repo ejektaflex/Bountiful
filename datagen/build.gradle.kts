@@ -1,7 +1,7 @@
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version libs.versions.kotlin
-    kotlin("plugin.serialization") version libs.versions.kotlin
+    id("org.jetbrains.kotlin.jvm")
+    kotlin("plugin.serialization")
 }
 
 group = "ejekta.io"

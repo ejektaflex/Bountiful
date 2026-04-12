@@ -6,6 +6,8 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.item.crafting.RecipeManager
 import net.minecraft.world.item.crafting.RecipeType
+import net.minecraft.world.item.crafting.RecipeHolder
+import net.minecraft.world.item.crafting.display.SlotDisplayContext
 
 
 class RecursiveRecipeParser(val server: MinecraftServer) {
@@ -32,6 +34,17 @@ class RecursiveRecipeParser(val server: MinecraftServer) {
 
     val ingredientCosts = mutableMapOf<Ingredient, MutableMap<ItemStack, Solveable>>()
 
+    private fun Ingredient.itemStacks(): List<ItemStack> {
+        return items().toList().map { holder -> ItemStack(holder.value()) }
+    }
+
+    private fun RecipeHolder<*>.resultStack(): ItemStack? {
+        val displayContext = SlotDisplayContext.fromLevel(server.overworld())
+        val display = value.display().firstOrNull() ?: return null
+        val stack = display.result().resolveForFirstStack(displayContext)
+        return stack.takeUnless { it.isEmpty }
+    }
+
     fun queryAll() {
         for (item in BuiltInRegistries.ITEM) {
             query(ItemStack(item))
@@ -43,10 +56,9 @@ class RecursiveRecipeParser(val server: MinecraftServer) {
         println("Querying $itemStack")
 
         val producers = recipeManager.recipes.filter {
-            ItemStack.isSameItem(it.value.getResultItem(server.registryAccess()), itemStack)
+            val resultStack = it.resultStack()
+            resultStack != null && ItemStack.isSameItem(resultStack, itemStack)
         }
-
-        recipeManager.recipes.first().value.ingredients.first().items.toList()
 
         println("Found ${producers.size} Producers")
 
@@ -57,12 +69,13 @@ class RecursiveRecipeParser(val server: MinecraftServer) {
         for (producer in producers) {
             println("\t* Processing Producer: ${producer.id}")
 
-            val solveable = Solveable(producer.value.ingredients, producer.value.getResultItem(server.registryAccess()).count, producer.value.type)
+            val resultCount = producer.resultStack()?.count ?: 1
+            val solveable = Solveable(producer.value.placementInfo().ingredients(), resultCount, producer.value.type)
 
             visitList.add(solveable)
 
             // Visit all stacks
-            for (input in producer.value.ingredients.map { it.items.toList() }.flatten()) {
+            for (input in producer.value.placementInfo().ingredients().flatMap { it.itemStacks() }) {
                 if (!hasVisited(input)) {
                     query(input)
                 }
@@ -73,7 +86,8 @@ class RecursiveRecipeParser(val server: MinecraftServer) {
 
     data class StackAmount(val item: ItemStack, val takes: Int, val makes: Int)
 
-    fun Ingredient.sameAs(other: Ingredient) = stackingIds.toSet() == other.stackingIds.toSet()
+    fun Ingredient.sameAs(other: Ingredient) =
+        items().toList().map { it.value() }.toSet() == other.items().toList().map { it.value() }.toSet()
 
     val planned = mutableMapOf<ItemStack, Int>()
 
@@ -184,8 +198,8 @@ class RecursiveRecipeParser(val server: MinecraftServer) {
         for (solve in getSolveables(key)) {
             //println("Solve: $solve")
             for (ingr in solve.ingredients) {
-                println(ingr.items.toList())
-                val singleMatch = ingr.items.firstOrNull() ?: continue
+                println(ingr.items().toList())
+                val singleMatch = ingr.itemStacks().firstOrNull() ?: continue
                 val matchKey = visited.stackKey(singleMatch)
                 if (matchKey in seen) {
                     continue
@@ -223,7 +237,7 @@ class RecursiveRecipeParser(val server: MinecraftServer) {
         for (next in nextItemStacks) {
             val stackSums = mutableMapOf<ItemStack, Int>()
             for (ingredient in next) {
-                for (option in ingredient.items.filter { visited.stackKey(it) !in seen }) {
+                for (option in ingredient.itemStacks().filter { visited.stackKey(it) !in seen }) {
                     val curr = stackSums.getStackOrPut(option) { 0 }
                     stackSums[option] = curr + option.count
                 }
@@ -262,7 +276,7 @@ class RecursiveRecipeParser(val server: MinecraftServer) {
 
         val nextKeys = solves.map { solve ->
             solve.ingredients.map { ingr ->
-                ingr.items.toList().map {
+                ingr.itemStacks().map {
                     StackAmount(visited.stackKey(it), it.count, stack.count)
                 }
             }.flatten()
@@ -292,7 +306,7 @@ class RecursiveRecipeParser(val server: MinecraftServer) {
         println("KEY: $key")
 
         val nextKeys = solves.map { solve ->
-            solve.ingredients.map { it.items.toList() }.flatten()
+            solve.ingredients.map { it.itemStacks() }.flatten()
         }.flatten().map {
             visited.stackKey(it)
         }

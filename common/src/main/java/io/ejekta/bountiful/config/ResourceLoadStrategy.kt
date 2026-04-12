@@ -4,7 +4,7 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.data.IMerge
 import io.ejekta.bountiful.data.Pool
 import kotlinx.serialization.DeserializationStrategy
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.packs.resources.ResourceManager
 import java.io.File
 import java.nio.file.Path
@@ -21,7 +21,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
 
     val loadedData = mutableListOf<T>()
 
-    private fun decode(identifier: ResourceLocation, fileText: String, newId: String, isData: Boolean): T? {
+    private fun decode(identifier: Identifier, fileText: String, newId: String, isData: Boolean): T? {
         return try {
             JsonFormats.DataPack.decodeFromString(decoder, fileText).apply {
                 id = newId
@@ -45,7 +45,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
 
     private val loadedLocations = mutableSetOf<String>()
 
-    private fun getConfigFile(id: ResourceLocation): File {
+    private fun getConfigFile(id: Identifier): File {
         val fileName = id.fileName() + ".json"
         val default = File(configPath.toFile(), fileName)
 
@@ -136,7 +136,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
         }
     }
 
-    private fun getResources(manager: ResourceManager): List<ResourceLocation> {
+    private fun getResources(manager: ResourceManager): List<Identifier> {
         return manager.listResources(folderName) {
             it.toString().endsWith(".json")
         }.filter {
@@ -154,7 +154,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
         }.keys.toList()
     }
 
-    private fun loadFile(id: ResourceLocation): T? {
+    private fun loadFile(id: Identifier): T? {
         val file = getConfigFile(id)
         if (file.exists()) {
             Bountiful.LOGGER.info("Reading config file: ${file.absolutePath}")
@@ -164,7 +164,7 @@ class ResourceLoadStrategy<T : IMerge<T>>(
         return null
     }
 
-    private fun loadResource(id: ResourceLocation, manager: ResourceManager): T? {
+    private fun loadResource(id: Identifier, manager: ResourceManager): T? {
         val resourceContent = manager.read(id)
         return decode(id, resourceContent, id.fileName(), true)
     }
@@ -192,11 +192,11 @@ class ResourceLoadStrategy<T : IMerge<T>>(
     }
 
     companion object {
-        private fun ResourceManager.read(id: ResourceLocation): String {
+        private fun ResourceManager.read(id: Identifier): String {
             return getResource(id).get().openAsReader().readText()
         }
 
-        private fun ResourceLocation.fileName(): String {
+        private fun Identifier.fileName(): String {
             return path.substringAfterLast("/").substringBefore(".")
         }
     }

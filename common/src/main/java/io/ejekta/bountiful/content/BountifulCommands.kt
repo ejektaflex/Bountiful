@@ -30,19 +30,21 @@ import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.HoverEvent
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.ai.targeting.TargetingConditions
 import net.minecraft.world.entity.ai.village.poi.PoiManager
 import net.minecraft.world.entity.ai.village.poi.PoiType
-import net.minecraft.world.entity.npc.Villager
+import net.minecraft.world.entity.npc.villager.Villager
+import net.minecraft.world.entity.schedule.Activity
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.Vec3
 import kotlin.jvm.optionals.getOrNull
 
 object BountifulCommands {
@@ -263,7 +265,7 @@ object BountifulCommands {
                     tr("debug.found_villager", villager.position(), villager.position().distanceTo(player.position()))
                 )
 
-                val serverWorld = player.serverLevel()
+                val serverWorld = player.level()
 
                 val rep: (Holder<PoiType>) -> Boolean = {
                     false
@@ -275,12 +277,12 @@ object BountifulCommands {
 
                 if (nearestBB != null) {
                     source.sendSystemMessage(
-                        tr("debug.found_board", nearestBB, nearestBB.toVec3().distanceTo(player.position()))
+                        tr("debug.found_board", nearestBB, Vec3.atCenterOf(nearestBB).distanceTo(player.position()))
                     )
                 }
 
                 val brain = villager.brain
-                val actTime = brain.schedule.getActivityAt((serverWorld.gameTime % 24000L).toInt())
+                val actTime = brain.getActiveNonCoreActivity().orElse(Activity.IDLE)
 
                 source.sendSystemMessage(tr("debug.current_activity", actTime.name))
 
@@ -290,7 +292,7 @@ object BountifulCommands {
                     villager.checkOnBoard(it)
                 }
 
-                for (task in brain.runningBehaviors) {
+                for (task in brain.getRunningBehaviors()) {
                     println("${task.debugString()} - ${task.status}")
                 }
             } else {
@@ -343,8 +345,8 @@ object BountifulCommands {
             player.sendSystemMessage(
                 tr("add_to_pool.edit_file", "config/bountiful/bounty_pools/$poolName.json").copy().apply {
                     style = style
-                        .withClickEvent(ClickEvent(ClickEvent.Action.OPEN_FILE, file.absolutePath))
-                        .withHoverEvent(HoverEvent(HoverEvent.Action.SHOW_TEXT, tr("add_to_pool.open_file", file.name)))
+                        .withClickEvent(ClickEvent.OpenFile(file.absolutePath))
+                        .withHoverEvent(HoverEvent.ShowText(tr("add_to_pool.open_file", file.name)))
                 }
             )
         } else {
@@ -367,7 +369,7 @@ object BountifulCommands {
     private fun CommandContext<CommandSourceStack>.addEntityToPool(
         inAmount: IntRange? = null,
         inUnitWorth: Int? = null,
-        entityId: ResourceLocation,
+        entityId: Identifier,
         poolName: String
     ) {
         val cmd = kambrikCommand<CommandSourceStack> {

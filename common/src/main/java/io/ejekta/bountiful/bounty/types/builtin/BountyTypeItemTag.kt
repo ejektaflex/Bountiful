@@ -11,7 +11,7 @@ import net.minecraft.ChatFormatting
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
 import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.player.Player
@@ -22,18 +22,18 @@ import net.minecraft.world.level.Level
 
 class BountyTypeItemTag : IBountyObjective {
 
-    override val id: ResourceLocation = ResourceLocation.parse("item_tag")
+    override val id: Identifier = Identifier.parse("item_tag")
 
     private fun entryAppliesToStack(entry: BountyDataEntry, stack: ItemStack): Boolean {
-        return stack.`is`(TagKey.create(Registries.ITEM, ResourceLocation.parse(entry.content)))
+        return stack.`is`(TagKey.create(Registries.ITEM, Identifier.parse(entry.content)))
     }
 
     override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {
-        return getTagItems(server.registries().compositeAccess(), getTagItemKey(ResourceLocation.parse(entry.content))).isNotEmpty()
+        return getTagItems(getTagItemKey(Identifier.parse(entry.content))).isNotEmpty()
     }
 
     private fun getCurrentStacks(entry: BountyDataEntry, player: Player): Map<ItemStack, Int>? {
-        return player.inventory.items.collect(entry.amount) {
+        return player.inventory.getNonEquipmentItems().collect(entry.amount) {
             entryAppliesToStack(entry, this)
         }
     }
@@ -77,10 +77,10 @@ class BountyTypeItemTag : IBountyObjective {
     }
 
     companion object {
-        private fun getTag(entry: BountyDataEntry) = TagKey.create(Registries.ITEM, ResourceLocation.parse(entry.content))
+        private fun getTag(entry: BountyDataEntry) = TagKey.create(Registries.ITEM, Identifier.parse(entry.content))
 
         fun getItems(world: Level, entry: BountyDataEntry): List<Item> {
-            return getTagItems(world.registryAccess(), getTag(entry))
+            return getTagItems(getTag(entry))
         }
     }
 

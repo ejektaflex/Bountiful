@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class SelectBounty(private val index: Int, private val uuidString: String) : KambrikMsg() {
     override fun onServerReceived(ctx: MsgContext) {
-        val handler = ctx.player.server.playerList.players.firstOrNull {
+        val handler = ctx.player.level().server.playerList.players.firstOrNull {
             it.stringUUID == uuidString
         }?.containerMenu as? BoardScreenHandler ?: return
         handler.container.select(index)

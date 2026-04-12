@@ -1,38 +1,52 @@
 modLoader = "kotlinforforge"
-loaderVersion = "[4,)"
+loaderVersion = "${forgelike_adapter_version_range}"
 #issueTrackerURL = ""
-license = "GPL 3.0"
+license = "${license}"
 
 [[mods]]
-modId = "bountiful"
+modId = "${mod_id}"
 version = "${version}"
-displayName = "Bountiful"
-authors = "Ejektaflex"
+displayName = "${mod_name}"
+authors = "${mod_author}"
 description = '''
-Bountiful adds bounty boards to the world.
+${description}
 '''
 #logoFile = ""
 
 [[mixins]]
 config = "bountiful.mixins.json"
 
-[[dependencies.bountiful]]
+[[dependencies.${mod_id}]]
 modId = "neoforge"
 type="required"
-versionRange = "[20.2.88,)"
+versionRange = "[${neoforge_version},)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.bountiful]]
+[[dependencies.${mod_id}]]
+modId = "kotlinforforge"
+type="required"
+versionRange = "${forgelike_adapter_version_range}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
 modId = "kambrik"
 type="required"
 versionRange = "${kambrik_version}"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.bountiful]]
+[[dependencies.${mod_id}]]
+modId = "percale"
+type="required"
+versionRange = "${percale_version}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
 modId = "minecraft"
 type="required"
-versionRange = "${minecraft_version}"
+versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"

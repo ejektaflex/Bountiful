@@ -5,8 +5,8 @@ import io.ejekta.bountiful.content.item.DecreeItem
 import io.ejekta.bountiful.content.villager.WalkToBoardTask
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
-import net.minecraft.world.entity.npc.Villager
-import net.minecraft.world.entity.npc.VillagerProfession
+import net.minecraft.world.entity.npc.villager.Villager
+import net.minecraft.world.entity.npc.villager.VillagerProfession
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.AnvilMenu
 import net.minecraft.world.item.ItemStack
@@ -18,7 +18,7 @@ object MixinHelper {
     fun injectNewTasks(
         profession: VillagerProfession,
         speed: Float,
-        cir: CallbackInfoReturnable<ImmutableList<MojangPair<Int, out BehaviorControl<in Villager?>?>>>
+        cir: CallbackInfoReturnable<ImmutableList<MojangPair<Int, out BehaviorControl<in Villager>>>>
     ) {
         val options = cir.returnValue.toMutableList()
         options.add(

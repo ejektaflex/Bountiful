@@ -208,7 +208,7 @@ object BountifulIO {
 
         // mcmeta creation
 
-        val resVersion = SharedConstants.getCurrentVersion().getPackVersion(PackType.SERVER_DATA)
+        val resVersion = SharedConstants.getCurrentVersion().packVersion(PackType.SERVER_DATA).major()
 
         tmpSpot.resolve("pack.mcmeta").writeLines(listOf(
             "{",

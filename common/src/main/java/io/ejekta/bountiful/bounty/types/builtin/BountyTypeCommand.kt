@@ -5,7 +5,7 @@ import io.ejekta.bountiful.components.BountyDataEntry
 import io.ejekta.bountiful.data.PoolEntry
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
 import net.minecraft.world.entity.player.Player
 import kotlin.random.Random
@@ -13,7 +13,7 @@ import kotlin.random.Random
 
 class BountyTypeCommand : IBountyReward {
 
-    override val id: ResourceLocation = ResourceLocation.parse("command")
+    override val id: Identifier = Identifier.parse("command")
 
     override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {
         val parsed = server.commands.dispatcher.parse(entry.content, server.createCommandSourceStack())
@@ -29,7 +29,7 @@ class BountyTypeCommand : IBountyReward {
     }
 
     override fun giveReward(entry: BountyDataEntry, player: Player) {
-        val server = player.server ?: return
+        val server = player.level().server ?: return
         val replacedCmd = entry.content
             .replace("%BOUNTY_AMOUNT%", entry.amount.toString())
             .replace("%PLAYER_NAME%", player.scoreboardName)

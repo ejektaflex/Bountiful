@@ -28,26 +28,15 @@ repositories {
 }
 
 dependencies {
-    def localKambrikNeo = rootProject.file("../Kambrik/neoforge/build/libs/kambrik-neoforge-${kambrik_version}.jar")
-    if (localKambrikNeo.exists()) {
-        implementation(files(localKambrikNeo))
-    } else {
-        implementation("io.ejekta.kambrik:kambrik-neoforge:${kambrik_version}")
-    }
-
-    def localPercaleNeo = rootProject.file("../Percale/neoforge/build/libs/percale-neoforge-${percale_version}.jar")
-    if (localPercaleNeo.exists()) {
-        implementation(files(localPercaleNeo))
-    } else {
-        implementation("io.ejekta.percale:percale-neoforge:${percale_version}")
-    }
-    implementation("me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}")
+    implementation("io.ejekta.kambrik:kambrik-neoforge-${minecraft_version}:${kambrik_version}")
+    implementation("io.ejekta.percale:percale-neoforge-${minecraft_version}:${percale_version}")
+    compileOnly("me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}")
+    runtimeOnly("me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}")
 }
 
 neoForge {
     mods {
         "${mod_id}" {
-            sourceSet sourceSets.main
             sourceSet sourceSets.gametest
         }
     }

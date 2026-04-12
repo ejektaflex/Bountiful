@@ -5,14 +5,12 @@ import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.BountifulReloadListener
 import io.ejekta.bountiful.content.BountifulCommands
 import io.ejekta.bountiful.content.BountifulContent
-import io.ejekta.bountiful.content.villager.DecreeTradeFactory
 import io.ejekta.kambrik.registration.KambrikRegistrar
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
-import net.fabricmc.fabric.api.`object`.builder.v1.trade.TradeOfferHelper
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType
 import net.fabricmc.loader.api.FabricLoader
@@ -78,15 +76,7 @@ class BountifulModFabric : ModInitializer {
             Bountybridge.handleEntityKills(world, entity, killedEntity)
         })
 
-        TradeOfferHelper.registerWanderingTraderOffers(1) {
-            Bountybridge.modifyTradeList(it)
-        }
-
-        TradeOfferHelper.registerRebalancedWanderingTraderOffers {
-            it.pool(
-                Bountiful.id("merchant_trade_offers"), 1, DecreeTradeFactory()
-            )
-        }
+        // TODO 26.1.2 trades are data-driven; reintroduce bounty trades with the new system.
 
         for ((group, items) in Bountybridge.getItemGroups()) {
             ItemGroupEvents.modifyEntriesEvent(group).register(ItemGroupEvents.ModifyEntries {

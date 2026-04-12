@@ -11,9 +11,9 @@ import io.ejekta.kambrik.gui.draw.KGui
 import io.ejekta.kambrik.gui.draw.widgets.KListWidget
 import io.ejekta.kambrik.gui.draw.widgets.KScrollbarVertical
 import io.ejekta.kambrik.gui.screen.KambrikContainerScreen
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraft.world.item.ItemStack
@@ -25,13 +25,11 @@ class BoardScreen(handler: AbstractContainerMenu, inventory: Inventory, title: C
     val boardHandler: BoardScreenHandler
         get() = menu as BoardScreenHandler
 
-    init {
-        imageWidth = 348
-        imageHeight = 165
-    }
+    private val guiWidth = 348
+    private val guiHeight = 165
 
     private val bgGui = kambrikGui {
-        img(TEXTURE, 349, 166)
+        img(TEXTURE, guiWidth + 1, guiHeight + 1)
     }
 
     private val buttons = (0 until 21).map { BountyLongButton(this, it) }
@@ -133,25 +131,25 @@ class BoardScreen(handler: AbstractContainerMenu, inventory: Inventory, title: C
 
     val fgGui = drawGui()
 
-    override fun onDrawBackground(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun onDrawBackground(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         bgGui.draw(context, mouseX, mouseY, delta)
     }
 
-    override fun onDrawForeground(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun onDrawForeground(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         fgGui.draw(context, mouseX, mouseY, delta)
     }
 
     override fun init() {
         super.init()
-        titleLabelX = (imageWidth - font.width(title)) / 2
+        titleLabelX = (guiWidth - font.width(title)) / 2
     }
 
     companion object {
         private val TEXTURE = Bountiful.id("board_bg")
         private val SELECTOR = Bountiful.id("selector")
-        private val SCROLLER = ResourceLocation.parse("container/villager/scroller")
-        private val XP_FG = ResourceLocation.parse("container/villager/experience_bar_current")
-        private val XP_BG = ResourceLocation.parse("container/villager/experience_bar_background")
+        private val SCROLLER = Identifier.parse("container/villager/scroller")
+        private val XP_FG = Identifier.parse("container/villager/experience_bar_current")
+        private val XP_BG = Identifier.parse("container/villager/experience_bar_background")
     }
 }
 

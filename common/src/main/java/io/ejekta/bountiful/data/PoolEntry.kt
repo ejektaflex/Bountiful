@@ -24,7 +24,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.Registries
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.item.Item
@@ -35,14 +35,15 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.streams.asSequence
 import kotlin.streams.toList
+import kotlin.jvm.optionals.getOrNull
 
 @Serializable
 class PoolEntry private constructor() {
-    var type: @Contextual ResourceLocation = ResourceLocation.fromNamespaceAndPath(Bountiful.ID, "null_pool")
+    var type: @Contextual Identifier = Identifier.fromNamespaceAndPath(Bountiful.ID, "null_pool")
     var rarity = BountyRarity.COMMON
     var content = "Nope"
     var name: String? = null
-    var icon: @Contextual ResourceLocation? = null
+    var icon: @Contextual Identifier? = null
         private set
     var amount = EntryRange(-1, -1)
     var unitWorth = -1000.0
@@ -66,11 +67,11 @@ class PoolEntry private constructor() {
         } else {
             val problems = mutableListOf<String>()
             try {
-                val bountyType = BountyTypeRegistry[type]
+                val bountyType = BountyTypeRegistry.getOptional(type).getOrNull()
 
                 if (bountyType == null) {
                     problems.add("* entry has invalid type: (${id} - ${content}) details: ${save()}")
-                } else if (!bountyType!!.isValid(this, server)) {
+                } else if (!bountyType.isValid(this, server)) {
                     problems.add("* entry failed type validation: (${id} - ${content}) details: ${save()}")
                 }
                 if (unitWorth <= 0) {
@@ -140,15 +141,15 @@ class PoolEntry private constructor() {
 
         val retSet = mutableSetOf<String>()
 
-        val regBiomes = world.registryAccess().registry(Registries.BIOME).get()
+        val regBiomes = world.registryAccess().lookupOrThrow(Registries.BIOME)
 
         val ourBiomeList = getRawBiomeList(biomes!!, world.server).groupBy { it.startsWith("#") }
         val biomeListRawNames = (ourBiomeList[false] ?: emptyList()).toSet()
         val biomeListTagNames = (ourBiomeList[true] ?: emptyList()).toSet()
 
-        regBiomes.asLookup().listElements().forEach {
-            val loc = it.key().location().toString()
-            val tags = it.tags().map { tk -> "#${tk.location}" }.toList().toSet()
+        regBiomes.listElements().forEach { holder ->
+            val loc = holder.unwrapKey().map { key -> key.identifier().toString() }.orElse(null) ?: return@forEach
+            val tags = holder.tags().map { tk -> "#${tk.location}" }.toList().toSet()
             if (loc in biomeListRawNames || biomeListTagNames.intersect(tags).isNotEmpty()) {
                 retSet.add(loc)
             }
@@ -162,7 +163,7 @@ class PoolEntry private constructor() {
     @Transient lateinit var id: String
 
     val typeLogic: IBountyType?
-        get() = BountyTypeRegistry[type]
+        get() = BountyTypeRegistry.getOptional(type).getOrNull()
 
     val conditions: @Contextual GsonObject? = null
     var components: @Contextual GsonObject? = null
@@ -193,12 +194,12 @@ class PoolEntry private constructor() {
         } else {
             relatedItemCache = when (type) {
                 BountyTypeRegistry.ITEM.id -> {
-                    val tagId = ResourceLocation.parse(content.substringAfter("#"))
-                    getTagItems(world.registryAccess(), getTagItemKey(tagId))
+                    val tagId = Identifier.parse(content.substringAfter("#"))
+                    getTagItems(getTagItemKey(tagId))
                 }
                 BountyTypeRegistry.ITEM_TAG.id -> {
-                    val tagId = ResourceLocation.parse(content)
-                    getTagItems(world.registryAccess(), getTagItemKey(tagId))
+                    val tagId = Identifier.parse(content)
+                    getTagItems(getTagItemKey(tagId))
                 }
                 else -> emptyList()
             }
@@ -216,8 +217,8 @@ class PoolEntry private constructor() {
         val amt = amountAt(worth, isCurrency)
 
         val actualContent = if (type == BountyTypeRegistry.ITEM.id && content.startsWith("#")) {
-            val tagId = ResourceLocation.parse(content.substringAfter("#"))
-            val items = getTagItems(world.registryAccess(), getTagItemKey(tagId))
+            val tagId = Identifier.parse(content.substringAfter("#"))
+            val items = getTagItems(getTagItemKey(tagId))
             if (items.isEmpty()){
                 Bountiful.logAndWarn("A pool entry tag has an empty list! ($id - $content)")
                 "minecraft:air"
@@ -294,7 +295,7 @@ class PoolEntry private constructor() {
     }
 
     @Serializable
-    class ForbiddenContent(val type: @Contextual ResourceLocation, val content: String)
+    class ForbiddenContent(val type: @Contextual Identifier, val content: String)
 
     companion object {
         fun fromKudzu(kv: KudzuVine): PoolEntry {

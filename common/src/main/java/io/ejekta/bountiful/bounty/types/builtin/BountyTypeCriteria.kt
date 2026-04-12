@@ -7,14 +7,14 @@ import io.ejekta.bountiful.data.PoolEntry
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
 import net.minecraft.world.entity.player.Player
 
 
 class BountyTypeCriteria : IBountyObjective {
 
-    override val id: ResourceLocation = ResourceLocation.parse("criteria")
+    override val id: Identifier = Identifier.parse("criteria")
 
     override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {
         return true // TODO can we validate Criteria?

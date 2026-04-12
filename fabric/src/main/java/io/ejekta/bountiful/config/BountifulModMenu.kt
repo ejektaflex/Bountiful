@@ -11,7 +11,7 @@ class BountifulModMenu : ModMenuApi {
         }
 
         return ConfigScreenFactory {
-            BountifulIO.configData.buildScreen()
+            BountifulConfigScreen.buildScreen()
         }
     }
 }

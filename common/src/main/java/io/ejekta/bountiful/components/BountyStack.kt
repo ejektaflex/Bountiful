@@ -100,7 +100,7 @@ class BountyStack(val stack: ItemStack) {
 
     fun tryCashIn(player: Player): Boolean {
         if (info.timeLeftTicks(player.level()) <= 0) {
-            player.displayClientMessage(Component.translatable("bountiful.bounty.expired"), false)
+            player.sendSystemMessage(Component.translatable("bountiful.bounty.expired"))
             return false
         }
         return if (hasFinishedObjectives(player)) {
@@ -108,7 +108,7 @@ class BountyStack(val stack: ItemStack) {
             rewardPlayer(player)
             true
         } else {
-            player.displayClientMessage(Component.translatable("bountiful.tooltip.requirements"), false)
+            player.sendSystemMessage(Component.translatable("bountiful.tooltip.requirements"))
             false
         }
     }

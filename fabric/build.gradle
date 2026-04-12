@@ -23,7 +23,7 @@ configurations {
 }
 
 repositories {
-//    mavenLocal()
+    mavenLocal()
     maven {
         name = "Architectury Maven"
         url = uri("https://maven.architectury.dev/")
@@ -31,22 +31,10 @@ repositories {
 }
 
 dependencies {
-    def localKambrikFabric = rootProject.file("../Kambrik/fabric/build/libs/kambrik-fabric-${kambrik_version}.jar")
-    if (localKambrikFabric.exists()) {
-        modImplementation(files(localKambrikFabric))
-    } else {
-        modImplementation("io.ejekta.kambrik:kambrik-fabric:${kambrik_version}")
-    }
-
-    def localPercaleFabric = rootProject.file("../Percale/fabric/build/libs/percale-fabric-${percale_version}.jar")
-    if (localPercaleFabric.exists()) {
-        modImplementation(files(localPercaleFabric))
-    } else {
-        modImplementation("io.ejekta.percale:percale-fabric:${percale_version}")
-    }
-    modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}")
-    modLocalRuntime("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}")
-    modImplementation "com.terraformersmc:modmenu:${mod_menu_version}"
+    implementation("io.ejekta.kambrik:kambrik-fabric-${minecraft_version}:${kambrik_version}")
+    implementation("io.ejekta.percale:percale-fabric-${minecraft_version}:${percale_version}")
+    compileOnly("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}")
+    implementation "com.terraformersmc:modmenu:${mod_menu_version}"
 }
 
 loom {

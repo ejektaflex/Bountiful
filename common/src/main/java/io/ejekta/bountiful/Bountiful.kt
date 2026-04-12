@@ -9,7 +9,7 @@ import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.ChatFormatting
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
 import kotlin.collections.mapIndexed
 import kotlin.io.path.appendLines
@@ -19,7 +19,7 @@ class Bountiful {
         const val ID = "bountiful"
         const val nightly = false
         var packMode = false
-        fun id(str: String) = ResourceLocation.fromNamespaceAndPath(ID, str)
+        fun id(str: String) = Identifier.fromNamespaceAndPath(ID, str)
         val LOGGER = Kambrik.Logging.createLogger(ID)
 
         fun logAndWarn(vararg strs: String) {

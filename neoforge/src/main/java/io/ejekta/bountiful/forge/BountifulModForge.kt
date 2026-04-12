@@ -19,7 +19,6 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent
 import net.neoforged.neoforge.event.server.ServerStartingEvent
-import net.neoforged.neoforge.event.village.WandererTradesEvent
 import net.neoforged.neoforge.registries.RegisterEvent
 import thedarkcolour.kotlinforforge.neoforge.forge.FORGE_BUS
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_CONTEXT
@@ -40,7 +39,6 @@ class BountifulModForge {
         FORGE_BUS.addListener(this::onGameReload)
         FORGE_BUS.addListener(this::onEntityKilled)
         FORGE_BUS.addListener(this::onServerStarting)
-        FORGE_BUS.addListener(this::changeTrades)
 
         val content = BountifulContent // trigger init
 
@@ -84,9 +82,7 @@ class BountifulModForge {
         BountifulCommands.register(evt.dispatcher, evt.buildContext, evt.commandSelection)
     }
 
-    private fun changeTrades(evt: WandererTradesEvent) {
-        Bountybridge.modifyTradeList(evt.rareTrades)
-    }
+    // TODO 26.1.2 trades are data-driven; reintroduce bounty trades with the new system.
 
     companion object {
         @JvmStatic
