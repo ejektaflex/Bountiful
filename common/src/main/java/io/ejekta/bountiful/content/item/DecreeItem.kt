@@ -14,8 +14,8 @@ import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.component.TooltipDisplay
 import java.util.function.Consumer
 
-class DecreeItem : Item(
-    Properties().stacksTo(1).fireResistant()
+class DecreeItem(props: Properties) : Item(
+    props.stacksTo(1).fireResistant()
 ) {
 
     override fun getName(stack: ItemStack): Component {

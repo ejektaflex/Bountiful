@@ -3,7 +3,7 @@ package io.ejekta.bountiful.forge
 import io.ejekta.bountiful.bridge.Bountybridge
 import io.ejekta.bountiful.client.AnalyzerScreen
 import io.ejekta.bountiful.client.BoardScreen
-import io.ejekta.bountiful.config.BountifulIO
+import io.ejekta.bountiful.config.BountifulConfigScreen
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.gui.AnalyzerScreenHandler
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
@@ -27,7 +27,7 @@ object BountifulForgeClient {
             evt.enqueueWork {
                 ModLoadingContext.get().registerExtensionPoint(
                     IConfigScreenFactory::class.java,
-                    { IConfigScreenFactory { c, s -> BountifulIO.configData.buildScreen() } }
+                    { IConfigScreenFactory { c, s -> BountifulConfigScreen.buildScreen() } }
                 )
             }
         }

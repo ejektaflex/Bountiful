@@ -8,13 +8,13 @@ import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.kambrik.registration.KambrikRegistrar
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.packs.resources.PreparableReloadListener
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
-import net.neoforged.neoforge.event.AddReloadListenerEvent
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent
 import net.neoforged.neoforge.event.RegisterCommandsEvent
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent
@@ -67,14 +67,12 @@ class BountifulModForge {
         Bountybridge.registerJigsawPieces(evt.server)
     }
 
-    private fun onGameReload(evt: AddReloadListenerEvent) {
-        evt.addListener(PreparableReloadListener { prepBarrier, resourceManager, pfa, pfb, ea, eb ->
-            return@PreparableReloadListener prepBarrier.wait(
-                CompletableFuture.supplyAsync({
-                    doContentReload(resourceManager)
-                    null
-                }, eb).get()
-            )
+    private fun onGameReload(evt: AddServerReloadListenersEvent) {
+        evt.addListener(Identifier.fromNamespaceAndPath(Bountiful.ID, "reload"), PreparableReloadListener { sharedState, taskExecutor, prepBarrier, reloadExecutor ->
+            return@PreparableReloadListener CompletableFuture.supplyAsync({
+                doContentReload(sharedState.resourceManager())
+                Unit
+            }, reloadExecutor).thenCompose { prepBarrier.wait(it) }.thenApply { null }
         })
     }
 
@@ -90,7 +88,7 @@ class BountifulModForge {
         fun registerRegistryContent(evt: RegisterEvent) {
             KambrikRegistrar[BountifulContent].content.forEach { entry ->
                 evt.register(entry.registry.key() as ResourceKey<out Registry<Any>>) {
-                    it.register(ResourceLocation.fromNamespaceAndPath(BountifulContent.getId(), entry.itemId), entry.item.value!!)
+                    it.register(Identifier.fromNamespaceAndPath(BountifulContent.getId(), entry.itemId), entry.item.value!!)
                 }
             }
         }

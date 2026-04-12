@@ -32,8 +32,8 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.util.ProblemReporter
 
 
-class BoardBlock : BaseEntityBlock(
-    Properties.of().sound(SoundType.WOOD).destroyTime(3f).explosionResistance(3600000f)
+class BoardBlock(props: Properties) : BaseEntityBlock(
+    props.sound(SoundType.WOOD).destroyTime(3f).explosionResistance(3600000f)
 ), EntityBlock {
 
     override fun getRenderShape(state: BlockState): RenderShape {
@@ -101,7 +101,7 @@ class BoardBlock : BaseEntityBlock(
     }
 
     override fun codec(): MapCodec<out BaseEntityBlock> {
-        return simpleCodec { _ -> BoardBlock() }
+        return simpleCodec(::BoardBlock)
     }
 
     override fun useItemOn(

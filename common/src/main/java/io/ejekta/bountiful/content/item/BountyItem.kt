@@ -21,8 +21,8 @@ import net.minecraft.world.phys.HitResult
 import java.util.*
 import java.util.function.Consumer
 
-class BountyItem : Item(
-    Properties().stacksTo(1).fireResistant()
+class BountyItem(props: Properties) : Item(
+    props.stacksTo(1).fireResistant()
 ) {
 
     override fun getName(stack: ItemStack): Component {
