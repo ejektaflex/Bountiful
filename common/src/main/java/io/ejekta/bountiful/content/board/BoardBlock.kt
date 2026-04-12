@@ -113,13 +113,16 @@ class BoardBlock(props: Properties) : BaseEntityBlock(
         hand: InteractionHand,
         hit: BlockHitResult
     ): InteractionResult {
-        val serverPlayer = player as? ServerPlayer ?: return InteractionResult.PASS
-        if (serverPlayer.isShiftKeyDown) {
+        if (player.isShiftKeyDown) {
             return InteractionResult.PASS
         }
-        val holding = serverPlayer.getItemInHand(hand)
+        val holding = player.getItemInHand(hand)
 
         if (holding.item is BountyItem) {
+            if (world.isClientSide) {
+                return InteractionResult.SUCCESS
+            }
+            val serverPlayer = player as? ServerPlayer ?: return InteractionResult.FAIL
             val boardEntity = serverPlayer.level().getBlockEntity(pos) as? BoardBlockEntity ?: return InteractionResult.FAIL
             val success = (holding.item as BountyItem).tryCashIn(serverPlayer, holding)
             if (success) {
@@ -128,11 +131,16 @@ class BoardBlock(props: Properties) : BaseEntityBlock(
                 boardEntity.setChanged()
                 return InteractionResult.CONSUME
             }
+            return InteractionResult.SUCCESS
         } else {
+            if (world.isClientSide) {
+                return InteractionResult.SUCCESS
+            }
+            val serverPlayer = player as? ServerPlayer ?: return InteractionResult.FAIL
             val menu = state.getMenuProvider(world, pos)
             if (menu != null) {
                 serverPlayer.openMenu(menu)
-                return InteractionResult.SUCCESS
+                return InteractionResult.CONSUME
             }
         }
         return InteractionResult.PASS

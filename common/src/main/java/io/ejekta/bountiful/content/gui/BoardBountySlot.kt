@@ -17,8 +17,12 @@ class BoardBountySlot(private val inv: BoardInventory, val usingPlayer: Player, 
     }
 
     override fun mayPickup(player: Player): Boolean {
+        return true
+    }
+
+    override fun onTake(player: Player, stack: ItemStack) {
         if (player is ServerPlayer) {
-            val board = player.level().getBlockEntity(inv.pos) as? BoardBlockEntity ?: return false
+            val board = player.level().getBlockEntity(inv.pos) as? BoardBlockEntity ?: return
             // Mask all matching bounties
             val matchingMaskIndices = board.fullInventoryCopy().readOnlyCopy
                 .mapIndexed { indexI, itemStack ->
@@ -33,11 +37,6 @@ class BoardBountySlot(private val inv: BoardInventory, val usingPlayer: Player, 
                 board.maskFor(player).add(newIndex)
             }
         }
-        super.onTake(player, item)
-        return true
-    }
-
-    override fun onTake(player: Player, stack: ItemStack) {
         if (stack.item is BountyItem) {
             BountyStack(stack).setPickedUp(player.level().gameTime)
         }

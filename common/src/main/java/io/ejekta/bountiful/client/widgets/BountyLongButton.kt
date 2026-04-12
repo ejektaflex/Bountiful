@@ -95,15 +95,16 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
 
         // Render amount
         dsl {
-            val textToShow = textLiteral(entry.amount.toString()) {
-                color = if (isReward) {
-                    entry.rarity.color.color ?: 0xFFFFFF
-                } else {
-                    0xFFFFFF
-                }
-            }
+            val textToShow = textLiteral(entry.amount.toString())
             val tr = Minecraft.getInstance().font
-            text(x + 18 - tr.width(textToShow), y + 10, textToShow)
+            val baseColor = if (isReward) {
+                entry.rarity.color.color ?: 0xFFFFFF
+            } else {
+                0xFFFFFF
+            }
+            val color = 0xFF000000.toInt() or (baseColor and 0xFFFFFF)
+            nextStratum()
+            textShadowed(x + 18 - tr.width(textToShow), y + 10, textToShow, color)
         }
         // Entry tooltip
         dsl {
@@ -136,7 +137,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
                 }
             }
 
-
+            nextStratum()
 
             // Render objectives
             renderEntries(getStack()[BountifulContent.BOUNTY_OBJS]!!) { rx, ry, e ->

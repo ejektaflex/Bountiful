@@ -7,10 +7,10 @@
 		"DSP"
 	],
 	"key": {
-		"P": {"item": "minecraft:paper"},
-		"S": {"item": "minecraft:stick"},
-		"G": {"item": "minecraft:gold_ingot"},
-		"D": {"item": "minecraft:purple_dye"}
+		"P": "minecraft:paper",
+		"S": "minecraft:stick",
+		"G": "minecraft:gold_ingot",
+		"D": "minecraft:purple_dye"
 	},
 	"result": {
 		"count": 1,

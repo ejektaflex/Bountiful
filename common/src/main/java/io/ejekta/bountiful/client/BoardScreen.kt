@@ -11,6 +11,7 @@ import io.ejekta.kambrik.gui.draw.KGui
 import io.ejekta.kambrik.gui.draw.widgets.KListWidget
 import io.ejekta.kambrik.gui.draw.widgets.KScrollbarVertical
 import io.ejekta.kambrik.gui.screen.KambrikContainerScreen
+import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
@@ -20,13 +21,13 @@ import net.minecraft.world.item.ItemStack
 
 
 class BoardScreen(handler: AbstractContainerMenu, inventory: Inventory, title: Component) :
-    KambrikContainerScreen<AbstractContainerMenu>(handler, inventory, title) {
+    KambrikContainerScreen<AbstractContainerMenu>(handler, inventory, title, GUI_WIDTH, GUI_HEIGHT) {
 
     val boardHandler: BoardScreenHandler
         get() = menu as BoardScreenHandler
 
-    private val guiWidth = 348
-    private val guiHeight = 165
+    private val guiWidth = GUI_WIDTH
+    private val guiHeight = GUI_HEIGHT
 
     private val bgGui = kambrikGui {
         img(TEXTURE, guiWidth + 1, guiHeight + 1)
@@ -56,38 +57,21 @@ class BoardScreen(handler: AbstractContainerMenu, inventory: Inventory, title: C
             val levelData = BoardBlockEntity.levelProgress(boardHandler.getTotalNumComplete())
             val percentDone = (levelData.second.toDouble() / levelData.third * 100).toInt()
 
-            // Selection highlight on selected stack
-            if (!ItemStack.matches(boardHandler.container.selected(), ItemStack.EMPTY)) {
-                boardHandler.container.selectedIndex?.let {
-                    offset(179 + ((it % 7) * 18), 16 + ((it / 7) * 18)) {
-                        img(SELECTOR, 20, 20)
-                        offset(2, 2) {
-                            area(16, 16) {
-                                rect(0x0, 0x88)
-                            }
-                        }
-                    }
-                }
-            }
-
             // Reputation Bar (background, foreground, label)
             offset(204, 75) {
                 img(XP_BG, 102, 5)
                 img(XP_FG, percentDone + 1, 5, x = 1)
-                textCentered(-16, -2) {
-                    color(0xabff7a)
-                    addLiteral(levelData.first.toString()) {
-                        format(BountyRarity.forReputation(levelData.first).color)
-                    }
-                }
+                val repColor = BountyRarity.forReputation(levelData.first).color.color ?: 0xFFFFFF
+                val repTextColor = 0xFF000000.toInt() or (repColor and 0xFFFFFF)
+                textCenteredColored(-16, -2, textLiteral(levelData.first.toString()), repTextColor)
                 offset(-28, -2) {
                     if (isHovered(18, 8)) {
-                        val repColor = BountyRarity.forReputation(levelData.first).color
+                        val repFormat = BountyRarity.forReputation(levelData.first).color
                         tooltip {
                             addTranslate("bountiful.ui.reputation", "Reputation") {
                                 color(0xabff7a)
                                 addLiteral(" (${levelData.first}) ") {
-                                    format(repColor)
+                                    format(repFormat)
                                 }
                             }
                             addLiteral("(") {
@@ -95,7 +79,7 @@ class BoardScreen(handler: AbstractContainerMenu, inventory: Inventory, title: C
                                 addTranslate("bountiful.ui.discount", "Discount") {
                                     addLiteral(": ")
                                     addLiteral("%.1f".format((1 - BountyCreator.getDiscount(levelData.first)) * 100) + "%") {
-                                        format(repColor)
+                                        format(repFormat)
                                     }
                                     addLiteral(")")
                                 }
@@ -106,18 +90,18 @@ class BoardScreen(handler: AbstractContainerMenu, inventory: Inventory, title: C
             }
 
             // GUI Title
-            textCentered(titleLabelX - 53, titleLabelY + 1) {
-                color = 0xEADAB5
-                add(title)
-            }
+            textCenteredColored(titleLabelX - 53, titleLabelY + 1, title, 0xFFEADAB5.toInt())
 
             // Button list and scroll bar
+            nextStratum()
             widget(buttonList, 5, 18)
             if (validButtons.isEmpty()) {
-                textCentered(85, 78) {
-                    color = 0xEADAB5
-                    addTranslate("bountiful.ui.empty", "It's Empty! Check back soon!")
-                }
+                textCenteredColored(
+                    85,
+                    78,
+                    Component.translatable("bountiful.ui.empty", "It's Empty! Check back soon!"),
+                    0xFFEADAB5.toInt()
+                )
             } else {
                 offset(166, 18) {
                     widget(scroller)
@@ -133,6 +117,7 @@ class BoardScreen(handler: AbstractContainerMenu, inventory: Inventory, title: C
 
     override fun onDrawBackground(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         bgGui.draw(context, mouseX, mouseY, delta)
+        drawSelectionOverlay(context, mouseX, mouseY, delta)
     }
 
     override fun onDrawForeground(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
@@ -141,10 +126,32 @@ class BoardScreen(handler: AbstractContainerMenu, inventory: Inventory, title: C
 
     override fun init() {
         super.init()
+        leftPos = (width - guiWidth) / 2
+        topPos = (height - guiHeight) / 2
         titleLabelX = (guiWidth - font.width(title)) / 2
     }
 
+    private fun drawSelectionOverlay(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+        if (ItemStack.matches(boardHandler.container.selected(), ItemStack.EMPTY)) {
+            return
+        }
+        kambrikGui {
+            boardHandler.container.selectedIndex?.let {
+                offset(179 + ((it % 7) * 18), 16 + ((it / 7) * 18)) {
+                    img(SELECTOR, 20, 20)
+                    offset(2, 2) {
+                        area(16, 16) {
+                            rect(0x0, 0x88)
+                        }
+                    }
+                }
+            }
+        }.draw(context, mouseX, mouseY, delta)
+    }
+
     companion object {
+        private const val GUI_WIDTH = 348
+        private const val GUI_HEIGHT = 165
         private val TEXTURE = Bountiful.id("board_bg")
         private val SELECTOR = Bountiful.id("selector")
         private val SCROLLER = Identifier.parse("container/villager/scroller")
