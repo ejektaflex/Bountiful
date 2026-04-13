@@ -28,12 +28,7 @@ repositories {
 }
 
 dependencies {
-    def localKambrikNeo = rootProject.file("../Kambrik/neoforge/build/libs/kambrik-neoforge-${kambrik_version}.jar")
-    if (localKambrikNeo.exists()) {
-        implementation(files(localKambrikNeo))
-    } else {
-        implementation("io.ejekta.kambrik:kambrik-neoforge:${kambrik_version}")
-    }
+    implementation("io.ejekta.kambrik:kambrik-neoforge:${kambrik_version}")
 
     def localPercaleNeo = rootProject.file("../Percale/neoforge/build/libs/percale-neoforge-${percale_version}.jar")
     if (localPercaleNeo.exists()) {

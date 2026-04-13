@@ -23,7 +23,7 @@ configurations {
 }
 
 repositories {
-//    mavenLocal()
+    mavenLocal()
     maven {
         name = "Architectury Maven"
         url = uri("https://maven.architectury.dev/")
@@ -31,12 +31,7 @@ repositories {
 }
 
 dependencies {
-    def localKambrikFabric = rootProject.file("../Kambrik/fabric/build/libs/kambrik-fabric-${kambrik_version}.jar")
-    if (localKambrikFabric.exists()) {
-        modImplementation(files(localKambrikFabric))
-    } else {
-        modImplementation("io.ejekta.kambrik:kambrik-fabric:${kambrik_version}")
-    }
+    modImplementation("io.ejekta.kambrik:kambrik-fabric:${kambrik_version}")
 
     def localPercaleFabric = rootProject.file("../Percale/fabric/build/libs/percale-fabric-${percale_version}.jar")
     if (localPercaleFabric.exists()) {
