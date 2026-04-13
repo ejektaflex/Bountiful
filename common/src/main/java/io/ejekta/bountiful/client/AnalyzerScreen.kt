@@ -8,7 +8,7 @@ import io.ejekta.kambrik.gui.draw.KGui
 import io.ejekta.kambrik.gui.draw.reactor.MouseReactor
 import io.ejekta.kambrik.gui.draw.widgets.KScrollbarVertical
 import io.ejekta.kambrik.gui.screen.KambrikContainerScreen
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.AbstractContainerMenu
@@ -21,13 +21,11 @@ class AnalyzerScreen(handler: AbstractContainerMenu, inventory: Inventory, title
 
     private var scanResolution = 1
 
-    init {
-        imageWidth = 177
-        imageHeight = 167
-    }
+    private val guiWidth = 177
+    private val guiHeight = 167
 
     private val bgGui = kambrikGui {
-        img(TEXTURE, imageWidth, imageHeight)
+        img(TEXTURE, guiWidth, guiHeight)
     }
 
     val dec = BountifulContent.Decrees.find { it.id == "fletcher" }!!
@@ -85,7 +83,7 @@ class AnalyzerScreen(handler: AbstractContainerMenu, inventory: Inventory, title
     private fun drawGui(): KGui {
         return kambrikGui {
 
-            area(imageWidth, imageHeight) {
+            area(guiWidth, guiHeight) {
                 text(7, 6) {
                     add(Component.translatable("bountiful.analyzer.title"))
                 }
@@ -138,16 +136,12 @@ class AnalyzerScreen(handler: AbstractContainerMenu, inventory: Inventory, title
 
     private val fgGui = drawGui()
 
-    override fun onDrawBackground(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
-        // do nothing
+    override fun onDrawBackground(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+        bgGui.draw(context, mouseX, mouseY, delta)
     }
 
-    override fun onDrawForeground(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun onDrawForeground(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         fgGui.draw(context, mouseX, mouseY, delta)
-    }
-
-    override fun renderBg(pGuiGraphics: GuiGraphics, pPartialTick: Float, pMouseX: Int, pMouseY: Int) {
-        bgGui.draw(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
     }
 
     override fun init() {

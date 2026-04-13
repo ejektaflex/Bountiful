@@ -18,7 +18,7 @@ import io.ejekta.kambrik.text.textLiteral
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.MobCategory
@@ -85,8 +85,9 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
 
     private fun renderEntry(dsl: KGuiDsl, entry: BountyDataEntry, x: Int, y: Int, isReward: Boolean = false) {
 
-        if (entry.icon != null) {
-            val itemForIcon = BuiltInRegistries.ITEM.get(entry.icon)
+        val icon = entry.icon
+        if (icon != null) {
+            val itemForIcon = BuiltInRegistries.ITEM.getOptional(icon).orElse(null) ?: Items.AIR
             dsl { itemStackIcon(ItemStack(itemForIcon), x, y) }
         } else {
             renderEntryBasedOnLogic(dsl, entry, x, y, isReward)
@@ -94,25 +95,16 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
 
         // Render amount
         dsl {
-            val textToShow = textLiteral(entry.amount.toString()) {
-                color = if (isReward) {
-                    entry.rarity.color.color ?: 0xFFFFFF
-                } else {
-                    0xFFFFFF
-                }
-            }
+            val textToShow = textLiteral(entry.amount.toString())
             val tr = Minecraft.getInstance().font
-            context.pose().pushPose()
-            context.pose().translate(0f, 0f, 200f)
-            context.drawString(
-                tr,
-                textToShow,
-                (ctx.absX(x) + 18 - tr.width(textToShow)),
-                ctx.absY(y) + 10,
-                0xFFFFFF,
-                true
-            )
-            context.pose().popPose()
+            val baseColor = if (isReward) {
+                entry.rarity.color.color ?: 0xFFFFFF
+            } else {
+                0xFFFFFF
+            }
+            val color = 0xFF000000.toInt() or (baseColor and 0xFFFFFF)
+            nextStratum()
+            textShadowed(x + 18 - tr.width(textToShow), y + 10, textToShow, color)
         }
         // Entry tooltip
         dsl {
@@ -145,7 +137,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
                 }
             }
 
-
+            nextStratum()
 
             // Render objectives
             renderEntries(getStack()[BountifulContent.BOUNTY_OBJS]!!) { rx, ry, e ->
@@ -164,7 +156,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
     }
 
     companion object {
-        val BUTTON = ResourceLocation.parse("widget/button")
+        val BUTTON = Identifier.parse("widget/button")
         val ARROW = Bountiful.id("arrow")
 
         const val ButtonWidth = 160

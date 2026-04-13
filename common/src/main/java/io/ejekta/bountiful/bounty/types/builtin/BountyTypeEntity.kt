@@ -9,7 +9,7 @@ import net.minecraft.ChatFormatting
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.EntityType
@@ -19,11 +19,11 @@ import net.minecraft.world.entity.player.Player
 
 class BountyTypeEntity : IBountyObjective {
 
-    override val id: ResourceLocation = ResourceLocation.parse("entity")
+    override val id: Identifier = Identifier.parse("entity")
 
     override fun isValid(entry: PoolEntry, server: MinecraftServer): Boolean {
-        val id = getEntityType(ResourceLocation.parse(entry.content)).id
-        return id == ResourceLocation.parse(entry.content)
+        val id = getEntityType(Identifier.parse(entry.content)).id
+        return id == Identifier.parse(entry.content)
     }
 
     override fun textOnBounty(entry: BountyDataEntry, isObj: Boolean, player: Player, current: Int): List<MutableComponent> {
@@ -68,11 +68,12 @@ class BountyTypeEntity : IBountyObjective {
 
     companion object {
         fun getEntityType(entry: BountyDataEntry): EntityType<*> {
-            return getEntityType(ResourceLocation.parse(entry.content))
+            return getEntityType(Identifier.parse(entry.content))
         }
 
-        fun getEntityType(id: ResourceLocation): EntityType<*> {
-            return BuiltInRegistries.ENTITY_TYPE.get(id)
+        fun getEntityType(id: Identifier): EntityType<*> {
+            return BuiltInRegistries.ENTITY_TYPE.getOptional(id).orElse(null)
+                ?: throw IllegalArgumentException("Unknown entity type: $id")
         }
     }
 

@@ -5,13 +5,13 @@ import io.ejekta.bountiful.util.getTagItems
 import io.ejekta.kambrik.ext.id
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
 import net.minecraft.world.item.Item
 
 @Serializable
 class BountifulChaosMatching(
-    val tag: MutableMap<@Contextual ResourceLocation, Double> = mutableMapOf(),
+    val tag: MutableMap<@Contextual Identifier, Double> = mutableMapOf(),
     val regex: MutableMap<String, Double> = mutableMapOf(),
     val ignoreRegex: MutableMap<String, Boolean> = mutableMapOf()
 ) {
@@ -25,7 +25,7 @@ class BountifulChaosMatching(
         }
 
         val matchedTag = tag.keys.sorted().firstOrNull {
-            item in getTagItems(server.registryAccess(), getTagItemKey(it))
+            item in getTagItems(getTagItemKey(it))
         }
         if (matchedTag != null) {
             return tag[matchedTag]!!

@@ -14,7 +14,7 @@ import kotlinx.serialization.Serializable
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.player.Player
 
 typealias GsonObject = com.google.gson.JsonObject
@@ -34,7 +34,7 @@ data class BountyDataEntry(
 ) {
 
     // Icon is local (to the client) rather than stored in items for net performance
-    val icon: ResourceLocation? by lazy {
+    val icon: Identifier? by lazy {
         BountifulContent.PoolEntryMap[id]?.icon
     }
 
@@ -45,7 +45,8 @@ data class BountyDataEntry(
 
     val isMystery: Boolean = false
 
-    val logic: IBountyType = BountyTypeRegistry.get(ResourceLocation.parse(logicName))!!
+    val logic: IBountyType = BountyTypeRegistry.getOptional(Identifier.parse(logicName)).orElse(null)
+        ?: throw IllegalArgumentException("Unknown bounty type: $logicName")
 
     private fun getRelatedDecrees(): Set<Decree> {
         return emptySet()

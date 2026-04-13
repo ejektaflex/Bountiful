@@ -5,10 +5,10 @@
 		"PLP", "ADA", "PLP"
 	],
 	"key": {
-		"P": {"item": "minecraft:oak_planks"},
-		"L": {"item": "minecraft:oak_log"},
-		"A": {"item": "minecraft:paper"},
-		"D": {"item": "minecraft:diamond"}
+		"P": "minecraft:oak_planks",
+		"L": "minecraft:oak_log",
+		"A": "minecraft:paper",
+		"D": "minecraft:diamond"
 	},
 	"result": {
 		"count": 1,

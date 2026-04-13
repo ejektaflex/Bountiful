@@ -5,13 +5,13 @@ import io.ejekta.bountiful.data.PoolEntry
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
 import net.minecraft.world.entity.player.Player
 
 sealed interface IBountyType {
 
-    val id: ResourceLocation
+    val id: Identifier
 
     fun textOnBounty(entry: BountyDataEntry, isObj: Boolean, player: Player, current: Int): List<MutableComponent>
 

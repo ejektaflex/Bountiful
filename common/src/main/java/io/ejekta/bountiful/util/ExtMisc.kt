@@ -16,7 +16,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.RegistryOps
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.TagKey
@@ -24,7 +24,7 @@ import net.minecraft.world.Container
 import net.minecraft.world.SimpleMenuProvider
 import net.minecraft.world.entity.ai.Brain
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
-import net.minecraft.world.entity.npc.Villager
+import net.minecraft.world.entity.npc.villager.Villager
 import net.minecraft.world.inventory.MenuConstructor
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -36,15 +36,7 @@ import java.util.*
 import kotlin.jvm.optionals.getOrNull
 import kotlin.random.Random
 
-operator fun <T> MinecraftServer.get(regResourceKey: ResourceKey<Registry<T>>): Registry<T> {
-    return registryAccess().registry(regResourceKey).get()
-}
-
-operator fun <T> RegistryAccess.get(regResourceKey: ResourceKey<out Registry<T>>): Registry<T> {
-    return registry(regResourceKey).get()
-}
-
-fun <T : Any> Registry<T>.getNullable(rl: ResourceLocation): T? {
+fun <T : Any> Registry<T>.getNullable(rl: Identifier): T? {
     return getOptional(rl).getOrNull()
 }
 
@@ -127,50 +119,37 @@ fun CompoundTag.putBlockPos(key: String, pos: BlockPos) {
 }
 
 fun CompoundTag.getBlockPos(key: String): BlockPos {
-    val tag = getCompound(key)
+    val tag = getCompound(key).orElse(null) ?: return BlockPos.ZERO
     return try {
         BlockPos(
-            tag.getInt("x"),
-            tag.getInt("y"),
-            tag.getInt("z")
+            tag.getInt("x").orElse(0),
+            tag.getInt("y").orElse(0),
+            tag.getInt("z").orElse(0)
         )
     } catch (e: Exception) {
         BlockPos.ZERO
     }
 }
 
-fun getTagItemKey(id: ResourceLocation): TagKey<Item> = TagKey.create(BuiltInRegistries.ITEM.key(), id)
+fun getTagItemKey(id: Identifier): TagKey<Item> = TagKey.create(BuiltInRegistries.ITEM.key(), id)
 
-fun getTagItems(reg: RegistryAccess, tagKey: TagKey<Item>): List<Item> {
-    return getRegistryTags(reg, tagKey)
-}
-
-fun <T : Any> getRegistryTags(reg: RegistryAccess, tagKey: TagKey<T>): List<T> {
-    val typedReg = reg[tagKey.registry] ?: return emptyList()
-    val streamed = typedReg.tags.filter {
-        tagKey == it.first
-    }.map {
-        it.second.toList().map { re ->
-            re.value()
-        }
-    }.toList().flatten()
-    return streamed
+fun getTagItems(tagKey: TagKey<Item>): List<Item> {
+    return BuiltInRegistries.ITEM.getTagOrEmpty(tagKey).map { it.value() }
 }
 
 val KambrikMsg.ctx: Minecraft
     get() = Minecraft.getInstance()
 
 fun ServerPlayer.iterateBountyStacks(func: BountyStack.() -> Unit) {
-    inventory.items.filter {
+    inventory.getNonEquipmentItems().filter {
         it.item is BountyItem
     }.map { BountyStack(it) }.forEach(func)
 }
 
 fun Brain<*>.ensureMemoryModules(memoryList: List<MemoryModuleType<*>>) {
-    val memMM = memories as MutableMap
     for (item in memoryList) {
-        if (item !in memMM) {
-            memMM[item] = Optional.empty()
+        if (getMemory(item).isEmpty) {
+            setMemory(item, Optional.empty())
         }
     }
 }
@@ -199,7 +178,7 @@ val ServerPlayer.currentBoardInteracting: BoardBlockEntity?
     get() {
         val shPos = (containerMenu as? BoardScreenHandler)?.container?.pos
         shPos?.run {
-            serverLevel().getBlockEntity(this)?.let {
+            level().getBlockEntity(this)?.let {
                 return (it as? BoardBlockEntity)
             }
         }

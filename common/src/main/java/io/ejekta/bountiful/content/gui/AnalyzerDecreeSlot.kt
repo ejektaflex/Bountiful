@@ -10,17 +10,15 @@ import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
 
 class AnalyzerDecreeSlot(inv: SimpleContainer, val usingPlayer: Player, index: Int, x: Int, y: Int) : Slot(inv, index, x, y) {
-    override fun mayPlace(pStack: ItemStack) = pStack?.item == BountifulContent.DECREE_ITEM
+    override fun mayPlace(pStack: ItemStack) = pStack.item == BountifulContent.DECREE_ITEM
 
     override fun mayPickup(pPlayer: Player) = true
 
-    override fun set(stack: ItemStack?) {
+    override fun set(stack: ItemStack) {
         super.set(stack)
-        stack?.let {
-            if (Kambridge.isOnClient()) {
-                val anScreen = Minecraft.getInstance().screen as? AnalyzerScreen
-                anScreen?.refreshWidgets()
-            }
+        if (Kambridge.isOnClient()) {
+            val anScreen = Minecraft.getInstance().screen as? AnalyzerScreen
+            anScreen?.refreshWidgets()
         }
     }
 }
