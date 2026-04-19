@@ -61,7 +61,7 @@ interface BountifulSharedApi {
     }
 
     fun registerJigsawPieces(server: MinecraftServer) {
-        if (BountifulIO.configData.board.villageChance == 0) return
+        if (BountifulIO.configData.board.villageGenFrequency <= 0f) return
         listOf("plains", "savanna", "snowy", "taiga", "desert").forEach { villageType ->
             Bountiful.LOGGER.info("Registering Bounty Board Jigsaw Piece for Village Type: $villageType")
             Kambrik.Structure.addToStructurePool(

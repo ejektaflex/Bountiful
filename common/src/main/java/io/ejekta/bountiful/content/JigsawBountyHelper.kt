@@ -14,19 +14,21 @@ object JigsawBountyHelper {
     private val BOUNTY_GAZEBO_ID = Identifier.fromNamespaceAndPath("bountiful", "village/common/bounty_gazebo")
 
     // null = not inside a village generation call on this thread
-    internal val shouldHaveBoard: ThreadLocal<Boolean?> = ThreadLocal.withInitial { null }
+    private val allowedBoards: ThreadLocal<Int?> = ThreadLocal.withInitial { null }
 
     fun onAddPiecesStart(centerPiece: PoolElementStructurePiece) {
-        val config = BountifulIO.configData.board
+        val freq = BountifulIO.configData.board.villageGenFrequency
+        val guaranteed = freq.toInt()
+        val extraChance = freq - guaranteed
         val bb = centerPiece.boundingBox
         // Seeded by village position + a Bountiful-specific salt, independent of world gen RNG
         val seed = bb.minX().toLong() * 341873128712L + bb.minZ().toLong() * 132897987541L xor 0xB0_4B_04_4BL
-        val rng = Random(seed)
-        shouldHaveBoard.set(rng.nextFloat() < config.villageChance / 100f)
+        val extra = if (Random(seed).nextFloat() < extraChance) 1 else 0
+        allowedBoards.set(guaranteed + extra)
     }
 
     fun onAddPiecesEnd() {
-        shouldHaveBoard.remove()
+        allowedBoards.remove()
     }
 
     private fun isBountyBoardElement(element: StructurePoolElement): Boolean {
@@ -46,15 +48,10 @@ object JigsawBountyHelper {
         val boards = targetPieces.filter { isBountyBoardElement(it) }
         if (boards.isEmpty()) return targetPieces
 
-        val config = BountifulIO.configData.board
-        val should = shouldHaveBoard.get() ?: false
-
-        if (!should) {
-            return targetPieces.filter { !isBountyBoardElement(it) }
-        }
-
+        val allowed = allowedBoards.get() ?: 0
         val alreadyPlaced = placer.bountiful_getPieces().count { isBountyBoardPiece(it) }
-        return if (alreadyPlaced >= config.maxBoardsPerVillage) {
+
+        return if (alreadyPlaced >= allowed) {
             targetPieces.filter { !isBountyBoardElement(it) }
         } else {
             // Move board to front so it is tried before any other house piece
