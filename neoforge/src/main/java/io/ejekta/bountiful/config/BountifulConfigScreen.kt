@@ -68,16 +68,25 @@ object BountifulConfigScreen {
 
         boardCat.addEntry(
             creator.startIntSlider(
-                tr("board.village_gen_frequency"),
-                config.board.villageGenFrequency,
-                0, 32
-            ).setDefaultValue(config.board.villageGenFrequency)
-                .setTooltip(
-                    tr("board.village_gen_frequency.tooltip")
-                )
-                .setSaveConsumer {
-                    config.board.villageGenFrequency = it
-                }
+                tr("board.village_chance"),
+                config.board.villageChance,
+                0, 100
+            ).setDefaultValue(100)
+                .setTooltip(tr("board.village_chance.tooltip"))
+                .setTextGetter { tr("board.village_chance.value", it) }
+                .setSaveConsumer { config.board.villageChance = it }
+                .requireRestart()
+                .build()
+        )
+
+        boardCat.addEntry(
+            creator.startIntSlider(
+                tr("board.max_boards_per_village"),
+                config.board.maxBoardsPerVillage,
+                1, 5
+            ).setDefaultValue(1)
+                .setTooltip(tr("board.max_boards_per_village.tooltip"))
+                .setSaveConsumer { config.board.maxBoardsPerVillage = it }
                 .requireRestart()
                 .build()
         )

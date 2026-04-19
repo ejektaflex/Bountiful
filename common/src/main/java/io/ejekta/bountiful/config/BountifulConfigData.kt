@@ -11,7 +11,8 @@ class BountifulConfigData {
     @Serializable
     class BoardConfigData {
         var updateFrequencySecs: Int = 45
-        var villageGenFrequency: Int = 2
+        var villageChance: Int = 100  // 0–100 % of villages that receive a board
+        var maxBoardsPerVillage: Int = 1
         var canBreak = true
         var globalBoardState = false
     }

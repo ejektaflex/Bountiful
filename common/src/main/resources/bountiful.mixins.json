@@ -5,7 +5,11 @@
 	"compatibilityLevel": "JAVA_25",
 	"mixins": [
 		"BountifulAnvilMenuMixin",
-		"BountifulTaskMixin"
+		"BountifulTaskMixin",
+		"JigsawAddPiecesMixin",
+		"JigsawPlacementMixin",
+		"JigsawPlacerAccessor",
+		"SinglePoolElementAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1
