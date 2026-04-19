@@ -15,6 +15,7 @@ import io.ejekta.bountiful.components.GsonObject
 import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyCreator
+import io.ejekta.bountiful.content.RewardModifierEngine
 import io.ejekta.bountiful.util.getTagItemKey
 import io.ejekta.bountiful.util.getTagItems
 import io.ejekta.kambrik.ext.id
@@ -51,6 +52,8 @@ class PoolEntry private constructor() {
     var timeMult = 1.0
     var repRequired = 0.0
     private val forbids: MutableList<ForbiddenContent> = mutableListOf()
+    var markers: MutableSet<String> = mutableSetOf()
+    var forbidMarkers: MutableSet<String> = mutableSetOf()
 
     // TODO will this fail if the user's resource file has a '.' in it?
     val protoPool: Pool?
@@ -167,6 +170,7 @@ class PoolEntry private constructor() {
 
     val conditions: @Contextual GsonObject? = null
     var components: @Contextual GsonObject? = null
+    var modifiers: MutableList<String> = mutableListOf()
 
     var mystery: Boolean = false
 
@@ -212,7 +216,8 @@ class PoolEntry private constructor() {
         pos: BlockPos,
         worth: Double? = null,
         usedDecs: Set<String>? = emptySet(),
-        isCurrency: Boolean = false
+        isCurrency: Boolean = false,
+        applyModifiers: Boolean = false
     ): BountyCreator.ValuedEntry {
         val amt = amountAt(worth, isCurrency)
 
@@ -229,24 +234,29 @@ class PoolEntry private constructor() {
             content
         }
 
-        val totWorth = amt * unitWorth
+        val baseWorth = amt * unitWorth
+        val modifiedReward = if (applyModifiers && typeLogic is BountyTypeItem && modifiers.isNotEmpty()) {
+            RewardModifierEngine.apply(world, this, actualContent, amt, baseWorth)
+        } else {
+            null
+        }
 
         val entry = BountyDataEntry(
             id,
             content = actualContent,
-            rarity,
+            modifiedReward?.rarity ?: rarity,
             type.toString(),
             amt,
             name = name,
             data = when (typeLogic) {
                 is BountyTypeCriteria -> conditions
-                is BountyTypeItem -> components
+                is BountyTypeItem -> modifiedReward?.components ?: components
                 else -> null
             }
             // TODO remember no more related decree ids here, need to get dynamically
         )
 
-        return BountyCreator.ValuedEntry(entry, totWorth)
+        return BountyCreator.ValuedEntry(entry, modifiedReward?.worth ?: baseWorth)
     }
 
     private fun amountAt(worth: Double? = null, isCurrency: Boolean = false): Int {
@@ -277,11 +287,15 @@ class PoolEntry private constructor() {
 
     fun forbids(world: ServerLevel, entry: PoolEntry): Boolean {
         val related = getRelatedItems(world)
-        return forbids.any {
+        val exactContentForbidden = forbids.any {
             it.type == entry.type && it.content == entry.content
         } || (!related.isNullOrEmpty()
                     && related.any { it.id.toString() == entry.content }
                 )
+
+        val markerForbidden = forbidMarkers.intersect(entry.markers).isNotEmpty()
+
+        return exactContentForbidden || markerForbidden
     }
 
     fun forbidsAny(world: ServerLevel, entries: List<PoolEntry>): Boolean {

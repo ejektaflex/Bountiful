@@ -3,6 +3,7 @@ package io.ejekta.bountiful.config
 import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bridge.Bountybridge
 import io.ejekta.bountiful.content.BountifulContent
+import io.ejekta.bountiful.data.BountyModifier
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.data.Pool
 import io.ejekta.kambrik.Kambrik
@@ -55,6 +56,7 @@ object BountifulIO {
 
     private val poolConfigs = rootFolder.ensured("bounty_pools")
     private val decreeConfigs = rootFolder.ensured("bounty_decrees")
+    private val modifierConfigs = rootFolder.ensured("bounty_modifiers")
 
     fun getPoolFile(poolName: String): KambrikConfigFile<Pool> {
         return KambrikConfigFile(
@@ -62,6 +64,27 @@ object BountifulIO {
             "$poolName.json", JsonFormats.Config.json, KambrikParseFailMode.LEAVE, Pool.serializer()) {
             Pool().apply { setup(poolName) }
         }
+    }
+
+    fun getDecreeFile(decreeName: String): KambrikConfigFile<Decree> {
+        return KambrikConfigFile(
+            decreeConfigs,
+            "$decreeName.json", JsonFormats.Config.json, KambrikParseFailMode.LEAVE, Decree.serializer()
+        ) {
+            Decree(
+                id = decreeName,
+                objectives = mutableSetOf(),
+                rewards = mutableSetOf()
+            )
+        }
+    }
+
+    fun hasDecreeConfigFile(decreeName: String): Boolean {
+        return decreeConfigs.resolve("$decreeName.json").exists()
+    }
+
+    fun deleteDecreeConfigFile(decreeName: String) {
+        decreeConfigs.resolve("$decreeName.json").deleteIfExists()
     }
 
     private fun saveConfig() {
@@ -120,6 +143,14 @@ object BountifulIO {
                 warnings.add("NOTE: This data will not show up in game until one of the above fixes is made.")
 
                 Bountiful.logAndWarn(warnings)
+            }
+        },
+        ResourceLoadStrategy("Modifier Loader", "bounty_modifiers", modifierConfigs, BountyModifier.serializer(),
+            onClear = { BountifulContent.populateModifiers(emptyList()) },
+            onComplete = { BountifulContent.populateModifiers(it) }
+        ) {
+            if (type == BountyModifier.Type.ENCHANTS && levels.min <= 0) {
+                Bountiful.logAndWarn("Modifier '$id' defines a non-positive minimum enchant level (${levels.min}).")
             }
         },
         ResourceLoadStrategy("Decree Loader", "bounty_decrees", decreeConfigs, Decree.serializer(),
@@ -187,6 +218,15 @@ object BountifulIO {
         }
 
         decreeConfigs.copyToRecursively(decreeSpot.createParentDirectories(), { src, target, e ->
+            e.printStackTrace()
+            OnErrorResult.TERMINATE
+        }, followLinks = false)
+
+        val modifierSpot = dataSpot.resolve(modifierConfigs.fileName).resolve(Bountiful.ID).apply {
+            toFile().mkdirs()
+        }
+
+        modifierConfigs.copyToRecursively(modifierSpot.createParentDirectories(), { src, target, e ->
             e.printStackTrace()
             OnErrorResult.TERMINATE
         }, followLinks = false)

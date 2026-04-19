@@ -5,33 +5,27 @@
             "type": "minecraft:item",
             "rarity": "EPIC",
             "content": "farmersdelight:diamond_knife",
+            "forbidMarkers": [
+                "diamond_material"
+            ],
             "unitWorth": 3000.0,
             "amount": {
                 "min": 1,
                 "max": 1
-            },
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:diamond"
-                }
-            ]
+            }
         },
         "deli_gold_knife": {
             "type": "minecraft:item",
             "rarity": "RARE",
             "content": "farmersdelight:golden_knife",
+            "forbidMarkers": [
+                "gold_material"
+            ],
             "unitWorth": 1250.0,
             "amount": {
                 "min": 1,
                 "max": 1
-            },
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:gold_ingot"
-                }
-            ]
+            }
         }
     }
 }

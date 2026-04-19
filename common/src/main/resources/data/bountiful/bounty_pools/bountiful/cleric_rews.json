@@ -15,17 +15,14 @@
         "magma_cream": {
             "type": "item",
             "content": "minecraft:magma_cream",
+            "forbidMarkers": [
+                "magma_cream_material"
+            ],
             "amount": {
                 "min": 2,
                 "max": 6
             },
-            "unitWorth": 450,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:magma_cream"
-                }
-            ]
+            "unitWorth": 450
         },
 
         "lapis": {

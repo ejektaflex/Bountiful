@@ -1,0 +1,14 @@
+{
+  "type": "ENCHANTS",
+  "chance": 0.65,
+  "onlyCompatible": true,
+  "levels": {
+    "min": 16,
+    "max": 28
+  },
+  "applicableTags": [
+    "minecraft:enchantable/mining"
+  ],
+  "valueFlatScale": 42.0,
+  "valueCostScale": 0.012
+}

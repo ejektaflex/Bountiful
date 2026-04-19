@@ -36,16 +36,19 @@
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:iron_pickaxe",
+            "forbidMarkers": [
+                "iron_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
             "unitWorth": 2700,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:iron_ingot"
-                }
+            "modifiers": [
+                "tool_enchants"
+            ],
+            "markers": [
+                "iron_tool_reward"
             ]
         },
 
@@ -53,16 +56,16 @@
             "type": "item",
             "rarity": "UNCOMMON",
             "content": "minecraft:iron_hoe",
+            "forbidMarkers": [
+                "iron_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
             "unitWorth": 1800,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:iron_ingot"
-                }
+            "markers": [
+                "iron_tool_reward"
             ]
         },
 
@@ -70,16 +73,19 @@
             "type": "item",
             "rarity": "RARE",
             "content": "minecraft:golden_axe",
+            "forbidMarkers": [
+                "gold_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
             "unitWorth": 2700,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:gold_ingot"
-                }
+            "modifiers": [
+                "tool_enchants"
+            ],
+            "markers": [
+                "gold_tool_reward"
             ]
         },
 
@@ -98,16 +104,19 @@
             "type": "item",
             "rarity": "RARE",
             "content": "minecraft:golden_pickaxe",
+            "forbidMarkers": [
+                "gold_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
             "unitWorth": 2700,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:gold_ingot"
-                }
+            "modifiers": [
+                "tool_enchants"
+            ],
+            "markers": [
+                "gold_tool_reward"
             ]
         },
 
@@ -115,16 +124,16 @@
             "type": "item",
             "rarity": "RARE",
             "content": "minecraft:golden_hoe",
+            "forbidMarkers": [
+                "gold_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
             "unitWorth": 1800,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:gold_ingot"
-                }
+            "markers": [
+                "gold_tool_reward"
             ]
         },
 
@@ -132,16 +141,19 @@
             "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:diamond_pickaxe",
+            "forbidMarkers": [
+                "diamond_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
             "unitWorth": 9000,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:diamond"
-                }
+            "modifiers": [
+                "tool_enchants"
+            ],
+            "markers": [
+                "diamond_tool_reward"
             ],
             "weightMult": 0.3
         },
@@ -150,16 +162,19 @@
             "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:diamond_axe",
+            "forbidMarkers": [
+                "diamond_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
             "unitWorth": 9000,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:diamond"
-                }
+            "modifiers": [
+                "tool_enchants"
+            ],
+            "markers": [
+                "diamond_tool_reward"
             ],
             "weightMult": 0.3
         },
@@ -168,16 +183,19 @@
             "type": "item",
             "rarity": "EPIC",
             "content": "minecraft:diamond_hoe",
+            "forbidMarkers": [
+                "diamond_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
             "unitWorth": 6000,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:diamond"
-                }
+            "modifiers": [
+                "tool_enchants"
+            ],
+            "markers": [
+                "diamond_tool_reward"
             ],
             "weightMult": 0.3
         },

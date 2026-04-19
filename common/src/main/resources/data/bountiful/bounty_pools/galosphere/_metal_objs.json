@@ -5,6 +5,9 @@
             "type": "minecraft:item",
 			"rarity": "UNCOMMON",
             "content": "galosphere:silver_ingot",
+            "markers": [
+                "silver_material"
+            ],
             "unitWorth": 1500.0,
             "amount": {
                 "min": 2,
@@ -15,6 +18,9 @@
             "type": "minecraft:item",
 			"rarity": "UNCOMMON",
             "content": "galosphere:raw_silver",
+            "markers": [
+                "silver_material"
+            ],
             "unitWorth": 1450.0,
             "amount": {
                 "min": 2,

@@ -45,6 +45,12 @@ interface BountifulSharedApi {
     fun registerServerMessages() {
         Kambrik.Message.registerServerMessage<SelectBounty>(Bountiful.id("select_bounty"))
         Kambrik.Message.registerServerMessage<ServerPlayerStatus>(Bountiful.id("server_player_status"))
+        Kambrik.Message.registerServerMessage<SavePoolEntryEdit>(Bountiful.id("save_pool_entry_edit"))
+        Kambrik.Message.registerServerMessage<DeletePoolEntryEdit>(Bountiful.id("delete_pool_entry_edit"))
+        Kambrik.Message.registerServerMessage<SavePoolEdit>(Bountiful.id("save_pool_edit"))
+        Kambrik.Message.registerServerMessage<DeletePoolEdit>(Bountiful.id("delete_pool_edit"))
+        Kambrik.Message.registerServerMessage<SaveDecreeEdit>(Bountiful.id("save_decree_edit"))
+        Kambrik.Message.registerServerMessage<DeleteDecreeEdit>(Bountiful.id("delete_decree_edit"))
     }
 
     fun registerClientMessages() {

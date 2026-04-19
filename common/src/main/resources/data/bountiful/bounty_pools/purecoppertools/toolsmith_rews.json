@@ -4,77 +4,62 @@
         "puco_sword": {
             "type": "minecraft:item",
             "content": "purecoppertools:copper_sword",
+            "forbidMarkers": [
+                "copper_material"
+            ],
             "unitWorth": 2000.0,
             "amount": {
                 "min": 1,
                 "max": 1
-            },
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:copper_ingot"
-                }
-            ]
+            }
         },
         "puco_shovel": {
             "type": "minecraft:item",
             "content": "purecoppertools:copper_shovel",
+            "forbidMarkers": [
+                "copper_material"
+            ],
             "unitWorth": 1000.0,
             "amount": {
                 "min": 1,
                 "max": 1
-            },
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:copper_ingot"
-                }
-            ]
+            }
         },
         "puco_pick": {
             "type": "minecraft:item",
             "content": "purecoppertools:copper_pickaxe",
+            "forbidMarkers": [
+                "copper_material"
+            ],
             "unitWorth": 3000.0,
             "amount": {
                 "min": 1,
                 "max": 1
-            },
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:copper_ingot"
-                }
-            ]
+            }
         },
         "puco_axe": {
             "type": "minecraft:item",
             "content": "purecoppertools:copper_axe",
+            "forbidMarkers": [
+                "copper_material"
+            ],
             "unitWorth": 100.0,
             "amount": {
                 "min": 1,
                 "max": 1
-            },
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:copper_ingot"
-                }
-            ]
+            }
         },
         "puco_hoe": {
             "type": "minecraft:item",
             "content": "purecoppertools:copper_hoe",
+            "forbidMarkers": [
+                "copper_material"
+            ],
             "unitWorth": 100.0,
             "amount": {
                 "min": 1,
                 "max": 1
-            },
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:copper_ingot"
-                }
-            ]
+            }
         }
     }
 }

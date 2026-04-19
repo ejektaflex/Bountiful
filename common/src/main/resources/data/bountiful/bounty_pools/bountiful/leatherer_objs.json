@@ -5,6 +5,9 @@
         "leather": {
             "type": "item",
             "content": "minecraft:leather",
+            "markers": [
+                "leather_material"
+            ],
             "amount": {
                 "min": 2,
                 "max": 10
@@ -38,6 +41,9 @@
             "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:turtle_scute",
+            "markers": [
+                "turtle_scute_material"
+            ],
             "amount": {
                 "min": 2,
                 "max": 6

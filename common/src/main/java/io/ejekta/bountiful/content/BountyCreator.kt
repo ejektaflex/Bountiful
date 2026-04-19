@@ -95,9 +95,10 @@ class BountyCreator private constructor(
         infoRarity = BountyRarity.entries[infoRarityOrdinal]
 
         // Gen rewards and total worth
-        val initialPicks = genInitialValuedEntries(initialEntries)
+        val initialType = getCreation(true)
+        val initialPicks = genInitialValuedEntries(initialEntries, initialType)
         val totalInitialWorth = initialPicks.sumOf { it.worth }
-        getCreation(true).dataGetter(this).addAll(initialPicks)
+        initialType.dataGetter(this).addAll(initialPicks)
 
         // return early if we have no rewards :(
         if (initialPicks.isEmpty()) {
@@ -116,8 +117,8 @@ class BountyCreator private constructor(
         infoTimeToComplete += 750L + BountifulIO.configData.bounty.flatBonusTimePerBountyInSecs
     }
 
-    private fun genInitialValuedEntries(entries: List<PoolEntry>): List<ValuedEntry> {
-        return entries.map { it.toEntry(world, pos) }
+    private fun genInitialValuedEntries(entries: List<PoolEntry>, creationType: CreationType): List<ValuedEntry> {
+        return entries.map { it.toEntry(world, pos, applyModifiers = creationType == CreationType.REW) }
     }
 
     private fun genInitialEntries(): List<PoolEntry> {
@@ -219,7 +220,14 @@ class BountyCreator private constructor(
 
             val picked = pickFiller(unpicked, w, greedy = doGreedy) ?: break
 
-            val entry = picked.toEntry(world, pos, w, decrees.map { it.id }.toSet(), isCurrency = doGreedy)
+            val entry = picked.toEntry(
+                world,
+                pos,
+                w,
+                decrees.map { it.id }.toSet(),
+                isCurrency = doGreedy,
+                applyModifiers = getCreation(false) == CreationType.REW
+            )
 
             // Add time based on entry
             infoTimeToComplete += (picked.timeMult * entry.worth * 0.35).toLong()

@@ -9,8 +9,10 @@ import io.ejekta.bountiful.content.board.BoardBlock
 import io.ejekta.bountiful.content.board.BoardBlockEntity
 import io.ejekta.bountiful.content.gui.AnalyzerScreenHandler
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
+import io.ejekta.bountiful.content.gui.EditorScreenHandler
 import io.ejekta.bountiful.content.item.BountyItem
 import io.ejekta.bountiful.content.item.DecreeItem
+import io.ejekta.bountiful.data.BountyModifier
 import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.data.Pool
 import io.ejekta.bountiful.data.PoolEntry
@@ -39,6 +41,11 @@ object BountifulContent : KambrikAutoRegistrar {
 
     val Decrees = mutableListOf<Decree>()
 
+    val Modifiers = mutableListOf<BountyModifier>()
+
+    var ModifierMap = mapOf<String, BountyModifier>()
+        private set
+
     var Pools = listOf<Pool>()
         private set
 
@@ -52,6 +59,12 @@ object BountifulContent : KambrikAutoRegistrar {
         Pools = newPools
         PoolMap = Pools.associateBy { it.id }
         PoolEntryMap = Pools.map { it.items }.flatten().associateBy { it.id }
+    }
+
+    fun populateModifiers(newModifiers: List<BountyModifier>) {
+        Modifiers.clear()
+        Modifiers.addAll(newModifiers)
+        ModifierMap = Modifiers.associateBy { it.id }
     }
 
     fun getDecrees(ids: Set<String>): Set<Decree> {
@@ -75,6 +88,7 @@ object BountifulContent : KambrikAutoRegistrar {
     val BOARD_SCREEN_HANDLER by "board" forScreen ::BoardScreenHandler
 
     val ANALYZER_SCREEN_HANDLER by "analyzer" forScreen ::AnalyzerScreenHandler
+    val EDITOR_SCREEN_HANDLER by "editor" forScreen ::EditorScreenHandler
 
     val MEM_MODULE_NEAREST_BOARD_INSTANCE = "nearest_bounty_board".forRegistration(
         BuiltInRegistries.MEMORY_MODULE_TYPE

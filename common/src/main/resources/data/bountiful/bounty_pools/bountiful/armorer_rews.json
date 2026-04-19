@@ -5,65 +5,53 @@
         "iron_helm": {
             "type": "item",
             "content": "minecraft:iron_helmet",
+            "forbidMarkers": [
+                "iron_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 4000,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:iron_ingot"
-                }
-            ]
+            "unitWorth": 4000
         },
 
         "iron_chest": {
             "type": "item",
             "content": "minecraft:iron_chestplate",
+            "forbidMarkers": [
+                "iron_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 6400,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:iron_ingot"
-                }
-            ]
+            "unitWorth": 6400
         },
 
         "iron_legs": {
             "type": "item",
             "content": "minecraft:iron_leggings",
+            "forbidMarkers": [
+                "iron_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 5600,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:iron_ingot"
-                }
-            ]
+            "unitWorth": 5600
         },
 
         "iron_boots": {
             "type": "item",
             "content": "minecraft:iron_boots",
+            "forbidMarkers": [
+                "iron_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 3200,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:iron_ingot"
-                }
-            ]
+            "unitWorth": 3200
         },
 
         "bell": {
@@ -81,34 +69,28 @@
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:chainmail_leggings",
+            "forbidMarkers": [
+                "iron_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 4200,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:iron_ingot"
-                }
-            ]
+            "unitWorth": 4200
         },
 
         "chain_boots": {
             "type": "item",
 			"rarity": "UNCOMMON",
             "content": "minecraft:chainmail_boots",
+            "forbidMarkers": [
+                "iron_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 2400,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:iron_ingot"
-                }
-            ]
+            "unitWorth": 2400
         },
 
         "gold_helm": {
@@ -170,34 +152,28 @@
             "type": "item",
 			"rarity": "RARE",
             "content": "minecraft:iron_horse_armor",
+            "forbidMarkers": [
+                "iron_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
-            "unitWorth": 5000,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:iron_ingot"
-                }
-            ]
+            "unitWorth": 5000
         },
 
         "diamond_horse_armor": {
             "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:diamond_horse_armor",
+            "forbidMarkers": [
+                "diamond_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
             "unitWorth": 24000,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:diamond"
-                }
-            ],
             "weightMult": 0.15
         },
 
@@ -205,17 +181,14 @@
             "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:diamond_helmet",
+            "forbidMarkers": [
+                "diamond_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
             "unitWorth": 20000,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:diamond"
-                }
-            ],
             "weightMult": 0.15
         },
 
@@ -223,17 +196,14 @@
             "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:diamond_chestplate",
+            "forbidMarkers": [
+                "diamond_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
             "unitWorth": 32000,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:diamond"
-                }
-            ],
             "weightMult": 0.15
         },
 
@@ -241,17 +211,14 @@
             "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:diamond_leggings",
+            "forbidMarkers": [
+                "diamond_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
             "unitWorth": 28000,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:diamond"
-                }
-            ],
             "weightMult": 0.15
         },
 
@@ -259,17 +226,14 @@
             "type": "item",
 			"rarity": "EPIC",
             "content": "minecraft:diamond_boots",
+            "forbidMarkers": [
+                "diamond_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
             "unitWorth": 16000,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:diamond"
-                }
-            ],
             "weightMult": 0.15
         },
 
@@ -277,17 +241,14 @@
             "type": "item",
             "rarity": "LEGENDARY",
             "content": "minecraft:netherite_helmet",
+            "forbidMarkers": [
+                "netherite_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
             "unitWorth": 30000,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:netherite_ingot"
-                }
-            ],
             "weightMult": 0.1
         },
 
@@ -295,17 +256,14 @@
             "type": "item",
             "rarity": "LEGENDARY",
             "content": "minecraft:netherite_chestplate",
+            "forbidMarkers": [
+                "netherite_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
             "unitWorth": 48000,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:netherite_ingot"
-                }
-            ],
             "weightMult": 0.1
         },
 
@@ -313,17 +271,14 @@
             "type": "item",
             "rarity": "LEGENDARY",
             "content": "minecraft:netherite_leggings",
+            "forbidMarkers": [
+                "netherite_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
             "unitWorth": 42000,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:netherite_ingot"
-                }
-            ],
             "weightMult": 0.1
         },
 
@@ -331,17 +286,14 @@
             "type": "item",
             "rarity": "LEGENDARY",
             "content": "minecraft:netherite_boots",
+            "forbidMarkers": [
+                "netherite_material"
+            ],
             "amount": {
                 "min": 1,
                 "max": 1
             },
             "unitWorth": 24000,
-            "forbids": [
-                {
-                    "type": "item",
-                    "content": "minecraft:netherite_ingot"
-                }
-            ],
             "weightMult": 0.1
         }
 

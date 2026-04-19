@@ -12,6 +12,7 @@ class BountifulClient : ClientModInitializer {
         Bountybridge.registerClientMessages()
         MenuScreens.register(BountifulContent.BOARD_SCREEN_HANDLER, ::BoardScreen)
         MenuScreens.register(BountifulContent.ANALYZER_SCREEN_HANDLER, ::AnalyzerScreen)
+        MenuScreens.register(BountifulContent.EDITOR_SCREEN_HANDLER, ::EditorScreen)
     }
 
 }

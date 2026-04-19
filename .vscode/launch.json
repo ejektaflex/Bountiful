@@ -1,0 +1,115 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "request": "launch",
+      "name": "NeoForge Client (:neoforge)",
+      "presentation": {
+        "group": "Mod Development - neoforge",
+        "order": 0
+      },
+      "projectName": "Bountiful-neoforge",
+      "mainClass": "net.neoforged.devlaunch.Main",
+      "args": [
+        "@C:\\Users\\20047\\IdeaProjects\\Minecraft\\EJEKTA\\Bountiful\\neoforge\\build\\moddev\\clientRunProgramArgs.txt"
+      ],
+      "vmArgs": [
+        "@C:\\Users\\20047\\IdeaProjects\\Minecraft\\EJEKTA\\Bountiful\\neoforge\\build\\moddev\\clientRunVmArgs.txt",
+        "-Dfml.modFolders\u003dbountiful%%C:\\Users\\20047\\IdeaProjects\\Minecraft\\EJEKTA\\Bountiful\\neoforge\\bin\\main;bountiful%%C:\\Users\\20047\\IdeaProjects\\Minecraft\\EJEKTA\\Bountiful\\neoforge\\bin\\gametest"
+      ],
+      "cwd": "${workspaceFolder}\\neoforge\\run",
+      "env": {},
+      "console": "internalConsole",
+      "shortenCommandLine": "none"
+    },
+    {
+      "type": "java",
+      "request": "launch",
+      "name": "NeoForge ClientData (:neoforge)",
+      "presentation": {
+        "group": "Mod Development - neoforge",
+        "order": 1
+      },
+      "projectName": "Bountiful-neoforge",
+      "mainClass": "net.neoforged.devlaunch.Main",
+      "args": [
+        "@C:\\Users\\20047\\IdeaProjects\\Minecraft\\EJEKTA\\Bountiful\\neoforge\\build\\moddev\\clientDataRunProgramArgs.txt"
+      ],
+      "vmArgs": [
+        "@C:\\Users\\20047\\IdeaProjects\\Minecraft\\EJEKTA\\Bountiful\\neoforge\\build\\moddev\\clientDataRunVmArgs.txt",
+        "-Dfml.modFolders\u003dbountiful%%C:\\Users\\20047\\IdeaProjects\\Minecraft\\EJEKTA\\Bountiful\\neoforge\\bin\\main;bountiful%%C:\\Users\\20047\\IdeaProjects\\Minecraft\\EJEKTA\\Bountiful\\neoforge\\bin\\gametest"
+      ],
+      "cwd": "${workspaceFolder}\\neoforge\\run",
+      "env": {},
+      "console": "internalConsole",
+      "shortenCommandLine": "none"
+    },
+    {
+      "type": "java",
+      "request": "launch",
+      "name": "NeoForge GameTest Server (:neoforge)",
+      "presentation": {
+        "group": "Mod Development - neoforge",
+        "order": 2
+      },
+      "projectName": "Bountiful-neoforge",
+      "mainClass": "net.neoforged.devlaunch.Main",
+      "args": [
+        "@C:\\Users\\20047\\IdeaProjects\\Minecraft\\EJEKTA\\Bountiful\\neoforge\\build\\moddev\\gameTestServerRunProgramArgs.txt"
+      ],
+      "vmArgs": [
+        "@C:\\Users\\20047\\IdeaProjects\\Minecraft\\EJEKTA\\Bountiful\\neoforge\\build\\moddev\\gameTestServerRunVmArgs.txt",
+        "-Dfml.modFolders\u003dbountiful%%C:\\Users\\20047\\IdeaProjects\\Minecraft\\EJEKTA\\Bountiful\\neoforge\\bin\\main;bountiful%%C:\\Users\\20047\\IdeaProjects\\Minecraft\\EJEKTA\\Bountiful\\neoforge\\bin\\gametest"
+      ],
+      "cwd": "${workspaceFolder}\\neoforge\\runs\\gametest",
+      "env": {},
+      "console": "internalConsole",
+      "shortenCommandLine": "none"
+    },
+    {
+      "type": "java",
+      "request": "launch",
+      "name": "NeoForge Server (:neoforge)",
+      "presentation": {
+        "group": "Mod Development - neoforge",
+        "order": 3
+      },
+      "projectName": "Bountiful-neoforge",
+      "mainClass": "net.neoforged.devlaunch.Main",
+      "args": [
+        "@C:\\Users\\20047\\IdeaProjects\\Minecraft\\EJEKTA\\Bountiful\\neoforge\\build\\moddev\\serverRunProgramArgs.txt"
+      ],
+      "vmArgs": [
+        "@C:\\Users\\20047\\IdeaProjects\\Minecraft\\EJEKTA\\Bountiful\\neoforge\\build\\moddev\\serverRunVmArgs.txt",
+        "-Dfml.modFolders\u003dbountiful%%C:\\Users\\20047\\IdeaProjects\\Minecraft\\EJEKTA\\Bountiful\\neoforge\\bin\\main;bountiful%%C:\\Users\\20047\\IdeaProjects\\Minecraft\\EJEKTA\\Bountiful\\neoforge\\bin\\gametest"
+      ],
+      "cwd": "${workspaceFolder}\\neoforge\\run",
+      "env": {},
+      "console": "internalConsole",
+      "shortenCommandLine": "none"
+    },
+    {
+      "type": "java",
+      "request": "launch",
+      "name": "NeoForge ServerData (:neoforge)",
+      "presentation": {
+        "group": "Mod Development - neoforge",
+        "order": 4
+      },
+      "projectName": "Bountiful-neoforge",
+      "mainClass": "net.neoforged.devlaunch.Main",
+      "args": [
+        "@C:\\Users\\20047\\IdeaProjects\\Minecraft\\EJEKTA\\Bountiful\\neoforge\\build\\moddev\\serverDataRunProgramArgs.txt"
+      ],
+      "vmArgs": [
+        "@C:\\Users\\20047\\IdeaProjects\\Minecraft\\EJEKTA\\Bountiful\\neoforge\\build\\moddev\\serverDataRunVmArgs.txt",
+        "-Dfml.modFolders\u003dbountiful%%C:\\Users\\20047\\IdeaProjects\\Minecraft\\EJEKTA\\Bountiful\\neoforge\\bin\\main;bountiful%%C:\\Users\\20047\\IdeaProjects\\Minecraft\\EJEKTA\\Bountiful\\neoforge\\bin\\gametest"
+      ],
+      "cwd": "${workspaceFolder}\\neoforge\\run",
+      "env": {},
+      "console": "internalConsole",
+      "shortenCommandLine": "none"
+    }
+  ]
+}
