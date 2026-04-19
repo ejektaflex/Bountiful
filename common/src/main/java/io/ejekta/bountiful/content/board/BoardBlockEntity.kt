@@ -4,7 +4,6 @@ import io.ejekta.bountiful.Bountiful
 import io.ejekta.bountiful.bounty.types.builtin.BountyTypeItem
 import io.ejekta.bountiful.components.*
 import io.ejekta.bountiful.config.BountifulIO
-import io.ejekta.bountiful.config.JsonFormats
 import io.ejekta.bountiful.content.BountifulContent
 import io.ejekta.bountiful.content.BountyCreator
 import io.ejekta.bountiful.content.gui.BoardScreenHandler
@@ -14,18 +13,10 @@ import io.ejekta.bountiful.data.Decree
 import io.ejekta.bountiful.decree.DecreeSpawnCondition
 import io.ejekta.bountiful.decree.DecreeSpawnRank
 import io.ejekta.bountiful.util.*
-import io.ejekta.kambrik.ext.ksx.decodeFromStringTag
-import io.ejekta.kambrik.ext.ksx.encodeToStringTag
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.MapSerializer
-import kotlinx.serialization.builtins.serializer
 import net.minecraft.ChatFormatting
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
-import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.StringTag
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerLevel
@@ -33,9 +24,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.TagKey
-import net.minecraft.world.ContainerHelper
 import net.minecraft.world.MenuProvider
-import net.minecraft.world.SimpleContainer
 import net.minecraft.world.entity.EntityEvent
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.ai.village.poi.PoiManager
@@ -59,17 +48,23 @@ import kotlin.jvm.optionals.getOrNull
 
 class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(BountifulContent.BOARD_ENTITY, pos, state), MenuProvider {
 
-    private val decrees = SimpleContainer(3)
-    private val bounties = BountyInventory()
+    // Per-board state used in non-global mode. In global mode, the server-wide GlobalBoardData is used instead.
+    private var localState = GlobalBoardData()
 
-    // Last time a bounty was added
-    private var lastUpdatedTime = serverWorld?.gameTime ?: 0L
+    private val isGlobalMode: Boolean
+        get() = BountifulIO.configData.board.globalBoardState
+
+    private val globalData: GlobalBoardData?
+        get() = if (isGlobalMode) serverWorld?.server?.dataStorage?.computeIfAbsent(GlobalBoardData.TYPE) else null
+
+    private val activeState: GlobalBoardData
+        get() = globalData ?: localState
 
     // Only need to calc this once per object, I don't see it changing often
     private val villageTag = TagKey.create(BuiltInRegistries.POINT_OF_INTEREST_TYPE.key(), Identifier.parse("village"))
 
-    private operator fun get(player: Player): PlayerBoardData {
-        return playerData.getOrPut(player.stringUUID) { PlayerBoardData.empty() }
+    private operator fun get(player: Player): GlobalBoardData.PlayerBoardData {
+        return activeState.playerData.getOrPut(player.stringUUID) { GlobalBoardData.PlayerBoardData.empty() }
     }
 
     fun maskFor(player: Player): MutableSet<Int> {
@@ -78,23 +73,18 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
     private fun clearMask(slot: Int) {
         // Clear mask because slot was updated
-        playerData.forEach { (_, data) ->
+        activeState.playerData.forEach { (_, data) ->
             data.taken.removeIf { it == slot }
         }
     }
 
-    // Slot #, Age
-    private var bountyTimestamps = mutableMapOf<Int, Long>()
-
-    private var playerData = mutableMapOf<String, PlayerBoardData>()
-
     // Whether this board has even been initialized/given starting data
     private val isPristine: Boolean
-        get() = decrees.isEmpty && bounties.isEmpty && playerData.isEmpty()
+        get() = activeState.decrees.isEmpty && activeState.bounties.isEmpty && activeState.playerData.isEmpty()
 
     // Calculated level, progress to next, point of next level
     private val levelData: Triple<Int, Int, Int>
-        get() = levelProgress(playerData.values.sumOf { it.done })
+        get() = levelProgress(activeState.playerData.values.sumOf { it.done })
 
     private val reputation: Int
         get() = levelData.first
@@ -102,8 +92,15 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     private val serverWorld: ServerLevel?
         get() = level as? ServerLevel
 
+    private var activeLastUpdatedTime: Long
+        get() = activeState.lastUpdatedTime
+        set(value) {
+            activeState.lastUpdatedTime = value
+            markStateDirty()
+        }
+
     private val takenSlots: Set<Int>
-        get() = BoardInventory.BOUNTY_RANGE.filter { !bounties.getItem(it).isEmpty }.toSet()
+        get() = BoardInventory.BOUNTY_RANGE.filter { !activeState.bounties.getItem(it).isEmpty }.toSet()
 
     private val freeSlots: Set<Int>
         get() = BoardInventory.BOUNTY_RANGE.toSet() - takenSlots
@@ -111,7 +108,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     private fun weightedBountySlot(): Int {
         val worldTime = level?.gameTime ?: return -1
         return takenSlots.toList().weightedRandomIntBy {
-            val putOnBoard = bountyTimestamps[this] ?: 0L
+            val putOnBoard = activeState.bountyTimestamps[this] ?: 0L
             (worldTime - putOnBoard).toInt() // this will be a problem if a bounty is left on the board for over 3.4 years (lol)
         }
     }
@@ -120,18 +117,24 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     private val villagerPickups = mutableMapOf<String, MutableSet<ItemStack>>()
 
     val numCompleted: Int
-        get() = playerData.values.sumOf { it.done }
+        get() = activeState.playerData.values.sumOf { it.done }
+
+    private fun markStateDirty() {
+        globalData?.setDirty()
+        setChanged()
+    }
 
     private fun incrementCompletedBounties(player: Player, timeTakenTicks: Long) {
-        playerData.getOrPut(player.stringUUID) { PlayerBoardData.empty() }.apply {
+        activeState.playerData.getOrPut(player.stringUUID) { GlobalBoardData.PlayerBoardData.empty() }.apply {
             done += 1
             totalTime += timeTakenTicks
         }
+        markStateDirty()
     }
 
     private fun getBoardDecrees(): Set<Decree> {
         return BountifulContent.getDecrees(
-            decrees.readOnlyCopy.filter {
+            activeState.decrees.readOnlyCopy.filter {
                 it.item is DecreeItem && it.count > 0
             }.map {
                 it[BountifulContent.DECREE_DATA]?.ids ?: emptySet()
@@ -194,10 +197,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     }
 
     private fun addBountyToRandomSlot(stack: ItemStack) {
-        //println("FREE SLOTS: $freeSlots")
         val slotNum = freeSlots.randomOrNull()
         slotNum?.let {
-            //println("ADDING TO SLOT: $it")
             addBounty(it, stack)
         }
     }
@@ -213,13 +214,14 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         if (slot !in BoardInventory.BOUNTY_RANGE) return
 
         // Update timestamps
-        level?.gameTime?.let { bountyTimestamps[slot] = it }
+        level?.gameTime?.let { activeState.bountyTimestamps[slot] = it }
 
         modifyTrackedGuiInvs {
             it.setItem(slot, stack.copy()) // All connected players get copies, so that taken bounties are instanced
         }
         clearMask(slot)
-        bounties.setItem(slot, stack)
+        activeState.bounties.setItem(slot, stack)
+        markStateDirty()
     }
 
     private fun removeBounty(slot: Int) {
@@ -227,14 +229,15 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             it.removeItemNoUpdate(slot)
         }
         clearMask(slot)
-        bounties.removeItemNoUpdate(slot)
+        activeState.bounties.removeItemNoUpdate(slot)
+        markStateDirty()
     }
 
     // If the bounty board has never been used before (pristine), populate it
     fun upkeepTryInitialPopulation() {
         if (isPristine) {
-            if (decrees.isEmpty) {
-                decrees.setItem((0..2).random(), DecreeItem.create(
+            if (activeState.decrees.isEmpty) {
+                activeState.decrees.setItem((0..2).random(), DecreeItem.create(
                     DecreeSpawnCondition.BOARD_SPAWN, 1, DecreeSpawnRank.CONSTANT
                 ))
             }
@@ -242,12 +245,12 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
                 randomlyUpdateBoard()
             }
         }
-        setChanged()
+        markStateDirty()
     }
 
     // Set unset decrees
     private fun upkeepRevealDecrees() {
-        decrees.items.filter {
+        activeState.decrees.items.filter {
             it.item is DecreeItem // must be a decree and not null
         }.forEach { stack ->
             // Get revealable decrees
@@ -284,8 +287,8 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     // Remove expired bounties
     private fun upkeepRemoveExpiredBounties() {
         serverWorld?.let {
-            for (i in 0 until bounties.containerSize) {
-                val stack = bounties.getItem(i)
+            for (i in 0 until activeState.bounties.containerSize) {
+                val stack = activeState.bounties.getItem(i)
                 if (stack.item !is BountyItem) {
                     continue
                 }
@@ -305,10 +308,10 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             BountifulIO.configData.board.updateFrequencySecs * GameTime.TICK_RATE
         }
         serverWorld?.let { sw ->
-            if (sw.gameTime - lastUpdatedTime >= updateFrequencyTicks && updateFrequencyTicks > 0) {
-                val numUpdates = ((sw.gameTime - lastUpdatedTime) / updateFrequencyTicks).coerceAtMost(BoardInventory.BOUNTY_SIZE.toLong())
+            if (sw.gameTime - activeLastUpdatedTime >= updateFrequencyTicks && updateFrequencyTicks > 0) {
+                val numUpdates = ((sw.gameTime - activeLastUpdatedTime) / updateFrequencyTicks).coerceAtMost(BoardInventory.BOUNTY_SIZE.toLong())
                 // We are updating!
-                serverWorld?.gameTime?.let { serverTime -> lastUpdatedTime = serverTime }
+                activeLastUpdatedTime = sw.gameTime
                 for (i in 0 until numUpdates) {
                     randomlyUpdateBoard()
                 }
@@ -318,7 +321,7 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
     private fun randomlyUpdateBoard() {
         val ourWorld = level as? ServerLevel ?: return
-        if (decrees.isEmpty) {
+        if (activeState.decrees.isEmpty) {
             return
         }
 
@@ -353,15 +356,15 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
             }
         }
 
-        setChanged()
+        markStateDirty()
     }
 
     fun fullInventoryCopy(): BoardInventory {
-        return BoardInventory(blockPos, bounties.clone(), decrees)
+        return BoardInventory(blockPos, activeState.bounties.clone(), activeState.decrees)
     }
 
     private fun getMaskedInventory(player: Player): BoardInventory {
-        return BoardInventory(blockPos, bounties.cloned(maskFor(player)), decrees)
+        return BoardInventory(blockPos, activeState.bounties.cloned(maskFor(player)), activeState.decrees)
     }
 
     // Sync properties to show server values to client
@@ -375,39 +378,14 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
     // Serialization
 
     override fun loadAdditional(input: ValueInput) {
-        val decreeList = input.childOrEmpty("decree_inv")
-        val bountyList = input.childOrEmpty("bounty_inv")
-
-        lastUpdatedTime = input.getLongOr("lastUpdated", 0L)
-
-        ContainerHelper.loadAllItems(decreeList, decrees.items)
-        ContainerHelper.loadAllItems(bountyList, bounties.items)
-
-        input.getString("completed").ifPresent { str ->
-            playerData = JsonFormats.BlockEntity.decodeFromStringTag(playerDataSerializer, StringTag.valueOf(str)).toMutableMap()
-        }
-
-        input.getString("timestamps").ifPresent { str ->
-            bountyTimestamps = JsonFormats.BlockEntity.decodeFromStringTag(bountyStampSerializer, StringTag.valueOf(str)).toMutableMap()
-        }
+        localState.loadFrom(input)
     }
 
     override fun saveAdditional(output: ValueOutput) {
         super.saveAdditional(output)
-
-        output.putLong("lastUpdated", lastUpdatedTime)
-
-        val doneMap = JsonFormats.BlockEntity.encodeToStringTag(playerDataSerializer, playerData)
-        output.putString("completed", doneMap.value())
-
-        val timeStampMap = JsonFormats.BlockEntity.encodeToStringTag(bountyStampSerializer, bountyTimestamps)
-        output.putString("timestamps", timeStampMap.value())
-
-        val decreeList = output.child("decree_inv")
-        ContainerHelper.saveAllItems(decreeList, decrees.readOnlyCopy)
-
-        val bountyList = output.child("bounty_inv")
-        ContainerHelper.saveAllItems(bountyList, bounties.readOnlyCopy)
+        if (!isGlobalMode) {
+            localState.saveTo(output)
+        }
     }
 
     // Villager & Completion Logic
@@ -522,16 +500,6 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
 
 
     companion object {
-
-        @Serializable
-        internal data class PlayerBoardData(var done: Int, var totalTime: Long, val taken: MutableSet<Int>) {
-            companion object {
-                fun empty() = PlayerBoardData(0, 0L, mutableSetOf())
-            }
-        }
-
-        private val bountyStampSerializer = MapSerializer(Int.serializer(), Long.serializer())
-        private val playerDataSerializer = MapSerializer(String.serializer(), PlayerBoardData.serializer())
 
         fun levelProgress(done: Int, per: Int = 2): Triple<Int, Int, Int> {
             var doneAcc = done

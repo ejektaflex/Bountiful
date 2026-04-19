@@ -13,6 +13,7 @@ class BountifulConfigData {
         var updateFrequencySecs: Int = 45
         var villageGenFrequency: Int = 2
         var canBreak = true
+        var globalBoardState = false
     }
 
     val board = BoardConfigData()

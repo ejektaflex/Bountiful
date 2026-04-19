@@ -1,6 +1,6 @@
 package io.ejekta.bountiful.bounty.types.builtin
 
-import io.ejekta.bountiful.bounty.types.IBountyObjective
+import io.ejekta.bountiful.bounty.types.IBountyExchangeable
 import io.ejekta.bountiful.bounty.types.Progress
 import io.ejekta.bountiful.components.BountyDataEntry
 import io.ejekta.bountiful.data.PoolEntry
@@ -14,13 +14,14 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
 import net.minecraft.tags.TagKey
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 
 
-class BountyTypeItemTag : IBountyObjective {
+class BountyTypeItemTag : IBountyExchangeable {
 
     override val id: Identifier = Identifier.parse("item_tag")
 
@@ -74,6 +75,20 @@ class BountyTypeItemTag : IBountyObjective {
             }
             true
         } ?: false
+    }
+
+    override fun giveReward(entry: BountyDataEntry, player: Player) {
+        val item = getTagItems(getTag(entry)).randomOrNull() ?: return
+        val toGive = (0 until entry.amount).chunked(ItemStack(item).maxStackSize).map { it.size }
+        for (amtToGive in toGive) {
+            val stack = ItemStack(item, amtToGive)
+            if (!player.addItem(stack)) {
+                val pos = player.position()
+                player.level().addFreshEntity(
+                    ItemEntity(player.level(), pos.x, pos.y, pos.z, stack).apply { setPickUpDelay(0) }
+                )
+            }
+        }
     }
 
     companion object {
