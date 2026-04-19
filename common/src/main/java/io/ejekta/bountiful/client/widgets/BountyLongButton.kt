@@ -42,7 +42,7 @@ class BountyLongButton(val parent: BoardScreen, var bountyIndex: Int) : KWidget 
     }
 
     private fun renderEntryBasedOnLogic(dsl: KGuiDsl, entry: BountyDataEntry, x: Int, y: Int, isReward: Boolean) {
-        when (entry.logic.id) {
+        when (entry.logic?.id) {
             BountyTypeRegistry.COMMAND.id -> {
                 dsl { itemStackIcon(ItemStack(Items.COMMAND_BLOCK), x, y + 1) }
             }

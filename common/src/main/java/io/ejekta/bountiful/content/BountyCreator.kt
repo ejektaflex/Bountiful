@@ -180,32 +180,32 @@ class BountyCreator private constructor(
 
         var fills = listOf<PoolEntry>()
 
-        val doGreedy = BountifulIO.configData.bounty.fillerCurrencyPool?.let {
-            val currPool = BountifulContent.PoolMap[it]
-            if (currPool == null) {
+        val currencyPool = BountifulIO.configData.bounty.fillerCurrencyPool?.let {
+            val pool = BountifulContent.PoolMap[it]
+            if (pool == null) {
                 Bountiful.LOGGER.warn("A currency pool is configured, but does not point to a valid loaded pool!")
-                return@let false
+                return@let null
             }
-            if (!currPool.currency) {
-                Bountiful.LOGGER.warn("Pool '${currPool.id} must have 'currency' set to true to be used as a currency!")
-                return@let false
+            if (!pool.currency) {
+                Bountiful.LOGGER.warn("Pool '${pool.id}' must have 'currency' set to true to be used as a currency!")
+                return@let null
             }
-            return@let true
-        } ?: false
+            pool
+        }
 
-        fills = if (doGreedy) {
-            BountifulContent.PoolMap[BountifulIO.configData.bounty.fillerCurrencyPool]!!.items.toList()
+        fills = if (currencyPool != null) {
+            currencyPool.items.toList()
         } else {
             getAllPossibleFillers(initialPools)
         }
 
-        val worthGroups = if (doGreedy) {
+        val worthGroups = if (currencyPool != null) {
             mutableListOf(worthNeeded)
         } else {
             randomSplit(worthNeeded, numFillers).toMutableList()
         }
 
-        val targetPct = if (doGreedy) 0.95 else 0.5
+        val targetPct = if (currencyPool != null) 0.95 else 0.5
 
         while (worthGroups.isNotEmpty()) {
             val w = worthGroups.removeAt(0)
@@ -218,14 +218,14 @@ class BountyCreator private constructor(
                 break
             }
 
-            val picked = pickFiller(unpicked, w, greedy = doGreedy) ?: break
+            val picked = pickFiller(unpicked, w, greedy = currencyPool != null) ?: break
 
             val entry = picked.toEntry(
                 world,
                 pos,
                 w,
                 decrees.map { it.id }.toSet(),
-                isCurrency = doGreedy,
+                isCurrency = currencyPool != null,
                 applyModifiers = getCreation(false) == CreationType.REW
             )
 

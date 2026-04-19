@@ -3,13 +3,9 @@ package io.ejekta.bountiful.components
 import com.google.gson.JsonPrimitive
 import io.ejekta.bountiful.bounty.BountyRarity
 import io.ejekta.bountiful.bounty.types.BountyTypeRegistry
-import io.ejekta.bountiful.bounty.types.IBountyReward
 import io.ejekta.bountiful.bounty.types.IBountyType
-import io.ejekta.bountiful.bounty.types.builtin.BountyTypeCommand
 import io.ejekta.bountiful.content.BountifulContent
-import io.ejekta.bountiful.data.Decree
 import kotlinx.serialization.Contextual
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
@@ -45,17 +41,17 @@ data class BountyDataEntry(
 
     val isMystery: Boolean = false
 
-    val logic: IBountyType = BountyTypeRegistry.getOptional(Identifier.parse(logicName)).orElse(null)
-        ?: throw IllegalArgumentException("Unknown bounty type: $logicName")
-
-    private fun getRelatedDecrees(): Set<Decree> {
-        return emptySet()
-        // TODO grab based on id
-        //return BountifulContent.getDecrees(relatedDecreeIds)
-    }
+    val logic: IBountyType?
+        get() = BountyTypeRegistry.getOptional(Identifier.parse(logicName)).orElse(null)
 
     fun getRelatedProfessions(): Set<String> {
-        return getRelatedDecrees().map { it.linkedProfessions }.flatten().toSet()
+        val poolId = id.substringBefore(".")
+        return BountifulContent.Pools
+            .find { it.id == poolId }
+            ?.usedInDecrees
+            ?.flatMap { it.linkedProfessions }
+            ?.toSet()
+            ?: emptySet()
     }
 
     fun contentToTranslationKey(): String {
@@ -77,7 +73,7 @@ data class BountyDataEntry(
     }
 
     fun textOnBoardSidebar(player: Player): List<Component> {
-        return logic.textOnBoardSidebar(this, player)
+        return logic?.textOnBoardSidebar(this, player) ?: emptyList()
     }
 
     fun textOnBounty(player: Player, isObj: Boolean, current: Int): List<MutableComponent> {
@@ -85,7 +81,7 @@ data class BountyDataEntry(
             true -> listOf( Component.literal("???").withStyle(ChatFormatting.BOLD).append(
                 Component.literal("x$amount").withStyle(rarity.color)
             ) )
-            false -> logic.textOnBounty(this, isObj, player, current)
+            false -> logic?.textOnBounty(this, isObj, player, current) ?: emptyList()
         }
     }
 

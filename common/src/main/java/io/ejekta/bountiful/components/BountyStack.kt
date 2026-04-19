@@ -67,7 +67,7 @@ class BountyStack(val stack: ItemStack) {
 
     private fun hasFinishedObjectives(player: Player): Boolean {
         return objs.all {
-            (it.logic as IBountyObjective).getProgress(it, player, progressOf(it)).isComplete()
+            (it.logic as? IBountyObjective)?.getProgress(it, player, progressOf(it))?.isComplete() == true
         }
     }
 
@@ -78,9 +78,7 @@ class BountyStack(val stack: ItemStack) {
     }
 
     private fun isDone(player: Player): Boolean {
-        return objs.all {
-            (it.logic as? IBountyObjective)?.getProgress(it, player, progressOf(it))?.isComplete() == true
-        } && ((info.timeLeftTicks(player.level())) > 0)
+        return hasFinishedObjectives(player) && info.timeLeftTicks(player.level()) > 0
     }
 
     // Rewards
@@ -92,7 +90,7 @@ class BountyStack(val stack: ItemStack) {
         player.giveExperiencePoints(rews.sumOf { (it.rarity.ordinal) * 2 + 1 })
 
         for (reward in rews) {
-            (reward.logic as IBountyReward).giveReward(reward, player)
+            (reward.logic as? IBountyReward)?.giveReward(reward, player)
         }
     }
 

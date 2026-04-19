@@ -23,13 +23,13 @@ object BountifulEditorPersistence {
 
         if (oldPoolId != payload.poolId) {
             val oldMap = buildConfigPoolContentMap(oldPoolId).toMutableMap()
-            oldMap[oldKey] = null
+            if (oldMap.containsKey(oldKey)) oldMap.remove(oldKey) else oldMap[oldKey] = null
             writePool(oldPoolId, oldMap)
         }
 
         val newMap = buildConfigPoolContentMap(payload.poolId).toMutableMap()
         if (oldPoolId == payload.poolId && oldKey != payload.entryKey) {
-            newMap[oldKey] = null
+            if (newMap.containsKey(oldKey)) newMap.remove(oldKey) else newMap[oldKey] = null
         }
         newMap[payload.entryKey] = encodePoolEntry(newEntry)
         writePool(payload.poolId, newMap)
@@ -37,7 +37,11 @@ object BountifulEditorPersistence {
 
     fun deletePoolEntry(poolId: String, entryKey: String) {
         val newMap = buildConfigPoolContentMap(poolId).toMutableMap()
-        newMap[entryKey] = null
+        if (newMap.containsKey(entryKey)) {
+            newMap.remove(entryKey)
+        } else {
+            newMap[entryKey] = null  // tombstone for datapack-owned entry
+        }
         writePool(poolId, newMap)
     }
 
