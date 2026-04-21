@@ -1,5 +1,6 @@
 package io.ejekta.bountiful.util
 
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.mojang.serialization.JsonOps
 import io.ejekta.bountiful.components.BountyStack
@@ -35,6 +36,24 @@ import net.minecraft.world.level.Level
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 import kotlin.random.Random
+
+fun isJsonSubset(sub: JsonElement?, sup: JsonElement?): Boolean {
+    if (sub == null || sup == null) return false
+    if (sub == sup) return true
+    return when {
+        sub.isJsonObject && sup.isJsonObject -> {
+            val subObj = sub.asJsonObject
+            val supObj = sup.asJsonObject
+            subObj.entrySet().all { (key, subValue) -> supObj.has(key) && isJsonSubset(subValue, supObj[key]) }
+        }
+        sub.isJsonArray && sup.isJsonArray -> {
+            val subArr = sub.asJsonArray
+            val supArr = sup.asJsonArray
+            subArr.size() <= supArr.size() && (0 until subArr.size()).all { i -> isJsonSubset(subArr[i], supArr[i]) }
+        }
+        else -> sub == sup
+    }
+}
 
 fun <T : Any> Registry<T>.getNullable(rl: Identifier): T? {
     return getOptional(rl).getOrNull()

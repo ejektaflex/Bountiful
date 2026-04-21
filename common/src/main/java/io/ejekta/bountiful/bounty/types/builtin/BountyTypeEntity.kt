@@ -1,12 +1,16 @@
 package io.ejekta.bountiful.bounty.types.builtin
 
+import com.mojang.serialization.JsonOps
 import io.ejekta.bountiful.bounty.types.IBountyObjective
 import io.ejekta.bountiful.components.BountyDataEntry
 import io.ejekta.bountiful.data.PoolEntry
+import io.ejekta.bountiful.util.isJsonSubset
 import io.ejekta.bountiful.util.iterateBountyStacks
 import io.ejekta.kambrik.ext.id
 import net.minecraft.ChatFormatting
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtOps
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
@@ -54,8 +58,15 @@ class BountyTypeEntity : IBountyObjective {
                 var changes = false
                 for (obj in entityObjs) {
                     if (obj.content == killedEntity.type.id.toString()) {
-                        advance(obj)
-                        changes = true
+                        val nbtMatches = obj.data?.let { reqData ->
+                            val entityNbt = CompoundTag().also { killedEntity.saveWithoutId(it) }
+                            val entityJson = NbtOps.INSTANCE.convertTo(JsonOps.INSTANCE, entityNbt).asJsonObject
+                            isJsonSubset(reqData, entityJson)
+                        } ?: true
+                        if (nbtMatches) {
+                            advance(obj)
+                            changes = true
+                        }
                     }
                 }
                 if (changes) {

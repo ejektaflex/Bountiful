@@ -12,6 +12,7 @@ import io.ejekta.bountiful.data.PoolEntry
 import io.ejekta.bountiful.util.asComponentJson
 import io.ejekta.bountiful.util.getTagItemKey
 import io.ejekta.bountiful.util.getTagItems
+import io.ejekta.bountiful.util.isJsonSubset
 import io.ejekta.kambrik.bridge.Kambridge
 import io.ejekta.kambrik.ext.collect
 import io.ejekta.kambrik.ext.id
@@ -52,30 +53,6 @@ class BountyTypeItem : IBountyExchangeable {
         }
     }
 
-    private fun isSubset(sub: JsonElement?, sup: JsonElement?): Boolean {
-        if (sub == null || sup == null) return false
-        if (sub == sup) return true
-
-        return when {
-            sub.isJsonObject && sup.isJsonObject -> {
-                val subObj = sub.asJsonObject
-                val supObj = sup.asJsonObject
-                subObj.entrySet().all { (key, subValue) ->
-                    supObj.has(key) && isSubset(subValue, supObj[key])
-                }
-            }
-
-            sub.isJsonArray && sup.isJsonArray -> {
-                val subArr = sub.asJsonArray
-                val supArr = sup.asJsonArray
-                subArr.size() <= supArr.size() &&
-                        (0 until subArr.size()).all { i -> isSubset(subArr[i], supArr[i]) }
-            }
-
-            else -> sub == sup
-        }
-    }
-
     private fun getCurrentStacks(entry: BountyDataEntry, player: Player): Map<ItemStack, Int> {
         return player.inventory.getNonEquipmentItems().collect(entry.amount) {
             val sameId = id.toString() == entry.content
@@ -93,7 +70,7 @@ class BountyTypeItem : IBountyExchangeable {
                 return@collect true
             }
 
-            return@collect isSubset(reqJson, itemJson)
+            return@collect isJsonSubset(reqJson, itemJson)
         }
     }
 
