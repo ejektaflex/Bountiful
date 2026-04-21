@@ -5,12 +5,14 @@ import io.ejekta.bountiful.config.BountifulIO
 import io.ejekta.bountiful.config.BountifulReloadListener
 import io.ejekta.bountiful.content.BountifulCommands
 import io.ejekta.bountiful.content.BountifulContent
+import io.ejekta.bountiful.content.villager.DecreeTradeFactory
 import io.ejekta.kambrik.registration.KambrikRegistrar
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents
+import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType
 import net.fabricmc.loader.api.FabricLoader
@@ -76,7 +78,9 @@ class BountifulModFabric : ModInitializer {
             Bountybridge.handleEntityKills(world, entity, killedEntity)
         })
 
-        // TODO 26.1.2 trades are data-driven; reintroduce bounty trades with the new system.
+        TradeOfferHelper.registerWanderingTraderOffers(1) { factories ->
+            factories.add { entity, random -> DecreeTradeFactory.createOffer(entity, random) }
+        }
 
         for ((group, items) in Bountybridge.getItemGroups()) {
             CreativeModeTabEvents.modifyOutputEvent(group).register(CreativeModeTabEvents.ModifyOutput { output ->

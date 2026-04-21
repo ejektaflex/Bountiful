@@ -5,6 +5,7 @@ import io.ejekta.bountiful.bridge.Bountybridge
 import io.ejekta.bountiful.config.BountifulIO.doContentReload
 import io.ejekta.bountiful.content.BountifulCommands
 import io.ejekta.bountiful.content.BountifulContent
+import io.ejekta.bountiful.content.villager.DecreeTradeFactory
 import io.ejekta.kambrik.registration.KambrikRegistrar
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
@@ -19,6 +20,7 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent
 import net.neoforged.neoforge.event.server.ServerStartingEvent
+import net.neoforged.neoforge.event.village.WandererTradesEvent
 import net.neoforged.neoforge.registries.RegisterEvent
 import thedarkcolour.kotlinforforge.neoforge.forge.FORGE_BUS
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_CONTEXT
@@ -39,6 +41,7 @@ class BountifulModForge {
         FORGE_BUS.addListener(this::onGameReload)
         FORGE_BUS.addListener(this::onEntityKilled)
         FORGE_BUS.addListener(this::onServerStarting)
+        FORGE_BUS.addListener(this::onWandererTrades)
 
         val content = BountifulContent // trigger init
 
@@ -67,6 +70,10 @@ class BountifulModForge {
         Bountybridge.registerJigsawPieces(evt.server)
     }
 
+    private fun onWandererTrades(evt: WandererTradesEvent) {
+        evt.genericTrades.add { entity, random -> DecreeTradeFactory.createOffer(entity, random) }
+    }
+
     private fun onGameReload(evt: AddServerReloadListenersEvent) {
         evt.addListener(Identifier.fromNamespaceAndPath(Bountiful.ID, "reload"), PreparableReloadListener { sharedState, taskExecutor, prepBarrier, reloadExecutor ->
             return@PreparableReloadListener CompletableFuture.supplyAsync({
@@ -79,8 +86,6 @@ class BountifulModForge {
     private fun registerCommands(evt: RegisterCommandsEvent) {
         BountifulCommands.register(evt.dispatcher, evt.buildContext, evt.commandSelection)
     }
-
-    // TODO 26.1.2 trades are data-driven; reintroduce bounty trades with the new system.
 
     companion object {
         @JvmStatic

@@ -28,12 +28,10 @@ import net.minecraft.stats.StatFormatter
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.village.poi.PoiType
 import net.minecraft.world.entity.ai.village.poi.PoiTypes
-import net.minecraft.world.entity.npc.villager.Villager
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.state.BlockState
 import java.util.*
-import java.util.function.BiPredicate
 
 object BountifulContent : KambrikAutoRegistrar {
 
@@ -96,7 +94,7 @@ object BountifulContent : KambrikAutoRegistrar {
 
     val MEM_MODULE_NEAREST_BOARD by MEM_MODULE_NEAREST_BOARD_INSTANCE
 
-    //val POI_BOUNTY_BOARD = "bountyboard".forVillagerPoi(MEM_MODULE_NEAREST_BOARD_INSTANCE, setOf(BOARD.value.defaultState), 1, 1)
+    val POI_BOUNTY_BOARD = "bountyboard".forVillagerPoi(setOf(BOARD.value.defaultState), 1, 1)
 
     val BOUNTY_INFO by "bounty_info".forComponent(BountyInfo.serializer())
     val BOUNTY_PING by "bounty_ping".forComponent(Boolean.serializer())
@@ -128,13 +126,10 @@ object BountifulContent : KambrikAutoRegistrar {
         Triggers
     }
 
-    private fun String.forVillagerPoi(memModule: Lazy<MemoryModuleType<GlobalPos>>, stateSet: Set<BlockState>, tickets: Int, searchDistance: Int): ResourceKey<PoiType>? {
+    private fun String.forVillagerPoi(stateSet: Set<BlockState>, tickets: Int, searchDistance: Int): ResourceKey<PoiType> {
         val registryKey = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, Bountiful.id(this))
-        // Villager.POI_MEMORIES is immutable in 26.1.2, so custom POI memory wiring needs a different hook.
         PoiTypes.register(BuiltInRegistries.POINT_OF_INTEREST_TYPE, registryKey, stateSet, tickets, searchDistance)
         return registryKey
     }
-//
-//    private fun String.forSimplePoi(memModule: Lazy<MemoryModuleType<GlobalPos>>)
 
 }
