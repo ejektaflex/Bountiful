@@ -26,22 +26,27 @@ class BountyItem(props: Properties) : Item(
 ) {
 
     override fun getName(stack: ItemStack): Component {
+        val bountyItemKey = "bountiful.bounty.item"
         if (Kambridge.isOnServer()) {
-            return Component.translatable("bountiful.bounty")
+            return Component.translatable(bountyItemKey)
         }
         val clientLevel = Minecraft.getInstance().level
         val info = BountyStack(stack).info
-        var text = Component.translatable(info.rarity.name.lowercase()
-            // Capitalizing
-            .replaceFirstChar {
-                if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
-            } + " Bounty ").withStyle(info.rarity.color)
+        val rarityTranslationKey = "bountiful.rarity." + info.rarity.name.lowercase()
+
+        // bountiful.bounty.item.display has two positional arguments:
+        // %1$s for rarity
+        // %2$s for bounty item name
+        var text = Component.translatable(bountyItemKey + ".display",
+            Component.translatable(rarityTranslationKey),
+            Component.translatable(bountyItemKey)
+        ).withStyle(info.rarity.color)
         if (info.rarity == BountyRarity.LEGENDARY) {
             text = text.withStyle(ChatFormatting.BOLD)
         }
         if (BountifulIO.configData.bounty.shouldHaveTimersAndExpire && clientLevel != null) {
             text = text.append(
-                Component.literal("(")
+                Component.literal(" (")
                     .append(info.formattedTimeLeft(clientLevel))
                     .append(Component.literal(")"))
                     .withStyle(ChatFormatting.WHITE)
