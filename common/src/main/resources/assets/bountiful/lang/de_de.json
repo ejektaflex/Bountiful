@@ -47,8 +47,6 @@
 	"bountiful.advancement.fetch_quest.title": "Nur eine 'Hol' Quest",
 	"bountiful.advancement.fetch_quest.desc": "Erfülle eine Belohnung mit Hilfe eines Begleittiers",
 
-	"bountiful.bounty": "Belohnung",
-
 	"bountiful.decree.armorer.name": "Rüstungsschmieden",
 	"bountiful.decree.butcher.name": "Schlachten",
 	"bountiful.decree.chef.name": "Kochzutaten",
@@ -69,6 +67,8 @@
 
 	"bountiful.bounty.type.entity.kills": "Erledigte Einheiten",
 
+	"bountiful.bounty.item": "Belohnung",
+	"bountiful.bounty.item.display": "%1$s %2$s",
 	"bountiful.rarity.common": "Gewöhnliche",
 	"bountiful.rarity.uncommon": "Ungewöhnliche",
 	"bountiful.rarity.rare": "Seltene",
