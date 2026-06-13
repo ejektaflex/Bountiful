@@ -273,7 +273,12 @@ class BoardBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Bountiful
         if (newStack.count == 0) {
             return
         }
-        val newDecrees = newStack[BountifulContent.DECREE_DATA]!!.ids
+        // Data component can be absent on decree stacks created/duplicated out-of-band
+        // (e.g. via creative pick-block on a board slot, modded item interactions, or
+        // an NBT-cleared stack from another mod). Bail out cleanly rather than NPEing
+        // the server thread — see issue #336.
+        val decreeData = newStack[BountifulContent.DECREE_DATA] ?: return
+        val newDecrees = decreeData.ids
         val decs = getBoardDecrees().map { it.id }.toSet() + newDecrees
         val allDecreesSet = BountifulContent.Decrees.map { it.id }.toSet()
         val allDecrees = decs.intersect(allDecreesSet) == allDecreesSet
