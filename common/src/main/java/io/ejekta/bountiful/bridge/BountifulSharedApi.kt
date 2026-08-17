@@ -125,8 +125,11 @@ interface BountifulSharedApi {
 
                         // Find the trigger in the registry
                         val objTrigger = BuiltInRegistries.TRIGGER_TYPES.getOptional(Identifier.parse(obj.content)).getOrNull()
-                        // If it cannot be found, or is different from the 'launching' trigger, skip evaluation
-                        if (objTrigger == null || objTrigger::class != trigger::class) {
+                        // If it cannot be found, or is not the exact 'launching' trigger, skip evaluation.
+                        // Note: this must be an identity check, not a class check. Mods (e.g. Cobblemon) register
+                        // many distinct triggers as instances of a single generic trigger class, so comparing
+                        // classes would hand this trigger's predicate an instance meant for a sibling criterion.
+                        if (objTrigger == null || objTrigger !== trigger) {
                             continue
                         }
 
@@ -148,14 +151,27 @@ interface BountifulSharedApi {
                         }
 
                         val triggerInstance = resulting.first.triggerInstance
-                        val castTriggerInstance = triggerInstance as? SimpleCriterionTrigger.SimpleInstance
 
                         if (triggerInstance == null) {
                             Bountiful.LOGGER.error("Could not parse trigger instance for obj '${obj.id}'")
                             continue
                         }
 
-                        val result = predicate.test(castTriggerInstance!!)
+                        val castTriggerInstance = triggerInstance as? SimpleCriterionTrigger.SimpleInstance
+
+                        if (castTriggerInstance == null) {
+                            Bountiful.LOGGER.error("Trigger instance for obj '${obj.id}' is not a simple criterion instance")
+                            continue
+                        }
+
+                        // Third party criteria can throw when handed a state they don't expect. Never let that
+                        // take down the server tick that the trigger fired on.
+                        val result = try {
+                            predicate.test(castTriggerInstance)
+                        } catch (e: Exception) {
+                            Bountiful.LOGGER.error("Criteria objective '${obj.id}' threw while testing trigger '${obj.content}'", e)
+                            continue
+                        }
 
                         if (result) {
                             // Advance on server
