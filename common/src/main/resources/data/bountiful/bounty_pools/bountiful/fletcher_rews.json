@@ -121,7 +121,7 @@
             },
             "unitWorth": 1500.0,
             "components": {
-                "minecraft:stored_enchantments": {
+                "minecraft:enchantments": {
                     "levels": {
                         "minecraft:infinity": 1
                     }
